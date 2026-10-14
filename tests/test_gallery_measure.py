@@ -1,7 +1,7 @@
 """The live wave 2 gallery code, offline: the After Effects recipe pass and its repeated-effect check, the spec /
 scenes gallery builders and its measurements (probe dots, ducking levels, scroll speed, AE vs Premiere), the text
 gallery's specs and in / out timing, and the new synthetic plates. No app, network or LLM; ffmpeg only where noted."""
-import copy, json, shutil, subprocess, sys, tempfile, unittest
+import copy, json, os, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -138,7 +138,8 @@ class TextGallery(unittest.TestCase):
                 self.assertEqual(m["effects"], [])
             seen.add(m["start"])
         self.assertTrue(all(t["anim"] is False for t in spec["texts"]))
-        self.assertFalse(any("%" in m["file"] for m in spec["mgts"]))
+        if os.name == "nt":  # %LOCALAPPDATA% template paths expand only on Windows, where the apps run
+            self.assertFalse(any("%" in m["file"] for m in spec["mgts"]))
 
     def test_mogrt_sample_resolves(self):
         files = g.mogrt_files()
