@@ -1,0 +1,188 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "J-cut and L-cut (split edits)",
+   "summary": "A split edit: the sound of the next shot starts before its picture (J-cut) or the sound of the outgoing shot carries on under the next picture (L-cut). The everyday grammar of interviews and documentaries: the cut feels smooth because sound and picture do not change on the same frame.",
+   "use_for": [
+    "interview and documentary cutting (J-cut into a speaker, L-cut out onto b-roll)",
+    "softening a hard cut",
+    "letting a reaction shot play under the speaker's line"
+   ],
+   "how": "Premiere: turn off Linked Selection (the timeline toggle) or hold Alt and click to select only the audio or only the video of a clip, then drag that edit point (or use the Rolling Edit tool, N, on the audio edit only); Clip > Unlink splits a clip for good (Ctrl+L links again). Working default: audio leads or trails by 0.3-1.5 s, with a short audio crossfade on the overlap. After Effects has no linked audio: offset the audio layer's in point. Bridge: a clip's own audio travels with it, so build a split edit with a separate audio[] entry cut from the same file (src = the video file, its own start / in / dur) on another track.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: select the pair (TrackItem.setSelected(true, true)), Sequence.unlinkSelection(), then trim the audio TrackItem alone (its end / start); Sequence.linkSelection() re-links. Or place picture and sound separately with Sequence.insertClip / overwriteClip(projectItem, time, vTrackIndex, aTrackIndex).",
+   "limits": "Whether writing TrackItem.start moves or trims an item was not verified (PVE TrackItem card), so scripted J/L cuts should change the outgoing audio's end (L) or place the incoming audio earlier as its own clip (J). In an L-cut both shots' audio overlaps: lower or cut the incoming clip's own audio for that stretch.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/trim-clips/perform-j-cuts-and-l-cuts.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/change-clip-sequence/select-clips.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/basic-audio-editing/link-audio-and-video-clips.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "Trims: ripple, roll, slip and slide",
+   "summary": "The four trims: Ripple Edit (B) changes one clip's length and moves everything after it; Rolling Edit (N) moves the cut between two clips without changing the sequence length; Slip (Y) changes which part of a clip is used without moving it; Slide (U) moves a clip along the track and trims its neighbours to keep the length.",
+   "use_for": [
+    "tightening an interview without leaving gaps (ripple)",
+    "moving a cut to a better frame (roll)",
+    "choosing a better moment of a b-roll shot in place (slip)",
+    "re-timing a shot against the music (slide)"
+   ],
+   "how": "Tools: Ripple Edit B, Rolling Edit N, Slip Y, Slide U (Adobe's trim pages). Scripted equivalents with the official DOM (it has no trim tools): ripple = set an item's end, then move every later item on the track(s) by the same delta (TrackItem.move); roll = A's end and B's head together by the same delta; slip = shift inPoint and outPoint by the same delta and keep start / end; slide = move the item and adjust the neighbours' end / start. QE has slip / slide / roll methods, all unsupported and unverified.",
+   "scriptable": "partial",
+   "script_api": "TrackItem.start, end, inPoint, outPoint (Time, read/write), TrackItem.move(Time), TrackItem.remove(inRipple, inAlignToVideo); QE: QETrackItem.slip(...), slide(...), roll(...) (unverified signatures)",
+   "limits": "How writing start / inPoint behaves (move vs trim) is unverified on 26.0.2: read every item back after a scripted trim. Linked audio follows only UI trims on a linked pair; scripts should trim audio and video items explicitly. A slip or roll needs media beyond the in / out points (handles).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/trim-clips/perform-ripple-edits.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/trim-clips/perform-rolling-edits.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/trim-clips/perform-slip-edits.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/trim-clips/perform-slide-edits.html",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "Three-point and four-point edits (insert and overwrite)",
+   "summary": "Placing a shot by marks: set three of source In, source Out, sequence In and sequence Out and the fourth follows; Insert (,) pushes later clips along, Overwrite (.) replaces what is there. With all four set, Premiere asks how to fit the clip (one choice changes its speed: fit to fill).",
+   "use_for": [
+    "cutting a sound bite into the timeline at an exact point",
+    "laying b-roll over a range without moving the edit",
+    "fit-to-fill a shot into a gap"
+   ],
+   "how": "Source Monitor: mark In (I) and Out (O); in the timeline set the target (playhead or sequence In); patch the source tracks; press , (Insert) or . (Overwrite). With an Insert edit, Adobe notes, the later clips shift ahead to make room. Four-point: set both pairs, then pick a Fit Clip option.",
+   "scriptable": "yes",
+   "script_api": "ProjectItem.setInPoint(seconds, 4) / setOutPoint(seconds, 4) (4 = all media types, as pr_build.jsx uses), then Sequence.insertClip(projectItem, time, vTrackIndex, aTrackIndex) or Sequence.overwriteClip(projectItem, time, vTrackIndex, aTrackIndex); UXP: SequenceEditor insert / overwrite actions.",
+   "limits": "The Fit Clip dialog's option names ('Change Clip Speed (Fit to Fill)', 'Ignore Source In/Out Point' ...) were found only in third-party guides, not on Adobe's pages. The docs type insertClip's time as Time but overwriteClip's as a seconds string: pass what the installed build accepts (pr_build.jsx passes seconds to overwriteClip). In / Out set on a ProjectItem affect every later use of that item.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/intro-to-editing/add-media-to-the-timeline-using-source-patching.html",
+    "https://helpx.adobe.com/premiere/desktop/get-started/keyboard-shortcuts/default-keyboard-shortcuts.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "Replace edit (Replace With Clip)",
+   "summary": "Swapping the media of a shot already in the timeline while keeping its position, length and effects: the replace edit, used to try alternative takes or b-roll without rebuilding effects and keyframes.",
+   "use_for": [
+    "trying alternative takes of a shot",
+    "swapping placeholder footage for the final",
+    "versioning a template edit"
+   ],
+   "how": "Premiere UI: right-click the timeline clip > Replace With Clip > From Source Monitor (or From Bin), or Alt-drag a clip from the Project panel onto the timeline clip (community-documented; no current Adobe help page and no default shortcut row were found). To replace a file everywhere it is used: relink it ('Relink offline media').",
+   "scriptable": "partial",
+   "script_api": "No replace-edit call in the ExtendScript DOM; equivalents: ProjectItem.changeMediaPath(newPath) (every use of the item), or overwriteClip at the same start and re-apply the effects (they do not carry over).",
+   "limits": "Menu names come from community sources and older docs, not a current Adobe page: low confidence until checked in the installed build.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/get-started/keyboard-shortcuts/default-keyboard-shortcuts.html",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "Lift and Extract (remove a range)",
+   "summary": "Removing a marked range from the sequence: Lift (;) leaves a gap, Extract (') closes it by pulling the later clips back (a ripple delete of the range).",
+   "use_for": [
+    "cutting a sentence out of an interview (extract)",
+    "blanking a range to fill with b-roll later (lift)"
+   ],
+   "how": "Set sequence In and Out around the range, target the tracks, press ; (Lift) or ' (Extract). Whole clips: select them and Ripple Delete (Shift+Delete).",
+   "scriptable": "partial",
+   "script_api": "Whole clips: TrackItem.remove(false, true) = lift, TrackItem.remove(true, true) = ripple delete (with inRipple set, later track items move earlier to fill the gap). A range inside clips needs a cut at both ends first (QE razor, unsupported) or trimming the overlapping items' end / start, then moving later items back by the range length.",
+   "limits": "No range-based Lift / Extract call in the DOM. remove()'s description on the docs page is copied from setSelected (a doc error): its parameter table is the reliable part.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/get-started/keyboard-shortcuts/default-keyboard-shortcuts.html",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "Match frame and reverse match frame",
+   "summary": "Match Frame (F) opens the timeline shot's source clip at the same frame in the Source Monitor; Reverse Match Frame (Shift+R) finds where the Source Monitor's frame is used in the sequence.",
+   "use_for": [
+    "finding the rest of a shot to extend or replace it",
+    "checking where a source moment was used",
+    "re-cutting from the original after a nest or render"
+   ],
+   "how": "Park on the shot (target its track) and press F; in the Source Monitor press Shift+R to jump to its use in the sequence. Scripted: source time = trackItem.inPoint.seconds + (t - trackItem.start.seconds) for a clip at 100% speed; reverse = search the track items whose projectItem.nodeId matches and whose inPoint..outPoint holds the time.",
+   "scriptable": "partial",
+   "script_api": "TrackItem.start / inPoint / projectItem / getSpeed(); ProjectItem.nodeId; Sequence.setPlayerPosition (PVE Sequence housekeeping card)",
+   "limits": "Speed-changed or time-remapped clips break the simple formula (getSpeed() gives a constant speed only). Nested sequences match to the nest, not to its contents.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/get-started/keyboard-shortcuts/default-keyboard-shortcuts.html",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "PR",
+   "name": "Closing gaps (Ripple Delete, Close Gap)",
+   "summary": "Removing empty space left by deletes and lifts: Ripple Delete on a gap or a clip closes it; Sequence > Close Gap closes every gap on the targeted tracks.",
+   "use_for": [
+    "tidying a rough cut",
+    "after scripted removals that left holes",
+    "before export, to catch accidental black frames"
+   ],
+   "how": "Select a gap and press Delete, or a clip and Shift+Delete (Ripple Delete; Alt+Backspace is the timeline-panel entry); Sequence > Close Gap for all gaps (reported by community sources; no Adobe help page found). Scripted: per track, sort items by start and move each one earlier by the gap before it (TrackItem.move), moving linked audio and video items together.",
+   "scriptable": "partial",
+   "script_api": "TrackItem.move(Time) (15.4+ per PVE's TrackItem card), TrackItem.start / end; Track.clips",
+   "limits": "Closing gaps on one track only desyncs linked clips on the others: close them across every track of a linked pair. The Close Gap menu item is not confirmed on Adobe's pages.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/get-started/keyboard-shortcuts/default-keyboard-shortcuts.html",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "editing_grammar",
+   "app": "AE",
+   "name": "Edit grammar on After Effects layers (trim, slip, ripple by script)",
+   "summary": "After Effects has no edit tools beyond layer trims, so edit grammar is three numbers per layer: startTime (where the source's first frame sits), inPoint and outPoint. Slip = move startTime only; ripple = shift the later layers; split audio = a separate audio layer with its own in point.",
+   "use_for": [
+    "mirroring a Premiere edit in AE (the bridge does)",
+    "slipping a shot inside a precomp",
+    "scripted ripple trims"
+   ],
+   "how": "Trim: layer.inPoint / outPoint (Alt+[ and Alt+] in the UI). Slip: layer.startTime -= d with in / out unchanged (the visible range moves through the source). Ripple: after changing one layer's outPoint by d, add d to the startTime of every layer that begins after it. ae_build.jsx places clips exactly this way (startTime = start - in, inPoint = start, outPoint = start + dur).",
+   "scriptable": "yes",
+   "script_api": "Layer.startTime, Layer.inPoint, Layer.outPoint (read/write), Layer.stretch (speed)",
+   "limits": "Set startTime before inPoint / outPoint, or the in / out can clamp against the source's extent. Time-stretched layers (stretch other than 100) scale source time.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

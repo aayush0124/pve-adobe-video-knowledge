@@ -1,0 +1,900 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Chaser Control",
+   "match": "ADBE CM Animated Shape 2",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Chasing Line - Boxes' shape preset: a group of rectangles that steps horizontally across the full comp width and wraps around, like marquee chaser lights.",
+   "look": [
+    "marquee lights",
+    "chasing boxes",
+    "shape loop",
+    "motion graphic",
+    "lower-third accent"
+   ],
+   "use_for": [
+    "animated accent line under a lower third or headline strap",
+    "looping marquee border on a 'breaking' banner",
+    "progress-style chaser on a reel title card"
+   ],
+   "avoid": [
+    "looks dated/cheesy on serious documentary graphics",
+    "does nothing on footage layers: it only drives the preset's shape layer"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Box Step Speed",
+     "does": "steps per second (each step moves the group one Spread); negative reverses direction, 0 parks the boxes mid-frame",
+     "typical": "5-20 (preset 10)"
+    },
+    {
+     "name": "Size",
+     "does": "[width, height] in pixels of each box: drives the Rectangle Size of Group 1",
+     "typical": "[100, 50] (preset value); [60, 30]-[160, 80]"
+    },
+    {
+     "name": "Spread",
+     "does": "horizontal spacing between boxes (feeds Repeater 1 position x)",
+     "typical": "120-200 (preset 150); keep it larger than the box width or boxes overlap"
+    },
+    {
+     "name": "Elements",
+     "does": "number of boxes in the moving group (Repeater 1 Copies)",
+     "typical": "3-10 (preset 6)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Drop Shadow",
+    "Fill"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Apply C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Shapes/Elements/Chasing Line - Boxes.ffx to an empty shape layer (layer.applyPreset(File(...))); it adds Group 1 (a Rectangle whose Size = effect(\"Chaser Control\")(\"Size\"), placed at the comp's left edge) and Repeater 1 (Copies = Elements, Position x = Spread, Offset stepped by Box Step Speed over a loop of ceil(compWidth/Spread)+Elements steps). Then set this panel's props; do not rename the effect. Preset stores Box Step Speed 10, Size [100, 50] px, Spread 150, Elements 6. The harvested Size default [960, 540] is the bare pseudo-effect default (comp centre), NOT the preset value: adding the match name alone or resetting Size gives giant boxes. Elements is an integer slider (min 1). Style the boxes via the preset's Fill 1 / Stroke 1.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that draws nothing alone; it needs the 'Chasing Line - Boxes' preset on a shape layer), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Swirl",
+   "match": "ADBE Color Swirl",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo-effect control panel with a Transition Completion slider and a Final Color swatch, apparently meant to drive a swirl-to-colour transition; no shipped AE preset uses it.",
+   "look": [
+    "colour transition",
+    "swirl",
+    "control panel"
+   ],
+   "use_for": [
+    "none in practice: no shipped preset drives it; build a swirl transition with Twirl + Fill instead"
+   ],
+   "avoid": [
+    "adding it alone changes nothing on screen",
+    "orphan control panel: an expression rig must be written by hand to make it do anything"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "intended 0-100 % progress of the swirl transition (only works if expressions read it)",
+     "typical": "keyframe 0 -> 100"
+    },
+    {
+     "name": "Final Color",
+     "does": "intended colour the image swirls into",
+     "typical": "brand colour"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Twirl",
+    "Fill",
+    "Turbulent Displace"
+   ],
+   "scripting": "Defined in PresetEffects.xml but referenced by no .ffx in the AE 2026 Presets folder (checked by grep), so it is an orphan control panel. Adding it via its match name just gives two inert controls; use it only as a slider/colour container that your own expressions read. Low confidence on its intended look.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (an orphan pseudo-effect panel that no shipped preset drives, so it draws nothing), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Corner Reveal",
+   "match": "ADBE CM CornerReveal",
+   "category": "",
+   "status": "hidden",
+   "summary": "Legacy control panel for a corner reveal: the layer appears as a rectangle growing out of one chosen corner (a horizontal and a vertical Linear Wipe moving together), with a feathered edge. No AE 2026 preset uses this panel any more.",
+   "look": [
+    "corner reveal",
+    "rectangle grow",
+    "wipe",
+    "feathered edge",
+    "transition"
+   ],
+   "use_for": [
+    "reveal a document/screenshot from the corner in an explainer",
+    "wipe-off of a quote card or photo",
+    "graphic transition between B-roll stills"
+   ],
+   "avoid": [
+    "hard diagonal wipes read as dated PowerPoint if overused",
+    "the panel alone does nothing"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "reveal progress in the shipped Corner Reveal logic: 0 = layer hidden, 100 = fully revealed (the inverse of a native Linear Wipe)",
+     "typical": "keyframe 0 -> 100 to reveal"
+    },
+    {
+     "name": "right (not left)",
+     "does": "checkbox: grow from a right corner instead of a left one",
+     "typical": "0 or 1"
+    },
+    {
+     "name": "bottom (not top)",
+     "does": "checkbox: grow from a bottom corner instead of a top one",
+     "typical": "0 or 1"
+    },
+    {
+     "name": "Feather",
+     "does": "softness of the wipe edge in pixels",
+     "typical": "0-80 px"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Inset (Premiere Wipe transition), or two Linear Wipe effects",
+   "pairs_with": [
+    "Linear Wipe",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect from Support Files/PresetEffects.xml; it renders NOTHING by itself, and no .ffx in the AE 2026 Presets folder references it any more (checked by byte search), so adding it gives an inert panel. The current preset C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Wipes/Corner Reveal.ffx rebuilds the look with plain controls: a Dropdown Menu Control 'Corner' (1 Left Top, 2 Left Bottom, 3 Right Top, 4 Right Bottom), Slider Controls 'Transition Completion' and 'Feather', and two Linear Wipes ('Linear Wipe  - horizontal' angle -90/90, 'Linear Wipe - vertical' angle 0/180) whose completion = linear(TC, 0, 100, 100, 0). Use that preset, or script the two Linear Wipes (ADBE Linear Wipe) directly with Transition Completion keyframed 100 -> 0. A single diagonal Linear Wipe is NOT the same look. Low confidence on how the legacy panel's own controls were wired; the semantics above come from the 2026 preset.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a legacy pseudo-effect panel no 2026 preset uses, so it draws nothing alone), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Counter Controls",
+   "match": "Pseudo/ADBE Counter Controls",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Counter Countdown Monospaced' text preset: turns a text layer into a rolling number counter with padding, decimals, locale grouping and optional prefix/suffix text.",
+   "look": [
+    "number counter",
+    "rolling digits",
+    "stat reveal",
+    "data callout",
+    "monospaced numbers"
+   ],
+   "use_for": [
+    "animated statistic in a news/explainer reel (votes, rupees spent, km built)",
+    "countdown to an event or result",
+    "big-number hook card for a reel",
+    "score/tally in an election graphic"
+   ],
+   "avoid": [
+    "no Indian lakh/crore grouping (only en-US, de-DE, fr-FR formats)",
+    "the expressions are keyed to the effect's preset name; renaming or adding it on its own breaks the counter",
+    "huge Animate Value with many digits rolls too fast to read: ease the keyframes"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Animate Value",
+     "does": "the number shown (absolute value; sign handled separately); keyframe it to count",
+     "typical": "0 -> target"
+    },
+    {
+     "name": "10x Value Multiplier",
+     "does": "shown number = Animate Value x 10^(value-1); 1 shows Animate Value as-is. Use it for numbers above the 1,000,000 slider limit",
+     "typical": "1 (the preset ships 2 = x10: always set it)"
+    },
+    {
+     "name": "Pad Zeros",
+     "does": "minimum integer digits; extra places show as leading zeros (0025)",
+     "typical": "1 for a stat reveal, 3-4 for a countdown look (preset 4)"
+    },
+    {
+     "name": "Digits After Decimal",
+     "does": "decimal places shown",
+     "typical": "0-2"
+    },
+    {
+     "name": "Number Format",
+     "does": "locale separators via Intl.NumberFormat: 1 en-US, 2 de-DE, 3 fr-FR",
+     "typical": "1"
+    },
+    {
+     "name": "Show Original Text",
+     "does": "where the text layer's own source text goes relative to the number: a prefix like '₹' (1) or a suffix like ' crore' (2)",
+     "typical": "1 for a '₹' prefix, 2 for a ' crore' suffix, 3 none (preset 3)"
+    },
+    {
+     "name": "Show Group Separators",
+     "does": "checkbox: thousands separators on/off",
+     "typical": "1"
+    },
+    {
+     "name": "Align Group Spacing",
+     "does": "which side stays put when Group Spacing widens the separators (Left/Right/Center)",
+     "typical": "3"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Number Format": {
+     "1": "1,234,567.01",
+     "2": "1.234.567,01",
+     "3": "1 234 567,01"
+    },
+    "Show Original Text": {
+     "1": "Before Numbers",
+     "2": "After Numbers",
+     "3": "Hide Original Text"
+    },
+    "Align Group Spacing": {
+     "1": "Left",
+     "2": "Right",
+     "3": "Center"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "no Premiere effect; use a counter .mogrt or a Source Text expression in AE",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow",
+    "Fill"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Apply C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Text/Number Counters/Counter Countdown Monospaced.ffx to a TEXT layer (layer.applyPreset(File(...))); it renames the effect 'Counter Countdown Controls' and its Source Text + Character Offset animators reference that name, so never rename it or add the match name alone. Preset keyframes Animate Value 100 -> 0 (the countdown) and stores 10x Value Multiplier 2, Pad Zeros 4, Digits After Decimal 0, Number Format 1, Show Original Text 3, Show Group Separators 0, Align Group Spacing 3: set the multiplier to 1 or every value shows x10. Verified from the expressions: displayed = |Animate Value| x 10^(multiplier-1) (sign shown separately); Animate Value is capped at 1,000,000, so for 45,000 crore in full digits use Animate Value 450000 with multiplier 7. Popups are 1-based (Number Format 1 en-US 1,234,567.01 / 2 de-DE / 3 fr-FR; Show Original Text 1 Before Numbers / 2 After Numbers / 3 Hide). Checkbox = 0/1. For rupees: source text '₹' + Show Original Text 1. With 2 (After Numbers) the digit animator only counts the first Pad Zeros digits, so set Pad Zeros to the final number's digit count (medium confidence). Keep digits out of the source text; use a monospaced font or the digits jitter.",
+   "recipe": {
+    "10x Value Multiplier": 1,
+    "Pad Zeros": 1,
+    "Show Group Separators": 1,
+    "Animate Value": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      2500
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that only works through the Counter Countdown preset on a text layer, not on the photo), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "corrected: scripting said the preset stores a static Animate Value (2); the .ffx actually keyframes it 100 -> 0. not_rendered verdict and empty demo_settings are right (hidden panel, no gallery frame)"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cracked Tiles",
+   "match": "ADBE CM CrackedTiles",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Cracked Tiles' image preset: cuts the layer into a grid of Card Wipe cards that shrink apart (thin gaps) and jitter slightly, like a cracked tiled wall.",
+   "look": [
+    "cracked tiles",
+    "mosaic grid",
+    "grout lines",
+    "fragmented",
+    "card grid"
+   ],
+   "use_for": [
+    "'system is broken' visual behind a satire or scam explainer",
+    "fractured still for a trailer hit",
+    "stylised background plate for a title"
+   ],
+   "avoid": [
+    "faces split by tile seams look ugly",
+    "Card Wipe is a heavy 3D effect: slow on long clips",
+    "the panel alone does nothing"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Tile Cracking",
+     "does": "0-100 %: shrinks every card from 100 % to 90 % (opening gaps) and raises X/Y/Z position jitter from 0 to 1",
+     "typical": "20-60 (preset 33)"
+    },
+    {
+     "name": "Tiles Across",
+     "does": "Card Wipe Rows AND Columns (both get this value), so tiles keep the layer's aspect ratio",
+     "typical": "10-60 (preset 50)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Card Wipe",
+    "Drop Shadow",
+    "Curves"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Apply C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Special Effects/Cracked Tiles.ffx (layer.applyPreset(File(...))), then set this panel. It drives one Card Wipe (APC CardWipeCam): Rows = Columns = Tiles Across, Card Scale = linear(Tile Cracking, 0, 100, 1, 0.9), X/Y/Z Jitter Amount = linear(Tile Cracking, 0, 100, 0, 1); there is no rotation jitter, so the tiles do not tilt. Without the preset, apply Card Wipe directly and set Rows, Columns, Card Scale and the jitter amounts.",
+   "recipe": {
+    "Tile Cracking": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      50
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that draws nothing without the Cracked Tiles preset's Card Wipe), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Crop Edges",
+   "match": "ADBE CM CropEdges",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Crop Edges' utility preset: crops the same percentage off all four edges of the layer, optionally feathered.",
+   "look": [
+    "crop",
+    "inset",
+    "soft border",
+    "frame trim"
+   ],
+   "use_for": [
+    "trim black bars or burned-in tickers off sourced news footage",
+    "soft-edged inset frame for picture-in-picture",
+    "clean edges on scanned documents"
+   ],
+   "avoid": [
+    "equal crop on all sides only; use Crop/masks for asymmetric trims",
+    "the panel alone does nothing"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Crop Amount (per edge)",
+     "does": "percent of width/height removed from EACH edge",
+     "typical": "2-10"
+    },
+    {
+     "name": "Feather",
+     "does": "edge softness in pixels",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Crop (Premiere)",
+   "pairs_with": [
+    "Linear Wipe",
+    "Drop Shadow",
+    "Stroke"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. The visible result comes from the companion effects and expressions inside the shipped .ffx preset, so apply the preset (layer.applyPreset(File(...))) and then set this panel's props; adding the match name alone gives an inert slider panel. Preset: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Utilities/Crop Edges.ffx; it adds four Linear Wipe effects (crop top/bottom/left/right) driven by this panel. Without the preset, a layer mask or four Linear Wipes give the same result.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that draws nothing without the Crop Edges preset's Linear Wipes), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Currency Controls",
+   "match": "Pseudo/ADBE Currency Controls",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Currency Counter Monospaced' text preset: a rolling money counter with currency symbol or code, decimals and locale grouping.",
+   "look": [
+    "money counter",
+    "rolling digits",
+    "currency",
+    "stat reveal",
+    "data callout"
+   ],
+   "use_for": [
+    "animated budget/scam amount in a dollar/euro/pound story",
+    "fundraising or market figure in an explainer"
+   ],
+   "avoid": [
+    "only USD, EUR, JPY, GBP: no INR (₹); for rupees use Counter Controls with '₹' source text",
+    "no lakh/crore grouping",
+    "renaming or adding the panel alone breaks the expressions"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Animate Value",
+     "does": "the amount shown; keyframe to count",
+     "typical": "0 -> target"
+    },
+    {
+     "name": "10x Value Multiplier",
+     "does": "shown amount = Animate Value x 10^(value-1); 1 shows Animate Value as-is",
+     "typical": "1 (the preset ships 3 = x100: always set it)"
+    },
+    {
+     "name": "Pad Zeros",
+     "does": "minimum integer digits; the preset's 5 shows leading zeros ($00,250.00)",
+     "typical": "1 for a clean count-up (preset 5)"
+    },
+    {
+     "name": "Digits After Decimal",
+     "does": "decimal places",
+     "typical": "0 for big amounts, 2 for exact money (preset 2)"
+    },
+    {
+     "name": "Currency Format",
+     "does": "locale and symbol placement",
+     "typical": "1"
+    },
+    {
+     "name": "Currency Symbol",
+     "does": "which currency",
+     "typical": "1-4"
+    },
+    {
+     "name": "Use Currency Code",
+     "does": "checkbox: show 'USD' instead of '$'",
+     "typical": "0"
+    },
+    {
+     "name": "Currency Symbol Scale",
+     "does": "size of the symbol relative to digits (%)",
+     "typical": "70-100"
+    },
+    {
+     "name": "Show Group Separators",
+     "does": "checkbox: thousands separators",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Currency Format": {
+     "1": "$1,234,567.01",
+     "2": "1.234.567,01 $",
+     "3": "1 234 567,01 $"
+    },
+    "Currency Symbol": {
+     "1": "$ USD",
+     "2": "€ EUR",
+     "3": "¥ JPY",
+     "4": "£ GBP"
+    },
+    "Align Group Spacing": {
+     "1": "Left",
+     "2": "Right",
+     "3": "Center"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "no Premiere effect; use a counter .mogrt",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Apply C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Text/Number Counters/Currency Counter Monospaced.ffx to a TEXT layer; it renames the effect 'Currency Counter Controls' and the expressions reference that name. The Source Text is generated by Intl.NumberFormat (style currency), so the layer's own text is replaced. Preset keyframes Animate Value 0 -> 100 and stores 10x Value Multiplier 3, Pad Zeros 5, Digits After Decimal 2, Show Group Separators 1: set the multiplier to 1 or every amount shows x100. Popups 1-based: Currency Format 1 $1,234,567.01 / 2 1.234.567,01 $ / 3 1 234 567,01 $; Currency Symbol 1 USD / 2 EUR / 3 JPY / 4 GBP. Checkboxes 0/1 (Use Currency Code shows 'USD' instead of '$'). Currency Symbol Position is a pixel offset for the symbol (default [0,0]); Currency Symbol Scale is a % scale of the symbol.",
+   "recipe": {
+    "10x Value Multiplier": 1,
+    "Pad Zeros": 1,
+    "Digits After Decimal": 0,
+    "Animate Value": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      1000000
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that only works through the Currency Counter preset on a text layer, not on the photo), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "corrected: scripting said the preset stores a static Animate Value (3); the .ffx actually keyframes it 0 -> 100. not_rendered verdict and empty demo_settings are right (hidden panel, no gallery frame)"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Dissolve - unmelt",
+   "match": "ADBE CM DissolveUnmelt",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Dissolve - unmelt' transition preset: the layer fades in from transparent while a turbulent liquid warp eases out to clean (Transition Completion 0 = invisible and fully warped, 100 = clean and opaque).",
+   "look": [
+    "melt",
+    "liquid distortion",
+    "dissolve",
+    "dreamy transition",
+    "warp"
+   ],
+   "use_for": [
+    "dream/flashback transition in a documentary",
+    "melt-away of an old headline or photo",
+    "surreal reel transition"
+   ],
+   "avoid": [
+    "looks gimmicky on hard news",
+    "distortion smears faces",
+    "the panel alone does nothing"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "reveal progress: drives Solid Composite Source Opacity 0 -> 100 and Turbulent Displace Amount from Maximum Distortion down to 0",
+     "typical": "keyframe 0 -> 100 on the incoming layer (100 -> 0 to melt a layer out)"
+    },
+    {
+     "name": "Maximum Distortion",
+     "does": "Turbulent Displace Amount at 0 % completion; eased out to 0 at 100 %",
+     "typical": "50-300 (preset 100)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Cross Dissolve with Turbulent Displace (Premiere)",
+   "pairs_with": [
+    "Turbulent Displace",
+    "Solid Composite"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Apply C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Dissolves/Dissolve - unmelt.ffx (layer.applyPreset(File(...))), then set this panel. Expressions: Turbulent Displace Amount = easeOut(TC, 0, 100, Maximum Distortion, 0), Size = layer width/5; Solid Composite Source Opacity = linear(TC, 0, 100, 0, 100). So 0 = hidden, 100 = fully visible (the opposite of AE's native Transition Completion). Keyframe over 0.5-1 s on the upper layer of the cut.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that draws nothing without the Dissolve - unmelt preset's Turbulent Displace and Solid Composite), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Dissolve Master Control",
+   "match": "ADBE CM TransDissolve",
+   "category": "",
+   "status": "hidden",
+   "summary": "Shared single-slider control panel used by several dissolve transition presets (vapor, dither, ripple, block dissolves) to drive their progress.",
+   "look": [
+    "dissolve",
+    "transition",
+    "control panel"
+   ],
+   "use_for": [
+    "one keyframed slider to run a vapor/dither/block dissolve between shots",
+    "pixel/block dissolve for a tech or glitchy reel"
+   ],
+   "avoid": [
+    "the panel alone does nothing",
+    "block/dither variants look retro-digital, not for serious documentary cuts"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "reveal progress of whichever dissolve preset added it: 0 = layer hidden, 100 = fully visible",
+     "typical": "keyframe 0 -> 100 on the incoming layer (100 -> 0 to dissolve a layer out)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Cross Dissolve (Premiere transition)",
+   "pairs_with": [
+    "Block Dissolve",
+    "Fast Box Blur",
+    "Noise Alpha",
+    "Ripple",
+    "Solid Composite"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Used by C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Dissolves/: Block Dissolve - digital and Block Dissolve - scanlines (Block Dissolve completion = 100 - TC, block size grows), Dissolve - dither (Noise Alpha + Solid Composite), Dissolve - ripple (Ripple + Solid Composite), Dissolve - vapor (Fast Box Blur radius height/3 -> 0 + Solid Composite). Every one maps Transition Completion 0 = hidden, 100 = visible, the inverse of AE's native Transition Completion. Apply one preset to the incoming (upper) layer and keyframe this slider 0 -> 100.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.7,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a shared pseudo-effect panel that draws nothing without one of the dissolve presets), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Drift Over Time",
+   "match": "ADBE CM Throw",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Drift Over Time' behavior preset: moves the layer continuously in one direction at a constant speed from its in-point.",
+   "look": [
+    "slow drift",
+    "constant motion",
+    "parallax",
+    "slow pan"
+   ],
+   "use_for": [
+    "slow pan on a still photo in a documentary",
+    "drifting dust/particle or cloud layer",
+    "parallax background behind titles"
+   ],
+   "avoid": [
+    "the layer eventually drifts off frame: oversize or trim it",
+    "linear motion with no easing feels mechanical for hero moves",
+    "the panel alone does nothing"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Direction",
+     "does": "compass heading of travel: 0 = up, 90 = right, 180 = down, 270 = left (default 135 = down-right)",
+     "typical": "0-360 (default 135)"
+    },
+    {
+     "name": "Speed (pixels/second)",
+     "does": "drift speed; negative reverses",
+     "typical": "10-60 (preset 50)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform (Premiere) or Motion > Position keyframes",
+   "pairs_with": [
+    "Transform",
+    "Motion Tile"
+   ],
+   "scripting": "Pseudo effect (expression-control panel) defined in Support Files/PresetEffects.xml; it renders NOTHING by itself. Apply C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Drift Over Time.ffx (layer.applyPreset(File(...))), then set this panel. It adds a Transform effect (ADBE Geometry2) whose Position expression is [cos(Direction-90), sin(Direction-90)] * Speed * (time - inPoint), an offset from the layer's own place. Direction is an angle with no harvested range. Equivalent by hand: keyframe Position linearly.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a pseudo-effect panel that draws nothing without the Drift Over Time preset's Transform effect), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Face Measurements",
+   "match": "Pseudo/ADBE Animal Head14",
+   "category": "",
+   "status": "hidden",
+   "summary": "Data container written by the AE Face Tracker ('Extract Face Measurements'): per-frame head offset, scale, orientation, eyebrow, eyelid, gaze and mouth values. It draws nothing.",
+   "look": [
+    "face tracking data",
+    "expression driver",
+    "puppet rig"
+   ],
+   "use_for": [
+    "drive a cartoon/puppet overlay from a presenter's real expressions",
+    "trigger a blink or mouth graphic from tracked openness"
+   ],
+   "avoid": [
+    "values are meaningless until the Face Tracker has run on footage",
+    "setting values by hand fakes data and achieves nothing visible"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Face Scale",
+     "does": "tracked head size (%)",
+     "typical": "read only"
+    },
+    {
+     "name": "Orientation Y",
+     "does": "head turn angle",
+     "typical": "read only"
+    },
+    {
+     "name": "Left Eyelid Openness",
+     "does": "eye openness (%), useful for blink triggers",
+     "typical": "read only"
+    },
+    {
+     "name": "Mouth Scale Height",
+     "does": "mouth open amount (%)",
+     "typical": "read only"
+    },
+    {
+     "name": "Offset X",
+     "does": "head offset from neutral (%)",
+     "typical": "read only"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Face Track Points",
+    "Puppet"
+   ],
+   "scripting": "Created by the Tracker panel (Method: Face Tracking (Detailed Features), then Extract Face Measurements) on a footage layer with a mask around the face; needs real face footage. Treat as read-only: link other layers' properties to it with expressions (effect(\"Face Measurements\")(\"Mouth Scale Height\")). Leaves sit inside groups (Face Offset, Face Orientation, Left Eye, Right Eye, Mouth); use the leaf names. No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a read-only Face Tracker data container that draws nothing), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Face Track Points",
+   "match": "Pseudo/ADBE Animal Head66",
+   "category": "",
+   "status": "hidden",
+   "summary": "Data container written by the AE Face Tracker (Detailed Features): keyframed 2D and 3D positions of about 68 facial landmarks plus head position, scale and orientation. It draws nothing.",
+   "look": [
+    "face tracking data",
+    "landmark points",
+    "expression driver"
+   ],
+   "use_for": [
+    "pin a blur/mosaic box to a face to anonymise a minor or witness in news footage",
+    "attach a sticker or eye-bar to a face in satire",
+    "read face positions so captions stay OFF faces"
+   ],
+   "avoid": [
+    "only exists after the Face Tracker runs on footage",
+    "tracking breaks on profile views, fast motion and occlusion"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "3D head position",
+     "typical": "read only"
+    },
+    {
+     "name": "Scale",
+     "does": "head scale (%)",
+     "typical": "read only"
+    },
+    {
+     "name": "Orientation Z",
+     "does": "head roll",
+     "typical": "read only"
+    },
+    {
+     "name": "Left Pupil",
+     "does": "2D left pupil position (px)",
+     "typical": "read only"
+    },
+    {
+     "name": "Right Pupil",
+     "does": "2D right pupil position (px)",
+     "typical": "read only"
+    },
+    {
+     "name": "Nose Tip",
+     "does": "2D nose tip position (px)",
+     "typical": "read only"
+    },
+    {
+     "name": "Mouth Top",
+     "does": "2D upper lip centre (px)",
+     "typical": "read only"
+    },
+    {
+     "name": "Chin",
+     "does": "2D chin position (px)",
+     "typical": "read only"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Face Measurements",
+    "Mosaic",
+    "Gaussian Blur"
+   ],
+   "scripting": "Created by the Tracker panel (Face Tracking (Detailed Features)) on a footage layer with a face mask; needs real face footage. Read-only data for expressions. The 'Face' group (Position, Scale, Orientation X/Y/Z) and the whole 'Face 3D' group are marked INVISIBLE in PresetEffects.xml: they exist and can be read by expressions but do not show in Effect Controls. Every landmark name appears twice: the first is the 2D point (layer pixels), the second (\"Left Pupil#2\" in the validator, group path 'Face 3D/Left Eye/Left Pupil') is the 3D point; address the 3D ones by group path or property index, never by bare name. No Premiere equivalent (Premiere masks can track faces).",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (a read-only Face Tracker data container that draws nothing), so no gallery frame was rendered and none is listed in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

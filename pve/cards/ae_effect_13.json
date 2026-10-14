@@ -1,0 +1,1454 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Light Rays",
+   "match": "CC Light Rays",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Shoots volumetric light rays outward from a centre point, streaking the layer's own bright pixels (or a chosen colour) like god rays through a window.",
+   "look": [
+    "god rays",
+    "volumetric light",
+    "radial streaks",
+    "glow",
+    "dreamy",
+    "epic"
+   ],
+   "use_for": [
+    "god rays behind a leader or logo reveal in a trailer",
+    "heavenly/epic light burst on a title card",
+    "light-through-flags burst on a rally or ceremony shot",
+    "streaky glow transition at a cut"
+   ],
+   "avoid": [
+    "washes out faces and text at high Intensity",
+    "rays only come from bright areas, so a dark frame shows little",
+    "overused, reads as cheap 2000s trailer"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Intensity",
+     "does": "strength/length of the rays",
+     "typical": "100-400"
+    },
+    {
+     "name": "Center",
+     "does": "point the rays radiate from (px)",
+     "typical": "on the light source or logo, e.g. [960, 300]"
+    },
+    {
+     "name": "Radius",
+     "does": "size of the source area that emits rays",
+     "typical": "30-120"
+    },
+    {
+     "name": "Warp Softness",
+     "does": "softens the ray warp",
+     "typical": "30-100"
+    },
+    {
+     "name": "Shape",
+     "does": "source shape (1 Round, 2 Square)",
+     "typical": "1"
+    },
+    {
+     "name": "Color from Source",
+     "does": "1 = rays take image colours, 0 = use Color",
+     "typical": "1 for natural, 0 for tinted rays"
+    },
+    {
+     "name": "Color",
+     "does": "ray colour when Color from Source is off",
+     "typical": "#FFD9A0 warm gold"
+    },
+    {
+     "name": "Transfer Mode",
+     "does": "how rays combine with the image (popup)",
+     "typical": "default 2"
+    }
+   ],
+   "demo_settings": {
+    "Intensity": 300,
+    "Center": [
+     960,
+     300
+    ],
+    "Radius": 70,
+    "Warp Softness": 60,
+    "Shape": 1,
+    "Color from Source": 1,
+    "Allow Brightening": 1
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Round",
+     "2": "Square"
+    },
+    "Transfer Mode": {
+     "1": "None",
+     "2": "Add",
+     "3": "Lighten",
+     "4": "Screen"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Volumetric Rays",
+   "pairs_with": [
+    "Glow",
+    "CC Light Burst 2.5",
+    "Curves",
+    "Fast Box Blur"
+   ],
+   "scripting": "Harvested default Center is [480, 270] (quarter-frame), so always set Center explicitly in 1920x1080. Direction only rotates the Square shape (Shape 2). Transfer Mode: 1 None, 2 Add (default), 3 Lighten, 4 Screen (read from After Effects 26.0). Color from Source, Allow Brightening are 0/1 checkboxes.",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      350
+     ],
+     [
+      2.0,
+      150
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/096.png",
+    "note": "Bright volumetric bloom with radial streaks radiating from the top centre, washing out the bright upper-left area as the avoid note warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Light Sweep",
+   "match": "CC Light Sweep",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Passes a bright band of light across the layer, like a glint sliding over chrome; on layers with alpha it also lights the edges.",
+   "look": [
+    "glint",
+    "shine sweep",
+    "chrome",
+    "premium",
+    "logo sting",
+    "highlight band"
+   ],
+   "use_for": [
+    "shine across a channel logo or bug at the end of a reel",
+    "glint over a title or lower-third as it lands",
+    "premium sweep on a trailer title card",
+    "highlight sweep over a product or award photo"
+   ],
+   "avoid": [
+    "too wide or slow a sweep looks like a smear",
+    "on full-frame footage without alpha the edge light does nothing",
+    "repeating it on every title gets tacky"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Center",
+     "does": "position of the light band (animate this)",
+     "typical": "keyframe x from -300 to 2200"
+    },
+    {
+     "name": "Direction",
+     "does": "angle of the band in degrees",
+     "typical": "-30 to -45"
+    },
+    {
+     "name": "Shape",
+     "does": "band falloff (1 Linear, 2 Smooth, 3 Sharp)",
+     "typical": "2 or 3"
+    },
+    {
+     "name": "Width",
+     "does": "band width in px",
+     "typical": "60-200"
+    },
+    {
+     "name": "Sweep Intensity",
+     "does": "brightness of the band",
+     "typical": "40-120"
+    },
+    {
+     "name": "Edge Intensity",
+     "does": "brightness on alpha edges (text/logos)",
+     "typical": "50-150"
+    },
+    {
+     "name": "Light Color",
+     "does": "colour of the light",
+     "typical": "#FFF6E8 warm white"
+    },
+    {
+     "name": "Light Reception",
+     "does": "1 Add, 2 Composite, 3 Cutout",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     540
+    ],
+    "Direction": -30,
+    "Shape": 3,
+    "Width": 160,
+    "Sweep Intensity": 100,
+    "Edge Intensity": 100,
+    "Light Color": "#FFF6E8",
+    "Light Reception": 1
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Linear",
+     "2": "Smooth",
+     "3": "Sharp"
+    },
+    "Light Reception": {
+     "1": "Add",
+     "2": "Composite",
+     "3": "Cutout"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Bevel Alpha",
+    "Drop Shadow",
+    "Gradient Ramp"
+   ],
+   "scripting": "Animate Center, not Direction. Apply to a precomp or text/logo layer so Edge Intensity has alpha edges to light. Light Reception 3 (Cutout) keeps only the lit band of the layer (exact behaviour unverified); use 1 (Add) for the normal glint. Center has no clamp, so off-frame keyframes (-300 to 2200) are fine.",
+   "recipe": {
+    "Center": [
+     [
+      0,
+      [
+       -300,
+       540
+      ]
+     ],
+     [
+      1.0,
+      [
+       2200,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/097.png",
+    "note": "A sharp bright diagonal band at about -30 degrees crosses the frame through the centre, glinting over the stripes and the centre.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Threads",
+   "match": "CS Threads",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Re-renders the layer as a woven fabric of criss-crossing threads coloured by the underlying image.",
+   "look": [
+    "woven",
+    "fabric",
+    "textile",
+    "tapestry",
+    "texture",
+    "stylised"
+   ],
+   "use_for": [
+    "textile/handloom texture for a story on weavers or khadi",
+    "stylised background plate behind titles",
+    "texture-in transition on a still photo"
+   ],
+   "avoid": [
+    "destroys faces and text detail",
+    "small Width/Height on 1080p looks like noise"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Width",
+     "does": "thread tile width",
+     "typical": "40-120"
+    },
+    {
+     "name": "Height",
+     "does": "thread tile height",
+     "typical": "40-120"
+    },
+    {
+     "name": "Overlaps",
+     "does": "number of overlapping thread layers",
+     "typical": "2-6"
+    },
+    {
+     "name": "Direction",
+     "does": "weave rotation in degrees",
+     "typical": "0 or 45"
+    },
+    {
+     "name": "Coverage",
+     "does": "how much of the image is covered by threads",
+     "typical": "70-100"
+    },
+    {
+     "name": "Shadowing",
+     "does": "shadow between threads (depth)",
+     "typical": "40-70"
+    },
+    {
+     "name": "Texture",
+     "does": "fibre texture amount",
+     "typical": "15-40"
+    }
+   ],
+   "demo_settings": {
+    "Width": 60,
+    "Height": 60,
+    "Overlaps": 4,
+    "Coverage": 90,
+    "Shadowing": 60,
+    "Texture": 30
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Gradient Ramp",
+    "Bevel Alpha",
+    "Curves"
+   ],
+   "scripting": "Match name is 'CS Threads' (not 'CC Threads'): use the match name when applying. All params are plain numbers; Center is in px.",
+   "recipe": {
+    "Coverage": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/098.png",
+    "note": "Whole frame re-rendered as a woven basket-weave of threads coloured by the photo; faces lose detail.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cell Pattern",
+   "match": "ADBE Cell Pattern",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Generates an animated cellular texture (bubbles, crystals, plates, static) that replaces the layer.",
+   "look": [
+    "cellular",
+    "crystals",
+    "bubbles",
+    "organic texture",
+    "procedural",
+    "matte"
+   ],
+   "use_for": [
+    "procedural background texture under explainer graphics",
+    "track-matte source for a cellular/shatter-style transition",
+    "displacement/luma map for organic distortion",
+    "sci-fi or biology-themed backdrop"
+   ],
+   "avoid": [
+    "replaces the footage completely; use on a solid",
+    "HQ patterns are slow at large sizes",
+    "untinted grey cells look unfinished; colourise"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Cell Pattern",
+     "does": "pattern type (13 options, 1 = Bubbles)",
+     "typical": "1-6"
+    },
+    {
+     "name": "Contextual Slider",
+     "does": "Contrast or Sharpness depending on pattern",
+     "typical": "80-300"
+    },
+    {
+     "name": "Size",
+     "does": "cell size in px",
+     "typical": "60-200"
+    },
+    {
+     "name": "Disperse",
+     "does": "randomness of cell placement",
+     "typical": "0.5-1"
+    },
+    {
+     "name": "Offset",
+     "does": "pattern position (px)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Evolution",
+     "does": "animates cells (degrees)",
+     "typical": "keyframe 0 to 360+"
+    },
+    {
+     "name": "Invert",
+     "does": "inverts the pattern",
+     "typical": "0"
+    },
+    {
+     "name": "Overflow",
+     "does": "how values outside 0-1 are handled (1 Clip, 2 Soft Clamp, 3 Wrap Back)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Cell Pattern": 1,
+    "Size": 120,
+    "Contextual Slider": 120,
+    "Disperse": 1,
+    "Evolution": 45
+   },
+   "enum_labels": {
+    "Cell Pattern": {
+     "1": "Bubbles",
+     "2": "Crystals",
+     "3": "Plates",
+     "4": "Static Plates",
+     "5": "Crystallize",
+     "6": "(separator)",
+     "7": "Pillow",
+     "8": "Crystals HQ",
+     "9": "Plates HQ",
+     "10": "Static Plates HQ",
+     "11": "Crystallize HQ",
+     "12": "Mixed Crystals",
+     "13": "Tubular"
+    },
+    "Overflow": {
+     "1": "Clip",
+     "2": "Soft Clamp",
+     "3": "Wrap Back"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Colorama",
+    "Tint",
+    "Displacement Map",
+    "Track matte"
+   ],
+   "scripting": "Cell Pattern (read from After Effects 26.0): 1 Bubbles, 2 Crystals, 3 Plates, 4 Static Plates, 5 Crystallize, 6 a separator, 7 Pillow, 8 Crystals HQ, 9 Plates HQ, 10 Static Plates HQ, 11 Crystallize HQ, 12 Mixed Crystals, 13 Tubular. 'Contextual Slider' is Contrast (Sharpness for the Static Plates patterns). Evolution raw value is degrees (360 = 1 revolution). Apply to a solid; it replaces the layer. No Premiere 2026 equivalent.",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      5,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/099.png",
+    "note": "Footage fully replaced by a grey-white Bubbles cellular texture with dark seams.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Checkerboard",
+   "match": "ADBE Checkerboard",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a checkerboard pattern over (or instead of) the layer.",
+   "look": [
+    "checkerboard",
+    "pattern",
+    "graphic",
+    "retro",
+    "race flag",
+    "grid"
+   ],
+   "use_for": [
+    "graphic background for explainer cards",
+    "transition matte (checker wipe) via track matte",
+    "retro/80s or chequered-flag styling"
+   ],
+   "avoid": [
+    "Blending Mode 1 (None) discards the footage",
+    "looks dated if used full opacity over footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Size From",
+     "does": "1 Corner Point, 2 Width Slider, 3 Width & Height Sliders",
+     "typical": "2"
+    },
+    {
+     "name": "Width",
+     "does": "square width (Size From 2/3)",
+     "typical": "60-200"
+    },
+    {
+     "name": "Height",
+     "does": "square height (Size From 3)",
+     "typical": "60-200"
+    },
+    {
+     "name": "Anchor",
+     "does": "pattern origin (px)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Width#2",
+     "does": "Feather / Width: soft edge of squares",
+     "typical": "0-10"
+    },
+    {
+     "name": "Color",
+     "does": "colour of the drawn squares",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Opacity",
+     "does": "pattern opacity %",
+     "typical": "30-100"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "1 None (pattern only), 2 Normal, ...",
+     "typical": "2"
+    }
+   ],
+   "demo_settings": {
+    "Size From": 2,
+    "Width": 120,
+    "Color": "#FFFFFF",
+    "Opacity": 60,
+    "Blending Mode": 2
+   },
+   "enum_labels": {
+    "Size From": {
+     "1": "Corner Point",
+     "2": "Width Slider",
+     "3": "Width & Height Sliders"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "Stencil Alpha",
+     "4": "(separator)",
+     "5": "Add",
+     "6": "Multiply",
+     "7": "Screen",
+     "8": "Overlay",
+     "9": "Soft Light",
+     "10": "Hard Light",
+     "11": "(separator)",
+     "12": "Color Dodge",
+     "13": "Color Burn",
+     "14": "(separator)",
+     "15": "Darken",
+     "16": "Lighten",
+     "17": "Difference",
+     "18": "Exclusion",
+     "19": "(separator)",
+     "20": "Hue",
+     "21": "Saturation",
+     "22": "Color",
+     "23": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: no Checkerboard effect in v26; for a checker wipe use the CheckerBoard or Checker Wipe transition",
+   "pairs_with": [
+    "Track matte",
+    "Gradient Ramp",
+    "Venetian Blinds"
+   ],
+   "scripting": "Two properties are named Width and Height: the checker size is 'Width'/'Height', the Feather group's are 'Width#2'/'Height#2'. Blending Mode is a 23-item popup: 1 = None (pattern only), 2 = Normal; 3 Stencil Alpha, then the layer modes with separators at 4, 11, 14 and 19 (enum_labels, read from After Effects 26.0).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/100.png",
+    "note": "White 60%-opacity checker squares about 120 px wide alternate with untouched footage squares across the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Circle",
+   "match": "ADBE Circle",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a solid disc or ring (optionally feathered or inverted) on the layer.",
+   "look": [
+    "circle",
+    "ring",
+    "highlight",
+    "spotlight",
+    "iris",
+    "callout"
+   ],
+   "use_for": [
+    "ring callout around a face or object in a news explainer",
+    "inverted feathered circle as a spotlight/vignette on one person",
+    "iris-in/iris-out transition",
+    "pulsing dot or radar ping on a map"
+   ],
+   "avoid": [
+    "hard-edged ring over footage looks cheap; add feather or a thin ring",
+    "default Blending Mode 1 (None) hides the footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Center",
+     "does": "circle centre (px)",
+     "typical": "on the subject"
+    },
+    {
+     "name": "Radius",
+     "does": "circle radius px",
+     "typical": "100-400"
+    },
+    {
+     "name": "Edge",
+     "does": "1 None (disc), 2 Edge Radius, 3 Thickness, 4 Thickness*Radius, 5 Thickness & Feather*Radius",
+     "typical": "3 for a ring"
+    },
+    {
+     "name": "Contextual Slider",
+     "does": "edge radius / thickness, depending on Edge",
+     "typical": "8-30"
+    },
+    {
+     "name": "Feather Outer Edge",
+     "does": "soft outer edge px",
+     "typical": "0-60"
+    },
+    {
+     "name": "Invert Circle",
+     "does": "1 = fill outside the circle",
+     "typical": "1 for spotlight"
+    },
+    {
+     "name": "Color",
+     "does": "fill colour",
+     "typical": "#FFD400 or brand red"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "1 None, 2 Normal, ...",
+     "typical": "2"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     500
+    ],
+    "Radius": 300,
+    "Edge": 3,
+    "Contextual Slider": 20,
+    "Color": "#FFD400",
+    "Opacity": 100,
+    "Blending Mode": 2
+   },
+   "enum_labels": {
+    "Edge": {
+     "1": "None",
+     "2": "Edge Radius",
+     "3": "Thickness",
+     "4": "Thickness * Radius",
+     "5": "Thickness & Feather * Radius"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "Stencil Alpha",
+     "4": "(separator)",
+     "5": "Add",
+     "6": "Multiply",
+     "7": "Screen",
+     "8": "Overlay",
+     "9": "Soft Light",
+     "10": "Hard Light",
+     "11": "(separator)",
+     "12": "Color Dodge",
+     "13": "Color Burn",
+     "14": "(separator)",
+     "15": "Darken",
+     "16": "Lighten",
+     "17": "Difference",
+     "18": "Exclusion",
+     "19": "(separator)",
+     "20": "Hue",
+     "21": "Saturation",
+     "22": "Color",
+     "23": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none in v26; draw an ellipse Shape in a Graphic clip or use an ellipse Opacity mask",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow",
+    "Track matte"
+   ],
+   "scripting": "Blending Mode default 1 = None renders only the circle on transparency; use 2 (Normal) to see the footage. Spotlight: Edge 1, Invert Circle 1, Color #000000, Opacity 60, Feather Outer Edge 150, Blending Mode 2.",
+   "recipe": {
+    "Radius": [
+     [
+      0,
+      0
+     ],
+     [
+      0.35,
+      320
+     ],
+     [
+      0.5,
+      300
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/101.png",
+    "note": "Thin yellow ring of radius about 300 px drawn over the footage around the frame centre, footage kept by Normal blending.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Ellipse",
+   "match": "ADBE ELLIPSE",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a soft glowing elliptical ring with separate inside and outside colours, like a neon tube.",
+   "look": [
+    "neon ring",
+    "glow",
+    "ellipse",
+    "HUD",
+    "target",
+    "halo"
+   ],
+   "use_for": [
+    "neon ring highlight around a subject in a reel",
+    "HUD/target reticle on a map or face",
+    "halo or portal glow behind a title"
+   ],
+   "avoid": [
+    "Width/Height max out at 2000 px",
+    "without Composite On Original the footage is replaced by transparency",
+    "the harvested default colours are an odd green/blue or pink/red pair; always set both colours"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Center",
+     "does": "ellipse centre (px)",
+     "typical": "on subject"
+    },
+    {
+     "name": "Width",
+     "does": "ellipse width px",
+     "typical": "300-1200"
+    },
+    {
+     "name": "Height",
+     "does": "ellipse height px",
+     "typical": "200-900"
+    },
+    {
+     "name": "Thickness",
+     "does": "ring thickness px",
+     "typical": "8-40"
+    },
+    {
+     "name": "Softness",
+     "does": "edge glow softness 0-1",
+     "typical": "0.4-0.8"
+    },
+    {
+     "name": "Inside Color",
+     "does": "core colour of the ring",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Outside Color",
+     "does": "glow colour",
+     "typical": "#FF2A2A or #00C8FF"
+    },
+    {
+     "name": "Composite On Original",
+     "does": "1 = draw over footage",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     540
+    ],
+    "Width": 900,
+    "Height": 600,
+    "Thickness": 24,
+    "Softness": 0.6,
+    "Inside Color": "#FFFFFF",
+    "Outside Color": "#00C8FF",
+    "Composite On Original": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none in v26; draw an ellipse Shape in a Graphic clip",
+   "pairs_with": [
+    "Glow",
+    "Circle",
+    "Turbulent Displacement"
+   ],
+   "scripting": "Always set Inside Color and Outside Color explicitly: the harvested defaults ([1, 0.745, 0.98, 0.725] and [1, 0.098, 0.098, 0.588]) are ambiguous about channel order. Composite On Original is a 0/1 checkbox. Softness is a raw 0-1 value.",
+   "recipe": {
+    "Thickness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      24
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/102.png",
+    "note": "Cyan-glow white elliptical ring about 900x600 px drawn over the footage at centre.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Eyedropper Fill",
+   "match": "ADBE Eyedropper Fill",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Samples the colour at a point in the layer and floods the layer with that colour, optionally blended with the original.",
+   "look": [
+    "solid colour",
+    "colour sample",
+    "tint",
+    "colour match",
+    "flat"
+   ],
+   "use_for": [
+    "colour-matched backing bar: apply to a masked duplicate of the footage so the bar takes the shot's own colour",
+    "colour wash/tint of footage towards a sampled colour",
+    "flash frame in the shot's own colour"
+   ],
+   "avoid": [
+    "sample point on a moving subject flickers",
+    "Blend With Original 0 replaces the shot with flat colour"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Sample Point",
+     "does": "where colour is sampled (px)",
+     "typical": "on a flag or wall area"
+    },
+    {
+     "name": "Sample Radius",
+     "does": "sampling area radius px",
+     "typical": "10-40"
+    },
+    {
+     "name": "Average Pixel Colors",
+     "does": "1 Skip Empty, 2 All, 3 All Premultiplied, 4 Including Alpha",
+     "typical": "2"
+    },
+    {
+     "name": "Maintain Original Alpha",
+     "does": "1 = keep the layer's alpha shape",
+     "typical": "1 on text/logos"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "0 = all fill, 1 = all original",
+     "typical": "0.3-0.7"
+    }
+   ],
+   "demo_settings": {
+    "Sample Point": [
+     700,
+     400
+    ],
+    "Sample Radius": 20,
+    "Average Pixel Colors": 2,
+    "Blend With Original": 0.4
+   },
+   "enum_labels": {
+    "Average Pixel Colors": {
+     "1": "Skip Empty",
+     "2": "All",
+     "3": "All Premultiplied",
+     "4": "Including Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Tint",
+    "Set Matte"
+   ],
+   "scripting": "Blend With Original is a raw 0-1 fraction (UI shows %). Average Pixel Colors labels medium-confidence. Sampled colour updates per frame; keep Sample Point static on a stable area.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/103.png",
+    "note": "Whole frame washed toward the sampled muted blue-grey (about 64% fill, contrast cut to a third), footage still readable underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fill",
+   "match": "ADBE Fill",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Replaces the layer's opaque area (or a chosen mask) with a solid colour; Opacity fades the filled layer itself rather than mixing the colour with the footage.",
+   "look": [
+    "solid colour",
+    "silhouette",
+    "brand colour",
+    "flat",
+    "colour flash"
+   ],
+   "use_for": [
+    "recolour text, logos or icons to brand colour",
+    "silhouette of a cut-out person for a 'who is this?' reveal",
+    "solid colour flash frame on a beat (on a duplicate or solid layer above the footage)",
+    "colour wash: Fill on a duplicate layer above the footage, then set that layer's blend mode (Color, Multiply) or opacity"
+   ],
+   "avoid": [
+    "on full-frame footage with no alpha it just becomes a flat colour frame",
+    "Opacity below 1 makes the whole layer translucent over what is beneath (black on a lone layer); it does not mix the colour with the footage",
+    "Fill Mask cannot be set from a spec"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Color",
+     "does": "fill colour",
+     "typical": "#E8202A brand red / #FFFFFF"
+    },
+    {
+     "name": "Opacity",
+     "does": "opacity of the filled result 0-1; lowers the layer's own alpha, not a mix with the original",
+     "typical": "1 (animate 0-1 on a layer above the footage for flashes)"
+    },
+    {
+     "name": "All Masks",
+     "does": "1 = fill inside all masks",
+     "typical": "0"
+    },
+    {
+     "name": "Invert",
+     "does": "fill outside the shape/mask",
+     "typical": "0"
+    },
+    {
+     "name": "Horizontal Feather",
+     "does": "horizontal edge feather px (mask fills)",
+     "typical": "0-50"
+    },
+    {
+     "name": "Vertical Feather",
+     "does": "vertical edge feather px",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Color": "#E8202A",
+    "Opacity": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Stroke",
+    "Glow",
+    "Track matte"
+   ],
+   "scripting": "Opacity is a raw 0-1 fraction (UI shows %). Verified render: on full-frame footage the result is a flat colour; Opacity 0.6 gives a darker flat colour over black, with no footage showing through. For a flash or wash over footage, apply Fill to a duplicate or solid layer above the footage and animate that layer. Fill Mask is a mask-reference property (type mask) and cannot be set from a spec; left at None it fills the whole layer alpha. The recipe (Opacity 0 -> 1 -> 0) is a flash for a duplicate or solid above the footage; keyed on the footage layer itself it fades in from black and back to black.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.08,
+      1
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/104.png",
+    "note": "Frame is now one uniform bright red (renders RGB 212,10,42, close to #E8202A under the project's colour handling) instead of the old dim dark red (126,5,26) from Opacity 0.6, which is exactly what the card says Fill does to a full-frame layer with no alpha.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: agree with 'wrong' and the text rewrite (104.png is one uniform dark red, no footage), but demo Opacity 0.6 demonstrated the card's own pitfall (layer dimmed over black, not the real colour); demo set to Opacity 1 so the frame shows the true #E8202A fill; scripting notes the recipe belongs on a layer above the footage"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fractal",
+   "match": "ADBE Fractal",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Renders a Mandelbrot or Julia set fractal with cycling colour palettes over the layer.",
+   "look": [
+    "fractal",
+    "psychedelic",
+    "mandelbrot",
+    "trippy",
+    "sci-fi",
+    "infinite zoom"
+   ],
+   "use_for": [
+    "trippy infinite-zoom background for an AI/maths explainer",
+    "psychedelic transition or dream sequence",
+    "abstract sci-fi texture behind titles"
+   ],
+   "avoid": [
+    "reads as a 90s screensaver if used plainly",
+    "deep magnification with high Escape Limit renders slowly",
+    "replaces the footage unless Overlay is on"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Set Choice",
+     "does": "which fractal set (6 options, 1 = Mandelbrot)",
+     "typical": "1 or 5"
+    },
+    {
+     "name": "Magnification",
+     "does": "zoom level of the Mandelbrot view",
+     "typical": "0-12 (animate for zoom)"
+    },
+    {
+     "name": "X (Real)",
+     "does": "Mandelbrot view centre real coordinate",
+     "typical": "-0.7436 with Y 0.1318 (Seahorse Valley, on the set edge); default -0.703 sits inside the set"
+    },
+    {
+     "name": "Y (Imaginary)",
+     "does": "Mandelbrot view centre imaginary coordinate",
+     "typical": "0.1318 for Seahorse Valley; 0 on the axis"
+    },
+    {
+     "name": "Escape Limit",
+     "does": "iteration depth (detail vs speed)",
+     "typical": "200-1000"
+    },
+    {
+     "name": "Palette",
+     "does": "colour palette (7 options)",
+     "typical": "1-3"
+    },
+    {
+     "name": "Hue",
+     "does": "palette hue rotation (degrees)",
+     "typical": "0-360"
+    },
+    {
+     "name": "Cycle Steps",
+     "does": "palette repeat length",
+     "typical": "20-80"
+    }
+   ],
+   "demo_settings": {
+    "Set Choice": 1,
+    "X (Real)": -0.7436,
+    "Y (Imaginary)": 0.1318,
+    "Magnification": 2,
+    "Escape Limit": 300,
+    "Palette": 1,
+    "Hue": 120,
+    "Cycle Steps": 40
+   },
+   "enum_labels": {
+    "Set Choice": {
+     "1": "Mandelbrot",
+     "2": "Mandelbrot Inverse",
+     "3": "Mandelbrot over Julia",
+     "4": "Mandelbrot Inverse over Julia",
+     "5": "Julia",
+     "6": "Julia Inverse"
+    },
+    "Equation": {
+     "1": "z = z^2 + c",
+     "2": "z = z^3 + c",
+     "3": "z = z^5 + c",
+     "4": "z = z^7 + c"
+    },
+    "Palette": {
+     "1": "Lightness Gradient",
+     "2": "Hue Wheel",
+     "3": "Black And White",
+     "4": "Solid Color",
+     "5": "Escape Angle",
+     "6": "Grayscale",
+     "7": "Apple ]["
+    },
+    "Oversample Method": {
+     "1": "Edge Detect-Fast-May miss pixels",
+     "2": "Brute Force-Slow-Every pixel"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Colorama",
+    "Glow",
+    "Turbulent Displacement"
+   ],
+   "scripting": "Property names repeat across groups: Mandelbrot = 'X (Real)', 'Y (Imaginary)', 'Magnification', 'Escape Limit'; Julia = the same names with '#2'; Post-inversion offset = 'X (Real)#3', 'Y (Imaginary)#3'. X/Y are complex-plane coordinates of the view centre; Magnification looks logarithmic (range -29..100, each step roughly doubles the zoom), unverified. Never zoom into the default centre (-0.703, 0): it is inside the set and the frame ends as flat colour; zoom on a boundary point such as (-0.7436, 0.1318). Set Choice: 1 Mandelbrot, 2 Mandelbrot Inverse, 3 Mandelbrot over Julia, 4 Mandelbrot Inverse over Julia, 5 Julia, 6 Julia Inverse; Equation: 1 z = z^2 + c ... 4 z = z^7 + c; Palette: 1 Lightness Gradient, 2 Hue Wheel, 3 Black And White, 4 Solid Color, 5 Escape Angle, 6 Grayscale, 7 Apple ][ (read from After Effects 26.0). Oversample settings only apply at Best quality.",
+   "recipe": {
+    "X (Real)": [
+     [
+      0,
+      -0.7436
+     ]
+    ],
+    "Y (Imaginary)": [
+     [
+      0,
+      0.1318
+     ]
+    ],
+    "Magnification": [
+     [
+      0,
+      0
+     ],
+     [
+      8,
+      8
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/105.png",
+    "note": "Footage replaced by a green-palette Mandelbrot set view (main cardioid and period-2 bulb) centred near the Seahorse Valley point.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Gradient Ramp",
+   "match": "ADBE Ramp",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a linear or radial colour gradient between two points, optionally blended with the original layer.",
+   "look": [
+    "gradient",
+    "colour ramp",
+    "sky tint",
+    "background",
+    "fade",
+    "duotone"
+   ],
+   "use_for": [
+    "gradient backgrounds for explainer and title cards",
+    "darken the bottom of a shot for caption legibility",
+    "gradient track matte for soft wipes",
+    "tint a sky or wash footage in brand colours"
+   ],
+   "avoid": [
+    "8-bit gradients band; add Ramp Scatter or work in 16-bit",
+    "Blend With Original 0 replaces the footage"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Start of Ramp",
+     "does": "gradient start point (px)",
+     "typical": "[960, 0]"
+    },
+    {
+     "name": "Start Color",
+     "does": "colour at start",
+     "typical": "#000000 / brand colour"
+    },
+    {
+     "name": "End of Ramp",
+     "does": "gradient end point (px)",
+     "typical": "[960, 1080]"
+    },
+    {
+     "name": "End Color",
+     "does": "colour at end",
+     "typical": "#FFFFFF / second brand colour"
+    },
+    {
+     "name": "Ramp Shape",
+     "does": "1 Linear Ramp, 2 Radial Ramp",
+     "typical": "1"
+    },
+    {
+     "name": "Ramp Scatter",
+     "does": "dithers to hide banding",
+     "typical": "5-30"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "0 = gradient only, 1 = original only",
+     "typical": "0 for backgrounds, 0.4-0.7 for tints"
+    }
+   ],
+   "demo_settings": {
+    "Start of Ramp": [
+     960,
+     0
+    ],
+    "Start Color": "#FF7A00",
+    "End of Ramp": [
+     960,
+     1080
+    ],
+    "End Color": "#0050A0",
+    "Ramp Shape": 1,
+    "Ramp Scatter": 10,
+    "Blend With Original": 0.5
+   },
+   "enum_labels": {
+    "Ramp Shape": {
+     "1": "Linear Ramp",
+     "2": "Radial Ramp"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Ramp",
+   "pairs_with": [
+    "Track matte",
+    "Fill",
+    "Colorama",
+    "CC Light Sweep"
+   ],
+   "scripting": "Blend With Original is a raw 0-1 fraction (UI shows %). For a caption scrim put it on a solid in Multiply or with layer opacity rather than on the footage. Points are comp pixels.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      1
+     ],
+     [
+      0.6,
+      0.5
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/106.png",
+    "note": "Linear orange-to-blue gradient blended 50% with the footage: warm orange top, blue bottom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Grid",
+   "match": "ADBE Grid",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a grid of lines (tech/blueprint style) over or instead of the layer.",
+   "look": [
+    "grid",
+    "HUD",
+    "blueprint",
+    "tech",
+    "data",
+    "graph paper"
+   ],
+   "use_for": [
+    "HUD/tech overlay for AI or data explainers",
+    "graph-paper backdrop behind charts and numbers",
+    "rule-of-thirds or framing guides for analysis segments"
+   ],
+   "avoid": [
+    "bright full-opacity grid over faces is distracting",
+    "Blending Mode 1 (None) hides the footage",
+    "thin 1px lines shimmer on scaled or moving layers"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Size From",
+     "does": "1 Corner Point, 2 Width Slider, 3 Width & Height Sliders",
+     "typical": "3"
+    },
+    {
+     "name": "Width",
+     "does": "cell width (Size From 2/3)",
+     "typical": "80-200"
+    },
+    {
+     "name": "Height",
+     "does": "cell height (Size From 3)",
+     "typical": "80-200"
+    },
+    {
+     "name": "Border",
+     "does": "line thickness",
+     "typical": "2-4"
+    },
+    {
+     "name": "Width#2",
+     "does": "Feather / Width: softens lines",
+     "typical": "0-3"
+    },
+    {
+     "name": "Color",
+     "does": "line colour",
+     "typical": "#FFFFFF or #00C8FF"
+    },
+    {
+     "name": "Opacity",
+     "does": "grid opacity %",
+     "typical": "20-50"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "1 None (grid only), 2 Normal, ...",
+     "typical": "2"
+    }
+   ],
+   "demo_settings": {
+    "Size From": 3,
+    "Width": 160,
+    "Height": 160,
+    "Border": 3,
+    "Color": "#FFFFFF",
+    "Opacity": 45,
+    "Blending Mode": 2
+   },
+   "enum_labels": {
+    "Size From": {
+     "1": "Corner Point",
+     "2": "Width Slider",
+     "3": "Width & Height Sliders"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "Stencil Alpha",
+     "4": "(separator)",
+     "5": "Add",
+     "6": "Multiply",
+     "7": "Screen",
+     "8": "Overlay",
+     "9": "Soft Light",
+     "10": "Hard Light",
+     "11": "(separator)",
+     "12": "Color Dodge",
+     "13": "Color Burn",
+     "14": "(separator)",
+     "15": "Darken",
+     "16": "Lighten",
+     "17": "Difference",
+     "18": "Exclusion",
+     "19": "(separator)",
+     "20": "Hue",
+     "21": "Saturation",
+     "22": "Color",
+     "23": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Gradient Ramp",
+    "Linear Wipe"
+   ],
+   "scripting": "Default Size From is 1 (Corner Point): cell size comes from the Corner point, so set Size From 3 to use Width/Height. Feather properties are 'Width#2'/'Height#2'. Blending Mode: 1 = None (grid only on transparency), 2 = Normal; rest unverified. No Premiere 2026 equivalent. Rule-of-thirds: Size From 3, Width 640, Height 360.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/107.png",
+    "note": "Thin white 45%-opacity grid lines at about 160 px cells over the footage; visible but light.",
+    "rerender": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,942 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Iris Wipe",
+   "match": "ADBE IRIS_WIPE",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Cuts a growing polygon or star-shaped hole (6-32 points) out of the layer from a centre point, revealing whatever is underneath; a classic iris / shape-wipe transition.",
+   "look": [
+    "iris wipe",
+    "shape transition",
+    "polygon reveal",
+    "star wipe",
+    "retro TV"
+   ],
+   "use_for": [
+    "retro or comic iris transition between two news clips (keyframe Outer Radius)",
+    "triangle, hexagon (12 points) or star reveal of a map or graphic layer underneath in an explainer",
+    "playful punch-in transition on a meme or satire reel",
+    "spotlight-style hole that opens on a face or object (move Iris Center onto it)"
+   ],
+   "avoid": [
+    "star wipes (Use Inner Radius on) read as dated and cheesy outside of deliberate retro/satire jokes",
+    "the inside of the iris is transparent: for an 'iris-out to black' where only a shrinking circle of image stays visible, use an ellipse mask instead",
+    "a hole with Feather 0 on a 6-point (triangle) iris looks like a cheap preset; add some feather or more points",
+    "a 6-point (triangle) iris centred on 1920x1080 cannot clear the whole frame within the 2000 Outer Radius maximum; use 24-32 points for a full wipe"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Outer Radius",
+     "does": "size of the transparent iris hole in pixels; this is the property you keyframe",
+     "typical": "0 (no hole) to about 1300 (a 1920x1080 frame fully cleared from the centre)"
+    },
+    {
+     "name": "Iris Points",
+     "does": "number of corner points counting outer and inner corners, so with Use Inner Radius 0 the hole has half as many sides (6 = triangle, 12 = hexagon, 32 = 16-sided, nearly a circle; render-verified)",
+     "typical": "6 for a triangle, 12 for a hexagon, 24-32 for a round iris"
+    },
+    {
+     "name": "Iris Center",
+     "does": "centre of the hole in layer pixels",
+     "typical": "[960, 540] or on the subject, e.g. a face"
+    },
+    {
+     "name": "Use Inner Radius",
+     "does": "0/1 checkbox; 1 makes a star by alternating corners between Outer and Inner Radius",
+     "typical": "0; 1 only for a deliberate star wipe"
+    },
+    {
+     "name": "Inner Radius",
+     "does": "radius of the inner star corners when Use Inner Radius is 1",
+     "typical": "40-60% of Outer Radius"
+    },
+    {
+     "name": "Rotation",
+     "does": "rotates the iris shape in degrees",
+     "typical": "0-45; keyframe a slow spin for a playful wipe"
+    },
+    {
+     "name": "Feather",
+     "does": "softens the iris edge in pixels",
+     "typical": "10-60"
+    }
+   ],
+   "demo_settings": {
+    "Iris Center": [
+     960,
+     540
+    ],
+    "Iris Points": 6,
+    "Outer Radius": 450,
+    "Use Inner Radius": 0,
+    "Rotation": 0,
+    "Feather": 15
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere transitions (not effects): Iris Round / Iris Box / Iris Diamond / Iris Cross / Iris Points / Iris Star / Iris Shapes, or Star Wipe",
+   "pairs_with": [
+    "Drop Shadow",
+    "Radial Wipe",
+    "Linear Wipe",
+    "Directional Blur"
+   ],
+   "scripting": "Use Inner Radius is a 0/1 number, not a boolean. Iris Center is in layer pixels (the harvested [960,540] matches a 1920x1080 layer). Outer Radius at 0 = layer fully visible; increasing it opens a transparent hole, so put the incoming clip on the layer BELOW. Render-verified: the INSIDE of the iris is the transparent part, and Outer Radius is the corner (circum) radius: 6 points at 450 gave a triangle with its apex 450 px above centre and its base 225 px below. A centred 6-point triangle would need about 2200 to clear a 1920x1080 frame (above the 2000 max), so a full wipe needs more points: a 32-point (16-sided) iris clears it at about 1130, so 1300 leaves margin for Feather.",
+   "recipe": {
+    "Iris Points": [
+     [
+      0,
+      32
+     ]
+    ],
+    "Outer Radius": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      1300
+     ]
+    ],
+    "Rotation": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/224.png",
+    "note": "A sharp transparent (black) hole opened at frame centre, as described, but 6 Iris Points made a triangle rather than a hexagon, so the Iris Points text, scripting and recipe were corrected.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Linear Wipe",
+   "match": "ADBE Linear Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer to transparent along a straight edge at any angle, with an optional soft feathered edge; also widely used as a gradient fade mask.",
+   "look": [
+    "linear wipe",
+    "edge reveal",
+    "soft gradient fade",
+    "write-on",
+    "clean transition"
+   ],
+   "use_for": [
+    "wipe-on of lower-third bars, headline strips and ticker plates in news graphics",
+    "left-to-right reveal of text or a line on a chart in an explainer",
+    "soft gradient fade of the bottom of a clip into a dark background layer so captions stay readable (large Feather, static)",
+    "directional wipe transition between two clips in a reel"
+   ],
+   "avoid": [
+    "a hard edge (Feather 0) on live action looks like a cheap PowerPoint wipe; feather it or use it on graphics",
+    "with a large Feather, check the first and last frames of the wipe: the soft band may still be partly visible at 0% or not fully cleared at 100% (Completion cannot go past 0-100), so trim the layer where the wipe ends"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "percent of the layer wiped away (0 = fully visible, 100 = gone)",
+     "typical": "keyframe 100 -> 0 for a reveal, 0 -> 100 for a wipe-off"
+    },
+    {
+     "name": "Wipe Angle",
+     "does": "direction the wipe travels in degrees (90/270 horizontal, 0/180 vertical; add 180 to reverse)",
+     "typical": "90 for a horizontal reveal, 0 or 180 for vertical, 45-135 for a diagonal"
+    },
+    {
+     "name": "Feather",
+     "does": "softness of the wipe edge in pixels",
+     "typical": "0-20 for graphics, 100-400 for a soft gradient fade"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 50,
+    "Wipe Angle": 90,
+    "Feather": 120
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Linear Wipe transition for a wipe on a cut; Linear Wipe (Legacy) video effect for in-clip wipes",
+   "pairs_with": [
+    "Radial Wipe",
+    "Venetian Blinds",
+    "Gradient Ramp",
+    "Drop Shadow"
+   ],
+   "scripting": "Wipe Angle is unbounded degrees. Render-verified: Wipe Angle 90 clears from the LEFT edge (Completion 50 left the left half transparent with a soft edge just left of centre); add 180 (270) to clear from the right. Transition Completion is a plain 0-100 percent. For a static gradient fade, set Completion around 50-80 and a large Feather, no keyframes.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      100
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/225.png",
+    "note": "The left half of the frame is wiped to transparent (black) with a soft feathered vertical edge near the centre, confirming Wipe Angle 90 clears from the left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Radial Wipe",
+   "match": "ADBE Radial Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Sweeps the layer to transparent like a clock hand around a centre point, clockwise, counter-clockwise or both ways at once.",
+   "look": [
+    "clock wipe",
+    "radial reveal",
+    "pie chart",
+    "countdown",
+    "circular progress"
+   ],
+   "use_for": [
+    "pie-chart or donut-ring reveal of a statistic in an explainer (on a ring or circle layer)",
+    "countdown / timer ring for a poll-result or deadline graphic",
+    "clock-wipe transition between two news clips",
+    "circular progress ring around a speaker's photo badge"
+   ],
+   "avoid": [
+    "as a full-frame transition on live action it looks like an old video-switcher preset",
+    "Feather on a thin ring spreads unevenly; keep it low on stroke graphics"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "percent of the circle wiped away (0 = fully visible, 100 = gone)",
+     "typical": "keyframe 100 -> 0 to draw a ring on"
+    },
+    {
+     "name": "Start Angle",
+     "does": "where the sweep starts, in degrees (0 = 12 o'clock)",
+     "typical": "0"
+    },
+    {
+     "name": "Wipe Center",
+     "does": "pivot of the sweep in layer pixels",
+     "typical": "centre of the ring or chart, e.g. [960, 540]"
+    },
+    {
+     "name": "Wipe",
+     "does": "sweep direction popup: 1 Clockwise, 2 Counterclockwise, 3 Both",
+     "typical": "1"
+    },
+    {
+     "name": "Feather",
+     "does": "softness of the sweep edge in pixels",
+     "typical": "0 for charts, 20-80 for a soft transition"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 40,
+    "Start Angle": 0,
+    "Wipe Center": [
+     960,
+     540
+    ],
+    "Wipe": 1,
+    "Feather": 10
+   },
+   "enum_labels": {
+    "Wipe": {
+     "1": "Clockwise",
+     "2": "Counterclockwise",
+     "3": "Both"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Radial Wipe or Clock Wipe transition (Premiere 2026 has no Radial Wipe video effect)",
+   "pairs_with": [
+    "Linear Wipe",
+    "Iris Wipe",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Wipe is a 1-based popup (1 Clockwise, 2 Counterclockwise, 3 Both; order confirmed from the plugin's own label string). Wipe Center is in layer pixels, so on a precomp or shape layer smaller than the comp use that layer's own centre. For a percentage ring, drive Transition Completion = 100 - value (e.g. 62% -> 38). Render-verified: Start Angle 0 is 12 o'clock and Wipe 1 sweeps clockwise (Completion 40 cleared the wedge from 12 o'clock round to about 5 o'clock).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      100
+     ],
+     [
+      1.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/226.png",
+    "note": "A clockwise pie wedge from 12 o'clock to about 144 degrees is wiped to transparent (black) around the frame centre, exactly a 40% clock wipe.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Venetian Blinds",
+   "match": "ADBE Venetian Blinds",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer away in parallel stripes like closing venetian blinds; stripe width, angle and edge softness are adjustable.",
+   "look": [
+    "venetian blinds",
+    "stripes",
+    "slatted reveal",
+    "retro transition",
+    "scanline bands"
+   ],
+   "use_for": [
+    "striped reveal of a graphic, title card or photo in an explainer",
+    "retro / broadcast-style transition between two clips in a satire reel",
+    "static stripe texture on a background plate (fixed Completion around 30-50)",
+    "slatted glimpse of a second layer underneath for a tension beat in a trailer"
+   ],
+   "avoid": [
+    "full-frame blinds on live action look like a 1990s wedding-video preset",
+    "very thin Width on detailed footage flickers and aliases when exported to social"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "how far each stripe is wiped away (0 = visible, 100 = gone)",
+     "typical": "keyframe 0 -> 100 over 0.5-0.8 s"
+    },
+    {
+     "name": "Direction",
+     "does": "angle of the stripes in degrees (0 = vertical stripes, render-verified)",
+     "typical": "0 for vertical slats, 90 for horizontal, 45 for diagonal"
+    },
+    {
+     "name": "Width",
+     "does": "width of each stripe in pixels",
+     "typical": "40-120 on 1920x1080"
+    },
+    {
+     "name": "Feather",
+     "does": "soft edge of each stripe in pixels",
+     "typical": "0-10"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 50,
+    "Direction": 0,
+    "Width": 80,
+    "Feather": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Venetian Blinds transition (Premiere 2026 has no Venetian Blinds video effect)",
+   "pairs_with": [
+    "Linear Wipe",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Direction is unbounded degrees. Render-verified: Direction 0 gives VERTICAL stripes, and Width is the full stripe period (Width 80 gave 24 stripes across 1920 px, each half transparent at Completion 50). Width min is 1 pixel. Wiped areas are transparent, so put the incoming clip on the layer below.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.7,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/227.png",
+    "note": "24 evenly spaced vertical transparent (black) slats cut through the frame, about half of each 80 px period wiped, a clear venetian-blinds look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Apply Color LUT",
+   "match": "ADBE Apply Color LUT2",
+   "category": "Utility",
+   "status": "needs_input",
+   "summary": "Applies a colour look-up table file (.cube, .3dl, .look or .csp) to the layer, e.g. a camera log-to-Rec.709 conversion or a creative film look.",
+   "look": [
+    "LUT",
+    "colour grade",
+    "log to Rec.709",
+    "film look",
+    "teal-orange"
+   ],
+   "use_for": [
+    "convert S-Log / V-Log / C-Log interview footage to Rec.709 in a documentary",
+    "apply a channel's house grading LUT consistently across news packages",
+    "creative film-emulation or teal-orange look on a trailer (on an adjustment layer)"
+   ],
+   "avoid": [
+    "a technical log LUT on footage that is not log (or the wrong camera) crushes and over-saturates",
+    "creative LUTs at full strength look stock; put it on an adjustment layer and lower Opacity"
+   ],
+   "confidence": "medium",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color (Basic Correction > Input LUT, or Creative > Look)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Curves",
+    "Exposure",
+    "Adjustment layer"
+   ],
+   "scripting": "needs_input: the LUT file is chosen with a file dialog when the effect is applied in the UI; the harvest has only headers ('<LUT not set>'), so there is no settable property and adding it by match name from a script leaves it with no LUT (no visible change). Workarounds: save a .ffx preset with the LUT loaded once by hand and apply it with layer.applyPreset(File), or use Lumetri Color's LUT fields via a preset. Strength is controlled by layer Opacity on an adjustment layer.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (no LUT file settable from a script), so the gallery has no frame for it; 234.png belongs to the older 'ADBE Apply Color LUT' match, not this one.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Overbrights",
+   "match": "CC Overbrights",
+   "category": "Utility",
+   "status": "needs_input",
+   "summary": "Diagnostic view that flags pixels whose values go outside the 0-1 range (overbrights) in a 32-bpc HDR project, painting them in a clip colour; channel views are selectable.",
+   "look": [
+    "diagnostic",
+    "clipping check",
+    "overbright highlight",
+    "false colour"
+   ],
+   "use_for": [
+    "check a 32-bpc grade or Glow/Exposure stack for highlight values that will clip on export",
+    "QC step before rendering an HDR or heavily-glowed trailer title"
+   ],
+   "avoid": [
+    "it is a monitoring tool; remove or disable it before rendering",
+    "on an 8/16-bpc project or SDR footage nothing is overbright, so it shows little or nothing"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Channel",
+     "does": "which measure is checked and how it is shown: 1 RGB Solid, 2 Lightness Solid, 3 Luminance Solid, (4 = menu separator), 5 RGB Clip, 6 Lightness Clip, 7 Luminance Clip",
+     "typical": "5 RGB Clip (default); 7 Luminance Clip to check brightness only"
+    },
+    {
+     "name": "Clip Color",
+     "does": "colour used to paint out-of-range pixels",
+     "typical": "#FF0000 or #FF00FF"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Channel": {
+     "1": "RGB Solid",
+     "2": "Lightness Solid",
+     "3": "Luminance Solid",
+     "4": "(separator)",
+     "5": "RGB Clip",
+     "6": "Lightness Clip",
+     "7": "Luminance Clip"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "HDR Compander",
+    "HDR Highlight Compression",
+    "Exposure",
+    "Glow"
+   ],
+   "scripting": "needs_input: its job is to show values above 1.0 / below 0, which only exist in a 32-bpc project with HDR or over-driven pixels; on an SDR test frame it is not reliably visible, so the gallery skips it. Channel is a 1-based popup; labels read from the plugin's own string 'RGB Solid|Lightness Solid|Luminance Solid|(-|RGB Clip|Lightness Clip|Luminance Clip' (the '(-' separator occupies index 4, never set 4). How the 'Solid' views differ from the 'Clip' views on screen is not verified (low confidence). Clip Color is set as \"#RRGGBB\".",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (only visible on 32-bpc over-range pixels), so no frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cineon Converter",
+   "match": "ADBE Cineon Converter2",
+   "category": "Utility",
+   "status": "current",
+   "summary": "Converts between Cineon/DPX logarithmic film encoding and linear video values, with control over black point, white point, gamma and highlight roll-off.",
+   "look": [
+    "log to linear",
+    "flat log",
+    "film scan",
+    "washed-out",
+    "contrast"
+   ],
+   "use_for": [
+    "turn 10-bit Cineon/DPX film-scan footage into viewable contrast for an archive documentary",
+    "deliberately flatten an image into a 'log' look for a before/after grading explainer",
+    "convert graded linear material back to log for a film-out style pipeline"
+   ],
+   "avoid": [
+    "on normal Rec.709 video Log to Linear crushes and over-contrasts the image",
+    "superseded for most work by colour management / OCIO and LUTs; only reach for it with real Cineon/DPX scans"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Conversion Type",
+     "does": "direction: 1 Linear to Log, 2 Log to Linear, 3 Log to Log",
+     "typical": "2 for Cineon scans; 1 for a flat log look"
+    },
+    {
+     "name": "10 Bit Black Point",
+     "does": "10-bit code value treated as black",
+     "typical": "95"
+    },
+    {
+     "name": "10 Bit White Point",
+     "does": "10-bit code value treated as white",
+     "typical": "685"
+    },
+    {
+     "name": "Gamma",
+     "does": "target gamma of the conversion",
+     "typical": "1.7 (default); 1.0 for linear workflows"
+    },
+    {
+     "name": "Highlight Rolloff",
+     "does": "how gently highlights above the white point are compressed",
+     "typical": "20-60"
+    }
+   ],
+   "demo_settings": {
+    "Conversion Type": 1,
+    "10 Bit Black Point": 95,
+    "10 Bit White Point": 685,
+    "Gamma": 1.7,
+    "Highlight Rolloff": 20
+   },
+   "enum_labels": {
+    "Conversion Type": {
+     "1": "Linear to Log",
+     "2": "Log to Linear",
+     "3": "Log to Log"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Cineon Converter (Premiere Video Effects > Utility; Conversion Type list differs)",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Lumetri Color",
+    "Apply Color LUT"
+   ],
+   "scripting": "Conversion Type is a 1-based popup; the order Linear to Log / Log to Linear / Log to Log is confirmed from the plugin's own label string and matches the harvested default 2 = Log to Linear. The obsolete Cineon Converter (ADBE Cineon Converter) and Premiere's Cineon Converter use a different, longer list, so do not reuse these indices there. Internal Black Point / Internal White Point are 0-1 values (internal working-space black and white), not 10-bit codes. Demo uses Linear to Log, which gives a clearly flat, washed-out frame on normal footage.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/228.png",
+    "note": "Linear to Log turned the frame flat and washed out: shadows lifted to grey, contrast and saturation clearly reduced, exactly the log look described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Profile Converter",
+   "match": "ADBE ProfileToProfile",
+   "category": "Utility",
+   "status": "current",
+   "summary": "Converts the layer's colours from one ICC colour profile to another (e.g. sRGB to Rec.709 or a linear profile), with rendering intent and black-point compensation.",
+   "look": [
+    "colour space conversion",
+    "gamma shift",
+    "profile transform",
+    "technical"
+   ],
+   "use_for": [
+    "fix a still or graphic that was made in a different colour profile and looks too dark or washed out",
+    "linearize a layer for physically correct blending, then convert back",
+    "match a client graphic's colour profile to the project's working space"
+   ],
+   "avoid": [
+    "profile indices depend on the ICC profiles installed on the machine, so a hard-coded index can mean a different profile elsewhere",
+    "double conversions (project colour management plus this effect) cause washed-out or crushed results"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Input Profile",
+     "does": "source ICC profile (popup, built from installed profiles)",
+     "typical": "1 (believed to be Project Working Space)"
+    },
+    {
+     "name": "Output Profile",
+     "does": "target ICC profile (popup, built from installed profiles)",
+     "typical": "1 (believed to be Project Working Space)"
+    },
+    {
+     "name": "Linearize Input Profile",
+     "does": "0/1: treat the input profile as linear (gamma 1.0)",
+     "typical": "0; 1 for linear-light blending"
+    },
+    {
+     "name": "Linearize Output Profile",
+     "does": "0/1: output a linear version of the output profile",
+     "typical": "0"
+    },
+    {
+     "name": "Intent",
+     "does": "ICC rendering intent: 1 Perceptual, 2 Saturation, 3 Relative Colorimetric, 4 Absolute Colorimetric",
+     "typical": "3 Relative Colorimetric (default); 1 Perceptual for photos converted into a smaller gamut"
+    },
+    {
+     "name": "Use Black Point Compensation",
+     "does": "0/1: keeps shadow detail when the profiles have different black points",
+     "typical": "1"
+    },
+    {
+     "name": "Scene-ref. Profile Compensation",
+     "does": "popup: 1 Use Project Setting, 2 On, 3 Off",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Linearize Input Profile": 1,
+    "Linearize Output Profile": 0,
+    "Use Black Point Compensation": 1
+   },
+   "enum_labels": {
+    "Intent": {
+     "1": "Perceptual",
+     "2": "Saturation",
+     "3": "Relative Colorimetric",
+     "4": "Absolute Colorimetric"
+    },
+    "Scene-ref. Profile Compensation": {
+     "1": "Use Project Setting",
+     "2": "On",
+     "3": "Off"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Exposure",
+    "Curves",
+    "Cineon Converter"
+   ],
+   "scripting": "Input Profile (1-152) and Output Profile (1-146) are 1-based popups whose lists are built from the installed ICC profiles; labels were not harvested, so only rely on index 1 (assumed Project Working Space; the plugin also has an 'Embedded' entry, position unknown; low confidence). Intent and Scene-ref. Profile Compensation labels are confirmed from the plugin's own label strings (default 3 = Relative Colorimetric, default 1 = Use Project Setting). Checkboxes are 0/1 numbers. Render-verified: the demo (Linearize Input Profile 1, everything else default) produces a clearly brighter, flatter, washed-out gamma shift in the gallery project.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/229.png",
+    "note": "Linearizing only the input profile gave a clearly brighter, milky, lower-contrast frame, the gamma shift the card predicts.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Grow Bounds",
+   "match": "ADBE GROW BOUNDS",
+   "category": "Utility",
+   "status": "needs_input",
+   "summary": "Enlarges the layer's rendering bounds by a number of pixels so following effects (glow, shadow, distortions) on shape, text or vector layers are not cut off at the layer edge; invisible by itself.",
+   "look": [
+    "utility",
+    "unclipped glow",
+    "edge fix"
+   ],
+   "use_for": [
+    "stop Glow or Drop Shadow being clipped square on a continuously rasterized text or shape layer",
+    "give Turbulent Displace / Wave Warp room to push pixels past a graphic's edge",
+    "fix hard-edged cut-offs on vector logo animations in news bumpers"
+   ],
+   "avoid": [
+    "it must sit ABOVE the effect that needs room in the stack; placed after it does nothing",
+    "very large values on many layers slow renders for no visible gain"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Pixels",
+     "does": "how many pixels the layer bounds grow on every side",
+     "typical": "50-300"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Drop Shadow",
+    "Turbulent Displace",
+    "Wave Warp"
+   ],
+   "scripting": "needs_input: it changes nothing visible on its own and on a full-frame footage layer there is nothing to clip, so the gallery skips it. Use it on a shape/text/vector layer and put it first in the effect stack (before the effect that needs space). Pixels is a plain number (default 10).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (invisible on its own on a full-frame layer), so no frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "HDR Compander",
+   "match": "ADBE Compander",
+   "category": "Utility",
+   "status": "current",
+   "summary": "Compresses HDR (32-bpc) pixel values into the 0-1 range by a gain factor so 8/16-bit-only effects can process them, then expands them back with a second instance; on its own it darkens or brightens the image.",
+   "look": [
+    "HDR range",
+    "exposure scale",
+    "darken",
+    "utility"
+   ],
+   "use_for": [
+    "sandwich an 8-bit-only effect in a 32-bpc trailer comp: Compander (Compress) -> effect -> Compander (Expand) with the same Gain",
+    "protect bright glows and flares from clipping when passing through a low-bit-depth effect"
+   ],
+   "avoid": [
+    "a mismatched Gain/Gamma between the compress and expand instances shifts exposure",
+    "pointless in an 8-bpc project with SDR footage beyond a crude exposure change"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Mode:",
+     "does": "1 Compress Range, 2 Expand Range",
+     "typical": "1 before the 8-bit effect, 2 after it"
+    },
+    {
+     "name": "Gain",
+     "does": "factor values are divided by (compress) or multiplied by (expand)",
+     "typical": "2-8, same on both instances"
+    },
+    {
+     "name": "Gamma",
+     "does": "gamma applied during the compress/expand",
+     "typical": "1.0, same on both instances"
+    }
+   ],
+   "demo_settings": {
+    "Mode:": 1,
+    "Gain": 3,
+    "Gamma": 1
+   },
+   "enum_labels": {
+    "Mode:": {
+     "1": "Compress Range",
+     "2": "Expand Range"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "HDR Highlight Compression",
+    "CC Overbrights",
+    "Glow",
+    "Exposure"
+   ],
+   "scripting": "Note the property name is 'Mode:' with a trailing colon. Mode is a 1-based popup (1 Compress Range, 2 Expand Range; confirmed from the plugin's label string). Link the second instance's Gain and Gamma to the first by expression so they always match. Demo (Compress, Gain 3) visibly darkens an SDR frame.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/230.png",
+    "note": "Compress Range at Gain 3 darkened the whole frame to roughly a third of its brightness with no other change, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "HDR Highlight Compression",
+   "match": "ADBE HDR ToneMap",
+   "category": "Utility",
+   "status": "needs_input",
+   "summary": "Tone-maps the highlights of a high-dynamic-range (32-bpc) image down into the displayable range, keeping detail that would otherwise clip to white.",
+   "look": [
+    "tone mapping",
+    "highlight recovery",
+    "HDR to SDR"
+   ],
+   "use_for": [
+    "bring over-driven glow/flare highlights in a 32-bpc trailer comp back into range before export",
+    "show detail in EXR/HDR stills or renders used in an explainer"
+   ],
+   "avoid": [
+    "does nothing on 8/16-bpc SDR footage where no value is above 1.0",
+    "high Amount on mid-tone-heavy HDR can look flat and greyed"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "strength of the highlight compression in percent",
+     "typical": "50-100"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "HDR Compander",
+    "CC Overbrights",
+    "Exposure",
+    "Glow"
+   ],
+   "scripting": "needs_input: it only acts on pixel values above 1.0, which exist only in a 32-bpc project with HDR footage or over-driven effects; on the SDR demo frame (test plate A) it shows no change, so the gallery skips it. Put it at the end of the stack (or on a top adjustment layer) in 32-bpc comps.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (no over-range pixels on the SDR demo frame), so no frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "3D Glasses (Obsolete)",
+   "match": "ADBE 3D Glasses",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of 3D Glasses: combines a left-eye and a right-eye layer into a stereoscopic image (anaglyph red/blue or red/green, side-by-side, over-under, interlaced or a difference view).",
+   "look": [
+    "anaglyph",
+    "stereo 3D",
+    "red-cyan",
+    "retro 3D"
+   ],
+   "use_for": [
+    "only for opening old projects that already use it; use the current 3D Glasses effect for new work"
+   ],
+   "avoid": [
+    "obsolete effect: do not add it to new comps",
+    "needs two separate eye views (layers); on a single layer with Left/Right View unset it outputs a blank black frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Left View",
+     "does": "layer used as the left-eye image (layer reference)",
+     "typical": "left-eye layer index"
+    },
+    {
+     "name": "Right View",
+     "does": "layer used as the right-eye image (layer reference)",
+     "typical": "right-eye layer index"
+    },
+    {
+     "name": "Scene Convergence",
+     "does": "horizontal offset between the eyes (sets depth of the screen plane)",
+     "typical": "-20 to 20"
+    },
+    {
+     "name": "3D View",
+     "does": "output format popup, 13 entries including separators (see enum_labels)",
+     "typical": "1 Stereo Pair (Side by Side); 10 Balanced Colored Red Blue for a red-cyan anaglyph"
+    },
+    {
+     "name": "Units",
+     "does": "units of Scene Convergence / Vertical Alignment: 1 Pixels, 2 % of Source",
+     "typical": "1"
+    },
+    {
+     "name": "Balance",
+     "does": "colour balance of anaglyph modes to reduce ghosting",
+     "typical": "8 (default)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "3D View": {
+     "1": "Stereo Pair (Side by Side)",
+     "2": "Interlace Upper L Lower R",
+     "3": "(separator)",
+     "4": "Red Green LR",
+     "5": "Red Blue LR",
+     "6": "(separator)",
+     "7": "Balanced Red Green LR",
+     "8": "Balanced Red Blue LR",
+     "9": "(separator)",
+     "10": "Balanced Colored Red Blue",
+     "11": "(separator)",
+     "12": "Over Under",
+     "13": "Difference"
+    },
+    "Units": {
+     "1": "Pixels",
+     "2": "% of Source"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: 3D Glasses (ADBE 3D Glasses2, Perspective category; its 3D View list has 12 entries in a different order, so indices do not transfer); Premiere: none",
+   "pairs_with": [
+    "Channel Combiner",
+    "Shift Channels"
+   ],
+   "scripting": "Obsolete: the gallery skips it. Left View / Right View are layer-reference properties (set with a layer index from ExtendScript, not from a spec). 3D View and Units labels come from the 3DGlasses plugin's label strings; the 13-entry list (with '(-' separators at 3, 6, 9, 11) is matched to this obsolete version by its harvested max of 13 (medium confidence); never set a separator index. For a fake anaglyph look from one clip, duplicate the layer, isolate red on one copy and cyan on the other with Shift Channels, offset them and blend with Screen/Add.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "pve/gallery/ae/231.png",
+    "note": "Card is obsolete so it is outside the gallery; a stale 231.png exists and is solid black, consistent with a single layer and no Left/Right View producing a blank image.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

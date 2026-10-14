@@ -1,0 +1,787 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fade In+Out - frames",
+   "match": "ADBE CM FadeInOutFrames",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect (a block of sliders defined in PresetEffects.xml) that renders nothing by itself. It is the control panel of the Behaviors preset 'Fade In+Out - frames', whose expression fades the layer up from transparent at its in point and back down at its out point over the set number of frames.",
+   "look": [
+    "fade in",
+    "fade out",
+    "opacity ramp",
+    "soft head and tail",
+    "clean"
+   ],
+   "use_for": [
+    "auto-fading lower thirds, captions and logo bugs at their in/out points without keyframes",
+    "news reel overlays (source credit, location tag) that must fade on and off cleanly",
+    "fading B-roll layers in a documentary stack so trims keep the fade attached to the layer ends"
+   ],
+   "avoid": [
+    "adding the bare match name: with no preset expression attached nothing changes on screen",
+    "fade in + fade out longer than the layer (the preset's expression is fadeIn + fadeOut - value, so overlapping ramps dip and the layer never reaches full opacity)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Fade In Duration (frames)",
+     "does": "Frames from the layer in point to full opacity (0 = no fade in)",
+     "typical": "8-15 frames for captions, 20-30 for documentary B-roll"
+    },
+    {
+     "name": "Fade Out Duration (frames)",
+     "does": "Frames from full opacity down to transparent at the layer out point (0 = no fade out)",
+     "typical": "8-15 frames"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Cross Dissolve (transition at clip head/tail)",
+   "pairs_with": [
+    "Solid Composite",
+    "Fade In+Out - msec"
+   ],
+   "scripting": "Hidden pseudo-effect: do not apply by match name expecting a visual. Apply the animation preset Support Files/Presets/Behaviors/Fade In+Out - frames.ffx instead; it adds this control effect plus a Solid Composite whose Source Opacity expression converts the two sliders with framesToTime() and ramps linear() from inPoint and to outPoint (result = fadeIn + fadeOut - value). After the preset is applied, set the two sliders via this match name. The expression looks the effect up by its display name effect(\"Fade In+Out - frames\"), so do not rename the effect. The fade follows the layer's in/out points, so trimming the layer moves the fade with it. 0 disables that side. No keyframes needed.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fade In+Out - msec",
+   "match": "ADBE CM FadeInOutmsec",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect that renders nothing by itself. It is the control panel of the Behaviors preset 'Fade In+Out - msec', whose expression fades the layer in from its in point and out to its out point over durations given in milliseconds.",
+   "look": [
+    "fade in",
+    "fade out",
+    "opacity ramp",
+    "soft head and tail",
+    "clean"
+   ],
+   "use_for": [
+    "frame-rate independent auto-fades on captions and lower thirds (same timing in 25, 30 and 60 fps comps)",
+    "fading logo bugs, source credits and map labels on and off in explainers",
+    "template layers that get retimed often, since the fade stays attached to the layer ends"
+   ],
+   "avoid": [
+    "applying the bare match name: without the preset's expression it does nothing",
+    "fade in + fade out longer than the layer (the two ramps overlap and the layer never reaches full opacity)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Fade In Duration (msec)",
+     "does": "Milliseconds from the layer in point to full opacity (0 = no fade in)",
+     "typical": "250-600 ms for captions, 800-1200 ms for documentary B-roll"
+    },
+    {
+     "name": "Fade Out Duration (msec)",
+     "does": "Milliseconds from full opacity down to transparent at the layer out point (0 = no fade out)",
+     "typical": "250-600 ms"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Cross Dissolve (transition at clip head/tail)",
+   "pairs_with": [
+    "Solid Composite",
+    "Fade In+Out - frames"
+   ],
+   "scripting": "Hidden pseudo-effect: apply the preset Support Files/Presets/Behaviors/Fade In+Out - msec.ffx, which adds this control plus a Solid Composite whose Source Opacity expression divides the slider values by 1000 and ramps linear() from inPoint and to outPoint. Then set the two sliders through this match name. The expression references the effect by display name, so do not rename it. Values are milliseconds (UI slider shows 0-10000; valid range 0-30000). 0 disables that side.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fade Master Control",
+   "match": "ADBE CM TransFade",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect with a single Transition Completion slider; it draws nothing itself. It is the master control of the 'Transitions - Dissolves' presets Fade - dip to black, Fade - flash to white and Fade - overexposed (and the Legacy Boxes/Ovals shape-wipe presets), whose Tint and Solid Composite expressions read the slider.",
+   "look": [
+    "dip to black",
+    "flash to white",
+    "overexposed fade",
+    "transition in"
+   ],
+   "use_for": [
+    "dip-to-black scene change between documentary chapters",
+    "flash-to-white hit on a trailer beat or a news 'breaking' sting",
+    "overexposed bloom-in on an AI-education reel cold open"
+   ],
+   "avoid": [
+    "applying it alone: only the preset's expressions make anything happen",
+    "using the flash-to-white version repeatedly in a political explainer (reads as cheap and can be harsh for viewers)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "Progress of the parent preset's transition, 0-100%. In 'Fade - dip to black' 0-50% fades the layer in fully tinted black and 50-100% removes the tint to reveal the colour",
+     "typical": "keyframe 0 -> 100 over 0.5-1.5 s"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Dip to Black (transition)",
+   "pairs_with": [
+    "Tint",
+    "Solid Composite",
+    "Calculations"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply one of Support Files/Presets/Transitions - Dissolves/Fade - dip to black.ffx (Tint + Solid Composite), Fade - flash to white.ffx (Tint + Solid Composite) or Fade - overexposed.ffx (Calculations + two Solid Composites); the Legacy 'Boxes - ...' and 'Ovals - ...' presets also use it. Apply to the INCOMING layer, then keyframe 'Transition Completion' on this match name. Expressions in the preset look it up by display name effect(\"Fade Master Control\"), so do not rename it. At 0% the layer is fully hidden, at 100% fully revealed; the mid point (50%) is the full black/white moment.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fly to Inset",
+   "match": "ADBE CM FlyToInset",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect that is the control panel of the Legacy preset 'Fly to Inset': as Transition Completion rises, the full-frame layer shrinks and travels to a corner picture-in-picture box with a bevelled coloured frame and drop shadow. On its own it renders nothing.",
+   "look": [
+    "picture-in-picture",
+    "inset box",
+    "framed video",
+    "drop shadow",
+    "bevel",
+    "TV news"
+   ],
+   "use_for": [
+    "shrinking a news clip into a corner inset so an anchor, map or graphic can take the frame",
+    "documentary 'archive footage in a box' move before a talking head returns",
+    "explainer PiP where a source video moves aside for an on-screen chart"
+   ],
+   "avoid": [
+    "applying the match name alone (no motion without the preset's Linear Wipe, Vegas, Bevel Alpha, Drop Shadow and Transform stack)",
+    "the bevel and light-grey frame look dated; for modern reels lower Frame Size or recolour the frame"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0% = full frame, 100% = finished inset; drives the edge crop (0-5%), scale, position, frame width, bevel and shadow of the preset",
+     "typical": "keyframe 0 -> 100 over 0.6-1 s"
+    },
+    {
+     "name": "Target Scale",
+     "does": "Final size of the inset in percent of the original",
+     "typical": "30-40"
+    },
+    {
+     "name": "Target Position",
+     "does": "Final centre of the inset in comp pixels",
+     "typical": "[1407, 288] top-right (default) or [512, 288] top-left in 1920x1080"
+    },
+    {
+     "name": "Frame Size",
+     "does": "Thickness of the coloured frame around the inset",
+     "typical": "4-10"
+    },
+    {
+     "name": "Frame Color",
+     "does": "Colour of the inset frame",
+     "typical": "#FFFFFF or a channel brand colour such as #FF6A00"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform",
+   "pairs_with": [
+    "Transform",
+    "Linear Wipe",
+    "Vegas",
+    "Bevel Alpha",
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply Support Files/Presets/Legacy/Fly to Inset.ffx: it adds this control plus 4 Linear Wipes (crop top/bottom/left/right, 0-5%), Vegas ('Vegas - frame', stroke colour = Frame Color, width = Frame Size), Bevel Alpha (Frame Size*0.75), Drop Shadow and a Transform (ADBE Geometry2) whose Position = easeOut(completion, centre, Target Position) and Scale = easeOut(completion, 100, Target Scale). Then set/keyframe props on this match name. Target Position is in layer pixels: default [1407.36, 288.36] = 0.733/0.267 of a 1920x1080 frame; for other comp sizes re-set it. Do not rename the effect (expressions use its display name).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Follow",
+   "match": "ADBE DE Follow",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect (control sliders, a Leader layer menu and checkboxes) intended for a follow-the-leader behaviour where a layer copies another layer's position, rotation, scale and opacity with a time delay. It renders nothing and no preset shipped with AE 2026 uses it, so on its own it has no effect.",
+   "look": [
+    "follow the leader",
+    "trailing echo",
+    "delayed motion",
+    "cascade"
+   ],
+   "use_for": [
+    "as a ready-made control panel for a custom expression that makes captions or icons trail a lead layer",
+    "cascading duplicates of a logo or arrow in an explainer (with a hand-written valueAtTime expression)"
+   ],
+   "avoid": [
+    "expecting motion after applying it: you must write the expression that reads these controls",
+    "relying on it in automated builds: it is an orphan internal pseudo-effect and may vanish in a future version"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Delay",
+     "does": "Intended time lag in seconds behind the leader (or per layer index when Based On Index is on)",
+     "typical": "0.05-0.2"
+    },
+    {
+     "name": "Leader",
+     "does": "Layer to follow (layer-reference popup)",
+     "typical": "the layer directly above"
+    },
+    {
+     "name": "Position",
+     "does": "Checkbox (0/1): follow the leader's position",
+     "typical": "1"
+    },
+    {
+     "name": "Rotation",
+     "does": "Checkbox (0/1): follow the leader's rotation",
+     "typical": "1"
+    },
+    {
+     "name": "Scale",
+     "does": "Checkbox (0/1): follow the leader's scale",
+     "typical": "1"
+    },
+    {
+     "name": "Opacity",
+     "does": "Checkbox (0/1): follow the leader's opacity",
+     "typical": "1"
+    },
+    {
+     "name": "Based On Index",
+     "does": "Checkbox (0/1): multiply the delay by the layer's index distance from the leader",
+     "typical": "1 for cascades"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Layer Control",
+    "Checkbox Control"
+   ],
+   "scripting": "Hidden orphan pseudo-effect (defined in Support Files/PresetEffects.xml; no .ffx in AE 2026 references it). Applying it adds only the controls; motion needs a property expression, e.g. on Position: f=effect(\"Follow\"); l=f(\"Leader\"); d=f(\"Delay\")*(f(\"Based On Index\")==1?(index-l.index):1); l.transform.position.valueAtTime(time-d). 'Leader' is a layer-type param and cannot be set from a spec; set it by layer index in script (property.setValue(layerIndex)). Checkboxes are 1d values 0/1. Purpose inferred from parameter names, so confidence is medium.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Getting Jiggy",
+   "match": "ADBE Getting Jiggy",
+   "category": "",
+   "status": "hidden",
+   "summary": "Adobe's sample pseudo-effect in PresetEffects.xml that shows most pseudo-effect parameter types (slider, percent, pixel, layer, colour, point, angle, checkbox, group) with joke names. No preset uses it; it does nothing visually and has no editing use.",
+   "look": [
+    "none",
+    "test effect",
+    "parameter sample"
+   ],
+   "use_for": [
+    "none in production; ignore when planning edits",
+    "reference only for how pseudo-effect parameter types appear to scripts"
+   ],
+   "avoid": [
+    "applying it to any layer in a deliverable (it adds an inexplicable effect with no output)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Oh Boy 1",
+     "does": "Sample plain slider (-50 to 50); controls nothing",
+     "typical": "leave default"
+    },
+    {
+     "name": "Hopscotch",
+     "does": "Sample colour parameter; controls nothing",
+     "typical": "leave default"
+    },
+    {
+     "name": "Center Point",
+     "does": "Sample point parameter; controls nothing",
+     "typical": "leave default"
+    },
+    {
+     "name": "Enable Jig",
+     "does": "Sample checkbox inside the 'Jig' group (0/1); controls nothing",
+     "typical": "leave default"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [],
+   "scripting": "Hidden test pseudo-effect. Never select it for an edit. Note for harvesters: group headers ('Jig', 'Funky Chicken') come through as header entries with an empty closing header; checkboxes appear as 1d 0/1; 'Follow Layer' is a layer-type param.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Grid Wipe",
+   "match": "ADBE CM GridWipe",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect that is the control panel of the 'Transitions - Wipes/Grid Wipe' preset: two perpendicular Venetian Blinds driven by expressions so the layer is revealed or removed through a growing grid of square cells. Alone it renders nothing.",
+   "look": [
+    "grid wipe",
+    "checker reveal",
+    "square cells",
+    "blinds",
+    "graphic transition"
+   ],
+   "use_for": [
+    "graphic reveal of a data card or chart in an explainer",
+    "tech/AI-themed scene transition in a reel",
+    "revealing a full-screen headline plate in a news package"
+   ],
+   "avoid": [
+    "applying the match name alone (no Venetian Blinds, no wipe)",
+    "tiny Cell Size on live-action shots: shimmering grid looks like a broken render"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0-100% progress. The preset maps it inverted onto both Venetian Blinds (blinds completion = 100 - this), so 0 = layer fully wiped away (hidden) and 100 = layer fully visible",
+     "typical": "keyframe 0 -> 100 to reveal the incoming layer, 100 -> 0 to wipe it out, over 0.5-1 s"
+    },
+    {
+     "name": "Cell Size",
+     "does": "Width of each grid cell (Venetian Blinds width) in pixels",
+     "typical": "60-160 for 1920x1080"
+    },
+    {
+     "name": "Grid Angle",
+     "does": "Rotation of the grid in degrees",
+     "typical": "0 or 45"
+    },
+    {
+     "name": "Feather",
+     "does": "Softness of cell edges",
+     "typical": "0-10"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Venetian Blinds",
+   "pairs_with": [
+    "Venetian Blinds",
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply Support Files/Presets/Transitions - Wipes/Grid Wipe.ffx; it adds this control plus two Venetian Blinds whose Transition Completion = linear(Grid Wipe completion, 0, 100, 100, 0), Direction = Grid Angle - 90 / + 180, Width = Cell Size, Feather = Feather. Keyframe props on this match name afterwards. Do not rename it (expressions use the display name 'Grid Wipe'). Like the other AE transition presets: apply to the incoming (upper) layer, 0% = hidden, 100% = revealed.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Inset Video - framed",
+   "match": "ADBE CM InsetVideoFramed",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect that is the control panel of the Legacy preset 'Inset Video - framed': the layer is cropped on all four sides by Linear Wipes, given a bevelled coloured frame and a drop shadow, and scaled into a picture-in-picture box. Alone it renders nothing.",
+   "look": [
+    "picture-in-picture",
+    "framed inset",
+    "bevel border",
+    "drop shadow",
+    "TV news"
+   ],
+   "use_for": [
+    "static PiP of a source clip next to an anchor or explainer graphic",
+    "framing archive footage as an 'old TV/photo' box in a documentary",
+    "putting a social-media clip in a bordered box over a branded background"
+   ],
+   "avoid": [
+    "applying the match name alone (no crop, frame or shadow)",
+    "default bevel + light grey frame looks dated in modern reels; use a thin flat frame instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Crop Amount",
+     "does": "Percent cropped off each edge before framing (drives four Linear Wipes)",
+     "typical": "3-10"
+    },
+    {
+     "name": "Frame Size",
+     "does": "Width of the Vegas-drawn coloured frame (bevel edge = 0.75x this)",
+     "typical": "4-12"
+    },
+    {
+     "name": "Frame Color",
+     "does": "Colour of the frame around the inset",
+     "typical": "#FFFFFF or the channel's brand colour"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Crop",
+   "pairs_with": [
+    "Linear Wipe",
+    "Vegas",
+    "Bevel Alpha",
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply Support Files/Presets/Legacy/Inset Video - framed.ffx; it adds this control, 4 Linear Wipes (crop top/bottom/left/right, Transition Completion = Crop Amount), Vegas ('Vegas - frame', colour = Frame Color, width = Frame Size), Bevel Alpha (Frame Size*0.75), Drop Shadow, and sets the layer's own Position/Scale for the inset. Afterwards set the three props on this match name and reposition the layer's own Transform. Do not rename the effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Inset Video - torn edges",
+   "match": "ADBE CM InsetVideoTorn",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect that is the control panel of the Legacy preset 'Inset Video - torn edges': the layer is cropped by Linear Wipes, its border roughened into a torn-paper edge and given a drop shadow, then scaled into an inset. Alone it renders nothing.",
+   "look": [
+    "torn paper",
+    "ripped edges",
+    "collage",
+    "scrapbook",
+    "picture-in-picture",
+    "drop shadow"
+   ],
+   "use_for": [
+    "newspaper-clipping / scrapbook look for archive photos in a political documentary",
+    "collage-style explainer reels with torn photo cut-outs",
+    "satire reels showing a quote or headline as a ripped-out piece"
+   ],
+   "avoid": [
+    "applying the match name alone (no crop, roughen or shadow)",
+    "on faces near the edge: the roughened border can bite into the subject"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Crop Amount",
+     "does": "Percent cropped off each edge before the torn border is applied (drives four Linear Wipes)",
+     "typical": "4-10"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Roughen Edges",
+   "pairs_with": [
+    "Linear Wipe",
+    "Roughen Edges",
+    "Drop Shadow",
+    "Transform"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply Support Files/Presets/Legacy/Inset Video - torn edges.ffx; it adds this control plus 4 Linear Wipes (Transition Completion = Crop Amount), Roughen Edges, Drop Shadow, and sets layer Position/Scale. Only Crop Amount lives here; tune tear look on the preset's Roughen Edges (ADBE Roughen Edges). Do not rename the effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Iris Wipe Master Controls",
+   "match": "ADBE CM TransIris",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect with Transition Completion, an Invert Alpha checkbox and Feather, meant as the master control of an iris (circle) wipe built from other effects. It renders nothing and no preset in AE 2026 references it, so applied alone it has no visible effect.",
+   "look": [
+    "iris wipe",
+    "circle reveal",
+    "transition"
+   ],
+   "use_for": [
+    "as a ready control panel for a custom iris-wipe rig (mask or Radial/Circle effect driven by expression)",
+    "otherwise skip it and use the shipped presets Transitions - Wipes/Inky Iris Wipe.ffx or Pixelated Iris Wipe.ffx, or a keyframed mask"
+   ],
+   "avoid": [
+    "expecting a wipe after applying it: nothing reads these controls unless you write the expressions",
+    "using it in automated builds: orphan internal pseudo-effect"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "Intended 0-100% progress of the iris wipe",
+     "typical": "keyframe 0 -> 100 over 0.5-1 s"
+    },
+    {
+     "name": "Invert Alpha",
+     "does": "Checkbox (0/1): intended to swap which side of the iris is visible",
+     "typical": "0"
+    },
+    {
+     "name": "Feather",
+     "does": "Intended softness of the iris edge",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Iris Round (transition)",
+   "pairs_with": [
+    "Circle",
+    "CC Light Wipe"
+   ],
+   "scripting": "Hidden orphan pseudo-effect (defined in Support Files/PresetEffects.xml, no .ffx in AE 2026 references it; the shipped Inky/Pixelated Iris Wipe presets do not use it). To get an iris wipe, drive a mask expansion or a 'Circle' effect radius from effect(\"Iris Wipe Master Controls\")(\"Transition Completion\") with your own expression. Invert Alpha is a 1d 0/1 checkbox. Confidence medium because the intended rig is inferred from names.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Jiggle",
+   "match": "ADBE DE Jiggle",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect with Amplitude, Frequency, Decay, Delay and Cycle Time sliders, meant to drive a decaying wobble (bounce/jiggle) expression on a layer property. It renders nothing and no preset in AE 2026 uses it, so on its own nothing moves.",
+   "look": [
+    "jiggle",
+    "wobble",
+    "bounce",
+    "elastic",
+    "decaying oscillation"
+   ],
+   "use_for": [
+    "control panel for a custom decaying-sine expression on scale or rotation of icons and stickers in reels",
+    "springy pop-in of captions or emoji in an explainer when paired with an expression"
+   ],
+   "avoid": [
+    "expecting motion after applying it: nothing reads the sliders unless an expression is written",
+    "orphan internal pseudo-effect: prefer standard Slider Controls or the Behaviors 'Scale Bounce' presets for durable builds"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Size of the wobble (units depend on the property the expression drives)",
+     "typical": "10-50"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "2-6"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast the wobble dies away (higher = shorter)",
+     "typical": "3-8"
+    },
+    {
+     "name": "Delay",
+     "does": "Seconds before the wobble starts (inferred)",
+     "typical": "0-0.5"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "Seconds between repeated jiggles; 0 = jiggle once (inferred)",
+     "typical": "0 or 2-4"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Jiggle At Marker",
+    "Slider Control",
+    "Transform"
+   ],
+   "scripting": "Hidden orphan pseudo-effect (Support Files/PresetEffects.xml; no shipped .ffx references it). A script must add an expression itself, e.g. on Scale: a=effect(\"Jiggle\")(\"Amplitude\"); f=effect(\"Jiggle\")(\"Frequency\"); d=effect(\"Jiggle\")(\"Decay\"); t=time-inPoint-effect(\"Jiggle\")(\"Delay\"); w=t>0? a*Math.sin(f*t*2*Math.PI)/Math.exp(d*t):0; value+[w,w]. Delay/Cycle Time meanings are inferred from names.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Jiggle At Marker",
+   "match": "ADBE DE Jiggle At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect with Amplitude, Frequency and Decay sliders, meant to drive an expression that fires a decaying wobble at each layer marker. It renders nothing and no preset in AE 2026 uses it, so alone nothing moves.",
+   "look": [
+    "jiggle",
+    "beat hit",
+    "bounce on marker",
+    "elastic",
+    "decaying oscillation"
+   ],
+   "use_for": [
+    "control panel for a marker-triggered wobble on captions, icons or logos synced to VO beats",
+    "punch-on-beat bounce of a lower third in a news reel (markers placed on the beat)"
+   ],
+   "avoid": [
+    "expecting motion without an expression that reads the markers and these sliders",
+    "orphan internal pseudo-effect: the Behaviors preset 'Scale Bounce - layer markers' is the shipped, working alternative"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Size of the wobble fired at each marker",
+     "typical": "10-40"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "3-6"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each wobble dies away",
+     "typical": "4-8"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Jiggle",
+    "Slider Control",
+    "Transform"
+   ],
+   "scripting": "Hidden orphan pseudo-effect. Needs layer markers plus a hand-written expression, e.g. on Scale: n=marker.numKeys?marker.nearestKey(time).index:0; if(n&&marker.key(n).time>time)n--; t=n?time-marker.key(n).time:-1; a=effect(\"Jiggle At Marker\")(\"Amplitude\"); f=effect(\"Jiggle At Marker\")(\"Frequency\"); d=effect(\"Jiggle At Marker\")(\"Decay\"); w=t>=0? a*Math.sin(f*t*2*Math.PI)/Math.exp(d*t):0; value+[w,w]. For a working shipped equivalent apply Support Files/Presets/Behaviors/Scale Bounce - layer markers.ffx.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect/preset control), so it was not rendered and has no frame in gallery/ae/index.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

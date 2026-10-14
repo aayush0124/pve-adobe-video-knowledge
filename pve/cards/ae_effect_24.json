@@ -1,0 +1,1249 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Glass Wipe",
+   "match": "CC Glass Wipe",
+   "category": "Transition",
+   "status": "needs_input",
+   "summary": "Wipes the layer away through a refractive, melting-glass edge: a gradient layer's luminance decides which areas go first, and the edge displaces the image like liquid glass while the reveal layer shows through. Needs a Layer to Reveal (and ideally a textured Gradient Layer) set by script: both default to the clip itself, so a spec-only apply wipes nothing and only smears the picture slightly along the glassy edge.",
+   "look": [
+    "liquid glass",
+    "refraction",
+    "melt transition",
+    "organic wipe",
+    "distorted edge"
+   ],
+   "use_for": [
+    "dreamy / flashback transition in a documentary",
+    "liquid reveal of a title card or logo bumper",
+    "soft organic scene change in an AI-education explainer",
+    "water / heat themed transition in a trailer"
+   ],
+   "avoid": [
+    "spec-only apply with Layer to Reveal left at its default (the clip itself): nothing wipes away, the frame only warps slightly even at Displacement 300 / Softness 80 (verified); set Layer to Reveal to the incoming clip or 0 (None) by script",
+    "with no textured Gradient Layer the wipe follows the clip's own luminance and can look blotchy",
+    "large Displacement Amount smears faces mid-transition; keep it short on interview shots"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress in % (0 = untouched, 100 = fully revealed)",
+     "typical": "keyframe 0 -> 100 over 0.6-1.2 s"
+    },
+    {
+     "name": "Layer to Reveal",
+     "does": "layer shown where the wipe has passed; default is the effect's own layer, so set it to the incoming clip (or None) by script",
+     "typical": "the incoming clip below this layer"
+    },
+    {
+     "name": "Gradient Layer",
+     "does": "layer whose luminance sets the order in which areas melt away (default: the effect's own layer)",
+     "typical": "a Fractal Noise or Gradient Ramp precomp, hidden"
+    },
+    {
+     "name": "Softness",
+     "does": "width of the soft glassy edge",
+     "typical": "15-40"
+    },
+    {
+     "name": "Displacement Amount",
+     "does": "strength of the refractive distortion along the edge",
+     "typical": "30-120"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 50,
+    "Softness": 80,
+    "Displacement Amount": 300
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Gradient Wipe video effect (luma-ordered wipe, no refraction); the Glass or Liquid Distortion transition for a refractive feel",
+   "pairs_with": [
+    "Fractal Noise",
+    "Gradient Ramp",
+    "CC Glass",
+    "Gaussian Blur"
+   ],
+   "scripting": "Layer to Reveal and Gradient Layer are layer-reference params (cannot be set from a spec; a script must setValue(layerIndex), 0 = None). Their harvested default is 1 = the effect's own layer, so a spec-only apply reveals the layer's own unaffected source: the visible result is only the glassy distortion band along the edge, and at Completion 100 the frame looks unchanged. Set Layer to Reveal to the incoming clip's index (or 0 to wipe to transparency over a lower layer). Completion is 0-100 raw here. Which luminance end melts first is not verified.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/ae/212.png",
+    "note": "Still no wipe: Displacement 300 / Softness 80 only bends the frame slightly more than the old render (the upper-left figure, the left side and block edges smeared, mean change vs old about 7/255) and the old render's bright glassy blobs are gone, because Layer to Reveal defaults to the clip itself so the wiped area shows the same picture; no in-range value fixes that, so the card is set to needs_input (a Layer to Reveal set by script).",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Grid Wipe",
+   "match": "CC Grid Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer out through a grid of tiles that each open with a radial, door or rectangular pattern, revealing what is underneath.",
+   "look": [
+    "grid wipe",
+    "tiles",
+    "checker reveal",
+    "geometric transition",
+    "mosaic"
+   ],
+   "use_for": [
+    "energetic scene change in a social reel",
+    "reveal of a data card or headline in a news package",
+    "rotated diamond-grid wipe for a stylised explainer section break"
+   ],
+   "avoid": [
+    "reads as a dated broadcast DVE if used repeatedly",
+    "very few tiles with no rotation looks like a cheap checkerboard"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress, raw 0-1 (UI shows 0-100 %)",
+     "typical": "keyframe 0 -> 1 over 0.5-0.8 s"
+    },
+    {
+     "name": "Center",
+     "does": "origin of the grid in comp pixels",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Rotation",
+     "does": "angle of the grid in degrees",
+     "typical": "0 for straight tiles, 45 for diamonds"
+    },
+    {
+     "name": "Border",
+     "does": "unverified: believed to set how wide/staggered the band of partially-opened tiles is (harvested range 30-200, default 75)",
+     "typical": "60-120"
+    },
+    {
+     "name": "Tiles",
+     "does": "number of tiles across the frame",
+     "typical": "6-14"
+    },
+    {
+     "name": "Shape",
+     "does": "how each tile opens (popup, see enum_labels)",
+     "typical": "2 (Radial) or 3 (Rectangular)"
+    },
+    {
+     "name": "Reverse Transition",
+     "does": "checkbox: 1 inverts the wipe direction",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 0.5,
+    "Center": [
+     960,
+     540
+    ],
+    "Rotation": 45,
+    "Border": 90,
+    "Tiles": 8,
+    "Shape": 3
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Doors",
+     "2": "Radial",
+     "3": "Rectangular"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Checker Wipe (approximate)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Bevel Alpha",
+    "Motion Tile"
+   ],
+   "scripting": "Completion's harvested range is 0-1 (fractional), unlike CC Glass Wipe's 0-100; values above 1 clamp to fully wiped. Shape is a 1-based popup (1 Doors, 2 Radial (default), 3 Rectangular (read from After Effects 26.0)). Border's exact meaning is not verified. Reverse Transition is a 0/1 checkbox. Wipes to transparency: the incoming clip must sit on a layer below.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.7,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/213.png",
+    "note": "The image survives only inside a 45-degree diamond grid of tiles on black, tiles shrinking toward the centre: a clear tiled grid wipe.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Image Wipe",
+   "match": "CC Image Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer away in an order driven by a chosen channel (luminance, colour, alpha...) of a gradient layer, with a soft edge, like a configurable Gradient Wipe.",
+   "look": [
+    "luma wipe",
+    "gradient wipe",
+    "organic reveal",
+    "soft edge",
+    "textured transition"
+   ],
+   "use_for": [
+    "ink-bleed or brush-texture transition using a texture precomp as the gradient",
+    "luminance-ordered dissolve between two documentary shots",
+    "reveal of a map or graphic following its own brightness"
+   ],
+   "avoid": [
+    "using the clip itself as the gradient gives an unpredictable blotchy wipe",
+    "hard edge (Border Softness 0) on noisy footage looks aliased"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress, raw 0-1",
+     "typical": "keyframe 0 -> 1 over 0.6-1.2 s"
+    },
+    {
+     "name": "Border Softness",
+     "does": "softness of the wipe edge, raw 0-1",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Auto Softness",
+     "does": "checkbox: 1 lets the effect set the edge softness automatically (exact behaviour unverified)",
+     "typical": "0"
+    },
+    {
+     "name": "Layer",
+     "does": "the gradient layer whose channel sets wipe order",
+     "typical": "hidden texture / Fractal Noise precomp"
+    },
+    {
+     "name": "Property",
+     "does": "which channel of the gradient layer orders the wipe (1-based popup, see enum_labels)",
+     "typical": "5 Luminance (default) or 4 Alpha for a shaped matte"
+    },
+    {
+     "name": "Blur",
+     "does": "blurs the gradient before use to smooth the wipe",
+     "typical": "5-30"
+    },
+    {
+     "name": "Inverse Gradient",
+     "does": "checkbox: 1 reverses the wipe order",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 0.7,
+    "Border Softness": 0.3,
+    "Property": 5,
+    "Blur": 15
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Gradient Wipe",
+   "pairs_with": [
+    "Fractal Noise",
+    "Gradient Ramp",
+    "Turbulent Displace"
+   ],
+   "scripting": "Layer (under the Gradient header) is a layer-reference param: set it by layer index in script, not from a spec; harvested default 1 = the effect's own layer, so it wipes in the order of its own luminance. Completion and Border Softness are raw 0-1. Property labels were read from CycoreFXHD/ImageWipe.aex (Red|Green|Blue|Alpha|Luminance|Lightness|Hue|Saturation), exact. Address props by plain name ('Property', 'Blur'): Gradient is a flat header row, not a group.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "enum_labels": {
+    "Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness",
+     "7": "Hue",
+     "8": "Saturation"
+    }
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/214.png",
+    "note": "Now a clear luminance-ordered wipe: at Completion 0.7 (was 0.5) about 55% of the frame (dark clothing, faces, hair, red stripes, block fronts, plant) has gone to black with soft blurred edges and only the bright wall, white stripes, block tops and flower highlights remain, where the old render dropped only the darkest areas (about 19%) and read as crushed blacks.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Jaws",
+   "match": "CC Jaws",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Splits the layer along a line into two halves with toothed, jagged edges that pull apart like opening jaws, revealing what is behind.",
+   "look": [
+    "split",
+    "jagged teeth",
+    "zig-zag edge",
+    "rip apart",
+    "comic transition"
+   ],
+   "use_for": [
+    "satirical / meme-style transition in a political roast reel",
+    "torn-apart reveal for a 'breaking' headline",
+    "playful split between before/after shots"
+   ],
+   "avoid": [
+    "looks cartoonish; wrong tone for serious news or documentary",
+    "low Height (default 0.1) gives shallow teeth that read as a plain split; use 0.25+ for visible jaws"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "how far the jaws have opened, raw 0-1",
+     "typical": "keyframe 0 -> 1 over 0.4-0.7 s"
+    },
+    {
+     "name": "Center",
+     "does": "point the split line passes through",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Direction",
+     "does": "angle of the split line in degrees",
+     "typical": "0 or 90"
+    },
+    {
+     "name": "Height",
+     "does": "depth of the teeth, raw 0-1",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Width",
+     "does": "number/width of teeth along the edge",
+     "typical": "6-15"
+    },
+    {
+     "name": "Shape",
+     "does": "tooth shape (popup, see enum_labels)",
+     "typical": "1 Spikes or 2 RoboJaw"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 0.5,
+    "Center": [
+     960,
+     540
+    ],
+    "Direction": 0,
+    "Height": 0.3,
+    "Width": 8,
+    "Shape": 1
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Spikes",
+     "2": "RoboJaw",
+     "3": "Block",
+     "4": "Waves"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Split transition (approximate: straight break, no teeth)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "CC Light Wipe"
+   ],
+   "scripting": "Completion and Height are raw 0-1. Shape is a 1-based popup (labels Spikes|RoboJaw|Block|Waves read from CycoreFXHD/Jaws.aex, exact). Reveals transparency, so put the incoming clip on a lower layer.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/215.png",
+    "note": "The frame is split horizontally by a black gap edged with interlocking triangular teeth top and bottom: clear jagged jaws opening.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Light Wipe",
+   "match": "CC Light Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer away from a centre point in a round, square or door shape while flooding the remaining image with the light colour, so the picture burns toward white as the hole grows, like a burst of light eating the frame.",
+   "look": [
+    "light burst",
+    "white-out",
+    "flash transition",
+    "iris wipe",
+    "bright bloom"
+   ],
+   "use_for": [
+    "flash-burst transition into a trailer title",
+    "glowing iris reveal of a logo or channel bumper",
+    "'light at the end' moment in a documentary chapter change"
+   ],
+   "avoid": [
+    "Intensity is not edge-only: 180 at 40% Completion bleached the whole remaining image to flat white with no detail; keep 40-100 unless a full white flash is the point, and tint it or use Color from Source",
+    "overuse makes an edit feel like a 2000s wedding video"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress in % (0-100)",
+     "typical": "keyframe 0 -> 100 over 0.5-1 s"
+    },
+    {
+     "name": "Center",
+     "does": "origin of the light wipe",
+     "typical": "[960, 540] or a light source in the shot"
+    },
+    {
+     "name": "Intensity",
+     "does": "brightness of the light glow, which spreads outward from the wipe edge over the whole remaining layer (only the far corners kept faint detail at 180); not edge-only",
+     "typical": "40-100 (higher only for a deliberate white flash)"
+    },
+    {
+     "name": "Shape",
+     "does": "wipe shape (popup, see enum_labels)",
+     "typical": "2 (Round)"
+    },
+    {
+     "name": "Direction",
+     "does": "angle of the shape (matters for Doors / Square)",
+     "typical": "0"
+    },
+    {
+     "name": "Color from Source",
+     "does": "checkbox: 1 tints the glow from the image colours",
+     "typical": "0 or 1"
+    },
+    {
+     "name": "Color",
+     "does": "colour of the light when Color from Source is 0; at high Intensity it clips to white (#FFE6B0 at 180 rendered neutral ~252 white)",
+     "typical": "#FFFFFF or warm #FFD9A0"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 40,
+    "Center": [
+     960,
+     540
+    ],
+    "Intensity": 60,
+    "Shape": 2,
+    "Color": "#FFE6B0"
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Doors",
+     "2": "Round",
+     "3": "Square"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Iris Round (approximate, no glow)",
+   "pairs_with": [
+    "Glow",
+    "Lens Flare",
+    "Exposure"
+   ],
+   "scripting": "Completion is 0-100 raw here. Shape is a 1-based popup (labels Doors|Round|Square read from CycoreFXHD/LightWipe.aex, exact; default 2 Round). Reverse Transition and Color from Source are 0/1 checkboxes. Wipes to transparency: incoming clip goes on the layer below.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ],
+    "Intensity": [
+     [
+      0,
+      100
+     ],
+     [
+      0.4,
+      250
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/216.png",
+    "note": "Round black hole in the centre with the remaining image burned toward warm white but still readable (stripes, a small round motif, foreground blocks and plant visible, brightest near the hole at about 252, lower corners about 205), where the old Intensity 180 render bleached everything outside the hole to flat white; Intensity 60 shows the light burn falling off from the wipe edge.",
+    "rerender": false,
+    "second_opinion": "corrected: frame confirms the 180 white-out, but the far corners kept faint detail, so the glow falls off from the wipe edge rather than being a flat fill; Intensity and Color param text reworded (Color no longer says 'light edge'); demo Intensity 60 kept",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Line Sweep",
+   "match": "CS LineSweep",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer off along one sweeping staircase edge: right-angled steps whose long faces lie square to the Direction angle and whose short faces are Thickness px tall, the whole staircase tilted a little off the Direction line by Slant. Reads as one stepped diagonal wipe, not a set of stripes.",
+   "look": [
+    "stepped edge",
+    "saw-tooth wipe",
+    "diagonal wipe",
+    "graphic transition",
+    "sweep"
+   ],
+   "use_for": [
+    "fast stylised scene change in a news or sports reel",
+    "diagonal reveal of a lower-third or name card",
+    "rhythmic beat-cut transition in a social edit"
+   ],
+   "avoid": [
+    "a small Thickness gives many tiny steps that alias and flicker after compression",
+    "dated broadcast look if slow"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress in % (0-100)",
+     "typical": "keyframe 0 -> 100 over 0.4-0.8 s"
+    },
+    {
+     "name": "Direction",
+     "does": "sweep angle in degrees; 135 wipes from upper-left toward lower-right, and the long step faces lie perpendicular to this angle",
+     "typical": "135 for a diagonal sweep"
+    },
+    {
+     "name": "Thickness",
+     "does": "height of each step's short face in pixels (measured ~100 px at 100); at Slant 50 each long face is about 5x as long, so smaller = more, finer steps",
+     "typical": "40-150"
+    },
+    {
+     "name": "Slant",
+     "does": "how far the staircase as a whole is tilted off the Direction line (long-face length per step); at 50 the steps are right-angled, long faces about 5x Thickness, overall edge about 11 degrees off the Direction line; the 0-99 mapping is unverified",
+     "typical": "20-70"
+    },
+    {
+     "name": "Flip Direction",
+     "does": "checkbox: 1 reverses the sweep",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 50,
+    "Direction": 135,
+    "Thickness": 100,
+    "Slant": 50
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Linear Wipe (approximate: straight edge without the steps)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Directional Blur",
+    "Linear Wipe"
+   ],
+   "scripting": "Match name is 'CS LineSweep' (not 'CC ...'); always apply by that match name. Completion is 0-100 raw. Wipes to transparency.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/217.png",
+    "note": "One diagonal wipe to black whose edge is a staircase of right-angled steps, as the corrected summary says.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: verdict and rewrite agreed, but measuring 217.png shows right-angled steps (short face ~100 px = Thickness, long face ~525 px, edge ~11 deg off the 135 line), so Slant does not make 'square vs saw-tooth' steps and Thickness is not the step length along the edge; summary, Direction, Thickness and Slant text corrected; demo_settings unchanged"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Radial ScaleWipe",
+   "match": "CC Radial ScaleWipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Opens a circular hole from a centre point and pushes the image outward around it with a radial stretch, so the frame looks sucked outward as the hole grows.",
+   "look": [
+    "radial stretch",
+    "iris",
+    "warp out",
+    "hole reveal",
+    "smear"
+   ],
+   "use_for": [
+    "warp-out transition into a new topic in an explainer",
+    "portal-style reveal of a title or logo",
+    "punchy zoom-style cut in a social reel"
+   ],
+   "avoid": [
+    "the stretched pixels smear faces badly; centre the hole away from people",
+    "slow use looks cheap; keep it under ~0.6 s"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress, raw 0-1",
+     "typical": "keyframe 0 -> 1 over 0.4-0.6 s"
+    },
+    {
+     "name": "Center",
+     "does": "centre of the expanding hole in comp pixels",
+     "typical": "[960, 540] or on the subject of the next shot"
+    },
+    {
+     "name": "Reverse Transition",
+     "does": "checkbox: 1 closes in instead of opening out",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 0.4,
+    "Center": [
+     960,
+     540
+    ]
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Iris Round (approximate, no stretch)",
+   "pairs_with": [
+    "CC Radial Fast Blur",
+    "Radial Blur",
+    "Glow"
+   ],
+   "scripting": "Completion is raw 0-1. The hole reveals transparency; the incoming clip goes on a lower layer.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/218.png",
+    "note": "A black circular hole in the centre with the image stretched radially outward around its rim (stripes and foreground blocks smeared into a ring).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Scale Wipe",
+   "match": "CC Scale Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Stretches the image from a centre point in a chosen direction, smearing its pixels across the frame like a scan-line stretch; animating Stretch makes a smear-in/smear-out transition.",
+   "look": [
+    "pixel stretch",
+    "smear",
+    "streak",
+    "slit-scan",
+    "speed wipe"
+   ],
+   "use_for": [
+    "smear-in of a title or graphic in a reel",
+    "speed-streak transition between shots",
+    "glitchy stretch accent on a beat"
+   ],
+   "avoid": [
+    "no Completion control: the transition is the Stretch keyframes",
+    "large stretch on faces looks ugly; use on graphics or wide shots"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Stretch",
+     "does": "amount of stretch (-100..100), sign flips the side that stretches",
+     "typical": "0 -> 80 animated"
+    },
+    {
+     "name": "Center",
+     "does": "line/point where the stretch starts",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Direction",
+     "does": "angle of the stretch in degrees",
+     "typical": "0 or 90"
+    }
+   ],
+   "demo_settings": {
+    "Stretch": 60,
+    "Center": [
+     960,
+     540
+    ],
+    "Direction": 90
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stretch Wipe transition (approximate pixel-stretch wipe)",
+   "pairs_with": [
+    "Directional Blur",
+    "Motion Tile",
+    "CC Line Sweep"
+   ],
+   "scripting": "Exact Stretch/Direction semantics are not verified (low confidence): check a rendered frame. There is no Completion property; animate Stretch. Default Direction is 50 degrees.",
+   "recipe": {
+    "Stretch": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/219.png",
+    "note": "Everything right of the centre line is smeared into horizontal streaks while the left half stays intact: a clear directional pixel stretch.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Twister",
+   "match": "CC Twister",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Twists the layer around an axis like a ribbon or page being wrung, with shading, so it flips over to reveal its backside layer.",
+   "look": [
+    "twist",
+    "ribbon flip",
+    "wrung page",
+    "3D twist",
+    "card turn"
+   ],
+   "use_for": [
+    "flip from one photo/document to another in an explainer",
+    "twisting reveal of a quote card or headline",
+    "playful transition in a reel"
+   ],
+   "avoid": [
+    "looks dated if slow; keep it fast",
+    "without a Backside layer the reverse shows the same image"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "how far the twist has travelled, raw 0-1",
+     "typical": "keyframe 0 -> 1 over 0.6-1 s"
+    },
+    {
+     "name": "Backside",
+     "does": "layer shown on the back of the twisted surface",
+     "typical": "the incoming shot or card"
+    },
+    {
+     "name": "Shading",
+     "does": "checkbox: 1 adds light/dark shading for a 3D feel",
+     "typical": "1"
+    },
+    {
+     "name": "Center",
+     "does": "centre of the twist",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Axis",
+     "does": "angle of the twist axis in degrees",
+     "typical": "-120 (default) or 0 / 90"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 0.5,
+    "Shading": 1,
+    "Center": [
+     960,
+     540
+    ],
+    "Axis": -120
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "none in Premiere; Flip Motion transition is the nearest (whole-frame 3D flip, no twist)",
+   "pairs_with": [
+    "Drop Shadow",
+    "CC Page Turn"
+   ],
+   "scripting": "Backside is a layer-reference param: set it by layer index in script (not from a spec). Its harvested default is 1 = the effect's own layer, so a spec-only apply twists back to the same image; point it at the incoming shot for a real transition. Completion is raw 0-1. Shading is a 0/1 checkbox.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/220.png",
+    "note": "The image is wrung into a ribbon pinched at the centre and turned along a diagonal axis with black around it: a clear 3D twist.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC WarpoMatic",
+   "match": "CC WarpoMatic",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Warps and dissolves the layer into a reveal layer, with the warp and blend order driven by image brightness or contrast, giving a liquid morph-like transition.",
+   "look": [
+    "warp",
+    "morph",
+    "liquid dissolve",
+    "distortion",
+    "dreamy"
+   ],
+   "use_for": [
+    "dream / memory transition in a documentary",
+    "morph-like blend between two portraits",
+    "trippy transition in a music or trend reel"
+   ],
+   "avoid": [
+    "high Warp Amount on faces looks grotesque",
+    "overused it reads as a cheap effect; use once per piece"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "transition progress in % (0-100)",
+     "typical": "keyframe 0 -> 100 over 1-2 s"
+    },
+    {
+     "name": "Layer to Reveal",
+     "does": "the incoming layer it warps into",
+     "typical": "the next clip"
+    },
+    {
+     "name": "Reactor",
+     "does": "what orders the warp/blend: the image's brightness, or differences between the two layers (popup, see enum_labels)",
+     "typical": "1 Brightness (default) or 3 Brightness Differences"
+    },
+    {
+     "name": "Smoothness",
+     "does": "smoothness of the warp map",
+     "typical": "30-100"
+    },
+    {
+     "name": "Warp Amount",
+     "does": "strength and sign of the displacement",
+     "typical": "50-200"
+    },
+    {
+     "name": "Warp Direction",
+     "does": "how the two layers warp relative to each other (popup, see enum_labels)",
+     "typical": "1 Joint (default) or 2 Opposing for a stronger morph"
+    },
+    {
+     "name": "Blend Span",
+     "does": "how wide the cross-blend band is",
+     "typical": "50-90"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 50,
+    "Reactor": 1,
+    "Smoothness": 50,
+    "Warp Amount": 150,
+    "Warp Direction": 2,
+    "Blend Span": 75
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Liquid Distortion or Wave transition (approximate warp-dissolve)",
+   "pairs_with": [
+    "Turbulent Displace",
+    "Gaussian Blur",
+    "Glow"
+   ],
+   "scripting": "Layer to Reveal is a layer-reference param (set by index in script, not from a spec); its harvested default is 1 = the effect's own layer, so a spec-only apply warps the clip into itself (the warp shows mid-transition, the end frame looks unchanged). Completion is 0-100 raw. Popup labels were read from CycoreFXHD/WarpoMatic.aex (exact): Reactor Brightness|Contrast Differences|Brightness Differences|Local Differences, Warp Direction Joint|Opposing|Twisting.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      100
+     ]
+    ]
+   },
+   "enum_labels": {
+    "Reactor": {
+     "1": "Brightness",
+     "2": "Contrast Differences",
+     "3": "Brightness Differences",
+     "4": "Local Differences"
+    },
+    "Warp Direction": {
+     "1": "Joint",
+     "2": "Opposing",
+     "3": "Twisting"
+    }
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/221.png",
+    "note": "The whole frame melts into liquid, chrome-edged warps that follow image contrast (stripes, faces, foreground blocks): a clear liquid morph.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Card Wipe",
+   "match": "APC CardWipeCam",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Breaks the layer into a grid of 3D cards that flip over in sequence to show a back layer, with its own camera, lighting and position/rotation jitter.",
+   "look": [
+    "card flip",
+    "3D tiles",
+    "mosaic flip",
+    "kinetic transition",
+    "broadcast"
+   ],
+   "use_for": [
+    "flip a wall of tiles from one photo to the next in a news package",
+    "card-flip reveal of a leader portrait or headline card",
+    "jittered tiles scattering for a trailer title",
+    "photo-mosaic style chapter break in a documentary"
+   ],
+   "avoid": [
+    "default Transition Completion is 25, so it breaks the frame as soon as it is applied",
+    "many rows/columns render slowly; very small cards alias",
+    "default lighting is flat; without Specular it can look plastic"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "how far the flip has travelled across the grid (0-100)",
+     "typical": "keyframe 0 -> 100 over 1-2 s"
+    },
+    {
+     "name": "Transition Width",
+     "does": "how many cards are mid-flip at once (0-100)",
+     "typical": "30-70"
+    },
+    {
+     "name": "Back Layer",
+     "does": "layer shown on the back of the cards",
+     "typical": "the incoming shot (set by layer index)"
+    },
+    {
+     "name": "Rows",
+     "does": "number of card rows",
+     "typical": "4-12"
+    },
+    {
+     "name": "Columns",
+     "does": "number of card columns",
+     "typical": "6-20"
+    },
+    {
+     "name": "Flip Axis",
+     "does": "axis the cards flip around (popup)",
+     "typical": "1 X or 2 Y"
+    },
+    {
+     "name": "Flip Order",
+     "does": "sweep order of flips (popup), 9 = Gradient uses Gradient Layer",
+     "typical": "1 Left to Right or 5 diagonal"
+    },
+    {
+     "name": "Timing Randomness",
+     "does": "randomises each card's start time (0-1)",
+     "typical": "0.2-0.5"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 50,
+    "Transition Width": 60,
+    "Rows": 6,
+    "Columns": 10,
+    "Flip Axis": 2,
+    "Flip Order": 5,
+    "Timing Randomness": 0.3,
+    "Specular Reflection": 0.5
+   },
+   "enum_labels": {
+    "Rows & Columns": {
+     "1": "Independent",
+     "2": "Columns Follows Rows"
+    },
+    "Flip Axis": {
+     "1": "X",
+     "2": "Y",
+     "3": "Random"
+    },
+    "Flip Direction": {
+     "1": "Positive",
+     "2": "Negative",
+     "3": "Random"
+    },
+    "Flip Order": {
+     "1": "Left to Right",
+     "2": "Right to Left",
+     "3": "Top to Bottom",
+     "4": "Bottom to Top",
+     "5": "Top Left to Bottom Right",
+     "6": "Top Right to Bottom Left",
+     "7": "Bottom Left to Top Right",
+     "8": "Bottom Right to Top Left",
+     "9": "Gradient"
+    },
+    "Camera System": {
+     "1": "Camera Position",
+     "2": "Corner Pins",
+     "3": "Comp Camera"
+    },
+    "Light Type": {
+     "1": "Point Source",
+     "2": "Distant Source",
+     "3": "First Comp Light"
+    },
+    "Transform Order": {
+     "1": "Rotate XYZ, Position",
+     "2": "Rotate XZY, Position",
+     "3": "Rotate YXZ, Position",
+     "4": "Rotate YZX, Position",
+     "5": "Rotate ZXY, Position",
+     "6": "Rotate ZYX, Position",
+     "7": "Position, Rotate XYZ",
+     "8": "Position, Rotate XZY",
+     "9": "Position, Rotate YXZ",
+     "10": "Position, Rotate YZX",
+     "11": "Position, Rotate ZXY",
+     "12": "Position, Rotate ZYX"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "none for per-card flips; nearest are Flip Motion (whole-frame 3D flip) or Checker Wipe / Random Blocks (tiled reveal, no 3D)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Camera Lens Blur",
+    "Glow",
+    "CC Light Sweep"
+   ],
+   "scripting": "Back Layer and Gradient Layer are layer-reference params (set by layer index in script, not from a spec); harvested default 1 = the effect's own layer, so unset, the card backs show the layer itself. Set Transition Completion explicitly (default 25). 'Focal Length' exists twice: a spec key 'Focal Length' reaches only the first (Camera Position section). The applier has no '#2' syntax and Camera Position / Corner Pins are flat header rows, not groups, so the Corner Pins one is reachable only by its match name 'APC CardWipeCam-0054' in a script. 'Upper Left  Corner' and 'Lower Left  Corner' contain a double space. Camera System 3 needs a comp camera; 2 uses the Corner Pins section. Light Type 3 needs a light layer. Rows & Columns 2 makes Columns follow Rows. Popup labels were read from Card Wipe.aex string tables (Light Type order Point Source, Distant Source, First Comp Light; harvested default 2 = Distant Source).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/222.png",
+    "note": "The frame is broken into a 6 x 10 grid of cards caught mid-flip on the vertical axis with black gaps: a clear 3D card-flip wipe.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Gradient Wipe",
+   "match": "ADBE Gradient Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Wipes the layer away in the order of a gradient layer's luminance (dark pixels disappear first), with optional soft edge: the classic luma-matte transition.",
+   "look": [
+    "luma wipe",
+    "organic reveal",
+    "ink bleed",
+    "soft dissolve",
+    "textured transition"
+   ],
+   "use_for": [
+    "ink / paint / smoke texture transitions using a texture clip as the gradient",
+    "soft directional reveal using a Gradient Ramp precomp",
+    "documentary chapter change with a burn or paper texture",
+    "reveal of a map or infographic"
+   ],
+   "avoid": [
+    "using the clip itself as gradient gives a random blotchy wipe",
+    "Transition Softness 0 on detailed gradients looks noisy and aliased"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "wipe progress; harvested raw range 0-1 (UI shows %)",
+     "typical": "keyframe 0 -> 1 over 0.6-1.5 s"
+    },
+    {
+     "name": "Transition Softness",
+     "does": "edge softness, raw 0-1",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Gradient Layer",
+     "does": "layer whose luminance orders the wipe",
+     "typical": "a hidden texture or Gradient Ramp / Fractal Noise precomp"
+    },
+    {
+     "name": "Gradient Placement",
+     "does": "how the gradient layer is fitted (popup)",
+     "typical": "3 Stretch Gradient to Fit"
+    },
+    {
+     "name": "Invert Gradient",
+     "does": "checkbox: 1 makes light pixels go first",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 0.7,
+    "Transition Softness": 0.2,
+    "Gradient Placement": 3,
+    "Invert Gradient": 0
+   },
+   "enum_labels": {
+    "Gradient Placement": {
+     "1": "Tile Gradient",
+     "2": "Center Gradient",
+     "3": "Stretch Gradient to Fit"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Gradient Wipe",
+   "pairs_with": [
+    "Fractal Noise",
+    "Gradient Ramp",
+    "Turbulent Displace",
+    "Glow"
+   ],
+   "scripting": "Gradient Layer is a layer-reference param: set it by layer index in script (not from a spec); by default it uses the effect's own layer. The harvested range for Transition Completion and Transition Softness is raw 0-1 (UI shows %), while sibling Linear Wipe is 0-100; values above 1 clamp, so keep to 0-1. Gradient Placement labels Tile Gradient|Center Gradient|Stretch Gradient to Fit read from Gradient_Wipe.aex (exact). The gradient layer is read without its effects/masks unless it is a precomp.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/223.png",
+    "note": "Now a clear luma wipe in progress: at Transition Completion 0.7 (was 0.5) about 56% of the frame (dark clothing, faces, red stripes, block fronts, plant) has wiped to black with soft edges, dark areas first, leaving the bright wall, white stripes and block tops, where the old render removed only the darkest areas (about 27%) and read as crushed blacks.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  }
+ ]
+}

@@ -1,0 +1,719 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Cross Dissolve (Legacy)",
+   "match": null,
+   "merged_into": "pr_transition_01.json"
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to Black (Legacy)",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "Older build of Dip to Black: the outgoing clip fades to black, then the incoming clip fades up from black, with linear ramps (gallery: steady darkening, full black at the cut). The current eased 'Dip to Black' replaces it.",
+   "look": [
+    "fade to black",
+    "pause",
+    "chapter break",
+    "solemn",
+    "breath",
+    "black beat"
+   ],
+   "use_for": [
+    "chapter or act break in a documentary",
+    "after a heavy or sombre line in a news explainer",
+    "fade out at the end of a reel or film (single-sided)",
+    "trailer beat before a title card",
+    "Chapter or act break in a documentary",
+    "Fade out at the very end of a video",
+    "Black beat between trailer title cards (pair with a boom)",
+    "Respectful pause after a tragedy or tribute segment"
+   ],
+   "avoid": [
+    "mid-sentence under continuous VO: the black reads as a stop",
+    "too many in one piece: kills pace",
+    "Mid-sentence under continuous VO: reads as an ending",
+    "Overuse in a reel kills pace"
+   ],
+   "confidence": "high",
+   "family": "dip",
+   "feel": "solemn, final, chapter break",
+   "duration_typical": "0.5-1.5",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Dip to Black (non-legacy). After Effects: a black Solid above both layers with Opacity 0->100 into the cut and 100->0 after it (or fade each layer's Opacity over a black background).",
+   "scripting": "Apply by the exact name including ' (Legacy)'. The QE list contains this name twice (both entries share this card); both behave the same. Harvest placed it centred for 1 s (261.52-262.52 s) with no error; frame at the cut is black. Single-sided at a clip start/end gives a plain fade from/to black. For a trailer blackout, pair with sfx 'boom' or 'sub_drop' instead of none. Linear timing (measured on PR 26): adobe_bridge builds the After Effects version automatically (DIP: black solid, linear segments).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/065b.png",
+    "note": "Frame at the cut is near-black; at -0.3 s A is at about 60% brightness and at +0.3 s B about 59%, i.e. a linear dip through black.",
+    "rerender": false
+   },
+   "merged": "2026-10-13: the duplicate card in pr_transition_01.json was merged here; use_for / avoid (and look, pairs_with, sources) are the union, and that card is kept whole in merged_from",
+   "merged_from": [
+    {
+     "kind": "pr_transition",
+     "app": "PR",
+     "name": "Dip to Black (Legacy)",
+     "match": null,
+     "category": "Dissolve",
+     "status": "obsolete",
+     "summary": "Clip A fades to black, then clip B fades up from black, with linear ramps. Replaced by the newer GPU 'Dip to Black', which eases into and out of the black.",
+     "look": [
+      "fade to black",
+      "black beat",
+      "pause",
+      "chapter break",
+      "solemn"
+     ],
+     "use_for": [
+      "Chapter or act break in a documentary",
+      "Fade out at the very end of a video",
+      "Black beat between trailer title cards (pair with a boom)",
+      "Respectful pause after a tragedy or tribute segment"
+     ],
+     "avoid": [
+      "Mid-sentence under continuous VO: reads as an ending",
+      "Overuse in a reel kills pace"
+     ],
+     "confidence": "high",
+     "family": "dip",
+     "feel": "final, solemn, chapter break",
+     "duration_typical": "0.8-2.0",
+     "sfx": "none",
+     "single_sided_ok": true,
+     "equivalent": "Premiere replacement: Dip to Black (eased). AE: black solid above the cut with opacity 0 to 100 up to the cut, then fade B in from 0 to 100 (linear for this legacy version).",
+     "scripting": "Linear timing (measured on PR 26). adobe_bridge builds the AE version automatically (DIP: black solid, linear segments). Harvest placed the 1 s centred instance at 49.52-50.52 s on the 50.0 s cut; frame at the cut is black. Single-sided at a clip start/end works as fade from/to black. The QE list contains this name twice; treat both entries as the same.",
+     "verified": {
+      "verdict": "pass",
+      "frame": "pve/gallery/tr/065b.png",
+      "note": "A at -0.3 s, an almost fully black frame with a faint ghost of A at the cut, and B coming back up slightly dark at +0.3 s.",
+      "rerender": false
+     },
+     "file": "pr_transition_01.json"
+    }
+   ]
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to White (Legacy)",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "Older build of Dip to White: the outgoing clip fades up to white, then the incoming clip fades down out of white, with linear ramps; short, it reads as a flash. The current eased 'Dip to White' replaces it.",
+   "look": [
+    "white flash",
+    "bright",
+    "memory",
+    "camera flash",
+    "dreamy",
+    "bright burst",
+    "overexposed"
+   ],
+   "use_for": [
+    "flashback or memory entry in a documentary",
+    "short white flash on a beat in a trailer or reel (0.2-0.3 s)",
+    "photo-reveal / camera-flash moment in a news story",
+    "bright opening fade up from white",
+    "Flashback or memory transition in a documentary",
+    "Camera-flash link between press photos in a news reel",
+    "Bright beat on a reveal or a drop in a reel",
+    "Short white hit between trailer shots"
+   ],
+   "avoid": [
+    "long durations look like a wedding video",
+    "on dark night footage the white jump is harsh on phones",
+    "Long durations feel like a wedding video; keep it short",
+    "Repeated white flashes can trouble photosensitive viewers"
+   ],
+   "confidence": "high",
+   "family": "dip",
+   "feel": "bright, flash, nostalgic when slow",
+   "duration_typical": "0.2-0.8",
+   "sfx": "shutter",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Dip to White (non-legacy). After Effects: a white Solid above the cut with Opacity 0->100->0 (peak on the cut); add a little Glow for a flash feel.",
+   "scripting": "Apply by the exact name including ' (Legacy)'. The QE list contains this name twice (both entries share this card); both behave the same. Harvest placed it centred for 1 s (265.52-266.52 s) with no error; gallery frame at the cut is almost pure white. For a flash-cut use 0.2-0.3 s centred. Linear timing (measured on PR 26): adobe_bridge builds the After Effects version automatically (DIP: white solid).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/066b.png",
+    "note": "Frame at the cut is almost pure white with A ghosted; A is about 40% lifted toward white at -0.3 s and B clean-ish at +0.3 s: a linear dip through white.",
+    "rerender": false
+   },
+   "merged": "2026-10-13: the duplicate card in pr_transition_01.json was merged here; use_for / avoid (and look, pairs_with, sources) are the union, and that card is kept whole in merged_from",
+   "merged_from": [
+    {
+     "kind": "pr_transition",
+     "app": "PR",
+     "name": "Dip to White (Legacy)",
+     "match": null,
+     "category": "Dissolve",
+     "status": "obsolete",
+     "summary": "Clip A fades up to white, then clip B fades down from white, with linear ramps. Replaced by the newer GPU 'Dip to White', which eases.",
+     "look": [
+      "white flash",
+      "bright burst",
+      "overexposed",
+      "memory",
+      "camera flash"
+     ],
+     "use_for": [
+      "Flashback or memory transition in a documentary",
+      "Camera-flash link between press photos in a news reel",
+      "Bright beat on a reveal or a drop in a reel",
+      "Short white hit between trailer shots"
+     ],
+     "avoid": [
+      "Long durations feel like a wedding video; keep it short",
+      "Repeated white flashes can trouble photosensitive viewers"
+     ],
+     "confidence": "high",
+     "family": "dip",
+     "feel": "bright flash, memory or flashback",
+     "duration_typical": "0.3-0.8",
+     "sfx": "shutter",
+     "single_sided_ok": true,
+     "equivalent": "Premiere replacement: Dip to White (eased). AE: white solid above the cut, opacity 0 to 100 up to the cut, then B fades in under it (linear for this legacy version); or keyframe Exposure up and back.",
+     "scripting": "Linear timing (measured on PR 26). adobe_bridge builds the AE version automatically (DIP: white solid). Harvest placed the 1 s centred instance at 53.52-54.52 s on the 54.0 s cut; frame at the cut is white. The QE list contains this name twice; treat both entries as the same.",
+     "verified": {
+      "verdict": "pass",
+      "frame": "pve/gallery/tr/066b.png",
+      "note": "A slightly lifted at -0.3 s, an almost fully white frame at the cut, and B still washed out at +0.3 s.",
+      "rerender": false
+     },
+     "file": "pr_transition_01.json"
+    }
+   ],
+   "flash": {
+    "per_use": 1,
+    "basis": "render: one dip, almost pure white at the cut"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Inset",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "The incoming clip is revealed in a hard-edged rectangle that starts in the top-left corner and grows diagonally until it fills the frame. It is a wipe: the incoming image is cropped, not scaled (gallery shows subjects at their full-frame positions inside the growing box).",
+   "look": [
+    "corner reveal",
+    "hard edge",
+    "rectangular",
+    "PowerPoint",
+    "retro"
+   ],
+   "use_for": [
+    "deliberately retro / 90s TV parody segment in a satire reel",
+    "revealing a document or screenshot from a corner in an explainer",
+    "comic 'cut to' gag"
+   ],
+   "avoid": [
+    "serious documentaries: reads as cheap slideshow",
+    "the hard edge looks dated at normal speed in trailers"
+   ],
+   "confidence": "high",
+   "family": "wipe",
+   "feel": "cheap 2000s, slideshow",
+   "duration_typical": "0.4-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: a rectangle mask on the incoming layer whose size animates from a corner to full frame (or Linear Wipe at 45 degrees for a softer variant); a scale-from-corner with Transform is the moving-picture version.",
+   "scripting": "Harvest placed it centred for 1 s (269.52-270.52 s) with no error. Gallery (pve/gallery/tr, A=test plate A, B=test plate B) confirms the default: box grows from the top-left corner, incoming image unscaled. Corner choice and border are Effect Controls settings not settable from a spec, so the bridge always gets top-left. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/067b.png",
+    "note": "Hard-edged box of B grows from the top-left corner (small at -0.3 s, ~half frame at the cut, most of frame at +0.3 s) and shows B cropped at its full-frame positions, not scaled.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Morph Cut",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "summary": "Hides a jump cut inside a talking-head shot by face tracking and optical-flow interpolation between the last frame before the cut and the first frame after it, so the speaker appears to talk continuously.",
+   "look": [
+    "invisible",
+    "seamless",
+    "jump-cut repair",
+    "interview",
+    "optical flow"
+   ],
+   "use_for": [
+    "removing ums, pauses or a cut sentence in a locked-off interview",
+    "tightening a politician's soundbite without a visible jump",
+    "AI-education talking-head videos with one static camera"
+   ],
+   "avoid": [
+    "between different shots or camera moves: produces melting warps",
+    "big head turns, hands crossing the face or long gaps: visible morphing artefacts",
+    "durations over ~0.5 s",
+    "objects that move between the two halves of the jump (a locked-off shot with things moving through it): measured, they tear into smeared ghost copies at the cut"
+   ],
+   "confidence": "high",
+   "family": "dissolve",
+   "feel": "invisible when it works, uncanny when it fails",
+   "duration_typical": "0.2-0.5",
+   "sfx": "none",
+   "single_sided_ok": false,
+   "equivalent": "No one-click equivalent in After Effects; approximate with Timewarp (Method: Pixel Motion) over a pre-comp of both sides of the cut, or hide the jump with a punch-in / B-roll cutaway.",
+   "scripting": "Centred only, needs handles on both clips from the same static shot. Harvest placed it centred for 1 s (273.52-274.52 s) with no error; on the gallery's two DIFFERENT shots it rendered a smeared, torn double exposure with blocky streaks, which is exactly the failure case, so never use it as a generic transition. For real use set 0.2-0.5 s on a jump cut inside one interview clip. Measured 2026-10-14 (live wave 3) on a synthetic face plate with a 1.2 s jump and a 0.6 s Morph Cut: the largest frame-to-frame change across the cut was 0.24 (the plate's own motion is 0.22-0.24) against 0.75 for the same jump as a hard cut, and the frames at the cut show one clean face, no double exposure; the same Morph Cut on a plate whose objects move between the two halves tore them into smeared ghost shapes. Premiere analyses the clip in the background after it is applied ('Analyzing in background' banner); a scripted export started before analysis completes carries the banner (measured: still there 150 s after the build, gone at 159 s on the rerun), so poll Sequence.isDoneAnalyzingForVideoEffects() or export again until no frame shows it.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/two_track/morph_pve_w3_morphcut_v2_pr_1_morph_cut_face_+0.00.png",
+    "note": "On its real job (a jump inside one static face shot) the cut is invisible: no frame-change spike (0.24 vs 0.75 for the hard cut) and one clean face at the cut; on a plate with moving objects the cut frame shows torn ghost shapes, the failure the card warns about.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "pass",
+      "changed": "2026-10-14",
+      "why": "judged on its real use case in the live wave 3 two-track test (work/pve_live/wave3/two_track.json); the old pass showed only the failure case on two different shots",
+      "frame": "pve/gallery/tr/068b.png",
+      "note": "On two different shots it renders the documented failure: a smeared, torn, washed-out double exposure with blocky vertical streaks, not a seamless join."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Non-Additive Dissolve",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "summary": "A luminance-comparison dissolve: per pixel it shows whichever clip is brighter, with hard edges instead of a soft mix. The bright areas of the incoming clip (sky, lights, pale surfaces) punch through the outgoing clip's darker areas from the first frames, the two images hold as a patchy, posterised double exposure for most of the duration, and the incoming clip's dark areas only take over at the end.",
+   "look": [
+    "patchy",
+    "hard-edged double exposure",
+    "highlights first",
+    "posterised",
+    "graphic",
+    "stylised"
+   ],
+   "use_for": [
+    "stylised double-exposure beat in a music-driven montage or trailer",
+    "transitioning into a bright title card or logo on black (only the bright graphic shows through)",
+    "night city, fire or stage-light footage where the lights should bleed through",
+    "graphic portrait-into-bright-landscape moment in a reel"
+   ],
+   "avoid": [
+    "faces and skin: the hard-edged blotches look like compression damage",
+    "two clips of similar brightness: a noisy patchwork for the whole duration (seen in the gallery)",
+    "news and documentary transitions: reads as a render error, use Cross Dissolve or Film Dissolve"
+   ],
+   "confidence": "medium",
+   "family": "dissolve",
+   "feel": "graphic, patchy, stylised",
+   "duration_typical": "0.4-0.8",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: incoming layer above in Lighter Color blend mode (per-pixel brighter pick, hard edges); keyframe the incoming layer's Levels/Exposure from black up to normal while the outgoing layer ramps from normal down to black, so the brighter pixel wins at every step.",
+   "scripting": "Harvest placed it centred for 1 s (277.52-278.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows B's pale tones replacing A's dark areas within 2 frames and a near-static hard-edged mix until about +0.45 s, then B. Centred needs handles on both clips. Single-sided behaviour (against black) not verified.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/069b.png",
+    "note": "B's pale tones punch through A's dark areas from -0.3 s and the two hold as a hard-edged patchy double exposure through +0.3 s, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Page Peel (Obsolete)",
+   "match": null,
+   "category": "Page Peel",
+   "status": "obsolete",
+   "summary": "Old version of the page-curl transition: the outgoing clip curls away from the top-left corner like a sheet of paper and the curl travels diagonally off the bottom-right, revealing the incoming clip underneath. The back of the page is a plain grey-white shaded paper, not the image. Kept only for old projects.",
+   "look": [
+    "page curl",
+    "paper",
+    "scrapbook",
+    "retro",
+    "storybook"
+   ],
+   "use_for": [
+    "deliberately kitschy retro or storybook gag in a satire reel",
+    "turning a 'page' of a document or newspaper in an explainer (prefer the current Page Turn / Page Peel)"
+   ],
+   "avoid": [
+    "any serious documentary, news or trailer: reads as cheap 2000s wedding video",
+    "new edits: use the current Page Peel or Page Turn instead"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "cheap 2000s, kitsch",
+   "duration_typical": "0.8-1.2",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Page Peel or Page Turn (Page Peel folder). After Effects: CC Page Turn effect on the outgoing layer, keyframing Fold Position across the frame.",
+   "scripting": "Apply by the exact name including ' (Obsolete)'; do not substring-match, because the current 'Page Peel' also exists. Harvest placed it centred for 1 s (281.52-282.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) confirms the top-left to bottom-right curl with a grey paper back. Whether it is listed in the Effects panel is not confirmed (may be reachable only by name through QE).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/070b.png",
+    "note": "A curls away from the top-left corner with a grey-white shaded paper back, the curl crosses diagonally and sits at the bottom-right corner at +0.3 s, revealing B underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Radial Wipe (Legacy)",
+   "match": null,
+   "category": "Wipe",
+   "status": "obsolete",
+   "summary": "Older build of Radial Wipe: a hard straight edge pivots on the top-left corner and sweeps clockwise from the top edge down to the left edge, like a clock hand, revealing the incoming clip (the outgoing clip's last sliver sits in the bottom-left). Replaced by the current Radial Wipe.",
+   "look": [
+    "radial sweep",
+    "radar",
+    "clock hand",
+    "hard edge",
+    "graphic"
+   ],
+   "use_for": [
+    "countdown or 'time running out' beat in a news explainer",
+    "radar-style reveal of a map or data graphic",
+    "retro game-show style satire segment"
+   ],
+   "avoid": [
+    "emotional documentary moments: too mechanical",
+    "hard edge with no feather looks dated"
+   ],
+   "confidence": "high",
+   "family": "wipe",
+   "feel": "mechanical, graphic, slightly retro",
+   "duration_typical": "0.5-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Radial Wipe (current). After Effects: Radial Wipe effect on the outgoing layer above the incoming one, Wipe Center at the top-left corner [0, 0], Start Angle 90 degrees, Wipe Clockwise, Transition Completion 0->25% over the duration (only one quadrant of the sweep is in frame); add a little Feather to soften.",
+   "scripting": "Apply by the exact name including ' (Legacy)'. Harvest placed it centred for 1 s (285.52-286.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) confirms the top-left pivot and clockwise sweep with a hard, unfeathered edge. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/071b.png",
+    "note": "Hard straight edge pivoting near the top-left corner sweeps clockwise, B above/right of it and A left in a shrinking bottom-left wedge.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Split (Legacy)",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Older build of Split: the outgoing clip splits along a vertical centre line and the two halves slide apart to the left and right like doors opening, revealing the incoming clip in a widening centre strip. Replaced by the current Split.",
+   "look": [
+    "doors opening",
+    "split",
+    "reveal",
+    "symmetrical",
+    "slide"
+   ],
+   "use_for": [
+    "reveal of a title, logo or leader photo behind 'opening doors'",
+    "satire segment 'behind closed doors' gag",
+    "chapter opener in a political explainer"
+   ],
+   "avoid": [
+    "subject's face on the centre line gets cut in half during the move",
+    "overuse looks like a 2000s slideshow"
+   ],
+   "confidence": "high",
+   "family": "slide/push",
+   "feel": "reveal, slightly retro",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Split (non-legacy). After Effects: duplicate the outgoing layer, mask left/right halves, and animate Position of each half off-frame (ease out), incoming layer below.",
+   "scripting": "Apply by the exact name including ' (Legacy)'. Harvest placed it centred for 1 s (289.52-290.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) confirms the vertical seam with the halves sliding horizontally. Orientation is an Effect Controls setting not settable from a spec, so the bridge gets the vertical split. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/072b.png",
+    "note": "A splits on a vertical centre seam and the halves slide left and right, B showing in a widening centre strip (~130 px at -0.3 s, ~310 px at the cut, most of frame at +0.3 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Chroma Leaks",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Immersive Video (360) transition that blends the clips under a violent colour burn: the outgoing clip floods hot yellow-orange just before the cut, then the incoming clip emerges through magenta, blue and cyan fringes that fade away. It renders on flat footage too.",
+   "look": [
+    "colour burn",
+    "yellow flash",
+    "magenta-cyan fringes",
+    "prismatic",
+    "loud",
+    "music video"
+   ],
+   "use_for": [
+    "energetic social reel transitions on music beats",
+    "AI-education channel intros and section changes",
+    "trailer montage glow-through between shots",
+    "travel or event B-roll"
+   ],
+   "avoid": [
+    "solemn documentary, hard news or political explainers: far too loud",
+    "faces at the cut: they burn out to yellow for several frames",
+    "flat (non-360) edits where a more controllable leak is wanted: use Premiere's 'Chroma Leak' transition"
+   ],
+   "confidence": "medium",
+   "family": "light/flare",
+   "feel": "loud, vibrant, party/music video",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "Premiere flat-footage counterpart: 'Chroma Leak'. After Effects: cross-dissolve plus a colour light-leak clip on Screen or Add over the cut; or a Fractal Noise layer colourised with Colorama (yellow to magenta to cyan), blurred, on Add, with Opacity peaking at the cut.",
+   "scripting": "Harvest placed it centred for 1 s (293.52-294.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows the frame almost fully yellow from about -0.16 s to the cut and magenta/cyan fringes on B until about +0.3 s. Leak colour and VR projection controls (Auto VR Properties) are Effect Controls settings not settable from a spec, so defaults apply.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/073b.png",
+    "note": "Frame at the cut is flooded hot yellow-orange over a mix of A and B; at +0.3 s B carries magenta/blue fringes, faint cyan/pink tint on A at -0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Gradient Wipe",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "unusable",
+   "summary": "Immersive Video (360) wipe meant to reveal the incoming clip along a soft gradient. With the defaults a script gets on flat footage it does not read as a wipe: the outgoing clip vanishes within about two frames of the transition start, and a few of its brightest fragments (flowers, a small gold detail) linger over the incoming clip until the end, which looks like a hard cut with leftover artefacts.",
+   "look": [
+    "near hard cut",
+    "lingering fragments",
+    "artefacts"
+   ],
+   "use_for": [
+    "nothing in scripted flat edits; only a hand-tuned 360 project where an editor sets the gradient and softness"
+   ],
+   "avoid": [
+    "any scripted transition: defaults give a jump cut plus stray fragments",
+    "soft wipes in explainers: use Cross Dissolve, or Linear Wipe with feather"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "broken at defaults",
+   "duration_typical": "0.5-1.0",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "For the intended soft gradient wipe: After Effects Gradient Wipe effect with a Gradient Ramp layer as the map and Transition Softness ~50%, or Linear Wipe with a large Feather; in Premiere a plain Cross Dissolve.",
+   "scripting": "Harvest placed it centred for 1 s (297.52-298.52 s) with no error, but Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows clip A gone by about -0.44 s except bright fragments that stay until about +0.5 s. The gradient and softness controls are Effect Controls settings not settable from a spec, so the planner should not choose it.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/074b.png",
+    "note": "B is already full frame at -0.3 s with bright A fragments (flowers, gold swooshes) floating over it at the cut and still a few at +0.3 s: a near hard cut with artefacts, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Iris Wipe",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Immersive Video (360) iris: a soft-edged circle of the incoming clip opens from about the frame centre and grows until it fills the frame. On flat 16:9 footage the circle stretches into a rounded rectangle as it grows.",
+   "look": [
+    "iris",
+    "soft-edged circle",
+    "rounded rectangle",
+    "centre reveal",
+    "spotlight"
+   ],
+   "use_for": [
+    "revealing a person or object from the centre in an explainer",
+    "playful 'spotlight' reveal in a reel",
+    "360 documentary scene changes centred on the viewer's gaze"
+   ],
+   "avoid": [
+    "hard-news segments: the circle feels cartoonish",
+    "subject off-centre while the iris opens at centre"
+   ],
+   "confidence": "medium",
+   "family": "iris/shape",
+   "feel": "playful, focused reveal",
+   "duration_typical": "0.5-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "Premiere flat-footage counterpart: 'Iris Round'. After Effects: an ellipse mask on the incoming layer whose Mask Expansion (or the shape's size) animates open with Mask Feather ~40 px; or the Iris Wipe effect.",
+   "scripting": "Harvest placed it centred for 1 s (301.52-302.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows a small circle near centre at -0.24 s, a large soft rounded rectangle at the cut, and full B by about +0.3 s. Centre (pan/tilt) and feather are Effect Controls settings not settable from a spec, so it always opens at the centre.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/075b.png",
+    "note": "Small circle of B at frame centre at -0.3 s, a large soft-edged rounded rectangle of B at the cut, full B at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Light Leaks",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Immersive Video (360) transition that washes the whole frame in shifting saturated colour: the outgoing clip tints pink-magenta, then orange and a near-white yellow burn at the cut, and the incoming clip comes out green-cyan before clearing. At defaults it is a loud rainbow wash, not a subtle warm film leak.",
+   "look": [
+    "rainbow wash",
+    "full-frame tint",
+    "yellow burn",
+    "psychedelic",
+    "loud"
+   ],
+   "use_for": [
+    "beat-drop transitions in party, festival or music-driven reels",
+    "high-energy AI-education channel intro or section change",
+    "deliberately trippy montage moment"
+   ],
+   "avoid": [
+    "documentary, hard news and political explainers: too loud and the colour shift reads as a grading error",
+    "faces at the cut: they disappear into the yellow-white burn",
+    "warm nostalgic or memory moments: use Premiere's 'Light Leak' transition or a real light-leak clip on Screen instead"
+   ],
+   "confidence": "medium",
+   "family": "light/flare",
+   "feel": "loud, psychedelic, party",
+   "duration_typical": "0.6-1.0",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "Premiere flat-footage counterpart for a warm film leak: 'Light Leak'. After Effects: an adjustment layer with Colorama (or a Gradient Ramp in Color/Overlay mode) cycling magenta to yellow to cyan over the cut, plus Exposure ramping up to near-white at the cut, under a cross-dissolve.",
+   "scripting": "Harvest placed it centred for 1 s (305.52-306.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows the tint starting about -0.36 s, near-white yellow at the cut and a green-cyan cast on B until about +0.4 s. Leak colour controls are Effect Controls settings not settable from a spec, so the default rainbow look always applies. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/076b.png",
+    "note": "A tinted pink-magenta at -0.3 s, near-white yellow wash with green blotches at the cut, B with a green-cyan cast at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Light Rays",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Immersive Video (360) transition: a cross-dissolve with a bright star-burst of light rays that flares up from a point near the frame centre around the cut and dies away. The burst covers roughly the middle third of the frame; the rest of the image is a normal mix of the two clips.",
+   "look": [
+    "star-burst",
+    "light rays",
+    "flash at centre",
+    "sparkle",
+    "dissolve"
+   ],
+   "use_for": [
+    "reveal of a hero shot, leader or monument in a celebratory news reel",
+    "trailer hit into a title or logo centred in frame",
+    "AI-education 'breakthrough' or 'idea' moment"
+   ],
+   "avoid": [
+    "subtle documentary scenes: the sparkle looks like a cheap preset",
+    "a face at the frame centre at the cut: the burst sits right on it"
+   ],
+   "confidence": "medium",
+   "family": "light/flare",
+   "feel": "bright, celebratory, sparkle",
+   "duration_typical": "0.5-1.0",
+   "sfx": "hit",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: cross-dissolve plus CC Light Burst 2.5 or CC Light Rays on an adjustment layer (centre at frame centre) with Intensity keyframed 0 -> peak at the cut -> 0; a small Lens Flare at centre adds the star.",
+   "scripting": "Harvest placed it centred for 1 s (309.52-310.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows the burst from about -0.16 s, peaking at the cut, faint streaks on B until about +0.2 s. Ray centre and intensity are Effect Controls settings not settable from a spec.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/077b.png",
+    "note": "Cross-dissolve with a bright star-burst of rays at frame centre at the cut covering roughly the middle third; clean A at -0.3 s and clean B at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Mobius Zoom",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Immersive Video (360) zoom: the outgoing clip bends into a spherical, fish-eye wrap while the incoming clip opens from a small circle at the frame centre and grows outward, pushing the wrapped remains of the outgoing clip off the left and right edges as spheres.",
+   "look": [
+    "spherical warp",
+    "fish-eye",
+    "tunnel",
+    "trippy",
+    "centre hole"
+   ],
+   "use_for": [
+    "high-energy reel transitions on a beat drop",
+    "'diving into' a topic in an AI-education video",
+    "trippy montage moments in a trailer or music-driven edit"
+   ],
+   "avoid": [
+    "faces near the edge get heavily distorted on flat footage",
+    "serious news or documentary: reads as gimmick"
+   ],
+   "confidence": "medium",
+   "family": "zoom",
+   "feel": "hard energetic, trippy",
+   "duration_typical": "0.4-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": false,
+   "equivalent": "After Effects: zoom transition: Scale the outgoing layer up into the cut and the incoming layer down from oversize with CC Radial Fast Blur / Radial Blur (Zoom) peaking at the cut; add CC Lens or Optics Compensation for the spherical warp.",
+   "scripting": "Harvest placed it centred for 1 s (313.52-314.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) shows a barrel-warped A with a small B circle at -0.3 s, B in a large centre circle at the cut, warped A spheres at the edges until about +0.16 s. Single-sided behaviour not verified, set false to be safe. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/078b.png",
+    "note": "A barrel-warped with a small B circle at centre at -0.3 s, B in a large centre opening with wrapped A spheres at left and right edges at the cut, slight top-edge warp on B at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Random Blocks",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Immersive Video (360) block dissolve: small rectangular blocks of the incoming clip pop in at random positions until they cover the frame; at the cut the image is a jumble of both clips, and a few stray blocks of the outgoing clip linger briefly after it. On flat footage it looks like a digital blocky dissolve.",
+   "look": [
+    "blocks",
+    "pixel",
+    "digital",
+    "data",
+    "mosaic",
+    "tech"
+   ],
+   "use_for": [
+    "tech / data segments in an AI-education explainer",
+    "'loading' or hacked-data beat in a news reel",
+    "glitchy reel transitions when paired with a glitch SFX"
+   ],
+   "avoid": [
+    "emotional or solemn moments: too mechanical",
+    "large slow blocks look like an old PowerPoint"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "digital, techy, slightly glitchy",
+   "duration_typical": "0.4-0.8",
+   "sfx": "glitch",
+   "single_sided_ok": true,
+   "equivalent": "Premiere flat-footage counterpart: 'Random Blocks'. After Effects: Block Dissolve effect on the outgoing layer (Transition Completion 0->100, small Block Width/Height, Feather 0).",
+   "scripting": "Harvest placed it centred for 1 s (317.52-318.52 s) with no error; Gallery (pve/gallery/tr, A=test plate A, B=test plate B) confirms random blocks of B from about -0.3 s, a mixed jumble at the cut and stray A blocks until about +0.3 s. Block size and feather are Effect Controls settings not settable from a spec. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/079b.png",
+    "note": "Small random blocks of B over A at -0.3 s, a jumble of both at the cut, a few stray A blocks on B at +0.3 s.",
+    "rerender": false
+   }
+  }
+ ]
+}

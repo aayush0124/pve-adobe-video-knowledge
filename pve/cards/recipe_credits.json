@@ -1,0 +1,268 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "credits",
+   "name": "Rolling end credits (AE scroll)",
+   "summary": "A centred credit list scrolls up the screen at a constant whole-pixel speed, from below the frame until the last line has left the top.",
+   "use_for": [
+    "documentary and short-film end credits",
+    "sources and acknowledgements lists"
+   ],
+   "avoid": [
+    "text under about 30 px tall at 1080p: thin strokes shimmer while moving",
+    "speeds that are not a whole number of pixels per frame (judder)"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [],
+   "scenes": [
+    {
+     "name": "rolling_credits",
+     "dur": 35,
+     "bg": "#000000",
+     "layers": [
+      {
+       "type": "text",
+       "name": "CREDITS",
+       "text": "<ROLE 1>\r<NAME 1>\r\r<ROLE 2>\r<NAME 2>\r\r<ROLE 3>\r<NAME 3>\r\r<ROLE 4>\r<NAME 4>\r\r<ROLE 5>\r<NAME 5>\r\r<ROLE 6>\r<NAME 6>\r\r<ROLE 7>\r<NAME 7>\r\r<ROLE 8>\r<NAME 8>\r\r<ROLE 9>\r<NAME 9>\r\r<ROLE 10>\r<NAME 10>\r\r<ROLE 11>\r<NAME 11>\r\r<ROLE 12>\r<NAME 12>\r",
+       "box": [
+        1400,
+        2200
+       ],
+       "pos": [
+        960,
+        2280
+       ],
+       "font": "Arial-BoldMT",
+       "size": 44,
+       "color": "#FFFFFF",
+       "segs": [
+        {
+         "p": "position",
+         "seg": [
+          0,
+          [
+           960,
+           2280
+          ],
+          34.8,
+          [
+           960,
+           -1200
+          ],
+          "lin"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "keyframes_note": "Scenes for vfx.render_scenes(scenes, aep, out_dir) at its defaults (1920x1080, 25 fps); segs are [t0, v0, t1, v1, ease] in comp seconds with ease lin | smooth | out | in (ae_lib.jsx seg). One box-text layer ([1400, 2200] box, '\\r' between lines) moved by a LINEAR position seg from y 2280 to -1200: 3480 px in 34.8 s = 100 px/s = 4 px per frame at 25 fps. Whole pixels per frame avoid the stutter of fractional steps; the speed itself is a working default (about 3-4 px/frame at 1080p keeps 44 px text readable), not a standard. The box must contain every line (box text clips what does not fit) and the start/end positions assume the block is at most about 2200 px tall: recompute both for longer lists. Two-column credits (role right-aligned, name left-aligned) need two text layers; vfx_build.jsx text supports left or centre justification only. Premiere's own route is the Essential Graphics Roll option ('Rolling credits and crawls in Premiere'). Measured 2026-10-13: 4 px per frame on every one of 722 frame pairs, as planned.",
+   "built_from": [
+    "Rolling credits and crawls in Premiere",
+    "Scrolling credits and crawls in After Effects",
+    "Text engine, Indic scripts and text scripting"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/013_scene_0_ae_b.png",
+    "note": "The centred list rolls up from below the frame until the last line leaves the top; measured 4 px per frame on all 722 frame pairs with text (constant, whole pixels).",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "credits",
+   "name": "News ticker crawl (looping)",
+   "summary": "A red ticker band along the bottom with a white BREAKING label box and headlines crawling right to left in an endless seamless loop, rendered with alpha for overlay.",
+   "use_for": [
+    "news-style explainers and recaps",
+    "running headlines under a live-style segment"
+   ],
+   "avoid": [
+    "reels: the bottom 20-35% of a 9:16 frame sits under platform UI (see 'Platform UI safe zones')",
+    "fast crawls: keep it readable (about 6-10 s for a headline to cross)"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [],
+   "scenes": [
+    {
+     "name": "news_ticker",
+     "dur": 20,
+     "bg": "#000000",
+     "alpha": true,
+     "layers": [
+      {
+       "type": "shape",
+       "name": "BAND",
+       "paths": [
+        {
+         "pts": [
+          [
+           0,
+           960
+          ],
+          [
+           1920,
+           960
+          ],
+          [
+           1920,
+           1040
+          ],
+          [
+           0,
+           1040
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#C8102E"
+      },
+      {
+       "type": "shape",
+       "name": "CRAWL_MATTE",
+       "paths": [
+        {
+         "pts": [
+          [
+           240,
+           960
+          ],
+          [
+           1920,
+           960
+          ],
+          [
+           1920,
+           1040
+          ],
+          [
+           240,
+           1040
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#FFFFFF"
+      },
+      {
+       "type": "text",
+       "name": "CRAWL_UNIT",
+       "text": "<HEADLINE ONE> | <HEADLINE TWO> | <HEADLINE THREE> | ",
+       "pos": [
+        960,
+        1012
+       ],
+       "font": "Arial-BoldMT",
+       "size": 40,
+       "color": "#FFFFFF",
+       "opacity": 0
+      },
+      {
+       "type": "text",
+       "name": "CRAWL",
+       "text": "<HEADLINE ONE> | <HEADLINE TWO> | <HEADLINE THREE> | <HEADLINE ONE> | <HEADLINE TWO> | <HEADLINE THREE> | <HEADLINE ONE> | <HEADLINE TWO> | <HEADLINE THREE> | ",
+       "pos": [
+        2400,
+        1012
+       ],
+       "font": "Arial-BoldMT",
+       "size": 40,
+       "color": "#FFFFFF",
+       "matte": {
+        "layer": "CRAWL_MATTE",
+        "type": "alpha"
+       },
+       "expr": {
+        "position": "var w = sourceRectAtTime(time, false).width; var u = thisComp.layer(\"CRAWL_UNIT\").sourceRectAtTime(time, false).width; var period = (w - u) / 2; [240 + w / 2 - ((time - inPoint) * 200) % period, value[1]]"
+       }
+      },
+      {
+       "type": "shape",
+       "name": "LABEL_BOX",
+       "paths": [
+        {
+         "pts": [
+          [
+           0,
+           960
+          ],
+          [
+           240,
+           960
+          ],
+          [
+           240,
+           1040
+          ],
+          [
+           0,
+           1040
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#FFFFFF"
+      },
+      {
+       "type": "text",
+       "name": "LABEL",
+       "text": "BREAKING",
+       "pos": [
+        120,
+        1012
+       ],
+       "font": "Arial-BoldMT",
+       "size": 34,
+       "color": "#C8102E"
+      }
+     ]
+    }
+   ],
+   "keyframes_note": "Scenes for vfx.render_scenes(scenes, aep, out_dir) at its defaults (1920x1080, 25 fps); segs are [t0, v0, t1, v1, ease] in comp seconds with ease lin | smooth | out | in (ae_lib.jsx seg). The crawl is an expression on Position (not keyframes), so it loops for any duration: the headline string is repeated 3 times and x moves left by (time * 200) modulo one repeat's advance width, which lands the second copy exactly where the first started. That width comes from two ink measurements: (sourceRectAtTime width of the 3-copy CRAWL minus that of the 1-copy CRAWL_UNIT, a hidden copy in the same font and size) / 2. The ink box leaves out the same trailing space and side bearing in both, so they cancel. Measured 2026-10-13 with the old period (ink width / 3): 8 px per frame on 499 frame pairs, but the band jumped 13 px at every wrap (frames 149, 299 and 448, every 5.99 s). Ink width / 3 was 5 px short of one repeat. Fix applied 2026-10-14, not re-rendered. 200 px/s = 8 px per frame at 25 fps (whole pixels). The text is clipped to the band right of the label by an alpha track matte (CRAWL_MATTE, hidden automatically). The band sits at y 960-1040: inside action safe (bottom 38 px) and clear of title safe for 1920x1080. 'alpha': true renders a .mov with alpha for overlay in Premiere. Keep CRAWL_UNIT's text exactly one repeat of CRAWL's (same font, size and tracking).",
+   "built_from": [
+    "Scrolling credits and crawls in After Effects",
+    "Track mattes (any layer, 23.0+)",
+    "Expressions (engine and scripting)",
+    "Broadcast safe areas (action and title safe)"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/recipe_specs/011_scene_0_ae_b.png",
+    "note": "The band, label and crawl look right and the crawl moves a steady 8 px per frame, but at every wrap (frames 149, 299, 448) the text jumps 13 px: the loop is not seamless.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "loop period now (3-copy width - 1-copy width) / 2 from a hidden CRAWL_UNIT text layer, see keyframes_note; not rendered again",
+      "frame": "pve/gallery/recipe_specs/011_scene_0_ae_b.png"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,1209 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fractal Noise",
+   "match": "ADBE Fractal Noise",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Generates procedural greyscale cloud / turbulence noise that replaces or blends over the layer. The workhorse for smoke, fog, light-leak textures, flicker mattes and organic displacement maps.",
+   "look": [
+    "clouds",
+    "smoke",
+    "fog",
+    "organic texture",
+    "turbulence",
+    "flicker",
+    "procedural noise"
+   ],
+   "use_for": [
+    "slow drifting fog / haze layer over a trailer title (Screen or Overlay blend)",
+    "animated texture behind lower thirds and news-graphics backplates",
+    "luma matte for an organic dissolve / burn-in transition",
+    "displacement source for heat-haze or glitch warps (Displacement Map)",
+    "subtle light flicker on a documentary archival photo"
+   ],
+   "avoid": [
+    "full-opacity Normal blend replaces the footage with grey noise; drop Opacity or put it on a solid with a layer blend mode",
+    "high Complexity with tiny Scale reads as cheap TV static; keep Scale 200+ for atmosphere",
+    "animating Offset Turbulence fast looks like sliding wallpaper; animate Evolution instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Fractal Type",
+     "does": "noise character preset (Basic, Turbulent Smooth, Dynamic, Rocky, Strings ...)",
+     "typical": "1 (Basic) for fog; try other indices for wispy/sharp textures"
+    },
+    {
+     "name": "Noise Type",
+     "does": "interpolation between noise cells",
+     "typical": "3 Soft Linear (default) or 4 Spline for smooth smoke"
+    },
+    {
+     "name": "Contrast",
+     "does": "contrast of the noise",
+     "typical": "100-200 (higher = punchier clouds / harder mattes)"
+    },
+    {
+     "name": "Brightness",
+     "does": "shifts the noise darker/brighter",
+     "typical": "-30 to 30"
+    },
+    {
+     "name": "Scale",
+     "does": "size of the noise pattern (Uniform Scaling on)",
+     "typical": "200-600 for fog and smoke, 30-80 for grit"
+    },
+    {
+     "name": "Complexity",
+     "does": "number of detail layers (octaves)",
+     "typical": "3-8"
+    },
+    {
+     "name": "Evolution",
+     "does": "morphs the noise over time (degrees)",
+     "typical": "animate 0 -> 360-720 over 10 s, or expression time*40"
+    },
+    {
+     "name": "Opacity",
+     "does": "mix of the noise over the original layer",
+     "typical": "20-60 when laid over footage"
+    }
+   ],
+   "demo_settings": {
+    "Contrast": 160,
+    "Scale": 300,
+    "Complexity": 6,
+    "Evolution": 120,
+    "Opacity": 55
+   },
+   "enum_labels": {
+    "Fractal Type": {
+     "1": "Basic",
+     "2": "(separator)",
+     "3": "Turbulent Smooth",
+     "4": "Turbulent Basic",
+     "5": "Turbulent Sharp",
+     "6": "(separator)",
+     "7": "Dynamic",
+     "8": "Dynamic Progressive",
+     "9": "Dynamic Twist",
+     "10": "(separator)",
+     "11": "Max",
+     "12": "Smeary",
+     "13": "Swirly",
+     "14": "Rocky",
+     "15": "Cloudy",
+     "16": "Terrain",
+     "17": "Subscale",
+     "18": "Small Bumps",
+     "19": "Strings",
+     "20": "Threads"
+    },
+    "Noise Type": {
+     "1": "Block",
+     "2": "Linear",
+     "3": "Soft Linear",
+     "4": "Spline"
+    },
+    "Overflow": {
+     "1": "Clip",
+     "2": "Soft Clamp",
+     "3": "Wrap Back",
+     "4": "Allow HDR Results"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "(separator)",
+     "4": "Add",
+     "5": "Multiply",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "(separator)",
+     "11": "Color Dodge",
+     "12": "Color Burn",
+     "13": "(separator)",
+     "14": "Darken",
+     "15": "Lighten",
+     "16": "Difference",
+     "17": "Exclusion",
+     "18": "(separator)",
+     "19": "Hue",
+     "20": "Saturation",
+     "21": "Luminosity"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Premiere: none native in v26; closest is VR Fractal Noise (Immersive Video bin, built for 360 frames)",
+   "pairs_with": [
+    "Turbulent Displace",
+    "Displacement Map",
+    "Set Matte / Track Matte",
+    "Colorama",
+    "Tint",
+    "Gaussian Blur",
+    "Glow"
+   ],
+   "scripting": "Usually applied to a full-frame solid (black solid 1920x1080) and composited with the layer's blend mode (Screen/Overlay/Add); applied to footage it overwrites pixels unless Opacity < 100 or the effect's own Blending Mode is changed. Blending Mode popup: 1 None, 2 Normal (default), 4 Add, 5 Multiply, 6 Screen, 7 Overlay ... (separators at 3, 10, 13, 18); Fractal Type: 1 Basic, 3 Turbulent Smooth, 4 Turbulent Basic, 5 Turbulent Sharp, 7 Dynamic ... 20 Threads (separators at 2, 6, 10); both in enum_labels (read from After Effects 26.0). Evolution and Rotation are angles in degrees with no harvested limits. Scale Width/Scale Height only act when Uniform Scaling = 0. For a seamless loop set Cycle Evolution = 1 and Cycle (in Revolutions) to the evolution turns.",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      720
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/137.png",
+    "note": "Grey cloudy fractal fog blended over the whole frame at about half opacity, image still readable underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Match Grain",
+   "match": "VISINF Grain Duplication",
+   "category": "Noise & Grain",
+   "status": "needs_input",
+   "summary": "Samples the film grain / sensor noise of another layer and adds matching grain to this layer, so CG, graphics or clean stock sit in the same plate.",
+   "look": [
+    "matched grain",
+    "film grain",
+    "sensor noise",
+    "plate integration",
+    "organic texture"
+   ],
+   "use_for": [
+    "make a clean CG element or AI shot match the grain of the live-action plate",
+    "give clean stock / screen-recorded inserts the same noise as camera footage in a documentary",
+    "unify grain after Remove Grain + compositing (degrain, comp, regrain)"
+   ],
+   "avoid": [
+    "without a grainy Noise Source Layer there is nothing to match; use Add Grain instead",
+    "Viewing Mode defaults to Preview (only a small box); the full frame shows nothing until set to Final Output",
+    "slow to render on long timelines; pre-render the regrained layer"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Viewing Mode",
+     "does": "Preview box / sample views / Final Output",
+     "typical": "5 (Final Output) for render"
+    },
+    {
+     "name": "Noise Source Layer",
+     "does": "layer whose grain is sampled",
+     "typical": "the camera plate layer"
+    },
+    {
+     "name": "Intensity",
+     "does": "strength multiplier on the matched grain",
+     "typical": "0.8-1.5"
+    },
+    {
+     "name": "Size",
+     "does": "grain size multiplier",
+     "typical": "0.8-1.5"
+    },
+    {
+     "name": "Softness",
+     "does": "softens grain edges",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Saturation",
+     "does": "colour saturation of the grain",
+     "typical": "0.3-1 (lower = more monochrome)"
+    },
+    {
+     "name": "Amount",
+     "does": "Blend with Original amount (keeps some of the clean layer)",
+     "typical": "0 (full effect)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Viewing Mode": {
+     "1": "Preview",
+     "2": "Noise Samples",
+     "3": "Compensation Samples",
+     "4": "Blending Matte",
+     "5": "Final Output"
+    },
+    "Blending Mode": {
+     "1": "Film",
+     "2": "Multiply",
+     "3": "Add",
+     "4": "Screen",
+     "5": "Overlay"
+    },
+    "Sample Selection": {
+     "1": "Automatic",
+     "2": "Manual"
+    },
+    "Combine Match and Mask Using": {
+     "1": "Multiply",
+     "2": "Screen"
+    },
+    "Match Color Using": {
+     "1": "Off",
+     "2": "(separator)",
+     "3": "RGB",
+     "4": "Hue",
+     "5": "Chroma",
+     "6": "Luminance",
+     "7": "Red Channel",
+     "8": "Green Channel",
+     "9": "Blue Channel"
+    },
+    "Masking Mode": {
+     "1": "Intensity",
+     "2": "Alpha",
+     "3": "Inverted Intensity",
+     "4": "Inverted Alpha"
+    },
+    "If Mask Size Differs": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Remove Grain",
+    "Add Grain",
+    "Lumetri Color"
+   ],
+   "scripting": "Noise Source Layer is a 'layer' property: an AdobeBridge spec cannot set it (pve check rejects layer props), so the build needs a custom ExtendScript line effect.property('Noise Source Layer').setValue(plateLayer.index). Viewing Mode defaults to 1 (Preview); set 5 (Final Output) or only the preview box is processed. Viewing Mode: 1 Preview, 2 Noise Samples, 3 Compensation Samples, 4 Blending Matte, 5 Final Output (read from After Effects 26.0). All groups in this effect are flat header rows, so 'Group/Property' does not disambiguate: a repeated name always resolves to its FIRST occurrence. The sample-point names '1'..'10' exist twice (Noise Sample Points, then Intensity points); only the first set is reachable by name and '1#2' style names do not work in After Effects. Sample points auto-place; leave them alone. Blending Mode: 1 Film, 2 Multiply, 3 Add (default), 4 Screen, 5 Overlay (read from After Effects 26.0).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (needs a grain source layer), so no gallery frame exists.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Median",
+   "match": "ADBE PS Median",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Replaces each pixel with the median of its neighbours within Radius: removes speckle noise at low radius and turns the image into a flat, painterly watercolour look at high radius.",
+   "look": [
+    "painterly",
+    "watercolour",
+    "posterized smooth",
+    "denoise",
+    "smeared detail",
+    "oil paint"
+   ],
+   "use_for": [
+    "light speckle / dust cleanup on low-res archival footage (Radius 1-2)",
+    "painterly / illustrated look for a stylised flashback or explainer background",
+    "smooth a luma matte or key edge before using it as a matte",
+    "abstract 'memory' look on a documentary reenactment"
+   ],
+   "avoid": [
+    "on faces Radius > 4 wipes skin detail into plastic",
+    "large radius on 4K is slow; work at 1080 or pre-render"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "neighbourhood size in pixels",
+     "typical": "1-2 denoise, 6-15 painterly"
+    },
+    {
+     "name": "Operate On Alpha Channel",
+     "does": "also median-filters the alpha (0 off, 1 on)",
+     "typical": "0 for footage, 1 to clean a matte"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 10
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none in v26 (no Median effect in the harvested list)",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Cartoon",
+    "Find Edges",
+    "Posterize",
+    "Lumetri Color"
+   ],
+   "scripting": "Newer replacement for 'Median (Legacy)' (ADBE Median); same two properties. Operate On Alpha Channel is a checkbox (0/1). Radius is in layer pixels, so the same value looks weaker on higher-res sources.",
+   "recipe": {
+    "Radius": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      12
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/138.png",
+    "note": "Detail is smeared flat: faces, flowers and stripes turn into smooth painterly blobs, no blur halo.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Median (Legacy)",
+   "match": "ADBE Median",
+   "category": "Noise & Grain",
+   "status": "obsolete",
+   "summary": "The older Median filter: replaces each pixel with the median of its neighbours, removing speckle at low radius and painting the image at high radius. Kept for old projects.",
+   "look": [
+    "painterly",
+    "denoise",
+    "smeared detail",
+    "watercolour"
+   ],
+   "use_for": [
+    "opening legacy projects that already use it",
+    "speckle cleanup on archival footage when matching an old render exactly"
+   ],
+   "avoid": [
+    "use the current 'Median' (ADBE PS Median) in new builds"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "neighbourhood size in pixels",
+     "typical": "1-2 denoise, 6-15 painterly"
+    },
+    {
+     "name": "Operate On Alpha Channel",
+     "does": "also filters alpha (0/1)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 10
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "AE replacement: Median (ADBE PS Median); Premiere: none in v26",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Posterize"
+   ],
+   "scripting": "Superseded by Median (match ADBE PS Median) with identical property names; scripts should apply ADBE PS Median instead. If kept, Radius (0-255) and Operate On Alpha Channel (0/1) work the same.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/139.png",
+    "note": "Same painterly smoothing as Median at Radius 10, faces and flowers flattened into smooth patches.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise",
+   "match": "ADBE Noise2",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Adds random per-pixel noise that changes every frame, in colour or monochrome. A quick video-noise / dirty-signal texture rather than true film grain.",
+   "look": [
+    "video noise",
+    "static",
+    "dirty signal",
+    "CCTV",
+    "gritty",
+    "lo-fi"
+   ],
+   "use_for": [
+    "CCTV / surveillance / leaked-footage look on a news reel (with desaturation)",
+    "break up banding on gradient backgrounds and big blurs (2-4%)",
+    "quick grit on a VHS / archive pastiche",
+    "noise burst on a glitch transition"
+   ],
+   "avoid": [
+    "above ~15% it reads as cheap TV static, not film grain; use Add Grain for filmic grain",
+    "colour noise on skin looks like a bad sensor; prefer Noise Type 0 (mono) on faces"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount of Noise",
+     "does": "percentage of noise added",
+     "typical": "2-4 for dither/grit, 10-25 for CCTV"
+    },
+    {
+     "name": "Noise Type",
+     "does": "checkbox 'Use Color Noise' (1 colour, 0 monochrome)",
+     "typical": "0 for a cleaner grain feel"
+    },
+    {
+     "name": "Clipping",
+     "does": "checkbox: clip result values (0 lets noise wash the image)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Amount of Noise": 50,
+    "Noise Type": 1,
+    "Clipping": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Noise",
+   "pairs_with": [
+    "Tint",
+    "Hue/Saturation",
+    "Scan lines (Venetian Blinds)",
+    "Fast Box Blur",
+    "Add Grain",
+    "Wave Warp"
+   ],
+   "scripting": "Noise Type and Clipping are checkboxes exposed as 0/1 numbers (Noise Type 1 = Use Color Noise). Noise re-randomises every frame automatically, no keyframes needed.",
+   "recipe": {
+    "Amount of Noise": [
+     [
+      0,
+      0
+     ],
+     [
+      0.1,
+      40
+     ],
+     [
+      0.3,
+      4
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/140.png",
+    "note": "At Amount 50 (was 25) a fine colour speckle now covers the whole frame, clearly visible on the walls, dark clothing and stripes even at preview size, reading as a dirty video signal where the old render was barely distinguishable from the reference.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise Alpha",
+   "match": "ADBE Noise Alpha2",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Adds random noise to the layer's alpha channel, punching speckled transparent holes (or speckled opacity) so whatever is below shows through. Used for disintegration and dusty, eroded mattes.",
+   "look": [
+    "speckled transparency",
+    "disintegrate",
+    "dust",
+    "eroded",
+    "dissolve"
+   ],
+   "use_for": [
+    "noisy dissolve / disintegrate transition between two shots (animate Amount)",
+    "eroded, dusty edge on a title or stamp graphic",
+    "speckled matte for a 'breaking up' archival photo in a documentary"
+   ],
+   "avoid": [
+    "on a single layer over black it just looks like black dots; needs a different layer underneath",
+    "uniform noise on large areas looks digital; blur the result slightly or use Fractal Noise as a matte instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise",
+     "does": "noise kind: Uniform Random, Squared Random (static) or Uniform / Squared Animation (moving)",
+     "typical": "1 (Uniform Random, default) or 2 (Squared Random, higher contrast); the Animation variants sit at higher indices (see scripting)"
+    },
+    {
+     "name": "Amount",
+     "does": "amount of alpha noise in percent",
+     "typical": "20-80; animate 0 -> 100 and finish with an opacity fade for a full dissolve"
+    },
+    {
+     "name": "Original Alpha",
+     "does": "where the noise goes: Add (everywhere), Clamp (opaque areas only), Scale (by opacity), Edges (semi-transparent edges only)",
+     "typical": "2 Clamp (default) on footage; 4 Edges to rough up a title's edges"
+    },
+    {
+     "name": "Overflow",
+     "does": "how values beyond 0-255 are handled",
+     "typical": "2 (default)"
+    },
+    {
+     "name": "Contextual Control",
+     "does": "random seed / noise phase of the pattern (degrees)",
+     "typical": "animate for changing pattern"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 60
+   },
+   "enum_labels": {
+    "Noise": {
+     "1": "Uniform Random",
+     "2": "Squared Random",
+     "3": "(separator)",
+     "4": "Uniform Animation",
+     "5": "Squared Animation"
+    },
+    "Original Alpha": {
+     "1": "Add",
+     "2": "Clamp",
+     "3": "Scale",
+     "4": "Edges"
+    },
+    "Overflow": {
+     "1": "Clip",
+     "2": "Wrap Back",
+     "3": "Wrap"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none in v26 (no Noise Alpha effect in the harvested list)",
+   "pairs_with": [
+    "Fast Box Blur",
+    "Fractal Noise",
+    "Linear Wipe",
+    "Drop Shadow"
+   ],
+   "scripting": "Only alpha changes, so the result is visible only over another layer or a coloured comp background. 'Contextual Control' is the harvested name of the seed/phase control (UI label reads Random Seed for the Random noise types and Noise Phase for the Animation types); animate it to change a static pattern. Original Alpha (1 Add, 2 Clamp, 3 Scale, 4 Edges), Overflow (1 Clip, 2 Wrap Back, 3 Wrap) and Noise (1 Uniform Random, 2 Squared Random, 3 a separator, 4 Uniform Animation, 5 Squared Animation) are read from After Effects 26.0. Cycle Noise (0/1) with Cycle (in Revolutions) makes the animated noise loop.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/141.png",
+    "note": "Fine speckled transparent holes over the whole layer let the black background through, giving a darker dusty, eroded texture.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise HLS",
+   "match": "ADBE Noise HLS2",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Adds noise separately to hue, lightness and saturation, with an optional grain mode and grain size. Gives colour speckle, luminance grain or psychedelic hue noise; static unless Noise Phase is animated.",
+   "look": [
+    "grain",
+    "colour speckle",
+    "luminance noise",
+    "gritty",
+    "retro"
+   ],
+   "use_for": [
+    "controllable luminance grain (Lightness only) on a gritty explainer or trailer",
+    "colour-speckle damage for a corrupted-file / glitch beat",
+    "textured grain on flat motion-graphics backgrounds"
+   ],
+   "avoid": [
+    "Hue noise above ~10 looks like rainbow confetti on skin",
+    "static noise pattern looks like a dirty lens unless Noise Phase is animated (or use Noise HLS Auto)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise",
+     "does": "noise kind: Uniform, Squared or Grain",
+     "typical": "3 (Grain) for film-like texture"
+    },
+    {
+     "name": "Hue",
+     "does": "amount of hue noise (%)",
+     "typical": "0-5"
+    },
+    {
+     "name": "Lightness",
+     "does": "amount of brightness noise (%)",
+     "typical": "8-30"
+    },
+    {
+     "name": "Saturation",
+     "does": "amount of saturation noise (%)",
+     "typical": "0-20"
+    },
+    {
+     "name": "Grain Size",
+     "does": "size of grains (Grain mode only)",
+     "typical": "1-2.5"
+    },
+    {
+     "name": "Noise Phase",
+     "does": "seed/phase of the pattern in degrees",
+     "typical": "animate via expression time*360 to make it crawl"
+    }
+   ],
+   "demo_settings": {
+    "Noise": 3,
+    "Lightness": 30,
+    "Saturation": 15,
+    "Hue": 3,
+    "Grain Size": 2
+   },
+   "enum_labels": {
+    "Noise": {
+     "1": "Uniform",
+     "2": "Squared",
+     "3": "Grain"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Noise (no HLS variant in v26)",
+   "pairs_with": [
+    "Hue/Saturation",
+    "Curves",
+    "Gaussian Blur",
+    "Noise HLS Auto"
+   ],
+   "scripting": "Noise is a 3-item popup (1 Uniform, 2 Squared, 3 Grain). Grain Size only matters when Noise = 3. Noise Phase has no harvested range (angle in degrees); keyframe or expression it, otherwise the noise is frozen.",
+   "recipe": {
+    "Noise Phase": [
+     [
+      0,
+      0
+     ],
+     [
+      5,
+      1800
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/142.png",
+    "note": "Clearly visible coarse luminance grain with slight colour speckle across the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise HLS Auto",
+   "match": "ADBE Noise HLS Auto2",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Same hue / lightness / saturation noise as Noise HLS, but it animates automatically at a set speed, so it behaves like live grain without keyframes.",
+   "look": [
+    "animated grain",
+    "luminance noise",
+    "colour speckle",
+    "gritty",
+    "film-ish"
+   ],
+   "use_for": [
+    "moving luminance grain over a trailer or documentary sequence with no keyframing",
+    "animated grain on motion-graphics backgrounds so they do not look sterile",
+    "gritty texture on a CCTV / found-footage pastiche"
+   ],
+   "avoid": [
+    "Hue noise on faces looks like confetti; keep Hue near 0",
+    "very high speed + large grain reads as boiling static"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise",
+     "does": "noise kind: Uniform, Squared or Grain",
+     "typical": "3 (Grain)"
+    },
+    {
+     "name": "Lightness",
+     "does": "amount of brightness noise (%)",
+     "typical": "8-25"
+    },
+    {
+     "name": "Saturation",
+     "does": "amount of saturation noise (%)",
+     "typical": "0-15"
+    },
+    {
+     "name": "Hue",
+     "does": "amount of hue noise (%)",
+     "typical": "0-3"
+    },
+    {
+     "name": "Grain Size",
+     "does": "size of grains (Grain mode only)",
+     "typical": "1-2"
+    },
+    {
+     "name": "Noise Animation Speed",
+     "does": "how fast the pattern changes (roughly changes per second)",
+     "typical": "24 (default) to 30"
+    }
+   ],
+   "demo_settings": {
+    "Noise": 3,
+    "Lightness": 30,
+    "Saturation": 15,
+    "Hue": 2,
+    "Grain Size": 2,
+    "Noise Animation Speed": 24
+   },
+   "enum_labels": {
+    "Noise": {
+     "1": "Uniform",
+     "2": "Squared",
+     "3": "Grain"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Noise (no HLS variant in v26)",
+   "pairs_with": [
+    "Curves",
+    "Hue/Saturation",
+    "Vignette (Lumetri)",
+    "Gaussian Blur"
+   ],
+   "scripting": "Static values only; animation is automatic from Noise Animation Speed (0 freezes it). Noise popup: 1 Uniform, 2 Squared, 3 Grain; Grain Size only applies with 3.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/143.png",
+    "note": "Same visible coarse luminance grain with light colour speckle as Noise HLS (animation not judgeable from one frame).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Remove Grain",
+   "match": "VISINF Grain Removal",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Analyses the grain/noise in sampled flat areas and removes it, with optional temporal filtering and sharpening. A denoiser for noisy low-light footage and the degrain step before compositing.",
+   "look": [
+    "denoise",
+    "clean",
+    "smooth",
+    "waxy at high settings"
+   ],
+   "use_for": [
+    "clean noisy night / low-light interview or rally footage before grading",
+    "degrain a plate before keying or compositing, then Match Grain after",
+    "reduce compression noise on downloaded news clips before upscaling",
+    "soften blotchy skin noise on phone footage"
+   ],
+   "avoid": [
+    "Viewing Mode defaults to Preview (a small box); set Final Output or the full frame is untouched",
+    "high Noise Reduction / many Passes gives plastic, waxy faces",
+    "very slow; pre-render long clips"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Viewing Mode",
+     "does": "Preview box / Noise Samples / Blending Matte / Final Output",
+     "typical": "4 (Final Output)"
+    },
+    {
+     "name": "Noise Reduction",
+     "does": "strength of noise removal",
+     "typical": "0.5-2 natural, 3-5 heavy"
+    },
+    {
+     "name": "Passes",
+     "does": "number of filter passes (more = removes larger grain)",
+     "typical": "2-4"
+    },
+    {
+     "name": "Chroma Suppression",
+     "does": "extra removal of colour noise",
+     "typical": "1-3"
+    },
+    {
+     "name": "Texture",
+     "does": "keeps some fine texture back",
+     "typical": "0.1-0.3"
+    },
+    {
+     "name": "Enable",
+     "does": "Temporal Filtering on/off (uses neighbouring frames)",
+     "typical": "1 for static/locked shots"
+    },
+    {
+     "name": "Amount",
+     "does": "Temporal Filtering amount (the FIRST 'Amount'; the only one reachable by name, see scripting)",
+     "typical": "100 (default) with Enable 1"
+    }
+   ],
+   "demo_settings": {
+    "Viewing Mode": 4,
+    "Noise Reduction": 5,
+    "Passes": 5,
+    "Chroma Suppression": 3,
+    "Texture": 0
+   },
+   "enum_labels": {
+    "Viewing Mode": {
+     "1": "Preview",
+     "2": "Noise Samples",
+     "3": "Blending Matte",
+     "4": "Final Output"
+    },
+    "Mode": {
+     "1": "Multichannel",
+     "2": "Single Channel"
+    },
+    "Sample Selection": {
+     "1": "Automatic",
+     "2": "Manual"
+    },
+    "Combine Match and Mask Using": {
+     "1": "Multiply",
+     "2": "Screen"
+    },
+    "Match Color Using": {
+     "1": "Off",
+     "2": "(separator)",
+     "3": "RGB",
+     "4": "Hue",
+     "5": "Chroma",
+     "6": "Luminance",
+     "7": "Red Channel",
+     "8": "Green Channel",
+     "9": "Blue Channel"
+    },
+    "Masking Mode": {
+     "1": "Intensity",
+     "2": "Alpha",
+     "3": "Inverted Intensity",
+     "4": "Inverted Alpha"
+    },
+    "If Mask Size Differs": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Match Grain",
+    "Add Grain",
+    "Unsharp Mask",
+    "Lumetri Color",
+    "Detail-preserving Upscale"
+   ],
+   "scripting": "Set Viewing Mode = 4 (Final Output) FIRST; default 1 only processes the preview box. 'Amount' repeats three times (Temporal Filtering 0-100, Unsharp Mask 0-5, Blend with Original 0-100). The groups are flat header rows, so AdobeBridge resolves both 'Amount' and 'Unsharp Mask/Amount' to the FIRST one (Temporal Filtering), and 'Amount#2' is simply not found in After Effects; the Unsharp Mask and Blend amounts cannot be set from a spec. To sharpen after degraining, add a separate Unsharp Mask effect after Remove Grain. Noise sample points 1-10 auto-place; Sample Selection: 1 Automatic, 2 Manual (read from After Effects 26.0). Mask Layer is a layer reference (not spec-settable). Mode: 1 Multichannel, 2 Single Channel (read from After Effects 26.0). The demo values deliberately over-smooth so the effect is visible; real use stays near Noise Reduction 1, Passes 3.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/144.png",
+    "note": "Final Output mode smooths the whole frame strongly, removing texture to a soft, waxy look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Turbulent Noise",
+   "match": "ADBE AIF Perlin Noise 3D",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "A faster, GPU-friendly version of Fractal Noise: procedural cloud/turbulence noise with an extra Turbulence Factor but fewer sub-settings. Same uses: fog, smoke, organic textures and mattes.",
+   "look": [
+    "clouds",
+    "smoke",
+    "fog",
+    "turbulence",
+    "organic texture",
+    "procedural noise"
+   ],
+   "use_for": [
+    "animated fog / smoke overlay on trailer titles (Screen blend)",
+    "organic luma matte for a burn or ink transition",
+    "moving texture under news-graphics panels",
+    "displacement source for heat-haze or warp effects"
+   ],
+   "avoid": [
+    "at Opacity 100 with Normal blend it hides the footage completely",
+    "no Cycle Evolution, so it cannot loop seamlessly; use Fractal Noise for looping backgrounds",
+    "no Sub Rotation / Sub Offset; use Fractal Noise when those are needed"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Fractal Type",
+     "does": "noise character preset",
+     "typical": "1 (Basic) for fog"
+    },
+    {
+     "name": "Contrast",
+     "does": "contrast of the noise",
+     "typical": "100-200"
+    },
+    {
+     "name": "Scale",
+     "does": "pattern size",
+     "typical": "200-600 for fog"
+    },
+    {
+     "name": "Complexity",
+     "does": "detail octaves",
+     "typical": "3-8"
+    },
+    {
+     "name": "Turbulence Factor",
+     "does": "how strongly the noise is churned/distorted",
+     "typical": "1.5-3"
+    },
+    {
+     "name": "Evolution",
+     "does": "morphs the noise over time (degrees)",
+     "typical": "0 -> 720 over 10 s"
+    },
+    {
+     "name": "Opacity",
+     "does": "mix over the original layer",
+     "typical": "20-60 over footage"
+    }
+   ],
+   "demo_settings": {
+    "Contrast": 160,
+    "Scale": 300,
+    "Complexity": 6,
+    "Turbulence Factor": 2.5,
+    "Evolution": 120,
+    "Opacity": 55
+   },
+   "enum_labels": {
+    "Fractal Type": {
+     "1": "Basic",
+     "2": "(separator)",
+     "3": "Turbulent Smooth",
+     "4": "Turbulent Basic",
+     "5": "Turbulent Sharp",
+     "6": "(separator)",
+     "7": "Dynamic",
+     "8": "Dynamic Progressive",
+     "9": "Dynamic Twist",
+     "10": "(separator)",
+     "11": "Max",
+     "12": "Smeary",
+     "13": "Swirly",
+     "14": "Rocky",
+     "15": "Cloudy",
+     "16": "Terrain",
+     "17": "Subscale",
+     "18": "Small Bumps",
+     "19": "Strings",
+     "20": "Threads"
+    },
+    "Noise Type": {
+     "1": "Block",
+     "2": "Linear",
+     "3": "Soft Linear",
+     "4": "Spline"
+    },
+    "Overflow": {
+     "1": "Clip",
+     "2": "Soft Clamp",
+     "3": "Wrap Back",
+     "4": "Allow HDR Results"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "(separator)",
+     "4": "Add",
+     "5": "Multiply",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "(separator)",
+     "11": "Color Dodge",
+     "12": "Color Burn",
+     "13": "(separator)",
+     "14": "Darken",
+     "15": "Lighten",
+     "16": "Difference",
+     "17": "Exclusion",
+     "18": "(separator)",
+     "19": "Hue",
+     "20": "Saturation",
+     "21": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Premiere: none native in v26; closest is VR Fractal Noise (Immersive Video bin, built for 360 frames)",
+   "pairs_with": [
+    "Displacement Map",
+    "Turbulent Displace",
+    "Set Matte / Track Matte",
+    "Tint",
+    "Glow"
+   ],
+   "scripting": "Same property names as Fractal Noise minus Sub Rotation, Sub Offset, Center Subscale and Cycle Evolution, plus Turbulence Factor (1-4). Blending Mode popup: 1 None, 2 Normal (default), 4 Add, 5 Multiply, 6 Screen ... (enum_labels). Evolution and Rotation are degrees with no harvested limits. Noise Type (1 Block, 2 Linear, 3 Soft Linear, 4 Spline) and Overflow (1 Clip, 2 Soft Clamp, 3 Wrap Back, 4 Allow HDR Results) are read from this effect's own menus in After Effects 26.0 (they match Fractal Noise).",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      720
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/145.png",
+    "note": "Grey turbulent cloud/smoke texture blended over the frame at about half opacity.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Basic 3D",
+   "match": "ADBE Basic 3D",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Tilts and swivels a layer in pseudo-3D space and pushes it toward/away from the viewer, with an optional specular glint. Superseded by making the layer a real 3D layer with a camera.",
+   "look": [
+    "pseudo-3D tilt",
+    "card flip",
+    "perspective",
+    "specular glint"
+   ],
+   "use_for": [
+    "legacy projects only",
+    "quick card tilt in a 2D comp where a 3D layer is not wanted"
+   ],
+   "avoid": [
+    "use the layer's 3D switch (plus a camera) for new builds; Basic 3D ignores comp cameras and lights",
+    "Specular Highlight looks dated"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Swivel",
+     "does": "rotation around the vertical axis (degrees)",
+     "typical": "-30 to 30"
+    },
+    {
+     "name": "Tilt",
+     "does": "rotation around the horizontal axis (degrees)",
+     "typical": "-20 to 20"
+    },
+    {
+     "name": "Distance to Image",
+     "does": "moves the layer toward (negative) or away from the viewer",
+     "typical": "0 to 200"
+    },
+    {
+     "name": "Specular Highlight",
+     "does": "adds a light glint (0/1)",
+     "typical": "0"
+    },
+    {
+     "name": "Preview",
+     "does": "draws a wireframe preview (0/1)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Swivel": 30,
+    "Tilt": 15
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: the layer's 3D switch plus a camera; Premiere: Basic 3D (same AE effect)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Bevel Alpha"
+   ],
+   "scripting": "Obsolete: prefer layer.threeDLayer = true and animating Orientation / X-Y Rotation. If used, Swivel and Tilt are degrees with no harvested limits; Specular Highlight and Preview are 0/1 checkboxes; leave Preview 0 for renders.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/146.png",
+    "note": "Layer is swivelled and tilted in perspective, its edges pulled in to reveal black on the left and bottom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Basic Text",
+   "match": "ADBE Basic Text2",
+   "category": "Obsolete",
+   "status": "unusable",
+   "summary": "Legacy (Obsolete category) effect that renders text typed into a modal dialog onto the layer. Superseded by native text layers; unusable from scripts here because applying it opens a modal Edit Text dialog and the harvest could read no properties.",
+   "look": [
+    "plain text",
+    "legacy title"
+   ],
+   "use_for": [
+    "legacy projects only; create text layers for any new title or caption"
+   ],
+   "avoid": [
+    "text is set in a modal dialog, so scripts cannot set the text content through properties",
+    "applying it from an unattended build opens that modal dialog and stalls After Effects (pve/dialog_watchdog.py exists to cancel it during harvests)",
+    "no per-character animators or proper typography"
+   ],
+   "confidence": "medium",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: text layer (comp.layers.addText / addBoxText); Premiere: Essential Graphics / Type tool text or the Text effect",
+   "pairs_with": [],
+   "scripting": "Harvest failed with 'TypeError: null is not an object', so no properties are known; do not apply from scripts. Use comp.layers.addText() / addBoxText() instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is unusable (modal Edit Text dialog, no readable properties), so no gallery frame exists.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

@@ -1,0 +1,2231 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Flash cut",
+   "summary": "A hard white flash frame bridges two shots: the outgoing blows to white and the incoming lands overexposed and settles in a few frames.",
+   "use_for": [
+    "energetic cut-away to B-roll on a beat in news and social reels",
+    "landing a hit word or a reveal stat on the cut",
+    "trailer beat cuts between action shots"
+   ],
+   "avoid": [
+    "calm documentary passages and interviews",
+    "more than one flash every few seconds (strobes, fatigues, photosensitivity risk)",
+    "sombre news (deaths, disasters)"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        4
+       ],
+       [
+        0.25,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -0.1,
+        0
+       ],
+       [
+        -0.01,
+        4
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Flash",
+    "dur": 0.3
+   },
+   "sfx": [
+    "hit",
+    "whoosh"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: the Flash transition, 0.3 s centred; it is front-loaded, so the white peak sits about 0.1 s before the cut and the incoming is clean by the cut. To land a beat, put the cut 0.1 s after the beat. After Effects: the bridge shows a hard cut, so the Exposure keys make the flash: outgoing ramps 0 -> +4 stops over its last 0.1 s, incoming starts at +4 and settles to 0 by 0.25 s (peak exactly on the cut). SFX: hit on the cut frame; add a short whoosh starting 0.15 s before the cut for extra energy.",
+   "built_from": [
+    "Flash",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/102a.png",
+     "note": "At 0.2 s the picture is still overexposed (about +0.8 stop, mean luma 137 vs 109) and settling, with the render's first frames near white, and by 1.0 s it matches the reference.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Zoom punch cut",
+   "summary": "The outgoing shot rushes forward into a radial zoom blur and the incoming shot snaps out of the same blur, a fast punch through the centre of the frame.",
+   "use_for": [
+    "hard energetic cut-away into a detail or close-up",
+    "topic switches in explainers and social reels",
+    "trailer escalation (stack several, shortening each)"
+   ],
+   "avoid": [
+    "faces or text at the frame edge during the move (they smear)",
+    "slow, reflective documentary moments",
+    "using it on every cut: it loses its punch"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        250
+       ],
+       [
+        0.2,
+        100
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    },
+    {
+     "name": "CC Radial Fast Blur",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Zoom": 1,
+      "Amount": [
+       [
+        0,
+        80
+       ],
+       [
+        0.2,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        -0.2,
+        100
+       ],
+       [
+        -0.01,
+        250
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    },
+    {
+     "name": "CC Radial Fast Blur",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Zoom": 1,
+      "Amount": [
+       [
+        -0.2,
+        0
+       ],
+       [
+        -0.01,
+        80
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Zoom Blur",
+    "dur": 0.4
+   },
+   "sfx": [
+    "whoosh",
+    "hit"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: Zoom Blur transition 0.4 s centred (needs 0.2 s of handles on both clips); it always zooms on frame centre. After Effects: outgoing scales 100 -> 250 % with the radial blur rising 0 -> 80 over its last 0.2 s; incoming starts at 250 % / 80 and settles to 100 % / 0 by 0.2 s. Transform comes before the blur so the blur streaks the scaled image. SFX: whoosh starting 0.2 s before the cut, hit on the cut.",
+   "built_from": [
+    "Zoom Blur",
+    "Transform",
+    "CC Radial Fast Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/103a.png",
+     "note": "Scale and radial blur reach rest exactly at 0.2 s, so both frames match the reference and miss the punch (the render's frames at 0.04-0.16 s do show the 250% zoom with streaked blur collapsing to normal).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Whip pan",
+   "summary": "A fast horizontal whip: the outgoing shot is flung off to the left under heavy motion blur and the incoming shot arrives from the right, as if the camera swung.",
+   "use_for": [
+    "joining two locations or two speakers in a social reel",
+    "energetic cut-aways between B-roll beats",
+    "'meanwhile' cuts in political explainers"
+   ],
+   "avoid": [
+    "clips with less than 0.15 s of handle media (the Whip transition needs handles on both sides)",
+    "static talking heads back to back (reads as a gimmick)",
+    "sombre content"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         1920,
+         540
+        ]
+       ],
+       [
+        0.15,
+        [
+         960,
+         540
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 90,
+      "Blur Length": [
+       [
+        0,
+        250
+       ],
+       [
+        0.15,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        -0.15,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        -0.01,
+        [
+         0,
+         540
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 90,
+      "Blur Length": [
+       [
+        -0.15,
+        0
+       ],
+       [
+        -0.01,
+        250
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Whip",
+    "dur": 0.3
+   },
+   "sfx": [
+    "whoosh"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: Whip transition 0.3 s centred, default direction right-to-left (cannot be changed from a spec). After Effects: Offset scrolls the picture with wrap-around (no exposed edges) while Directional Blur (Direction 90 = horizontal) hides the wrap seam: outgoing centre 960 -> 0 px and blur 0 -> 250 over its last 0.15 s, incoming centre 1920 -> 960 and blur 250 -> 0 over its first 0.15 s, so travel is right-to-left like Premiere. SFX: whoosh starting 0.15 s before the cut so its peak lands on the cut.",
+   "built_from": [
+    "Whip",
+    "Offset",
+    "Directional Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/104a.png",
+     "note": "The offset and directional blur end at 0.15 s, so both frames match the reference and miss the whip (the render's frames at 0.04-0.12 s do show the horizontally smeared picture sliding in).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Vertical swipe whip (reel)",
+   "summary": "A vertical whip for 9:16 reels: the outgoing shot scrolls up out of frame under vertical motion blur and the next one arrives from below, like a fast feed swipe, identical in both apps.",
+   "use_for": [
+    "9:16 social reels and shorts: topic-to-topic swipes",
+    "listicle beats ('number 3...')",
+    "cuts where the Whip transition has no handles (this build needs none)"
+   ],
+   "avoid": [
+    "16:9 documentary (a horizontal Whip reads more naturally)",
+    "text-heavy frames at the moment of the swipe"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Offset",
+     "pr_props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         0.5,
+         1.0
+        ]
+       ],
+       [
+        0.15,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Directional Blur",
+     "pr_props": {
+      "Angle": 0,
+      "Amount": [
+       [
+        0,
+        90
+       ],
+       [
+        0.15,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "premiere_out": [
+    {
+     "name": "Offset",
+     "pr_props": {
+      "Shift Center To": [
+       [
+        -0.15,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        -0.01,
+        [
+         0.5,
+         0.0
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Directional Blur",
+     "pr_props": {
+      "Angle": 0,
+      "Amount": [
+       [
+        -0.15,
+        0
+       ],
+       [
+        -0.01,
+        90
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         540,
+         1920
+        ]
+       ],
+       [
+        0.15,
+        [
+         540,
+         960
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 0,
+      "Blur Length": [
+       [
+        0,
+        300
+       ],
+       [
+        0.15,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        -0.15,
+        [
+         540,
+         960
+        ]
+       ],
+       [
+        -0.01,
+        [
+         540,
+         0
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 0,
+      "Blur Length": [
+       [
+        -0.15,
+        0
+       ],
+       [
+        -0.01,
+        300
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "swoosh_tr"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Hard cut, no transition: both apps build it from the same effects, so no handles are needed. AE points assume a 1080x1920 comp. Outgoing: Offset centre y 0.5 -> 0.0 (AE 960 -> 0 px) with blur rising over its last 0.15 s; incoming: centre y 1.0 -> 0.5 (AE 1920 -> 960 px) with blur falling over its first 0.15 s. Offset wraps the picture, so no edges show. Premiere's Directional Blur Angle 0 and AE Direction 0 both give vertical streaks. For a horizontal version use x instead of y and Angle/Direction 90. SFX: swoosh_tr starting 0.1 s before the cut.",
+   "built_from": [
+    "Offset",
+    "Directional Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/082c.png",
+    "note": "The render shows the incoming shot torn into vertical streaks and scrolling up from below over its first 0.12 s (082c.png at 0.08 s, extracted from the build render); by 0.2 s (082a.png) and 1.0 s it is clean and matches the untouched footage, as the 0.15 s keys intend.",
+    "rerender": false,
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/105a.png",
+     "note": "The Offset points are for a 1080x1920 comp, so on this 1920x1080 test comp the picture stays wrapped with visible seams cutting through it at 0.2 s and 1.0 s instead of settling centred; vs Premiere: Premiere's frame-fraction keys give a clean centred picture by 0.2 s.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Time skip flicker",
+   "summary": "An unstable projector-style flicker jumps between the two shots for half a second and settles on the new one, signalling that time has passed.",
+   "use_for": [
+    "'hours later / the next morning / years later' jumps in documentaries",
+    "before/after comparisons",
+    "montage of the same place at different times"
+   ],
+   "avoid": [
+    "fast social cuts (too long and busy)",
+    "viewers sensitive to flashing: keep it to one per sequence"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        2.5
+       ],
+       [
+        0.033,
+        -1
+       ],
+       [
+        0.1,
+        1.5
+       ],
+       [
+        0.133,
+        -0.5
+       ],
+       [
+        0.2,
+        0.8
+       ],
+       [
+        0.25,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -0.25,
+        0
+       ],
+       [
+        -0.2,
+        1.5
+       ],
+       [
+        -0.167,
+        -1
+       ],
+       [
+        -0.1,
+        2
+       ],
+       [
+        -0.067,
+        -0.5
+       ],
+       [
+        -0.01,
+        2.5
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Flicker",
+    "dur": 0.5
+   },
+   "sfx": [
+    "tick",
+    "shutter"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: Flicker transition 0.5 s centred; the switch is irregular (outgoing flashes back until about cut+0.1 s). After Effects: Exposure keys a frame or two apart make the flicker around a hard cut: outgoing last 0.25 s, incoming first 0.25 s, ending at 0. Pair with an on-screen date/time card after it. SFX: a run of ticks (one per flicker step) plus a shutter on the cut.",
+   "built_from": [
+    "Flicker",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/106a.png",
+     "note": "The 0.2 s frame catches a single +0.8-stop bright step and 1.0 s matches the reference, so a still cannot show the flicker (the render's first frames do alternate dark and bright as keyed).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Rewind to the past (tape)",
+   "summary": "Analog VHS tracking damage tears across the cut, as if a tape is rewound to an older recording: tracking-noise bands, horizontal tearing, vertical jumps and washed-out colour.",
+   "use_for": [
+    "flashbacks to an earlier event or old TV footage",
+    "'let's go back to 2014' moments in political explainers",
+    "jumping into archive news clips"
+   ],
+   "avoid": [
+    "modern clean corporate pieces",
+    "more than once or twice per video"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 2,
+      "Wave Height": [
+       [
+        0,
+        30
+       ],
+       [
+        0.3,
+        0
+       ]
+      ],
+      "Wave Width": 60,
+      "Direction": 0,
+      "Wave Speed": 4
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         960,
+         700
+        ]
+       ],
+       [
+        0.067,
+        [
+         960,
+         430
+        ]
+       ],
+       [
+        0.133,
+        [
+         960,
+         610
+        ]
+       ],
+       [
+        0.2,
+        [
+         960,
+         540
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Color Balance (HLS)",
+     "props": {
+      "Saturation": [
+       [
+        0,
+        -60
+       ],
+       [
+        0.3,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 2,
+      "Wave Height": [
+       [
+        -0.3,
+        0
+       ],
+       [
+        -0.01,
+        30
+       ]
+      ],
+      "Wave Width": 60,
+      "Direction": 0,
+      "Wave Speed": 4
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        -0.2,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        -0.133,
+        [
+         960,
+         600
+        ]
+       ],
+       [
+        -0.067,
+        [
+         960,
+         460
+        ]
+       ],
+       [
+        -0.01,
+        [
+         960,
+         380
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE HUE SATURATION",
+     "props": {
+      "Master Saturation": [
+       [
+        -0.3,
+        0
+       ],
+       [
+        -0.01,
+        -60
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "VHS Damage",
+    "dur": 0.6
+   },
+   "sfx": [
+    "tape_rewind"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: VHS Damage transition 0.6 s centred (controls not settable; defaults are strong enough). After Effects: around a hard cut, a square Wave Warp (Wave Type 2, Direction 0 = horizontal tearing) peaks at the cut, Offset makes the vertical roll/jump (wraps, no edges) and saturation dips to -60, each over 0.3 s either side. SFX: tape_rewind starting 0.4 s before the cut, ducked under any voice-over. After Effects: Hue/Saturation's Master Saturation cannot be keyframed (the harvest marks it not animatable and After Effects refused the keys in live wave 2), so the saturation keys sit on Color Balance (HLS) Saturation, the same -100..100 control, which is animatable.",
+   "built_from": [
+    "VHS Damage",
+    "Wave Warp",
+    "Offset",
+    "Color Balance (HLS)"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/107a.png",
+     "note": "After Effects refused the Hue/Saturation Master Saturation keys (last in the stack), so the washed-out colour dip is missing; the tearing and vertical jump of the other two effects render.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "Hue/Saturation Master Saturation keys moved to Color Balance (HLS) Saturation (animatable); not rendered again",
+       "frame": "pve/gallery/recipes_ae/107a.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Memory flashback (soft white)",
+   "summary": "The picture fades up into white and the incoming shot emerges from the white soft and out of focus, sharpening as the memory settles.",
+   "use_for": [
+    "flashbacks and personal memories in documentaries",
+    "dream or imagined sequences",
+    "tributes and 'remembering' segments"
+   ],
+   "avoid": [
+    "news and hard explainers (reads sentimental)",
+    "already bright, overexposed footage (the white has no contrast to work against)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": [
+       [
+        0,
+        40
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Repeat Edge Pixels": 1,
+      "Blurriness": [
+       [
+        0,
+        40
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Dip to White",
+    "dur": 1.0
+   },
+   "sfx": [
+    "riser"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Dip to White 1.0 s centred: Premiere applies it natively and the bridge builds the same white dip in After Effects (colour solid with Premiere's measured ease), so both apps match. The blur on the incoming clip runs from the cut to 0.8 s, after the white has cleared. Follow with a warm or faded grade on the flashback clips. SFX: riser that ends on the white peak (the cut). After Effects: Blurriness reads about six times lighter than Premiere's Gaussian Blur Amount at the same number (40 -> 0 leaves shapes readable at 0.2 s where Premiere is near-abstract), so key about 240 -> 0 to match Premiere's defocus.",
+   "built_from": [
+    "Dip to White",
+    "Gaussian Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/083a.png",
+    "note": "At 0.2 s the picture is heavily defocused (shapes only, faces unreadable) and by 1.0 s (083b.png) it is sharp and identical to the reference, the soft-to-sharp emergence the summary describes; the white dip is the transition and not in these frames.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/108a.png",
+     "note": "At 0.2 s the picture is clearly soft and out of focus (shapes still readable) and by 1.0 s it is sharp and matches the reference, the soft-to-sharp emergence the summary describes; vs Premiere: much lighter defocus than Premiere's near-abstract 0.2 s frame (measured blur about six times smaller).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Era change: colour drains to black-and-white",
+   "summary": "The last second of the present-day shot drains to greyscale, then a film dissolve carries it into black-and-white archive footage, so the jump in era reads as one move.",
+   "use_for": [
+    "present-day location -> archive footage of the same place or person",
+    "'in 1947...' history jumps in documentaries",
+    "political explainers moving from today's clip to old newsreel"
+   ],
+   "avoid": [
+    "cutting between two colour clips (no archive on the other side)",
+    "fast social edits (needs about 2 s)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    }
+   ],
+   "premiere_out": [
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Amount to Tint": [
+       [
+        -1.6,
+        0
+       ],
+       [
+        -0.4,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {}
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Amount to Tint": [
+       [
+        -1.6,
+        0
+       ],
+       [
+        -0.4,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Film Dissolve",
+    "dur": 0.8
+   },
+   "sfx": [
+    "amb_projector",
+    "shutter"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Outgoing clip: Tint (default black-to-white mapping = greyscale) Amount to Tint 0 -> 100 from 1.6 s to 0.4 s before its end, so it is fully mono before the 0.8 s Film Dissolve begins; the incoming archive clip gets Black & White so both sides of the dissolve are mono. The bridge builds the Film Dissolve in After Effects as a smoothstep crossfade, so both apps match. Reverse for archive -> present: Tint 100 -> 0 over the incoming clip's first 1.2 s, no Black & White. SFX: bring amb_projector in under the archive clip from the cut; a shutter on the cut adds a period click.",
+   "built_from": [
+    "Tint",
+    "Black & White",
+    "Film Dissolve"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/084b.png",
+    "note": "Both frames of the incoming clip are clean neutral greyscale (R=G=B) with full tonal range, the black-and-white archive side of the move; the colour drain is on premiere_out and the dissolve is the transition, neither in these frames.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/109b.png",
+     "note": "Both frames are clean neutral greyscale (R=G=B) with full tonal range, the black-and-white archive side of the move; vs Premiere: matches Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Chapter change: dip to black",
+   "summary": "A slow eased fade down to black and back up, with a low sub drop in the black, marking the end of one chapter and the start of the next.",
+   "use_for": [
+    "documentary chapter and act breaks",
+    "before a chapter title card",
+    "end of a political explainer's main section"
+   ],
+   "avoid": [
+    "inside a scene (reads as an ending)",
+    "fast social reels (use Flash cut or Whip pan)"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [],
+   "transition": {
+    "name": "Dip to Black",
+    "dur": 1.2
+   },
+   "sfx": [
+    "sub_drop"
+   ],
+   "keyframes_note": "Dip to Black 1.2 s centred (needs 0.6 s of handles on both clips; at a clip with nothing before or after it, it becomes a plain fade from / to black). Premiere applies it natively and the bridge builds the same eased dip in After Effects, so no effects are needed. For a chapter card, end the outgoing clip with transition_out Dip to Black 0.8, hold the card on black, then fade up the next clip with transition Dip to Black 0.8. SFX: sub_drop on the darkest frame; the new chapter's amb_* bed fades in with the picture.",
+   "built_from": [
+    "Dip to Black"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Trailer blackout hit",
+   "summary": "A very short eased dip through black on a heavy impact sound, the trailer-style blackout between beats.",
+   "use_for": [
+    "trailer and teaser beats",
+    "the line before a big reveal in a reel",
+    "punctuating a shocking fact"
+   ],
+   "avoid": [
+    "documentary pacing (use the 1.2 s chapter dip)",
+    "more than one every few seconds unless building a rhythmic montage"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [],
+   "transition": {
+    "name": "Dip to Black",
+    "dur": 0.3
+   },
+   "sfx": [
+    "boom"
+   ],
+   "keyframes_note": "Dip to Black 0.3 s centred: about 0.15 s down and 0.15 s up (the trailer blackout range is 0.2-0.4 s). Native in Premiere and built by the bridge in After Effects. For a held blackout, end the clip with transition_out Dip to Black 0.2, leave 0.3-0.6 s of empty timeline, and fade the next clip in with Dip to Black 0.2. SFX: boom on the black frame; on a rising montage, a riser ending on the last blackout.",
+   "built_from": [
+    "Dip to Black"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Blur-to-focus reveal",
+   "summary": "The new shot dissolves in heavily defocused and pulls into sharp focus, a gentle reveal of the scene or subject.",
+   "use_for": [
+    "opening a scene or the first shot of a video",
+    "revealing a key photo, document or person",
+    "soft transitions in calm documentary passages"
+   ],
+   "avoid": [
+    "fast energetic edits",
+    "shots that are themselves soft or out of focus"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": [
+       [
+        0,
+        60
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Repeat Edge Pixels": 1,
+      "Blurriness": [
+       [
+        0,
+        60
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Cross Dissolve",
+    "dur": 0.6
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Cross Dissolve 0.6 s into the clip (from the previous clip, or from black if nothing is before it); native in Premiere, built by the bridge in After Effects as a smoothstep crossfade. The incoming blur falls 60 -> 0 over its first 0.8 s. Premiere's Gaussian Blur Amount (0-100) and AE Blurriness (pixels) differ in scale, so check the first frame of each render. Add a slow push (clip zoom 1.05) for a cinematic opener. SFX: air on the dissolve, or a riser that resolves as the focus lands. After Effects: Blurriness reads about six to seven times lighter than Premiere's Gaussian Blur Amount at the same number (60 -> 0 is only moderately soft at 0.2 s), so key about 360 -> 0 to match Premiere's heavy defocus.",
+   "built_from": [
+    "Cross Dissolve",
+    "Gaussian Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/085a.png",
+    "note": "At 0.2 s the shot is a near-abstract heavy defocus and at 1.0 s (085b.png) it is pin-sharp and identical to the reference, a clear defocused-to-sharp reveal.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/110a.png",
+     "note": "At 0.2 s the shot is clearly defocused (edge energy down 68%, shapes still readable) and by 1.0 s it is sharp and matches the reference, a clear defocus-to-focus reveal; vs Premiere: much lighter defocus than Premiere's near-abstract 0.2 s frame (measured blur about seven times smaller).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Iris reveal",
+   "summary": "The incoming shot opens from the centre of the frame in an expanding hard-edged circle, the classic iris reveal.",
+   "use_for": [
+    "revealing a subject at the frame centre",
+    "playful or retro explainers",
+    "opening from black at the start of a segment"
+   ],
+   "avoid": [
+    "serious news (reads cartoonish)",
+    "subjects off-centre (the iris always opens from frame centre from a spec)",
+    "After Effects builds that need it: the bridge shows a cut there"
+   ],
+   "app": "PR",
+   "premiere": [],
+   "after_effects": [],
+   "transition": {
+    "name": "Iris Round",
+    "dur": 0.6
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "Premiere: Iris Round 0.6 s (centred on a cut, or into a clip with nothing before it to open from black). B is almost frame-filling 0.3 s after the cut. Centre, border and feather are not settable from a spec. For a through-black version (A shrinks to a dot, B grows back) use the Shape Flow transition at 1.0 s. After Effects: an iris needs an ellipse mask or shape-layer matte on the incoming layer over an overlap, which a spec cannot express (AE's Iris Wipe effect makes the inside of the iris transparent, the opposite of this reveal), so the bridge shows a hard cut; use 'Blur-to-focus reveal' when After Effects parity matters. SFX: air across the transition.",
+   "built_from": [
+    "Iris Round",
+    "Shape Flow",
+    "Iris Wipe"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Glitch cut (two-sided AE tear)",
+   "summary": "A digital glitch tears across the cut: horizontal slice displacement, scanline tearing and RGB fringing mix the two shots and resolve to the new one.",
+   "use_for": [
+    "tech, AI and cyber topics",
+    "'breaking' or 'leaked' reveals in political reels",
+    "jumping to a screen recording or social post"
+   ],
+   "avoid": [
+    "calm documentary and archive passages",
+    "more than a few per minute",
+    "photosensitive audiences (keep it short)"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Shift Channels",
+     "props": {
+      "Take Red From": [
+       [
+        0,
+        4
+       ],
+       [
+        0.067,
+        2
+       ]
+      ],
+      "Take Blue From": [
+       [
+        0,
+        2
+       ],
+       [
+        0.067,
+        4
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 2,
+      "Wave Height": [
+       [
+        0,
+        50
+       ],
+       [
+        0.15,
+        0
+       ]
+      ],
+      "Wave Width": 24,
+      "Direction": 0,
+      "Wave Speed": 8
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         1010,
+         540
+        ]
+       ],
+       [
+        0.033,
+        [
+         920,
+         540
+        ]
+       ],
+       [
+        0.067,
+        [
+         990,
+         540
+        ]
+       ],
+       [
+        0.1,
+        [
+         960,
+         540
+        ]
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Shift Channels",
+     "props": {
+      "Take Red From": [
+       [
+        -0.1,
+        2
+       ],
+       [
+        -0.067,
+        4
+       ]
+      ],
+      "Take Blue From": [
+       [
+        -0.1,
+        4
+       ],
+       [
+        -0.067,
+        2
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 2,
+      "Wave Height": [
+       [
+        -0.15,
+        0
+       ],
+       [
+        -0.01,
+        50
+       ]
+      ],
+      "Wave Width": 24,
+      "Direction": 0,
+      "Wave Speed": 8
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        -0.1,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        -0.067,
+        [
+         1000,
+         540
+        ]
+       ],
+       [
+        -0.033,
+        [
+         925,
+         540
+        ]
+       ],
+       [
+        -0.01,
+        [
+         985,
+         540
+        ]
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Glitch",
+    "dur": 0.3
+   },
+   "sfx": [
+    "glitch"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: Glitch transition 0.3 s centred (0.3 s is punchier than the default; tearing lines run about 0.15 s either side). After Effects: around a hard cut, Shift Channels swaps red/blue for 2 frames either side (popup keys hold), a narrow square Wave Warp (Direction 0 = horizontal slices) peaks at the cut, and Offset jitters the frame sideways with wrap-around. SFX: glitch centred on the cut.",
+   "built_from": [
+    "Glitch",
+    "Shift Channels",
+    "Wave Warp",
+    "Offset"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/111a.png",
+     "note": "The channel swap, slice tear and jitter end by 0.15 s, so both frames match the reference and miss the glitch (the render's frames at 0.04-0.12 s do show red/blue swapped, sliced and shifted bands).",
+     "rerender": false
+    }
+   },
+   "renamed": "2026-10-13: was 'Glitch cut', the same name as the impacts recipe (which carries the render-checked Premiere side); kept as its own recipe because its After Effects stacks differ (it tears both sides of the cut)"
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Channel switch (TV power off/on)",
+   "summary": "The outgoing picture collapses like an old CRT switching off (to a bright line, then a dot, then black) and the next shot powers on in reverse.",
+   "use_for": [
+    "switching between news segments or TV clips",
+    "'meanwhile on the other channel' jokes in satire reels",
+    "ending a chapter that used broadcast footage"
+   ],
+   "avoid": [
+    "modern cinematic pieces",
+    "clips that must stay readable through the cut"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 0,
+      "Scale Width": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        0
+       ],
+       [
+        0.2,
+        100
+       ]
+      ],
+      "Scale Height": [
+       [
+        0,
+        1
+       ],
+       [
+        0.2,
+        1
+       ],
+       [
+        0.4,
+        100
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        3
+       ],
+       [
+        0.2,
+        3
+       ],
+       [
+        0.4,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 0,
+      "Scale Height": [
+       [
+        -0.4,
+        100
+       ],
+       [
+        -0.2,
+        1
+       ]
+      ],
+      "Scale Width": [
+       [
+        -0.2,
+        100
+       ],
+       [
+        -0.1,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -0.4,
+        0
+       ],
+       [
+        -0.2,
+        3
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "TV Power",
+    "dur": 0.8
+   },
+   "sfx": [
+    "blip",
+    "glitch"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: TV Power transition 0.8 s centred; it holds near-black for about 0.3 s around the cut. After Effects: outgoing Transform (Uniform Scale off) squashes Scale Height 100 -> 1 % over 0.4 -> 0.2 s before the end, then Scale Width 100 -> 0 % by 0.1 s before the end, with Exposure up to +3 so the line glows; the incoming does the reverse (width 0 -> 100 % from 0.1 to 0.2 s, height 1 -> 100 % from 0.2 to 0.4 s). The black between them is the comp background. SFX: blip on the collapse to the dot, glitch on the power-on.",
+   "built_from": [
+    "TV Power",
+    "Transform",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/112a.png",
+     "note": "At 0.2 s the frame is black except a thin bright horizontal line across its full width, the CRT collapse stage, and by 1.0 s the picture is back intact.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Warm light leak",
+   "summary": "Warm orange-red light-leak streaks with a slight chroma split sweep across the frame and wash out the cut, a film-camera feel.",
+   "use_for": [
+    "nostalgic, human or celebratory documentary moments",
+    "travel and culture B-roll",
+    "lifestyle social reels"
+   ],
+   "avoid": [
+    "hard news, crime or tragedy",
+    "night or very dark footage (the leak swamps it)",
+    "more than once or twice per minute"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Ramp",
+     "props": {
+      "Start of Ramp": [
+       200,
+       150
+      ],
+      "Start Color": "#FF7A1A",
+      "End of Ramp": [
+       1800,
+       1000
+      ],
+      "End Color": "#FFD9A0",
+      "Ramp Shape": 1,
+      "Blend With Original": [
+       [
+        0,
+        0.4
+       ],
+       [
+        0.4,
+        1
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        1.2
+       ],
+       [
+        0.4,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Lens Flare",
+     "props": {
+      "Lens Type": 1,
+      "Flare Center": [
+       [
+        0,
+        [
+         960,
+         420
+        ]
+       ],
+       [
+        0.4,
+        [
+         1750,
+         300
+        ]
+       ]
+      ],
+      "Flare Brightness": [
+       [
+        0,
+        250
+       ],
+       [
+        0.4,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Ramp",
+     "props": {
+      "Start of Ramp": [
+       200,
+       150
+      ],
+      "Start Color": "#FF7A1A",
+      "End of Ramp": [
+       1800,
+       1000
+      ],
+      "End Color": "#FFD9A0",
+      "Ramp Shape": 1,
+      "Blend With Original": [
+       [
+        -0.4,
+        1
+       ],
+       [
+        -0.01,
+        0.4
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -0.4,
+        0
+       ],
+       [
+        -0.01,
+        1.2
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Lens Flare",
+     "props": {
+      "Lens Type": 1,
+      "Flare Center": [
+       [
+        -0.4,
+        [
+         200,
+         250
+        ]
+       ],
+       [
+        -0.01,
+        [
+         960,
+         420
+        ]
+       ]
+      ],
+      "Flare Brightness": [
+       [
+        -0.4,
+        0
+       ],
+       [
+        -0.01,
+        250
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Chroma Leak",
+    "dur": 0.8
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: Chroma Leak transition 0.8 s centred (warm by default; Light Leak is the multicolour alternative). After Effects: on both sides of a hard cut, a warm orange-to-cream Gradient Ramp blends in (Blend With Original 1 -> 0.4 at the cut), Exposure lifts to +1.2 stops and a Lens Flare travels left to right peaking at 250 % on the cut, each over 0.4 s. Order matters: ramp, then exposure, then flare. SFX: air (soft) or whoosh (energetic) centred on the cut.",
+   "built_from": [
+    "Chroma Leak",
+    "Light Leak",
+    "Gradient Ramp",
+    "Exposure",
+    "Lens Flare"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/113a.png",
+     "note": "At 0.2 s a warm orange-to-cream wash lifts the whole frame (mean luma 168 vs 109) with a bright lens flare and ghost rings crossing the upper middle, and by 1.0 s the picture matches the reference.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Dip to brand colour",
+   "summary": "The picture washes into a solid brand colour and the next shot emerges from it, with the colour set exactly (Premiere's Dip to Color transition is stuck on grey-lavender).",
+   "use_for": [
+    "branded explainers and channel identity (e.g. saffron, party or channel colour)",
+    "section changes in social reels",
+    "into or out of a title or logo card in the same colour"
+   ],
+   "avoid": [
+    "documentary realism",
+    "colours that clash with the footage's grade"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Ramp",
+     "pr_props": {
+      "Start Color": "#FF7A00",
+      "End Color": "#FF7A00",
+      "Blend With Original": [
+       [
+        0,
+        0
+       ],
+       [
+        0.3,
+        1
+       ]
+      ]
+     }
+    }
+   ],
+   "premiere_out": [
+    {
+     "name": "Ramp",
+     "pr_props": {
+      "Start Color": "#FF7A00",
+      "End Color": "#FF7A00",
+      "Blend With Original": [
+       [
+        -0.3,
+        1
+       ],
+       [
+        -0.01,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Ramp",
+     "props": {
+      "Start Color": "#FF7A00",
+      "End Color": "#FF7A00",
+      "Blend With Original": [
+       [
+        0,
+        0
+       ],
+       [
+        0.3,
+        1
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Ramp",
+     "props": {
+      "Start Color": "#FF7A00",
+      "End Color": "#FF7A00",
+      "Blend With Original": [
+       [
+        -0.3,
+        1
+       ],
+       [
+        -0.01,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "swoosh_tr"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Hard cut, no transition. A Ramp with the same Start and End colour is a solid; Blend With Original (0-1 in both apps) fades it 1 -> 0 over the outgoing clip's last 0.3 s and 0 -> 1 over the incoming clip's first 0.3 s, so the cut lands on solid colour in both apps. Replace #FF7A00 with the brand colour. For a held colour beat, put a title or logo card in the same colour between the clips. SFX: swoosh_tr starting at the start of the wash.",
+   "built_from": [
+    "Ramp",
+    "Gradient Ramp",
+    "Dip to Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/086a.png",
+    "note": "At 0.2 s the shot is still under a clear orange wash (mean red up 36, blue down 21 vs the plain footage) and the build render is solid #FF7A00 on the clip's first frame, then the wash clears to the untouched picture by 1.0 s (086b.png).",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/114a.png",
+     "note": "At 0.2 s the shot sits under a clear orange wash (mean red up 36, blue down 21) and by 1.0 s it matches the untouched picture; vs Premiere: matches Premiere to the level.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Push-through match cut",
+   "summary": "Both shots keep the same slow push-in across the cut and a 6-frame film dissolve blends the matched shapes, so a graphic match cut (eye to moon, wheel to clock) reads as one continuous move.",
+   "use_for": [
+    "graphic match cuts on a shared shape or position",
+    "linking two places, people or eras through a matching object",
+    "smoothing a cut between two shots of similar composition"
+   ],
+   "avoid": [
+    "shots whose matched shapes sit in different parts of the frame (re-frame first)",
+    "fast energetic sequences"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.6,
+        108
+       ]
+      ],
+      "Scale Width": [
+       [
+        0,
+        100
+       ],
+       [
+        0.6,
+        108
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "premiere_out": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Scale Height": [
+       [
+        -0.6,
+        100
+       ],
+       [
+        -0.01,
+        108
+       ]
+      ],
+      "Scale Width": [
+       [
+        -0.6,
+        100
+       ],
+       [
+        -0.01,
+        108
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.6,
+        108
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        -0.6,
+        100
+       ],
+       [
+        -0.01,
+        108
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "transition": {
+    "name": "Film Dissolve",
+    "dur": 0.2
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Both clips push in at the same rate (8 % per 0.6 s): outgoing 100 -> 108 % over its last 0.6 s, incoming 100 -> 108 % over its first 0.6 s, so the speed carries through the cut. Before that, set each clip's Transform Position (Premiere frame fractions, AE pixels) so the matched shape sits on the same frame point at the cut. The Film Dissolve is 0.2 s (3 frames each side) and the bridge builds it in After Effects as a crossfade. SFX: none, or air under the dissolve.",
+   "built_from": [
+    "Transform",
+    "Film Dissolve"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/087b.png",
+    "note": "The frame tightens from about 103 % at 0.2 s to a held 108 % at 1.0 s (087b.png is visibly tighter than ref.png, the left-hand detail cut at the left edge), a slow push-in with no exposed edges.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/115b.png",
+     "note": "The frame tightens from about 103% at 0.2 s to 108% at 1.0 s, a slow push-in with no exposed edges; vs Premiere: matches Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Jump-cut punch-in",
+   "summary": "A jump cut inside a talking-head shot is hidden by punching the second half in by 15 %, so it reads as a deliberate camera change.",
+   "use_for": [
+    "trimming pauses and mistakes out of interviews and pieces to camera",
+    "emphasis on a key line in a talking-head reel",
+    "alternating wide/close on every other cut of a monologue"
+   ],
+   "avoid": [
+    "footage below 1080p for a 1080p output (the 115 % crop softens it)",
+    "shots where the punch-in crops the speaker's head"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Scale Height": 115,
+      "Scale Width": 115
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 115
+     }
+    }
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Hard cut, no transition, effect on the clip after the jump only (static, no keys). Re-centre the face with Transform Position if the punch crops it (eyes about a third down the frame). Premiere's Morph Cut (0.2-0.5 s, centred) can hide the same jump seamlessly but only between two parts of ONE static shot with handles on both sides, and it has no After Effects equivalent; on different shots it renders a torn double exposure. SFX: none.",
+   "built_from": [
+    "Transform",
+    "Morph Cut"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/088b.png",
+    "note": "Both frames are a static 115 % punch-in versus the reference (the figures larger, stripes and foreground blocks cropped at the edges, faces still well inside frame), reading as a tighter camera angle.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/116b.png",
+     "note": "Both frames are a static 115% punch-in versus the reference, with the stripes and foreground blocks cropped at the edges, reading as a tighter camera angle; vs Premiere: matches Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "transitions",
+   "name": "Impact shake cut",
+   "summary": "Both shots shake violently with motion-blurred jolts around the cut, as if hit by an impact or tremor, and settle on the new shot.",
+   "use_for": [
+    "explosions, war, protests, disasters in documentaries and news",
+    "'bombshell' moments in political reels",
+    "trailer impacts"
+   ],
+   "avoid": [
+    "calm or emotional moments",
+    "text on screen during the shake",
+    "back-to-back use (it numbs)"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        112
+       ],
+       [
+        0.3,
+        100
+       ]
+      ],
+      "Position": [
+       [
+        0,
+        [
+         990,
+         520
+        ]
+       ],
+       [
+        0.033,
+        [
+         935,
+         560
+        ]
+       ],
+       [
+        0.067,
+        [
+         980,
+         530
+        ]
+       ],
+       [
+        0.1,
+        [
+         945,
+         552
+        ]
+       ],
+       [
+        0.133,
+        [
+         972,
+         535
+        ]
+       ],
+       [
+        0.2,
+        [
+         955,
+         545
+        ]
+       ],
+       [
+        0.3,
+        [
+         960,
+         540
+        ]
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "after_effects_out": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        -0.25,
+        100
+       ],
+       [
+        -0.01,
+        112
+       ]
+      ],
+      "Position": [
+       [
+        -0.25,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        -0.2,
+        [
+         975,
+         532
+        ]
+       ],
+       [
+        -0.133,
+        [
+         948,
+         550
+        ]
+       ],
+       [
+        -0.067,
+        [
+         985,
+         525
+        ]
+       ],
+       [
+        -0.01,
+        [
+         930,
+         562
+        ]
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "transition": {
+    "name": "Earthquake",
+    "dur": 0.5
+   },
+   "sfx": [
+    "boom"
+   ],
+   "keyframes_note": "premiere/after_effects go on the INCOMING clip, t from its first frame (the cut); premiere_out/after_effects_out go on the OUTGOING clip, negative t from its end (-0.01 = the cut). Premiere: Earthquake transition 0.5 s centred (Chaos at 0.4 s is a lighter, hit-style shake). After Effects: Transform jolts Position 15-30 px every frame or two with motion blur, scaled up to 112 % at the cut so no edges show, over the outgoing clip's last 0.25 s and the incoming clip's first 0.3 s. AE points assume 1920x1080. SFX: boom on the cut (hit for the lighter Chaos version).",
+   "built_from": [
+    "Earthquake",
+    "Chaos",
+    "Transform"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (its look is the Premiere transition and/or After Effects-only keys), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/117a.png",
+     "note": "The 0.2 s frame shows only the tail of the move (about 104% scale, a few pixels off centre) and 1.0 s matches the reference, so a still cannot show the shake (the render's first frames do jolt and zoom with mild motion blur, settling by 0.3 s).",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

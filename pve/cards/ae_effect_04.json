@@ -1,0 +1,1309 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Unsharp Mask",
+   "match": "ADBE Unsharp Mask2",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Sharpens by boosting contrast along edges (image minus a blurred copy). Small radius = fine detail sharpening; large radius with low amount = local-contrast 'clarity' punch.",
+   "look": [
+    "sharpened",
+    "crisp edges",
+    "local contrast",
+    "clarity",
+    "edge halo"
+   ],
+   "use_for": [
+    "crisp up soft archival or AI-upscaled footage in documentaries",
+    "add bite to press photos used as full-screen stills in news reels",
+    "large-radius, low-amount clarity pass on flat b-roll for trailers",
+    "restore perceived detail after downscaling 4K sources to 1080"
+   ],
+   "avoid": [
+    "high Amount with a small Radius exaggerates compression blocks and noise in web-sourced news clips",
+    "white/dark halos around faces and on-screen text at high Amount + Radius",
+    "do not sharpen before a scale-up or zoom; sharpen last in the stack"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "Sharpening strength in percent (default 0 = no change). Negative values push the other way (softening); unverified.",
+     "typical": "50-120 for detail; 20-40 with a big Radius for clarity"
+    },
+    {
+     "name": "Radius",
+     "does": "Distance in pixels over which edge contrast is boosted.",
+     "typical": "1-3 for detail; 20-60 for local-contrast clarity"
+    },
+    {
+     "name": "Threshold",
+     "does": "Minimum edge difference that gets sharpened, normalised 0..1; protects flat areas, skin and noise.",
+     "typical": "0-0.05"
+    },
+    {
+     "name": "Color Mode",
+     "does": "0/1 switch (Premiere's copy of this effect exposes it as a true/false checkbox); meaning unverified, probably luminance-only vs per-channel sharpening.",
+     "typical": "leave 0"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 250,
+    "Radius": 6,
+    "Threshold": 0
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Unsharp Mask",
+   "pairs_with": [
+    "Lumetri Color",
+    "Curves",
+    "Add Grain",
+    "Noise"
+   ],
+   "scripting": "Match name is the updated 'ADBE Unsharp Mask2'. Amount defaults to 0, so nothing shows until it is set. Threshold is normalised 0..1 here (the legacy effect used 0-255 levels). Color Mode is a 0/1 switch whose meaning is not confirmed; leave at 0. Put it after Transform/scale effects so halos are not rescaled. Premiere's Unsharp Mask has the same four controls (Amount -500..500, Radius, Threshold 0..1, Color Mode as a boolean). The old 'ADBE Unsharp Mask' (Threshold 0-255) is in the obsolete bin; do not use it for new work.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      120
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/015.png",
+    "note": "Edges and local contrast are clearly crisper than the reference (stripes, faces, foreground-block rims) with light halos, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mocha AE",
+   "match": "mochaAECC",
+   "category": "Boris FX Mocha",
+   "status": "needs_input",
+   "summary": "Boris FX planar tracker bundled with After Effects: you open the separate Mocha AE window to track a flat surface or roto a shape, then the effect applies that tracked shape as a matte or exports corner-pin / transform data to another layer.",
+   "look": [
+    "planar track",
+    "screen replacement",
+    "corner pin",
+    "tracked mask",
+    "roto matte"
+   ],
+   "use_for": [
+    "replace a phone, TV or billboard screen in news b-roll with a graphic",
+    "track a blur matte over a face or number plate for privacy",
+    "pin a label or lower-third onto a moving wall or banner in documentaries",
+    "isolate a tracked region (a speaker's face, a product) on a duplicate layer with Apply Matte for a local colour or exposure fix"
+   ],
+   "avoid": [
+    "cannot be driven headless: tracking happens in the Mocha GUI, so an automated pipeline can only reuse an existing track",
+    "planar tracks fail on occluded or textureless surfaces (plain walls, blown-out screens)",
+    "stabilisation is a Mocha Pro module, not part of Mocha AE; use Warp Stabilizer for shaky footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Apply Matte",
+     "does": "0/1: cuts the layer to the matte from the Mocha track.",
+     "typical": "1 when using the track as a mask"
+    },
+    {
+     "name": "View Matte",
+     "does": "0/1: shows the matte as black and white for checking.",
+     "typical": "0 for output"
+    },
+    {
+     "name": "Feather",
+     "does": "Softens the matte edge in pixels.",
+     "typical": "2-20"
+    },
+    {
+     "name": "Dilate",
+     "does": "Grows (+) or shrinks (-) the matte.",
+     "typical": "-5 to 10"
+    },
+    {
+     "name": "Invert Mask",
+     "does": "0/1: inverts the matte (keep everything except the tracked shape).",
+     "typical": "0"
+    },
+    {
+     "name": "Export Option",
+     "does": "Type of tracking data the Create Track Data button writes: 1 Corner Pin, 2 Corner Pin (Support Motion Blur), 3 Transform (read from After Effects 26.0).",
+     "typical": "1"
+    },
+    {
+     "name": "Layer Export To",
+     "does": "Layer reference that receives the exported corner-pin/transform data.",
+     "typical": "the replacement graphic layer"
+    },
+    {
+     "name": "Top Left",
+     "does": "Tracked corner-pin point in comp pixels (also Top Right, Bottom Left, Bottom Right, Center).",
+     "typical": "written by Mocha; do not hand-set"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Mosaic",
+    "Corner Pin",
+    "CC Power Pin"
+   ],
+   "scripting": "'mocha Arb Data 0/1' are custom blobs holding the Mocha project and tracks and cannot be set from a spec; 'Launch Mocha AE' and the Create Track Data control are UI buttons. A script can only toggle Apply Matte / Feather / Dilate / Invert Mask on a layer that already carries track data (e.g. from a saved preset or template). Layer Export To and Right View are layer references. Corner points are comp pixels [x, y]. 'First parameter', 'Last parameter' and 'License Control' are internal. Premiere has no Mocha effect; its built-in mask tracking is the closest.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input, so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   },
+   "enum_labels": {
+    "Views": {
+     "1": "Mono",
+     "2": "Stereo",
+     "3": "Top/Bottom",
+     "4": "Left/Right",
+     "5": "(separator)",
+     "6": "360 Mono",
+     "7": "360 Stereo",
+     "8": "360 Top/Bottom",
+     "9": "360 Left/Right"
+    },
+    "Stereo Output": {
+     "1": "Left",
+     "2": "Right"
+    },
+    "Shape": {
+     "1": "All Visible",
+     "2": "All"
+    },
+    "Dilation quality": {
+     "1": "Fast",
+     "2": "High quality"
+    },
+    "View": {
+     "1": "Front",
+     "2": "Back",
+     "3": "Zenith (top)",
+     "4": "Nadir (bottom)",
+     "5": "Right",
+     "6": "Left",
+     "7": "Custom"
+    },
+    "Export Option": {
+     "1": "Corner Pin",
+     "2": "Corner Pin (Support Motion Blur)",
+     "3": "Transform"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Arithmetic",
+   "match": "ADBE Arithmetic",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Runs a simple math operation (Xor, Add, Difference, Slice, Multiply...) between every pixel's red, green and blue values and constant values you set per channel, giving hard colour casts, channel inversions and solarised looks.",
+   "look": [
+    "colour shift",
+    "solarize",
+    "channel tint",
+    "posterize",
+    "psychedelic",
+    "harsh digital"
+   ],
+   "use_for": [
+    "per-channel colour flip for glitch / 'hacker' segments in AI-education explainers",
+    "one- or two-frame solarised flash on an impact beat in trailers",
+    "Slice operator for a hard poster look behind titles"
+   ],
+   "avoid": [
+    "looks cheap and digital on faces; not a grading tool",
+    "Clipping 0 lets values wrap and produces noisy bands"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Operator",
+     "does": "The math operation (1-based popup, see enum_labels).",
+     "typical": "6 Difference to invert a channel; 4 Add / 5 Subtract for casts"
+    },
+    {
+     "name": "Red Value",
+     "does": "Constant applied to the red channel, 8-bit levels.",
+     "typical": "255 with Difference = invert red; 40-120 with Add for a cast"
+    },
+    {
+     "name": "Green Value",
+     "does": "Constant applied to the green channel.",
+     "typical": "0-120"
+    },
+    {
+     "name": "Blue Value",
+     "does": "Constant applied to the blue channel.",
+     "typical": "0-120"
+    },
+    {
+     "name": "Clipping",
+     "does": "1 clips results to 0-255; 0 lets them wrap.",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Operator": 6,
+    "Red Value": 255,
+    "Green Value": 0,
+    "Blue Value": 0,
+    "Clipping": 1
+   },
+   "enum_labels": {
+    "Operator": {
+     "1": "And",
+     "2": "Or",
+     "3": "Xor",
+     "4": "Add",
+     "5": "Subtract",
+     "6": "Difference",
+     "7": "Min",
+     "8": "Max",
+     "9": "Block Above",
+     "10": "Block Below",
+     "11": "Slice",
+     "12": "Multiply",
+     "13": "Screen"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Invert",
+    "Posterize",
+    "Hue/Saturation",
+    "Glow"
+   ],
+   "scripting": "Default Operator 3 (Xor) with all values 0 is an identity, so it shows nothing until values change. Values are 8-bit levels 0-255 regardless of project bit depth. Operator labels (enum_labels) are read from After Effects 26.0. Premiere v26 has no Arithmetic effect (absent from the harvested Premiere list); there use Invert, or Lumetri Color for casts.",
+   "recipe": {
+    "Red Value": [
+     [
+      0,
+      0
+     ],
+     [
+      0.08,
+      255
+     ],
+     [
+      0.16,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/016.png",
+    "note": "Red channel is inverted (Difference 255): white background turns cyan, navy areas turn red, red stripes go dark; a hard channel-flip look as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Blend",
+   "match": "ADBE Blend",
+   "category": "Channel",
+   "status": "needs_input",
+   "summary": "Blends the layer with another layer picked in the effect, using Crossfade, Color Only, Tint Only, Darken Only or Lighten Only.",
+   "look": [
+    "crossfade",
+    "colour transfer",
+    "tint",
+    "double exposure"
+   ],
+   "use_for": [
+    "Color Only with a solid or gradient layer to colourise footage in brand colours (takes per-pixel hue/saturation from the other layer)",
+    "Darken Only / Lighten Only merge of a texture plate (paper, smoke) into archival footage",
+    "crossfade two layers inside one precomp without a transition"
+   ],
+   "avoid": [
+    "the other layer is read without its effects and masks; precompose it first",
+    "usually cleaner with layer blend modes or track mattes"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blend With Layer",
+     "does": "Layer reference to blend with (default None).",
+     "typical": "a texture or reference-colour layer"
+    },
+    {
+     "name": "Mode",
+     "does": "How the two layers combine (1-based, see enum_labels).",
+     "typical": "2 Color Only or 4 Darken Only"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back toward the untouched layer; Adobe documents that at 100% the effect has no visible result. Harvested as 0..1 with default 1, so set it toward 0 to see the blend.",
+     "typical": "0-0.5"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "1 Center, 2 Stretch to Fit.",
+     "typical": "2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Mode": {
+     "1": "Crossfade",
+     "2": "Color Only",
+     "3": "Tint Only",
+     "4": "Darken Only",
+     "5": "Lighten Only"
+    },
+    "If Layer Sizes Differ": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Tint",
+    "Curves",
+    "Fractal Noise",
+    "Gaussian Blur"
+   ],
+   "scripting": "Blend With Layer is a layer reference; with None (0) the effect does nothing, so a second layer must exist in the comp. Blend With Original is harvested as 0..1 with default 1; if that means 100% original the effect is invisible until it is lowered toward 0. Unconfirmed: verify on the render. Premiere v26 has no Blend effect (absent from the harvested Premiere list); stack the clips and use the top clip's Opacity blend mode instead.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input, so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Composite",
+   "match": "CS Composite",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Composites the layer's original, pre-effect image (or another layer picked in Top Layer) back over the result of the effects above it, using a transfer mode and opacity. Mixes a stylise effect with the clean image, or self-blends the layer for punchier contrast.",
+   "look": [
+    "self blend",
+    "contrast boost",
+    "effect mix",
+    "detail restore"
+   ],
+   "use_for": [
+    "after Glow, Find Edges or Cartoon, lay the clean footage back on top at 30-70% for a controlled stylised look",
+    "self-multiply or overlay for quick punch on flat archival clips",
+    "bring back detail over a blurred or distorted pass in trailer looks"
+   ],
+   "avoid": [
+    "first in the stack with the default mode it changes nothing",
+    "Transfer Mode indices count menu separators (4, 10, 17, 25, 29, 34, 39): pick the index of a label in enum_labels"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transfer Mode",
+     "does": "Blend mode used to put the original back on top (1-based popup, 41 indices, default 3 = In Front). The menu (read from After Effects 26.0) counts separators: 1 Copy, 2 Behind, 3 In front, 5 Darken, 6 Multiply, 7 Linear Burn ... 11 Add, 12 Lighten, 13 Screen ... 18 Overlay, 19 Soft Light ... 26 Difference ... 41 Luminescent Premul (enum_labels).",
+     "typical": "6 Multiply, 13 Screen, 18 Overlay, 19 Soft Light"
+    },
+    {
+     "name": "Opacity",
+     "does": "Strength of the original image on top.",
+     "typical": "30-70"
+    },
+    {
+     "name": "RGB Only",
+     "does": "1 keeps the effected layer's alpha; 0 also composites alpha.",
+     "typical": "1"
+    },
+    {
+     "name": "Top Layer",
+     "does": "Layer reference for the image put on top; defaults to the layer itself.",
+     "typical": "leave at default"
+    }
+   ],
+   "demo_settings": {
+    "Transfer Mode": 6,
+    "Opacity": 100,
+    "RGB Only": 1
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Find Edges",
+    "Cartoon",
+    "Gaussian Blur"
+   ],
+   "scripting": "Stack order matters: it uses the image as it was before ALL effects above it. Top Layer is a layer reference that defaults to the layer itself (harvest default 1); leave it. Transfer Mode is not animatable; its default 3 is In Front (plain composite, identity when CC Composite is first in the stack). The demo value 6 is Multiply (read from After Effects 26.0; the render shows the self-multiply); Screen is 13 and Overlay 18, not 7 and 8. Use match 'CS Composite'; 'CC Composite' is the obsolete twin (its popup is named 'Composite Original'). No Premiere equivalent.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      100
+     ],
+     [
+      0.5,
+      40
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/017.png",
+    "note": "Self-blend with Transfer Mode 6 clearly darkens and deepens the whole frame (mean level 168 -> 105), consistent with a self-Multiply contrast boost.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Transfer Mode": {
+     "1": "Copy",
+     "2": "Behind",
+     "3": "In front",
+     "4": "(separator)",
+     "5": "Darken",
+     "6": "Multiply",
+     "7": "Linear Burn",
+     "8": "Color Burn",
+     "9": "Classic Color Burn",
+     "10": "(separator)",
+     "11": "Add",
+     "12": "Lighten",
+     "13": "Screen",
+     "14": "Linear Dodge",
+     "15": "Color Dodge",
+     "16": "Classic Color Dodge",
+     "17": "(separator)",
+     "18": "Overlay",
+     "19": "Soft Light",
+     "20": "Hard Light",
+     "21": "Linear Light",
+     "22": "Vivid Light",
+     "23": "Pin Light",
+     "24": "Hard Mix",
+     "25": "(separator)",
+     "26": "Difference",
+     "27": "Classic Difference",
+     "28": "Exclusion",
+     "29": "(separator)",
+     "30": "Hue",
+     "31": "Saturation",
+     "32": "Color",
+     "33": "Luminosity",
+     "34": "(separator)",
+     "35": "Stencil Alpha",
+     "36": "Stencil Luma",
+     "37": "Silhouette Alpha",
+     "38": "Silhouette Luma",
+     "39": "(separator)",
+     "40": "Add Alpha",
+     "41": "Luminescent Premul"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Calculations",
+   "match": "ADBE Calculations",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Combines one channel of this layer with a channel of a second layer through a blend mode. Used alone, it pulls a single channel (Gray, Red, Green, Blue, Alpha) out as a black-and-white image.",
+   "look": [
+    "channel extract",
+    "black and white",
+    "high-contrast mono",
+    "blend",
+    "double exposure"
+   ],
+   "use_for": [
+    "punchy B&W from the red channel for archival or flashback looks in documentaries",
+    "extract a channel as a luma matte for sky or smoke compositing",
+    "blend a texture or second plate in by blend mode for trailers"
+   ],
+   "avoid": [
+    "the second layer is read without its effects and masks; precompose",
+    "Gray conversion is flat; grade afterwards with Curves/Levels"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Input Channel",
+     "does": "Which channel of this layer is used (see enum_labels).",
+     "typical": "3 Red for dramatic B&W; 2 Gray for neutral mono"
+    },
+    {
+     "name": "Invert Input",
+     "does": "0/1: inverts the input channel.",
+     "typical": "0"
+    },
+    {
+     "name": "Second Layer",
+     "does": "Layer reference for the second source (defaults to this layer).",
+     "typical": "a texture plate"
+    },
+    {
+     "name": "Second Layer Channel",
+     "does": "Which channel of the second layer is used.",
+     "typical": "1 RGBA"
+    },
+    {
+     "name": "Second Layer Opacity",
+     "does": "Opacity of the second layer, harvested on a 0..1 scale (UI shows %); Adobe: 0% means the second layer has no influence.",
+     "typical": "0 for channel extract; 0.3-0.7 to blend"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "Blend mode between the two (1-based, 37 indices including separators at 3, 8, 14, 21, 25, 30, 35; labels in enum_labels (read from After Effects 26.0)).",
+     "typical": "leave 1 unless blending a second layer"
+    },
+    {
+     "name": "Preserve Transparency",
+     "does": "0/1: keeps the original alpha.",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Input Channel": 3
+   },
+   "enum_labels": {
+    "Input Channel": {
+     "1": "RGBA",
+     "2": "Gray",
+     "3": "Red",
+     "4": "Green",
+     "5": "Blue",
+     "6": "Alpha"
+    },
+    "Second Layer Channel": {
+     "1": "RGBA",
+     "2": "Gray",
+     "3": "Red",
+     "4": "Green",
+     "5": "Blue",
+     "6": "Alpha"
+    },
+    "Blending Mode": {
+     "1": "Normal",
+     "2": "Copy",
+     "3": "(separator)",
+     "4": "Darken",
+     "5": "Multiply",
+     "6": "Color Burn",
+     "7": "Classic Color Burn",
+     "8": "(separator)",
+     "9": "Add",
+     "10": "Lighten",
+     "11": "Screen",
+     "12": "Color Dodge",
+     "13": "Classic Color Dodge",
+     "14": "(separator)",
+     "15": "Overlay",
+     "16": "Soft Light",
+     "17": "Hard Light",
+     "18": "Linear Light",
+     "19": "Vivid Light",
+     "20": "Pin Light",
+     "21": "(separator)",
+     "22": "Difference",
+     "23": "Classic Difference",
+     "24": "Exclusion",
+     "25": "(separator)",
+     "26": "Hue",
+     "27": "Saturation",
+     "28": "Color",
+     "29": "Luminosity",
+     "30": "(separator)",
+     "31": "Stencil Alpha",
+     "32": "Stencil Luma",
+     "33": "Silhouette Alpha",
+     "34": "Silhouette Luma",
+     "35": "(separator)",
+     "36": "Alpha Add",
+     "37": "Luminescent Add"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Tint",
+    "Add Grain"
+   ],
+   "scripting": "Second Layer Opacity is harvested on a 0..1 scale (UI shows a percentage); at 0 only Input Channel drives the result, which is how the single-channel B&W works with no second layer. Second Layer is a layer reference defaulting to the layer itself. Blending Mode indices count menu separators; the labels are in enum_labels (read from After Effects 26.0). Premiere v26 has no Calculations effect (absent from the harvested Premiere list); use Black & White or Lumetri Color for mono looks there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/018.png",
+    "note": "Frame is a single-channel black-and-white image that matches the reference red channel best (corr 0.92 vs 0.82 green), so Input Channel 3 = Red B&W as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Channel Combiner",
+   "match": "ADBE Channel Combiner",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Maps one channel or a colour-space conversion (e.g. Lightness, Hue, RGB to HLS, RGB to YUV) into a target channel, producing channel swaps, false colour or single-channel greyscale.",
+   "look": [
+    "false colour",
+    "channel swap",
+    "psychedelic",
+    "mono",
+    "infrared look"
+   ],
+   "use_for": [
+    "short false-colour flashes for glitch transitions in reels",
+    "extract hue, saturation or lightness as a greyscale matte for compositing",
+    "copy luminance into alpha to make a quick luma matte"
+   ],
+   "avoid": [
+    "RGB/HLS/YUV conversions look garish on skin; keep them to brief stylised beats",
+    "the From / To menus count separators as indices (From 6, 11, 17; To 5, 9, 14): take an index from enum_labels and never set a separator"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "From",
+     "does": "Source channel or conversion (1-based popup, 19 indices incl. separators). Documented items include multichannel conversions (RGB to HLS, HLS to RGB, RGB to YUV, YUV to RGB, straight/premultiplied alpha conversions) and single sources (Red, Green, Blue, Alpha, Lightness, Hue, Saturation, Luminance, Saturation Multiplied, Min RGB, Max RGB); the menu (read from After Effects 26.0): 1 RGB to HLS, 2 HLS to RGB, 3 RGB to YUV, 4 YUV to RGB, 5 Straight to Premultiplied, 7 Red, 8 Green, 9 Blue, 10 Alpha, 12 Hue, 13 Lightness, 14 Luminance, 15 Saturation, 16 Saturation Multiplied, 18 Min RGB, 19 Max RGB (6, 11 and 17 are separators).",
+     "typical": "a conversion for false colour, a single channel for mattes"
+    },
+    {
+     "name": "To",
+     "does": "Destination for single-channel sources: Red Only, Green Only, Blue Only, Alpha Only, Hue Only, Lightness Only, Saturation Only and similar (menu (read from After Effects 26.0): 1 Red, 2 Green, 3 Blue, 4 Alpha, 6 Hue, 7 Lightness (default), 8 Saturation, 10-13 Red / Green / Blue / Alpha only, 15-17 Hue / Lightness / Saturation only; 5, 9 and 14 are separators). Ignored by the multichannel conversions.",
+     "typical": "default"
+    },
+    {
+     "name": "Invert",
+     "does": "0/1: inverts (1 minus) the output channel values.",
+     "typical": "0; 1 for a negative false-colour look"
+    },
+    {
+     "name": "Solid Alpha",
+     "does": "0/1: forces a fully opaque alpha.",
+     "typical": "1 when the result must stay opaque"
+    },
+    {
+     "name": "Use 2nd Layer",
+     "does": "0/1: take the source from Source Layer instead of this layer.",
+     "typical": "0"
+    },
+    {
+     "name": "Source Layer",
+     "does": "Layer reference used when Use 2nd Layer = 1.",
+     "typical": "this layer"
+    }
+   ],
+   "demo_settings": {
+    "Invert": 1
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Set Channels",
+    "Shift Channels",
+    "Hue/Saturation",
+    "Levels"
+   ],
+   "scripting": "From (19) and To (17) popups count menu separators as indices; the labels are in enum_labels (read from After Effects 26.0); the demo uses only Invert, the setting that was rendered. Source Layer is a layer reference that only matters when Use 2nd Layer = 1. Adobe's tip: any channel as greyscale = that channel in From + Lightness Only in To (e.g. From 7 Red, To 16). No Premiere equivalent: Premiere v26 has no Channel Mixer, and its 'Channel Mix' effect only scales or inverts channels, it cannot route one channel into another.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/019.png",
+    "note": "Strong inverted false-colour result (magenta/cyan/blue psychedelic palette) replaces the natural colours, matching the false-colour look.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "From": {
+     "1": "RGB to HLS",
+     "2": "HLS to RGB",
+     "3": "RGB to YUV",
+     "4": "YUV to RGB",
+     "5": "Straight to Premultiplied",
+     "6": "(separator)",
+     "7": "Red",
+     "8": "Green",
+     "9": "Blue",
+     "10": "Alpha",
+     "11": "(separator)",
+     "12": "Hue",
+     "13": "Lightness",
+     "14": "Luminance",
+     "15": "Saturation",
+     "16": "Saturation Multiplied",
+     "17": "(separator)",
+     "18": "Min RGB",
+     "19": "Max RGB"
+    },
+    "To": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "(separator)",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "(separator)",
+     "10": "Red only",
+     "11": "Green only",
+     "12": "Blue only",
+     "13": "Alpha only",
+     "14": "(separator)",
+     "15": "Hue only",
+     "16": "Lightness only",
+     "17": "Saturation only"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Compound Arithmetic",
+   "match": "ADBE Compound Arithmetic",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Combines this layer with a second source layer by a math operator (Add, Multiply, Difference, Screen, Overlay...) on RGB, ARGB or alpha. With the layer itself as source it gives a quick self-blend.",
+   "look": [
+    "blend",
+    "difference",
+    "double exposure",
+    "contrast boost",
+    "glitch"
+   ],
+   "use_for": [
+    "screen a light-leak or fire plate into footage for trailers",
+    "multiply a paper or dust texture into archival documentary footage",
+    "self-overlay (default source = itself) for instant punch on flat clips",
+    "difference against an offset precomp of itself for edge/glitch looks"
+   ],
+   "avoid": [
+    "the second source is read without its effects and masks",
+    "Overflow Wrap produces harsh banding",
+    "Adobe keeps it only for compatibility with old projects and it is 8-bpc; layer blend modes do the same faster and in 16/32 bpc"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Second Source Layer",
+     "does": "Layer reference to combine with (defaults to this layer).",
+     "typical": "a texture or light-leak layer"
+    },
+    {
+     "name": "Operator",
+     "does": "Math/blend operator (see enum_labels).",
+     "typical": "13 Screen for light leaks, 4 Multiply for textures, 14 Overlay for punch"
+    },
+    {
+     "name": "Operate on Channels",
+     "does": "1 RGB, 2 ARGB, 3 Alpha.",
+     "typical": "1"
+    },
+    {
+     "name": "Overflow Behavior",
+     "does": "1 Clip, 2 Wrap, 3 Scale.",
+     "typical": "1"
+    },
+    {
+     "name": "Stretch Second Source to Fit",
+     "does": "0/1: scale the second source to this layer's size.",
+     "typical": "1"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back toward the untouched layer, percent.",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Operator": 14,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Operator": {
+     "1": "Copy",
+     "2": "Add",
+     "3": "Subtract",
+     "4": "Multiply",
+     "5": "Difference",
+     "6": "And",
+     "7": "Or",
+     "8": "Xor",
+     "9": "Lighter",
+     "10": "Darker",
+     "11": "Minimum",
+     "12": "Maximum",
+     "13": "Screen",
+     "14": "Overlay",
+     "15": "Hard Light"
+    },
+    "Operate on Channels": {
+     "1": "RGB",
+     "2": "ARGB",
+     "3": "Alpha"
+    },
+    "Overflow Behavior": {
+     "1": "Clip",
+     "2": "Wrap",
+     "3": "Scale"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Curves",
+    "Fractal Noise",
+    "Gaussian Blur",
+    "Tint"
+   ],
+   "scripting": "Second Source Layer is a layer reference; harvest default 1 = the layer itself, which is why the demo self-overlay shows a change with no extra layer. Default Operator 1 (Copy) of itself is an identity. Operator labels are read from After Effects 26.0 (9 and 10 are named Lighter and Darker there). Premiere v26 has no Compound Arithmetic (absent from the harvested Premiere list); use the clip's Opacity blend mode.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/020.png",
+    "note": "Self-Overlay gives a visible punch: whites brighter, darks deeper, colours richer (contrast std 51 -> 71) with no other change.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Invert",
+   "match": "ADBE Invert",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Inverts a chosen channel or colour space: full RGB photo negative, hue flip, lightness/luminance flip, or alpha inversion.",
+   "look": [
+    "negative",
+    "inverted",
+    "hue flip",
+    "x-ray",
+    "flash frame"
+   ],
+   "use_for": [
+    "1-3 frame negative flash on a beat or impact in trailers and reels",
+    "x-ray/negative look for a 'hidden document revealed' moment in explainers",
+    "Hue (7) for a surreal colour flip that keeps exposure",
+    "Alpha (16) to flip a matte"
+   ],
+   "avoid": [
+    "long full-negative stretches tire the eye and add flashing-content risk",
+    "full negatives on faces read as horror; keep them short"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channel",
+     "does": "What gets inverted (see enum_labels; 5, 10, 15 are menu separators).",
+     "typical": "1 RGB for a negative, 7 Hue for colour flip"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back toward the original, percent.",
+     "typical": "0 for the flash; 50-70 for a washed half-negative"
+    }
+   ],
+   "demo_settings": {
+    "Channel": 1,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Channel": {
+     "1": "RGB",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "(separator)",
+     "6": "HLS",
+     "7": "Hue",
+     "8": "Lightness",
+     "9": "Saturation",
+     "10": "(separator)",
+     "11": "YIQ",
+     "12": "Luminance",
+     "13": "In Phase Chrominance",
+     "14": "Quadrature Chrominance",
+     "15": "(separator)",
+     "16": "Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Invert",
+   "pairs_with": [
+    "Glow",
+    "Tint",
+    "Curves",
+    "Shift Channels"
+   ],
+   "scripting": "Default Channel 1 = RGB, so the effect is fully visible as soon as it is applied. Channel indices count menu separators: 5, 10 and 15 are separators and must not be set. For a flash, keyframe Blend With Original rather than toggling the effect. Premiere's Invert has the same menu but its Channel control is 0-based there (harvested 0-15), so subtract 1 when porting an index.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.04,
+      0
+     ],
+     [
+      0.12,
+      0
+     ],
+     [
+      0.16,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/021.png",
+    "note": "Full RGB photo negative of the reference: faces dark blue-grey, dark clothing cream, red stripes green.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Minimax",
+   "match": "ADBE Minimax",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Replaces each pixel with the minimum or maximum value found within a radius, spreading bright or dark areas into blocky shapes; on alpha it grows or chokes a matte.",
+   "look": [
+    "blocky",
+    "painterly",
+    "spread",
+    "choke",
+    "smeared light"
+   ],
+   "use_for": [
+    "choke or spread a keyed/alpha matte by 1-3 px (Channel Alpha)",
+    "thicken thin text or line art so it survives small phone screens",
+    "stylised blocky light-spread on night city shots in trailers"
+   ],
+   "avoid": [
+    "large radius on footage gives obvious square blocks",
+    "Maximum on Color brightens and destroys detail"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Operation",
+     "does": "1 Minimum (shrink brights), 2 Maximum (spread brights), 3 Minimum then Maximum, 4 Maximum then Minimum.",
+     "typical": "2 for spread, 1 to choke"
+    },
+    {
+     "name": "Radius",
+     "does": "Size of the search area in pixels.",
+     "typical": "1-3 for mattes; 8-20 stylised"
+    },
+    {
+     "name": "Channel",
+     "does": "Which channels are processed (see enum_labels).",
+     "typical": "6 Alpha for matte work, 1 Color for looks"
+    },
+    {
+     "name": "Direction",
+     "does": "1 Horizontal & Vertical, 2 Just Horizontal, 3 Just Vertical.",
+     "typical": "1; 2 for horizontal streak looks"
+    },
+    {
+     "name": "Don't Shrink Edges",
+     "does": "0/1: stops the result pulling in from the layer edges.",
+     "typical": "1 on full-frame footage"
+    }
+   ],
+   "demo_settings": {
+    "Operation": 2,
+    "Radius": 12,
+    "Channel": 1,
+    "Direction": 1
+   },
+   "enum_labels": {
+    "Operation": {
+     "1": "Minimum",
+     "2": "Maximum",
+     "3": "Minimum Then Maximum",
+     "4": "Maximum Then Minimum"
+    },
+    "Channel": {
+     "1": "Color",
+     "2": "Alpha and Color",
+     "3": "Red",
+     "4": "Green",
+     "5": "Blue",
+     "6": "Alpha"
+    },
+    "Direction": {
+     "1": "Horizontal & Vertical",
+     "2": "Just Horizontal",
+     "3": "Just Vertical"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Simple Choker",
+    "Matte Choker",
+    "Glow",
+    "Fast Box Blur"
+   ],
+   "scripting": "Radius defaults to 0 (no change). Cost grows with Radius. Channel labels are read from After Effects 26.0. No Premiere equivalent.",
+   "recipe": {
+    "Radius": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      15
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/022.png",
+    "note": "Bright areas spread into blocky 12 px squares over darker detail (faces, flowers, foreground blocks), the painterly maximum spread described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Remove Color Matting",
+   "match": "ADBE Remove Color Matting",
+   "category": "Channel",
+   "status": "needs_input",
+   "summary": "Removes the dark or coloured fringe on semi-transparent edges of a layer whose alpha was premultiplied against a background colour (e.g. graphics rendered on black).",
+   "look": [
+    "clean edges",
+    "de-fringe",
+    "unpremultiply"
+   ],
+   "use_for": [
+    "clean black halos on logo or graphic renders imported with the wrong alpha interpretation",
+    "fix fringe on soft-edged elements (fire, smoke, light leaks) rendered over black"
+   ],
+   "avoid": [
+    "does nothing on fully opaque footage",
+    "a wrong Background Color makes edges worse"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Background Color",
+     "does": "The colour the alpha was premultiplied with.",
+     "typical": "#000000 for black-premultiplied renders"
+    },
+    {
+     "name": "Clipping",
+     "does": "0/1: clip HDR values, i.e. clamp over-range results (matters in 32-bpc projects).",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Simple Choker",
+    "Matte Choker"
+   ],
+   "scripting": "Only semi-transparent pixels change, so it needs a layer with a real alpha channel (graphic, keyed or masked layer); an opaque full-frame plate shows nothing. Harvested default colour has alpha 0; set Background Color explicitly, e.g. '#000000'. Interpreting the footage as Premultiplied in the project is often the better fix.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input, so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Set Channels",
+   "match": "ADBE Set Channels",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Rebuilds the red, green, blue and alpha channels from chosen channels (or luminance, hue, lightness, saturation) of up to four source layers, defaulting to the layer itself; used for channel swaps and channel-based mattes.",
+   "look": [
+    "channel swap",
+    "false colour",
+    "colour shift",
+    "infrared look"
+   ],
+   "use_for": [
+    "swap red and blue for an eerie false-colour flashback or 'alternate reality' beat",
+    "copy luminance into alpha (Set Alpha to Luminance) to make a luma matte for smoke or light-leak overlays",
+    "build a stylised channel-split glitch frame in reels"
+   ],
+   "avoid": [
+    "channel swaps on faces look alien; keep to short stylised beats",
+    "source layers are read without their effects and masks"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Set Red To Source 1’s",
+     "does": "Which channel of Source Layer 1 becomes red (see enum_labels).",
+     "typical": "3 Blue for a red/blue swap"
+    },
+    {
+     "name": "Set Green To Source 2’s",
+     "does": "Which channel of Source Layer 2 becomes green.",
+     "typical": "2 (unchanged)"
+    },
+    {
+     "name": "Set Blue To Source 3’s",
+     "does": "Which channel of Source Layer 3 becomes blue.",
+     "typical": "1 Red for a red/blue swap"
+    },
+    {
+     "name": "Set Alpha To Source 4’s",
+     "does": "Which channel of Source Layer 4 becomes alpha.",
+     "typical": "5 Luminance for a luma matte; 9 Full to force opaque"
+    },
+    {
+     "name": "Source Layer 1",
+     "does": "Layer reference feeding red (0 = None = this layer); Source Layer 2-4 work the same.",
+     "typical": "None"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "0/1: stretch source layers to fit.",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Set Red To Source 1’s": 3,
+    "Set Blue To Source 3’s": 1
+   },
+   "enum_labels": {
+    "Set Red To Source 1’s": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Off"
+    },
+    "Set Green To Source 2’s": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Off"
+    },
+    "Set Blue To Source 3’s": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Off"
+    },
+    "Set Alpha To Source 4’s": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Off"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Channel Combiner",
+    "Shift Channels",
+    "Hue/Saturation",
+    "Curves"
+   ],
+   "scripting": "Property names use a typographic apostrophe (U+2019), e.g. 'Set Red To Source 1’s'; a plain ' will not match. Source Layer 1-4 are layer references; default 0 = None = use this layer, so channel swaps work with no extra layer. Defaults (1,2,3,4) are an identity. All ten options (1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance, 6 Hue, 7 Lightness, 8 Saturation, 9 Full, 10 Off) are read from After Effects 26.0. Premiere v26 has no Set Channels or Channel Mixer; its 'Channel Mix' only scales or inverts channels and cannot swap them.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/023.png",
+    "note": "Red and blue are swapped: red stripes turn blue, navy areas turn brown, maroon foreground blocks turn purple, as described.",
+    "rerender": false
+   }
+  }
+ ]
+}

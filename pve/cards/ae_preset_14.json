@@ -1,0 +1,1525 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bump And Slide On",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Puts the text on a curved path with a hump and slides the characters on along it, so the line rides over a bump before settling.",
+   "look": [
+    "text on path",
+    "slide on",
+    "bump",
+    "bouncy curve",
+    "playful"
+   ],
+   "use_for": [
+    "Playful title or channel-name entrance in an AI-education explainer",
+    "Single hook word arriving with a hop in a reel",
+    "Light-hearted segment headers"
+   ],
+   "avoid": [
+    "Too playful for serious political or news graphics",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: First Margin -401 -> 469 over 0-2.0 s after comp.time, then holds at rest on the path.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"Bump and Slide On\" in Myriad Pro Cond (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): open wavy line about 910x178 px with a hump near its left end.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/514b.png",
+    "note": "Text is replaced by \"Bump and Slide On\" and rides a curve: steep drop at 0.5 s, settled over a hump on the left by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Circuit Board Out",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Races the text along an angular, circuit-trace style path while shrinking it from 100% to 5%, so the line zips away through sharp corners.",
+   "look": [
+    "text on path",
+    "circuit trace",
+    "tech",
+    "angular",
+    "shrink",
+    "exit"
+   ],
+   "use_for": [
+    "Exit for a tech/AI topic title",
+    "Leaving a 'how it works' explainer card",
+    "Data or cyber themed reel text exit"
+   ],
+   "avoid": [
+    "Ends at 5% scale, not 0: a small speck stays unless you trim the layer or fade it",
+    "Glyphs pile up or flip at the sharp corners"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit: First Margin -1585 -> 2050 and animator Scale 100% -> 5% over 0-2.0 s after comp.time. Trim the layer at +2 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. Keeps the layer's own text (no Source Text stored). Mask path (decoded from the .ffx vertices, authored size in layer pixels): open path about 737x263 px of straight runs with small rounded right-angle corners that loops over itself like circuit traces.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/515b.png",
+    "note": "ARCHIVE 1947 bends round right-angle corners at full size at 0.5 s and is much smaller on the trace at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Conveyor Belt",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Wraps the text around a closed loop path and moves it along like items on a conveyor belt.",
+   "look": [
+    "text on path",
+    "conveyor",
+    "looping",
+    "marquee",
+    "continuous motion"
+   ],
+   "use_for": [
+    "Looping text around a framed object in a reel",
+    "Background motif for a process/pipeline explainer",
+    "Seamless-loop social reel text"
+   ],
+   "avoid": [
+    "Only 2 s of motion by default: it stops unless you loop it",
+    "Text on the underside of the loop reads upside down"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Travel: First Margin 26 -> 869 over 0-2.0 s after comp.time, then stops. For continuous motion add the expression loopOut(\"continue\") to First Margin.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"Conveyor Belt\" in Myriad Pro Cond (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): thin closed loop (belt/stadium shape) about 397x41 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/516b.png",
+    "note": "Text becomes \"Conveyor Belt\" wrapped round a closed loop (underside upside down) and has moved round the belt between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Double Spiral",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Runs the text along a double spiral path: it grows from 0 to full size as it arrives at the middle, then spirals on and shrinks to nothing.",
+   "look": [
+    "text on path",
+    "spiral",
+    "swirl",
+    "hypnotic",
+    "retro"
+   ],
+   "use_for": [
+    "Dizzy/confusion beat in a satirical political reel",
+    "Retro title in a fun explainer",
+    "Decorative text in a music-driven reel"
+   ],
+   "avoid": [
+    "Readable only around the 2 s midpoint",
+    "Wrong tone for sober news or documentary graphics"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-and-out: First Margin -2508 -> -18 -> 2507 and animator Scale 0% -> 100% -> 0% at 0 / 2.0 / 4.0 s after comp.time. Full size only at +2 s; gone at +4 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"double spiral\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): two spirals about 665x429 px overall, joined by an S-curve.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/517b.png",
+    "note": "\"double spiral\" letters are tiny on a spiral at 0.5 s and near full size on the curve at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Down And Out",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Slides the text along a path that drops downward, so the characters run down and out.",
+   "look": [
+    "text on path",
+    "exit",
+    "drop",
+    "fall away"
+   ],
+   "use_for": [
+    "Exit for a 'prices/numbers fell' line in an explainer",
+    "Satire beat where a slogan or promise falls flat",
+    "Title out at the end of a segment"
+   ],
+   "avoid": [
+    "Comic connotation: avoid on tragedy or sensitive news",
+    "Path sits in layer space, so the text may fall through graphics below it"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit move: First Margin -261 -> 688 over 0-2.03 s after comp.time (no opacity change: trim the layer if it must vanish).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"Down and Out\" in Myriad Pro Cond (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): short curve only about 114x114 px bowing down from top-left to bottom-right, so most of the First Margin travel runs off the end of the path along its tangent.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/518a.png",
+    "note": "\"Down and Out\" runs straight down then turns along the bottom at 0.5 s, and is sliding out past the right edge at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Downhill Slide Off",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "The characters slide along a sloping downhill path, like sliding down a ramp and off.",
+   "look": [
+    "text on path",
+    "slide off",
+    "slope",
+    "decline",
+    "playful"
+   ],
+   "use_for": [
+    "Show a decline (GDP, ratings, prices) with text literally sliding downhill",
+    "Light-hearted title exit in reels",
+    "Satire: a claim sliding away"
+   ],
+   "avoid": [
+    "Too cartoonish for documentary lower thirds",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit move: First Margin -391 -> 410 over 0-1.5 s after comp.time (no opacity change: trim the layer if it must vanish).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"Downhill Slide Off\" in Myriad Pro Cond (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): S-curve about 201x181 px descending from top-left to bottom-right.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/519a.png",
+    "note": "\"Downhill Slide Off\" bends down a slope off the right edge at 0.5 s and is gone by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Hurdles",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Runs the text along a flat path with three humps while the humps themselves slide along (mask shape keyed), so the characters hop over 'hurdles' as they travel.",
+   "look": [
+    "text on path",
+    "hopping",
+    "bouncy",
+    "obstacles",
+    "playful"
+   ],
+   "use_for": [
+    "Explainer about obstacles in a scheme or process",
+    "Education-style title movement",
+    "Fun reel word bouncing across frame"
+   ],
+   "avoid": [
+    "Long text spreads over the whole path and is hard to read mid-move",
+    "Cartoonish for serious news"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Travel: First Margin -319 -> 1804 over 0-2.0 s after comp.time; the mask shape is also keyframed 0 -> 2.0 s (path morphs during the move).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"Hurdles\" in Myriad Pro Cond (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): flat line with three humps; the two mask keys slide the humps to the right (about 3178 px between both keys).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/520b.png",
+    "note": "\"Hurdles\" rides over a hump at 0.5 s and a different hump at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Karate Chop",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "The text sits on a straight path that snaps into a sharp V-shaped kink in a tenth of a second, so the line looks chopped and bent by a hit.",
+   "look": [
+    "text on path",
+    "snap",
+    "impact",
+    "sharp angle",
+    "hit"
+   ],
+   "use_for": [
+    "Punchy single-word hit on a beat in a satire reel",
+    "Comic 'cut' beat on a price or budget cut",
+    "Impact accent synced to a whoosh/hit SFX"
+   ],
+   "avoid": [
+    "The move is only 0.1 s: sync it to a hit sound or it reads as a glitch",
+    "Cartoonish for serious content"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: only the mask shape is keyframed, at 0 / 0.03 / 0.1 s after comp.time (no First Margin travel); text is static before and after.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it (First Margin is not animated in this preset). The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"karate chop\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): straight line about 430 px wide that kinks into a V about 174 px deep.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/521b.png",
+    "note": "\"karate chop\" sits on a sharp V kink, identical at 0.5 s and 1.4 s (accent over in 0.1 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Long Spiral Out",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Sends the text away along a long inward spiral while it shrinks to nothing and its tracking tightens; a Ramp Down selector also tapers the line so the first characters are up to 2.6x larger than the last.",
+   "look": [
+    "text on path",
+    "spiral",
+    "exit",
+    "swirl",
+    "shrink"
+   ],
+   "use_for": [
+    "Dreamy or dizzying title exit",
+    "Flashback/memory transition text",
+    "Satire on political 'spin' as the text exits"
+   ],
+   "avoid": [
+    "Unreadable while spiralling",
+    "Can look dated (early-2000s motion graphics)",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit: First Margin 0 -> 1652, animator Scale 100% -> 0% and Tracking 30.4 -> -50 over 0-2.0 s after comp.time; text is at the path start at comp.time and invisible at +2 s. A second animator holds Scale 260% on a Ramp Down selector (size taper, leading characters largest).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. Keeps the layer's own text (no Source Text stored). Mask path (decoded from the .ffx vertices, authored size in layer pixels): spiral about 338x287 px winding in to its centre.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/522b.png",
+    "note": "ARCHIVE 1947 curls on a spiral with large leading letters at 0.5 s and is small, tightly tracked and further along at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Loop In and Out",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Moves the text along a path with a loop: it travels in, reaches its rest point at the middle of the move and carries straight on out.",
+   "look": [
+    "text on path",
+    "loop-de-loop",
+    "roller coaster",
+    "in and out",
+    "playful"
+   ],
+   "use_for": [
+    "Fun one-move word fly-through in a reel",
+    "Roller-coaster metaphor for markets or opinion polls",
+    "Kids/education intro text"
+   ],
+   "avoid": [
+    "Readable for only a moment around +1 s",
+    "Characters turn upside down inside the loop"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-and-out: First Margin 800 -> 0 -> -800 at 0 / 1.0 / 2.0 s after comp.time; at rest only at +1 s, off-path at the ends.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. Keeps the layer's own text (no Source Text stored). Mask path (decoded from the .ffx vertices, authored size in layer pixels): curl with one loop, about 179x233 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/523b.png",
+    "note": "ARCHIVE 1947 is curling into the loop at 0.5 s and curling out of it at 1.4 s, past its 1 s rest.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pipes",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Routes the text through an S-shaped run of pipes with rounded U-bends; the characters are shrunk to 25% at the start and end of the trip and full size in the middle.",
+   "look": [
+    "text on path",
+    "pipes",
+    "flow",
+    "angular",
+    "mechanical"
+   ],
+   "use_for": [
+    "Explainer about money, data or water flowing through a system",
+    "Process/pipeline infographic text",
+    "Tech themed reel transitions"
+   ],
+   "avoid": [
+    "Hard to read while flowing around bends",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Travel: First Margin -300 -> 615 -> 1530 at 0 / 1.47 / 3.0 s after comp.time; a Subtract-mode selector with Scale 25% has Offset 100 -> 0 (0.47-0.9 s) and 0 -> -100 (1.94-2.5 s), so characters are full size roughly 0.9-1.94 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"pipes\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): S-shaped run of horizontal pipes with rounded U-bends, about 507x241 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/524b.png",
+    "note": "\"pipes\" letters are tiny on a bend at 0.5 s and full size on the straight at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rat Nest",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Threads the text along a straight path with a tangled knot in the middle; mid-move the characters shrink to 35%, spread apart and jitter wildly in size (even flipping) and opacity, then return to normal as the move slows to a stop at 3 s.",
+   "look": [
+    "text on path",
+    "tangled",
+    "chaotic",
+    "scribble",
+    "messy"
+   ],
+   "use_for": [
+    "Visualise red tape or confusion in a satire explainer",
+    "Chaos beat in a political roast reel",
+    "Abstract decorative text motion"
+   ],
+   "avoid": [
+    "Unreadable mid-move: never for information text",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Travel: First Margin -408 -> 1305 -> 1654 at 0 / 2.13 / 3.0 s after comp.time. Two animators (Scale 35% + Tracking 0 -> 30 -> 0; Scale 800% / Opacity 10% / Anchor [-25,-25] through a Wiggly Selector) are switched on by selector Offset 100 -> 0 (0.17-0.53 s) and off by 0 -> -100 (2.13-2.5 s); normal text before +0.17 s and from +2.5 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"rat nest\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): straight line about 365 px wide with a tangled scribble knot in the middle.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/525b.png",
+    "note": "\"rat nest\" letters are small and spread at 0.5 s and a tiny jittered, partly flipped knot at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Reel To Reel",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Runs the text slowly along a path between two circles like tape winding from one reel to the other.",
+   "look": [
+    "text on path",
+    "tape reels",
+    "retro",
+    "analog",
+    "slow"
+   ],
+   "use_for": [
+    "'From the archives' title in a documentary",
+    "Retro cassette/tape themed segment card",
+    "Music or audio themed reel text"
+   ],
+   "avoid": [
+    "Long 8 s move: too slow for reels unless retimed",
+    "Text wrapped round the circles is upside down for part of the path"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Slow travel: First Margin 1111 -> -127 over 0-8.0 s after comp.time (moves backwards along the path).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \" . . . reel-to-reel . . . (repeated 4x)\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): two tightly wound spirals (reels) joined by straight tape runs, about 495x148 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/526b.png",
+    "note": "The dotted \"reel-to-reel\" string runs from a dot circle into a densely wound right reel and has crept along between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Reel-To-Reel 2",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "A second tape-reel preset on a smaller, flatter reel path: the text travels backwards between the two reels in 4 s instead of 8 s, so it moves noticeably faster than Reel To Reel.",
+   "look": [
+    "text on path",
+    "tape reels",
+    "retro",
+    "analog",
+    "circular"
+   ],
+   "use_for": [
+    "Faster alternative to Reel To Reel for archival/retro titles",
+    "Audio or music themed reel text"
+   ],
+   "avoid": [
+    "Text upside down on the circular parts",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Travel: First Margin 607 -> -893 over 0-4.0 s after comp.time (moves backwards along the path).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"reel-to-reel . . . reel-to-reel 2. . . (repeated)\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): two small wound reels joined by straight tape runs, about 442x58 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/527b.png",
+    "note": "\"reel-to-reel 2\" runs between two small wound reel blobs and has moved backwards along the tape between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rope Bridge",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Hangs the text on a rope-like curve whose shape is animated, so the line sways like a rope bridge.",
+   "look": [
+    "text on path",
+    "sway",
+    "sagging curve",
+    "rope",
+    "gentle motion"
+   ],
+   "use_for": [
+    "'Bridge between two sides' metaphor in an explainer",
+    "Gentle playful title hold",
+    "Education segment headings"
+   ],
+   "avoid": [
+    "Sway stops after about 4 s unless the mask keys are looped",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Hold with sway: only the mask shape is keyframed, at 0 / 1 / 2 / 3 / 3.97 s after comp.time (no First Margin travel).",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it (First Margin is not animated in this preset). The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"Rope Bridge\" in Myriad Pro Cond (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): shallow sagging curve about 801x154 px; its 5 mask keys sway the sag.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/528b.png",
+    "note": "\"Rope Bridge\" hangs on a shallow curve whose sag changes slightly between 0.5 s and 1.4 s (gentle sway).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Serpent",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "The text slithers along a winding path, growing from 5% to full size as it arrives and shrinking again as it slithers away, with a wiggle.",
+   "look": [
+    "text on path",
+    "snake",
+    "wavy",
+    "slither",
+    "organic"
+   ],
+   "use_for": [
+    "Wavy decorative title in a reel",
+    "Fun card in a nature/wildlife segment",
+    "Winding-road or long-journey metaphor"
+   ],
+   "avoid": [
+    "Snake connotation next to a real politician reads as an insult: tone and legal risk",
+    "Long 6 s move; readable only around the midpoint"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-and-out: First Margin -1670 -> 0 -> 1680, animator Scale 5% -> 100% -> 5% and Tracking 10 -> 0 -> 10 at 0 / 3.0 / 6.0 s after comp.time.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"serpent\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. The Position of 'Animator - Adjust Anchor Point' carries the expression text.animator(\"Animator - adjust anchor point\").property.anchorPoint and a Wiggly Selector animator wiggles the anchor: do not rename the animators. Mask path (decoded from the .ffx vertices, authored size in layer pixels): diagonal path about 679x726 px with curly loops in its middle.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/529b.png",
+    "note": "\"serpent\" letters are tiny on a curve at 0.5 s and larger on a winding S at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Springy",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Sends the text backwards along a long path of swooping arcs with sharp cusps while its letter spacing pumps in and out rapidly, so the line bounces like a spring.",
+   "look": [
+    "text on path",
+    "spring",
+    "bouncy",
+    "pulsing tracking",
+    "playful"
+   ],
+   "use_for": [
+    "Bouncy title in kids/education explainers",
+    "Reel hook word with springy energy",
+    "'Bounce back' / recovery metaphor"
+   ],
+   "avoid": [
+    "Cartoonish on serious news",
+    "Devanagari on a curved path separates glyphs and breaks the headline bar: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Travel: First Margin 1899 -> -1713 -> -1911 at 0 / 2.67 / 3.33 s after comp.time; Tracking oscillates -10 <-> 21.8 every ~0.15-0.3 s during the move.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"springy\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): path of swooping concave arcs meeting in sharp cusps, about 783x526 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/530b.png",
+    "note": "\"springy\" swoops along arcs, upright at 0.5 s and upside down on another arc at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Symmetry",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Splits the line into left and right halves that slide in along a mirror-symmetric looping path from opposite directions and meet in place after 4 s, while the characters' sizes jitter and then calm back to normal.",
+   "look": [
+    "text on path",
+    "symmetric",
+    "mirror motion",
+    "size wiggle",
+    "settle",
+    "decorative"
+   ],
+   "use_for": [
+    "Decorative entrance for a centred title",
+    "'Balance' or 'equality' theme cards",
+    "Abstract typography in music reels"
+   ],
+   "avoid": [
+    "Readable only from about +4 s, when both halves have arrived",
+    "Wiggle phase looks messy on long lines",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: left half (0-50%) Position 3000 -> 0 and right half (50-100%) Position -3000 -> 0 along the path over 0-4.0 s after comp.time. A third animator (Scale 75% -> 50%) runs through a Wiggly Selector (+-100%, so sizes jitter around normal) whose Max Amount drops 100 -> 0 (2-4 s) and wiggle 100 -> 0 (3-4 s), so it has no effect at the end: the text rests at its normal 100% size from +4 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it (First Margin is not animated in this preset). The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"symmetry\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. The text sits on the Symmetrical Path; animator Position X moves characters along that path. Mask path (decoded from the .ffx vertices, authored size in layer pixels): mirror-symmetric ornamental path of loops, about 489x569 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/531b.png",
+    "note": "\"symm\" and \"etry\" approach from opposite sides on a mirrored path at 0.5 s and overlap near the meeting point at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Tchotchke",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "A whimsical toy swing: the line swings back and forth along a shallow arc (+-280 px along the path) while its letter spacing pumps every third of a second, both dying away to rest over 3 s.",
+   "look": [
+    "whimsical",
+    "swing",
+    "pendulum",
+    "pulsing tracking",
+    "settle"
+   ],
+   "use_for": [
+    "Quirky decorative title in light-hearted reels",
+    "Fun trivia card in an AI-education explainer"
+   ],
+   "avoid": [
+    "Too whimsical for news or documentary",
+    "Text is mid-swing at comp.time: let it settle before the viewer must read it",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent that settles: Position X 0 -> 280 -> -280 -> 280 ... (keys every 0.33-0.67 s) and Tracking 0 <-> 50 every 0.33 s, each scaled by a selector Max Amount 100 -> 0 over 0-3.0 s after comp.time; at rest from +3 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it (First Margin is not animated in this preset). The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"tchotchke\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): shallow arc about 737x70 px (\"Swing Path\").",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/532b.png",
+    "note": "\"tchotchke\" is widely tracked on a tilted arc at 0.5 s and nearly flat with tighter spacing at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zig-Zag",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Races the text along a long zig-zag path of straight segments, then eases it to a stop.",
+   "look": [
+    "text on path",
+    "zig-zag",
+    "angular",
+    "fast",
+    "energetic"
+   ],
+   "use_for": [
+    "Volatile market or poll numbers in an explainer",
+    "Energetic reel word movement",
+    "Shock or electric beat in satire"
+   ],
+   "avoid": [
+    "Very fast first 1.5 s: unreadable until it settles",
+    "Glyphs flip abruptly at each corner"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: First Margin -5110 -> 4188 (0-1.53 s) then eases to 4470 (2.27 s) after comp.time; at rest from +2.27 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds a mask to the layer and sets Text > Path Options > Path to it, animating First Margin. The mask is in layer space around the text origin and was authored at a fixed size, so check its size and position in a 1920x1080 comp (scale the layer or mask), and confirm Path Options points at the new mask if the layer already had masks. First Margin travel is in pixels of the authored path, so a much larger or smaller font may not clear the path. The preset stores a Source Text value, so applying it REPLACES the layer's text with the sample string \"zig-zag\" in Myriad Pro Bold (Adobe documents this for the Paths presets): set the TextDocument (text, font, size, fill) again after applying. Mask path (decoded from the .ffx vertices, authored size in layer pixels): long back-and-forth zig-zag of near-horizontal lines, about 716x378 px.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/533b.png",
+    "note": "\"zigzag\" letters pile up at zig-zag corners, high left at 0.5 s and lower at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Drip Down",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "Character by character, from the right end of the line to the left, letters rotate 90 degrees, skew and drop 126 px, so the text ends slumped below its baseline.",
+   "look": [
+    "per-character",
+    "rotation",
+    "drip",
+    "falling",
+    "slump"
+   ],
+   "use_for": [
+    "'Meltdown' beat (market crash) in a satire reel",
+    "Gloomy statistic that collapses",
+    "Spooky themed title"
+   ],
+   "avoid": [
+    "Letters stay visible lying on their side: add an opacity fade or trim if it should disappear",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Transform-out: selector Offset 100 -> 0 over 0-2.37 s after comp.time (square range, characters excluding spaces); text is normal at comp.time and fully dripped from +2.37 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator values: Position [0, 126], Rotation 90, Skew -50 (axis -31).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/534b.png",
+    "note": "From the right end the characters tip, skew and drop below the line: \"47\" fallen at 0.5 s, only \"ARCH\" upright at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flip Up",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "Characters start upside down (rotated 180 degrees) and flip upright one after another from left to right.",
+   "look": [
+    "per-character",
+    "flip",
+    "rotation",
+    "reveal",
+    "snappy"
+   ],
+   "use_for": [
+    "Headline or keyword reveal in an explainer",
+    "Stat/number reveal in a news reel",
+    "Quick title entrance"
+   ],
+   "avoid": [
+    "Text is visible but upside down at comp.time: start the layer at comp.time and cut in on the motion",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: selector Offset 0 -> 100 over 0.07-1.23 s after comp.time; upright and at rest from +1.23 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Rotation 180 (2D, not a 3D card flip).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/535a.png",
+    "note": "At 0.5 s \"ARCH\" is upright, \"I\" mid-flip and the rest upside down; fully upright at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Full Rotation",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "A wave travels along the line in which each character spins one full turn; the text is upright before and after.",
+   "look": [
+    "per-character",
+    "spin",
+    "360 rotation",
+    "wave",
+    "playful"
+   ],
+   "use_for": [
+    "Attention grab on a single short keyword in a reel",
+    "Playful accent during a title hold",
+    "Emphasis when a new fact lands"
+   ],
+   "avoid": [
+    "The wave only crosses the first ~12 characters (Index Offset 0 -> 12): raise the end key for longer lines",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: Index-based selector Offset 0 -> 12 over 0-3.0 s after comp.time; readable before and after.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Rotation -360, range in Index units (0-100).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/536b.png",
+    "note": "Single characters are mid-spin in a wave (\"C\" at 0.5 s, \"V\" at 1.4 s) while the rest stay upright.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Loopy Loop",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "Characters spin a full turn around an offset anchor in a travelling wave, so each letter loops around a small circle and lands back in place.",
+   "look": [
+    "per-character",
+    "looping",
+    "spin",
+    "wave",
+    "playful"
+   ],
+   "use_for": [
+    "Cartoonish satire beat",
+    "Fun kids/education titles",
+    "Goofy reel hook"
+   ],
+   "avoid": [
+    "The wave only crosses the first ~12 characters (Index Offset 0 -> 12): raise the end key for longer lines",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: Index-based selector Offset 0 -> 12 over 0-3.0 s after comp.time; readable before and after.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator values: Rotation -360 with an offset anchor point (Grouping Alignment [0, 90]: the pivot sits below each character).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/537b.png",
+    "note": "One character at a time loops off its spot (\"C\" at 0.5 s, \"V\" well below the line at 1.4 s) and the rest stay in place.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Random Rotation",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "In random order, characters rotate to nearly upside down (179 degrees) and back as a selection sweeps through the line.",
+   "look": [
+    "per-character",
+    "random",
+    "rotation",
+    "jumbled",
+    "chaotic"
+   ],
+   "use_for": [
+    "Chaos or confusion beat in satire",
+    "Glitchy energetic reel text",
+    "Jumble-then-resolve on a keyword"
+   ],
+   "avoid": [
+    "Unreadable mid-sweep",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: selector Offset -100 -> 100 over 0.07-2.54 s after comp.time (randomize order on); readable before and after.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Rotation 179.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/538b.png",
+    "note": "Scattered characters are upside down at 0.5 s and nearly the whole line is flipped at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rotate Per Character",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "Every character spins one full turn around its own anchor at the same time, ending upright.",
+   "look": [
+    "per-character",
+    "rotation",
+    "spin",
+    "kinetic type"
+   ],
+   "use_for": [
+    "Kinetic typography accent in explainers",
+    "Spin on a keyword during a hold",
+    "Social reel caption accent"
+   ],
+   "avoid": [
+    "All letters spin together, so it can look mechanical on long lines",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: animator Rotation 0 -> 360 over 0-2.24 s after comp.time; readable before and after.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/539b.png",
+    "note": "All characters are rotated in place together, about a quarter turn at 0.5 s and past half a turn at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rotate Per Word",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "Every word spins one full turn around its own anchor (word baseline centre) at the same time, ending upright.",
+   "look": [
+    "per-word",
+    "rotation",
+    "spin",
+    "kinetic type",
+    "readable"
+   ],
+   "use_for": [
+    "Word-level spin accent synced to voiceover",
+    "Likely safer than per-character presets on Hindi headlines (still test Devanagari)",
+    "Reel captions with rhythm"
+   ],
+   "avoid": [
+    "Long words swing wide at large sizes"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: animator Rotation 0 -> 360 over 0.13-2.37 s after comp.time; readable before and after.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. The preset sets More Options > Anchor Point Grouping = Word.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/540b.png",
+    "note": "Both words spin around their own centres together, about 90 degrees at 0.5 s and past 180 at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spin In",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "Characters start displaced up and to the right and rotated 180 degrees, then spin down into place one after another from left to right.",
+   "look": [
+    "per-character",
+    "spin",
+    "animate in",
+    "rotation",
+    "fly in"
+   ],
+   "use_for": [
+    "Title entrance in explainers",
+    "Keyword pop-in for reels",
+    "Segment header reveal"
+   ],
+   "avoid": [
+    "Characters are visible at their start offset (+393, -401 px): near the top of frame they start off-screen, elsewhere they show scattered",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: selector Offset 0 -> 100 over 0.07-2.27 s after comp.time; at rest from +2.27 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator values: Position [393.3, -401], Rotation 180 (no opacity change).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/541a.png",
+    "note": "At 0.5 s \"AR\" has landed and \"C\" spins down from upper right, later characters are off-frame; \"ARCHIVE\" is in place at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Swirly Rotation",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "A soft wave sweeps the line in which characters swing a full turn around an offset anchor, curling through a swirl and landing back in place.",
+   "look": [
+    "per-character",
+    "swirl",
+    "rotation",
+    "wave",
+    "fluid"
+   ],
+   "use_for": [
+    "Dreamy or magical title accent",
+    "Fun transition in kids/education content",
+    "Music-driven reel text"
+   ],
+   "avoid": [
+    "Busy on long text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: Ramp Up selector (End 50) Offset -50 -> 100 over 0-3.0 s after comp.time; rotation is -360 so the text is at rest at both ends.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator values: Rotation -360 with an offset anchor (Grouping Alignment [180, 0]: the pivot sits to the right of each character).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/542b.png",
+    "note": "Characters swing out of line and back in a wave (A/R at 0.5 s, H/I/V at 1.4 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Whirlwind",
+   "match": null,
+   "category": "Text/Rotation",
+   "status": "current",
+   "summary": "A tight wave whips across the line in which each character whirls a full turn around a pivot far to its right, swinging in a wide arc before landing back in place.",
+   "look": [
+    "per-character",
+    "whirl",
+    "rotation",
+    "wave",
+    "energetic"
+   ],
+   "use_for": [
+    "'Political storm' accent in satire",
+    "Energetic reel transition on a title",
+    "Emphasis whip across a keyword"
+   ],
+   "avoid": [
+    "Unreadable mid-whirl",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Accent: Ramp Up selector (End 25) Offset -25 -> 100 over 0-2.54 s after comp.time; rotation is -360 so the text is at rest at both ends.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator values: Rotation -360 with an offset anchor (Grouping Alignment [750, -25]: pivot far to the right, so characters sweep big arcs and can leave the frame mid-move).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/543b.png",
+    "note": "Characters swing in wide arcs far from the line (\"A\" and \"C\" at 0.5 s, \"E\" and \"V\" at 1.4 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lets Dance",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "All characters start jittering wildly in size (0-200%) about a shared pivot so they bob and drift as if dancing, then in random order each one settles to normal size.",
+   "look": [
+    "per-character",
+    "scale jitter",
+    "wiggle",
+    "random order",
+    "playful"
+   ],
+   "use_for": [
+    "Captions in music reels (retime to the beat)",
+    "Festive or celebration titles",
+    "Playful hook text"
+   ],
+   "avoid": [
+    "Starts already on screen as a jittering jumble, not from blank: cut in on it or fade the layer in",
+    "Not beat-locked: retime to the music",
+    "Cartoonish for news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Settle: Ramp Up selector (End 6, random order) Offset -6 -> 100 over 0-2.0 s after comp.time, intersected with a Wiggly Selector (+-100%) (the .ffx keys sit at 0.5-2.5 s, but After Effects places the preset's first keyframe at comp.time, so there is no hold); everything jitters at comp.time, characters settle in random order from then on, at rest from +2 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are as rendered: After Effects shifts the preset so its earliest keyframe lands on comp.time (the .ffx stores them later); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Scale 0%; with the +-100% wiggle that gives sizes from 0% to 200%. Anchor Point Grouping = All with Grouping Alignment [-46, -5], so scaling also moves characters toward/away from one shared pivot. The Wiggly Selector only acts while the range still selects a character.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/544a.png",
+    "note": "Characters jitter in size with a few already settled at 0.5 s; most settled at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Random Scale In",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Characters grow from zero size in random order until the whole line is visible.",
+   "look": [
+    "per-character",
+    "scale in",
+    "random order",
+    "pop",
+    "reveal"
+   ],
+   "use_for": [
+    "Title or keyword reveal in explainers",
+    "Stat/number reveal in news reels",
+    "Energetic reel hook"
+   ],
+   "avoid": [
+    "The word is unreadable until the last character lands",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: Ramp Up selector (random order) Offset -100 -> 100 over 0-2.0 s after comp.time; invisible at comp.time, at rest from +2 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Scale 0%.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/545a.png",
+    "note": "At 0.5 s a few characters are tiny and others missing; at 1.4 s most are full size and H, I, 9 still small.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale In By Word",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Words grow from zero size one after another, left to right, each around its own centre.",
+   "look": [
+    "per-word",
+    "scale in",
+    "pop",
+    "sequential",
+    "kinetic type"
+   ],
+   "use_for": [
+    "Word-by-word reveal synced to voiceover",
+    "Hindi headlines (word units are safer for Devanagari than per-character)",
+    "Quote cards in documentaries"
+   ],
+   "avoid": [
+    "Even timing per word: retime the keys to match VO pace"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: Percent Start 0 -> 100 over 0-2.0 s after comp.time (based on words, anchor grouping per word); invisible at comp.time, at rest from +2 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Scale 0%.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/546b.png",
+    "note": "At 0.5 s only \"ARCHIVE\" is visible and small; at 1.4 s it is full size and \"1947\" is growing.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale In From Point",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Characters grow from zero size starting at a chosen point along the line and spreading outward, by default from the middle (Start Point 50); direction (outward, or from both ends inward), width, easing and a Y offset are controls on the layer.",
+   "look": [
+    "scale in",
+    "from point",
+    "expression-driven",
+    "reveal",
+    "customisable"
+   ],
+   "use_for": [
+    "Reveal a title from its centre outward",
+    "Lower-third name reveal with an adjustable start point",
+    "Reel keyword that pops from one letter"
+   ],
+   "avoid": [
+    "Control effects show in the Effect Controls panel and break if renamed",
+    "1 s default is quick: retime the slider keys for VO pace",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Point Control",
+    "Slider Control"
+   ],
+   "duration_note": "Animate-in: one slider keyframed 0 -> 100 over 0-1.0 s after comp.time; at rest from +1 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds Point Control + Slider Control expression-control effects that drive the animator by expressions: 'Scale In - Anchor Point', 'Scale In - Animator Direction', 'Scale In - Animator Start Point', 'Scale In - Animator Width', 'Scale In - Completion', 'Scale In - Ease In', 'Scale In - Ease Out', 'Scale In - Y Position Offset'. The effect names begin with a TAB character (expressions call effect(\"\\tScale In - Completion\")), so look them up with the tab or by iterating the layer's effects. Controls (decoded): 'Scale In - Completion' Slider keyed 0 -> 100 over 0-1 s; 'Scale In - Animator Direction' is a pseudo-effect dropdown (1 = In>Out, from the start point outward; 2 = Out>In, from both ends inward), default 1; Sliders 'Scale In - Animator Start Point' 50 (% along the line), 'Animator Width' 100, 'Ease In' 88, 'Ease Out' 12, 'Y Position Offset' 0; Point Control 'Scale In - Anchor Point' [0, 0] (drives Grouping Alignment). Do not rename the controls or the expressions break.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/547a.png",
+    "note": "At 0.5 s the middle characters are full size and the ends still smaller; full line at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale In",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "All characters grow together from zero to full size, each around its own anchor.",
+   "look": [
+    "per-character",
+    "scale in",
+    "grow",
+    "simultaneous",
+    "clean"
+   ],
+   "use_for": [
+    "Clean title entrance",
+    "Lower-third name entrance",
+    "Reel caption pop"
+   ],
+   "avoid": [
+    "Letters grow from their own baselines, not from the line's centre",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: animator Scale 0% -> 100% over 0-2.0 s after comp.time; invisible at comp.time, at rest from +2 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Uses text animators with range selectors; no effects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/548a.png",
+    "note": "All characters together at 25% height at 0.5 s and 70% at 1.4 s, each in its own slot.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale Out By Word",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Words shrink to zero one after another, left to right, each toward its own bottom centre (on the baseline), starting at comp.time.",
+   "look": [
+    "per-word",
+    "scale out",
+    "sequential",
+    "exit",
+    "kinetic type"
+   ],
+   "use_for": [
+    "Word-by-word exit of a quote card",
+    "Hindi headline exit (word units are safer for Devanagari)",
+    "Caption clear-out before a cut"
+   ],
+   "avoid": [
+    "Starts at comp.time with no hold: apply it on the exact frame the exit should begin"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit: Percent End 0 -> 100 over 0-1.53 s after comp.time (based on words) (the .ffx keys sit at 1.0-2.53 s, but After Effects places the preset's first keyframe at comp.time, so there is no hold); the first word is already shrinking at +0.5 s, gone from +1.53 s. Set comp.time = exit start.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are as rendered: After Effects shifts the preset so its earliest keyframe lands on comp.time (the .ffx stores them later); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Scale 0%.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/549a.png",
+    "note": "The first word shrunk onto its baseline at 0.5 s while the second is full size; only a tiny second word at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: summary said each word shrinks around its own centre; 549a shows ARCHIVE shrunk onto the baseline (bottom at y203, centred horizontally), so the pivot is the bottom centre of each word (Word grouping, alignment [0,0]). Timing rewrite agreed: .ffx Percent End keys 0.999-2.532 s, frames fit a linear 0-1.53 s sweep (ARCHIVE ~31% at 0.5 s, 1947 ~17% at 1.4 s)."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale Out From Point",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Characters shrink to zero starting at a chosen point along the line and spreading outward, by default from the middle (Start Point 50); direction (outward, or from both ends inward), width, easing and a Y offset are controls on the layer.",
+   "look": [
+    "scale out",
+    "from point",
+    "expression-driven",
+    "exit",
+    "customisable"
+   ],
+   "use_for": [
+    "Clear a title from its centre outward",
+    "Lower-third exit with an adjustable start point",
+    "Hand-off from a title to a graphic"
+   ],
+   "avoid": [
+    "Control effects show in the Effect Controls panel and break if renamed",
+    "1 s default is quick: retime the slider keys",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Point Control",
+    "Slider Control"
+   ],
+   "duration_note": "Exit: one slider keyframed 0 -> 100 over 0-1.0 s after comp.time; gone from +1 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Adds Point Control + Slider Control expression-control effects that drive the animator by expressions: 'Scale Out - Anchor Point', 'Scale Out - Animator Direction', 'Scale Out - Animator Start Point', 'Scale Out - Animator Width', 'Scale Out - Completion', 'Scale Out - Ease In', 'Scale Out - Ease Out', 'Scale Out - Y Position Offset'. The effect names begin with a TAB character (expressions call effect(\"\\tScale Out - Completion\")), so look them up with the tab or by iterating the layer's effects. Controls (decoded): 'Scale Out - Completion' Slider keyed 0 -> 100 over 0-1 s; 'Scale Out - Animator Direction' is a pseudo-effect dropdown (1 = In>Out, from the start point outward; 2 = Out>In, from both ends inward), default 1; Sliders 'Scale Out - Animator Start Point' 50 (% along the line), 'Animator Width' 100, 'Ease In' 88, 'Ease Out' 12, 'Y Position Offset' 0; Point Control 'Scale Out - Anchor Point' [0, 0] (drives Grouping Alignment). Do not rename the controls or the expressions break.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/550a.png",
+    "note": "At 0.5 s the middle characters \"VE\" have shrunk while the ends are full size; empty at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale Out",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "All characters shrink together from full size to zero, each around its own anchor, starting the moment the preset is applied (comp.time).",
+   "look": [
+    "per-character",
+    "scale out",
+    "shrink",
+    "exit",
+    "clean"
+   ],
+   "use_for": [
+    "Clean title exit",
+    "Lower-third exit",
+    "Reel caption clear-out"
+   ],
+   "avoid": [
+    "Starts shrinking at comp.time with no hold: apply it on the exact frame the exit should begin",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit: animator Scale 100% -> 0% over 0-2.0 s after comp.time (the .ffx keys sit at 1.0-3.0 s, but After Effects places the preset's first keyframe at comp.time, so there is no hold); gone from +2 s. Set comp.time = exit start.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are as rendered: After Effects shifts the preset so its earliest keyframe lands on comp.time (the .ffx stores them later); retime by moving those keys afterwards. Uses text animators with range selectors; no effects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/551a.png",
+    "note": "All characters shrinking around their own anchors (gaps opening) at 0.5 s; tiny letters in place at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggly Scale Wipe",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Characters start jittering in size (about 34-166%), then a narrow wipe passes left to right and settles each character to normal size.",
+   "look": [
+    "per-character",
+    "wiggle",
+    "scale",
+    "wipe",
+    "settle"
+   ],
+   "use_for": [
+    "Playful title settle-in",
+    "Comic emphasis in a satire reel",
+    "Kids/education heading"
+   ],
+   "avoid": [
+    "Wobbly jitter reads as cheap on serious titles",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: Ramp Up selector (End 7) Offset -7 -> 100 over 0-2.0 s after comp.time, intersected with a Wiggly Selector (+-100%) (the .ffx keys sit at 0.5-2.5 s, but After Effects places the preset's first keyframe at comp.time, so there is no hold); jittery at comp.time, the wipe settles characters left to right from then on (first 3 settled by +0.5 s, 7 by +1.4 s), at rest from +2 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are as rendered: After Effects shifts the preset so its earliest keyframe lands on comp.time (the .ffx stores them later); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator value: Scale 166%, modulated +-100% by the Wiggly Selector (so sizes swing about 34-166% around normal).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/552b.png",
+    "note": "Left characters settled while the right ones jitter at 0.5 s; all but the last two settled at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom Away",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Characters shrink toward the centre of the line and fade out in a quick sweep from left to right, starting at comp.time, so the line collapses away in about 0.7 s.",
+   "look": [
+    "scale down",
+    "fade out",
+    "exit",
+    "quick",
+    "per-character"
+   ],
+   "use_for": [
+    "Title exit just before a cut",
+    "Lower-third clear-out",
+    "Reel transition out of a text card"
+   ],
+   "avoid": [
+    "Not a 3D zoom: a 2D shrink toward the line's centre plus fade",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Exit: Ramp Down selector Offset -100 -> 100 over 0-0.73 s after comp.time (the .ffx keys sit at 0.57-1.3 s, but After Effects places the preset's first keyframe at comp.time, so there is no hold); gone from about +0.73 s. Set comp.time = exit start.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time = start seconds, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)). Keyframe times in duration_note are as rendered: After Effects shifts the preset so its earliest keyframe lands on comp.time (the .ffx stores them later); retime by moving those keys afterwards. Uses text animators with range selectors; no effects. Animator values: Scale 0%, Opacity 0%. Anchor Point Grouping = Line with Grouping Alignment [0, -50], so characters scale toward the line's anchor rather than their own.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/553a.png",
+    "note": "The first five characters gone and the rest shrinking and fading at 0.5 s; empty at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  }
+ ]
+}

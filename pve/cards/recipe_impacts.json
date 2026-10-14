@@ -1,0 +1,2852 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Impact shake hit",
+   "summary": "A short, violent handheld jolt on a boom or slam that decays to a locked frame in about half a second.",
+   "use_for": [
+    "explosion, crash or slam hit in a trailer",
+    "breaking-news headline card landing",
+    "bass hit on a reel cut",
+    "punchline slam in a political roast reel"
+   ],
+   "avoid": [
+    "holding the shake past ~0.6 s (nauseating)",
+    "text-heavy cards and lower thirds that must be read during the hit",
+    "Premiere Camera Shake for a hit: at Speed 160 (max 200) the gallery render was a smooth 1.54x push-in easing back over 0.5 s with no frame-to-frame jitter, and it cropped heads",
+    "the identical jitter keys on repeated hits: mirror or reorder the offsets so they do not look copy-pasted"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 110,
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        0.04,
+        [
+         0.5167,
+         0.4833
+        ]
+       ],
+       [
+        0.08,
+        [
+         0.4865,
+         0.5148
+        ]
+       ],
+       [
+        0.12,
+        [
+         0.5104,
+         0.4907
+        ]
+       ],
+       [
+        0.16,
+        [
+         0.4917,
+         0.5083
+        ]
+       ],
+       [
+        0.2,
+        [
+         0.5057,
+         0.4954
+        ]
+       ],
+       [
+        0.24,
+        [
+         0.4958,
+         0.5046
+        ]
+       ],
+       [
+        0.3,
+        [
+         0.5026,
+         0.4981
+        ]
+       ],
+       [
+        0.4,
+        [
+         0.499,
+         0.5009
+        ]
+       ],
+       [
+        0.5,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        1.5
+       ],
+       [
+        0.08,
+        -1.2
+       ],
+       [
+        0.12,
+        0.8
+       ],
+       [
+        0.16,
+        -0.6
+       ],
+       [
+        0.24,
+        0.3
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 110,
+      "Position": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.04,
+        [
+         992,
+         522
+        ]
+       ],
+       [
+        0.08,
+        [
+         934,
+         556
+        ]
+       ],
+       [
+        0.12,
+        [
+         980,
+         530
+        ]
+       ],
+       [
+        0.16,
+        [
+         944,
+         549
+        ]
+       ],
+       [
+        0.2,
+        [
+         971,
+         535
+        ]
+       ],
+       [
+        0.24,
+        [
+         952,
+         545
+        ]
+       ],
+       [
+        0.3,
+        [
+         965,
+         538
+        ]
+       ],
+       [
+        0.4,
+        [
+         958,
+         541
+        ]
+       ],
+       [
+        0.5,
+        [
+         960,
+         540
+        ]
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        1.5
+       ],
+       [
+        0.08,
+        -1.2
+       ],
+       [
+        0.12,
+        0.8
+       ],
+       [
+        0.16,
+        -0.6
+       ],
+       [
+        0.24,
+        0.3
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "sfx": [
+    "boom",
+    "hit"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Premiere and AE use the same hand-made decaying jitter on Transform: Position offsets of up to 1.7% of the frame (Premiere frame fractions, AE pixels) and Rotation up to 1.5 deg, settling by 0.5 s; Scale 110 hides the edges the jitter and roll expose. Shutter off + 180 gives the motion blur. Premiere's Camera Shake effect is not used: at Speed 160 it drifted smoothly (no jitter) and pushed the frame in 1.5x. In AE scale the pixel offsets for other comp sizes (for 1080x1920 swap to a [540, 960] centre).",
+   "built_from": [
+    "Transform"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/043a.png",
+    "note": "Now a real handheld jolt: per-frame alignment against the reference shows the 110% frame jumping by alternating 6-19 px and 0.5-0.9 deg on successive frames from the hit, decaying to locked by 0.48 s and holding at 110% at 1.0 s, where the old Camera Shake render was a smooth 1.54x push-in.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/055a.png",
+     "note": "The 110% frame jitters by alternating 10-17 px and 0.5-0.9 deg on successive frames from the hit with motion-blur softening (the 0.2 s frame is still soft and 6 px off), decaying to locked by 0.48 s and holding at 110% at 1.0 s; vs Premiere: the same decaying jolt as Premiere, from the same keys.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Graphic jolt",
+   "summary": "A title, card or sticker shudders hard for a beat, then settles, while the footage under it stays still.",
+   "use_for": [
+    "headline or number card slamming on screen",
+    "'WRONG' / 'FAKE' stamp landing in an explainer",
+    "meme sticker hit in a reel",
+    "lower third that jolts on a sound hit"
+   ],
+   "avoid": [
+    "long continuous wiggle under readable text",
+    "full-frame footage (use Impact shake hit: Wiggle looks synthetic there)",
+    "ranges above ~30: units are unverified and big values throw the graphic off screen"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 20,
+      "Vertical Range": 12,
+      "Wiggle Speed": 200,
+      "Spin Range (deg)": 3,
+      "Min Scale": 100,
+      "Max Scale": 106,
+      "Motion Blur": 30,
+      "Master": [
+       [
+        0,
+        100
+       ],
+       [
+        0.35,
+        0
+       ]
+      ],
+      "Seed": 5
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Position": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.04,
+        [
+         992,
+         522
+        ]
+       ],
+       [
+        0.08,
+        [
+         934,
+         556
+        ]
+       ],
+       [
+        0.12,
+        [
+         980,
+         530
+        ]
+       ],
+       [
+        0.16,
+        [
+         944,
+         549
+        ]
+       ],
+       [
+        0.2,
+        [
+         971,
+         535
+        ]
+       ],
+       [
+        0.24,
+        [
+         952,
+         545
+        ]
+       ],
+       [
+        0.3,
+        [
+         965,
+         538
+        ]
+       ],
+       [
+        0.4,
+        [
+         958,
+         541
+        ]
+       ],
+       [
+        0.5,
+        [
+         960,
+         540
+        ]
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        1.5
+       ],
+       [
+        0.08,
+        -1.2
+       ],
+       [
+        0.12,
+        0.8
+       ],
+       [
+        0.16,
+        -0.6
+       ],
+       [
+        0.24,
+        0.3
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "sfx": [
+    "hit"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Apply to the graphic / mogrt clip itself, not the footage. Master fades the wiggle out over 0.35 s; leave Effect Timing at defaults. In AE the Transform keys are pixel offsets around the layer's own centre [960, 540]; for a smaller text layer set the jitter around its anchor point.",
+   "built_from": [
+    "Wiggle",
+    "Transform"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/044_040ms.png",
+    "note": "The (footage) clip jumps 15-22 px at 640 wide frame to frame with black edges exposed over the first 0.24 s and is still by 0.36 s; on footage the edges show, as the avoid list says, so keep it on graphics.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/056a.png",
+     "note": "Applied to the full frame, the picture jumps 8-16 px and up to 0.8 deg with motion blur on alternate frames over the first 0.24 s, showing a thin black sliver at the frame edge, and is still from 0.48 s (identical to the reference at 1.0 s); vs Premiere: AE's hand-keyed jolt moves roughly half as far as Premiere's Wiggle but adds rotation; both expose edges on footage, so keep it on graphics.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Snap punch-in",
+   "summary": "A two-to-three-frame snap zoom to a tighter framing on the hit word, with real motion blur, then hold.",
+   "use_for": [
+    "emphasis on a key word in a talking-head explainer",
+    "reaction beat in a reel",
+    "documentary interview punch on a revealing line",
+    "comedic beat in a political roast"
+   ],
+   "avoid": [
+    "more than ~125% on 1080p sources (soft)",
+    "every sentence: it stops meaning anything",
+    "leaving the shutter checkbox on: the zoom steps with no blur"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.08,
+        120
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 270,
+      "Sampling": 1
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.08,
+        120
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 270,
+      "Sampling": 2
+     }
+    }
+   ],
+   "sfx": [
+    "hit"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Scale 100 -> 120 in 0.08 s, then hold. To zoom on a face instead of the centre set Anchor Point AND Position to the face (Premiere frame fractions, e.g. [0.42, 0.35]; AE pixels). To release, add a key back to 100 just before the next sentence or cut. Do not also use the clip's zoom field on the same beat: the two scales stack.",
+   "built_from": [
+    "Transform"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/045a.png",
+    "note": "Framing snaps to 1.2x with heavy zoom blur on the first two frames and holds 1.2x through 1.0 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/057a.png",
+     "note": "Framing snaps from 1.0x to 1.2x over the first two frames with heavy zoom blur and holds a sharp 1.2x at 0.2 s and 1.0 s; vs Premiere: same as Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Crash zoom cut",
+   "summary": "The cut rushes through a radial zoom blur and the incoming shot lands slightly zoomed and settles back.",
+   "use_for": [
+    "hook-to-body handoff in reels",
+    "jump from a wide to a detail or headline",
+    "trailer beat cut",
+    "new location or topic in a news reel"
+   ],
+   "avoid": [
+    "slow documentary or sombre cuts",
+    "chaining it on consecutive cuts",
+    "far off-centre subjects (the blur pulls to centre)"
+   ],
+   "app": "both",
+   "transition": {
+    "name": "Zoom Blur",
+    "dur": 0.4
+   },
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": [
+       [
+        0,
+        125
+       ],
+       [
+        0.3,
+        100
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 270
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "CC Radial Fast Blur",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Amount": [
+       [
+        0,
+        70
+       ],
+       [
+        0.2,
+        0
+       ]
+      ],
+      "Zoom": 1
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        125
+       ],
+       [
+        0.3,
+        100
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 270
+     }
+    }
+   ],
+   "sfx": [
+    "whoosh",
+    "hit"
+   ],
+   "keyframes_note": "Effects go on the INCOMING clip, keys from its start (the cut). The Zoom Blur transition centred on the cut needs >= 0.2 s handles on both clips and always zooms on frame centre (its controls are not settable). Cross Zoom (0.4 s) is the same move with a harder zoom. In AE the radial blur peaks on the cut frame and clears in 0.2 s while the scale settles over 0.3 s.",
+   "built_from": [
+    "Zoom Blur",
+    "Cross Zoom",
+    "Transform",
+    "CC Radial Fast Blur"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/046_000ms.png",
+    "note": "Incoming shot lands at 1.24x and eases back to 1.0x by 0.28 s (1.07x at the 0.2 s frame); the zoom blur itself is the transition, not in these frames.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/058_040ms.png",
+     "note": "The incoming frame lands at 1.29x inside a heavy radial zoom blur that clears by 0.2 s (1.07x, slightly soft) and settles to an untouched frame by 0.32 s; vs Premiere: AE renders the radial zoom blur on the clip itself where Premiere leaves it to the Zoom Blur transition; the scale settle matches.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "RGB split hit",
+   "summary": "The colour channels tear apart sideways for a few frames on the hit and snap back together.",
+   "use_for": [
+    "tech / AI / cyber reel hit word",
+    "'error' or 'fake' beat in a political roast",
+    "beat drop accent",
+    "trailer hacker beat"
+   ],
+   "avoid": [
+    "straight news and serious documentary (reads as a broken feed)",
+    "holding a split over readable text",
+    "Horizontal Split above ~12 (extreme; range is -50..50)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        10
+       ],
+       [
+        0.12,
+        4
+       ],
+       [
+        0.24,
+        0
+       ]
+      ],
+      "Vertical Split": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        3
+       ],
+       [
+        0.24,
+        0
+       ]
+      ],
+      "Seed": 3
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        64
+       ],
+       [
+        0.12,
+        28
+       ],
+       [
+        0.24,
+        0
+       ]
+      ],
+      "Blue Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        12
+       ],
+       [
+        0.12,
+        6
+       ],
+       [
+        0.24,
+        0
+       ]
+      ],
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.04,
+        [
+         990,
+         540
+        ]
+       ],
+       [
+        0.08,
+        [
+         960,
+         540
+        ]
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Peak on the hit frame (0.04 s), half by 0.12 s, gone by 0.24 s. Premiere's RGB Split defaults to Horizontal Split 1 (a visible fringe), so the 0 keys matter. AE has no single-effect RGB offset that renders on CPU (VR Digital Glitch needs GPU acceleration and rendered a 'requires GPU' slate under aerender): a horizontal Channel Blur with red wider than blue gives the colour tear and a two-frame Offset jump adds the sideways snap. A true channel offset in AE needs three channel layers, which a single-layer effect spec cannot express.",
+   "built_from": [
+    "RGB Split",
+    "Channel Blur",
+    "Offset"
+   ],
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/047a.png",
+    "note": "Red/cyan channels torn sideways (very heavy at 0.04-0.12 s, still a clear fringe at 0.2 s) and fully clean at 1.0 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/peaks/059_040ms.png",
+     "note": "On the hit frame the picture jumps 30 px sideways for one frame with only a thin green/magenta halo on high-contrast edges that reads at full size, fading by 0.12 s and gone at the 0.2 s frame, so the channels never visibly tear apart; vs Premiere: much weaker than Premiere's heavy red/cyan channel offset, which still fringes at 0.2 s.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: A wider, red-dominant horizontal Channel Blur should turn the hairline halo into a broad red/cyan smear on the hit frames, the nearest CPU stand-in for a channel offset.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/peaks/059_040ms.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Chromatic pulse",
+   "summary": "A soft radial colour-fringe breath with a 4% scale bump on each beat, like the lens flexing on the kick.",
+   "use_for": [
+    "beat-synced music reel",
+    "emphasis pulse on a number or stat card",
+    "trailer heartbeat build",
+    "AI-explainer hook energy"
+   ],
+   "avoid": [
+    "every beat for a whole reel (motion fatigue)",
+    "faces in serious news",
+    "Depth Split above ~6 (channels leave the frame)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Depth Split": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        5
+       ],
+       [
+        0.3,
+        0
+       ]
+      ],
+      "Horizontal Split": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        2
+       ],
+       [
+        0.3,
+        0
+       ]
+      ],
+      "Softness": 10
+     }
+    },
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.06,
+        104
+       ],
+       [
+        0.3,
+        100
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        48
+       ],
+       [
+        0.3,
+        0
+       ]
+      ],
+      "Blue Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        10
+       ],
+       [
+        0.3,
+        0
+       ]
+      ],
+      "Blur Dimensions": 1,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.06,
+        104
+       ],
+       [
+        0.3,
+        100
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "sfx": [
+    "heartbeat"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. One pulse = 0.3 s; repeat the key block on each beat (beat time + 0, +0.06, +0.3). For beats closer than 0.3 s apart shorten the decay to half the beat gap.",
+   "built_from": [
+    "RGB Split",
+    "Transform",
+    "Channel Blur"
+   ],
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/048_080ms.png",
+    "note": "Soft red/cyan fringing on every edge with a slight scale bump at 0.04-0.12 s, nearly gone by 0.2 s and clean at 1.0 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/peaks/060_080ms.png",
+     "note": "The 3.5% scale bump reads, but the colour fringe is only a faint green halo on hard edges at full size during 0.04-0.12 s, invisible at normal viewing size, and the frame is clean by 0.32 s; vs Premiere: Premiere's soft red/cyan fringe on every edge is clearly stronger; the scale bump matches.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Doubling the red blur and cutting the blue should turn the hairline green halo into a soft red/cyan fringe like Premiere's.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/peaks/060_080ms.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Exposure flash hit",
+   "summary": "The frame blows out toward white on the hit and recovers in about a quarter second, like a camera flash or blast.",
+   "use_for": [
+    "gunshot / blast / camera-flash beat",
+    "reveal of a big number or verdict",
+    "trailer hit on a boom",
+    "accent on a single word in a reel"
+   ],
+   "avoid": [
+    "more than ~3 flashes per second (photosensitivity)",
+    "already overexposed shots where it barely registers",
+    "Exposure above ~5 stops (solid white, all detail gone)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": [
+       [
+        0,
+        3.5
+       ],
+       [
+        0.08,
+        1.5
+       ],
+       [
+        0.3,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        3.5
+       ],
+       [
+        0.08,
+        1.5
+       ],
+       [
+        0.3,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "hit",
+    "shutter"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. For a hit mid-clip add a 0 key one frame before the peak (h - 0.04) so the flash does not ramp in from the clip start. Premiere alternative when a Lumetri grade already sits on the clip: Brightness & Contrast Brightness [[0, 90], [0.3, 0]] (gentler, never reaches pure white).",
+   "built_from": [
+    "Lumetri Color",
+    "Exposure",
+    "Brightness & Contrast"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/049_000ms.png",
+    "note": "Hit frame is lifted ~88 levels toward white (pale but detail kept), decaying to +18 at 0.2 s and back to normal by 0.32 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/061_000ms.png",
+     "note": "The hit frame is blown to white (+109 levels, 64% of pixels clipped), easing to +54 at 0.08 s and +24 at the 0.2 s frame, and is normal by 0.32 s; vs Premiere: AE blows out much harder than Premiere's pale +88-level lift, which keeps detail.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "White flash cut",
+   "summary": "A press-camera white-out on the cut: the outgoing shot blows to white and the incoming one lands bright and settles.",
+   "use_for": [
+    "photo-to-photo cuts in a news or documentary montage",
+    "trailer hit cut",
+    "beat-synced reel cut",
+    "'breaking' reveal in a political explainer"
+   ],
+   "avoid": [
+    "many flash cuts in a row (keep under 3 per second)",
+    "soft emotional cuts (use Dip to White instead)"
+   ],
+   "app": "both",
+   "transition": {
+    "name": "Flash",
+    "dur": 0.35
+   },
+   "premiere": [
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": [
+       [
+        0,
+        60
+       ],
+       [
+        0.25,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        3
+       ],
+       [
+        0.06,
+        2
+       ],
+       [
+        0.3,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "shutter",
+    "hit"
+   ],
+   "keyframes_note": "Brightness & Contrast / Exposure go on the INCOMING clip, keys from its start (the cut). The Flash transition is front-loaded: at 0.35 s centred the white peak lands ~0.1 s before the cut, so put the shutter/hit sound 0.1 s early. In AE (no Film Impact transitions) the incoming Exposure spike is the flash itself; for a fuller white-out add the same spike reversed at the end of the outgoing clip: [[-0.25, 0], [0, 3]].",
+   "built_from": [
+    "Flash",
+    "Brightness & Contrast",
+    "Exposure"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/050_000ms.png",
+    "note": "Incoming shot lands ~59 levels brighter and settles to normal by 0.28 s; the white-out on the outgoing side is the Flash transition, not in these frames.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/062_000ms.png",
+     "note": "The incoming shot lands almost white (+98 levels, 56% clipped) and fades through +29 at the 0.2 s frame to normal by 0.32 s; vs Premiere: much hotter than Premiere's +59-level Brightness lift, which leaves the white-out to the Flash transition.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Negative flash",
+   "summary": "Three frames (0.12 s at 25 fps) of full photo-negative on the hit, then straight back to normal.",
+   "use_for": [
+    "horror / shock beat in a documentary",
+    "'reality flips' satire beat",
+    "trailer stinger",
+    "glitchy reel accent paired with a glitch sound"
+   ],
+   "avoid": [
+    "holding the negative on people (skin turns blue-green)",
+    "repeated negative flashes (photosensitivity)",
+    "Premiere Channel 4, 9 or 14 (menu separators)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Invert",
+     "pr_props": {
+      "Channel": 0,
+      "Blend With Original": [
+       [
+        0,
+        0
+       ],
+       [
+        0.08,
+        0
+       ],
+       [
+        0.12,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Invert",
+     "props": {
+      "Channel": 1,
+      "Blend With Original": [
+       [
+        0,
+        0
+       ],
+       [
+        0.08,
+        0
+       ],
+       [
+        0.12,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "glitch",
+    "hit"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Blend With Original 0 = full negative; it jumps to 100 (clean) between 0.08 and 0.12 s, so the frames at 0, 0.04 and 0.08 s are negative (three frames at 25 fps, as the gallery showed); for two frames move the 0.08 key to 0.04 and the 0.12 key to 0.08. For a hit mid-clip add [h - 0.04, 100] first so the clip is clean before it. Premiere Channel is 0-based (0 = RGB), AE 1-based (1 = RGB).",
+   "built_from": [
+    "Invert"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/051_040ms.png",
+    "note": "Full blue-white photo-negative on the frames at 0, 0.04 and 0.08 s, clean from 0.12 s (summary corrected from two frames to three).",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/063_040ms.png",
+     "note": "Frames 0, 0.04 and 0.08 s are a full blue-white photo negative and the picture is clean from 0.12 s, so the 0.2 s and 1.0 s stills match the source; vs Premiere: identical to Premiere (three negative frames).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Glitch burst",
+   "summary": "A third-of-a-second digital corruption: block tearing, colour-channel smear and noise that resolves to clean picture.",
+   "use_for": [
+    "tech / AI / cyber news reels",
+    "'system error' punchline in a political roast",
+    "hacker beat in a trailer",
+    "hook interruption in the first second of a reel"
+   ],
+   "avoid": [
+    "serious documentary or official government content",
+    "default settings (full-strength glitch for the whole clip)",
+    "faces that must stay recognisable during the hit"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "VR Digital Glitch",
+     "pr_props": {
+      "Master Amplitude": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        100
+       ],
+       [
+        0.2,
+        60
+       ],
+       [
+        0.32,
+        0
+       ]
+      ],
+      "Color Distortion": 70,
+      "Geometry Distortion X": 60,
+      "Geometry Distortion Y": 15,
+      "Distortion Complexity": 50,
+      "Distortion Rate": 60,
+      "Distortion Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        0.35,
+        720
+       ]
+      ],
+      "Color Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        0.35,
+        360
+       ]
+      ],
+      "Noise Strength": 20,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        8
+       ],
+       [
+        0.12,
+        -5
+       ],
+       [
+        0.2,
+        3
+       ],
+       [
+        0.32,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 2,
+      "Direction": 0,
+      "Wave Width": 70,
+      "Wave Speed": 8,
+      "Wave Height": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        45
+       ],
+       [
+        0.2,
+        25
+       ],
+       [
+        0.32,
+        0
+       ]
+      ],
+      "Pinning": 1
+     }
+    },
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        40
+       ],
+       [
+        0.32,
+        0
+       ]
+      ],
+      "Blue Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        20
+       ],
+       [
+        0.32,
+        0
+       ]
+      ],
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.04,
+        [
+         1010,
+         540
+        ]
+       ],
+       [
+        0.08,
+        [
+         925,
+         540
+        ]
+       ],
+       [
+        0.12,
+        [
+         960,
+         540
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.04,
+        105
+       ],
+       [
+        0.32,
+        105
+       ],
+       [
+        0.4,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Premiere: Master Amplitude is the envelope; the Evolution keys are what make the blocks move (a static Evolution gives a frozen pattern); change Random Seed per use. AE's VR Digital Glitch needs GPU acceleration (it rendered a 'requires GPU' slate under aerender), so the AE version is CPU-safe: a square Wave Warp with Direction 0 shears the frame into horizontal slices, Channel Blur tears the colour sideways, Offset jumps the picture for three frames, and Transform holds 105% while the slices would expose the frame edges.",
+   "built_from": [
+    "VR Digital Glitch",
+    "RGB Split",
+    "Wave Warp",
+    "Channel Blur",
+    "Offset",
+    "Transform"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/052a.png",
+    "note": "Block tearing, rainbow channel smear and noise over the whole frame from 0.04 to 0.2 s, clean picture at 1.0 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/064a.png",
+     "note": "From 0.04 to 0.28 s the frame is sheared into horizontal slices that jump up to about 100 px with a faint colour smear, still clearly sliced at the 0.2 s frame (small black notches show at the left edge on the 0.04 s frame), and clean at 1.0 s; vs Premiere: the block tearing matches, but with far less colour and no noise compared with Premiere's VR Digital Glitch rainbow smear.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Glitch cut",
+   "summary": "A digital-tear transition: slice displacement and colour fringing mix the two shots and resolve on the incoming one.",
+   "use_for": [
+    "fast social cut on a glitch sound",
+    "tech / AI reel topic change",
+    "roast-reel 'system error' cut",
+    "trailer cyber beat"
+   ],
+   "avoid": [
+    "serious documentary or government content",
+    "durations over ~0.4 s (looks like a broken file)",
+    "overuse in one video"
+   ],
+   "app": "both",
+   "transition": {
+    "name": "Glitch",
+    "dur": 0.3
+   },
+   "premiere": [
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": [
+       [
+        0,
+        8
+       ],
+       [
+        0.08,
+        3
+       ],
+       [
+        0.2,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 2,
+      "Direction": 0,
+      "Wave Width": 70,
+      "Wave Speed": 8,
+      "Wave Height": [
+       [
+        0,
+        45
+       ],
+       [
+        0.2,
+        0
+       ]
+      ],
+      "Pinning": 1
+     }
+    },
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": [
+       [
+        0,
+        40
+       ],
+       [
+        0.2,
+        0
+       ]
+      ],
+      "Blue Blurriness": [
+       [
+        0,
+        20
+       ],
+       [
+        0.2,
+        0
+       ]
+      ],
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        105
+       ],
+       [
+        0.2,
+        105
+       ],
+       [
+        0.28,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "keyframes_note": "Effects go on the INCOMING clip, keys from the cut: the residual fringe clears in 0.2 s after the transition. The Glitch transition's controls are not settable from a spec; centred on the cut it needs >= 0.15 s handles on both clips. In AE (no Film Impact transitions; VR Digital Glitch is GPU-only) the incoming slice-and-colour tear decaying over 0.2 s is the cut effect; mirror the Wave Height and blur keys on the outgoing clip ([[-0.2, 0], [0, 45]]) for a two-sided tear.",
+   "built_from": [
+    "Glitch",
+    "RGB Split",
+    "Wave Warp",
+    "Channel Blur",
+    "Transform"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/053_000ms.png",
+    "note": "Strong red/cyan sideways fringe on the incoming frames 0-0.12 s that clears by 0.2 s; the slice displacement is the Glitch transition, not in these frames.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/065_000ms.png",
+     "note": "The incoming frames at 0-0.12 s are sheared into horizontal slices with a faint colour smear, the tear is gone at the 0.2 s frame (1.05x) and the picture is untouched from 0.28 s; vs Premiere: AE draws the slice tear on the incoming clip itself, where Premiere shows only a red/cyan fringe and leaves the slices to the Glitch transition.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Shockwave thump",
+   "summary": "An impact point bulges out and the whole frame flexes like a pressure wave passing through, then settles.",
+   "use_for": [
+    "explosion or landing impact in a trailer",
+    "bass drop in a reel",
+    "map pin or stat slam in an explainer",
+    "superhero-style landing beat"
+   ],
+   "avoid": [
+    "faces of real people in straight news (a bulge reads as mockery)",
+    "Spherize radius above ~0.5 x frame height held for long",
+    "positive Lens Distortion curvature (exposes the frame edges)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Spherize",
+     "pr_props": {
+      "Radius": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        550
+       ],
+       [
+        0.4,
+        0
+       ]
+      ],
+      "Center of Sphere": [
+       0.5,
+       0.5
+      ]
+     }
+    },
+    {
+     "name": "Lens Distortion",
+     "pr_props": {
+      "Curvature": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        -40
+       ],
+       [
+        0.3,
+        0
+       ]
+      ],
+      "Fill Color": "#000000"
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Spherize",
+     "props": {
+      "Radius": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        500
+       ],
+       [
+        0.4,
+        0
+       ]
+      ],
+      "Center of Sphere": [
+       960,
+       540
+      ]
+     }
+    },
+    {
+     "name": "ADBE Ripple",
+     "props": {
+      "Radius": [
+       [
+        0,
+        10
+       ],
+       [
+        0.5,
+        70
+       ]
+      ],
+      "Center of Ripple": [
+       960,
+       540
+      ],
+      "Wave Height": [
+       [
+        0,
+        40
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Wave Width": 50,
+      "Wave Speed": 2,
+      "Type of Conversion": 1
+     }
+    }
+   ],
+   "sfx": [
+    "boom",
+    "sub_drop"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Put Center of Sphere (and AE Center of Ripple) on the impact point: Premiere frame fractions, AE pixels. Spherize radius is pixels, so scale it to the frame (about half the frame height at peak). Negative Lens Distortion is a pincushion pinch, which keeps the frame filled. AE's Ripple radius grows 10 -> 90% while its height dies, giving the expanding ring Premiere lacks.",
+   "built_from": [
+    "Spherize",
+    "Lens Distortion",
+    "Ripple"
+   ],
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/054_080ms.png",
+    "note": "Centre bulges out (barrel-curved foreground blocks, ~1.34x magnification at 0.08 s) and relaxes through 1.11x at 0.2 s to an undistorted frame by 0.32 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/peaks/066_120ms.png",
+     "note": "Ripple at Wave Height 120 and Width 40 folds the picture into jagged zigzag ripples (sawtooth stripes and block edges, black scallops along the bottom edge) from 0.08 s to past 0.64 s, burying the brief Spherize bulge, so it reads as a liquid melt rather than a quick pressure flex that settles; vs Premiere: Premiere's Spherize plus pinch is a clean bulge that settles by 0.32 s.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: A lower, wider and shorter ripple (Height 40 to 0 and Radius 10 to 70 over 0.5 s, Width 50) keeps the expanding ring as a gentle flex without folding the picture; the Ripple card already warns that large Wave Height on live action looks smeary.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/peaks/066_120ms.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Light burst flash",
+   "summary": "Highlights bloom into a warm burst of light on the hit and fade back over about half a second.",
+   "use_for": [
+    "reveal of a winner, result or achievement",
+    "divine / glory moment in a trailer",
+    "rally or celebration hit",
+    "logo or title reveal accent"
+   ],
+   "avoid": [
+    "faces and white shirts in press shots (they bloom out)",
+    "flat low-contrast footage with no highlights",
+    "holding the burst: it looks like a devotional-poster filter",
+    "Premiere Wonder Glow Intensity 100 / Highlights Only 30 / Size 150 plus Brightness 50: the gallery frames were solid white with no picture for the first 0.15 s",
+    "Premiere Wonder Glow Highlights Only 60: at Intensity 55 it added about 2 levels, so the only visible hit was the Brightness lift",
+    "camera flashes in the source under the glow: at Intensity 44 / Highlights Only 30 one exposure flash clipped a third of the frame"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Wonder Glow",
+     "pr_props": {
+      "Intensity": [
+       [
+        0,
+        56
+       ],
+       [
+        0.15,
+        45
+       ],
+       [
+        0.6,
+        0
+       ]
+      ],
+      "Highlights Only": 30,
+      "Size": 150,
+      "Volumetric Glow": 30,
+      "Color": "#FFE6C0",
+      "Colorize": 30,
+      "Ambient Amount": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "CC Light Burst 2.5",
+     "props": {
+      "Center": [
+       960,
+       400
+      ],
+      "Intensity": 100,
+      "Ray Length": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        50
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Burst": 2
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        2
+       ],
+       [
+        0.3,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "hit",
+    "riser"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Wonder Glow at Intensity 0 leaves the frame untouched (gallery frames after 0.6 s match the reference within codec noise), so the effect can stay on the clip. In AE keep CC Light Burst Intensity at 100 and animate Ray Length from 0 (Intensity to 0 risks a dark frame); put Center on the brightest element. A riser leading into the hit sells it. Highlights Only is the lever in Premiere: at 30 / Size 150 Intensity 37, 50, 56 and 62 lifted the frame +8, +24, +42 and +56 levels (56 = warm bloom off the bright wall edges with faces readable, 62 and up = milky haze); at 60 Intensity 55 added about 2.",
+   "built_from": [
+    "Wonder Glow",
+    "CC Light Burst 2.5",
+    "Exposure"
+   ],
+   "confidence": "medium",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/055a.png",
+    "note": "The picture is intact now but nothing blooms: 055a (0.2 s) is within 1 level of the reference and the hit frame is only Brightness's +27-level lift (Wonder Glow at Highlights Only 60 added about 2 levels), so untested change: Highlights Only 30, Size 150, Intensity 56 -> 45 at 0.15 s -> 0 at 0.6 s and Brightness & Contrast dropped, the glow settings that gave a warm edge bloom with readable faces (+42 levels, 0.3% clipped) at 0.24 s of the old render.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/067a.png",
+     "note": "Ray Length 150 smears the whole frame into bright warm radial streaks from 0.04 s to about 0.5 s (40-50% clipped at the peak), so the picture is unreadable for half a second instead of the highlights blooming, and it is clean from 0.6 s; vs Premiere: the opposite of Premiere's Wonder Glow, which barely lifted the frame.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: A 50 px ray peak ending at 0.5 s should leave a warm streaky glow off the bright edges with the picture still readable, keeping Intensity at 100 as the card advises.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/067a.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Speed ramp slam",
+   "summary": "The shot runs fast into the hit, slams into slow motion on it, then ramps back to real time.",
+   "use_for": [
+    "action or sports moment in a trailer",
+    "rally crowd surge in a reel",
+    "drone or vehicle shot hitting a beat",
+    "dramatic gesture in a political montage"
+   ],
+   "avoid": [
+    "Pixel Motion on crossing objects, waving flags or hair (rubbery warps: use Method Frame Mix)",
+    "sources without enough media (fast segments use extra source; frames hold at the end)",
+    "talking heads (breaks lip-sync)",
+    "Pixel Motion across camera flashes or cuts in the source (gallery test plate A warped into a mosaic for half a second)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Timewarp",
+     "pr_props": {
+      "Method": 1,
+      "Adjust Time By": 0,
+      "Speed": [
+       [
+        0,
+        160
+       ],
+       [
+        0.4,
+        160
+       ],
+       [
+        0.55,
+        20
+       ],
+       [
+        1.5,
+        20
+       ],
+       [
+        1.8,
+        100
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": [
+       [
+        0.4,
+        100
+       ],
+       [
+        0.55,
+        110
+       ],
+       [
+        1.8,
+        106
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Timewarp",
+     "props": {
+      "Method": 2,
+      "Adjust Time By": 1,
+      "Speed": [
+       [
+        0,
+        160
+       ],
+       [
+        0.4,
+        160
+       ],
+       [
+        0.55,
+        20
+       ],
+       [
+        1.5,
+        20
+       ],
+       [
+        1.8,
+        100
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0.4,
+        100
+       ],
+       [
+        0.55,
+        110
+       ],
+       [
+        1.8,
+        106
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    }
+   ],
+   "sfx": [
+    "whoosh",
+    "sub_drop"
+   ],
+   "keyframes_note": "Keys are from the clip start; the slam lands at 0.55 s, so start the clip 0.55 s before the hit. Timewarp retimes inside the clip without changing its length, and this curve consumes ~1.4 s of source over 1.8 s; make the clip long enough. CPU-only and slow. Premiere dropdowns are 0-based (Method 1 = Frame Mix, 2 = Pixel Motion, Adjust Time By 0 = Speed), AE 1-based (2 / 3, 1). Premiere uses Frame Mix: Pixel Motion (2) turned 0.4-0.9 s of gallery test plate A, where the exposure flickers, into a smeared mosaic; try Pixel Motion only on clean, flash-free shots. Premiere's own Time Remapping is not scriptable.",
+   "built_from": [
+    "Timewarp",
+    "Transform"
+   ],
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/056b.png",
+    "note": "Frame Mix removed the mosaic: the run is 1.6x to 0.4 s (0.2 s shows source 0.32 s), 0.44-0.84 s around the slam is a soft frame blend that only ghosts and washes where the source's exposure flashes fall, then a 110% slow-motion hold (1.0 s shows source 0.88 s, about 0.2x) ramps back to real time at 106% by 1.8 s.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/068b.png",
+     "note": "The retime works (1.6x run to 0.4 s, near-frozen slow motion around 0.5-1.3 s, speeding back up by 1.8 s), but Pixel Motion tears the picture into warped mosaic patches and doubled outlines at 0.12 s, on the 1.0 s frame and at 1.4-1.6 s, where the source's exposure flashes fall; vs Premiere: Premiere switched to Frame Mix, which only ghosts; the AE stack still uses Pixel Motion (Method 3).",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Method 2 is AE's Frame Mix, the same fix that removed the mosaic on the Premiere side.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/068b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Echo trail hit",
+   "summary": "Moving subjects smear into glowing ghost trails for a beat on the hit, then snap back to a single clean image.",
+   "use_for": [
+    "dance, sports or action beat in a reel",
+    "punch or swing landing",
+    "music-video accent",
+    "fast motion graphic accent (on a nested graphic)"
+   ],
+   "avoid": [
+    "talking heads (double faces look like a mistake)",
+    "static shots (nothing to trail)",
+    "Add operator with many echoes (blows out to white)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Echo",
+     "pr_props": {
+      "Echo Time (seconds)": -0.04,
+      "Number Of Echoes": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        6
+       ],
+       [
+        0.44,
+        1
+       ],
+       [
+        0.48,
+        1
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Starting Intensity": [
+       [
+        0,
+        1
+       ],
+       [
+        0.04,
+        0.55
+       ],
+       [
+        0.48,
+        0.65
+       ],
+       [
+        0.5,
+        1
+       ]
+      ],
+      "Decay": 0.6,
+      "Echo Operator": 3
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Echo",
+     "props": {
+      "Echo Time (seconds)": -0.04,
+      "Number Of Echoes": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        6
+       ],
+       [
+        0.44,
+        1
+       ],
+       [
+        0.48,
+        1
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Starting Intensity": [
+       [
+        0,
+        1
+       ],
+       [
+        0.04,
+        0.55
+       ],
+       [
+        0.48,
+        0.65
+       ],
+       [
+        0.5,
+        1
+       ]
+      ],
+      "Decay": 0.6,
+      "Echo Operator": 4
+     }
+    }
+   ],
+   "sfx": [
+    "whoosh"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Echo Time is one frame at 25 fps (-0.0333 at 30 fps). Operator Screen = 3 in Premiere (0-based), 4 in AE (1-based). Echo reads source frames only: Motion/Transform animation on the same clip is not echoed, so nest (PR) or precompose (AE) an animated graphic first. Number Of Echoes 0 with Starting Intensity 1 is the clean frame. The two keys move together: Screen of n echoes stays near the original brightness only when Starting Intensity is about 0.55 (6 echoes) to 0.65 (1 echo), so both are held there and switch to 0 / 1 on the same 0.5 s key. Ending at 1 echo / 0.6 left the rest of the clip ~15 levels darker and doubled; ramping Starting Intensity back to 1 while echoes remained lifted the release 20-30 levels above the hit (the old render matches a keyed echo count rounded up). Exposure flashes in the source still echo as bright ghosts.",
+   "built_from": [
+    "Echo"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/057b.png",
+    "note": "Trails still show on the hit (a turning figure smears into soft ghosts at 0.12-0.2 s, +4 to +7 levels) and 1.0 s is now the reference image (0.0 levels, single image) instead of 16 levels darker and doubled; it is clean from 0.52 s, with only the source's exposure flashes smeared over neighbouring frames at 0.32-0.48 s.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/069a.png",
+     "note": "Moving edges smear into soft ghost trails from 0.04 to 0.48 s with the frame 4-8 levels brighter and slightly less saturated, the source's exposure flashes smear over neighbouring frames, and the picture is a clean single image from 0.52 s (1.0 s matches the source); vs Premiere: matches Premiere's trails and clean release.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Stutter step",
+   "summary": "Motion drops to a choppy 8 fps for half a second on the hit, like dropped frames, then runs smooth again.",
+   "use_for": [
+    "tension or 'something is wrong' beat",
+    "trailer stinger",
+    "hip-hop / meme reel accent",
+    "freeze-feel without a full freeze frame"
+   ],
+   "avoid": [
+    "talking heads for more than a beat (lip-sync looks broken)",
+    "static shots and stills (nothing to step)",
+    "Premiere adjustment layers (time effects there may not step the layers below: apply to the clip or a nest)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Posterize Time",
+     "pr_props": {
+      "Frame Rate": [
+       [
+        0,
+        8
+       ],
+       [
+        0.5,
+        8
+       ],
+       [
+        0.54,
+        60
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Posterize Time",
+     "props": {
+      "Frame Rate": [
+       [
+        0,
+        8
+       ],
+       [
+        0.5,
+        8
+       ],
+       [
+        0.54,
+        25
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "tick",
+    "tape_rewind"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Rates at or above the sequence rate change nothing, so the jump to 60 ends the stutter in one frame. For a hit mid-clip add [h - 0.04, 60] first. In AE it works on an adjustment layer to stutter everything below. After Effects: end the stutter at the comp frame rate or an exact multiple of it (25 or 50 in a 25 fps comp, 30 or 60 at 30 fps), because a rate that does not divide evenly into the comp rate, such as 60 at 25 fps, repeats a frame every 0.2 s for the rest of the clip.",
+   "built_from": [
+    "Posterize Time"
+   ],
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/058a.png",
+    "note": "Per-frame scan of the clip shows each image held for three frames (8 fps) through 0.5 s, e.g. a held frame at 0.32 s where the source has an exposure flash, then normal motion; the 0.2 and 1.0 s stills look like the source.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/070a.png",
+     "note": "The 8 fps stutter itself is right (each image held 3-4 frames through 0.5 s), but the release to 60 fps in this 25 fps comp still floors time, so afterwards four of every five frames show the previous source frame and the motion hitches every 0.2 s for the rest of the clip instead of running smooth; vs Premiere: Premiere's identical keys return to normal motion after 0.5 s.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Releasing to the comp frame rate puts every sample on a frame boundary, so every source frame plays again after the stutter.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/070a.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Paparazzi strobe",
+   "summary": "A short burst of one-frame white camera flashes (two, half a second apart) for a press-scrum or red-carpet feel.",
+   "use_for": [
+    "press-conference or leader-arrival footage",
+    "celebrity / scandal beat in a reel",
+    "court-steps or media-scrum moment in a documentary"
+   ],
+   "avoid": [
+    "more than ~3 flashes per second (photosensitivity, platform warnings)",
+    "a long regular strobe (mechanical): keep the burst to two or three flashes",
+    "Duration equal to Period in Premiere (draws no flash)",
+    "Random Strobe Probablity above 0 (and below 100): it inverts about that share of frames in random bursts (measured: 10 reached 6 flashes in one second, 50 reached 11), so the count cannot be held under 3 a second"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Strobe Duration (secs)": 0.46,
+      "Strobe Period (secs)": 0.5,
+      "Random Strobe Probablity": 0,
+      "Blend With Original": [
+       [
+        0,
+        0
+       ],
+       [
+        0.9,
+        0
+       ],
+       [
+        1.0,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        0
+       ],
+       [
+        0.12,
+        0
+       ],
+       [
+        0.16,
+        3
+       ],
+       [
+        0.2,
+        0
+       ],
+       [
+        0.64,
+        0
+       ],
+       [
+        0.68,
+        3
+       ],
+       [
+        0.72,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "shutter"
+   ],
+   "keyframes_note": "Keys from the clip start; Blend With Original 100 switches the strobe off at 1 s (extend the 0.9 key for a longer burst). With Random 0 Premiere flashes for Period minus Duration at the start of each Period, so Duration 0.46 / Period 0.5 draws a one-frame (0.04 s) white flash at 0 s and 0.5 s: two flashes, the same count as the AE version and under the 3-per-second limit. Change Period per clip (0.45-0.6, keeping Duration = Period - 0.04) or move the clip start to vary where the flashes land, rather than raising Random Strobe Probablity, which turns the strobe into random bursts (measured: 10 reached 6 flashes in one second). 'Random Strobe Probablity' is misspelt in the app, use it exactly. The AE version hand-keys one-frame +3 stop Exposure spikes at 0.16 s and 0.68 s (AE's Strobe Light measures the same as Premiere's, with its clock on the layer's source frame 0, so the same Strobe Light values work there too); add more spikes at irregular gaps of 0.34 s or more and lay a shutter sound on each.",
+   "built_from": [
+    "Strobe Light",
+    "Exposure"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/059a.png",
+    "note": "Now exactly two one-frame solid white flashes, at 0.00 and 0.52 s, with every other frame matching the reference (the 0.2 s and 1.0 s stills are clean), down from white on 14 of the first 24 frames; the flashes are evenly spaced, so the summary no longer claims irregular ~1.5/s flashes.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "edited": "2026-10-13: the Random Strobe Probablity warning and the AE note rewritten from the strobe measurement renders (work/pve_live/strobe.json); the verdict covers the Premiere frames",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/071_160ms.png",
+     "note": "Exactly two one-frame white-outs, at 0.16 s (+97 levels, 56% clipped) and 0.68 s, with every other frame untouched, so the 0.2 s and 1.0 s stills match the source; vs Premiere: the same two one-frame flashes as Premiere, landing at 0.16 and 0.68 s instead of 0 and 0.52 s.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Bass drop slam",
+   "summary": "The hero hit: the frame slams in zoomed, flashes bright and shakes, then settles to normal in about half a second.",
+   "use_for": [
+    "beat drop that opens a reel's main section",
+    "trailer title slam",
+    "biggest reveal in an explainer",
+    "punchline landing in a roast reel"
+   ],
+   "avoid": [
+    "using it more than once or twice per video (it stops being the big hit)",
+    "sombre or sensitive news",
+    "under on-screen text that must be read on the hit frame",
+    "stacking Premiere Camera Shake on the slam zoom: the gallery frame went to ~1.75x and cut off heads with no jitter"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": [
+       [
+        0,
+        125
+       ],
+       [
+        0.25,
+        104
+       ],
+       [
+        0.6,
+        100
+       ]
+      ],
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        0.04,
+        [
+         0.5167,
+         0.4833
+        ]
+       ],
+       [
+        0.08,
+        [
+         0.4865,
+         0.5148
+        ]
+       ],
+       [
+        0.12,
+        [
+         0.5104,
+         0.4907
+        ]
+       ],
+       [
+        0.16,
+        [
+         0.4917,
+         0.5083
+        ]
+       ],
+       [
+        0.2,
+        [
+         0.5057,
+         0.4954
+        ]
+       ],
+       [
+        0.24,
+        [
+         0.4958,
+         0.5046
+        ]
+       ],
+       [
+        0.3,
+        [
+         0.5026,
+         0.4981
+        ]
+       ],
+       [
+        0.4,
+        [
+         0.499,
+         0.5009
+        ]
+       ],
+       [
+        0.5,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        1.5
+       ],
+       [
+        0.08,
+        -1.2
+       ],
+       [
+        0.12,
+        0.8
+       ],
+       [
+        0.16,
+        -0.6
+       ],
+       [
+        0.24,
+        0.3
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 270
+     }
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": [
+       [
+        0,
+        70
+       ],
+       [
+        0.15,
+        0
+       ]
+      ],
+      "Contrast": [
+       [
+        0,
+        30
+       ],
+       [
+        0.3,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": [
+       [
+        0,
+        125
+       ],
+       [
+        0.25,
+        110
+       ],
+       [
+        0.6,
+        106
+       ]
+      ],
+      "Position": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.04,
+        [
+         992,
+         522
+        ]
+       ],
+       [
+        0.08,
+        [
+         934,
+         556
+        ]
+       ],
+       [
+        0.12,
+        [
+         980,
+         530
+        ]
+       ],
+       [
+        0.16,
+        [
+         944,
+         549
+        ]
+       ],
+       [
+        0.2,
+        [
+         971,
+         535
+        ]
+       ],
+       [
+        0.24,
+        [
+         952,
+         545
+        ]
+       ],
+       [
+        0.3,
+        [
+         965,
+         538
+        ]
+       ],
+       [
+        0.4,
+        [
+         958,
+         541
+        ]
+       ],
+       [
+        0.5,
+        [
+         960,
+         540
+        ]
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        1.5
+       ],
+       [
+        0.08,
+        -1.2
+       ],
+       [
+        0.12,
+        0.8
+       ],
+       [
+        0.16,
+        -0.6
+       ],
+       [
+        0.24,
+        0.3
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 270
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        2.5
+       ],
+       [
+        0.15,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "boom",
+    "sub_drop",
+    "hit"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Best on the first frame of the incoming clip after a riser. Effect order matters: Transform (slam scale plus a hand-keyed decaying Position/Rotation jitter, the same keys as Impact shake hit) first, then the flash. Premiere's Camera Shake is not used: in the gallery it added a smooth push-in to ~1.75x that cropped heads, with no visible shake. In AE the scale settles at 106 (not 100) so the shake jitter never shows the frame edge; key it to 100 after 0.6 s if needed.",
+   "built_from": [
+    "Transform",
+    "Brightness & Contrast",
+    "Exposure"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/060a.png",
+    "note": "The slam now shakes: the hit frame is 1.24x with a +81-level flash and the frame jumps 4-13 px and 0.3-0.6 deg on alternate frames while the scale settles (1.07x at 0.2 s, back to 1.0x and matching the reference from 0.6 s), both heads stay in frame, instead of Camera Shake's smooth 1.75x push.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/072_000ms.png",
+     "note": "The hit frame is 1.24x with a +85-level flash (47% clipped), the frame jitters 5-16 px and 0.3-0.65 deg on alternate frames while the flash clears by 0.16 s, and the scale settles through 1.12x at 0.2 s to a held 1.06x at 1.0 s; vs Premiere: the same slam, flash and shake as Premiere, but AE holds 106% where Premiere returns to 1.0x by 0.6 s, as the keyframes note intends.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "impacts",
+   "status": "current",
+   "name": "Whip smear hit",
+   "summary": "A sideways motion smear with colour fringing and a small kick of the frame, as if the camera flinched on the hit.",
+   "use_for": [
+    "fast reaction beat in a reel",
+    "comparison flip (leader A vs leader B) on a word",
+    "action accent in a trailer",
+    "punch or swipe sound"
+   ],
+   "avoid": [
+    "faces as the subject during the peak (features smear)",
+    "a constant streak on a static shot (reads as an error)",
+    "angle that fights the real motion in the shot"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Directional Blur",
+     "pr_props": {
+      "Angle": 90,
+      "Amount": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        85
+       ],
+       [
+        0.2,
+        0
+       ]
+      ],
+      "Chromatic Aberration": 25
+     }
+    },
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 106,
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        0.06,
+        [
+         0.47,
+         0.5
+        ]
+       ],
+       [
+        0.2,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 270
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 90,
+      "Blur Length": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        150
+       ],
+       [
+        0.2,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 106,
+      "Position": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.06,
+        [
+         900,
+         540
+        ]
+       ],
+       [
+        0.2,
+        [
+         960,
+         540
+        ]
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 270
+     }
+    }
+   ],
+   "sfx": [
+    "swoosh_tr"
+   ],
+   "keyframes_note": "Times are seconds from the hit. The builder's keys are relative to the clip start (negative = from the clip end), so when the hit word lands h seconds into the clip add h to every key time; for a hit on the cut use them as given on the incoming clip. Premiere's new Directional Blur gives VERTICAL streaks at Angle 0, so 90 is horizontal; AE's Directional Blur (ADBE Motion Blur) uses Direction 90 for horizontal. Position kick is 3% / 60 px left at the peak (scale 106 hides the edge). For a whip ACROSS a cut use the Whip transition (0.3 s) instead.",
+   "built_from": [
+    "Directional Blur",
+    "Transform",
+    "Whip"
+   ],
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/peaks/061_080ms.png",
+    "note": "Frames 0.04-0.12 s are a full horizontal motion smear with faint colour fringing, back to a sharp 106% frame by 0.2 s and held at 1.0 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/peaks/073_040ms.png",
+     "note": "Frames 0.04-0.16 s are a full horizontal motion smear with the frame kicked left, back to a sharp 106% frame at the 0.2 s still and held at 1.0 s; vs Premiere: matches Premiere's smear but without its faint colour fringing, which AE's Directional Blur cannot add.",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

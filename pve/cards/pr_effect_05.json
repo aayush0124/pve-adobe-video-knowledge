@@ -1,0 +1,1034 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Lighting Effects",
+   "match": "AE.ADBE LightingEffect",
+   "category": "Adjust",
+   "status": "current",
+   "summary": "Relights the clip with up to five virtual lights (spot, omni or directional) plus an ambient level, darkening everything the lights do not reach. Can also emboss a texture via a bump layer.",
+   "look": [
+    "spotlight",
+    "pool of light",
+    "relit",
+    "theatrical",
+    "dark surround",
+    "warm key light"
+   ],
+   "use_for": [
+    "Spotlight one leader in a group press photo while the rest falls dark",
+    "Add a warm pool of light to a flat, evenly lit interview or archive still",
+    "Moody low-key look for documentary reenactments and trailer title backdrops",
+    "Slow light sweep across a still image to give it life in an explainer"
+   ],
+   "avoid": [
+    "Defaults (Ambience Intensity 20) darken the whole frame a lot: raise Ambience Intensity if only a subtle relight is wanted",
+    "Hard-edged spot (high Focus) on a face looks like a cheap stage light",
+    "Bump Layer needs another track and is not settable from a spec"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Light Type",
+     "does": "Light 1 type dropdown (Light Type#2..#5 for lights 2-5, which default to None)",
+     "typical": "3 (Spotlight)"
+    },
+    {
+     "name": "Center",
+     "does": "Where light 1 is aimed, frame fractions",
+     "typical": "[0.5, 0.45] on the subject's face/upper body"
+    },
+    {
+     "name": "Major Radius",
+     "does": "Long radius of the spotlight ellipse (% of frame)",
+     "typical": "30-50"
+    },
+    {
+     "name": "Minor Radius",
+     "does": "Short radius of the ellipse",
+     "typical": "20-35"
+    },
+    {
+     "name": "Intensity",
+     "does": "Brightness of light 1",
+     "typical": "30-60"
+    },
+    {
+     "name": "Focus",
+     "does": "Size of the bright core inside the light ellipse; higher = fuller, flatter pool with a more abrupt edge, lower = small hotspot with long falloff (direction not render-verified)",
+     "typical": "20-50"
+    },
+    {
+     "name": "Light Color",
+     "does": "Colour of light 1",
+     "typical": "#FFFFFF neutral or #FFD9A0 warm"
+    },
+    {
+     "name": "Ambience Intensity",
+     "does": "Brightness of the unlit areas (ambient fill)",
+     "typical": "5 dramatic, 20 default, 40-60 subtle"
+    }
+   ],
+   "demo_settings": {
+    "Light Type": 3,
+    "Light Color": "#FFD27F",
+    "Center": [
+     0.45,
+     0.4
+    ],
+    "Major Radius": 45,
+    "Minor Radius": 30,
+    "Intensity": 45,
+    "Focus": 40,
+    "Ambience Intensity": 10
+   },
+   "enum_labels": {
+    "Light Type": {
+     "0": "None",
+     "1": "Directional",
+     "2": "Omni",
+     "3": "Spotlight"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "CC Spotlight (or AE 3D light layers)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Noise",
+    "Gaussian Blur"
+   ],
+   "scripting": "Each of the five lights repeats the same property names: light 1 = 'Light Type', 'Center', 'Intensity'...; light 2 = 'Light Type#2', 'Center#2'...; up to #5. 'Light 1'..'Light 5' bools and the unnamed bools are group rows, do not set them. Only light 1 is on by default (Light Type 3); set 'Light Type#2' etc. to a non-zero value to add lights. 'Bump Layer' is a track picker whose harvested range is garbage (min > max): never set it. Angle is in degrees. Ambience Intensity below ~10 or light Intensity above ~60 tends to crush the surround or blow out the hotspot; check a frame. Light Type labels (None/Directional/Omni/Spotlight) follow the Premiere UI order, medium confidence.",
+   "recipe": {
+    "Center": [
+     [
+      0,
+      [
+       0.3,
+       0.45
+      ]
+     ],
+     [
+      3,
+      [
+       0.7,
+       0.45
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/043.png",
+    "note": "Warm spotlight pool lights the upper-left of the frame while the right side and frame edges fall darker, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Lightning",
+   "match": "AE.ADBE Lightning",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws an animated electric bolt between a start and end point on top of the clip, with branches, glow colours and random flicker.",
+   "look": [
+    "electric bolt",
+    "energy arc",
+    "crackling",
+    "branching",
+    "glow",
+    "storm"
+   ],
+   "use_for": [
+    "Electric 'connection' line between two faces or logos in a satire or explainer graphic",
+    "Storm or power hit on a trailer title card",
+    "One-frame-to-few-frames energy flash on a hook beat",
+    "Comic 'shock' accent when a claim is busted in a political reel"
+   ],
+   "avoid": [
+    "Left on for long it looks like 2000s stock FX on real footage; keep it to short hits",
+    "Thin defaults (Width 10) are hard to see at 1080p",
+    "Outside Color is harvested as a broken number and cannot be set from a spec"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Start point",
+     "does": "Where the bolt starts, frame fractions",
+     "typical": "[0.2, 0.2]"
+    },
+    {
+     "name": "End point",
+     "does": "Where the bolt ends",
+     "typical": "[0.8, 0.8]"
+    },
+    {
+     "name": "Segments",
+     "does": "Number of zig-zag segments of the main bolt",
+     "typical": "8-15"
+    },
+    {
+     "name": "Amplitude",
+     "does": "How far the bolt wanders from a straight line",
+     "typical": "15-30"
+    },
+    {
+     "name": "Branching",
+     "does": "Amount of side branches (0-1)",
+     "typical": "0.3-0.5"
+    },
+    {
+     "name": "Width",
+     "does": "Bolt thickness",
+     "typical": "20-40 for 1080p"
+    },
+    {
+     "name": "Speed",
+     "does": "How fast the bolt shape changes",
+     "typical": "8-15"
+    },
+    {
+     "name": "Inside Color",
+     "does": "Core colour of the bolt",
+     "typical": "#FFFFFF"
+    }
+   ],
+   "demo_settings": {
+    "Start point": [
+     0.1,
+     0.15
+    ],
+    "End point": [
+     0.9,
+     0.85
+    ],
+    "Segments": 12,
+    "Amplitude": 25,
+    "Detail Level": 4,
+    "Branching": 0.5,
+    "Width": 30,
+    "Speed": 10,
+    "Inside Color": "#FFFFFF"
+   },
+   "enum_labels": {
+    "Blending Mode": {
+     "0": "Normal",
+     "1": "Add",
+     "2": "Screen"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Advanced Lightning",
+   "pairs_with": [
+    "Lumetri Color",
+    "Lens Flare",
+    "Noise"
+   ],
+   "scripting": "Points are frame fractions. 'Outside Color' was harvested as a number with an invalid range (min > max): it is really a colour, so do not set it from a spec. 'Blending Mode' is a 0..2 dropdown, default 1; the Normal/Add/Screen labels come from the old AE Lightning (same plug-in, 3 items) and are not render-verified. The bolt animates on its own with time; 'Rerun At Each Frame' true gives a completely new bolt every frame (harsh flicker). Animate opacity or trim the clip to make short hits.",
+   "recipe": {
+    "Width": [
+     [
+      0,
+      1
+     ],
+     [
+      0.1,
+      35
+     ],
+     [
+      0.4,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/044.png",
+    "note": "A white-core, blue-glow branching bolt crosses the frame from upper left to the right foreground block on top of the clip.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Linear Wipe (Legacy)",
+   "match": "AE.ADBE Linear Wipe",
+   "category": "Transition",
+   "status": "obsolete",
+   "summary": "In-clip wipe effect that makes the clip transparent along a straight edge at a chosen angle, revealing the track below as Transition Completion rises. Still renders but is the legacy version.",
+   "look": [
+    "straight wipe",
+    "hard edge",
+    "soft edge reveal",
+    "split screen",
+    "slide-in"
+   ],
+   "use_for": [
+    "Wipe a top-track clip on or off over the clip below without a transition",
+    "Static diagonal split screen of two leaders (completion ~50, feathered)",
+    "Reveal a map or graphic from left to right in an explainer"
+   ],
+   "avoid": [
+    "On a single track the revealed area is black, which looks like a mistake",
+    "Zero feather on fast moves looks cheap; add 20-100 px"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "Percent of the clip wiped away (transparent)",
+     "typical": "0 shown, 100 gone; 50 for a split"
+    },
+    {
+     "name": "Wipe Angle",
+     "does": "Direction the wipe travels, in degrees (90 = travels left to right with a vertical edge; add 180 to reverse)",
+     "typical": "90/270 sideways, 0/180 up/down, 45/135 diagonal"
+    },
+    {
+     "name": "Feather",
+     "does": "Softness of the wipe edge in pixels",
+     "typical": "20-150"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 50,
+    "Wipe Angle": 135,
+    "Feather": 80
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Linear Wipe (video transition) for wipes on a cut; Gradient Wipe effect for in-clip reveals; AE: Linear Wipe",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "Gradient Wipe"
+   ],
+   "scripting": "Needs content on a lower track to show anything but black. Prefer the 'Linear Wipe' transition when the wipe sits on a cut; keep this effect only for in-clip or static split-screen use (no direct new-generation effect replacement was found in the harvest). The new transition can also sit single-sided at a clip's start/end to wipe a top clip on/off. Wipe Angle is in degrees and unbounded; which side clears first for a given angle is medium confidence (90 is believed to clear from the left), so flip by 180 if a frame check shows the wrong side.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      100
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/045.png",
+    "note": "At completion 50 and angle 135 the upper-left half is wiped to black (transparent on a single track) along a slightly soft diagonal edge.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Luma Key",
+   "match": "AE.ADBE Legacy Key Luma",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Makes the dark (low-luminance) parts of a clip transparent so the track below shows through. Used to drop elements shot on black over other footage.",
+   "look": [
+    "black removed",
+    "luma matte",
+    "overlay",
+    "cut-out darks"
+   ],
+   "use_for": [
+    "Lay fire, smoke, sparks or light-leak stock shot on black over footage",
+    "Drop a white-on-black logo or text plate over a shot",
+    "Add dust, film-scratch or bokeh overlays shot on black over archive footage"
+   ],
+   "avoid": [
+    "On a single track, keyed areas just turn black, so the effect is barely visible",
+    "Compressed stock gives noisy, chattering key edges; Screen blend mode on the clip is often cleaner for light elements",
+    "Keys dark parts of the subject too (hair, suits): not for keying people",
+    "Cannot key a white background (no invert option): for dark ink on white paper (newspaper scans, signatures) use Multiply blend mode instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold",
+     "does": "Range of dark values that become transparent (higher = more of the image keyed)",
+     "typical": "20-60"
+    },
+    {
+     "name": "Cutoff",
+     "does": "Opacity of the non-keyed areas / hardness of the key (higher = more transparent)",
+     "typical": "10-50"
+    }
+   ],
+   "demo_settings": {
+    "Threshold": 60,
+    "Cutoff": 30
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Extract",
+   "pairs_with": [
+    "Track Matte Key",
+    "Lumetri Color",
+    "Ultra Key"
+   ],
+   "scripting": "Only meaningful on an upper track over other footage; on a single track transparent = black. Defaults (Threshold 100, Cutoff 0) are believed to act as a soft luminance matte already (pure black transparent, dark tones partly see-through), not a no-op. The exact Threshold/Cutoff interaction is from Adobe's legacy docs and not verified by render: tune by eye, start Threshold 40-60, Cutoff 20-30 for elements on black; high Cutoff (60+) can make most of a normal shot transparent. Despite the match name containing 'Legacy', it is the current Luma Key in the Keying folder.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/046.png",
+    "note": "Dark tones (block fronts, clothing, shadows) are keyed out and read as black on the single track while light areas stay intact.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Lumetri Color",
+   "match": "AE.ADBE Lumetri",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Premiere's main colour-grading effect: white balance, exposure and tone, creative looks and LUTs, curves, colour wheels, HSL secondary and vignette in one GPU effect.",
+   "look": [
+    "graded",
+    "warm",
+    "teal-orange",
+    "punchy contrast",
+    "faded film",
+    "desaturated",
+    "vignette"
+   ],
+   "use_for": [
+    "Fix white balance and exposure of mismatched news/press footage so cuts match",
+    "Give a documentary a consistent look (contrast, slight fade, vignette)",
+    "Black-and-white or desaturated flashback for archive sections",
+    "Warm/cool emotional shift between political 'promise' and 'reality' segments",
+    "Punchy saturated grade for social reels"
+   ],
+   "avoid": [
+    "Saturation above ~140 pushes Indian skin tones orange and clips on YouTube",
+    "Applying a creative Look at full intensity on every shot looks templated",
+    "Crushing blacks (Blacks < -40) loses detail after platform compression"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Temperature",
+     "does": "Basic Correction white balance, blue (-) to yellow (+)",
+     "typical": "-15..+15 correction, +30 warm look"
+    },
+    {
+     "name": "Saturation",
+     "does": "Basic Correction saturation (100 = unchanged)",
+     "typical": "90-120; 0 = black and white"
+    },
+    {
+     "name": "Exposure",
+     "does": "Basic Correction exposure in stops",
+     "typical": "-0.5..+0.5"
+    },
+    {
+     "name": "Contrast",
+     "does": "Basic Correction contrast",
+     "typical": "10-30"
+    },
+    {
+     "name": "Highlights",
+     "does": "Recover (-) or boost (+) bright areas",
+     "typical": "-30..0 for blown sky/flags"
+    },
+    {
+     "name": "Shadows",
+     "does": "Lift (+) or deepen (-) shadows",
+     "typical": "+10..+30 for dark interviews"
+    },
+    {
+     "name": "Faded Film",
+     "does": "Creative: lifts blacks for a faded film look",
+     "typical": "10-30"
+    },
+    {
+     "name": "Amount",
+     "does": "Vignette amount (negative darkens edges)",
+     "typical": "-1.0..-0.5"
+    }
+   ],
+   "demo_settings": {
+    "Temperature": 40,
+    "Saturation": 135,
+    "Contrast": 40,
+    "Amount": -2.0
+   },
+   "enum_labels": {
+    "Look": {
+     "0": "None"
+    },
+    "Input LUT": {
+     "0": "None"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Noise",
+    "Gaussian Blur",
+    "Sharpen",
+    "Unsharp Mask"
+   ],
+   "scripting": "Names repeat across sections: 'Saturation' = Basic, 'Saturation#2' = Creative, 'Saturation#3' = HSL Secondary correction; 'Temperature'/'Tint'/'Contrast' = Basic, '#2' = HSL Secondary; 'Intensity#2' = Creative Look intensity; 'Sharpen' = Creative; 'Amount', 'Midpoint', 'Roundness', 'Feather' = Vignette. The 'Active', 'Active#2'..'Active#13' bools are section and sub-curve enable switches in panel order ('Active' = Basic Correction, '#2' = Creative, '#3' = Curves, '#10' = Color Wheels, '#11' = HSL Secondary, '#12' = Vignette): leave true. 'Intensity' (first, 0-100, default 50) sits in Basic Correction before the Color group and is unidentified: do not set it. Section-name bools (Basic Correction, Creative, Curves, Vignette...) are group rows: do not set. Harvested numeric ranges are wider than the UI sliders (Temperature/Tint +-300, Contrast etc. +-150, Exposure +-7, vignette Amount +-5) so stay near UI ranges. Look and Input LUT are 0-based dropdowns over the installed LUT list (0 = None); other indices depend on the install, and custom .cube files (LUTAsset/LookAsset strings), curves, colour wheels and HSL keys are blobs that cannot be set from a spec: use a saved effect preset for those.",
+   "recipe": {
+    "Saturation": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/047.png",
+    "note": "Frame is warmer, more saturated and contrastier, with visibly darkened vignette corners.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Magnify (Legacy)",
+   "match": "AE.ADBE Magnify",
+   "category": "Distort",
+   "status": "obsolete",
+   "summary": "Draws a circular or square magnifying-glass zoom of part of the image, with feather, opacity and blend controls. Still renders but is the legacy version.",
+   "look": [
+    "magnifying glass",
+    "zoom circle",
+    "loupe",
+    "detail callout"
+   ],
+   "use_for": [
+    "Magnify a line in a document, tweet or newspaper clip in an explainer",
+    "Callout a face or badge in a wide crowd/press photo",
+    "Animated loupe sweeping over a chart or map"
+   ],
+   "avoid": [
+    "High magnification on low-res stills looks blurry and cheap",
+    "No outline: add a stroke/shape ring if it must read as a magnifier",
+    "Centred on a flat area (plain wall, sky) the loupe is nearly invisible: aim Center at a face, text or other detail"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Shape",
+     "does": "Circle or square lens",
+     "typical": "0 (Circle)"
+    },
+    {
+     "name": "Center",
+     "does": "Where the lens sits, frame fractions",
+     "typical": "on the detail to show"
+    },
+    {
+     "name": "Magnification",
+     "does": "Zoom inside the lens in percent",
+     "typical": "180-300"
+    },
+    {
+     "name": "Size",
+     "does": "Lens radius in pixels",
+     "typical": "150-350"
+    },
+    {
+     "name": "Feather",
+     "does": "Softness of the lens edge in pixels",
+     "typical": "0-20"
+    },
+    {
+     "name": "Link",
+     "does": "Ties size/feather to magnification",
+     "typical": "0 (None)"
+    },
+    {
+     "name": "Resize Layer",
+     "does": "Lets the lens extend beyond the clip bounds",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Shape": 0,
+    "Center": [
+     0.38,
+     0.22
+    ],
+    "Magnification": 220,
+    "Size": 250,
+    "Feather": 8
+   },
+   "enum_labels": {
+    "Shape": {
+     "0": "Circle",
+     "1": "Square"
+    },
+    "Link": {
+     "0": "None",
+     "1": "Size To Magnification",
+     "2": "Size & Feather To Magnification"
+    },
+    "Scaling": {
+     "0": "Standard",
+     "1": "Soft",
+     "2": "Scatter"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "No new-generation Magnify found in the harvest; this legacy effect still works. Alternative: duplicate the clip, scale it with Transform/Motion and cut it with a mask. AE: Magnify",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Shape",
+    "Gaussian Blur"
+   ],
+   "scripting": "Marked (Legacy) by Premiere 2026 but no direct replacement exists in this install, so it remains the simplest scripted loupe: e.g. Magnification 220, Size 250, Feather 8, Center on the detail. Enum labels come from the AE version of Magnify (same plug-in), medium confidence. 'Blending Mode' is a 0..21 dropdown (default 1, probably Normal); labels not verified. Size and Feather are pixels, not fractions.",
+   "recipe": {
+    "Center": [
+     [
+      0,
+      [
+       0.3,
+       0.5
+      ]
+     ],
+     [
+      2.5,
+      [
+       0.7,
+       0.5
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/048.png",
+    "note": "A circular loupe over a face shows it clearly enlarged against the unmagnified surroundings.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Mask",
+   "match": "AE.ADBE AEMask",
+   "category": "Internal (effect masks)",
+   "status": "needs_input",
+   "summary": "Internal component that holds a mask drawn on a clip's effect or Opacity (ellipse, 4-point or pen mask), with feather, opacity, expansion and invert. It is created by Premiere's mask tools rather than picked from the Effects panel.",
+   "look": [
+    "masked area",
+    "soft-edged shape",
+    "vignette shape",
+    "isolated region"
+   ],
+   "use_for": [
+    "Limit a blur or mosaic to a face or number plate for censoring",
+    "Spot-grade a face with a masked Lumetri",
+    "Vignette-shaped opacity cut-out for picture-in-picture"
+   ],
+   "avoid": [
+    "Untracked masks drift off moving subjects",
+    "Hard (0 feather) masks on grades show visible edges"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Mask Feather",
+     "does": "Edge softness in pixels",
+     "typical": "10-60"
+    },
+    {
+     "name": "Mask Opacity",
+     "does": "Strength of the masked area",
+     "typical": "100"
+    },
+    {
+     "name": "Mask Expansion",
+     "does": "Grows (+) or shrinks (-) the mask in pixels",
+     "typical": "-20..+40"
+    },
+    {
+     "name": "Inverted",
+     "does": "Applies the effect outside the shape instead",
+     "typical": "false; true for grading the background"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "AE layer/effect masks",
+   "pairs_with": [
+    "Mosaic",
+    "Gaussian Blur",
+    "Lumetri Color",
+    "Opacity"
+   ],
+   "scripting": "Cannot be created from a spec: 'Mask Path', 'Additional Paths' and 'Selection Data Param' are binary strings, so a script cannot draw the shape. Route: save an effect preset (.prfpset) with the mask already drawn and apply it, or build the masked shot in After Effects. Once a mask exists, feather/opacity/expansion/inverted are plain numbers/bools. Probably not listed in the Effects panel; low confidence on how scripts can reach it.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "needs_input card: no gallery frame exists (a mask cannot be drawn from a spec).",
+    "rerender": false,
+    "second_opinion": "agree: no frame exists (status needs_input, absent from gallery/pr/index.json); harvest confirms Mask Path / Additional Paths / Selection Data Param are binary strings, Feather 0..5000 (default 10), Opacity 0..100, Expansion -5000..5000, empty demo_settings is correct"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Mask2",
+   "match": "AE.ADBE AEMask2",
+   "category": "Internal (effect masks)",
+   "status": "needs_input",
+   "summary": "Newer internal mask component (Premiere 2025/2026 masking) with its own transform (position, scale, rotation, anchor), feather, opacity, expansion, invert, blend mode, mask type and tracker data. Created by the mask tools, not from the Effects panel.",
+   "look": [
+    "masked area",
+    "shape mask",
+    "tracked mask",
+    "isolated region"
+   ],
+   "use_for": [
+    "Isolate a face or object for blur/censor or a spot grade",
+    "Tracked mask following a moving subject for a highlight",
+    "Combine several shapes (add/subtract) for a custom cut-out"
+   ],
+   "avoid": [
+    "Tracker data does not survive being rebuilt from a script",
+    "Expecting a script to draw the path: it cannot"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Feather",
+     "does": "Edge softness",
+     "typical": "10-60"
+    },
+    {
+     "name": "Opacity",
+     "does": "Strength of the mask",
+     "typical": "100"
+    },
+    {
+     "name": "Expansion",
+     "does": "Grows or shrinks the mask",
+     "typical": "-20..+40"
+    },
+    {
+     "name": "Inverted",
+     "does": "Flips inside/outside",
+     "typical": "false"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotates the mask shape (degrees)",
+     "typical": "0"
+    },
+    {
+     "name": "Blend Mode",
+     "does": "How this mask combines with other masks (0..2, probably Add/Subtract/Intersect)",
+     "typical": "0"
+    },
+    {
+     "name": "Type",
+     "does": "Mask type dropdown (0..4, probably ellipse/rectangle/pen/object kinds)",
+     "typical": "leave as created"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE layer/effect masks",
+   "pairs_with": [
+    "Mosaic",
+    "Gaussian Blur",
+    "Lumetri Color"
+   ],
+   "scripting": "Path, Tracker and User Interactions are binary strings and cannot be set from a spec, so the mask must come from a saved effect preset or be drawn by hand. Position/Scale/Anchor Point units are unclear from the harvest (Position default [0, 0], Scale [1, 1]); Blend Mode and Type labels are guesses, not verified. Treat as read-mostly.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "needs_input card: no gallery frame exists (a mask cannot be drawn from a spec).",
+    "rerender": false,
+    "second_opinion": "agree: no frame exists (status needs_input, absent from gallery/pr/index.json); harvest confirms Path, two Tracker rows and User Interactions are binary strings, Position [0,0] / Scale [1,1], Rotation -32768..32767, Blend Mode 0..2, Type 0..4, Feather default 0; empty demo_settings is correct"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Metadata & Timecode Burn-in",
+   "match": "AE.ADBE PPro Metadata",
+   "category": "Video",
+   "status": "current",
+   "summary": "Burns up to five lines of timecode or clip metadata (source/sequence timecode, clip name, file name and similar) into the picture on a semi-transparent box.",
+   "look": [
+    "timecode overlay",
+    "burn-in",
+    "review copy",
+    "text box",
+    "slate info"
+   ],
+   "use_for": [
+    "Review/approval exports for clients or legal with timecode to reference notes",
+    "Burn source timecode on interview selects for transcript logging",
+    "Show clip names on an adjustment layer for assistant-editor checks of a rough cut"
+   ],
+   "avoid": [
+    "Forgetting to disable it before the final export",
+    "On an adjustment layer, per-clip fields (clip name, source timecode) follow the 'Source Track' picker, which cannot be set from a spec: check the burn-in reads the intended track, or apply it to the clips themselves"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Size",
+     "does": "Overall text size",
+     "typical": "15-30"
+    },
+    {
+     "name": "Opacity",
+     "does": "Opacity of the background box behind the text",
+     "typical": "40-70"
+    },
+    {
+     "name": "Metadata",
+     "does": "Line 1 field dropdown (Metadata#2..#5 for lines 2-5)",
+     "typical": "keep the default 6 for line 1"
+    },
+    {
+     "name": "Position",
+     "does": "Line 1 position, frame fractions",
+     "typical": "[0.38, 0.93] default bottom"
+    },
+    {
+     "name": "Format",
+     "does": "Timecode format dropdown for line 1",
+     "typical": "0"
+    },
+    {
+     "name": "Time Display",
+     "does": "Frame-rate/time display dropdown for line 1",
+     "typical": "0"
+    },
+    {
+     "name": "Offset",
+     "does": "Frame offset added to the displayed time",
+     "typical": "0"
+    },
+    {
+     "name": "Size#2",
+     "does": "Line 1 text scale in percent (per-line, on top of the global Size; meaning inferred from its 0-200 range)",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {
+    "Size": 30,
+    "Opacity": 70
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Timecode",
+   "pairs_with": [
+    "Timecode",
+    "Clip Name"
+   ],
+   "scripting": "Five line groups repeat the same names: line 1 = 'Metadata', 'Position', 'Size#2', 'Format', 'Time Display', 'Offset', 'Starting Timecode' (number) + 'Starting Timecode#2' (bool); line 2 = 'Metadata#2', 'Position#2', 'Size#3', 'Format#2', ... 'Starting Timecode#3'/'#4'; line N uses Starting Timecode #(2N-1) number and #(2N) bool. The first 'Size' and 'Opacity' are global (text size, background box opacity). 'Line 1'..'Line 5' bools are group rows (harvested false although line 1 shows by default): do not set them. A line is shown by giving its 'Metadata#N' a non-zero value. Metadata is a 0..27 dropdown whose labels were not harvested (default 6 on line 1, 0 on lines 2-5, believed to be None). Format 0..3 is probably SMPTE / Frames / Feet+Frames 16mm / 35mm as in the Timecode effect; Time Display 0..7 labels unknown. 'Source Track' has an invalid harvested range (min > max): do not set it.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/049.png",
+    "note": "Large white source timecode 00:00:02:00 is burned in at lower centre on a semi-opaque black box.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Mirror",
+   "match": "AE.ADBE Mirror",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Reflects one side of the image onto the other across a line defined by a centre point and an angle, giving symmetrical or kaleidoscope-like frames.",
+   "look": [
+    "symmetry",
+    "reflection",
+    "kaleidoscope",
+    "surreal",
+    "split mirror"
+   ],
+   "use_for": [
+    "Symmetrical 'two faces' or double-leader satire shots",
+    "Trippy symmetry for music reels and trailer montages",
+    "Mirror wipe transition by animating Reflection Center across the frame",
+    "Fill an empty half of a frame for a stylised background plate"
+   ],
+   "avoid": [
+    "Faces cut by the mirror line look disturbing: keep the line off faces unless that is the joke",
+    "Text or logos mirror backwards",
+    "Default centre [1, 0.5] sits on the right edge, so nothing visible happens"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Reflection Center",
+     "does": "A point on the mirror line, frame fractions",
+     "typical": "[0.5, 0.5] for a centred mirror"
+    },
+    {
+     "name": "Reflection Angle",
+     "does": "Angle of the mirror line in degrees (0 = vertical line, left side reflected to the right)",
+     "typical": "0, 90, 180, 270"
+    }
+   ],
+   "demo_settings": {
+    "Reflection Center": [
+     0.5,
+     0.5
+    ],
+    "Reflection Angle": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Mirror",
+   "pairs_with": [
+    "Transform",
+    "Lumetri Color",
+    "Replicate"
+   ],
+   "scripting": "Points are frame fractions. Stack two Mirror instances (Angle 0 and 90) for a four-way kaleidoscope. A separate 'Mirror' video transition also exists; use that on cuts. Which side is kept for a given angle should be checked by eye.",
+   "recipe": {
+    "Reflection Center": [
+     [
+      0,
+      [
+       1,
+       0.5
+      ]
+     ],
+     [
+      0.5,
+      [
+       0.5,
+       0.5
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/050.png",
+    "note": "The left half is reflected onto the right across the vertical centre line, giving a symmetrical double of the left half of the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Mosaic (Legacy)",
+   "match": "AE.ADBE Mosaic",
+   "category": "Stylize",
+   "status": "obsolete",
+   "summary": "Pixelates the clip into a grid of solid-colour blocks. Superseded in Premiere 2026 by the new Mosaic effect but still renders.",
+   "look": [
+    "pixelated",
+    "censor blocks",
+    "8-bit",
+    "blocky",
+    "digital"
+   ],
+   "use_for": [
+    "Censor a face, number plate or private document (with an effect mask)",
+    "Pixel-resolve reveal on a hook or title",
+    "Retro 8-bit stylisation for meme-style reels"
+   ],
+   "avoid": [
+    "Too many (small) blocks leave a censored face recognisable, especially in motion: keep blocks 30+ px (40-60 Horizontal Blocks on a 1920 frame, since blocks count across the whole clip even under a mask)",
+    "Unmasked full-frame mosaic for long durations tires viewers"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Horizontal Blocks",
+     "does": "Number of blocks across the whole clip (fewer = bigger blocks)",
+     "typical": "40-60 censor at 1920 wide, 10-20 stylised"
+    },
+    {
+     "name": "Vertical Blocks",
+     "does": "Number of blocks down",
+     "typical": "Horizontal Blocks / 1.78 for square blocks at 16:9"
+    },
+    {
+     "name": "Sharp Colors",
+     "does": "Uses the centre pixel colour instead of the block average",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Horizontal Blocks": 48,
+    "Vertical Blocks": 27
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Mosaic (new-generation, AE.Impact_Mosaic_FX); AE: Mosaic",
+   "pairs_with": [
+    "Mask",
+    "Gaussian Blur",
+    "Lumetri Color"
+   ],
+   "scripting": "Prefer the new 'Mosaic' effect when it is available; this legacy one is the fallback and works with simple numbers. For square blocks keep Vertical = round(Horizontal * height / width). Limiting it to a face needs an effect mask, which a script cannot draw (use a saved preset). The resolve recipe ends at 400x225 blocks (still slightly soft): cut or disable the effect right after the last keyframe.",
+   "recipe": {
+    "Horizontal Blocks": [
+     [
+      0,
+      8
+     ],
+     [
+      0.6,
+      400
+     ]
+    ],
+    "Vertical Blocks": [
+     [
+      0,
+      5
+     ],
+     [
+      0.6,
+      225
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/051.png",
+    "note": "The whole frame is pixelated into a coarse grid of solid-colour blocks.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Noise",
+   "match": "AE.ADBE Noise2",
+   "merged_into": "pr_effect_06.json"
+  }
+ ]
+}

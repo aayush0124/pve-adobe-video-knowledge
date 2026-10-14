@@ -1,0 +1,977 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photoshop Bevel And Emboss",
+   "match": "ADBE PSL Bevel Emboss",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Photoshop-5-style bevel/emboss kept so pre-CS3 projects (where PSD layer effects were converted into these 'Photoshop' effects) still open. Applied in AE 2026 it renders only the bevel pass, a highlight edge on the lit side and a shadow edge opposite, traced along the layer's alpha, and drops the layer's own pixels: the opaque test photo turned black with a thin white highlight along the top and left frame edges.",
+   "look": [
+    "bevel highlight only",
+    "thin edge highlight on black",
+    "image replaced",
+    "legacy layer style"
+   ],
+   "use_for": [
+    "Reading or conforming legacy AE projects / old PSD imports that already contain it (expect it to hide the layer's own pixels)",
+    "Identifying what an old raised-logo or lower-third template did before rebuilding it with the Bevel and Emboss layer style or Bevel Alpha"
+   ],
+   "avoid": [
+    "New work: it is hidden from the Effects panel; the Bevel and Emboss layer style or Bevel Alpha keep the layer visible and have more controls",
+    "Any clip on its own: the picture disappears, leaving only a thin bevel highlight along the lit (top and left, at the default Angle 120) frame edges on black"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Depth",
+     "does": "Bevel depth in pixels (1-20, Photoshop 5 'Depth'): higher = stronger, deeper relief",
+     "typical": "3-8"
+    },
+    {
+     "name": "Blur",
+     "does": "Softness / width of the bevel edge in pixels (0-50)",
+     "typical": "3-10"
+    },
+    {
+     "name": "Angle",
+     "does": "Light direction in degrees (Photoshop global-light style)",
+     "typical": "120"
+    },
+    {
+     "name": "Direction",
+     "does": "2-entry popup: 1 Up (raised), 2 Down (sunken, the default)",
+     "typical": "default 2"
+    },
+    {
+     "name": "Style",
+     "does": "2-entry popup selecting the bevel style: 1 Emboss (default), 2 Pillow Emboss (read from After Effects 26.0)",
+     "typical": "default 1"
+    },
+    {
+     "name": "Color",
+     "does": "Probably the highlight colour of the bevel (default white)",
+     "typical": "#FFFFFF"
+    }
+   ],
+   "demo_settings": {
+    "Depth": 20,
+    "Blur": 20
+   },
+   "enum_labels": {
+    "Direction": {
+     "1": "Up",
+     "2": "Down"
+    },
+    "Style": {
+     "1": "Emboss",
+     "2": "Pillow Emboss"
+    },
+    "Show Bevel:": {
+     "1": "Highlight",
+     "2": "Shadow"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Layer > Layer Styles > Bevel and Emboss, or Bevel Alpha (ADBE Bevel Alpha); Premiere 2026: none (Bevel Alpha is not in the harvested Premiere effect list) - bake the bevel in AE/Photoshop or a MOGRT",
+   "pairs_with": [
+    "Photoshop Drop Shadow",
+    "Photoshop Inner Shadow",
+    "Photoshop Outer Glow"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. Direction, Style and 'Show Bevel:' are 2-entry popups (1-based); labels (read from After Effects 26.0): Direction 1 Up, 2 Down; Style 1 Emboss, 2 Pillow Emboss; Show Bevel: 1 Highlight, 2 Shadow. The property name 'Show Bevel:' includes the trailing colon. Angle is an unbounded degree value (default 120). Use the Bevel and Emboss layer style instead; layer styles are added with a menu command on the selected layer (app.executeCommand(app.findMenuCommandId('Bevel and Emboss'))), not with Effects.addProperty (command lookup unverified). Verified on a gallery render: applied by script it outputs only the effect pass and the layer's own pixels are not drawn, so the classic look needs a duplicate of the layer stacked above it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/255.png",
+    "note": "The photo is still not drawn, but the bevel pass now reads clearly: a soft white highlight band about 6-7 px wide (at 640 px) fades in along the top and left (lit, Angle 120) edges of the black frame where the old render had only a 1-2 px hairline, matching the rewritten card.",
+    "rerender": false,
+    "second_opinion": "corrected: avoid line said the highlight runs around the frame edge; 255.png shows it only on the top and left (lit) edges. Verdict, rewrite and demo (Depth 20 / Blur 20, both in range) agreed.",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photoshop Drop Shadow",
+   "match": "ADBE PSL Drop Shadow",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Photoshop-5-style drop shadow kept only for old projects. Applied in AE 2026 it renders only the shadow (the layer's alpha offset by Angle/Distance, blurred and filled with Color) and drops the layer's own pixels: on the opaque test photo the whole frame went black, a full-frame black shadow over the black comp. The Drop Shadow effect or layer style replaces it.",
+   "look": [
+    "shadow pass only",
+    "image replaced by shadow colour",
+    "offset silhouette",
+    "legacy layer style"
+   ],
+   "use_for": [
+    "Reading or conforming legacy projects / old PSD imports that already contain it (expect it to hide the layer's own pixels)",
+    "Reference when rebuilding an old title template's shadow with Drop Shadow (ADBE Drop Shadow)"
+   ],
+   "avoid": [
+    "New work: use Drop Shadow (ADBE Drop Shadow, Perspective), which keeps the layer and adds Opacity and Shadow Only, or the Drop Shadow layer style",
+    "Any clip on its own: the picture disappears and an opaque full-frame layer becomes a solid shadow-coloured rectangle (black by default)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Distance",
+     "does": "Offset of the shadow from the layer, pixels",
+     "typical": "5-20"
+    },
+    {
+     "name": "Blur",
+     "does": "Softness of the shadow, pixels",
+     "typical": "5-20"
+    },
+    {
+     "name": "Angle",
+     "does": "Direction the light comes from, degrees",
+     "typical": "120-135"
+    },
+    {
+     "name": "Color",
+     "does": "Shadow colour",
+     "typical": "#000000"
+    },
+    {
+     "name": "Intensity",
+     "does": "Photoshop-5 'intensity' (%): hardens/spreads the shadow (exact behaviour unverified)",
+     "typical": "0-100"
+    }
+   ],
+   "demo_settings": {
+    "Color": "#FF9933",
+    "Distance": 80,
+    "Blur": 20
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Drop Shadow (ADBE Drop Shadow) or Layer Styles > Drop Shadow; Premiere: Drop Shadow",
+   "pairs_with": [
+    "Photoshop Outer Glow",
+    "Fill",
+    "Bevel Alpha"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. No Opacity property was harvested; the shadow strength probably comes from Intensity and the colour (low confidence). Angle is an unbounded degree value. Use ADBE Drop Shadow for scripted shadows. Verified on a gallery render: applied by script it outputs only the effect pass and the layer's own pixels are not drawn, so the classic look needs a duplicate of the layer stacked above it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/256.png",
+    "note": "The frame is now a flat saffron rectangle (the full-frame layer's shadow filled with Color, soft at its edge) shifted down and right so a black strip about 13 px tall runs along the top and about 22 px wide down the left, where the old render was solid black; the photo is still not drawn, exactly the shadow-only output the card describes.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photoshop Inner Glow",
+   "match": "ADBE PSL Inner Glow",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Photoshop-5-style glow painted inward from the edges (or from the centre) of the layer's alpha, kept only so old projects open. Applied in AE 2026 it renders only the glow and drops the layer's own pixels: the opaque test photo turned black with a faint pale-yellow line around the frame border. The Inner Glow layer style replaces it.",
+   "look": [
+    "glow pass only",
+    "edge glow on black",
+    "image replaced",
+    "legacy layer style"
+   ],
+   "use_for": [
+    "Reading or conforming legacy projects / old PSD imports that already contain it (expect it to hide the layer's own pixels)",
+    "Reference when rebuilding an old glowing title with the Inner Glow layer style"
+   ],
+   "avoid": [
+    "New work: hidden from the Effects panel; the Inner Glow layer style keeps the layer and has blend mode, opacity and size",
+    "Any clip on its own: the picture disappears, leaving only a thin glow around the frame edge on black"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color",
+     "does": "Glow colour (default pale yellow #FAFABE)",
+     "typical": "#FAFABE or a brand colour"
+    },
+    {
+     "name": "Blur",
+     "does": "Width/softness of the glow, pixels",
+     "typical": "5-20"
+    },
+    {
+     "name": "Intensity",
+     "does": "Photoshop-5 'intensity' (%) of the glow (exact behaviour unverified)",
+     "typical": "0-100"
+    },
+    {
+     "name": "Glow Type",
+     "does": "2-entry popup: 1 Center, 2 Edge (the default) (read from After Effects 26.0), where the glow originates",
+     "typical": "default 2"
+    }
+   ],
+   "demo_settings": {
+    "Blur": 50,
+    "Intensity": 100
+   },
+   "enum_labels": {
+    "Glow Type": {
+     "1": "Center",
+     "2": "Edge"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Layer Styles > Inner Glow; Premiere: none direct (Alpha Glow glows outward only)",
+   "pairs_with": [
+    "Photoshop Outer Glow",
+    "Photoshop Bevel And Emboss"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. Glow Type: 1 Center, 2 Edge (read from After Effects 26.0). Verified on a gallery render: applied by script it outputs only the effect pass and the layer's own pixels are not drawn, so the classic look needs a duplicate of the layer stacked above it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/257.png",
+    "note": "A pale-yellow (#FAFABE) glow about 13 px wide now fades inward from all four frame edges over black, where the old render showed only a 1 px dim line; the photo is still not drawn, matching the card's glow-only description.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photoshop Inner Shadow",
+   "match": "ADBE PSL Inner Shadow",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Photoshop-5-style shadow cast inside the layer's alpha edges, kept only for old projects. Applied in AE 2026 it renders only the inner shadow and drops the layer's own pixels: on the opaque test photo the whole frame went black (black shadow on the black comp). The Inner Shadow layer style replaces it.",
+   "look": [
+    "shadow pass only",
+    "inner edge shadow",
+    "image replaced",
+    "legacy layer style"
+   ],
+   "use_for": [
+    "Reading or conforming legacy projects / old PSD imports that already contain it (expect it to hide the layer's own pixels)",
+    "Reference when rebuilding an inset title or button with the Inner Shadow layer style"
+   ],
+   "avoid": [
+    "New work: hidden from the Effects panel; the Inner Shadow layer style keeps the layer and has opacity/choke controls",
+    "Any clip on its own: the picture disappears and the frame goes black, apart from the shadow band when its colour is not black"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Distance",
+     "does": "Offset of the inner shadow, pixels",
+     "typical": "3-10"
+    },
+    {
+     "name": "Blur",
+     "does": "Softness of the inner shadow, pixels",
+     "typical": "3-10"
+    },
+    {
+     "name": "Angle",
+     "does": "Light direction, degrees",
+     "typical": "120"
+    },
+    {
+     "name": "Color",
+     "does": "Shadow colour",
+     "typical": "#000000"
+    },
+    {
+     "name": "Intensity",
+     "does": "Photoshop-5 'intensity' (%) (exact behaviour unverified)",
+     "typical": "0-100"
+    }
+   ],
+   "demo_settings": {
+    "Color": "#FF9933",
+    "Distance": 80,
+    "Blur": 20
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Layer Styles > Inner Shadow; Premiere: none direct",
+   "pairs_with": [
+    "Photoshop Bevel And Emboss",
+    "Photoshop Drop Shadow"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. Angle is an unbounded degree value; Intensity range 0-600 mirrors Photoshop 5 (meaning not verified). Verified on a gallery render: applied by script it outputs only the effect pass and the layer's own pixels are not drawn, so the classic look needs a duplicate of the layer stacked above it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/258.png",
+    "note": "A saffron inner-shadow band now runs along the top (about 15 px) and left (about 25 px) edges of a black frame, where the old render was solid black; the photo is still not drawn, matching the card's shadow-only description.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photoshop Outer Glow",
+   "match": "ADBE PSL Outer Glow",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Photoshop-5-style glow spreading from the layer's alpha in one colour, kept only for old projects. Applied in AE 2026 it renders only the glow and drops the layer's own pixels: an opaque full-frame layer turns into a flat field of the glow colour (pale yellow #FAFABE by default, slightly darker at the frame edge). The Outer Glow layer style or the Glow effect replaces it.",
+   "look": [
+    "glow pass only",
+    "flat colour field",
+    "image replaced",
+    "legacy layer style"
+   ],
+   "use_for": [
+    "Reading or conforming legacy projects / old PSD imports that already contain it (expect it to hide the layer's own pixels)",
+    "Reference when rebuilding a glowing logo or title with the Outer Glow layer style"
+   ],
+   "avoid": [
+    "New work: hidden from the Effects panel; the Outer Glow layer style / Glow keep the layer and give blend mode, size and opacity",
+    "Any clip on its own: an opaque full-frame layer becomes a flat glow-coloured frame and the picture disappears"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color",
+     "does": "Glow colour (default pale yellow #FAFABE)",
+     "typical": "#FAFABE or a brand colour"
+    },
+    {
+     "name": "Blur",
+     "does": "Size/softness of the glow, pixels",
+     "typical": "10-30"
+    },
+    {
+     "name": "Intensity",
+     "does": "Photoshop-5 'intensity' (%) of the glow (exact behaviour unverified)",
+     "typical": "0-150"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Layer Styles > Outer Glow, or Glow (ADBE Glo2) with Glow Based On = 1 (Alpha Channel) and Glow Colors = 2 (A & B Colors); Premiere: Alpha Glow",
+   "pairs_with": [
+    "Photoshop Drop Shadow",
+    "Photoshop Inner Glow"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. No Opacity property was harvested; Intensity (0-600, default 0) mirrors Photoshop 5 and its exact behaviour is unverified. For scripted alpha-edge glows use the Outer Glow layer style or Glow (ADBE Glo2) set to Glow Based On = 1 (Alpha Channel); Glow's default (Color Channels) glows bright pixels, not the alpha edge. Verified on a gallery render: applied by script it outputs only the effect pass and the layer's own pixels are not drawn, so the classic look needs a duplicate of the layer stacked above it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/259.png",
+    "note": "The whole frame is a flat pale yellow field with no trace of the picture, as the corrected summary says.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photoshop Solid Fill",
+   "match": "ADBE PSL Solid Fill",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy translation of Photoshop's Color Overlay layer effect (stored in PSDs as 'Solid Fill'): replaces the layer's visible pixels with one flat colour while keeping its alpha. Kept only for old projects; Fill or the Color Overlay layer style replaces it.",
+   "look": [
+    "flat colour",
+    "silhouette",
+    "colour overlay",
+    "legacy layer style"
+   ],
+   "use_for": [
+    "Reading or conforming legacy projects / old PSD imports that already contain it",
+    "Reference when rebuilding a flat-colour logo or silhouette with Fill (ADBE Fill)"
+   ],
+   "avoid": [
+    "New work: use Fill (Generate) or the Color Overlay layer style",
+    "Full-frame footage: it turns the whole frame into one solid colour"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color",
+     "does": "The fill colour (default blue #0000FF)",
+     "typical": "brand colour, e.g. #FF9933"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Fill (ADBE Fill) or Layer Styles > Color Overlay; Premiere: none direct (Tint with Map Black To = Map White To approximates it)",
+   "pairs_with": [
+    "Photoshop Drop Shadow",
+    "Photoshop Outer Glow"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. Only one property (Color, default blue #0000FF); there is no opacity or blend mode, so it is always a 100% flat fill. Use ADBE Fill (Color + Opacity) for scripted fills.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/260.png",
+    "note": "The whole frame is flat pure blue (default #0000FF) with the photo gone, exactly the one-colour fill over the full-frame layer the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Puppet",
+   "match": "ADBE FreePin3",
+   "category": "_Obsolete",
+   "status": "needs_input",
+   "summary": "Mesh deformation driven by pins: the Puppet Position, Starch, Bend and Advanced Pin tools place pins on a layer and moving/keyframing them bends the image like a puppet. It is applied by the Puppet tools, not the Effects panel, and does nothing until pins exist.",
+   "look": [
+    "mesh warp",
+    "puppet animation",
+    "bend",
+    "wave",
+    "cut-out animation",
+    "organic deformation"
+   ],
+   "use_for": [
+    "Animating cut-out characters in satire explainers (arm waves, head nods, pointing)",
+    "Gentle wave on a flag, banner or map cut-out",
+    "Bringing PNG cut-outs of objects alive in documentary photo animation",
+    "Limb gestures for stickman or vector character dialogue reels"
+   ],
+   "avoid": [
+    "Warping real people's news photos so it could read as genuine footage",
+    "Opaque full-frame footage: the mesh covers the whole rectangle and bends look like a rubber sheet",
+    "Too few pins or large rotations: the mesh tears or smears; add Starch pins to keep faces and text rigid"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Puppet Engine",
+     "does": "Deformation solver: 1 Legacy, 2 Advanced (better rotation and bend pins)",
+     "typical": "2"
+    },
+    {
+     "name": "Mesh Rotation Refinement",
+     "does": "Advanced-engine accuracy for rotated mesh areas; higher = smoother bends, slower",
+     "typical": "10-20"
+    },
+    {
+     "name": "On Transparent",
+     "does": "0/1 checkbox for how the deformed layer is rendered over transparent areas (exact behaviour unverified)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Puppet Engine": {
+     "1": "Legacy",
+     "2": "Advanced"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Premiere: none (no pin-based mesh warp; Bend, Wave Warp or Turbulent Displace are only rough whole-clip substitutes)",
+   "pairs_with": [
+    "Roto Brush & Refine Edge",
+    "Drop Shadow",
+    "Motion Blur (layer switch)",
+    "Wiggle expressions on pin positions"
+   ],
+   "scripting": "The '_Obsolete' category is a harvest artifact: this is the current Puppet effect, created by the Puppet tools and hidden from the Effects panel. Effects.addProperty('ADBE FreePin3') gives a mesh with no pins = no visible change; ExtendScript cannot create pins, so pin placement is a manual step (once a human has placed pins, their positions can be keyframed). 'arap/Auto-traced Shapes' is a group header, not settable. Works best on layers with alpha (PNG cut-outs, shape/text layers). Puppet Engine: 1 Legacy, 2 Advanced (the default) (read from After Effects 26.0); On Transparent behaviour is not verified (low confidence), leave it at 0.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (pins can only be placed by hand with the Puppet tools; with no pins it does nothing), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Refine Matte",
+   "match": "ADBE RefineMatte",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy (CS5-era) matte cleanup that smooths, feathers, chokes and de-chatters an existing alpha matte, with motion blur for moving edges and edge-colour decontamination. Its direct successor is Refine Hard Matte (same control set with renamed edge controls); Refine Soft Matte is the newer edge-detail variant for hair and soft edges.",
+   "look": [
+    "matte cleanup",
+    "soft edges",
+    "keying refinement",
+    "decontaminated edges"
+   ],
+   "use_for": [
+    "Reading legacy projects that already use it on a keyed or rotoscoped layer",
+    "Reference when rebuilding edge cleanup on a green-screen anchor with Refine Hard Matte (or Refine Soft Matte for hair)"
+   ],
+   "avoid": [
+    "New work: use Refine Hard Matte (direct successor) or Refine Soft Matte",
+    "Opaque footage with no alpha: there is no matte to refine, nothing visible changes",
+    "High Reduce Chatter on fast motion: edges lag and ghost"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Smooth",
+     "does": "Smooths jagged matte edges",
+     "typical": "2-10"
+    },
+    {
+     "name": "Feather",
+     "does": "Softens the matte edge",
+     "typical": "10-30"
+    },
+    {
+     "name": "Choke",
+     "does": "Shrinks (positive) or grows (negative) the matte",
+     "typical": "0-20"
+    },
+    {
+     "name": "Reduce Chatter",
+     "does": "Temporal smoothing of flickering edges",
+     "typical": "30-60"
+    },
+    {
+     "name": "Use Motion Blur",
+     "does": "0/1: render motion blur on moving matte edges",
+     "typical": "1"
+    },
+    {
+     "name": "Decontaminate Edge Colors",
+     "does": "0/1: removes background colour spill from edge pixels",
+     "typical": "1"
+    },
+    {
+     "name": "Amount",
+     "does": "Strength of the edge-colour decontamination",
+     "typical": "80-100"
+    },
+    {
+     "name": "Increase Radius",
+     "does": "Widens the zone that gets decontaminated",
+     "typical": "0-10"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "AE replacement: Refine Hard Matte (ADBE RefineRBMatte), or Refine Soft Matte (ADBE RefineMatte2) for hair (Matte category); Premiere: Ultra Key > Matte Cleanup (Choke, Soften)",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Advanced Spill Suppressor",
+    "Roto Brush & Refine Edge"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. All 0/1 properties are checkboxes. 'Amount', 'Extend Where Smoothed' and 'Increase Radius' belong to the Decontamination group; 'Samples Per Frame', 'Shutter Angle' and 'Higher Quality' belong to Motion Blur. 'View Map' is a debug view (keep 0). Temporal effect: slow to render and needs neighbouring frames. Porting to Refine Hard Matte (ADBE RefineRBMatte): the harvested ranges/defaults line up as Smooth (0-1000, def 2) -> Feather (0-1000, def 2), Feather (0-100, def 20) -> Contrast (0-100, def 80, roughly 100 minus the old value), Choke (-100..100) -> Shift Edge (-100..100, sign probably reversed: Choke + shrinks, Shift Edge + grows); Reduce Chatter, motion-blur and decontamination controls carry over by name. This mapping is inferred from the harvest, not documented (medium-low confidence).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/S_refine_keyed_1.04.png",
+    "note": "At its defaults after Keylight on the green-screen plate the matte edge is smoothed and decontaminated (no green rim, the fine strands and semi-transparent screen residue cleaned away): it refines an existing matte, as the card says.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/ae/261.png",
+      "note": "Frame shows no visible change from the untouched render (mean diff 0.2/255, max 6, spread evenly over the frame, i.e. sub-visible rounding, not an edge change) because the opaque photo has no matte edge to refine, as the card warns; no demo value can show it, and the card is already obsolete, so status stays obsolete rather than needs_input.",
+      "second_opinion": "corrected: note called the 0.2/255 diff encode noise, but no-op renders (262, 263, 051...) are bit-identical, so it is a real sub-visible rounding change; verdict and obsolete status agreed."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Roto Brush & Refine Edge",
+   "match": "ADBE Samurai",
+   "category": "_Obsolete",
+   "status": "needs_input",
+   "summary": "AI-assisted rotoscoping: separates a subject (person or object) from its background using brush strokes painted in the Layer panel and propagated through the shot, with Refine Edge for hair and soft edges. Output is the subject on a transparent background.",
+   "look": [
+    "cut-out",
+    "subject isolation",
+    "background removal",
+    "rotoscope",
+    "matte",
+    "hair detail"
+   ],
+   "use_for": [
+    "Cutting out a speaker or politician to put titles behind them (text-behind-subject reels)",
+    "Isolating a subject to grade or blur the background separately in documentaries",
+    "Freeze-frame pop-out cut-outs for trailers and explainer intros",
+    "Removing a busy background for split-screen or composite shots without a green screen"
+   ],
+   "avoid": [
+    "Long shots with fast motion or occlusion: propagation drifts and needs correction strokes per frame",
+    "Fine hair on busy backgrounds without Refine Edge: chattery, crunchy edges",
+    "Expecting a script alone to do it: with no strokes the layer renders unchanged"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Version",
+     "does": "Roto Brush model version: 1 1.0 (Classic), 2 2.0, 3 3.0 (default, newest) (read from After Effects 26.0)",
+     "typical": "3"
+    },
+    {
+     "name": "Quality",
+     "does": "Propagation quality, probably 1 Standard / 2 Best",
+     "typical": "2 for final renders"
+    },
+    {
+     "name": "Feather",
+     "does": "Softens the Roto Brush matte edge",
+     "typical": "5-20"
+    },
+    {
+     "name": "Contrast",
+     "does": "Hardens the matte edge (higher = crisper)",
+     "typical": "50-80"
+    },
+    {
+     "name": "Shift Edge",
+     "does": "Shrinks (negative) or grows (positive) the matte",
+     "typical": "-10 to 0"
+    },
+    {
+     "name": "Reduce Chatter",
+     "does": "Temporal smoothing of the Roto Brush matte edge",
+     "typical": "10-40"
+    },
+    {
+     "name": "Use Motion Blur",
+     "does": "0/1: motion-blur the matte edge on fast movement",
+     "typical": "1 on fast action"
+    },
+    {
+     "name": "Decontaminate Edge Colors",
+     "does": "0/1: removes background colour fringing from edge pixels",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Version": {
+     "1": "1.0 (Classic)",
+     "2": "2.0",
+     "3": "3.0"
+    },
+    "Quality": {
+     "1": "Standard",
+     "2": "Best"
+    },
+    "Edge Detection": {
+     "1": "Favor Predicted Edges",
+     "2": "Balanced",
+     "3": "Favor Current Edges"
+    },
+    "Chatter Reduction": {
+     "1": "Off",
+     "2": "(separator)",
+     "3": "More Detailed",
+     "4": "Smoother (Slower)"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Premiere: no Roto Brush; closest is an Opacity mask with mask tracking (newer builds may add an AI object mask; unverified)",
+   "pairs_with": [
+    "Refine Soft Matte",
+    "Track Matte / Set Matte",
+    "Gaussian Blur (background)",
+    "Lumetri Color",
+    "Drop Shadow"
+   ],
+   "scripting": "The '_Obsolete' category is a harvest artifact: this is the current Roto Brush effect, applied by the Roto Brush tool (Alt+W) in the Layer panel and hidden from the Effects panel. ExtendScript cannot paint segmentation strokes or run propagation, so a scripted ADBE Samurai shows nothing: plan roto as a manual step, or matte the clip with an external tool and import the alpha. Once a human has stroked and frozen it, matte settings can be scripted. Duplicate names: Feather/Contrast/Shift Edge/Reduce Chatter are the Roto Brush Matte group; 'Feather#2', 'Contrast#2', 'Shift Edge#2', 'Reduce Chatter#2' (0-400) and 'Smooth' belong to the Refine Edge Matte group. 0/1 properties are checkboxes. Enable Classic Controls exposes Motion Threshold, Motion Damping and Edge Detection (1 Favor Predicted Edges, 2 Balanced (default), 3 Favor Current Edges (read from After Effects 26.0)) used by the old propagation model. Version: 1 1.0 (Classic), 2 2.0, 3 3.0 (next-gen, default); Quality: 1 Standard (default), 2 Best; Chatter Reduction: 1 Off, 3 More Detailed, 4 Smoother (Slower) (2 is a separator) (read from After Effects 26.0). Leave Version alone on a layer a human has already stroked: switching models probably invalidates the propagated matte (unverified).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs Roto Brush strokes painted and propagated by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Set Matte",
+   "match": "ADBE Set Matte2",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Older version of Set Matte: replaces this layer's alpha with a channel (alpha, luminance, a colour channel and so on) taken from another layer, so any layer can matte another anywhere in the stack. The current Set Matte (ADBE Set Matte3) replaces it.",
+   "look": [
+    "matte",
+    "cut-out",
+    "text-filled-with-video",
+    "luma matte",
+    "reveal"
+   ],
+   "use_for": [
+    "Reading legacy projects that already use it",
+    "Reference when rebuilding a video-inside-text or shape reveal with track mattes or Set Matte (ADBE Set Matte3)"
+   ],
+   "avoid": [
+    "New work: use the layer Track Matte menu or the current Set Matte",
+    "Forgetting it reads the matte layer's source before its masks/effects unless precomposed"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Take Matte From Layer",
+     "does": "The layer whose channel becomes this layer's alpha (layer reference)",
+     "typical": "a text or shape layer index"
+    },
+    {
+     "name": "Use For Matte",
+     "does": "Which channel of that layer is used (popup 1-10)",
+     "typical": "4 Alpha, 5 Luminance"
+    },
+    {
+     "name": "Invert Matte",
+     "does": "0/1: inverts the matte",
+     "typical": "0"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "0/1: stretch the matte layer to fit this layer",
+     "typical": "1"
+    },
+    {
+     "name": "Composite Matte with Original",
+     "does": "0/1: multiply the new matte with this layer's existing alpha",
+     "typical": "1"
+    },
+    {
+     "name": "Premultiply Matte Layer",
+     "does": "0/1: premultiply the matte layer with its background",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Use For Matte": 5
+   },
+   "enum_labels": {
+    "Use For Matte": {
+     "1": "Red Channel",
+     "2": "Green Channel",
+     "3": "Blue Channel",
+     "4": "Alpha Channel",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Off"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Set Matte (ADBE Set Matte3) or the layer Track Matte menu; Premiere: Track Matte Key",
+   "pairs_with": [
+    "Fill",
+    "Gradient Ramp",
+    "Shape layers",
+    "Text layers"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. 'Take Matte From Layer' is a layer-reference property: the spec system cannot set it (set it directly in ExtendScript with the matte layer's index). Left at its default the matte source is this layer itself, so Use For Matte = 4 (Alpha) changes nothing (verified: pixel-identical to the untouched render); the demo uses 5 (Luminance) to matte the layer by its own brightness. If Layer Sizes Differ is the 'Stretch Matte to Fit' checkbox. Use For Matte labels (read from After Effects 26.0) are the same as the current Set Matte's.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/262.png",
+    "note": "Unlike the old render, which matched the untouched frame, the photo now dims in proportion to its own brightness (mean level 158 -> 105): dark clothing and block shadows sink to near-black while the bright wall and stripes stay readable, because the Luminance matte turns dark areas transparent over the black comp.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Three-Way Color Corrector",
+   "match": "ADBE Three-Way Color Corrector",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Premiere-era colour corrector: hue-balance wheels, saturation and levels for shadows, midtones and highlights separately, plus a secondary correction limited by hue/saturation/luma. Lumetri Color replaces it in both apps.",
+   "look": [
+    "colour grade",
+    "three-way wheels",
+    "warm highlights",
+    "cool shadows",
+    "teal-orange",
+    "levels"
+   ],
+   "use_for": [
+    "Reading or conforming old Premiere projects sent to AE that already use it",
+    "Reference when rebuilding an old grade (warm highlights / cool shadows) in Lumetri Color"
+   ],
+   "avoid": [
+    "New work: Lumetri Color is faster, GPU-accelerated and shared between AE and Premiere",
+    "Large Balance Magnitude values on faces: skin goes green or magenta quickly"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Balance Magnitude#2",
+     "does": "Strength of the colour cast pushed into the shadows (Shadow wheel)",
+     "typical": "5-20"
+    },
+    {
+     "name": "Balance Angle#2",
+     "does": "Hue direction of the shadow cast, degrees",
+     "typical": "about 20 for a cool/blue shadow cast (measured: 200 pushed the shadows warm)"
+    },
+    {
+     "name": "Balance Magnitude#4",
+     "does": "Strength of the colour cast pushed into the highlights (Highlight wheel)",
+     "typical": "5-20"
+    },
+    {
+     "name": "Balance Angle#4",
+     "does": "Hue direction of the highlight cast, degrees",
+     "typical": "about 200 for a warm highlight cast (measured: 20 pushed the highlights blue)"
+    },
+    {
+     "name": "Saturation",
+     "does": "Master saturation (100 = unchanged)",
+     "typical": "90-120"
+    },
+    {
+     "name": "Input Black Level",
+     "does": "Master levels: input black point (0-255 scale)",
+     "typical": "0-15"
+    },
+    {
+     "name": "Input White Level",
+     "does": "Master levels: input white point (0-255 scale)",
+     "typical": "235-255"
+    },
+    {
+     "name": "Input Gray Level",
+     "does": "Master levels: midtone gamma",
+     "typical": "0.9-1.15"
+    }
+   ],
+   "demo_settings": {
+    "Balance Magnitude#2": 30,
+    "Balance Angle#2": 200,
+    "Balance Magnitude#4": 30,
+    "Balance Angle#4": 20,
+    "Saturation": 125
+   },
+   "enum_labels": {
+    "Output": {
+     "1": "Composite",
+     "2": "Luma",
+     "3": "Mask",
+     "4": "Tonal Range"
+    },
+    "Layout": {
+     "1": "Horizontal",
+     "2": "Vertical"
+    },
+    "Invert": {
+     "1": "None",
+     "2": "Invert Limit Color",
+     "3": "Invert Mask"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Lumetri Color (ADBE Lumetri) Color Wheels; Premiere: Lumetri Color (Three-Way Color Corrector is not in the harvested Premiere 2026 effect list, so it cannot be applied there either)",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Vibrance"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. Repeated names map to sections in harvest order: no suffix = Master, #2 = Shadow, #3 = Midtone, #4 = Highlight for 'Hue Angle', 'Balance Magnitude', 'Balance Gain', 'Balance Angle' and 'Saturation'; 'Start/End Threshold' and 'Start/End Softness' no suffix = Hue, #2 = Saturation, #3 = Luma limits of the secondary correction. The wheel pucks are Balance Magnitude (0-100 distance) + Balance Angle (unbounded degrees); angle-to-hue orientation measured on one gallery render: about 20 pushes a range towards blue, about 200 towards warm yellow-orange (medium confidence). Levels use a 0-255 scale; Input Gray Level is a gamma (0.1-9.97). Black/Gray/White Balance and the Picker colours are eyedropper samples. 'Edge Thining' is spelled as harvested. 'Invert': 1 None (default), 2 Invert Limit Color, 3 Invert Mask; Output: 1 Composite, 2 Luma, 3 Mask, 4 Tonal Range; Layout: 1 Horizontal, 2 Vertical (read from After Effects 26.0); the unnamed '[?]' property is unknown: leave it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/ae/263.png",
+    "note": "The grade now shows but only faintly (mean change about 4/255 vs the old render, which matched the untouched frame): highlights take a cool blue-lavender cast (blue +16), master Saturation 125 lifts the stripe and foreground-block reds, and the shadow push barely registers because the photo has almost no shadows; Angle 20 read as blue and 200 as warm, the reverse of the intended warm highlights, so a stronger in-range demo would be Balance Magnitude#4 about 70 with Balance Angle#2 20 and Balance Angle#4 200.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Threshold",
+   "match": "ADBE Threshold",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Older version of Threshold: turns the image into pure black and white, with pixels brighter than Level going white and darker ones black. The current Threshold (ADBE Threshold2, Stylize) replaces it.",
+   "look": [
+    "high contrast",
+    "black and white",
+    "stencil",
+    "photocopy",
+    "graphic"
+   ],
+   "use_for": [
+    "Reading legacy projects that already use it",
+    "Reference for stencil / photocopy looks rebuilt with the current Threshold"
+   ],
+   "avoid": [
+    "New work: use Threshold (ADBE Threshold2)",
+    "Faces and detailed news photos: hard 1-bit output loses features and looks harsh"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Level",
+     "does": "Brightness cut-off on a 0-255 scale (default 127.5)",
+     "typical": "100-160"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Threshold (ADBE Threshold2, Stylize; its Level is on a 0-1 scale, default 0.5); Premiere 2026: no Threshold in the harvested effect list - approximate with Black & White followed by Posterize at 2 levels, or a hard Lumetri contrast push",
+   "pairs_with": [
+    "Tint",
+    "Fill",
+    "Fractal Noise",
+    "Gaussian Blur"
+   ],
+   "scripting": "Hidden legacy effect (category _Obsolete): never apply it in new builds. The harvested range (-30000 to 7650000) is a raw internal limit; useful values sit on the 0-255 scale around the 127.5 default. When porting to ADBE Threshold2, divide by 255 (old 127.5 = new 0.5): the two versions use different Level scales.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/264.png",
+    "note": "Pure black-and-white stencil at the default Level 127.5 (wall, white clothing and white stripes white; dark clothing, hair and block shadows black), pixel-identical to the current Threshold at 0.5, as the card says.",
+    "rerender": false
+   }
+  }
+ ]
+}

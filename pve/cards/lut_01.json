@@ -1,0 +1,1582 @@
+{
+ "cards": [
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "fxTechnicolor(3strip)",
+   "match": null,
+   "category": "Lumetri/Film",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Film\\fxTechnicolor(3strip).lut",
+   "status": "unusable",
+   "summary": "Not a usable colour LUT on its own: it is the 3D texture behind SpeedGrade's 'Technicolor 3-strip' film shader (fxTechnicolor(3strip).irtp in the same folder). Read as a plain LUT it brightens about 1.25x and turns any pixel above ~77% in any channel black.",
+   "look": [
+    "broken",
+    "shader texture",
+    "technicolor (intended)"
+   ],
+   "use_for": [
+    "Do not apply; for a 3-strip Technicolor feel build it manually (saturated primaries, warm reds, deep greens) with Lumetri HSL / saturation",
+    "Reference only: Premiere ships the SpeedGrade film shaders without exposing them"
+   ],
+   "avoid": [
+    "Applying it via Look > Browse: highlights go black",
+    "Treating the .lut file as a standard Technicolor emulation LUT"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": null,
+   "scripting": "Measured: the file is .cube-format text (TITLE 'Technicolor 3strip LUT', LUT_3D_SIZE 32) holding a 25-point colour cube padded to 32 (indices 25-31 are all zero), consumed by the .irtp shader with its own coordinate scaling; Premiere does not expose .irtp film shaders, and the .lut extension may not even be accepted by Browse. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Blue Cold",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Cold.look",
+   "status": "current",
+   "summary": "Cold SpeedLooks grade: cyan-blue shadows, slightly green-cyan mids, colour reduced (about 0.75x overall, skin about 0.85x and shifted toward yellow) and a strong brightening, because it is built for log input.",
+   "look": [
+    "cold",
+    "cyan",
+    "desaturated",
+    "bleak",
+    "icy"
+   ],
+   "use_for": [
+    "Winter, night-shift or disaster B-roll in documentaries",
+    "Somber explainer segments (scams, tragedies)",
+    "Thriller-trailer establishing shots"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Interviews and anchors: kills skin tones"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Blue Cold (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL BLUE COLD' (Lumetri/LUTs/Creative/SL BLUE COLD.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'BLUE COLD - SL - 3527.cube', which is not installed under that name; the installed data is 'BLUE COLD - SL - 3527.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.83/0.87/0.85, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.61/0.68/0.65), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Blue Day4Nite",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Day4Nite.look",
+   "status": "current",
+   "summary": "Day-for-night: neutrals go deep blue and one to two stops darker; strong colours keep their saturation but skin collapses to grey-mauve (about 0.2x through the Rec.709 SL patch). Applied straight to Rec.709 it is less dark and skin stays orange.",
+   "look": [
+    "day for night",
+    "moonlight",
+    "blue night",
+    "dark",
+    "cool"
+   ],
+   "use_for": [
+    "Fake night scenes from daylight B-roll in reenactments",
+    "Suspense beats in crime / investigation documentaries",
+    "Night montage in a trailer"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Visible sky, sun or hard daylight shadows betray it",
+    "Faces: skin loses nearly all colour (grey-mauve) through the patch, or turns orange when applied raw"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Blue Day4Nite (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL BLUE DAY4NITE' (Lumetri/LUTs/Creative/SL BLUE DAY4NITE.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'BLUE DAY4NITE - SL - 3527.cube', which is not installed under that name; the installed data is 'BLUE DAY4NITE - SL - 3527.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.39/0.47/0.69, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.24/0.28/0.43), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Blue Ice",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Ice.look",
+   "status": "current",
+   "summary": "Icy cyan-blue mids and shadows with slightly lifted blacks; blues pushed toward cyan, greens toward cyan-green, skin desaturated to about 0.75x.",
+   "look": [
+    "icy",
+    "cyan",
+    "cool",
+    "clean",
+    "tech"
+   ],
+   "use_for": [
+    "Cool, modern B-roll for AI / tech explainers",
+    "Cold-weather or mountain footage",
+    "Sci-fi or cyber-crime trailer moods"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Warm human stories: makes people look ill"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Blue Ice (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL BLUE ICE' (Lumetri/LUTs/Creative/SL BLUE ICE.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'BLUE ICE - SL - 3527.cube', which is not installed under that name; the installed data is 'BLUE ICE - SL - 3527.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.71/0.78/0.79, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.52/0.59/0.60), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Blue Intense",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Intense.look",
+   "status": "current",
+   "summary": "Like Blue Ice but with deeper, crushed shadows and a slightly stronger cyan cast; skin drops to about 0.65x saturation.",
+   "look": [
+    "intense cyan",
+    "cool",
+    "contrasty",
+    "moody"
+   ],
+   "use_for": [
+    "Hard-hitting cyber / surveillance explainer B-roll",
+    "Action-trailer night or rain shots",
+    "Cold title backgrounds"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Faces in close-up"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Blue Intense (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL BLUE INTENSE' (Lumetri/LUTs/Creative/SL BLUE INTENSE.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'BLUE INTENSE - SL - 3527.cube', which is not installed under that name; the installed data is 'BLUE INTENSE - SL - 3527.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.68/0.77/0.79, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.44/0.54/0.55), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Blue Moon",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Moon.look",
+   "status": "current",
+   "summary": "Softer cool grade: gentle cyan mids, neutral shadows with slightly lifted warm blacks, overall saturation about kept, skin mildly desaturated (about 0.8x).",
+   "look": [
+    "soft blue",
+    "moonlit",
+    "gentle cool",
+    "calm"
+   ],
+   "use_for": [
+    "Calm night / dusk B-roll",
+    "Reflective documentary interludes",
+    "Lo-fi reel backgrounds"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Blue Moon (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL BLUE MOON' (Lumetri/LUTs/Creative/SL BLUE MOON.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'BLUE MOON - SL - 3527.cube', which is not installed under that name; the installed data is 'BLUE MOON - SL - 3527.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.68/0.74/0.75, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.49/0.53/0.52), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Blue Steel",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Steel.look",
+   "status": "current",
+   "summary": "Steely look: near-neutral but very bright mids, green-cyan shadows and reduced colour (about 0.75x overall, skin about 0.85x).",
+   "look": [
+    "steel",
+    "metallic",
+    "bleached",
+    "desaturated",
+    "gritty"
+   ],
+   "use_for": [
+    "Defence, military or industrial B-roll",
+    "Gritty thriller / war trailer beats",
+    "Cold corporate or factory footage"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Anything that needs natural skin"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Blue Steel (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL BLUE STEEL' (Lumetri/LUTs/Creative/SL BLUE STEEL.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'BLUE STEEL - SL - 3527.cube', which is not installed under that name; the installed data is 'BLUE STEEL - SL - 3527.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.86/0.86/0.87, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.65/0.67/0.67), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Clean Punch HDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch HDR.look",
+   "status": "current",
+   "summary": "Clean, neutral punch with more saturation (about 1.15x overall, skin about 1.25x); the gentlest-brightening Clean Punch variant, with slightly lifted warm blacks and compressed highlights for high-dynamic-range scenes.",
+   "look": [
+    "clean",
+    "punchy",
+    "vivid",
+    "neutral",
+    "contrast"
+   ],
+   "use_for": [
+    "Vibrant social reels from flat footage",
+    "Travel / rally / event B-roll",
+    "AI-tool demo footage shot in a flat profile"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Oversaturating already-vivid scenes (flags, saffron, festivals)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Clean Punch HDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. There is no 'SL' copy of this look in the Look dropdown. The .look is a default Primary layer plus one LUT layer that references 'CLEAN PUNCH HDR - SL - 3563.cube', which is not installed under that name; the installed data is 'CLEAN PUNCH HDR - SL - 3563.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.67/0.71/0.68, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.52/0.53/0.48), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Clean Punch LDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch LDR.look",
+   "status": "current",
+   "summary": "Clean Punch variant with the strongest brightening (mid grey near 0.9 applied raw) and richer, warmer skin (about 1.35x saturation); meant for low-dynamic-range (flat, low-contrast) scenes.",
+   "look": [
+    "clean",
+    "bright",
+    "punchy",
+    "high key"
+   ],
+   "use_for": [
+    "Bright, airy reel looks from dark flat footage",
+    "Lifting underexposed log interviews"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Already-bright footage blows out"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Clean Punch LDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. There is no 'SL' copy of this look in the Look dropdown. The .look is a default Primary layer plus one LUT layer that references 'CLEAN PUNCH LDR - SL - 3563.cube', which is not installed under that name; the installed data is 'CLEAN PUNCH LDR - SL - 3563.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.89/0.88/0.87, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.73/0.70/0.64), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Clean Punch NDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch NDR.look",
+   "status": "current",
+   "summary": "Middle Clean Punch variant: neutral balance, punchy contrast, saturation up about 1.2x (skin about 1.3x).",
+   "look": [
+    "clean",
+    "punchy",
+    "neutral",
+    "vivid"
+   ],
+   "use_for": [
+    "General-purpose punchy grade for flat B-roll",
+    "Social reels needing clean colour"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Clean Punch NDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. There is no 'SL' copy of this look in the Look dropdown. The .look is a default Primary layer plus one LUT layer that references 'CLEAN PUNCH NDR - SL - 3563.cube', which is not installed under that name; the installed data is 'CLEAN PUNCH NDR - SL - 3563.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.77/0.79/0.77, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.60/0.59/0.54), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Heat",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Heat.look",
+   "status": "current",
+   "summary": "Hot amber grade: strong warm-orange mids, crushed blacks, greens pushed yellow and darker, blue skies muted to pale lavender-grey; skin much warmer and more saturated (about 1.6x).",
+   "look": [
+    "hot",
+    "amber",
+    "desert",
+    "warm",
+    "sun-baked"
+   ],
+   "use_for": [
+    "Heat-wave or drought news B-roll",
+    "Rural summer / desert footage",
+    "War-zone or desert trailer shots"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Already-warm indoor tungsten footage goes orange"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Heat (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL GOLD HEAT' (Lumetri/LUTs/Creative/SL GOLD HEAT.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'GOLD HEAT - SL - 3528.cube', which is not installed under that name; the installed data is 'GOLD HEAT - SL - 3528.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.89/0.82/0.72, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.71/0.60/0.49), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Orange",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Orange.look",
+   "status": "current",
+   "summary": "Warm orange-and-blue separation: warm mids, reds and skin pushed to orange (skin about 1.4x saturation) while blues and skies stay clean blue.",
+   "look": [
+    "orange-teal",
+    "blockbuster",
+    "warm accents",
+    "stylised"
+   ],
+   "use_for": [
+    "Action-trailer grades",
+    "City / sunset B-roll",
+    "Hype reels"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Talking heads: skin turns orange; lower Intensity#2 on faces"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Orange (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL GOLD ORANGE' (Lumetri/LUTs/Creative/SL GOLD ORANGE.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'GOLD ORANGE - SL - 3528.cube', which is not installed under that name; the installed data is 'GOLD ORANGE - SL - 3528.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.91/0.91/0.88, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.72/0.66/0.61), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Rush HDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Rush HDR.look",
+   "status": "current",
+   "summary": "Faded golden look: overall saturation reduced (about 0.8x), reds pushed orange, greens teal, skin turned golden-yellow, very bright mids; the HDR variant has gentler contrast.",
+   "look": [
+    "bleached",
+    "desaturated",
+    "gritty",
+    "faded gold"
+   ],
+   "use_for": [
+    "Gritty historical recreations",
+    "War / conflict documentary B-roll",
+    "Hard-hitting political trailer montage"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Colour-critical shots (party colours, logos): reds shift orange, greens teal and saturation drops"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Rush HDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL GOLD RUSH HDR' (Lumetri/LUTs/Creative/SL GOLD RUSH HDR.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'GOLD RUSH HDR - SL - 3528.cube', which is not installed under that name; the installed data is 'GOLD RUSH HDR - SL - 3528.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.91/0.93/0.90, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.72/0.72/0.67), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Rush LDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Rush LDR.look",
+   "status": "current",
+   "summary": "Same faded golden look as Gold Rush HDR (about 0.85x overall saturation) with darker shadows and more contrast; skin warmer and a little richer (about 1.2x).",
+   "look": [
+    "bleached",
+    "desaturated",
+    "gritty",
+    "faded gold"
+   ],
+   "use_for": [
+    "Gritty recreations from low-dynamic-range sources",
+    "Conflict / crisis B-roll"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Rush LDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL GOLD RUSH LDR' (Lumetri/LUTs/Creative/SL GOLD RUSH LDR.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'GOLD RUSH LDR - SL - 3528.cube', which is not installed under that name; the installed data is 'GOLD RUSH LDR - SL - 3528.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.89/0.91/0.87, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.68/0.67/0.60), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Sport",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Sport.look",
+   "status": "current",
+   "summary": "Contrasty sports grade: neutral balance, crushed blacks, punchy saturated primaries (strongest when applied raw) and slightly warmer skin.",
+   "look": [
+    "sport",
+    "punchy",
+    "contrasty",
+    "saturated",
+    "energetic"
+   ],
+   "use_for": [
+    "Sports or rally footage",
+    "High-energy reels",
+    "Crowd and stadium shots"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Crushed blacks lose detail in dark clothing / hair"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Sport (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. There is no 'SL' copy of this look in the Look dropdown. The .look is a default Primary layer plus one LUT layer that references 'GOLD SPORT - SL - 3561.cube', which is not installed under that name; the installed data is 'GOLD SPORT - SL - 3561.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.70/0.72/0.71, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.52/0.51/0.49), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Tobacco",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Tobacco.look",
+   "status": "current",
+   "summary": "Warm brown-amber 'tobacco' grade: brown mids, warm slightly lifted blacks, purple-grey skies and richer skin (about 1.4x saturation).",
+   "look": [
+    "tobacco",
+    "brown",
+    "amber",
+    "nostalgic",
+    "warm"
+   ],
+   "use_for": [
+    "Nostalgic history segments",
+    "1970s / old-India recreations",
+    "Warm, intimate interview mood (on log)"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Tobacco (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL GOLD TOBACCO' (Lumetri/LUTs/Creative/SL GOLD TOBACCO.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'GOLD TOBACCO - SL - 3528.cube', which is not installed under that name; the installed data is 'GOLD TOBACCO - SL - 3528.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.75/0.69/0.64, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.60/0.50/0.45), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Gold Western",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Western.look",
+   "status": "current",
+   "summary": "Dusty yellow-orange western warmth: strong warm mids, warm lifted blacks, greens pushed yellow-olive, blues and skies muted to grey-lavender; skin much warmer (about 1.5x).",
+   "look": [
+    "western",
+    "dusty",
+    "warm",
+    "sepia-ish",
+    "period"
+   ],
+   "use_for": [
+    "Rural / heritage stories",
+    "Dusty village or desert footage",
+    "Period-drama trailer beats"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Blue skies turn muddy"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Gold Western (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL GOLD WESTERN' (Lumetri/LUTs/Creative/SL GOLD WESTERN.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'GOLD WESTERN - SL - 3528.itx', which is installed in Lumetri/LUTs/Legacy. Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.76/0.68/0.59, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.60/0.49/0.41), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Neutral Start",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Neutral Start.look",
+   "status": "current",
+   "summary": "Near-neutral SpeedLooks base: through the Rec.709 SL patch it is almost transparent (mid grey 0.45 to 0.43, saturation about 1.1x); on log it is a clean conversion with modest brightening and slightly cool shadows.",
+   "look": [
+    "neutral",
+    "base grade",
+    "clean",
+    "natural"
+   ],
+   "use_for": [
+    "Base grade under manual Lumetri tweaks",
+    "Flat-profile interviews needing a natural start",
+    "Consistent baseline across multi-camera documentary footage"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Neutral Start (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NEUTRAL START' (Lumetri/LUTs/Creative/SL NEUTRAL START.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NEUTRAL START - SL - 3560.cube', which is not installed under that name; the installed data is 'NEUTRAL START - SL - 3560.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.59/0.61/0.59, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.45/0.43/0.42), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir 1965",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir 1965.look",
+   "status": "current",
+   "summary": "Bright high-key black-and-white: greens render light, reds mid-grey, blues dark (like a yellow-green filter).",
+   "look": [
+    "black and white",
+    "high key",
+    "classic",
+    "1960s",
+    "monochrome"
+   ],
+   "use_for": [
+    "Flashback / archival-style recreations",
+    "Historic political moments (1960s-70s)",
+    "Memorial or tribute segments"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir 1965 (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR 1965' (Lumetri/LUTs/Creative/SL NOIR 1965.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR 1965 - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR 1965 - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.80, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.57), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir HDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir HDR.look",
+   "status": "current",
+   "summary": "Soft, low-contrast black-and-white: shadows and mids lifted (a 0.2 dark grey renders about 0.4) while black itself stays near 0 (about 0.09 through the Rec.709 SL patch); greens and reds render light, blues darker.",
+   "look": [
+    "matte b&w",
+    "faded",
+    "soft",
+    "monochrome"
+   ],
+   "use_for": [
+    "Dream / memory sequences",
+    "Soft B&W documentary interviews",
+    "Quote cards over B&W B-roll"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir HDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR HDR' (Lumetri/LUTs/Creative/SL NOIR HDR.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR HDR - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR HDR - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.82, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.69), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir LDR",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir LDR.look",
+   "status": "current",
+   "summary": "Hard high-contrast black-and-white: crushed blacks, very bright mids, blues render dark.",
+   "look": [
+    "high contrast b&w",
+    "stark",
+    "graphic",
+    "monochrome"
+   ],
+   "use_for": [
+    "Dramatic trailer beats",
+    "Stark quote / statement moments",
+    "Graphic B&W reel sections"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Midtone detail burns out"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir LDR (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR LDR' (Lumetri/LUTs/Creative/SL NOIR LDR.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR LDR - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR LDR - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.90, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.68), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir Nouvelle Red",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Nouvelle Red.look",
+   "status": "current",
+   "summary": "Stronger red-filter black-and-white than Noir Nouvelle: reds near 0.8, greens and blues pushed to about 0.3.",
+   "look": [
+    "red filter",
+    "b&w",
+    "dramatic",
+    "dark skies"
+   ],
+   "use_for": [
+    "Dramatic B&W portraits",
+    "Moody B&W landscapes"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Green foliage goes very dark"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir Nouvelle Red (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR NOUVELLE RED' (Lumetri/LUTs/Creative/SL NOIR NOUVELLE RED.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR NOUVELLE RED - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR NOUVELLE RED - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.67, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.52), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir Nouvelle",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Nouvelle.look",
+   "status": "current",
+   "summary": "Black-and-white with a red-filter response: reds bright, greens and blues dark, so skies darken and skin glows.",
+   "look": [
+    "nouvelle vague",
+    "red filter",
+    "b&w",
+    "dramatic skies"
+   ],
+   "use_for": [
+    "Arty B&W interviews",
+    "Landscapes with dramatic skies",
+    "Art-house trailer moods"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir Nouvelle (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR NOUVELLE' (Lumetri/LUTs/Creative/SL NOIR NOUVELLE.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR NOUVELLE - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR NOUVELLE - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.67, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.51), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir Red Wave",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Red Wave.look",
+   "status": "current",
+   "summary": "Extreme red-filter black-and-white: reds go almost white, greens and blues fall to about 0.26, an infrared-like look.",
+   "look": [
+    "infrared-like",
+    "surreal",
+    "b&w",
+    "stylised"
+   ],
+   "use_for": [
+    "Surreal / stylised music-reel moments",
+    "Making red banners or flags glow in a B&W frame"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Skin and red clothing burn to paper white"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir Red Wave (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR RED WAVE' (Lumetri/LUTs/Creative/SL NOIR RED WAVE.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR RED WAVE - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR RED WAVE - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.59, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.44), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Noir Tri-X",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Tri-X.look",
+   "status": "current",
+   "summary": "Black-and-white in the spirit of Kodak Tri-X photojournalism: moderate contrast and a clear red-filter response (reds light, greens and blues dark; close to Noir Nouvelle but a little darker). No grain is added.",
+   "look": [
+    "tri-x",
+    "photojournalism",
+    "b&w",
+    "documentary"
+   ],
+   "use_for": [
+    "Photojournalistic documentary sequences",
+    "Protest / press footage",
+    "Tribute segments"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)",
+    "Expecting film grain: add it separately"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Noir Tri-X (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. (3) The Look dropdown's 'SL NOIR TRI-X' (Lumetri/LUTs/Creative/SL NOIR TRI-X.itx) is very likely the same SpeedLooks grade (same name and 32-point size; that copy is encrypted, so it was not compared). The .look is a default Primary layer plus one LUT layer that references 'NOIR TRI-X - SL - 3522.cube', which is not installed under that name; the installed data is 'NOIR TRI-X - SL - 3522.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.60, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.42), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Retro Brown",
+   "match": null,
+   "category": "Looks/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Retro Brown.look",
+   "status": "current",
+   "summary": "Brown vintage grade: warm brown mids, red-brown shadows with slightly lifted blacks, blues almost removed and greens darkened; overall saturation reduced (about 0.8x) while skin stays rich.",
+   "look": [
+    "vintage",
+    "brown",
+    "faded",
+    "sepia-ish",
+    "70s"
+   ],
+   "use_for": [
+    "Old-photo / archival flashbacks",
+    "History explainer segments",
+    "Nostalgic reels"
+   ],
+   "avoid": [
+    "Rec.709 / phone / news footage at full strength: SpeedLooks expect log input and over-brighten normal video (add the REC.709 SL patch as Input LUT, or lower Intensity#2)"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "SpeedLooks log (LogC-like) input: camera log via its SL patch, or Rec.709 after the 'REC.709 - NORMAL - SL - PROFILE.itx' patch as Input LUT",
+   "scripting": "Legacy SpeedLooks look (.look in Lumetri/Looks/Legacy; not listed in the Look dropdown). Routes: (1) Effects > Lumetri Presets > SpeedLooks > Universal > 'SL Retro Brown (Universal)' (the camera bins, e.g. '(Canon 5D)', also set that camera's SL patch as Input LUT); (2) Lumetri Color > Creative > Look > Browse to this .look. There is no 'SL' copy of this look in the Look dropdown. The .look is a default Primary layer plus one LUT layer that references 'RETRO BROWN - SL - 3562.cube', which is not installed under that name; the installed data is 'RETRO BROWN - SL - 3562.itx' in Lumetri/LUTs/Legacy, so verify on a rendered frame that the look changes the image (if not, Browse the .itx). Measured from the LUT data: built for SpeedLooks log input; applied directly, mid grey 0.45 maps to 0.76/0.69/0.67, so normal video blows out. For Rec.709 / phone footage first set Basic Correction > Input LUT > Browse 'Lumetri/LUTs/Legacy/REC.709 - NORMAL - SL - PROFILE.itx' (the SpeedLooks Rec.709 patch, applied before the look; through it this look maps mid grey 0.45 to 0.61/0.50/0.44), or lower the look strength 'Intensity#2' (0-200, default 100) to 30-60. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Fuji ETERNA 250D Fuji 3510 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji ETERNA 250D Fuji 3510 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Fuji Eterna 250D daylight negative printed on Fuji 3510). Measured on Rec.709 input: crushed blacks, neutral mids, warm highlights, skin saturation up about 25%, greens deepened toward blue-green.",
+   "look": [
+    "film emulation",
+    "contrasty",
+    "warm highlights",
+    "deep greens",
+    "cinematic"
+   ],
+   "use_for": [
+    "Cinematic B-roll in documentaries",
+    "Trailer grades with dense blacks",
+    "Outdoor daylight footage needing a film feel"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. A ready preset also exists: Effects > Lumetri Presets > Filmstocks > 'Fuji Eterna 250D Fuji 3510 (by Adobe)'. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Fuji ETERNA 250D Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji ETERNA 250D Kodak 2395 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Fuji Eterna 250D on Kodak 2395). Measured: lifted warm blacks (black about 0.13-0.15), neutral mids, saturation about unchanged: a matte, low-contrast print.",
+   "look": [
+    "matte",
+    "faded blacks",
+    "soft contrast",
+    "film print"
+   ],
+   "use_for": [
+    "Soft, filmic interview grade",
+    "Nostalgic or reflective documentary segments",
+    "Matte social-reel aesthetic"
+   ],
+   "avoid": [
+    "Already-flat or hazy footage looks washed out",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. A ready preset also exists: Effects > Lumetri Presets > Filmstocks > 'Fuji Eterna 250d Kodak 2395 (by Adobe)'. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Fuji F125 Kodak 2393 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji F125 Kodak 2393 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Fuji F-125 negative on Kodak 2393). Measured: crushed blacks, slightly darker warm mids, yellow-warm highlights, dark rich greens: a dense, contrasty print.",
+   "look": [
+    "contrasty",
+    "rich",
+    "warm",
+    "dense",
+    "film emulation"
+   ],
+   "use_for": [
+    "Dramatic trailer shots",
+    "Rich, moody documentary B-roll",
+    "Night city footage"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. A ready preset also exists: Effects > Lumetri Presets > Filmstocks > 'Fuji F125 Kodak 2393 (by Adobe)'. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Fuji F125 Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji F125 Kodak 2395 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Fuji F-125 negative on Kodak 2395). Measured: lifted warm blacks, neutral mids, low contrast: a matte filmic print.",
+   "look": [
+    "matte",
+    "faded",
+    "low contrast",
+    "film print"
+   ],
+   "use_for": [
+    "Matte interview look",
+    "Soft lifestyle / human-interest reels",
+    "Retro-leaning explainer B-roll"
+   ],
+   "avoid": [
+    "Hazy or low-contrast footage gets muddy",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. A ready preset also exists: Effects > Lumetri Presets > Filmstocks > 'Fuji F125 Kodak 2395 (by Adobe)'. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Fuji REALA 500D Kodak 2393 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji REALA 500D Kodak 2393 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Fuji Reala 500D on Kodak 2393). Measured: crushed blacks, warm highlights, deeper blues and greens, mild saturation boost: natural but punchy.",
+   "look": [
+    "natural",
+    "punchy",
+    "film emulation",
+    "warm highlights"
+   ],
+   "use_for": [
+    "Natural-looking cinematic grade for interviews",
+    "People-centred documentary footage",
+    "General trailer base look"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. A ready preset also exists: Effects > Lumetri Presets > Filmstocks > 'Fuji Reala 500D Kodak 2393 (by Adobe)'. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Kodak 5205 Fuji 3510 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Kodak 5205 Fuji 3510 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Kodak Vision3 250D on Fuji 3510). Measured: deep blacks with cool-cyan shadows, neutral mids, warm highlights; reds shift orange, greens teal, blues violet: a gentle teal-orange split.",
+   "look": [
+    "teal-orange",
+    "cool shadows",
+    "film emulation",
+    "cinematic"
+   ],
+   "use_for": [
+    "Cinematic B-roll and establishing shots",
+    "Explainer hero shots",
+    "Travel and city reels"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Kodak 5218 Kodak 2383 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Kodak 5218 Kodak 2383 (by Adobe).cube",
+   "status": "current",
+   "summary": "Classic film-print emulation (Kodak Vision2 500T on Kodak 2383). Measured: slightly warm blacks, faintly cyan mids and lowered saturation (skin about 0.8x): a restrained Hollywood print look.",
+   "look": [
+    "classic film",
+    "restrained",
+    "cyan mids",
+    "cinematic",
+    "print"
+   ],
+   "use_for": [
+    "Cinematic documentary grade",
+    "Trailer base look",
+    "Serious political explainer interviews"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Kodak 5218 Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Kodak 5218 Kodak 2395 (by Adobe).cube",
+   "status": "current",
+   "summary": "Film-print emulation (Kodak Vision2 500T on Kodak 2395). Measured: lifted blacks, cool highlights and reduced saturation: a matte, cool faded print.",
+   "look": [
+    "matte",
+    "cool",
+    "faded",
+    "desaturated",
+    "film print"
+   ],
+   "use_for": [
+    "Cool, reflective documentary segments",
+    "Moody matte reels",
+    "Night or rain B-roll"
+   ],
+   "avoid": [
+    "Low-contrast or hazy footage gets muddy",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Monochrome Fuji ETERNA 250D Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Monochrome Fuji ETERNA 250D Kodak 2395 (by Adobe).look",
+   "status": "current",
+   "summary": "Black-and-white version of the Fuji Eterna 250D / Kodak 2395 print emulation (a .look wrapping that colour LUT with Primary layers). Measured: matte B&W with lifted blacks (about 0.13), mid grey 0.45 to 0.51; greens and reds render lighter than blues.",
+   "look": [
+    "b&w",
+    "matte",
+    "film",
+    "monochrome",
+    "soft"
+   ],
+   "use_for": [
+    "Soft B&W memory / flashback sequences",
+    "Tribute segments",
+    "Archival-feel interviews"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. This is a .look (layer stack: Primary, LUT 'Fuji ETERNA 250D Kodak 2395 (by Adobe).cube', Primary); B&W verified: the last Primary layer sets PostSat 0 and the .look's embedded 8-point preview LUT is neutral grey (black about 0.13, mid grey 0.45 to 0.51). Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Monochrome Kodak 5205 Fuji 3510 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Monochrome Kodak 5205 Fuji 3510 (by Adobe).look",
+   "status": "current",
+   "summary": "Black-and-white version of the Kodak 5205 / Fuji 3510 print emulation (a .look wrapping that colour LUT with Primary layers). Measured: normal-contrast B&W with deep blacks, mid grey 0.45 to 0.50; reds render lighter and greens darker than a plain desaturation would make them.",
+   "look": [
+    "b&w",
+    "film",
+    "monochrome",
+    "classic",
+    "deep blacks"
+   ],
+   "use_for": [
+    "Classic B&W documentary sequences",
+    "Historic recreations",
+    "Dramatic quote moments"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. This is a .look (layer stack: Primary, LUT 'Kodak 5205 Fuji 3510 (by Adobe).cube', Primary); B&W verified: the last Primary layer sets PostSat 0 and the .look's embedded 8-point preview LUT is neutral grey (black about 0.01, mid grey 0.45 to 0.50). Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Monochrome Kodak 5218 Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "LUTs/Creative",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Monochrome Kodak 5218 Kodak 2395 (by Adobe).look",
+   "status": "current",
+   "summary": "Black-and-white version of the Kodak 5218 / Kodak 2395 print emulation (a .look wrapping that colour LUT with Primary layers). Measured: matte B&W with lifted blacks (about 0.12), mid grey 0.45 to 0.52; greens render light, reds and blues darker.",
+   "look": [
+    "b&w",
+    "matte",
+    "film",
+    "monochrome"
+   ],
+   "use_for": [
+    "Matte B&W interviews",
+    "Reflective documentary interludes",
+    "Moody reel sections"
+   ],
+   "avoid": [
+    "Full intensity on contrasty phone footage: shadows crush and skin shifts; dial intensity down",
+    "Applying to log footage without a technical Input LUT first"
+   ],
+   "confidence": "medium",
+   "lut_kind": "creative",
+   "input_space": "Rec.709 display-referred (normal camera / phone footage)",
+   "scripting": "Creative look: Lumetri Color > Creative > Look (file is in Lumetri/LUTs/Creative, so it is listed in the Look dropdown by name). Expects normal Rec.709 footage; on phone/news clips set the look strength 'Intensity#2' (0-200, default 100) to about 50-70. This is a .look (layer stack: Primary, LUT 'Kodak 5218 Kodak 2395 (by Adobe).cube', Primary); B&W verified: the last Primary layer sets PostSat 0 and the .look's embedded 8-point preview LUT is neutral grey (black about 0.12, mid grey 0.45 to 0.52). Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "FullToSMPTE10",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\FullToSMPTE10.cube",
+   "status": "current",
+   "summary": "Range conversion for 10-bit sources: squeezes full-range values into legal/SMPTE range (0 becomes the 16/255-equivalent black, 1.0 the 235/255 white), so the picture gets flatter with greyer blacks; the extended domain keeps super-blacks and super-whites.",
+   "look": [
+    "legal range",
+    "lifted blacks",
+    "lower contrast",
+    "range fix"
+   ],
+   "use_for": [
+    "Fix 10-bit ProRes / HEVC clips that look crushed / over-contrasty because full-range data is being read as legal range",
+    "Match a full-range screen recording / OBS capture that looks too contrasty to the legal-range camera footage around it"
+   ],
+   "avoid": [
+    "On correctly decoded footage it only washes the image out",
+    "Pick the variant matching the source bit depth (8 / 10 / 12 are nearly identical in float)",
+    "As a broadcast-safe / legaliser pass: Premiere already maps 0-1 to 16-235 on export, so this double-squeezes to grey blacks; use Video Limiter for broadcast limits"
+   ],
+   "confidence": "high",
+   "lut_kind": "legacy",
+   "input_space": "full-range video (0-255 / 0-1023 / 0-4095 code values)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Also a ready preset: Effects > Lumetri Presets > Technical > 'Full to Legal Range, 10-bit'. Script-only approximation (clips super-blacks/whites, unlike this extended-domain LUT): {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Output Level\": 16, \"(RGB) White Output Level\": 235}}. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "FullToSMPTE12",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\FullToSMPTE12.cube",
+   "status": "current",
+   "summary": "Range conversion for 12-bit sources: squeezes full-range values into legal/SMPTE range (0 becomes the 16/255-equivalent black, 1.0 the 235/255 white), so the picture gets flatter with greyer blacks; the extended domain keeps super-blacks and super-whites.",
+   "look": [
+    "legal range",
+    "lifted blacks",
+    "lower contrast",
+    "range fix"
+   ],
+   "use_for": [
+    "Fix 12-bit camera clips that look crushed / over-contrasty because full-range data is being read as legal range",
+    "Match a full-range screen recording / OBS capture that looks too contrasty to the legal-range camera footage around it"
+   ],
+   "avoid": [
+    "On correctly decoded footage it only washes the image out",
+    "Pick the variant matching the source bit depth (8 / 10 / 12 are nearly identical in float)",
+    "As a broadcast-safe / legaliser pass: Premiere already maps 0-1 to 16-235 on export, so this double-squeezes to grey blacks; use Video Limiter for broadcast limits"
+   ],
+   "confidence": "high",
+   "lut_kind": "legacy",
+   "input_space": "full-range video (0-255 / 0-1023 / 0-4095 code values)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Also a ready preset: Effects > Lumetri Presets > Technical > 'Full to Legal Range, 12-bit'. Script-only approximation (clips super-blacks/whites, unlike this extended-domain LUT): {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Output Level\": 16, \"(RGB) White Output Level\": 235}}. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "FullToSMPTE8",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\FullToSMPTE8.cube",
+   "status": "current",
+   "summary": "Range conversion for 8-bit sources: squeezes full-range values into legal/SMPTE range (0 becomes the 16/255-equivalent black, 1.0 the 235/255 white), so the picture gets flatter with greyer blacks; the extended domain keeps super-blacks and super-whites.",
+   "look": [
+    "legal range",
+    "lifted blacks",
+    "lower contrast",
+    "range fix"
+   ],
+   "use_for": [
+    "Fix 8-bit H.264 / phone / screen-recording clips that look crushed / over-contrasty because full-range data is being read as legal range",
+    "Match a full-range screen recording / OBS capture that looks too contrasty to the legal-range camera footage around it"
+   ],
+   "avoid": [
+    "On correctly decoded footage it only washes the image out",
+    "Pick the variant matching the source bit depth (8 / 10 / 12 are nearly identical in float)",
+    "As a broadcast-safe / legaliser pass: Premiere already maps 0-1 to 16-235 on export, so this double-squeezes to grey blacks; use Video Limiter for broadcast limits"
+   ],
+   "confidence": "high",
+   "lut_kind": "legacy",
+   "input_space": "full-range video (0-255 / 0-1023 / 0-4095 code values)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Also a ready preset: Effects > Lumetri Presets > Technical > 'Full to Legal Range, 8-bit'. Script-only approximation (clips super-blacks/whites, unlike this extended-domain LUT): {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Output Level\": 16, \"(RGB) White Output Level\": 235}}. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Linear_to_Log",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\Linear_to_Log.cube",
+   "status": "current",
+   "summary": "Encodes scene-linear data into a Cineon-style log curve: on normal footage the picture turns very flat, grey and nearly colourless (black becomes 0.09, mid grey 0.45 becomes 0.61, saturation about 0.1x).",
+   "look": [
+    "flat",
+    "log",
+    "washed out",
+    "technical"
+   ],
+   "use_for": [
+    "VFX round-trip: convert linear renders (EXR) to log before a log-based grade",
+    "A deliberate 'ungraded log' before/after demo in a colour-grading explainer"
+   ],
+   "avoid": [
+    "Never as a creative look on delivery footage"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "scene-linear (VFX renders / EXR)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Log_to_Display_Gamma",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\Log_to_Display_Gamma.cube",
+   "status": "current",
+   "summary": "Converts Cineon-style film-scan log to a viewable display image; measured mid grey drops (0.45 to 0.24) and highlights go far above 1.0 (0.85 to about 3.0), so it needs clipping or a highlight roll-off after it.",
+   "look": [
+    "log to display",
+    "film scan",
+    "technical",
+    "high contrast"
+   ],
+   "use_for": [
+    "Viewing / grading archival Cineon DPX film scans in a documentary",
+    "VFX log plates"
+   ],
+   "avoid": [
+    "On Rec.709 footage it crushes mids and blows highlights to super-white"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "Cineon-style 10-bit printing-density log (film scans / DPX)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "log_to_lin",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\log_to_lin.lut",
+   "status": "current",
+   "summary": "Classic Kodak/Cineon conversion of 10-bit log to 8-bit 'linear' video (reference white 685, black 95, film gamma 0.6), stored as an Autodesk/Discreet 1D .lut.",
+   "look": [
+    "log to video",
+    "film scan",
+    "technical"
+   ],
+   "use_for": [
+    "Archival film scans (DPX / Cineon) in history documentaries",
+    "Legacy VFX plates"
+   ],
+   "avoid": [
+    "Any normal camera footage",
+    "The .lut extension may not be accepted by Browse"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "Cineon 10-bit log (ref white 685, ref black 95, film gamma 0.6)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Format is the Autodesk/Discreet 1D 'LUT: 3 1024' text format, not .cube; Browse support for it is unverified. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Panalog4_to_Linear",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\Panalog4_to_Linear.cube",
+   "status": "current",
+   "summary": "Converts Panavision Panalog 4 (Genesis camera log) to scene-linear; output goes above 1.0 in highlights (0.85 to about 2.7) and looks dark and contrasty on a Rec.709 timeline unless a display transform follows.",
+   "look": [
+    "log to linear",
+    "panavision",
+    "technical"
+   ],
+   "use_for": [
+    "Panavision Genesis archival footage (rare)",
+    "Linearising Panalog plates for VFX"
+   ],
+   "avoid": [
+    "Anything not shot in Panalog 4",
+    "Using it as the final display transform"
+   ],
+   "confidence": "medium",
+   "lut_kind": "legacy",
+   "input_space": "Panavision Panalog 4 (Genesis)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "SMPTEToFull10",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\SMPTEToFull10.cube",
+   "status": "current",
+   "summary": "Range conversion for 10-bit sources: expands legal/SMPTE range to full range (16/255 black goes to 0, 235/255 white to 1.0, about +16% contrast and saturation); values outside go below 0 / above 1.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast",
+    "punch restore"
+   ],
+   "use_for": [
+    "Fix washed-out 10-bit clips with grey blacks (legal-range video read as full range)",
+    "Restore punch to a screen recording or OBS capture whose waveform shows blacks near 16 and whites near 235 before grading",
+    "Match a mis-flagged clip to the rest of a news package"
+   ],
+   "avoid": [
+    "On correctly decoded footage it clips shadows and highlights",
+    "Check the waveform first: use only when blacks sit near 16 and whites near 235"
+   ],
+   "confidence": "high",
+   "lut_kind": "legacy",
+   "input_space": "legal / SMPTE-range video (16-235 at 8-bit)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Also a ready preset: Effects > Lumetri Presets > Technical > 'Legal to Full Range, 10-bit'. Script-only approximation: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "SMPTEToFull12",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\SMPTEToFull12.cube",
+   "status": "current",
+   "summary": "Range conversion for 12-bit sources: expands legal/SMPTE range to full range (16/255 black goes to 0, 235/255 white to 1.0, about +16% contrast and saturation); values outside go below 0 / above 1.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast",
+    "punch restore"
+   ],
+   "use_for": [
+    "Fix washed-out 12-bit clips with grey blacks (legal-range video read as full range)",
+    "Restore punch to a screen recording or OBS capture whose waveform shows blacks near 16 and whites near 235 before grading",
+    "Match a mis-flagged clip to the rest of a news package"
+   ],
+   "avoid": [
+    "On correctly decoded footage it clips shadows and highlights",
+    "Check the waveform first: use only when blacks sit near 16 and whites near 235"
+   ],
+   "confidence": "high",
+   "lut_kind": "legacy",
+   "input_space": "legal / SMPTE-range video (16-235 at 8-bit)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Also a ready preset: Effects > Lumetri Presets > Technical > 'Legal to Full Range, 12-bit'. Script-only approximation: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "SMPTEToFull8",
+   "match": null,
+   "category": "LUTs/Legacy",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\SMPTEToFull8.cube",
+   "status": "current",
+   "summary": "Range conversion for 8-bit sources: expands legal/SMPTE range to full range (16/255 black goes to 0, 235/255 white to 1.0, about +16% contrast and saturation); values outside go below 0 / above 1.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast",
+    "punch restore"
+   ],
+   "use_for": [
+    "Fix washed-out 8-bit H.264 / phone / screen-recording clips with grey blacks (legal-range video read as full range)",
+    "Restore punch to a screen recording or OBS capture whose waveform shows blacks near 16 and whites near 235 before grading",
+    "Match a mis-flagged clip to the rest of a news package"
+   ],
+   "avoid": [
+    "On correctly decoded footage it clips shadows and highlights",
+    "Check the waveform first: use only when blacks sit near 16 and whites near 235"
+   ],
+   "confidence": "high",
+   "lut_kind": "legacy",
+   "input_space": "legal / SMPTE-range video (16-235 at 8-bit)",
+   "scripting": "Legacy utility LUT in Lumetri/LUTs/Legacy: not listed in the dropdowns, load it via Lumetri Color > Basic Correction > Input LUT > Browse. Also a ready preset: Effects > Lumetri Presets > Technical > 'Legal to Full Range, 8-bit'. Script-only approximation: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "ALEXA_Default_LogC2Rec709",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\ALEXA_Default_LogC2Rec709.cube",
+   "status": "current",
+   "summary": "ARRI's default LogC-to-Rec.709 conversion (alexalutconv, full in / full out): flat grey LogC footage becomes normal-contrast Rec.709 with restored saturation (measured mid grey 0.45 to 0.51, saturation about 1.4x).",
+   "look": [
+    "normalise",
+    "rec709",
+    "natural contrast",
+    "technical"
+   ],
+   "use_for": [
+    "ARRI stock / library footage that arrives flat and grey",
+    "Documentary interviews shot on ALEXA in LogC",
+    "Base conversion before a creative look"
+   ],
+   "avoid": [
+    "Footage already in Rec.709 (oversaturated, crushed)",
+    "Stacking on top of Premiere's automatic log colour management"
+   ],
+   "confidence": "high",
+   "lut_kind": "technical",
+   "input_space": "ARRI LogC3 (ALEXA classic / Mini / LF, EI 800), ARRI Wide Gamut 3, full range; outputs Rec.709",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "AlexaV3_K1S1_LogC2Video_DCIP3_EE",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\AlexaV3_K1S1_LogC2Video_DCIP3_EE.cube",
+   "status": "current",
+   "summary": "ARRI LogC-to-video conversion with ARRI's K1S1 tone map and DCI-P3 output primaries; on a Rec.709 timeline it looks slightly lifted and the colours are off.",
+   "look": [
+    "dci-p3",
+    "cinema",
+    "technical",
+    "normalise"
+   ],
+   "use_for": [
+    "DCI / cinema-projection masters",
+    "Grading on a P3 reference monitor"
+   ],
+   "avoid": [
+    "Web, social or TV delivery: use the Rec709 version"
+   ],
+   "confidence": "high",
+   "lut_kind": "technical",
+   "input_space": "ARRI LogC3, ARRI Wide Gamut 3 (ALEXA, K1S1); outputs DCI-P3, not Rec.709",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "AlexaV3_K1S1_LogC2Video_Rec709_EE",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\AlexaV3_K1S1_LogC2Video_Rec709_EE.cube",
+   "status": "current",
+   "summary": "ARRI LogC-to-Rec.709 with ARRI's standard K1S1 tone map: restores contrast and saturation (mid grey 0.45 to 0.51, saturation about 1.4x).",
+   "look": [
+    "normalise",
+    "rec709",
+    "arri",
+    "technical"
+   ],
+   "use_for": [
+    "ALEXA LogC footage in documentaries and trailers",
+    "Stock ARRI clips delivered in LogC",
+    "Base conversion before a creative look"
+   ],
+   "avoid": [
+    "Footage already in Rec.709",
+    "Double conversion with Premiere's colour management"
+   ],
+   "confidence": "high",
+   "lut_kind": "technical",
+   "input_space": "ARRI LogC3, ARRI Wide Gamut 3 (ALEXA); outputs Rec.709",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "AMIRA_Default_LogC2Rec709",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\AMIRA_Default_LogC2Rec709.cube",
+   "status": "current",
+   "summary": "AMIRA default LogC-to-Rec.709 conversion; measured nearly the same tone curve as the ALEXA default with slightly gentler saturation on pure primaries.",
+   "look": [
+    "normalise",
+    "rec709",
+    "arri",
+    "technical"
+   ],
+   "use_for": [
+    "AMIRA documentary / ENG footage in LogC",
+    "Matching AMIRA and ALEXA clips in one edit"
+   ],
+   "avoid": [
+    "Footage already in Rec.709"
+   ],
+   "confidence": "high",
+   "lut_kind": "technical",
+   "input_space": "ARRI LogC3 from AMIRA, ARRI Wide Gamut 3; outputs Rec.709",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "ARRI_Universal_DCI",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\ARRI_Universal_DCI.cube",
+   "status": "current",
+   "summary": "ARRI LogC conversion to DCI (P3) output with a gentle curve: measured mid grey 0.45 to 0.46, slightly lifted blacks, modest saturation (about 1.1x).",
+   "look": [
+    "dci",
+    "gentle",
+    "arri",
+    "technical"
+   ],
+   "use_for": [
+    "Cinema / DCP masters from ARRI LogC footage"
+   ],
+   "avoid": [
+    "Rec.709 web or TV delivery",
+    "Footage that is not LogC"
+   ],
+   "confidence": "low",
+   "lut_kind": "technical",
+   "input_space": "ARRI LogC (assumed LogC3 / AWG3; the file has no header); outputs DCI-P3",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "ARRI_Universal_HD",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\ARRI_Universal_HD.cube",
+   "status": "current",
+   "summary": "ARRI LogC conversion to HD video with a gentler curve than the camera defaults: measured mid grey 0.45 to 0.43, saturation about 1.3x.",
+   "look": [
+    "hd",
+    "gentle",
+    "arri",
+    "normalise"
+   ],
+   "use_for": [
+    "Softer LogC-to-Rec.709 conversion that leaves room to grade",
+    "Matching older ARRI footage"
+   ],
+   "avoid": [
+    "Footage that is not LogC"
+   ],
+   "confidence": "low",
+   "lut_kind": "technical",
+   "input_space": "ARRI LogC (assumed LogC3 / AWG3; the file has no header); outputs HD Rec.709",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "D-21_delogC_EI0200_B1",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\D-21_delogC_EI0200_B1.cube",
+   "status": "current",
+   "summary": "De-log conversion for the ARRI D-21 camera at EI 200: LogC to video, measured mid grey 0.45 to 0.44, saturation about 1.45x.",
+   "look": [
+    "normalise",
+    "arri d-21",
+    "technical",
+    "legacy camera"
+   ],
+   "use_for": [
+    "Archival ARRI D-21 footage",
+    "Older film-style digital stock"
+   ],
+   "avoid": [
+    "Modern ALEXA footage (use the ALEXA LUTs)",
+    "Wrong EI: exposure and contrast will be off"
+   ],
+   "confidence": "medium",
+   "lut_kind": "technical",
+   "input_space": "ARRI D-21 LogC at EI 200",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  },
+  {
+   "kind": "lut",
+   "app": "PR",
+   "name": "Phantom_Rec709_Gamma",
+   "match": null,
+   "category": "LUTs/Technical",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Technical\\Phantom_Rec709_Gamma.cube",
+   "status": "current",
+   "summary": "1D curve that applies the Rec.709 transfer function to linear-light data (verified: 0.1 becomes 0.29, 0.45 becomes 0.67), brightening linear Phantom high-speed footage into normal video gamma with no gamut change.",
+   "look": [
+    "rec709 gamma",
+    "linear to video",
+    "high speed",
+    "technical"
+   ],
+   "use_for": [
+    "Phantom slow-motion clips (sports, explosions, stock) delivered as linear",
+    "Any linear-light render brought into a Rec.709 edit"
+   ],
+   "avoid": [
+    "Normal Rec.709 footage: washes out (lifted, saturation about 0.64x)"
+   ],
+   "confidence": "high",
+   "lut_kind": "technical",
+   "input_space": "scene-linear (Vision Research Phantom linear Cine / linear renders)",
+   "scripting": "Technical LUT: Lumetri Color > Basic Correction > Input LUT (file is in Lumetri/LUTs/Technical, listed in the Input LUT dropdown). Apply first, before any creative look, and only to clips actually recorded in the input space. Selecting a LUT file from a spec is not possible: in Premiere the Lumetri Color properties 'Look' (0-68) and 'Input LUT' (0-11) are popup indices (0 = None) with undocumented, install-dependent ordering, 'LookAsset' / 'LUTAsset' are file blobs a spec cannot set, and the Lumetri Presets store older legacy indices that must not be copied either. Practical routes: in Premiere apply the Lumetri preset or Browse by hand (AdobeBridge's Premiere build cannot apply effect presets), or set the index on a probe clip and verify with a rendered frame; in AE (same file under Support Files/Lumetri) load it once through Lumetri Color's Browse or Apply Color LUT, save an animation preset (.ffx) and apply that from the spec's 'presets' (check a render that the LUT came along)."
+  }
+ ]
+}

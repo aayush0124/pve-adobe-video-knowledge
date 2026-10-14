@@ -1,0 +1,1017 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Video Copilot Saber (free)",
+   "summary": "Free Video Copilot effect plug-in that draws energy beams, lightsabers, neon outlines, lasers, portals, electricity and haze, with realistic glow falloff, built-in distortion, 50 presets and the ability to trace text layers or masks.",
+   "use_for": [
+    "neon/energy outline that traces a title or logo (Core Type = text layer)",
+    "glowing border or route line drawn from a mask on a map in a political explainer",
+    "electric / power accents on cinematic trailer titles",
+    "light-sweep reveal of a lower third"
+   ],
+   "how": "Download from the Saber tutorial page on videocopilot.net (Download Saber for Windows), run the installer and pick the After Effects 2026 plug-in folder (it lands in Support Files/Plug-ins/VideoCopilot). In AE: put it on a black solid (blend mode Add/Screen), Effect > Video Copilot > Saber; Customize Core > Core Type switches between the built-in beam, Layer Masks and Text Layer; presets are chosen from the effect's Preset menu.",
+   "scriptable": "partial",
+   "script_api": "Once installed it is a normal effect: layer.property(\"ADBE Effect Parade\").addProperty(<Saber match name>). Saber is NOT installed in AE 2026 on this machine (only FXConsole.aex is in Plug-ins/VideoCopilot) so its match name and properties are not in the PVE harvest. The match name is often quoted as \"VIDEOCOPILOT 3DSaber\" -- unverified; after installing, re-run pve/harvest_ae.py and use only the harvested match/property names. Preset and Core Type are popups (1-based indices once harvested).",
+   "limits": "Official compatibility text (tutorial page, re-checked Oct 2026): 'After Effects CS5, CS6 & CC+', 'PC & Mac (OSX 10.8+)'. Video Copilot's Dec 2021 blog says it updated its plug-ins '(including our free ones!)' for AE 2022 Multi-Frame Rendering; the May 2022 post says its plug-ins were updated for native Apple M1 but lists no individual plug-ins. No statement naming AE 2026 exists, so 2026 support is assumed, not verified. AE only, no Premiere build. Do not confuse with paid Video Copilot products: Heat Distortion ($24.95), Twitch, Optical Flares, Element 3D are paid.",
+   "status": "current",
+   "sources": [
+    "https://www.videocopilot.net/tutorials/saber_plug-in",
+    "https://www.videocopilot.net/blog/2016/03/new-plug-in-saber-now-available-100-free/",
+    "https://www.videocopilot.net/blog",
+    "https://www.videocopilot.net/products/heatdistortion",
+    "https://www.videocopilot.net/blog/2021/12/plug-in-updates-after-effects-2022-ready",
+    "https://www.videocopilot.net/blog/2022/05/plug-ins-now-apple-m1-ready"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Video Copilot FX Console (free)",
+   "summary": "Free Video Copilot workflow plug-in: a pop-up search box (default Ctrl+Space) that applies any effect or animation preset by typing its name, plus FX shortcuts/overrides and a snapshot tool that exports the comp viewer as PNG into a gallery. Installed here: Support Files/Plug-ins/VideoCopilot/FXConsole.aex in After Effects 2026.",
+   "use_for": [
+    "fast manual application of effects/presets while a human finishes an automated build",
+    "PNG frame grabs of the comp viewer for review/QC thumbnails",
+    "finding an effect whose menu category you do not know"
+   ],
+   "how": "Select a layer in an open comp, press Ctrl+Space, type part of the effect or preset name, press Enter. A companion ScriptUI panel 'FX Console.jsx' (dated 23 Mar 2020) is installed in Scripts/ScriptUI Panels on this machine: it loads Plug-ins/VideoCopilot/FXConsole.aex and offers Screenshot, Gallery, Export and Preferences buttons (Window > FX Console.jsx).",
+   "scriptable": "partial",
+   "script_api": "No documented API. The bundled FX Console.jsx shows an UNDOCUMENTED ExternalObject hook: new ExternalObject(\"lib:\" + <Plug-ins/VideoCopilot/FXConsole.aex>) then .execute(\"screenshot\" | \"gallery\" | \"export\" | \"preferences\") and .execute(\"shortcut\", index). It acts on the UI (active viewer), so do not build on it and it does nothing in aerender. Pipelines should call layer.property(\"ADBE Effect Parade\").addProperty(matchName) or layer.applyPreset(new File(ffx)) directly. For frame grabs use comp.saveFrameToPng(time, file): it is NOT in the ae-scripting docs (CompItem page lists only duplicate, exportAsMotionGraphicsTemplate, get/setMotionGraphics...ControllerName, layer, openInEssentialGraphics, openInViewer) but is used in many public AE scripts; verify on 2026, else render a still through the render queue.",
+   "limits": "Version 1.0.5 is quoted from a search summary (unverified). Keyboard shortcut can collide with other panels/OS shortcuts. Only helps a human operator.",
+   "status": "current",
+   "sources": [
+    "https://www.videocopilot.net/tutorials/saber_plug-in",
+    "https://www.videocopilot.net/blog",
+    "https://ae-scripting.docsforadobe.dev/item/compitem/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/Scripts/ScriptUI%20Panels/FX%20Console.jsx"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Video Copilot Orb (free)",
+   "summary": "Free Video Copilot 3D sphere plug-in: renders photoreal planets/globes and spheres with a physically based shader, texture mapping, environment reflection maps, motion blur and UV controls inside AE's 3D camera.",
+   "use_for": [
+    "rotating Earth/globe for news and geopolitics intros (map an equirectangular texture)",
+    "planet/space backdrops for cinematic trailers",
+    "glossy spheres/bubbles as motion-graphics elements"
+   ],
+   "how": "Download from the 'Ultra 3D Earth' tutorial page on videocopilot.net ('Download VC Orb V1.0.1'; the page also links Earth_Textures_6K.zip), install for AE 2026, then Effect > Video Copilot > VC Orb on a solid; assign a texture layer (equirectangular map), add a 3D camera to orbit.",
+   "scriptable": "partial",
+   "script_api": "Effect is added with addProperty(<Orb match name>) after install -- match name and properties unverified (not installed here, not in the PVE harvest). Texture inputs are layer-reference properties, which the PVE spec cannot set ('layer' type cannot be set from a spec); set them by script with prop.setValue(layerIndex) only after verifying the harvested type.",
+   "limits": "The tutorial page offers 'VC Orb V1.0.1'; a later 'V1.0.3-2022.1' build is mentioned only in search summaries (unverified). Users reported older Orb builds breaking after AE upgrades (2020, macOS Catalina) -- re-check after each AE update. AE only; AE 2026 compatibility unverified.",
+   "status": "current",
+   "sources": [
+    "https://www.videocopilot.net/tutorials/ultra_3d_earth",
+    "https://www.videocopilot.net/blog"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Video Copilot Color Vibrance (free)",
+   "summary": "Free Video Copilot colorize plug-in that maps an intense, hot colour wash onto footage and can output mattes/alpha from the colour selection.",
+   "use_for": [
+    "one-colour hot tint on archival footage or hero titles",
+    "generating a colour-based matte for a glow pass"
+   ],
+   "how": "Download from the Color Vibrance tutorial page on videocopilot.net, install for AE 2026, Effect > Video Copilot > Color Vibrance.",
+   "scriptable": "partial",
+   "script_api": "addProperty(<Color Vibrance match name>) after install -- match name/properties unverified (not harvested). Note AE's built-in 'Vibrance' (ADBE Vibrance) is a different effect; do not confuse the two.",
+   "limits": "Official page states version 1.0.6 and compatibility 'After Effects CS5, CS6 & CC, CC 2014 & 2015'; a later 2022.1 build is mentioned in search summaries. AE 2026 support unverified. Built-in Tint / Colorama / Lumetri cover most of the same looks without a dependency.",
+   "status": "current",
+   "sources": [
+    "https://www.videocopilot.net/tutorials/color_vibrance_plug-in"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Mister Horse Animation Composer 4 (free Starter Pack)",
+   "summary": "Free AE panel from Mister Horse: a browser of drag-and-drop animation presets, transitions, titles, social-media elements, graphic components and sound effects, plus free tools Keyframe Wingman (easing), Keyframe Actions, Anchor Point Mover and Transition Shifter. Installed here: CEP extension com.misterhorse.AnimationComposer v4.1.1 and Starter Pack product 3300 (569 .mhitemdata items, 60 .wav, previews as .webm).",
+   "use_for": [
+    "quick text/shape entrance presets on lower thirds",
+    "timers, bullet lists, callouts and cinematic titles from the free library",
+    "keyframe easing with Keyframe Wingman during manual polish"
+   ],
+   "how": "Install via Mister Horse Product Manager (download from misterhorse.com, sign in for the free plan). In AE: Window > Extensions > Animation Composer; pick an item and click/drag it onto a layer or the timeline.",
+   "scriptable": "no",
+   "script_api": "none. Library items are stored in Mister Horse's proprietary .mhitemdata format under %LOCALAPPDATA%\\MisterHorse\\ProductManager\\Products\\3300 and are only applied through the panel; no public scripting API was found. Recreate the look with native effects/expressions or save the applied result as an .ffx and use layer.applyPreset(new File(ffx)).",
+   "limits": "Requires 'Adobe After Effects 2025 and newer' (official). Free plan includes the Starter Pack; the User Library is free up to 500 items, unlimited with a subscription; premium packs are paid. Commercial-use terms of the free items were not checked -- verify before client work. CEP panel: subject to Adobe's CEP phase-out (AE CEP disabled by default Dec 2028, removed from new versions Dec 2029).",
+   "status": "current",
+   "sources": [
+    "https://misterhorse.com/animation-composer-for-after-effects",
+    "https://misterhorse.com/what-s-new/animation-composer-4-is-here",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Mister Horse Animation Composer for Premiere (formerly Premiere Composer, free)",
+   "summary": "Free Premiere panel from Mister Horse (renamed from 'Premiere Composer' to 'Animation Composer' on 10 Jun 2026) with transitions, text boxes, text presets, sound effects and (2026) film/VHS/light-leak items. Installed here as CEP com.misterhorse.PremiereComposer v1.6.11 with Starter Pack product 3283: 135 .mogrt, 38 .wav SFX, 28 .mhpctransition, 14 .aegraphic.",
+   "use_for": [
+    "animated text boxes / callouts for news reels and explainers",
+    "whoosh/impact SFX under transitions",
+    "quick stylised transitions on social reels"
+   ],
+   "how": "Install via Mister Horse Product Manager (free plan). In Premiere: Window > Extensions > Animation Composer (older builds: Premiere Composer); drag items onto the timeline or onto a cut.",
+   "scriptable": "partial",
+   "script_api": "The Starter .mogrt files are plain files under %LOCALAPPDATA%\\MisterHorse\\ProductManager\\Products\\3283\\Items\\... and are already listed in pve/harvest/files.json with origin 'premiere_composer' (see the mogrt cards). Place them with seq.importMGT(path, String(ticks), vidTrackOffset, audTrackOffset) -- per the Premiere scripting guide time is a ticks STRING (254016000000 ticks per second), the two offsets count tracks from the zero-th video/audio track, and it returns the new TrackItem (proven in AdobeBridge pr_build.jsx). SFX .wav: app.project.importFiles([path], true, bin, false) then place. The .mhpctransition transitions are proprietary and only apply through the panel.",
+   "limits": "Requires 'Premiere 2025 and newer' (official). Free library vs paid packs; user library free up to 500 items. Commercial-use terms of free items not verified. CEP panel: Premiere stops accepting new CEP Marketplace submissions Dec 2027, CEP disabled by default Dec 2028, removed from new versions Dec 2029.",
+   "status": "current",
+   "sources": [
+    "https://misterhorse.com/animation-composer-for-premiere",
+    "https://misterhorse.com/what-s-new/premiere-composer-renamed-to-animation-composer",
+    "pve/harvest/files.json",
+    "pr_build.jsx",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Motion Bro (free panel)",
+   "summary": "Free preset-manager extension for AE and Premiere that previews and applies packs of transitions, text animations, graphics and SFX. Installed here: CEP extension MotionBro3 v4.5.0 in C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/MotionBro3 (manifest hosts PPRO 15.0+, AEFT 18.0+; UPIA /list all shows it Enabled for After Effects 26.0 and Premiere Pro 26.0). Packs live in Documents/Motion Bro (here: 'Basic Transitions for After Effects by videolancer' = 137 .aep + 3 .ffx).",
+   "use_for": [
+    "one-click transitions/zooms between clips on social reels",
+    "text animation presets for titles",
+    "organising third-party preset packs in one panel"
+   ],
+   "how": "Install from Adobe Exchange / Creative Cloud desktop (Motion Bro) or motionbro.com, then import a pack (.zip/.mbr) in the panel. AE: Window > Extensions > Motion Bro; Premiere: Window > Extensions > Motion Bro. Select layers/clips, hover to preview, click to apply.",
+   "scriptable": "partial",
+   "script_api": "Panel logic is not scriptable. But pack content in AE is ordinary files: app.project.importFile(new ImportOptions(new File(aep))) imports a pack .aep (returns a FolderItem), comp.layers.add(item) places a comp, layer.applyPreset(new File(ffx)) applies its .ffx. Premiere pack formats were not inspected -- unverified.",
+   "limits": "The Adobe Exchange listing was reported as version 7.3.1 (Sept 2026) with an Aug 2026 review of the AE panel failing on macOS Tahoe; the Exchange page is script-rendered and could not be re-read in the Oct 2026 check, so treat those two facts as unverified. Installed build (4.5.0) is old. Packs are licensed separately (free packs are personal-use only, see 'Free Motion Bro Presets'). CEP extension: subject to Adobe's CEP phase-out (Premiere: no new CEP submissions Dec 2027, disabled by default Dec 2028; AE: both Dec 2028; removal from new versions Dec 2029).",
+   "status": "current",
+   "sources": [
+    "https://exchange.adobe.com/apps/cc/105006/motion-bro",
+    "https://motionbro.com/",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Free Motion Bro Presets bundle",
+   "summary": "Motion Bro's free bundle: 8 packages, about 1,400 transition presets, graphics, videos and sound effects for Premiere and After Effects (Premiere and AE options are separate downloads). Licence tiers on the official page: Personal use - Free ($0), Personal use - Donate ($4), Commercial use ($17).",
+   "use_for": [
+    "prototype transitions and text animations on personal/test projects",
+    "commercial channel work only after buying the $17 commercial licence"
+   ],
+   "how": "Get it from motionbro.com/products/free-motion-bro-presets (choose Premiere or After Effects option and licence), then import the downloaded pack into the Motion Bro panel.",
+   "scriptable": "partial",
+   "script_api": "Same as Motion Bro: AE pack items are .aep/.ffx files that can be imported with app.project.importFile(new ImportOptions(new File(aep))) / layer.applyPreset(new File(ffx)); applying through the panel itself is not scriptable.",
+   "limits": "Software requirement on the official page: 'After Effects 2022 or higher, Premiere Pro 2024 or higher'. The $0 tier is PERSONAL use only -- client, broadcast, political-party or monetised channel work needs the Commercial ($17) licence. Requires the Motion Bro panel. The product page returned HTTP 403 to the Oct 2026 fact-check, so prices/tiers could not be re-confirmed -- re-check before buying.",
+   "status": "current",
+   "sources": [
+    "https://motionbro.com/products/free-motion-bro-presets/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Mixkit free video templates (Envato)",
+   "summary": "Envato's free library of editable templates for Premiere Pro and After Effects (titles, lower thirds, transitions, logo reveals, intros, social/YouTube elements) plus free stock video, music and SFX, each under Mixkit's own per-type free licence (Video Templates Free License).",
+   "use_for": [
+    "free lower-thirds and title templates for news/explainer channels",
+    "logo stings and YouTube intros/outros",
+    "transition templates without buying packs"
+   ],
+   "how": "Download from mixkit.co/free-premiere-pro-templates or mixkit.co/free-after-effects-templates (no sign-up). Premiere items are mostly .mogrt -- drag into the Essential Graphics / Graphics Templates panel or onto the timeline; AE items are .aep projects.",
+   "scriptable": "partial",
+   "script_api": "After download: Premiere .mogrt -> seq.importMGT(path, String(ticks), vTrackIndex, aTrackIndex); AE .aep -> app.project.importFile(new ImportOptions(new File(path))). Text fields of a placed MOGRT are set through its Graphics component properties (see PVE mogrt cards). Downloading itself is a manual step.",
+   "limits": "Mixkit says the templates require the latest Premiere Pro / After Effects. Licence differs per item type (video templates, stock video, restricted stock video, music, SFX): read the specific licence for each download; Mixkit's site states no attribution required for templates (search summary). Quality/consistency varies; fonts used by templates may need installing.",
+   "status": "current",
+   "sources": [
+    "https://mixkit.co/free-premiere-pro-templates/",
+    "https://mixkit.co/free-after-effects-templates/",
+    "https://mixkit.co/license/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Adobe Stock free Motion Graphics templates",
+   "summary": "Adobe Stock includes a set of free motion graphics templates (.mogrt titles, lower thirds, transitions, overlays) that Creative Cloud users can license at no cost and use from Premiere's Essential Graphics / Graphics Templates browser.",
+   "use_for": [
+    "extra lower thirds and titles beyond the ones bundled with Premiere 2026",
+    "consistent template style for an explainer series"
+   ],
+   "how": "In Premiere, browse Adobe Stock templates from the Essential Graphics / Graphics Templates panel (filter for Free) or search stock.adobe.com for 'free' templates; license, then the .mogrt appears in your templates library.",
+   "scriptable": "partial",
+   "script_api": "After licensing the .mogrt is a file: place with seq.importMGT(path, String(ticks), vTrackIndex, aTrackIndex). Licensing/downloading from Adobe Stock is a manual UI step (no verified script API).",
+   "limits": "Which templates are free changes over time; Adobe Stock licence terms apply (standard licence). Exact Premiere 2026 panel naming for the Stock browser not verified.",
+   "status": "current",
+   "sources": [
+    "https://stock.adobe.com/search/templates?k=free"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Film Impact effects and transitions (built into Premiere 25.5+)",
+   "summary": "Adobe acquired Film Impact; Premiere Pro 25.5 (launched 10 Sept 2025, IBC) ships its 90+ transitions, effects and animations inside Premiere 'all included in your plan', and the separate Film Impact subscription was wound down. In the Premiere 2026 harvest 29 video effects have match names AE.Impact_*_FX (e.g. Light Leaks, Camera Shake, RGB Split, Volumetric Rays, Long Shadow, Logo Cutout, Rounded Crop, Wonder Glow, Echo Glow, Edge Glow, Glint, Bokeh Blur, Focus Blur, Compound Blur, 3D Rotate, Auto Align, Clone, Channel Mix, Wiggle, Grow, Shrink, Spin, Move, Spacer, Stroke, Vignette, Mosaic, Gaussian Blur, Directional Blur).",
+   "use_for": [
+    "camera shake / RGB split hits on political satire and news reels",
+    "light leaks and volumetric rays for cinematic trailers",
+    "logo cut-outs and rounded-crop picture-in-picture for explainers",
+    "modern transitions (glitch, VHS damage, light leak, typewriter, pop/spring motion) instead of paid packs"
+   ],
+   "how": "Already in Effects > Video Effects / Video Transitions in Premiere 2026 -- no install. Apply like any built-in effect/transition.",
+   "scriptable": "yes",
+   "script_api": "They are native effects: PVE spec {\"name\": <display name>, \"pr_props\": {...}} with property names from pve/harvest/pr/pr_video_effects.json. Under the hood (proven in pr_build.jsx): qeItem.addVideoEffect(qe.project.getVideoEffectByName(name)) and qeItem.addTransition(qe.project.getVideoTransitionByName(name), ...). NAME TRAP: plain 'Gaussian Blur', 'Directional Blur' and 'Mosaic' now resolve to the Film Impact versions (AE.Impact_*); the old Adobe effects are 'Gaussian Blur (Legacy)', 'Directional Blur (Legacy)', 'Mosaic (Legacy)', and old transitions carry '(Legacy)' too (e.g. 'Cross Dissolve (Legacy)', 'Push (Legacy)'). Use the exact harvested name for the version you want.",
+   "limits": "Premiere only (none of these match names appear in the AE 2026 harvest). Which un-suffixed 2026 transitions came from Film Impact (Glitch, VHS Damage, Typewriter, Light Leak, Chaos, Earthquake, Kaleidoscope, Pop/Spring Motion, ...) is inferred from naming and Adobe's announcement list -- medium confidence. Some transition names occur twice in the harvested list (e.g. 'Stretch', 'Cross Dissolve (Legacy)'); which one getVideoTransitionByName returns is unverified. Old standalone Film Impact licences were reported to keep working only through Nov 2026 -- projects using the old third-party plug-in must be rebuilt with the built-in versions.",
+   "status": "current",
+   "sources": [
+    "https://www.provideocoalition.com/adobe-acquires-film-impact-premiere-pro-25-5/",
+    "https://blog.adobe.com/en/publish/2025/09/09/introducing-more-than-90-new-effects-transitions-animations-in-premiere-pro",
+    "https://www.toolfarm.com/film-impact-discontinued/",
+    "pve/harvest/pr/pr_video_effects.json",
+    "pve/harvest/pr/pr_lists.json",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Boris FX Mocha AE (bundled free with After Effects)",
+   "summary": "Planar tracker from Boris FX that ships free inside After Effects 2026 as the effect 'Mocha AE' (match name mochaAECC, category 'Boris FX Mocha', harvested plug-in version 12.2.1). Tracks planes through motion and exports corner-pin / transform data and mattes back to AE.",
+   "use_for": [
+    "screen/billboard/phone replacement in explainers",
+    "tracked blur of faces, minors or number plates in news footage",
+    "pinning graphics/annotations to a moving surface"
+   ],
+   "how": "Effect > Boris FX Mocha > Mocha AE on the footage layer; click 'Launch Mocha AE' in the effect to open the Mocha GUI, draw a spline, track, close/save. Back in AE: Tracking Data > Create Track Data, choose Export Option and Layer Export To, Apply Export (corner pin / transform onto the target layer); or Matte > Apply Matte to cut the layer with the tracked shape (Feather, Dilate, Invert Mask).",
+   "scriptable": "partial",
+   "script_api": "layer.property(\"ADBE Effect Parade\").addProperty(\"mochaAECC\") adds it. The track itself (Mocha GUI) and the Create Track Data / Apply Export buttons (type 'none' in the harvest) are not scriptable. After a human has tracked, a script/PVE spec can set the harvested Matte props: 'View Matte' / 'Apply Matte' / 'Invert Mask' (0-1), 'Shape' (popup 1-2), 'Feather' (0-400), 'Dilate' (-100..100), 'Dilation quality' (1-2), and can READ the tracked corner pins 'Top Left', 'Top Right', 'Bottom Left', 'Bottom Right', 'Center' (2D px), 'Rotation', 'Scale X', 'Scale Y' and copy their keyframes to another layer's Corner Pin. 'Layer Export To' / 'Right View' are layer-reference props (not settable from a spec). Legacy 'mocha shape' (ISL MochaShapeImporter) is listed under Obsolete.",
+   "limits": "Mocha AE is the reduced AE edition (no Mocha Pro modules such as Remove, Insert, Module Renders, Lens); needs a human for the track.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "fnord 3D Channel tools: Cryptomatte, EXtractoR, IDentifier (bundled)",
+   "summary": "Free compositing utilities originally by fnord software (ProEXR author) that ship with After Effects 2026 in the '3D Channel' category: Cryptomatte (pick ID mattes from Cryptomatte EXR renders), EXtractoR (pull any channel out of a multichannel EXR) and IDentifier (object/material ID mattes).",
+   "use_for": [
+    "compositing Blender/Cinema 4D renders for cinematic trailers (isolate objects for grading/glow)",
+    "pulling depth/normal/AO passes from multilayer EXR"
+   ],
+   "how": "Import the multichannel EXR, then Effect > 3D Channel > Cryptomatte / EXtractoR / IDentifier on that layer; choose the layer/channel and click objects in the viewer (Cryptomatte).",
+   "scriptable": "partial",
+   "script_api": "Added with addProperty(\"Cryptomatte\"), addProperty(\"EXtractoR\") or addProperty(\"IDentifier\") (match names from the PVE harvest, plug-in version 2.6.6). Settable harvested props: Cryptomatte 'Output' (popup 1-4) and 'Selection Mode' (0-1); IDentifier 'Display' (popup 1-4) and 'ID' (integer); EXtractoR 'Black Point', 'White Point', 'UnMult' (0-1). The actual matte/channel choice lives in custom-type props (Cryptomatte 'Settings', 'Channel Info') that cannot be set with setValue -- pick it once in the UI and save an .ffx preset, then layer.applyPreset(new File(ffx)).",
+   "limits": "Only useful with EXR renders carrying the right channels. AE only.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Native OpenColorIO (OCIO) effects in After Effects 2026",
+   "summary": "After Effects 2026 ships OCIO colour-pipeline effects natively, so no third-party OpenColorIO plug-in is needed: ADBE OCIO Color Space Transform, ADBE OCIO Display Transform, ADBE OCIO FILE Transform, ADBE OCIO Look Transform and ADBE OCIO CDL Transform (all present in the PVE AE harvest).",
+   "use_for": [
+    "converting camera log/ACES footage into the working space per layer",
+    "applying a CDL (from a colourist) or an OCIO look file",
+    "matching AE comps to a Resolve/Nuke ACES pipeline"
+   ],
+   "how": "Effect > Color Correction (category per the 2026 harvest) > OCIO Color Space Transform / OCIO Display Transform / OCIO File Transform / OCIO Look Transform / OCIO CDL Transform; colour spaces, displays and looks come from the OCIO config chosen in Project Settings (Color tab).",
+   "scriptable": "yes",
+   "script_api": "layer.property(\"ADBE Effect Parade\").addProperty(\"ADBE OCIO Color Space Transform\") (or the other four match names). PVE TRAP: the harvest reports the colour-space/display/look popups ('Input Color Space', 'Output Color Space', 'Display Device', 'View Transform', 'Look', 'CCCID') with min 1 / max 1 because their menus are filled from the active OCIO config at run time (defaults such as 79/80 already exceed that max), so a PVE spec value would be CLAMPED to 1 -- do not set these through the spec. The File / CDL 'File' entries are buttons (type 'none') that open a dialog. Reliable route: configure once in the UI, save an .ffx, apply with layer.applyPreset(new File(ffx)); only 'Inverse transform' (0-1) is safely spec-settable.",
+   "limits": "Popup ordering is config-dependent and the menus are dynamic. The Adobe help page for AE OCIO could not be fetched (helpx blocks automated fetches), so this card is based on the local harvest only.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Duik Angela (RxLaboratory, free/open source)",
+   "summary": "The standard free rigging and animation toolkit for After Effects (IK, bones, controllers, constraints, walk/run cycles, automation like wiggle/swing/blink, camera controls, scripting/expression tools). Licence GNU GPL-v3; current version 17.1.21 (released 18 Feb 2026); 17.2.0 alpha in pre-release.",
+   "use_for": [
+    "rigging 2D explainer characters / mascots (e.g. stickman or cartoon politicians)",
+    "automated secondary motion (swing, blink, wiggle) without hand keyframing",
+    "camera rigs for parallax explainers"
+   ],
+   "how": "Download from rxlaboratory.org/tools/duik-angela (or GitHub RxLaboratory/Duik releases); install the ScriptUI panel per the user guide (copy to Scripts/ScriptUI Panels or File > Scripts > Install ScriptUI Panel), restart AE, open Window > Duik Angela.",
+   "scriptable": "partial",
+   "script_api": "Duik publishes an 'API reference' (linked from the official page) for driving its library from ExtendScript -- exact function names unverified here; read the API reference before calling. The panel UI itself is not scriptable.",
+   "limits": "AE only. Rigs add expressions that slow previews/renders on heavy comps. 2026 compatibility inferred from the Feb 2026 release (no explicit 'AE 2026' statement captured).",
+   "status": "current",
+   "sources": [
+    "https://rxlaboratory.org/tools/duik-angela/",
+    "https://github.com/RxLaboratory/Duik/releases"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "nexrender (open-source AE render automation)",
+   "summary": "MIT-licensed Node.js tool for data-driven After Effects rendering: a JSON job names a template .aep and composition, swaps assets (image/video/audio/data/script/static) and runs aerender, then post-render actions (e.g. @nexrender/action-encode, @nexrender/action-copy). Latest release v1.63.4 (3 Jun 2026); repo active.",
+   "use_for": [
+    "batch-rendering many news lower thirds / headline cards from a spreadsheet",
+    "daily templated explainer intros with swapped photos and text",
+    "a render farm alternative to AdobeBridge's own aerender calls"
+   ],
+   "how": "Download nexrender-cli binary (GitHub releases) or npm i -g @nexrender/cli; run nexrender-cli --file job.json. Job: {\"template\": {\"src\": \"file:///D:/t.aep\", \"composition\": \"main\", \"outputModule\": \"H.264 - Match Render Settings - 15 Mbps\", \"outputExt\": \"mp4\"}, \"assets\": [{\"type\": \"image\", \"src\": \"file:///D:/a.png\", \"layerName\": \"photo.png\"}, {\"type\": \"data\", \"layerName\": \"title\", \"property\": \"Source Text\", \"value\": \"...\"}]}.",
+   "scriptable": "yes",
+   "script_api": "CLI: nexrender-cli --file <job.json>; Node API via @nexrender/core. Field names above are from the README (template.src, template.composition, assets[].type/src/layerName/property/value, template.outputModule/outputExt).",
+   "limits": "Renders through aerender, so an installed After Effects is required on the worker. README claims workers need no AE licence: by default nexrender writes Adobe's render-only-node file ae_render_only_node.txt (disable with addLicense: false) -- treat this as the project's claim and check Adobe's licensing yourself. README: since AE 2023 aerender often will not render without an explicit outputModule. AE 2026 not named in the README; latest release v1.63.4 published 3 Jun 2026 (GitHub API).",
+   "status": "current",
+   "sources": [
+    "https://github.com/inlife/nexrender"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Bodymovin / Lottie exporter",
+   "summary": "Free AE extension (MIT, Airbnb/Hernan Torrisi) that exports AE animations to Lottie JSON for web/iOS/Android playback (lottie-web player).",
+   "use_for": [
+    "animated logos, icons and stickers for websites and apps",
+    "lightweight animated graphics for web articles accompanying a video"
+   ],
+   "how": "Install from aescripts.com/bodymovin (name-your-own-price, $0 allowed for individuals) with a ZXP installer; AE: Window > Extensions > Bodymovin; select comps, set destination, Render.",
+   "scriptable": "partial",
+   "script_api": "Export is driven from the panel; no supported headless API was verified. Output JSON can be checked with lottie-web (npm 'lottie-web').",
+   "limits": "Supports only a subset of AE features (no most third-party effects, limited expressions/effects). A bug report for AE 2026 (v26.0) says gradients export as grayscale. Business pricing on aescripts is the suggested price (unverified amount). Extension repo last pushed Aug 2024; lottie-web Sept 2025.",
+   "status": "current",
+   "sources": [
+    "https://aescripts.com/bodymovin/",
+    "https://github.com/bodymovin/bodymovin-extension",
+    "https://github.com/airbnb/lottie-web",
+    "https://community.adobe.com/bug-reports-528/gradient-rendering-issue-grayscale-in-lottie-bodymovin-after-after-effects-2026-v26-0-update-1553388"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Ease and Wizz (aescripts, name your own price)",
+   "summary": "ScriptUI panel that applies easing expressions (expo, quint, back, elastic, bounce, etc.) between keyframes, including overshoot/spring/bounce without extra keyframes.",
+   "use_for": [
+    "snappy text and shape animation curves on explainer graphics",
+    "bounce/overshoot pop-ins on social reel stickers"
+   ],
+   "how": "Download from aescripts.com/ease-and-wizz (Name Your Own Price; individuals may pay $0, businesses must pay the suggested price), copy to Scripts/ScriptUI Panels, open from Window menu, select keyframes, choose curve, Apply.",
+   "scriptable": "partial",
+   "script_api": "The panel writes expressions onto the selected properties; a pipeline can write equivalent expressions itself with prop.expression = \"...\" (standard AE API) instead of driving the panel.",
+   "limits": "Suggested price $24.99 for businesses (search summary). Expression-based easing renders slower than baked keyframes on heavy comps. Compatibility list reported as including AE 2026 (search summary, unverified on the page).",
+   "status": "current",
+   "sources": [
+    "https://aescripts.com/ease-and-wizz/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Motion Tools Pro (Motion Design School)",
+   "summary": "AE extension: a customisable command panel with 30+ scripts (Add Null, AutoCrop, Ease Keyframes, Easings Manager, GIF converter, anchor tools, physics widget), an expressions library/editor and up to four panels.",
+   "use_for": [
+    "speeding up manual finishing in AE (anchor, nulls, easing)",
+    "storing team expression snippets"
+   ],
+   "how": "Get it from motiondesign.school (Motion Tools Pro 2025 page) or aescripts.com/motion-tools-pro; install the extension; Window > Extensions > Motion Tools Pro.",
+   "scriptable": "no",
+   "script_api": "none verified (UI panel).",
+   "limits": "Official page states 'Compatibility: AE 2022+' and a Jan 2026 changelog mentions AE 2026 3D meshes. PRICE UNCERTAIN: older Motion Tools Pro was free, but the 2025 page shows purchase/refund terms -- treat as possibly paid until checked.",
+   "status": "current",
+   "sources": [
+    "https://motiondesign.school/products/motion-tools-pro-2025/",
+    "https://aescripts.com/motion-tools-pro/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "redefinery rd: scripts (Jeff Almasol, free)",
+   "summary": "Classic bundle of ~50 free ExtendScript utilities by Jeff Almasol (e.g. rd_RenderLayers, rd_Duplink) for batch rendering layers, duplicating with links, renaming, etc.",
+   "use_for": [
+    "reference code for common AE batch operations",
+    "one-off utilities (render each layer separately, linked duplicates)"
+   ],
+   "how": "Original site redefinery.com is down; the bundle is mirrored on Tom Paddon's store/Gumroad (free). Copy .jsx to Scripts or Scripts/ScriptUI Panels, or File > Scripts > Run Script File.",
+   "scriptable": "yes",
+   "script_api": "Plain .jsx: can be executed with $.evalFile(new File(path)) inside an ExtendScript run, but most open a ScriptUI dialog and expect a selection -- read the source and call the underlying logic rather than the UI.",
+   "limits": "Old code (pre-2020 era); not maintained; some scripts may break on AE 2026 -- test each. Mirror source is third-party; read the code before running.",
+   "status": "current",
+   "sources": [
+    "https://www.tompaddon.com/store/rd-redefinery-scripts-bundle"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "FXAA (Plugin Everything, free)",
+   "summary": "Free effect implementing NVIDIA's Fast Approximate Anti-Aliasing to smooth jagged/stair-stepped edges on low-res logos, pixel-art, 3D renders or upscaled stills, cheaper than supersampling.",
+   "use_for": [
+    "cleaning crunchy edges on low-resolution party logos or screenshots",
+    "smoothing aliased edges after scaling up small graphics"
+   ],
+   "how": "Download free from plugineverything.com/fxaa (also listed on aescripts), install the .aex into AE's Plug-ins folder, apply from the Effect menu.",
+   "scriptable": "partial",
+   "script_api": "addProperty(<FXAA match name>) after install -- match name unverified (not installed/harvested here).",
+   "limits": "Official page: 'Compatible with AE CS6 and up for Mac & Windows'; changelog v1.1 (May 6 2022: Multi-Frame Rendering + universal binary for native Apple Silicon), v1.0 (Apr 10 2020). No update since 2022, AE 2026 untested. AE only.",
+   "status": "current",
+   "sources": [
+    "https://www.plugineverything.com/fxaa",
+    "https://aescripts.com/fxaa/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "G'MIC plug-ins for After Effects / Premiere (reduxFX, open source)",
+   "summary": "Tobias Fleischer's bridge that exposes the G'MIC image-processing library as native Adobe effect plug-ins (make_plugins.bat generates '1000+' individual Adobe plug-ins per the README: artistic, stylise, denoise, deformations), dual-licensed CeCILL-C / CeCILL v2; also builds separate OpenFX and frei0r versions.",
+   "use_for": [
+    "unusual stylisation (painterly, halftone, glitch) without paid packs",
+    "experimental looks on archival stills"
+   ],
+   "how": "Windows binaries from reduxfx.com; per the README put the files from the 'adobe' folder under C:\\Program Files\\Adobe\\Common\\Plug-ins\\7.0\\MediaCore\\ and run make_plugins.bat there to generate the individual plug-ins (installing software: get the user's go-ahead).",
+   "scriptable": "partial",
+   "script_api": "Generated filters are ordinary effects: addProperty(<match name>) in AE / getVideoEffectByName(<name>) in Premiere -- names unverified until installed and harvested.",
+   "limits": "README lists 'After Effects (CS6 or higher)' and 'Premiere Pro (CS6 or higher)'; GitHub repo last pushed Mar 2023 -- AE/PR 2026 compatibility unverified. Many filters are CPU-heavy. Windows-focused.",
+   "status": "current",
+   "sources": [
+    "https://github.com/tobybear/gmic_plugin",
+    "https://reduxfx.com"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "pymiere (Python for Premiere Pro, open source)",
+   "summary": "GPL-3.0 Python library that controls Premiere Pro through a small CEP extension ('Pymiere Link'), exposing Premiere's ExtendScript DOM as Python objects (pymiere.objects.app.project ...).",
+   "use_for": [
+    "driving Premiere edits from Python instead of generating .jsx",
+    "reading project/sequence data into a Python pipeline"
+   ],
+   "how": "python -m pip install pymiere; install the Pymiere Link .zxp with the repo's extension_installer_win.bat, ExManCmd/UPIA or a ZXP installer; start Premiere (Window > Extensions shows Pymiere Link). Then: import pymiere; pymiere.objects.app.isDocumentOpen().",
+   "scriptable": "yes",
+   "script_api": "pymiere.objects.app (mirrors ExtendScript 'app'); helper functions in pymiere/wrappers.py. Same object model as ExtendScript, so QE-DOM calls still need the ExtendScript route.",
+   "limits": "README: 'Pymiere is not maintained anymore'; tested up to Premiere 23.1 (2023) -- 2026 untested. Depends on CEP: Premiere stops new CEP Marketplace submissions Dec 2027, disables CEP by default Dec 2028, removes it from new versions Dec 2029; unsigned panels need PlayerDebugMode. AdobeBridge already drives Premiere via ExtendScript, so this is an alternative, not a requirement.",
+   "status": "current",
+   "sources": [
+    "https://github.com/qmasingarbe/pymiere",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Adobe CEP Samples - PProPanel (official reference panel)",
+   "summary": "Adobe's MIT-licensed sample CEP panel for Premiere Pro whose ExtendScript (PProPanel.jsx) demonstrates most of the Premiere scripting API (import, sequences, markers, export via AME, metadata, QE calls). Motion Bro even ships a copy of PProPanel.jsx inside its extension here.",
+   "use_for": [
+    "looking up a working example of a Premiere ExtendScript call before using it in AdobeBridge",
+    "starting point for a custom Premiere panel"
+   ],
+   "how": "Clone github.com/Adobe-CEP/Samples, copy PProPanel to the CEP extensions folder, enable PlayerDebugMode, open Window > Extensions > PProPanel. Or just read PProPanel/jsx/PPRO/Premiere.jsx as documentation.",
+   "scriptable": "yes",
+   "script_api": "Reference implementation of app.project.*, Sequence.*, app.encoder.* (Adobe Media Encoder) etc. Companion docs: ppro-scripting.docsforadobe.dev.",
+   "limits": "Repo active (last push Mar 2026) but CEP is being phased out (see CEP timeline card); for new Premiere panels prefer UXP. ExtendScript itself is NOT affected by the CEP phase-out per Adobe.",
+   "status": "current",
+   "sources": [
+    "https://github.com/Adobe-CEP/Samples",
+    "https://ppro-scripting.docsforadobe.dev/",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Premiere UXP plugins API (GA) and official samples",
+   "summary": "UXP is Premiere's modern plug-in platform: initial public beta in Premiere (Beta) 25.2 (4 Dec 2024), official release (GA) in Premiere 25.6, UXP Hybrid plugins (UXP + native C++ libraries) officially supported from Premiere 26.2. Official Apache-2.0 samples: AdobeDocs/uxp-premiere-pro-samples. This machine runs Premiere 26.0.2: UXP plugins yes, Hybrid plugins not yet.",
+   "use_for": [
+    "building a future-proof AdobeBridge panel for Premiere",
+    "programmatic export (EncoderManager) and frame export from a panel"
+   ],
+   "how": "Install UXP Developer Tool from Creative Cloud desktop; in Premiere enable Settings > Plugins > Enable developer mode and restart; in UDT Add Plugin > select manifest.json > Load (or Load & Watch).",
+   "scriptable": "yes",
+   "script_api": "const ppro = require(\"premierepro\"); e.g. ppro.EncoderManager.getManager(), ppro.Exporter.exportSequenceFrame(...), ppro.Constants.ExportType.IMMEDIATELY, ppro.EncoderManager.getExportFileExtension(sequence, presetFile) (verified in sample-panels/premiere-api/src/export.ts, Oct 2026). Types: npm @adobe/premierepro (the samples pin a 27.0.0 beta).",
+   "limits": "UXP runs only inside a loaded plugin (no command-line entry like ExtendScript -r); per Hyper Brew (third-party) 'Most APIs are stable. Some are still missing.' -- Adobe's own parity statement was not found; check the API reference before porting. The QE DOM has no UXP equivalent documented. Requires Premiere 25.6+ (Hybrid: 26.2+).",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/plugins",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog",
+    "https://github.com/AdobeDocs/uxp-premiere-pro-samples",
+    "https://hyperbrew.co/blog/uxp-plugins-in-premiere-2026/",
+    "https://blog.developer.adobe.com/en/publish/2025/12/uxp-arrives-in-premiere-a-new-era-for-plugin-development"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "UXP Developer Tool (UDT)",
+   "summary": "Free Adobe desktop app for loading, reloading and debugging in-development UXP plugins (Premiere now; After Effects UXP public beta announced for Nov 2026).",
+   "use_for": [
+    "loading unsigned AdobeBridge UXP panels during development",
+    "debugging UXP plugin console/errors"
+   ],
+   "how": "Creative Cloud desktop > All apps > search 'UXP Developer Tools' > Install. Needs admin privileges (not available as an Admin Console package for Teams/Enterprise). Requirements per Adobe: Premiere 25.6 or later and UDT 2.2 or later. Enable Developer Mode on first UDT launch, and in Premiere: Settings > Plugins tab > 'Enable developer mode', then restart Premiere.",
+   "scriptable": "no",
+   "script_api": "none (developer GUI). Packaging for distribution produces a .ccx installable with UPIA.",
+   "limits": "Developer-only; plugins loaded through UDT are not permanently installed.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/introduction/essentials/dev-tools",
+    "https://developer.adobe.com/premiere-pro/uxp/plugins/tutorials/udt-deep-dive"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "CEP-to-UXP transition timeline (affects every CEP panel)",
+   "summary": "Adobe's Sept 2026 announcement: CEP will be retired at the end of 2029. Premiere: UXP GA + Hybrid plugins now; stops accepting new CEP Marketplace submissions Dec 2027; CEP disabled by default Dec 2028. After Effects: UXP public beta Nov 2026; stop new CEP submissions and CEP disabled by default Dec 2028. Media Encoder: UXP public beta live now; same Dec 2028 dates. Illustrator: UXP public beta spring 2027; Dec 2028 dates. From Dec 2029 CEP is no longer included in new versions. 'ExtendScripts are not affected by this transition.'",
+   "use_for": [
+    "deciding whether a free CEP panel (Motion Bro, Mister Horse, pymiere, Bodymovin) is safe to depend on",
+    "planning AdobeBridge's own panel work (ExtendScript stays; panels should move to UXP)"
+   ],
+   "how": "When CEP is disabled by default users can turn it back on (per Adobe). Existing Marketplace CEP plugins keep working and can be updated until removal.",
+   "scriptable": "no",
+   "script_api": "none (policy). AdobeBridge's ExtendScript automation is unaffected per Adobe.",
+   "limits": "Dates are Adobe's stated plan as of Sept 2026 and may move.",
+   "status": "current",
+   "sources": [
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "https://blog.developer.adobe.com/en/publish/2025/12/uxp-arrives-in-premiere-a-new-era-for-plugin-development"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "ExtendScript Debugger for VS Code (Adobe)",
+   "summary": "Free official VS Code extension for running and debugging ExtendScript (.jsx) in After Effects, Premiere Pro and other ExtendScript hosts: breakpoints, conditional breakpoints, watch, call stack, multiple hosts. Current Marketplace version 2.1.0 (8 Aug 2025; previous 2.0.2, Jun 2022).",
+   "use_for": [
+    "debugging AdobeBridge .jsx builders against a live AE/PR",
+    "evaluating API calls interactively before adding them to a recipe"
+   ],
+   "how": "VS Code > Extensions > search 'ExtendScript Debugger' (publisher Adobe) > Install; create a launch config. Without a hostAppSpecifier the extension lists installed apps and shows each one's specifier (grey text next to the name, e.g. 'premierepro-22.0' style) -- copy that into launch.json.",
+   "scriptable": "no",
+   "script_api": "none (developer tool). Read the 2026 apps' host specifiers from the extension's host picker (not verified here). For After Effects callbacks the docs say to set $.level = 1.",
+   "limits": "Replaces the old ExtendScript Toolkit. Windows/macOS; NOT supported on Windows on ARM (Known Issues). Debugging pauses the host app.",
+   "status": "current",
+   "sources": [
+    "https://marketplace.visualstudio.com/items?itemName=Adobe.extendscript-debug",
+    "https://blog.developer.adobe.com/extendscript-debugger-for-visual-studio-code-public-release-a2ff6161fa01"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Bolt CEP / Bolt UXP (Hyper Brew, open source)",
+   "summary": "MIT-licensed boilerplates for building Adobe panels with Vite + TypeScript + React/Svelte/Vue: Bolt CEP (CEP + ExtendScript, last push Jun 2026) and Bolt UXP (UXP for Photoshop, InDesign, Premiere Pro, with Illustrator and After Effects listed as Beta; last push Sep 2026), with hot reload and packaging.",
+   "use_for": [
+    "building a custom AdobeBridge control panel inside AE/Premiere",
+    "porting a CEP panel to UXP"
+   ],
+   "how": "npx create-bolt-cep or npx create-bolt-uxp (yarn/pnpm create also work) per the READMEs; build and package to .zxp (CEP) or .ccx (UXP, one .ccx per host); load unsigned builds via PlayerDebugMode (CEP) or UXP Developer Tool (UXP).",
+   "scriptable": "yes",
+   "script_api": "Framework only; the API used inside is Adobe's (ExtendScript via CSInterface.evalScript for CEP; require(\"premierepro\") for UXP).",
+   "limits": "Developer tooling, not an end-user plugin. CEP variant inherits the CEP phase-out timeline.",
+   "status": "current",
+   "sources": [
+    "https://github.com/hyperbrew/bolt-cep",
+    "https://github.com/hyperbrew/bolt-uxp"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Types-for-Adobe (TypeScript definitions)",
+   "summary": "MIT TypeScript declaration files for the ExtendScript DOMs of After Effects, Premiere, Audition, Illustrator, InDesign, Photoshop and ScriptUI (docsforadobe, last push May 2026).",
+   "use_for": [
+    "checking that an ExtendScript method/property name really exists before a builder uses it",
+    "autocomplete when writing .jsx"
+   ],
+   "how": "npm i -D types-for-adobe (or clone) and reference the AE/Premiere .d.ts in tsconfig/jsconfig.",
+   "scriptable": "no",
+   "script_api": "none (type definitions only). Coverage of the newest 2026 APIs may lag the apps.",
+   "limits": "Community-maintained; Premiere QE DOM is undocumented and only partly typed.",
+   "status": "current",
+   "sources": [
+    "https://github.com/docsforadobe/Types-for-Adobe"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "auto-editor (open source silence/jump-cut tool)",
+   "summary": "Public-domain (Unlicense) CLI (v31.7.2, released 3 Oct 2026) that analyses audio/motion and cuts dead air; with --export premiere it writes an FCP7 XML timeline that Premiere imports as an editable sequence.",
+   "use_for": [
+    "first-pass silence removal on talking-head / VO recordings",
+    "jump-cut social reels from long interviews",
+    "rough cuts for documentaries before manual editing"
+   ],
+   "how": "Download the Windows binary from github.com/WyattBlue/auto-editor/releases and rename it auto-editor.exe (the CLI is no longer published on pip; the project is now built in Nim). Run: auto-editor interview.mp4 --export premiere; in Premiere File > Import the .xml.",
+   "scriptable": "yes",
+   "script_api": "CLI: auto-editor <file> --export premiere (README values: premiere, resolve, final-cut-pro, shotcut, kdenlive, clip-sequence). Premiere side, documented: app.openFCPXML(xmlPath, projPath) opens the XML as a Premiere project. Importing the XML into the current project with app.project.importFiles([xmlPath], true, targetBin, false) works in the UI importer but is not mentioned in the scripting guide -- verify on 2026.",
+   "limits": "Cuts are threshold-based (tune --margin / edit method); always review. FCP7 XML drops effects/titles beyond basic cuts. Release binaries may carry other OSS licences than the repo's Unlicense.",
+   "status": "current",
+   "sources": [
+    "https://github.com/WyattBlue/auto-editor",
+    "https://github.com/WyattBlue/auto-editor/releases",
+    "https://auto-editor.com/installing",
+    "https://ppro-scripting.docsforadobe.dev/application/application/",
+    "https://ppro-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "OpenTimelineIO + FCP7 XML adapter",
+   "summary": "Academy Software Foundation's Apache-2.0 timeline interchange library (OTIO v0.18.1, Nov 2025) with a separate otio-fcp-adapter (Apache-2.0) providing the 'fcp_xml' adapter that reads/writes Final Cut Pro 7 XML -- the format Premiere imports and exports.",
+   "use_for": [
+    "generating Premiere sequences from Python edit decision lists",
+    "round-tripping timelines between Premiere, Resolve and AdobeBridge JSON"
+   ],
+   "how": "pip install opentimelineio otio-fcp-adapter; build an otio.schema.Timeline in Python and otio.adapters.write_to_file(timeline, 'cut.xml', adapter_name='fcp_xml'); import cut.xml in Premiere.",
+   "scriptable": "yes",
+   "script_api": "Python: opentimelineio.adapters.write_to_file(timeline, \"cut.xml\", adapter_name=\"fcp_xml\") (adapter provided by the otio-fcp-adapter plugin). Premiere side: documented app.openFCPXML(xml, projPath), or import into the open project with app.project.importFiles([xml], true, bin, false) (XML import via importFiles is not mentioned in the scripting guide -- verify).",
+   "limits": "Per the adapter's feature matrix: supports clips, multiple video tracks, audio tracks, gaps, markers and nesting; does NOT support transitions, audio/video effects, speed effects or CDL (image sequences write-only). So no Premiere effects, MOGRT parameters or Lumetri. The FCP adapter moved out of core OTIO into its own package.",
+   "status": "current",
+   "sources": [
+    "https://github.com/AcademySoftwareFoundation/OpenTimelineIO",
+    "https://github.com/OpenTimelineIO/otio-fcp-adapter",
+    "https://ppro-scripting.docsforadobe.dev/application/application/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Voukoder (classic, free) / Voukoder Pro (now paid)",
+   "summary": "FFmpeg-based encoder plug-in for Premiere/Media Encoder and After Effects (x264/x265, NVENC/AMD, VP9 and more). Classic Voukoder is officially end-of-life ('No further development or bug fixes will be done'); its successor Voukoder Pro (2026) is commercial: 69 EUR perpetual or 6 EUR/month subscription (subscription includes future versions).",
+   "use_for": [
+    "hardware-accelerated H.265/AV1-class exports where AME presets fall short",
+    "VP9/other codecs not offered by AME"
+   ],
+   "how": "Install Voukoder Pro plus its Premiere/AME/AE connector from voukoder.org; choose Voukoder in Export settings > Format.",
+   "scriptable": "partial",
+   "script_api": "Exports through a saved preset: seq.exportAsMediaDirect(outPath, eprPath, app.encoder.ENCODE_ENTIRE) (proven in pr_build.jsx with AME presets) -- whether a Voukoder .epr works through this call is unverified.",
+   "limits": "Current builds are not free. Classic Voukoder's last version number and whether old Voukoder Pro 1.x builds remain free were not verified. Classic builds may not support Premiere 2026. Premiere/AME 2026 native H.264/HEVC/ProRes exports usually suffice for social/news delivery.",
+   "status": "current",
+   "sources": [
+    "https://www.voukoder.org/",
+    "https://www.voukoder.org/forum/thread/1744-subscription-license-6-eur-month/",
+    "https://vouk.github.io/voukoder/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "WebM plug-in for Premiere / Media Encoder / AE (fnord)",
+   "summary": "Free WebM import/export plug-in by Brendan Bolles (fnord) adding VP8/VP9 video and Vorbis/Opus audio to Premiere Pro, Media Encoder and After Effects export settings; distributed on Adobe Exchange; source moved from GitHub to GitLab.",
+   "use_for": [
+    "transparent or small WebM overlays for web pages",
+    "importing VP9/WebM clips downloaded from the web"
+   ],
+   "how": "Install from Adobe Exchange (WebM, app id 11631) via Creative Cloud desktop; choose WebM in Export > Format.",
+   "scriptable": "partial",
+   "script_api": "Export via a saved WebM preset with seq.exportAsMediaDirect(out, epr, app.encoder.ENCODE_ENTIRE) -- untested with this plug-in.",
+   "limits": "Exchange reviews (via search summary, snippet-only) report VP9 import not working in Premiere 26.0.2 (Apr 2026) while export worked in May 2026. For downloaded WebM sources, transcoding with ffmpeg to ProRes/H.264 is the safer route.",
+   "status": "current",
+   "sources": [
+    "https://exchange.adobe.com/apps/cc/11631/webm",
+    "https://github.com/fnordware/AdobeWebM"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Premiere third-party audio plug-ins (VST/VST3/AU) - Audio Plug-in Manager",
+   "summary": "Premiere hosts third-party audio effects in VST 2.4, VST3 and (macOS) AU formats, so free VSTs (loudness meters, EQs, noise removal) can be used as clip or track effects.",
+   "use_for": [
+    "adding free loudness metering, dynamic EQ or noise reduction to VO and interviews"
+   ],
+   "how": "Install the plug-in (Windows VST3 default folder C:\\Program Files\\Common Files\\VST3), then Edit > Preferences > Audio > Audio Plug-in Manager > Scan for Plug-ins (tick Rescan existing); enabled plug-ins appear under Audio Effects.",
+   "scriptable": "partial",
+   "script_api": "Built-in audio effects are added with qeTrackItem.addAudioEffect(qe.project.getAudioEffectByName(name)) (proven in pve/harvest_pr.jsx); whether third-party VSTs resolve by name the same way, and whether their parameters are exposed as component properties, is unverified -- harvest after install.",
+   "limits": "Premiere does not auto-scan new plug-ins. VST GUIs cannot be driven from scripts; meter readings stay in the UI.",
+   "status": "current",
+   "sources": [
+    "https://www.provideocoalition.com/tool-tip-tuesday-for-adobe-premiere-pro-tame-your-audio-effects/",
+    "https://support.fxfactory.com/article/164-enable-audio-plug-ins-in-premiere-pro"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Youlean Loudness Meter 2 (free version)",
+   "summary": "Free loudness meter plug-in/app (VST2, VST3, AU, AAX; Windows and macOS) measuring integrated, short-term and momentary LUFS, true peak, loudness range, with broadcast presets (ITU-R BS.1770-4, EBU R128, ATSC A/85, OP-59, ARIB, AGCOM) and streaming presets (YouTube, Spotify, Netflix, etc.).",
+   "use_for": [
+    "checking news/explainer mixes against -14 LUFS (YouTube/social) or EBU R128 -23 LUFS broadcast",
+    "true-peak check before upload"
+   ],
+   "how": "Download FREE from youlean.co, install the VST3, rescan in Audio Plug-in Manager, put it on the master/Mix track (Audio Track Mixer effects rack) and play the sequence through.",
+   "scriptable": "partial",
+   "script_api": "Meter values cannot be read by script. For automated QC measure the exported file instead (ffmpeg loudnorm/ebur128 filter) -- AdobeBridge-side.",
+   "limits": "PRO version (paid) adds export/visualisation extras; free version is fully functional for metering. Real-time only.",
+   "status": "current",
+   "sources": [
+    "https://youlean.co/youlean-loudness-meter/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "ReaPlugs VST suite (Cockos, free)",
+   "summary": "Free Cockos VST plug-ins from REAPER: ReaEQ (unlimited-band EQ), ReaComp, ReaXcomp (multiband), ReaGate, ReaFIR (FFT EQ/dynamics and noise-profile subtraction), ReaDelay, ReaJS. Latest ReaPlugs VST v2.36 (2 Jan 2016), 32/64-bit Windows.",
+   "use_for": [
+    "noise-print removal on interview audio with ReaFIR (Subtract mode)",
+    "gating and EQ on location dialogue"
+   ],
+   "how": "Download 'ReaPlugs VST v2.36 64-bit' from reaper.fm/reaplugs, install the VST2 DLLs to a VST folder Premiere scans, rescan in Audio Plug-in Manager.",
+   "scriptable": "partial",
+   "script_api": "Same as other VSTs: application/parameters from script unverified.",
+   "limits": "VST2 only and unchanged since 2016; official page lists Windows up to W7 (works under newer Windows per common use, unverified). Premiere's built-in DeNoise / Enhance Speech may be simpler.",
+   "status": "current",
+   "sources": [
+    "https://www.reaper.fm/reaplugs/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "TDR Nova (Tokyo Dawn Labs, free)",
+   "summary": "Free parallel dynamic equaliser: four dynamic bands plus HP/LP filters, each band with its own dynamics, usable as static EQ, dynamic EQ, de-esser, multiband or wideband compressor. VST2/VST3/AAX on Windows 64-bit.",
+   "use_for": [
+    "taming harsh 's' and resonances in voice-over",
+    "frequency-selective compression on interviews"
+   ],
+   "how": "Download from tokyodawn.net (TDR Nova), install VST3, rescan in Premiere's Audio Plug-in Manager, apply to the VO track.",
+   "scriptable": "partial",
+   "script_api": "Script application/parameters unverified (see VST hosting card).",
+   "limits": "Official site was unreachable from this environment; facts from KVR/review sites. GE (paid) version adds bands/features.",
+   "status": "current",
+   "sources": [
+    "https://www.kvraudio.com/product/tdr-nova-by-tokyo-dawn-labs",
+    "https://www.musicradar.com/music-tech/plugins/fantastic-free-plugins-and-how-to-use-them-tdr-nova"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "PR",
+   "name": "Premiere native log colour management (free alternative to conversion LUTs)",
+   "summary": "Premiere's colour management can convert supported log/raw camera formats straight to SDR/HDR without LUTs (per an Adobe help page seen only as a search snippet: ARRI LogC3/LogC4, Canon Log/Log2/Log3, Leica L-Log, Panasonic V-Log, Sony S-Log; unknown media defaults to Rec.709). The exact 2026 list (e.g. Apple Log, RED, Fujifilm, Nikon, DJI) was not verified.",
+   "use_for": [
+    "normalising Sony/Canon/Panasonic log interview footage for documentaries",
+    "avoiding wrong-LUT mistakes on mixed-camera shoots"
+   ],
+   "how": "Lumetri Color panel > Settings tab > Project: enable 'Color Manage Auto Detected and Raw Media'; Sequence Settings > Color Management: working space Rec.709 and enable Auto Tone Map Media.",
+   "scriptable": "partial",
+   "script_api": "Project/sequence colour settings via script are unverified; set them in the template project AdobeBridge opens.",
+   "limits": "If a camera's log format is not detected (check the clip's colour-space override menu), use the manufacturer LUT instead -- DJI D-Log/D-Log M support was not confirmed. Help page blocks automated fetches (HTTP 403), so setting names are snippet-only.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere-pro/using/auto-detection-of-log-camera-formats-and-raw-media.html"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Camera-manufacturer technical LUTs (DJI official and others)",
+   "summary": "Free official log-to-Rec.709 conversion LUTs (.cube) from camera makers, e.g. DJI's LUT download page listing D-Log / D-Log M to Rec.709 LUTs for Mavic, Air, Mini, Avata, Osmo Pocket/Action and 360 cameras.",
+   "use_for": [
+    "normalising drone and action-cam footage (DJI D-Log M) in documentaries and news packages",
+    "a neutral starting point before creative grading"
+   ],
+   "how": "Download from dji.com/lut (or the camera maker's support site). Premiere: Lumetri Color > Basic Correction > Input LUT > Browse; AE: Effect > Utility > Apply Color LUT (file dialog) or Lumetri Color.",
+   "scriptable": "partial",
+   "script_api": "Choosing a LUT file from a script is not a documented property: in Premiere the Lumetri 'Input LUT'/'Look' properties are popup indices with install-dependent ordering, and AE's Apply Color LUT loads files only through a dialog (see PVE lut cards). Reliable route: apply once in the UI, save a Lumetri preset (.prfpset) or AE .ffx, then apply that preset by script (layer.applyPreset(new File(ffx)) in AE).",
+   "limits": "Use the LUT that matches camera model AND log/gamut setting. Sony/Canon/Panasonic official LUT pages were not verified in this pass (Premiere's native colour management covers those formats).",
+   "status": "current",
+   "sources": [
+    "https://www.dji.com/lut"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Free third-party log-conversion LUT packs",
+   "summary": "Free .cube packs that convert many log profiles to Rec.709, e.g. Bounce Color 'True Log Conversion LUTs' (Sony S-Log2/3, Canon C-Log/2/3, Panasonic V-Log, DJI D-Log/D-Log M, Nikon, Fujifilm, RED, ARRI) and Alister Chapman's free S-Log3 LUTs (also D-Log M variants).",
+   "use_for": [
+    "covering cameras without an official LUT",
+    "consistent look across mixed cameras in a documentary"
+   ],
+   "how": "Download from the vendor page (email sign-up may be required), store in a shared LUT folder, load via Lumetri Input LUT (Premiere) or Apply Color LUT / Lumetri (AE).",
+   "scriptable": "partial",
+   "script_api": "Same LUT-selection limits as the manufacturer-LUT card: preset-based application is the reliable scripted route.",
+   "limits": "Licence/redistribution terms of each pack not verified; third-party LUTs are approximations of the manufacturer transforms. Prefer Premiere native colour management or manufacturer LUTs when available.",
+   "status": "current",
+   "sources": [
+    "https://www.bouncecolor.com/blogs/news/true-luts",
+    "https://www.xdcam-user.com/picture-settings-and-luts/alisters-free-luts/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Adobe Exchange / Creative Cloud desktop plugin marketplace",
+   "summary": "Adobe's official marketplace (exchange.adobe.com, also inside Creative Cloud desktop) for free and paid UXP, CEP and C++ plug-ins for AE and Premiere (e.g. Motion Bro, WebM).",
+   "use_for": [
+    "installing free panels with automatic updates and clean removal"
+   ],
+   "how": "Find the plug-in on exchange.adobe.com or in Creative Cloud desktop's plugin section, click Get/Install; it installs for all compatible app versions. Manage/remove from the same place.",
+   "scriptable": "no",
+   "script_api": "none from the marketplace itself; for scripted installs use UPIA with the downloaded .zxp/.ccx.",
+   "limits": "Premiere stops accepting NEW CEP plugin submissions in Dec 2027, AE in Dec 2028; existing CEP listings keep working and updating until CEP removal (Dec 2029).",
+   "status": "current",
+   "sources": [
+    "https://exchange.adobe.com/apps/cc/105006/motion-bro",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "UPIA - Unified Plugin Installer Agent (Adobe command-line installer)",
+   "summary": "Adobe's command-line plug-in installer bundled with Creative Cloud desktop (5.5+) that installs/removes extension packages (.zxp; .ccx/.xdx per Adobe help, unverified here); replaces ExManCmd. Present on this machine (UPIA 8.5.0.13) at C:\\Program Files\\Common Files\\Adobe\\Adobe Desktop Common\\RemoteComponents\\UPI\\UnifiedPluginInstallerAgent\\UnifiedPluginInstallerAgent.exe.",
+   "use_for": [
+    "scripted, repeatable installs of free panels on render/worker machines",
+    "installing an AdobeBridge panel packaged as .zxp/.ccx"
+   ],
+   "how": "Run in a terminal: UnifiedPluginInstallerAgent.exe /install C:\\path\\plugin.zxp (or .ccx); restart the host app.",
+   "scriptable": "yes",
+   "script_api": "CLI (from the exe's own /help on this machine): /install <extension-file-path>, /remove <extension-name>, /list all (or /list \"<product display name>\"), /version, /help. Here /list all shows MotionBro3 4.5.0 enabled for After Effects 26.0 and Premiere Pro 26.0; the Mister Horse panels are not listed (installed by Mister Horse Product Manager instead).",
+   "limits": "Not separately downloadable (comes with Creative Cloud desktop). Installs signed packages; unsigned CEP panels still need PlayerDebugMode. Installing software changes the machine -- get the user's go-ahead.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/manage-plugins/install-plugins-using-upia-tool.html",
+    "https://blog.developer.adobe.com/en/publish/2021/06/new-command-line-tool-for-plugin-installation-replaces-exmancmd"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "aescripts ZXP/UXP Installer (free)",
+   "summary": "Free GUI installer from aescripts for any .zxp (CEP) or UXP extension for AE, Premiere, Photoshop, Illustrator, Audition and Media Encoder, with a fallback 'custom install' when Adobe's installer fails.",
+   "use_for": [
+    "installing .zxp panels from GitHub or vendors (Bodymovin, Pymiere Link) when Exchange is not an option"
+   ],
+   "how": "Download from aescripts.com/learn/zxp-installer; Windows: double-click the .zxp with the installer associated (Mac: drag and drop); restart the host app; panel appears under Window > Extensions.",
+   "scriptable": "no",
+   "script_api": "none (GUI). For scripted installs use UPIA.",
+   "limits": "Third-party tool; installs whatever you give it -- only install packages from trusted sources.",
+   "status": "current",
+   "sources": [
+    "https://aescripts.com/zxp-installer/",
+    "https://aescripts.com/learn/zxp-installer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "Loading unsigned / open-source CEP panels (PlayerDebugMode)",
+   "summary": "Unsigned CEP panels (GitHub projects, Pymiere Link dev builds, Adobe's PProPanel sample, your own Bolt CEP builds) only load when CEP debug mode is on for the CSXS version the app uses. AE 2026 and Premiere 2026 here both ship CEPHtmlEngine 12.0.1, i.e. CEP 12 -> registry key CSXS.12. This machine has HKCU\\Software\\Adobe\\CSXS.10, CSXS.11 and CSXS.12 keys, all with PlayerDebugMode unset.",
+   "use_for": [
+    "running open-source panels copied straight into the CEP extensions folder"
+   ],
+   "how": "Per Adobe's CEP 12 Cookbook: add string value PlayerDebugMode = \"1\" under HKCU\\Software\\Adobe\\CSXS.12, copy the panel folder to the per-user folder %APPDATA%\\Adobe\\CEP\\extensions (system folders: C:\\Program Files (x86)\\Common Files\\Adobe\\CEP\\extensions and C:\\Program Files\\Common Files\\Adobe\\CEP\\extensions), restart the app.",
+   "scriptable": "yes",
+   "script_api": "Registry: reg add HKCU\\Software\\Adobe\\CSXS.12 /v PlayerDebugMode /t REG_SZ /d 1 -- this changes a security-relevant app setting, so only with the user's explicit approval.",
+   "limits": "Lowers signature checking for ALL CEP panels for that user. CEP itself is being phased out (disabled by default Dec 2028 in AE/Premiere).",
+   "status": "current",
+   "sources": [
+    "https://github.com/Adobe-CEP/CEP-Resources",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "https://github.com/Adobe-CEP/CEP-Resources/blob/master/CEP_12.x/Documentation/CEP%2012%20HTML%20Extension%20Cookbook.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "AE",
+   "name": "Installing and running free ExtendScript / ScriptUI scripts in After Effects",
+   "summary": "How free open-source .jsx tools (GitHub ScriptUI panels, rd: scripts, Duik) are installed in AE 2026: dockable panels go in Support Files/Scripts/ScriptUI Panels (appear under the Window menu), plain scripts in Support Files/Scripts (File > Scripts). Bundled here: ScriptUI Panels = Create Nulls From Paths.jsx, VR Comp Editor.jsx (plus Video Copilot's FX Console.jsx); Scripts = Smart Import.jsx, Sort Layers by In Point.jsx, Scale Composition.jsx, Find and Replace Text.jsx, Update Legacy Expressions.jsx, UpgradeLegacyBlurs.jsx and others.",
+   "use_for": [
+    "adding community panels (rigging, renaming, layout helpers)",
+    "running a one-off utility script during a build"
+   ],
+   "how": "File > Scripts > Install ScriptUI Panel... (or copy the .jsx into C:\\Program Files\\Adobe\\Adobe After Effects 2026\\Support Files\\Scripts\\ScriptUI Panels, needs admin) and restart; File > Scripts > Run Script File for one-offs. Enable Preferences > Scripting & Expressions > 'Allow Scripts to Write Files and Access Network' for scripts that save files.",
+   "scriptable": "yes",
+   "script_api": "From an ExtendScript run: $.evalFile(new File(path)) executes a .jsx in the current engine; AdobeBridge already sends scripts to AE (e.g. AfterFX -r). Panel scripts usually build UI on load -- call their functions, not their UI.",
+   "limits": "Scripts run with full file/network access once allowed -- read third-party code first. ScriptUI panels do nothing in aerender.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/ae_effects.json",
+    "https://ae-scripting.docsforadobe.dev/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "free_plugins",
+   "app": "both",
+   "name": "OpenFX (OFX) plug-ins in After Effects / Premiere - not supported",
+   "summary": "After Effects and Premiere Pro are not OpenFX hosts: they use Adobe's own effect SDK, and no official OFX bridge exists. OFX plug-ins (Resolve/Nuke/Natron/Vegas builds) cannot be loaded; a vendor must ship an Adobe-format build (e.g. G'MIC ships separate Adobe and OFX builds).",
+   "use_for": [
+    "deciding whether a free OFX plug-in found online can be used in the PVE pipeline (it cannot, unless an Adobe build exists)"
+   ],
+   "how": "Look for the vendor's 'After Effects / Premiere' (Adobe .aex / MediaCore) build instead of the .ofx bundle.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Based on the Wikipedia OFX host list (Adobe absent) and community answers; no Adobe statement either way was found.",
+   "status": "current",
+   "sources": [
+    "https://en.wikipedia.org/wiki/OpenFX_(API)",
+    "https://creativecow.net/forums/thread/open-fx/",
+    "https://github.com/tobybear/gmic_plugin"
+   ],
+   "confidence": "medium"
+  }
+ ]
+}

@@ -1,0 +1,116 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "audio_delivery",
+   "app": "both",
+   "name": "Scripted ducking from VO ranges",
+   "summary": "Ducking without Premiere's UI-only Auto Ducking: take the VO clips' timeline ranges (or a voice-activity pass on the VO file), merge ranges separated by short pauses, and write the music clip's Volume 'Level' keyframes: down before each VO block, back up after it, only where the gap is long enough.",
+   "use_for": [
+    "automated edits that place VO and music from a script",
+    "re-ducking after a re-cut without clicking",
+    "consistent ducking across a series"
+   ],
+   "how": "Algorithm: (1) VO ranges [(s, e)] from the spec / timeline; (2) merge ranges whose gap < G (working default 1.2 s: shorter gaps stay ducked, or the music pumps); (3) for each merged block: keys at s - R_down (full), s (ducked), e + H (ducked), e + H + R_up (full); working defaults R_down 0.3 s, H 0.2 s, R_up 0.5-0.6 s, duck 12 dB (Premiere's own Auto Ducking presets use -18 / -24 / -36 dB with 800 / 1200 / 250 ms fades: PVE 'Auto Ducking'); (4) Premiere: Level = 10^((dB - 15) / 20) (the README's measured mapping; 0 dB = 0.1778), so a bed at -6 dB ducked to -18 dB keys 0.0891 and 0.0224; key times are in source-media seconds, so add trackItem.inPoint.seconds as pr_build.jsx does; (5) After Effects: Audio Levels keys in dB directly ([dB, dB]). Today's bridge spec has no audio keyframes: 'Music ducks under VO (scripted, from VO ranges)' gets the same result from a ducked bed plus sample-aligned lift copies.",
+   "scriptable": "yes",
+   "script_api": "Premiere ExtendScript: lp = trackItem.components (displayName 'Volume') .properties ('Level'); lp.setTimeVarying(true); lp.addKey(t); lp.setValueAtKey(t, level, true); ComponentParam.setInterpolationTypeAtKey for curved ramps. AE: layer.property('ADBE Audio Group').property('ADBE Audio Levels').setValueAtTime(t, [db, db]).",
+   "limits": "All timings and the duck depth are working defaults (by ear, then by meter: the VO should sit clearly on top, music about 10-15 dB under it in the mix). Mono clips get Premiere's extra -3 dB pan law (README). A VAD pass on a noisy VO finds breaths as speech: merge with G. Check the final mix with ffmpeg ebur128 against the delivery target. Premiere snaps the in point of an audio-only clip to the item's media timebase (25 fps in the project file, measured 2026-10-13): in 4.7 s was stored as 4.666667 s, one frame early. Keep in points that must stay sample-aligned with another copy of the same file on a multiple of 0.2 s ('Music ducks under VO').",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/avlayer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_delivery",
+   "app": "PR",
+   "name": "Stems and split-track export (dialogue, music, effects)",
+   "summary": "Delivering the mix as separate stems (dialogue, music, effects, sometimes ambience) that add back up to the full mix, as 48 kHz / 24-bit uncompressed WAV. Premiere has no one-click stems export: stems are made by exporting audio-only passes with other tracks muted, by a multichannel master, or as an OMF for Pro Tools.",
+   "use_for": [
+    "broadcaster and streamer deliverables",
+    "versioning (re-mixing music without the dialogue)",
+    "handing the mix to a sound house"
+   ],
+   "how": "Lay the edit out by role first: dialogue / VO tracks, music tracks, effects tracks, ambience (the bridge already keeps spec audio on its own tracks). Per stem: mute every track that is not in it, export audio only (Waveform Audio, 48 kHz, 24-bit, same channels as the mix), unmute; the stems must sum to the mix (Netflix requires D/M/E stems that equal the mix when combined). Check with a null test: the mix minus the sum of the stems should be silence. For a sound house: File > Export > OMF with 'Separate Audio' (one file per clip). Export > Audio > Channels sets the channel count (downmixes only 5.1 to stereo and stereo to mono).",
+   "scriptable": "partial",
+   "script_api": "Scripted stem passes: Track.setMute(1) / setMute(0) on the sequence's audioTracks, then Sequence.exportAsMediaDirect(outWav, wavEpr, app.encoder.ENCODE_ENTIRE) per stem (PVE audio scripting card); OMF: app.project.exportOMF(...) (PVE 'Interchange export' card) or the File > Export menu.",
+   "limits": "A multichannel master with tracks routed to channels is documented only by community sources (not found on Adobe's pages). Effects on the master or submix tracks are applied to each stem pass, so a master limiter can make stems that no longer sum exactly: put the limiter only on the full-mix export.",
+   "status": "current",
+   "sources": [
+    "https://studiopartner.netflix.net/studio/branded-sound-mix-spec-and-best-practices",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/overview-of-export-settings.html",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/export-omf-files-for-pro-tools.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/track/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_delivery",
+   "app": "PR",
+   "name": "M&E (music and effects) mix",
+   "summary": "The international version of the soundtrack: every sound except dialogue, fully filled so another language can be dubbed on top. Netflix: a fully filled music-and-effects submix with no dialogue, including ambience and foley fill, every non-dialogue sound of the main mix, at levels that mirror the final mix.",
+   "use_for": [
+    "dubbing and foreign-language versions",
+    "broadcast international sound tracks (EBU R 123 layout 4b)",
+    "documentaries sold abroad"
+   ],
+   "how": "Keep dialogue and VO on their own tracks from the start; record room tone and natural sound so that removing a sync interview does not leave holes (fill = ambience and foley under the removed dialogue). Export the M&E as a stem pass with dialogue muted, same format as the mix (48 kHz / 24-bit WAV), and listen through it for dropouts where sync sound was cut.",
+   "scriptable": "partial",
+   "script_api": "Same route as stems: mute the dialogue tracks (Track.setMute) and export audio only through a WAV .epr.",
+   "limits": "An interview-led documentary's M&E is mostly ambience and music: without recorded fill it sounds empty. Requirements differ per buyer: read the delivery spec.",
+   "status": "current",
+   "sources": [
+    "https://studiopartner.netflix.net/studio/branded-sound-mix-spec-and-best-practices",
+    "https://tech.ebu.ch/files/live/sites/tech/files/shared/r/r123.pdf"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_delivery",
+   "app": "both",
+   "name": "Broadcast audio track layouts (EBU R 123)",
+   "summary": "Standard audio track allocations for programme files (EBU R 123, 48 kHz / 24-bit): 4a = 1-2 stereo, 3-4 encoded multichannel; 4b = 1-2 stereo mix, 3-4 stereo international sound or effects; 8a = 1-2 stereo, 3-8 5.1 (L R C LFE Ls Rs); 8b = 1-6 5.1, 7-8 stereo; 16a = 1-2 stereo mix, 3-8 5.1 mix, 9-10 stereo effects, 11-16 5.1 effects.",
+   "use_for": [
+    "setting the channel map of a broadcast master",
+    "answering 'which track carries the M&E'"
+   ],
+   "how": "Choose the layout the broadcaster names (their spec sheet wins; R 123 is the common reference), then build the export's channels in that order: a stereo-only programme with an international track is layout 4b (1-2 mix, 3-4 M&E). Label the tracks in the file's metadata or slate.",
+   "scriptable": "partial",
+   "script_api": "Channel layout lives in the export preset (.epr) and the sequence's audio master settings; set once and reuse.",
+   "limits": "R 123 dates from 2009 and the EBU keeps it as-is for legacy SD / HD content; newer object-based formats are outside it. Layout 8d (Sky) is a broadcaster-specific variant.",
+   "status": "current",
+   "sources": [
+    "https://tech.ebu.ch/files/live/sites/tech/files/shared/r/r123.pdf"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_delivery",
+   "app": "both",
+   "name": "Documentary mix-level plan (dialogue, music, effects)",
+   "summary": "A starting plan for mixing narration-led documentaries and explainers: dialogue sets the level, music sits under it, effects punctuate, and the whole mix lands on the delivery's loudness target and true-peak ceiling. Sourced targets: Netflix -27 LKFS dialogue-gated (+/-2 LU) with true peak at most -2 dBTP; EBU R 128 -23 LUFS, true peak at most -1 dBTP; ATSC A/85 -24 LKFS, true peak below -2 dBTP; web: see 'Delivery loudness targets'.",
+   "use_for": [
+    "first-pass mixes of explainers and documentaries",
+    "consistent levels across a series",
+    "setting gain_db values in a bridge spec"
+   ],
+   "how": "Working defaults (not a standard): bus structure DIA (VO + interviews), MUS, SFX, AMB into the master, with a true-peak limiter on the master only, set at or below the delivery ceiling (Netflix recommends limiters at -2.3 dBFS for its -2 dBTP). Dialogue first: normalise VO and interviews to the same loudness (for a web mix, VO alone around -16 LUFS: PVE VO chain recipe). Music under dialogue 10-15 dB below the dialogue's loudness, in the clear 3-6 dB below it; effects hits near dialogue level; ambience 20-30 dB under. Then measure the full mix (ffmpeg -af ebur128=peak=true) and trim the master to the target.",
+   "scriptable": "partial",
+   "script_api": "Bridge spec: audio[].gain_db per element; Premiere Volume Level / track faders by script (PVE audio cards); measurement with ffmpeg ebur128.",
+   "limits": "Only the delivery targets are sourced; every relative level above is a working default to adjust by ear. Netflix also says that when dialogue is under 15% of a programme, the whole programme is measured at -24 LKFS (+/-2 LU). EBU R 128 allows +/-1 LU only where the target is impractical (live).",
+   "status": "current",
+   "sources": [
+    "https://studiopartner.netflix.net/studio/branded-sound-mix-spec-and-best-practices",
+    "https://tech.ebu.ch/docs/r/r128.pdf",
+    "https://www.atsc.org/wp-content/uploads/2025/06/A85-2013-with-Corrigendum-No-1.pdf"
+   ],
+   "confidence": "medium"
+  }
+ ]
+}

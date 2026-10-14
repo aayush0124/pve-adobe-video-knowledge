@@ -1,0 +1,983 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Stroke",
+   "match": "AE.Impact_Stroke_FX",
+   "category": "Stylize",
+   "status": "needs_input",
+   "summary": "Film Impact-derived outline effect built into Premiere 2026 that draws a coloured stroke along the clip's alpha edge, for cut-out subjects, logos, PNG stickers and text. It needs real transparency: on opaque full-frame footage it draws nothing at all, not even a border at the frame edge (verified with Size 80, Position 0).",
+   "look": [
+    "outline",
+    "sticker cut-out",
+    "pop-art edge",
+    "two-tone stroke",
+    "logo outline"
+   ],
+   "use_for": [
+    "white or yellow sticker outline around a cut-out politician or speaker in a reel: the alpha must exist before Stroke runs (a PNG cut-out, or Ultra Key / Track Matte Key above Stroke in the stack; an Opacity mask on the same clip is applied after Stroke, so nest the masked clip first)",
+    "outline on a PNG logo, flag or map shape in an explainer",
+    "pop-in outline animated on with Size for meme-style reels"
+   ],
+   "avoid": [
+    "opaque full-frame footage or a plain picture-in-picture clip: there is no alpha edge, so nothing is drawn (for a PiP border use a shape/graphic layer or a solid behind it instead)",
+    "very thick strokes on soft or noisy keys show every jagged edge of the matte",
+    "two-tone Duo strokes in saturated colours look cheap on serious documentary material"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Size",
+     "does": "stroke thickness in pixels",
+     "typical": "8-20 for stickers, 20-40 for a bold logo outline"
+    },
+    {
+     "name": "Position",
+     "does": "where the stroke sits on the alpha edge, from -100 to 100; 0 is assumed to centre it on the edge and the default 100 to put it outside (sign unverified)",
+     "typical": "100 (default) outside a cut-out, 0 centred on the edge"
+    },
+    {
+     "name": "Color",
+     "does": "stroke colour",
+     "typical": "#FFFFFF sticker, #FFD400 news yellow"
+    },
+    {
+     "name": "Colorize",
+     "does": "how fully the stroke takes Color (0 keeps colour from the source)",
+     "typical": "100"
+    },
+    {
+     "name": "Roundness",
+     "does": "rounding of the stroke at corners",
+     "typical": "100 soft sticker, 0 sharp box"
+    },
+    {
+     "name": "Duo Color",
+     "does": "second colour blended into the stroke",
+     "typical": "contrasting brand colour"
+    },
+    {
+     "name": "Duo Amount",
+     "does": "how much Duo Color mixes in",
+     "typical": "0 off, 30-60 for two-tone"
+    },
+    {
+     "name": "Alpha Falloff",
+     "does": "fades the stroke's opacity across its width for a soft or gradient edge (exact behaviour unverified)",
+     "typical": "0 crisp, 20-40 soft"
+    }
+   ],
+   "demo_settings": {
+    "Size": 80,
+    "Position": 0,
+    "Color": "#FFD400",
+    "Colorize": 100,
+    "Opacity": 100
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Stroke layer style or the Stroke effect in After Effects (layer style is the closer match)",
+   "pairs_with": [
+    "Ultra Key",
+    "Track Matte Key",
+    "Drop Shadow",
+    "Long Shadow",
+    "Motion"
+   ],
+   "scripting": "This is the new Film Impact-based Stroke (match AE.Impact_Stroke_FX), not an old Premiere effect. The Effects-panel folder for the Film Impact set was not verified, so apply it by display name. The sign of Position is inferred (100 = outside, the default), the demo used 0 (centred on the edge). Render check: on the opaque reference clip nothing was drawn, so the frame border does not count as an alpha edge. 'Pre Transform' and the unnamed bool rows are twirl-group headers, so ignore them. 'Scale' (0-100, default 50) sits in the Pre Transform group and its effect is unverified, so leave it alone. Colours are '#RRGGBB'. The harvested default Color decodes to roughly #404040. Effects render before Motion, so Size is in source pixels and shrinks with the clip in a PiP (20 px at Motion Scale 30 shows as about 6 px). A visible demo needs a source with transparency (PNG cut-out, keyed or masked clip); the gallery's opaque test clip cannot show it. Premiere applies the fixed Motion and Opacity effects after the standard effects, so an Opacity mask or Motion scale on the same clip does not give Stroke an edge. For a PiP border, an untested route is Crop (a few %) or Rounded Crop above Stroke in the stack, which puts an alpha edge inside the frame.",
+   "recipe": {
+    "Size": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      20
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input: the opaque reference has no alpha edge. The earlier v1 render (gallery/pr_v1/116.png, Size 80 / Position 0 / #FFD400 per pr_v1/builds/pve_pr_gallery_105_pr_relay.jsx) is identical to pr_v1/ref.png, so Stroke is absent from the current gallery/pr index and has no current frame.",
+    "rerender": false,
+    "second_opinion": "corrected: note said no frame exists; the stale v1 frame gallery/pr_v1/116.png does exist and matches pr_v1/ref.png within encode noise (mean abs diff 0.74, max 10 of 255), which confirms the not_rendered/needs_input verdict. demo_settings (Size 80 of 0..1000, Position 0 of -100..100, Colorize/Opacity 100) are in range and not destructive; they only show on a source with alpha. Harvested default Color 0xFF00400040003DD8 does decode to about #404040."
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Vignette",
+   "match": "AE.Impact_Vignette_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Film Impact-derived vignette built into Premiere 2026 that darkens or tints the frame edges with an adjustable elliptical shape. It has its own centre, size, roundness, feather and colour, plus chromatic fringing in the darkened edge that is on (20) by default.",
+   "look": [
+    "dark edges",
+    "cinematic",
+    "moody",
+    "focus on centre",
+    "lens falloff",
+    "chromatic edge"
+   ],
+   "use_for": [
+    "pull the eye to the speaker in a documentary interview",
+    "moody, cinematic darkening on archival or B-roll shots",
+    "offset vignette (move Center) to frame one leader in a two-shot",
+    "coloured edge (red or saffron) for breaking-news or political reel accents"
+   ],
+   "avoid": [
+    "heavy black vignettes on every shot read as amateur, so keep them subtle in news",
+    "on vertical reels with text near the edges the darkening fights the captions",
+    "stacking with Lumetri's vignette doubles the darkening",
+    "Chromatic Aberration defaults to 20 and puts colour fringes in the darkened edge: set it to 0 for clean news or interview footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Vignette",
+     "does": "strength of the edge darkening/tint",
+     "typical": "30-60 subtle, 100 strong"
+    },
+    {
+     "name": "Scale",
+     "does": "overall size of the clear centre area (smaller = more frame covered)",
+     "typical": "80-120"
+    },
+    {
+     "name": "Width",
+     "does": "horizontal extent of the vignette shape",
+     "typical": "70-90"
+    },
+    {
+     "name": "Height",
+     "does": "vertical extent of the vignette shape",
+     "typical": "70-90"
+    },
+    {
+     "name": "Center",
+     "does": "centre of the clear area (frame fractions)",
+     "typical": "[0.5, 0.5], or shifted onto the subject"
+    },
+    {
+     "name": "Feather",
+     "does": "edge softness of the vignette boundary",
+     "typical": "40-70"
+    },
+    {
+     "name": "Color",
+     "does": "vignette colour",
+     "typical": "#000000"
+    },
+    {
+     "name": "Chromatic Aberration",
+     "does": "RGB fringing in the vignetted edge",
+     "typical": "0 for news, 20-40 for a lensy look"
+    },
+    {
+     "name": "Roundness",
+     "does": "shape of the clear area: 100 = ellipse, lower = rounded rectangle (assumed)",
+     "typical": "100"
+    },
+    {
+     "name": "Master",
+     "does": "overall mix of the effect (keyframe it to fade the whole vignette)",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {
+    "Vignette": 100,
+    "Scale": 75,
+    "Feather": 40,
+    "Color": "#000000",
+    "Opacity": 100,
+    "Master": 100
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "CC Vignette, or the Lumetri Color vignette (Premiere)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Noise",
+    "Light Leaks",
+    "Wonder Glow"
+   ],
+   "scripting": "Match is AE.Impact_Vignette_FX. Center is a point given as frame fractions. Angle's range is -32768..32767 degrees. Feather runs -100..100, and negative values are unverified, so stay positive. Master (0-100) is the overall mix and is the property to keyframe for fades. Seed only matters for any noise/grain component.",
+   "recipe": {
+    "Vignette": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      70
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/112.png",
+    "note": "Edges fall off into a strong black elliptical vignette around the centre with a soft feathered rim, centre untouched (mean brightness 0.70x ref).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Volumetric Rays",
+   "match": "AE.Impact_Volumetric_Rays_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Film Impact-derived light-ray effect built into Premiere 2026 that streaks god rays outward from a light position through the bright areas of the image. Optional drifting fog and caustics make the light look volumetric.",
+   "look": [
+    "god rays",
+    "light shafts",
+    "heavenly",
+    "atmospheric haze",
+    "sun burst",
+    "epic"
+   ],
+   "use_for": [
+    "sun rays behind a leader on a stage for a heroic trailer or rally reel moment",
+    "atmospheric light shafts in temple, monument or forest B-roll",
+    "dramatic title reveal with rays bursting from behind text",
+    "dreamy reveal on an AI-generated shot in an explainer"
+   ],
+   "avoid": [
+    "on flat, low-contrast footage there are no highlights to streak, so lower Highlights Only",
+    "strong rays over faces wash them out",
+    "overused on news content it looks like a devotional-poster filter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Intensity",
+     "does": "brightness of the rays",
+     "typical": "50-90"
+    },
+    {
+     "name": "Highlights Only",
+     "does": "threshold: higher = only the brightest areas emit rays",
+     "typical": "30-60"
+    },
+    {
+     "name": "Ray Length",
+     "does": "how far rays streak from their source",
+     "typical": "60-95"
+    },
+    {
+     "name": "Light Position",
+     "does": "origin of the rays (frame fractions)",
+     "typical": "[0.5, 0.15]-[0.5, 0.3] top-centre sun"
+    },
+    {
+     "name": "Volumetric Fog",
+     "does": "amount of hazy fog the light scatters through",
+     "typical": "20-50"
+    },
+    {
+     "name": "Fog Speed",
+     "does": "drift speed/direction of the fog (-100..100)",
+     "typical": "10-30"
+    },
+    {
+     "name": "Color",
+     "does": "ray tint colour",
+     "typical": "#FFE0B0 warm sun"
+    },
+    {
+     "name": "Colorize",
+     "does": "how strongly Color tints the rays",
+     "typical": "20-60"
+    }
+   ],
+   "demo_settings": {
+    "Intensity": 85,
+    "Highlights Only": 45,
+    "Ray Length": 85,
+    "Light Position": [
+     0.5,
+     0.2
+    ],
+    "Volumetric Fog": 35,
+    "Color": "#FFD9A0",
+    "Colorize": 40
+   },
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "CC Light Rays / CC Light Burst 2.5 (After Effects)",
+   "pairs_with": [
+    "Wonder Glow",
+    "Light Leaks",
+    "Vignette",
+    "Lumetri Color"
+   ],
+   "scripting": "Match is AE.Impact_Volumetric_Rays_FX. Light Position is a point given as frame fractions. Blend Mode is a 2-item dropdown (0..1, default 1) whose labels were not verified, so keep the default. Source Opacity (0-100) at 0 is believed to show only the rays over transparency, for compositing. Seed varies the fog/caustics pattern. Expect slow renders at 4K. The harvested default Color decodes to about #FFDFAD (warm).",
+   "recipe": {
+    "Light Position": [
+     [
+      0,
+      [
+       0.35,
+       0.2
+      ]
+     ],
+     [
+      4,
+      [
+       0.65,
+       0.2
+      ]
+     ]
+    ],
+    "Intensity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      80
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/113.png",
+    "note": "Strong warm-yellow god rays stream outward from the top centre through the bright foreground blocks, flowers, stripes and wall (brightness 1.44x ref).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Wiggle",
+   "match": "AE.Impact_Wiggle_FX",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Film Impact-derived procedural wiggle built into Premiere 2026 that randomly jitters a clip's or graphic's position, rotation and scale. It has built-in motion blur, an optional timing window with ease in/out, and per-object delay and variation for multi-object graphics. For realistic handheld camera movement on footage, Camera Shake is the dedicated effect.",
+   "look": [
+    "camera shake",
+    "handheld",
+    "jitter",
+    "impact shake",
+    "nervous energy",
+    "earthquake"
+   ],
+   "use_for": [
+    "impact shake on a hard-hitting stat, headline or beat drop in a reel (short burst, keyframe Master down)",
+    "nervous jitter on a text card, sticker or meme cut-out in satire reels",
+    "trailer slam with a short high-speed shake that decays to zero",
+    "gentle float on a lower-third, logo bug or PiP card (low ranges, low speed)"
+   ],
+   "avoid": [
+    "large ranges reveal black frame edges unless Min Scale is raised (105+) or the clip is scaled up in Motion",
+    "constant strong shake over talking heads is nauseating, so keep it to short bursts",
+    "for a believable handheld camera on footage use Camera Shake (strafe/stride/roll modes); Wiggle looks synthetic there"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Horizontal Range",
+     "does": "maximum sideways displacement",
+     "typical": "default 5; units unverified (pixels or % of frame), so 3-10 drift, 15-30 impact, render-check before going higher"
+    },
+    {
+     "name": "Vertical Range",
+     "does": "maximum vertical displacement",
+     "typical": "default 5; units unverified (pixels or % of frame), so 3-10 drift, 15-30 impact, render-check before going higher"
+    },
+    {
+     "name": "Wiggle Speed",
+     "does": "how fast the position wiggles",
+     "typical": "20-40 handheld, 100-250 impact"
+    },
+    {
+     "name": "Spin Range (deg)",
+     "does": "random rotation amount in degrees",
+     "typical": "0-2 handheld, 3-8 impact"
+    },
+    {
+     "name": "Min Scale",
+     "does": "lower bound of the random scale wobble (%)",
+     "typical": "100-105"
+    },
+    {
+     "name": "Max Scale",
+     "does": "upper bound of the random scale wobble (%)",
+     "typical": "105-115"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur on the movement",
+     "typical": "10-40"
+    },
+    {
+     "name": "Master",
+     "does": "overall strength of the wiggle; keyframe it to fade the shake",
+     "typical": "100, decay to 0"
+    }
+   ],
+   "demo_settings": {
+    "Horizontal Range": 20,
+    "Vertical Range": 15,
+    "Wiggle Speed": 120,
+    "Spin Range (deg)": 3,
+    "Min Scale": 105,
+    "Max Scale": 112,
+    "Motion Blur": 30,
+    "Master": 100
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "wiggle() expressions on Position/Rotation/Scale, or the Behaviors > Wiggle animation presets, in After Effects",
+   "pairs_with": [
+    "Motion",
+    "RGB Split",
+    "Directional Blur",
+    "Camera Shake"
+   ],
+   "scripting": "Match is AE.Impact_Wiggle_FX. The bool rows 'Effect Timing', 'Pre Transform', 'Visual Curve Editor', 'Motion Controls' and 'FI Motion Blur Engine' are twirl-group headers, so ignore them. 'Start Offset' and 'Start Offset#2' are a pair, as are 'Duration' and 'Duration#2'; they are probably the seconds and frames versions selected by 'Units' (0..1). This is unverified. Duration 0 appears to mean the whole clip, so leave timing at its defaults and trim or keyframe Master instead. Curve Graph is a string and cannot be set from a spec. Ease In/Out are 0-100. Anchor is a point in frame fractions. The output only moves during playback. A still frame shows just the offset, scale and blur at that instant. 'Object Delay' and 'Object Variation' are believed to offset the wiggle per separate object found in the alpha (e.g. letters of a title); leave them at 0 for a whole-clip shake. Range units are unverified, hence the moderate demo.",
+   "recipe": {
+    "Master": [
+     [
+      0,
+      100
+     ],
+     [
+      0.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/114.png",
+    "note": "Picture is jittered down-left, slightly scaled up and tilted, leaving a black gap along the top edge, i.e. the wiggle offset at this instant.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Wonder Glow",
+   "match": "AE.Impact_Wonder_Glow_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Film Impact-derived glow built into Premiere 2026 that blooms the image's highlights with a tintable glow and an ambient colour wash. It also has volumetric spread, shape (width, height, angle) and chromatic fringing (10 by default).",
+   "look": [
+    "bloom",
+    "dreamy glow",
+    "soft highlights",
+    "halation",
+    "warm haze",
+    "neon"
+   ],
+   "use_for": [
+    "dreamy bloom for flashback or memory sequences in documentaries",
+    "glowing neon look on titles, logos or UI screen recordings in AI-education reels",
+    "warm halation on golden-hour B-roll for a cinematic trailer",
+    "beat-synced glow flash on a reveal"
+   ],
+   "avoid": [
+    "high Intensity with low Highlights Only lifts the whole frame into milky haze",
+    "glow on skin and white shirts in press shots blooms out faces and loses detail",
+    "Ambient Color tints shadows (red-orange by default), so watch skin tones"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Intensity",
+     "does": "glow brightness",
+     "typical": "30-60 subtle, 80-100 strong"
+    },
+    {
+     "name": "Highlights Only",
+     "does": "threshold: higher = only brightest areas glow",
+     "typical": "40-70"
+    },
+    {
+     "name": "Size",
+     "does": "glow radius",
+     "typical": "30-80, up to 200 for haze"
+    },
+    {
+     "name": "Volumetric Glow",
+     "does": "spreads the glow into ray-like volumetric light",
+     "typical": "0-40"
+    },
+    {
+     "name": "Color",
+     "does": "glow tint colour",
+     "typical": "#FFE0B0 warm, #80C0FF cool"
+    },
+    {
+     "name": "Colorize",
+     "does": "how strongly Color tints the glow",
+     "typical": "0-50"
+    },
+    {
+     "name": "Ambient Amount",
+     "does": "amount of Ambient Color wash added to the frame",
+     "typical": "0-30"
+    },
+    {
+     "name": "Chromatic Aberration",
+     "does": "RGB fringing in the glow",
+     "typical": "0-20"
+    }
+   ],
+   "demo_settings": {
+    "Intensity": 85,
+    "Highlights Only": 35,
+    "Size": 120,
+    "Volumetric Glow": 20,
+    "Color": "#FFD9A0",
+    "Colorize": 40,
+    "Ambient Amount": 20
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Glow (After Effects); Deep Glow is a third-party alternative",
+   "pairs_with": [
+    "Volumetric Rays",
+    "Light Leaks",
+    "Vignette",
+    "Lumetri Color",
+    "Noise"
+   ],
+   "scripting": "Match is AE.Impact_Wonder_Glow_FX. Position is a point in frame fractions, believed to be the glow's centre or anchor when a shaped or volumetric glow is used. Size, Width and Height run 0-400. Angle runs -32768..32767 degrees. Blend Mode is a 2-item dropdown (0..1, default 1) with unverified labels, so keep the default. Harvested defaults decode to roughly Color #FFDFAD and Ambient Color #FF4746.",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      100
+     ],
+     [
+      0.4,
+      45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/115.png",
+    "note": "Heavy warm bloom swamps the highlights, wall and lamps in a yellow-white haze (brightness 1.83x ref); clearly the effect, overblown for real use at these settings.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "MPEG Source Settings",
+   "match": "AE.ADBE MPEG.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Source-settings component that Premiere attaches to MPEG-family media (e.g. H.264/HEVC phone or screen recordings). It controls how variable-frame-rate source is interpreted. It is not a creative effect and has no visible look.",
+   "look": [
+    "none",
+    "frame-rate interpretation",
+    "timing fix"
+   ],
+   "use_for": [
+    "fix audio drift or stutter on variable-frame-rate phone footage or screen recordings",
+    "make VFR screen captures for AI-tool tutorials play back with steady timing"
+   ],
+   "avoid": [
+    "changing it on constant-frame-rate media does nothing useful",
+    "for badly drifting VFR clips, transcoding to CFR (ffmpeg / HandBrake) is more reliable"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Variable Frame Rate Mode",
+     "does": "how Premiere interprets VFR timing (2-option dropdown)",
+     "typical": "leave at 0 (default) unless there is drift"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Interpret Footage settings in After Effects",
+   "pairs_with": [],
+   "scripting": "Source setting of MPEG-family media (H.264/HEVC .mp4/.mov), reached through the master clip's Source Settings, not a sequence effect. QE addVideoEffect appends it to any timeline clip (that is how it was harvested), but that is not a supported way to change decoding, so never use it as an effect. The labels of Variable Frame Rate Mode (0..1) were not verified. The unnamed bool row is a group header. Prefer conforming VFR media to CFR (ffmpeg) before import.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (source-settings component, not a sequence effect), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree: source-settings component of MPEG-family media, no gallery frame (absent from gallery/pr and pr_v1 indexes); harvest has only a group-header bool and Variable Frame Rate Mode 0..1, matching the card; empty demo_settings is correct"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Motion",
+   "match": "AE.ADBE Motion",
+   "category": "Intrinsic (fixed effect on every clip)",
+   "status": "current",
+   "summary": "Premiere's built-in transform present on every visual clip: position, scale (uniform or width/height), rotation, anchor point, anti-flicker and edge crops (Crop Left/Top/Right/Bottom, now part of Motion). It is the basis of reframing, picture-in-picture, Ken Burns moves and split screens.",
+   "look": [
+    "reframe",
+    "push-in",
+    "Ken Burns",
+    "picture-in-picture",
+    "split screen",
+    "rotation"
+   ],
+   "use_for": [
+    "slow Ken Burns push-in on archival photos and press stills in documentaries",
+    "punch-in zoom (115-130%) for emphasis or jump-cut variety in talking-head reels",
+    "picture-in-picture or split-screen layouts for news comparisons",
+    "reframe 16:9 footage inside a 9:16 reel sequence"
+   ],
+   "avoid": [
+    "scaling raster footage above ~120% softens it visibly; use higher-res source",
+    "keyframed moves without easing look robotic, so use bezier or eased keyframes",
+    "rotation reveals black corners unless the clip is also scaled up"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Position",
+     "does": "clip centre in the frame (frame fractions)",
+     "typical": "[0.5, 0.5]; [0.25, 0.5]/[0.75, 0.5] for split screen"
+    },
+    {
+     "name": "Scale",
+     "does": "uniform scale in percent of the SOURCE pixels (a 4K clip fills a 1080p frame at 50)",
+     "typical": "cover-fit x1.0-1.3 for punch-ins; about half of cover-fit for split screen, a third for PiP"
+    },
+    {
+     "name": "Scale Width",
+     "does": "horizontal scale when Uniform Scale is off",
+     "typical": "100"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "lock width/height scaling together",
+     "typical": "true"
+    },
+    {
+     "name": "Rotation",
+     "does": "rotation in degrees",
+     "typical": "-5..5 for dynamic stills"
+    },
+    {
+     "name": "Anchor Point",
+     "does": "pivot for scale/rotation (frame fractions); moving it alone shifts the image, because the anchor lands on Position",
+     "typical": "[0.5, 0.5]; to zoom into a face set Anchor Point and Position to the face point together"
+    },
+    {
+     "name": "Anti-flicker Filter",
+     "does": "softens thin horizontal detail that twitters when scaled or interlaced (0-1)",
+     "typical": "0, 0.3-0.7 for scaled graphics/text"
+    },
+    {
+     "name": "Crop Left",
+     "does": "crops from the left edge in percent (also Crop Top/Right/Bottom)",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Scale": 130,
+    "Rotation": 5,
+    "Position": [
+     0.45,
+     0.5
+    ]
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Layer Transform (Position/Scale/Rotation/Anchor Point) in After Effects; Transform effect in Premiere for effect-order control",
+   "pairs_with": [
+    "Transform",
+    "Crop",
+    "Drop Shadow",
+    "Gaussian Blur",
+    "Lumetri Color"
+   ],
+   "scripting": "Every visual clip already has Motion (components[1] after Opacity on a plain clip, seen in a probe; look it up by displayName 'Motion' as pr_build does). In an AdobeBridge spec do not list 'Motion' under a clip's effects: the builder would call QE addVideoEffect on it (whether that adds a second Motion is unverified) and an absolute Scale there overrides the cover-fit scale. Use the clip fields instead: zoom / zoom_from (multipliers of the cover-fit scale the builder writes to Motion Scale) and pan ([[x, y] start, [x, y] end] in frame fractions on Motion Position). Scale runs 0..10000 percent of source pixels; Scale Width only applies when Uniform Scale is false. Rotation is in degrees (-32768..32767). Crop Left/Top/Right/Bottom (0-100 %) are part of Motion here, so the separate Crop effect is only needed for its edge feather. Motion renders after the clip's standard effects, so use the Transform effect when a blur or shadow must come after the move.",
+   "recipe": {
+    "Scale": [
+     [
+      0,
+      100
+     ],
+     [
+      6,
+      112
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/116.png",
+    "note": "Frame is pushed in about 130%, tilted slightly and shifted left so the left-hand detail is cropped at the left edge.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Opacity",
+   "match": "AE.ADBE Opacity",
+   "category": "Intrinsic (fixed effect on every clip)",
+   "status": "current",
+   "summary": "Premiere's built-in opacity and blend-mode control present on every visual clip. It fades clips in and out, makes overlays semi-transparent and sets how a clip blends with the tracks below.",
+   "look": [
+    "fade",
+    "transparency",
+    "overlay blend",
+    "screen blend",
+    "dissolve"
+   ],
+   "use_for": [
+    "fade a lower-third, logo bug or title in and out",
+    "blend light-leak, film-grain or dust overlays with Screen/Overlay",
+    "semi-transparent background plate under on-screen text in explainers",
+    "dip-to-black ending on documentary sequences"
+   ],
+   "avoid": [
+    "the blend-mode index is not the menu order (Normal = 18), so never guess an index for Screen, Overlay etc.",
+    "fading two overlapping clips against each other (one out, one in) dips through the background mid-way; fade only the upper clip or use Cross Dissolve"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Opacity",
+     "does": "clip opacity in percent",
+     "typical": "100; 0->100 over 0.3-1 s for fades; 40-70 for overlays"
+    },
+    {
+     "name": "Blend Mode",
+     "does": "how the clip composites onto the tracks below (dropdown, internal index)",
+     "typical": "18 = Normal (observed default)"
+    }
+   ],
+   "demo_settings": {
+    "Opacity": 55
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Layer Opacity + layer blending mode in After Effects",
+   "pairs_with": [
+    "Motion",
+    "Cross Dissolve",
+    "Light Leaks",
+    "Noise",
+    "Track Matte Key"
+   ],
+   "scripting": "Every visual clip already has Opacity (components[0], seen in a probe). In an AdobeBridge spec set it with the clip field opacity_pct (a value or [[t, value]] keyframes), not an effects entry: QE addVideoEffect appends a second 'Opacity' component (that is what the harvest read back). 'Blend Mode' (0..27) reads 18 on a plain clip, so 18 = Normal; the index-to-mode mapping is not the UI order and was not verified, so discover any other mode by setting it in the UI and reading it back first. 'Blend Mode#2' (0..31, default 0) is an undocumented second row: leave it alone. Opacity masks (ellipse/pen) live on this component but cannot be created from a spec.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/117.png",
+    "note": "Whole frame is uniformly dimmed to 0.54x the reference brightness, i.e. the clip at 55% opacity over the empty black track.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "PRORES RAW Source Settings",
+   "match": "AE.ADBE ProResRaw.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "RAW-development component that Premiere attaches to Apple ProRes RAW clips. It sets exposure (ISO-style offset) and the colour space the RAW data is decoded into before any grading.",
+   "look": [
+    "raw exposure",
+    "colour space",
+    "decode",
+    "log/linear"
+   ],
+   "use_for": [
+    "rebalance exposure of ProRes RAW drone or Atomos footage before grading",
+    "choose a log/wide-gamut decode for a documentary grade in Lumetri"
+   ],
+   "avoid": [
+    "it only exists on ProRes RAW media; other clips have no such component",
+    "large Exposure pushes (beyond about +/-2 stops) bring up noise or clip highlights"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Exposure",
+     "does": "exposure offset in stops applied at decode",
+     "typical": "-1..+1"
+    },
+    {
+     "name": "Color Space",
+     "does": "decode colour space / gamma (8-option dropdown)",
+     "typical": "0 (default)"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "ProRes RAW source interpretation in After Effects (Interpret Footage)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Color Space Transform"
+   ],
+   "scripting": "Master-clip Source Settings of ProRes RAW media (Atomos / DJI recordings), not a sequence effect; target the master clip. QE addVideoEffect appends it to any timeline clip (that is how it was harvested), but that is not a supported way to change decoding. Exposure was harvested at -10..10. The 8 Color Space options (0..7) were not verified, so read the UI before changing that value. The unnamed bool row is a group header.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (source-settings component, not a sequence effect), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree: needs ProRes RAW media, no gallery frame; harvest confirms Exposure -10..10 (default 0), Color Space 0..7 and one header bool; typical -1..+1 is in range; empty demo_settings is correct"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "RED Source Settings",
+   "match": "AE.ADBE RED.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "RAW-development component that Premiere attaches to RED .R3D clips. It exposes the RED SDK decode controls: image pipeline (IPP2/legacy), ISO, white balance, exposure, debayer quality, denoise, output tone map and highlight roll-off. It also has a legacy colour section with CDL, curves and lift/gamma/gain.",
+   "look": [
+    "raw development",
+    "white balance",
+    "ISO",
+    "tone map",
+    "debayer"
+   ],
+   "use_for": [
+    "fix white balance and exposure on RED interview or B-roll footage before grading",
+    "try decode-time Denoise (0..6, 7 levels like REDCINE-X Off..Maximum, labels unverified) on noisy high-ISO RED interviews before grading",
+    "set Output Tone Map / Highlight Roll-Off for a cinematic trailer grade"
+   ],
+   "avoid": [
+    "it only exists on .R3D media",
+    "the legacy-pipeline controls (FLUT, DRX, Shadow, curves, lift/gamma/gain) only apply when Image Pipeline is Legacy; IPP2 keeps ISO/Kelvin/Tint/Exposure, CDL, creative LUT, Output Tone Map and Highlight Roll-Off. Grade in Lumetri rather than mixing both",
+    "low Debayer Detail left on at export softens the image"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Image Pipeline",
+     "does": "RED decode pipeline: IPP2 vs legacy (2-option dropdown)",
+     "typical": "leave at the clip's own value"
+    },
+    {
+     "name": "Kelvin",
+     "does": "white-balance colour temperature",
+     "typical": "3200 tungsten, 5600 daylight"
+    },
+    {
+     "name": "Tint",
+     "does": "green/magenta white-balance tint",
+     "typical": "-10..10"
+    },
+    {
+     "name": "ISO",
+     "does": "ISO rating, as an index into RED's ISO list (0..27)",
+     "typical": "leave at the clip's own value"
+    },
+    {
+     "name": "Exposure",
+     "does": "exposure adjustment in stops (IPP2 section)",
+     "typical": "-1..+1"
+    },
+    {
+     "name": "Debayer Detail",
+     "does": "debayer detail-extraction level (0..2 dropdown, harvested default 2; likely Low/Medium/High as in REDCINE-X, labels unverified). It is not decode resolution: Premiere sets R3D playback resolution in the Program monitor",
+     "typical": "leave at the default 2 (likely High)"
+    },
+    {
+     "name": "Output Tone Map",
+     "does": "IPP2 output tone-mapping contrast (0..3 dropdown)",
+     "typical": "leave at the default"
+    },
+    {
+     "name": "Highlight Roll-Off",
+     "does": "how softly IPP2 highlights roll off (0..4 dropdown)",
+     "typical": "leave at the default"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "RED R3D Source Settings in After Effects (Interpret Footage > More Options)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Color Space Transform"
+   ],
+   "scripting": "Master-clip Source Settings of .R3D media, not a sequence effect; target the master clip. QE addVideoEffect appends it to any timeline clip (that is how it was harvested), but that is not a supported way to change decoding. The harvest was taken without real RED media, so many 'defaults' are uninitialised garbage (e.g. 1e-42). Read the live values from the actual clip before changing anything. Many names repeat across sections: 'Kelvin', 'Kelvin#2'; 'Tint', 'Tint#2'; 'Exposure' (-8..8), 'Exposure#2' (-7..7, legacy); 'Color Space' to 'Color Space#3'; 'Gamma Curve' to 'Gamma Curve#3'; 'Saturation', 'Contrast' and 'Denoise' twice; 'Red', 'Green' and 'Blue' up to #7 (legacy RGB, CDL power, slope, offset, lift, gamma, gain); 'Global' to 'Global#3'. Which repeat belongs to the IPP2 path and which to the legacy path is inferred from row order, so the mapping is unverified. Dropdown labels were not verified. Rows named ' ' and the '... Settings' bools are group headers.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (source-settings component, not a sequence effect), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "corrected: Debayer Detail was described as decode resolution and used for faster playback; it is RED's debayer Detail level (0..2, default 2, like REDCINE-X Low/Medium/High), and Premiere's R3D playback speed comes from Program-monitor playback resolution, so that use_for line now points at Denoise (0..6). not_rendered verdict is right (source-settings component, needs .R3D media); every param name and range checks out against the harvest, including the 7 Red/Green/Blue and 3 Color Space/Gamma Curve repeats."
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Sony RAW MXF Source Settings",
+   "match": "AE.ADBE ImporterMXF.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source setting of Sony RAW / X-OCN MXF media (VENICE, VENICE 2, BURANO and similar). Its only control is the colour space the RAW data is decoded into. F65-family RAW may use the separate 'Sony Raw Source Settings' instead.",
+   "look": [
+    "raw decode",
+    "colour space",
+    "S-Log3",
+    "Rec.709"
+   ],
+   "use_for": [
+    "choose a Rec.709 vs S-Log3/S-Gamut3 decode of Sony RAW footage before grading",
+    "match the decode of mixed Sony RAW cameras in a documentary timeline"
+   ],
+   "avoid": [
+    "it only exists on Sony RAW MXF media",
+    "decoding to log without a later LUT or Color Space Transform leaves the image flat and grey"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Color Space",
+     "does": "decode colour space (4-option dropdown, 0..3)",
+     "typical": "0 (default)"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Sony RAW interpretation in After Effects",
+   "pairs_with": [
+    "Lumetri Color",
+    "Color Space Transform"
+   ],
+   "scripting": "Master-clip Source Settings of Sony RAW MXF media, not a sequence effect; target the master clip. QE addVideoEffect appends it to any timeline clip (that is how it was harvested), but that is not a supported way to change decoding. The 4 Color Space labels (0..3) were not verified. The unnamed bool row is a group header.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (source-settings component, not a sequence effect), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree: needs Sony RAW/X-OCN MXF media, no gallery frame; harvest confirms Color Space 0..3 (default 0) plus one header bool; empty demo_settings is correct"
+   }
+  }
+ ]
+}

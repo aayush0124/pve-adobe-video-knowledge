@@ -1,0 +1,1237 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "ExtendScript DOM (official Premiere scripting API)",
+   "summary": "Premiere's documented ES3 JavaScript object model rooted at `app`: projects, bins, sequences, tracks, clips, effect parameters, keyframes, markers and export. Synchronous (blocks the UI while it runs). Frozen since Premiere 23.0 but still working in 26.x; it is the surface AdobeBridge (pr_build.jsx) drives.",
+   "use_for": [
+    "Building a whole edit from a JSON timeline: import, place, trim, keyframe, export",
+    "Setting effect parameters and keyframes after QE or the UI has applied the effect",
+    "Reading back what Premiere actually did (clip times, transition positions) to self-verify a build"
+   ],
+   "how": "Runs inside Premiere only. Entry points: app.project, app.project.activeSequence, app.project.rootItem, app.encoder. Deliver code with a BridgeTalk relay from After Effects (see the BridgeTalk card), a CEP panel's evalScript, or the VS Code ExtendScript Debugger. Wrap the job in try/catch and write 'OK' / 'ERR ...' plus warnings to a result file.",
+   "scriptable": "yes",
+   "script_api": "app, app.project (Project), ProjectItem, Sequence, Track, TrackItem, Component, ComponentParam, MarkerCollection/Marker, app.encoder (Encoder), Time",
+   "limits": "Changelog for 23.0: no further changes or improvements planned. The scripting guide's index says ExtendScript integrations stay supported 'through September 2026' (that window has now passed); Adobe's September 2026 developer blog says 'ExtendScripts are not affected' by the CEP-to-UXP transition, so treat it as working but frozen and re-test after every Premiere update. The guide recommends running scripts from CEP panels; command-line execution needs extra configuration, varies by platform and is not recommended. Verified working on the installed Premiere 26.0.2.2. Cannot add effects or transitions (needs QE or UXP), cannot set clip speed, has no nest call, cannot create adjustment layers or apply .prfpset presets. ES3 engine: no JSON object in some contexts (harvest_pr.jsx carries its own serializer).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/",
+    "https://ppro-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://ppro-scripting.docsforadobe.dev/introduction/how-to-execute-scripts/",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "both",
+   "name": "Script delivery to Premiere: BridgeTalk relay from After Effects",
+   "summary": "Premiere has no simple, documented command-line flag for running a script (the scripting guide says command-line execution needs extra configuration, varies by platform and is not recommended; Adobe recommends CEP panels). AdobeBridge runs a JSX in After Effects with `AfterFX.exe -r <absolute path>`, and that JSX forwards the Premiere script over BridgeTalk. Premiere reports back through files.",
+   "use_for": [
+    "Running any Premiere ExtendScript job from Python without a panel",
+    "Harvesting effect lists and parameter ranges (pve/harvest_pr.py)"
+   ],
+   "how": "In AE: if (!BridgeTalk.isRunning('premierepro')) BridgeTalk.launch('premierepro'); var bt = new BridgeTalk(); bt.target = 'premierepro'; bt.body = 'eval(decodeURIComponent(\"<URL-encoded script>\"))'; bt.send(); The Premiere script writes `<result>.start` when it picks the job up and `<result>` ('OK' or 'ERR ...' plus one warning per line) when done; Python polls both files. app.setSDKEventMessage(text, 'info'|'warning'|'error') also logs to Premiere's Events panel.",
+   "scriptable": "yes",
+   "script_api": "BridgeTalk (target 'premierepro'): new BridgeTalk(), bt.target, bt.body, bt.send(), BridgeTalk.isRunning(), BridgeTalk.launch(); AfterFX.exe -r <abs path>; app.setSDKEventMessage(message, decorator)",
+   "limits": "BridgeTalk mangles backslashes in the body, so URL-encode it. `-r` with a RELATIVE path is silently ignored. AE cold-started hidden runs the job and quits, killing the relay: start AE normally. After AE's exportAsMotionGraphicsTemplate, AE ignores later -r scripts (restart AE). Never open or close projects from an AE -r script. Other routes: a CEP panel's CSInterface.evalScript (CEP is deprecated, see the CEP card); a UXP plugin cannot run ExtendScript.",
+   "status": "current",
+   "sources": [
+    "README.md",
+    "adobe_bridge.py",
+    "https://ppro-scripting.docsforadobe.dev/application/application/",
+    "https://ppro-scripting.docsforadobe.dev/introduction/how-to-execute-scripts/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Project lifecycle: newProject, openDocument, save, saveAs, closeDocument",
+   "summary": "Create, open, save and close .prproj files from a script.",
+   "use_for": [
+    "Starting each build in a fresh project",
+    "Opening a template project that already holds assets the API cannot create (adjustment layer, styled caption track)",
+    "Saving a versioned copy for delivery"
+   ],
+   "how": "app.newProject(path) creates and opens a new project (AdobeBridge does this per build). app.openDocument(path, suppressConversionDialog, bypassLocateFileDialog, bypassWarningDialog, doNotAddToMRUList) opens one. app.project.save() saves in place; app.project.saveAs(path) saves a copy and makes it active.",
+   "scriptable": "yes",
+   "script_api": "app.newProject(path); app.openDocument(path, suppressConversionDialog, bypassLocateFileDialog, bypassWarningDialog, doNotAddToMRUList); app.project.save(); app.project.saveAs(path); app.project.closeDocument(saveFirst, promptIfDirty); app.isDocumentOpen(); app.isDocument(path); app.projects",
+   "limits": "openDocument can raise conversion, locate-media or warning dialogs that block a headless run: pass the bypass flags and keep the dialog watchdog running (pve/pr_dialog_watchdog.py). saveAs switches the active project to the copy. Auto-save folders appear beside the project.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/application/application/",
+    "https://ppro-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Media import: project.importFiles and bins",
+   "summary": "Imports media files (video, audio, stills, image sequences, .srt) into a bin (.mogrt files go through importMGT instead).",
+   "use_for": [
+    "Bringing footage, VO, music, SFX, stills and SRT files into the project before placing them",
+    "Organising bins per chapter or asset type"
+   ],
+   "how": "app.project.importFiles([paths], true, app.project.rootItem, false). It returns only true/false, not the new items: build a lookup from rootItem.children[i].getMediaPath() (normalise slashes and case). Bins: rootItem.createBin(name), item.moveBin(bin), bin.renameBin(name).",
+   "scriptable": "yes",
+   "script_api": "app.project.importFiles(filePaths, suppressUI, targetBin, importAsNumberedStills); ProjectItem.children, getMediaPath(), createBin(name), moveBin(newParent), findItemsMatchingMediaPath(path, ignoreSubClips)",
+   "limits": "getMediaPath works only for atomic media (not sequences or AE comps). Semi-transparent RGBA PNG overlays render weaker than expected in Premiere (an 85%-alpha black dim darkened only about 38%): bake dims into an opaque plate or use an Opacity value instead.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "both",
+   "name": "Dynamic Link: project.importAEComps / importAllAEComps",
+   "summary": "Links After Effects compositions into Premiere as live project items (edit in AE, Premiere updates). This is how AdobeBridge brings AE titles and heavy VFX shots into the Premiere cut.",
+   "use_for": [
+    "AE-built title cards, maps, counters and VFX shots placed in a Premiere edit",
+    "Keeping AE as the VFX app and Premiere as the final cut"
+   ],
+   "how": "app.project.importAEComps(aepPath, ['COMP_A', 'COMP_B'], app.project.rootItem). The new items' names start with the comp name: find them by name prefix, set in/out on the item, then overwriteClip onto a track.",
+   "scriptable": "yes",
+   "script_api": "app.project.importAEComps(path, compNames, targetBin); app.project.importAllAEComps(path, targetBin); UXP: Project.importAEComps(aepPath, compNames, targetBin), Project.importAllAEComps(aepPath, targetBin)",
+   "limits": "Premiere cannot render Dynamic-Linked comps from an .aep that is open in the AE window: link to a COPY (AdobeBridge uses <name>_pr_titles.aep). Dynamic Link renders slowly; once a VFX comp is final, render it with aerender to ProRes and import the file. UXP importAEComps default-bin handling was fixed in 26.5.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog",
+    "README.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Sequence creation and settings",
+   "summary": "Creates sequences and sets frame size and frame rate.",
+   "use_for": [
+    "9:16 reels (1080x1920), 1:1 news cards, 16:9 documentaries and trailers from one script",
+    "Matching sequence fps to the delivery spec (25 for Indian broadcast-style, 30 for social)"
+   ],
+   "how": "AdobeBridge pattern: seq = app.project.createNewSequenceFromClips(name, [firstItem], rootItem); st = seq.getSettings(); st.videoFrameWidth = W; st.videoFrameHeight = H; st.videoFrameRate = Time with seconds = 1/fps; seq.setSettings(st); remove every clip (while (track.clips.numItems) track.clips[0].remove(false, false)); app.project.openSequence(seq.sequenceID). Or app.project.newSequence(name, sqpresetPath) from a saved .sqpreset.",
+   "scriptable": "yes",
+   "script_api": "app.project.createNewSequenceFromClips(name, projectItems[], bin); app.project.newSequence(name, pathToSequencePreset); app.project.createNewSequence(name, sequenceID); Sequence.getSettings() / setSettings(settings); app.project.openSequence(sequenceID); app.project.activeSequence; app.project.sequences",
+   "limits": "createNewSequence(name, id) may open the New Sequence dialog on some versions (unverified here); AdobeBridge avoids it. New sequences have 3 video + 3 audio tracks: add more with QE addTracks. QE always works on the ACTIVE sequence, so openSequence before any QE call.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Placing clips: overwriteClip / insertClip with source in/out",
+   "summary": "Puts a project item on a track at a time, using the source range set on the project item.",
+   "use_for": [
+    "Laying B-roll, interview bites, stills, music and SFX at exact times",
+    "Ripple-inserting a new shot (insertClip) versus overwriting a gap (overwriteClip)"
+   ],
+   "how": "item.setInPoint(srcIn, 4); item.setOutPoint(srcIn + dur, 4) (mediaType 4 = video and audio); track.overwriteClip(item, startSeconds); then find the new TrackItem on that track by start time (within half a frame) and set trackItem.end to a Time at start + dur (needed for stills).",
+   "scriptable": "yes",
+   "script_api": "ProjectItem.setInPoint(seconds, mediaType); ProjectItem.setOutPoint(seconds, mediaType); ProjectItem.clearInPoint()/clearOutPoint(); Track.overwriteClip(projectItem, timeSeconds); Track.insertClip(projectItem, time); Sequence.overwriteClip(projectItem, time, vTrackIndex, aTrackIndex); Sequence.insertClip(projectItem, time, vTrackIndex, aTrackIndex)",
+   "limits": "The calls return no TrackItem: look it up by start time. Snap every time to the sequence frame grid first (off-grid times broke the lookup). Source in/out persist on the project item: set them again before each placement. Placing A/V media may also lay its audio on an audio track (not verified here: check and remove if unwanted; TrackItem.getLinkedItems() appears in pymiere's reflection-generated API but is not on the docs page and is unverified here). The docs disagree on the time argument: Track.overwriteClip/insertClip say a ticks string, Sequence.overwriteClip says seconds, Sequence.insertClip says a Time object. The guide's own nestSelection example and AdobeBridge pass a seconds number to Track.overwriteClip, which works on 26.0.2.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/track/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "TrackItem timing and state: start, end, inPoint, outPoint, move, remove, disabled",
+   "summary": "Reads and edits a placed clip's timeline position, trim, enabled state and name.",
+   "use_for": [
+    "Trimming a clip to a beat (end)",
+    "Shifting a clip later on its track (move)",
+    "Ripple-deleting a shot (remove with ripple)",
+    "Muting a layer for an alternate version (disabled)"
+   ],
+   "how": "trackItem.end = Time (trim tail); trackItem.move(Time offset) shifts it (15.4+); trackItem.remove(true, true) ripple-deletes; trackItem.disabled = true; trackItem.name = 'label'.",
+   "scriptable": "yes",
+   "script_api": "TrackItem.start, end, inPoint, outPoint (Time, read/write); TrackItem.duration (read); move(newInPointTime); remove(inRipple, inAlignToVideo); disabled; name; projectItem; mediaType; getMatchName(); isAdjustmentLayer(); getSpeed(); isSpeedReversed()",
+   "limits": "No razor, slip, slide or roll in the official DOM (QE has unsupported ones). How writing `start` behaves (move vs trim) was not verified here; AdobeBridge only writes `end`. getSpeed/isSpeedReversed/isAdjustmentLayer are read-only. See also: 'Trims: ripple, roll, slip and slide'; 'J-cut and L-cut (split edits)'; 'Closing gaps (Ripple Delete, Close Gap)'; 'Lift and Extract (remove a range)'.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://ppro-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Effect parameters: Component and ComponentParam.setValue",
+   "summary": "Every clip's effects (Motion, Opacity, Volume, then applied effects in order) are Components; their controls are ComponentParams you read and set by display name.",
+   "use_for": [
+    "Setting effect values from a PVE spec (pr_props)",
+    "Dumping a clip's full effect stack for QA (pr_build `dump`)"
+   ],
+   "how": "Loop trackItem.components[k].displayName to find the effect (search from the END for one just added), then component.properties[k].displayName for the control; param.setValue(value, true). Repeated names (Lumetri has several 'Contrast', 'Intensity') are addressed in the PVE spec as 'Name#2' for the 2nd occurrence.",
+   "scriptable": "yes",
+   "script_api": "TrackItem.components (ComponentCollection); Component.displayName, Component.matchName, Component.properties; ComponentParam.displayName, getValue(), setValue(value, updateUI)",
+   "limits": "Display names are localised (this install is English). Out-of-range values are clamped silently (the harvest probed every range by setting +/-1e9). Points are [x, y] frame fractions. Popup values are raw numbers, 0-based as harvested: take the range from the effect's card. Header/group rows have empty or group names and no value. Some params are opaque strings or JSON (Lumetri LookAsset, .mogrt text) and are not settable from the PVE spec. ExtendScript cannot remove a component (UXP can).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/component/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "pve/harvest_pr.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Keyframes: setTimeVarying, addKey, setValueAtKey, setInterpolationTypeAtKey",
+   "summary": "Animates any keyframable ComponentParam (Scale push-ins, Position drifts, blur reveals, volume fades).",
+   "use_for": [
+    "Ken Burns push-in or pull-out on stills (Motion > Scale)",
+    "Pan drifts (Motion > Position)",
+    "Blur-in or glow pulses on effects",
+    "Audio fades and dips (Volume > Level)"
+   ],
+   "how": "param.setTimeVarying(true); for each key: param.addKey(t); param.setValueAtKey(t, value, true). t is in the clip's SOURCE time: add trackItem.inPoint.seconds to a time measured from the clip start (pr_build: k0 = ti.inPoint.seconds). Optional: param.setInterpolationTypeAtKey(t, 5, true) for Bezier. Interpolation constants: 0 linear, 4 hold, 5 bezier, 6 time, 7 time-transition start, 8 time-transition end (1-3 are obsolete eases).",
+   "scriptable": "yes",
+   "script_api": "ComponentParam.setTimeVarying(bool); addKey(time); setValueAtKey(time, value, updateUI); setInterpolationTypeAtKey(time, interpolationType, updateUI); getKeys(); getValueAtKey(time); getValueAtTime(time); removeKey(time); removeKeyRange(start, end); findNearestKey(time, thresholdTicks); findNextKey(time); findPreviousKey(time); areKeyframesSupported(); isTimeVarying()",
+   "limits": "Docs type the time as a Time object; plain seconds numbers work on 26.0.2 (pr_build passes numbers). No control over ease speed/influence: Bezier is automatic. setTimeVarying(false) discards keys. setInterpolationTypeAtKey has not yet been exercised in AdobeBridge.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Colour parameters: setColorValue / getColorValue",
+   "summary": "Sets colour controls (Tint colours, Fill, Stroke, Glow colour, .mogrt colours).",
+   "use_for": [
+    "Brand saffron/green tints on lower thirds and cards",
+    "Recolouring .mogrt shapes and text"
+   ],
+   "how": "'#RRGGBB' -> param.setColorValue(255, r, g, b, true). To detect a colour param, getValue() returns a packed number above 2^32 (that is how the harvest and pr_build tell colour params apart).",
+   "scriptable": "yes",
+   "script_api": "ComponentParam.setColorValue(alpha, red, green, blue, updateUI); ComponentParam.getColorValue()",
+   "limits": "Keyframed colour values (setValueAtKey with a colour) are unverified. Components 0-255 integers.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Intrinsic Motion and Opacity components",
+   "summary": "Every video clip carries 'Motion' (Position, Scale, Scale Width, Uniform Scale, Rotation, Anchor Point, Anti-flicker Filter, Crop Left/Top/Right/Bottom) and 'Opacity' (Opacity, Blend Mode), all scriptable.",
+   "use_for": [
+    "Cover-fit scaling and push-ins on stills and footage",
+    "Picture-in-picture and split layouts (Position + Scale + Crop)",
+    "Fades via Opacity keys",
+    "Blend overlays (film grain, light leaks) via Blend Mode"
+   ],
+   "how": "Motion > Scale (percent), Motion > Position [x, y] as frame fractions (0.5, 0.5 = centre), Motion > Rotation (degrees), Opacity > Opacity (0-100). AdobeBridge clip keys: zoom_from/zoom (Scale ramp), pan [[x,y],[x,y]] (Position), opacity_pct (value or keys).",
+   "scriptable": "yes",
+   "script_api": "component 'Motion' params: Position, Scale, Scale Width, Uniform Scale, Rotation, Anchor Point, Anti-flicker Filter, Crop Left, Crop Top, Crop Right, Crop Bottom; component 'Opacity' params: Opacity, Blend Mode",
+   "limits": "Blend Mode is a raw number (dumps showed 0 and 18); the index-to-mode mapping was not harvested, so verify a mode before relying on it. Opacity masks (pen/ellipse) are not scriptable. Time Remapping did not appear in the component dumps (those were stills).",
+   "status": "current",
+   "sources": [
+    "live component dump from a production Premiere project (not published)",
+    "pr_build.jsx",
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Audio clip Volume and fades",
+   "summary": "Audio clips carry an intrinsic 'Volume' component whose 'Level' param sets gain and takes keyframes; fades and ducking dips are keyframes on it.",
+   "use_for": [
+    "Music bed at -18 dB under VO",
+    "Fade in/out on music and SFX",
+    "Manual ducking dips under VO lines"
+   ],
+   "how": "Level is LINEAR: value = 10^((dB - 15) / 20), so 0 dB = 0.1778. Fade = keys at 10^(-90/20) = 0.0000316 (that is -75 dB on this scale, 20 log10(v) + 15, not -90: inaudible either way) and the target level (pr_build fade_in/fade_out). Measured 2026-10-14 (live wave 3): 0.0562 = -10.0 dB, 0.1778 = 0 dB, 0.3162 = +5.0 dB, 1 = +15.0 dB. Find with components 'Volume' > 'Level'.",
+   "scriptable": "yes",
+   "script_api": "audio TrackItem.components 'Volume' > 'Level' (setValue / addKey / setValueAtKey); audio effects via QE addAudioEffect",
+   "limits": "Mono clips get a further -3 dB pan-law drop. Channel Volume's rows are 'Left' and 'Right' on the same scale (0.1778 = 0 dB; stereo dump, live wave 3); the Panner's param names were not harvested. Track-level volume automation (Audio Track Mixer), Essential Sound tags and Auto-Ducking are not exposed by ExtendScript or the UXP reference; QE has nothing documented for them.",
+   "status": "current",
+   "sources": [
+    "pr_build.jsx",
+    "README.md",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Markers: sequence and clip markers",
+   "summary": "Creates, colours, types and reads markers on sequences and project items.",
+   "use_for": [
+    "Beat or cut markers from a music analysis",
+    "YouTube chapter markers on long-form explainers",
+    "Review notes for a human editor"
+   ],
+   "how": "var m = seq.markers.createMarker(seconds); m.name = 'Ch 2'; m.comments = '...'; m.end = seconds + dur (a seconds NUMBER: the docs say not to assign a Time object to end); m.setTypeAsChapter(); m.setColorByIndex(colorIndex) (documented as setColorByIndex(colorIndex, markerIndex), but Adobe's PProPanel sample passes only the colour index). Colours: 0 green, 1 red, 2 purple, 3 orange, 4 yellow, 5 white, 6 blue, 7 cyan. Read: getFirstMarker()/getNextMarker(m), numMarkers; clip markers via projectItem.getMarkers().",
+   "scriptable": "yes",
+   "script_api": "Sequence.markers (MarkerCollection): createMarker(time), deleteMarker(marker), getFirstMarker(), getNextMarker(m), getPrevMarker(m), getLastMarker(), numMarkers; Marker.name, comments, start (Time), end (Time, write seconds), type (read-only string: Comment, Chapter, Segmentation, WebLink), guid, setTypeAsChapter(), setTypeAsComment(), setTypeAsSegmentation(), setTypeAsWebLink(url, frameTarget), getWebLinkURL(), getWebLinkFrameTarget(), getColorByIndex(), setColorByIndex(colorIndex, markerIndex); ProjectItem.getMarkers()",
+   "limits": "Whether chapter markers reach an exported MP4 depends on the export preset (unverified). UXP equivalent needs a transaction: Markers.getMarkers(seq).createAddMarkerAction(name, type, start, duration, comments).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/marker/",
+    "https://ppro-scripting.docsforadobe.dev/collection/markercollection/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/markers/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Render inside Premiere: Sequence.exportAsMediaDirect",
+   "summary": "Renders a sequence to a file with an .epr export preset, synchronously, without Media Encoder's queue.",
+   "use_for": [
+    "Final MP4 of a reel or documentary at the end of a build",
+    "QC renders for frame checks"
+   ],
+   "how": "seq.exportAsMediaDirect(new File(outMp4).fsName, new File(eprPath).fsName, app.encoder.ENCODE_ENTIRE). H.264 preset used here: C:/Program Files/Adobe/Adobe Media Encoder 2026/MediaIO/systempresets/4E49434B_48323634/00 - Match Source - High bitrate.epr. Then check that the output file exists.",
+   "scriptable": "yes",
+   "script_api": "Sequence.exportAsMediaDirect(outputPath, presetPath, workAreaType) with workAreaType 0 = entire (app.encoder.ENCODE_ENTIRE), 1 = in to out, 2 = work area; Sequence.getExportFileExtension(presetPath)",
+   "limits": "Blocks Premiere until finished. workAreaType 2 needs the work area bar, which is off by default (check seq.isWorkAreaEnabled()). Needs NATIVE backslash paths (use File.fsName): forward slashes fail with 'Unknown Error'. The return value is not a reliable success signal: test the file. Dynamic-Linked comps from an .aep open in AE will not render (link a copy).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "pr_build.jsx",
+    "README.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Media Encoder queue: app.encoder",
+   "summary": "Queues sequences, project items or files to Adobe Media Encoder and starts the batch, so Premiere stays free while renders run.",
+   "use_for": [
+    "Rendering several deliverables (9:16, 1:1, 16:9) from one build",
+    "Batch proxies or transcodes"
+   ],
+   "how": "app.encoder.launchEncoder(); var id = app.encoder.encodeSequence(seq, outPath, eprPath, 0, true); app.encoder.startBatch(); then poll for the output files. Media Encoder 2026 is installed here.",
+   "scriptable": "yes",
+   "script_api": "app.encoder.launchEncoder(); encodeSequence(sequence, outputPath, presetPath, workArea, removeUponCompletion); encodeProjectItem(projectItem, outputPath, presetPath, workArea, removeUponCompletion); encodeFile(filePath, outputPath, presetPath, workArea, removeUponCompletion, inPoint, outPoint); startBatch(); setSidecarXMPEnabled(enabled); setEmbeddedXMPEnabled(enabled)",
+   "limits": "Not yet used by AdobeBridge. encode* calls return a job ID string, or 0 on failure. Job events are used in Adobe's PProPanel sample: app.encoder.bind('onEncoderJobComplete' | 'onEncoderJobError' | 'onEncoderJobProgress' | 'onEncoderJobQueued' | 'onEncoderJobCanceled', fn), with onEncoderJobComplete(jobID, outputFilePath). They only reach a persistent script context such as a CEP panel, not a one-shot BridgeTalk job, so poll files instead (untested here). UXP equivalent: EncoderManager.getManager().exportSequence(...) / encodeFile(...). See also: 'Export encoding choices: VBR 2-pass vs CBR, maximum depth and quality, field order'; 'Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift' and the 'Delivery spec: ...' cards (YouTube upload, vertical Reels/Shorts/TikTok, broadcast masters, mezzanine and archive masters, alpha overlays).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/encoder/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/encodermanager/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Motion Graphics Templates: importMGT and getMGTComponent",
+   "summary": "Places a .mogrt on a track and edits its exposed parameters (text, font, size, colours, sliders, checkboxes, Duration).",
+   "use_for": [
+    "Lower thirds, name straps, callouts, counters and shape animations in news and explainer edits",
+    "House templates exported from AE (make_house_mogrts.py)"
+   ],
+   "how": "var ti = seq.importMGT(path, String(Math.round(startSec * 254016000000)), videoTrackIndex0, 0); var mc = ti.getMGTComponent(); text params are those whose getValue() is JSON containing 'textEditValue': o = JSON.parse(v); o.textEditValue = text; o.fontTextRunLength = [text.length]; optional o.fontEditValue = [postscriptName]; o.fontSizeEditValue = [size]; param.setValue(JSON.stringify(o), true). Set a 'Duration' param if exposed, then ti.end = Time. Colours with setColorValue. From CC Libraries: seq.importMGTFromLibrary(libraryName, mgtName, time, vOff, aOff).",
+   "scriptable": "yes",
+   "script_api": "Sequence.importMGT(path, timeInTicksString, vidTrackOffset, audTrackOffset) -> TrackItem; TrackItem.getMGTComponent() -> Component; Sequence.importMGTFromLibrary(libraryName, mgtName, time, vidTrackOffset, audTrackOffset); UXP: SequenceEditor.insertMogrtFromPath(path, TickTime, vIdx, aIdx), insertMogrtFromLibrary(...)",
+   "limits": "The docs describe importMGT/getMGTComponent only for After Effects-authored .mogrts; templates made in Premiere's Essential Graphics are community-reported to return null from getMGTComponent (unverified here), so author house templates in AE. Premiere clamps .mogrt sliders to AE's 0-100 slider range (expose big numbers as hidden text). Text boxes with a locked font size need 'Scale'. Two .mogrts overlapping on one track overwrite each other: put them on separate tracks. Param names repeat ('Text' group, text, colour): match colours only on params holding a packed colour.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Captions from SRT: Sequence.createCaptionTrack",
+   "summary": "Creates a caption track on a sequence from an imported caption file (.srt etc.).",
+   "use_for": [
+    "Subtitle tracks for reels and YouTube explainers from a Whisper-generated SRT",
+    "Sidecar caption deliverables"
+   ],
+   "how": "Write an .srt, app.project.importFiles([srt]), find its project item, then seq.createCaptionTrack(srtItem, 0, Sequence.CAPTION_FORMAT_SUBTITLE). Formats: CAPTION_FORMAT_SUBTITLE, _608, _708, _TELETEXT, _OPEN_EBU, _OP42, _OP47.",
+   "scriptable": "partial",
+   "script_api": "Sequence.createCaptionTrack(projectItem, startAtTimeSeconds, [captionFormat])",
+   "limits": "Caption STYLING (font, size, position, background box) is not exposed in ExtendScript or the UXP reference: apply a saved caption style by hand, or build styled burned-in text with AE comps or .mogrts (what AdobeBridge does, including Hindi). Automatic speech-to-text exists only in UXP (Transcript.transcribeClipProjectItem, listed for 26.5, not on the installed 26.0.2): use local Whisper for SRTs. Devanagari shaping on caption tracks is unverified. Not yet exercised in AdobeBridge.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/transcript/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Nested sequences (no direct Nest call)",
+   "summary": "There is no 'Nest' method in ExtendScript, QE (known) or UXP. Nesting is done by placing one sequence's project item inside another, or by createSubsequence plus replacement.",
+   "use_for": [
+    "Applying one look or one Transform move to a group of shots",
+    "Pre-building a repeated intro or segment once and reusing it",
+    "Speeding or reversing a whole segment later by hand"
+   ],
+   "how": "Build-time (preferred): build the inner sequence first, then place it with outerTrack.overwriteClip(innerSeq.projectItem, startSeconds). After the fact (the scripting guide's own nestSelection() example): set seq in/out to the selection's start/end seconds, var sub = seq.createSubsequence(true), then seq.videoTracks[trackIdx].overwriteClip(sub.projectItem, start.seconds) over the originals on that track, then restore the old in/out. Clips on OTHER tracks inside the range are not replaced: remove them yourself.",
+   "scriptable": "partial",
+   "script_api": "Sequence.projectItem; Track.overwriteClip(projectItem, time); Sequence.createSubsequence(ignoreTrackTargeting); Sequence.setInPoint(time)/setOutPoint(time); UXP: Sequence.createSubsequence(ignoreTrackTargeting)",
+   "limits": "createSubsequence COPIES (the docs: 'This is not the same as nesting'); it does not replace the originals. Without ignoreTrackTargeting = true (default false), only targeted tracks are copied. Placing a sequence's projectItem via overwriteClip is documented in the guide's example but not yet run in AdobeBridge.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://vakago-tools.com/how-to-nest-a-sequence-using-extendscript-in-premiere-pro/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Auto Reframe sequence: Sequence.autoReframeSequence",
+   "summary": "Generates a new, subject-tracked sequence at another aspect ratio (Premiere 14.0+).",
+   "use_for": [
+    "Turning a 16:9 documentary cut into a 9:16 reel or 1:1 post"
+   ],
+   "how": "var reel = seq.autoReframeSequence(9, 16, 'default', 'MyCut_9x16', false); motionPreset is 'slower', 'default' or 'faster'.",
+   "scriptable": "yes",
+   "script_api": "Sequence.autoReframeSequence(numerator, denominator, motionPreset, newName, useNestedSequences) -> Sequence",
+   "limits": "Analysis is slow and can mis-frame (two-shots, text on screen): QC every shot and fix Position keys. On-screen graphics designed for 16:9 will be cropped. The 'Auto Reframe' effect (AE.ADBE AEFilterAutoFramer) is the per-clip version.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Selection, linking and Scene Edit Detection",
+   "summary": "Selects timeline clips from a script, links/unlinks A/V, and runs Premiere's cut detection on the selection.",
+   "use_for": [
+    "Splitting an imported finished video (news clip, archival reel) into shots before re-editing",
+    "Adding markers at every shot change for a montage plan"
+   ],
+   "how": "trackItem.setSelected(1, 1); seq.performSceneEditDetectionOnSelection('ApplyCuts', true, 'MediumSensitivity'). actionDesired: 'ApplyCuts' or 'CreateMarkers'; sensitivity: 'LowSensitivity', 'MediumSensitivity', 'HighSensitivity'. Read selection with seq.getSelection().",
+   "scriptable": "yes",
+   "script_api": "TrackItem.setSelected(state, updateUI); TrackItem.isSelected(); Sequence.getSelection(); Sequence.linkSelection(); Sequence.unlinkSelection(); Sequence.performSceneEditDetectionOnSelection(actionDesired, applyCutsToLinkedAudio, sensitivity); Sequence.isDoneAnalyzingForVideoEffects(); UXP: SequenceUtils.performSceneEditDetectionOnSelection(clipOperation, trackItemSelection)",
+   "limits": "The docs only say the call returns a boolean; whether all cuts exist when it returns is undocumented. Re-read the track after the call, and again after a pause, until the clip count stops changing. Not yet exercised in AdobeBridge.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/sequenceutils/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Track state: mute, lock, targeting",
+   "summary": "Mutes, locks and targets tracks; reads track names and clip/transition collections.",
+   "use_for": [
+    "Muting a scratch VO track before export",
+    "Targeting tracks before insert edits or createSubsequence"
+   ],
+   "how": "seq.audioTracks[i].setMute(1); track.setLocked(true); track.setTargeted(true, true); iterate track.clips and track.transitions (TrackItemCollections in time order).",
+   "scriptable": "yes",
+   "script_api": "Track.setMute(0|1), isMuted(); Track.setLocked(bool), isLocked(); Track.setTargeted(isTargeted, shouldBroadcast), isTargeted(); Track.name, id, mediaType, clips, transitions",
+   "limits": "isLocked/setLocked and isTargeted/setTargeted are not on the docs Track page. setTargeted(true, true) and isTargeted() are used in Adobe's own PProPanel sample, and all four appear in pymiere's reflection-generated Track class; setLocked's argument is unverified (medium confidence). Several audio tracks can be targeted at once (new sequences target every audio track). Track names are read-only in ExtendScript; UXP 26.3+ adds VideoTrack/AudioTrack.createSetNameAction (not on 26.0.2).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/track/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx",
+    "https://github.com/qmasingarbe/pymiere/blob/master/pymiere/objects/premiere_objects.py"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Source-clip edits: subclips, frame-rate interpretation, scale to frame",
+   "summary": "Edits the master clip in the bin: subclips, overriding the interpreted frame rate or pixel aspect, scale-to-frame, colour labels, proxies, relinking.",
+   "use_for": [
+    "Conforming 50/60 fps footage to a 25 fps sequence for true slow motion (whole clip)",
+    "Subclipping sound bites from a long interview",
+    "Relinking media after a folder move"
+   ],
+   "how": "item.setOverrideFrameRate(25) on a 50 fps clip plays it at 50% speed with no frame blending; do it BEFORE placing the clip. item.createSubClip('bite 03', String(Math.round(inSec * 254016000000)), String(Math.round(outSec * 254016000000)), 1, 1, 1) (start/end are TICKS strings). item.setScaleToFrameSize(). item.changeMediaPath(newPath, true).",
+   "scriptable": "yes",
+   "script_api": "ProjectItem.setOverrideFrameRate(fps); setOverridePixelAspectRatio(num, den); getFootageInterpretation(); setFootageInterpretation(obj); createSubClip(name, startTicks, endTicks, hasHardBoundaries, takeAudio, takeVideo) -> ProjectItem or 0; setScaleToFrameSize(); setColorLabel(0-15: 0 Violet ... 13 Green, 15 Yellow); attachProxy(mediaPath, isHiRes); changeMediaPath(newPath, [overrideChecks]); refreshMedia(); videoComponents() (master-clip effects, read)",
+   "limits": "createSubClip: the docs' parameter table lists takeVideo before takeAudio while the signature says takeAudio, takeVideo: pass 1 for both unless verified. Interpretation changes every use of that media in the project: import a second copy if the same file is also needed at normal speed. How the audio of an overridden clip behaves was not verified here. Clips already on the timeline may not pick up the new duration.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Clip speed and reverse (Speed/Duration)",
+   "summary": "Changing a timeline clip's speed or reversing it has NO supported scripting setter in ExtendScript or UXP; both only read speed.",
+   "use_for": [
+    "Knowing to route slow-mo, fast-forward and reverse shots through a workaround"
+   ],
+   "how": "UI: right-click clip > Speed/Duration (Ctrl+R). From a script use a workaround: (1) Timewarp effect with keyframable Speed (see its card); (2) ProjectItem.setOverrideFrameRate for high-frame-rate footage; (3) pre-render the retimed or reversed shot with ffmpeg (setpts / reverse) and import it; (4) FCP XML import keeps constant speed changes.",
+   "scriptable": "no",
+   "script_api": "read-only: TrackItem.getSpeed(), TrackItem.isSpeedReversed(); UXP VideoClipTrackItem.getSpeed(), isSpeedReversed(). QE trackItem.setSpeed()/setReverse() exist by reflection but are unsupported with no known working argument list.",
+   "limits": "Adobe staff (Bruce Bullis): 'the QE DOM will remain undocumented, and unsupported'; no setSpeed signature was ever confirmed. The UXP reference up to 26.5 has no speed setter.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videocliptrackitem/",
+    "https://community.adobe.com/t5/premiere-pro/setspeed-bad-argument-list/td-p/10079476",
+    "https://github.com/leancoderkavy/premiere-pro-mcp/issues/593"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Time Remapping (speed ramps on the clip)",
+   "summary": "Premiere's Time Remapping (rubber-band speed ramps) is not exposed to any documented scripting surface.",
+   "use_for": [
+    "Knowing that speed ramps must come from Timewarp, AE, ffmpeg or a human"
+   ],
+   "how": "UI: clip > Show Clip Keyframes > Time Remapping > Speed, Ctrl-click to add keys. Scripted alternatives: Timewarp effect 'Speed' keyframes in Premiere; AE time-remap (but rebuilding AE time-remap keys from script crashed AE here: pre-render with ffmpeg instead).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Not in the ExtendScript docs or the UXP reference (checked through 26.5). Keyframed speed in imported FCP XML is converted to one constant average speed.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/",
+    "https://helpx.adobe.com/be_en/premiere-pro/using/importing-xml-project-files-final.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Scriptable slow motion and speed ramps: Timewarp effect",
+   "summary": "Premiere 26 ships the AE Timewarp effect (match name AE.ADBE Timewarp). It retimes footage INSIDE the clip with a keyframable 'Speed' and optical-flow interpolation, and it can be applied and keyed from a script, so it is the practical scripted speed tool.",
+   "use_for": [
+    "Smooth slow motion on a key moment in a documentary or trailer",
+    "Fast-slow-fast speed ramps on action beats in reels",
+    "Freeze-like holds by mapping 'Source Frame'"
+   ],
+   "how": "QE: qeItem.addVideoEffect(qe.project.getVideoEffectByName('Timewarp')); then on the TrackItem's 'Timewarp' component set 'Speed' (harvest range -5000..5000, default 50), 'Method' (0..2, default 2), 'Adjust Time By' (0 = Speed, 1 = Source Frame), keyframe 'Speed' for ramps. PVE spec: {\"name\": \"Timewarp\", \"pr_props\": {\"Speed\": [[0, 100], [0.5, 30], [1.5, 30], [2, 100]]}}.",
+   "scriptable": "yes",
+   "script_api": "QE: qeTrackItem.addVideoEffect(qe.project.getVideoEffectByName('Timewarp')); DOM: ComponentParam 'Speed', 'Method', 'Adjust Time By', 'Source Frame' setValue/addKey/setValueAtKey; UXP: VideoFilterFactory.createComponent('AE.ADBE Timewarp')",
+   "limits": "The clip's timeline length does NOT change: slowing shows only the first part of the source range; speeding past 100 runs out of frames and holds, so give the clip enough source. Pixel-motion warping on crowds, flags and hair. Heavier render. Applied and harvested without error on 26.0.2; the retime look itself is not yet verified in an AdobeBridge build.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/pr/pr_video_effects.json",
+    "pve/cards/pr_effect_06.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Lumetri Color from a script (incl. Look and LUT selection)",
+   "summary": "Lumetri Color can be added by QE and most of its numeric controls set; the built-in Creative 'Look' and Basic 'Input LUT' are numeric INDEX controls, while custom .cube files sit in opaque string params that a script cannot set.",
+   "use_for": [
+    "Scripted grades: exposure, contrast, saturation, temperature, vignette in Lumetri",
+    "Picking one of Premiere's bundled Looks or input LUTs by index"
+   ],
+   "how": "QE addVideoEffect(getVideoEffectByName('Lumetri Color')); then set params by name, with repeated names as 'Name#2' (e.g. two 'Intensity'). Harvested on 26.0.2: 'Input LUT' (0..11) and 'Look' (0..68, 0 = none, others index Premiere's bundled Looks list) EACH appear twice back to back ('Look' and 'Look#2', 'Input LUT' and 'Input LUT#2'); which copy drives the dropdown is unverified, so set both to the same index and check a render. The Creative 'Intensity' is 'Intensity#2' (0..200, default 100); the first 'Intensity' (0..100, default 50) sits in Basic Correction before the Color group. Source-clip input LUTs: ProjectItem.getInputLUTID() (read) and UXP ClipProjectItem.createSetInputLUTIDAction(lutGuid).",
+   "scriptable": "partial",
+   "script_api": "QE addVideoEffect + ComponentParam.setValue on Lumetri params; ProjectItem.getInputLUTID(), getEmbeddedLUTID(); UXP ClipProjectItem.createSetInputLUTIDAction(stringLUTID)",
+   "limits": "The index-to-Look-name mapping was not harvested (render a gallery before choosing). Custom .cube/.look files: 'LookAsset' and 'LUTAsset' are opaque strings (value shows as a junk character) and setting them from script is unverified; the PVE spec rejects string params. For a custom LUT, apply it in AE (or use ffmpeg lut3d on a pre-render), or choose it by hand. Curves, HSL secondaries and color wheels are many params with repeated names: set only what you need.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/pr/pr_video_effects.json",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/clipprojectitem/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Effect presets (.prfpset) from a script",
+   "summary": "Saved Premiere effect presets (and the bins under Effects > Presets) cannot be applied by ExtendScript, QE or UXP. Presets do not appear in getVideoEffectList().",
+   "use_for": [
+    "Knowing to rebuild a preset as effect + parameter values in the PVE spec"
+   ],
+   "how": "UI: drag the preset from Effects > Presets onto the clip. Scripted workaround: read the preset's XML (.prfpset), note each effect and its values, then apply the effect with QE and set the values with ComponentParam (or simply author the PVE spec with those values).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Adobe staff confirmed there is no way to access and apply custom effect presets from script. Parsing .prfpset XML is unofficial and the format is undocumented.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/t5/premiere-pro-discussions/extendscript-import-effect-preset-file/m-p/10848271",
+    "https://community.adobe.com/questions-729/applying-presets-via-click-in-uxp-developer-tools-1550963",
+    "https://community.adobe.com/questions-729/automation-blocks-adding-effect-preset-1416940"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Interchange export: FCP XML, AAF, OMF, project subset",
+   "summary": "Exports the project or a sequence to Final Cut Pro 7 XML, AAF, OMF, or a new .prproj holding one sequence; opens FCP XML as a project.",
+   "use_for": [
+    "Handing a cut to DaVinci Resolve or an audio mixer (AAF/OMF)",
+    "Diffing what Premiere built against the plan by parsing the exported XML",
+    "Delivering a clean single-sequence project"
+   ],
+   "how": "seq.exportAsFinalCutProXML(path); app.project.exportFinalCutProXML(path, true); seq.exportAsProject(path); app.project.exportAAF(seq, path, ...); app.openFCPXML(xmlPath, newProjPath).",
+   "scriptable": "yes",
+   "script_api": "Sequence.exportAsFinalCutProXML(outputPath); Sequence.exportAsProject(outputPath); Project.exportFinalCutProXML(outputPath, suppressUI); Project.exportAAF(sequence, outputPath, mixdownVideo, explodeToMono, sampleRate, bitsPerSample, embedAudio, audioFileFormat, trimSources, handleFrames, presetPath, renderAudioEffects, includeClipCopies, preserveParentFolder); Project.exportOMF(sequence, outputPath, omfTitle, sampleRate, bitsPerSample, audioEncapsulated, audioFileFormat, trimAudioFiles, handleFrames, includePan); app.openFCPXML(path, projPath); UXP 26.2+: ProjectConverter.exportAsOpenTimelineIO / exportAsFinalCutProXML, 26.3+: exportAAF",
+   "limits": "Effects and .mogrts do not survive XML/AAF round trips intact. The UXP ProjectConverter (OTIO) needs 26.2+, so it is NOT available on the installed 26.0.2.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/projectconverter/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "FCP 7 XML import as an alternate edit path",
+   "summary": "An externally generated Final Cut Pro 7 XML (xmeml) imported into Premiere can carry things the scripting API cannot set: constant speed changes, nested sequences, dissolves/wipes, markers, track layout.",
+   "use_for": [
+    "Edits that need constant-speed slow-mo or fast-forward on many clips",
+    "Multi-sequence structures with nests",
+    "Interop with OTIO-based tooling (export OTIO to FCP7 XML, import into Premiere)"
+   ],
+   "how": "Generate xmeml (for example with OpenTimelineIO's fcp_xml adapter), then app.openFCPXML(xmlPath, newProjectPath) or app.project.importFiles([xmlPath]). Continue with ExtendScript/QE for effects, .mogrts and AE comps on top.",
+   "scriptable": "partial",
+   "script_api": "app.openFCPXML(path, projPath); Project.importFiles([xmlPath], true, bin, false)",
+   "limits": "Per Adobe's help page on FCP XML import: constant speed changes are preserved; keyframed speed becomes one constant average speed (the page blocked automated re-fetch in this review, so this is from the earlier read). Effect mapping is partial. Not yet tried in AdobeBridge; check the imported timeline against the plan (export it back with exportAsFinalCutProXML and diff).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/be_en/premiere-pro/using/importing-xml-project-files-final.html",
+    "https://ppro-scripting.docsforadobe.dev/application/application/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Sequence housekeeping: playhead, in/out, work area, clone, delete",
+   "summary": "Controls the playhead (CTI), sequence in/out and work area, and duplicates or deletes sequences.",
+   "use_for": [
+    "Setting in/out before createSubsequence or an in-to-out export",
+    "Duplicating a cut before making a 'version B'",
+    "Cleaning temporary sequences"
+   ],
+   "how": "seq.setPlayerPosition(ticksString); seq.getPlayerPosition() (Time); seq.setInPoint(seconds); seq.setOutPoint(seconds); seq.setWorkAreaInPoint(seconds); seq.clone(); app.project.deleteSequence(seq).",
+   "scriptable": "yes",
+   "script_api": "Sequence.getPlayerPosition(), setPlayerPosition(ticksString), getInPoint(), getOutPoint(), setInPoint(time), setOutPoint(time), getWorkAreaInPoint(), setWorkAreaInPoint(time), setWorkAreaOutPoint(time), isWorkAreaEnabled(), setZeroPoint(ticks), clone(), close(), attachCustomProperty(id, value), end, timebase, frameSizeHorizontal, frameSizeVertical; Project.deleteSequence(seq), openSequence(id)",
+   "limits": "setPlayerPosition takes a TICKS string; in/out setters take seconds or Time. clone() names the copy itself; find it in app.project.sequences.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Time values and ticks",
+   "summary": "Premiere times are Time objects; 1 second = 254016000000 ticks. Some calls take seconds, some ticks strings, some timecode strings.",
+   "use_for": [
+    "Converting PVE spec seconds to what each call expects"
+   ],
+   "how": "var t = new Time(); t.seconds = s; t.ticks is a string. Ticks string for importMGT/setPlayerPosition: String(Math.round(s * 254016000000)). QE calls take timecode strings like '00;00;01;12' (frames after the last ';'). t.getFormatted(frameRate, displayFormat) formats.",
+   "scriptable": "yes",
+   "script_api": "Time.seconds, Time.ticks, Time.getFormatted(frameRate, displayFormat), Time.setSecondsAsFraction(num, den); UXP: TickTime.createWithSeconds(s)",
+   "limits": "Snap every time to the frame grid (frames / fps) before use: clip lookups by start time failed on off-grid values. QE timecode strings use the sequence frame rate.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/other/time/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Metadata: XMP and project metadata",
+   "summary": "Reads and writes XMP and Premiere project-panel metadata on project items; adds custom metadata fields.",
+   "use_for": [
+    "Tagging footage with source/credit and verification status for documentaries",
+    "Storing shot IDs from a plan so a later script can find clips"
+   ],
+   "how": "item.getXMPMetadata() / item.setXMPMetadata(xmpString); app.project.addPropertyToProjectMetadataSchema(name, label, 2); item.setProjectMetadata(xml, [fieldNames]).",
+   "scriptable": "yes",
+   "script_api": "ProjectItem.getXMPMetadata(), setXMPMetadata(xmp), getProjectMetadata(), setProjectMetadata(newMetadata, updatedFields), getProjectColumnsMetadata(); Project.addPropertyToProjectMetadataSchema(propertyName, propertyLabel, propertyType 0 int/1 real/2 string/3 bool)",
+   "limits": "XMP must be valid serialized XMP (use ExtendScript's XMPMeta library to edit). Not yet used in AdobeBridge.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://ppro-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Project Manager: collect or transcode a project for hand-off (app.projectManager)",
+   "summary": "Scripted version of File > Project Manager: copies (or transcodes) a project's used media plus a trimmed project into a destination folder, optionally rendering Dynamic-Linked AE comps to clips.",
+   "use_for": [
+    "Delivering a self-contained project folder to a client or another editor",
+    "Archiving a finished documentary or reel with only the media it uses",
+    "Flattening Dynamic-Linked AE comps to rendered media before hand-off"
+   ],
+   "how": "var pmo = app.projectManager.options; pmo.clipTransferOption = pmo.CLIP_TRANSFER_COPY (or CLIP_TRANSFER_TRANSCODE with pmo.clipTranscoderOption = pmo.CLIP_TRANSCODE_MATCH_PRESET and pmo.encoderPresetFilePath = eprPath); pmo.destinationPath = new Folder(outDir).fsName; pmo.includeAllSequences = false; pmo.affectedSequences = [seq]; pmo.excludeUnused = true; pmo.handleFrameCount = 12; pmo.includePreviews = false; pmo.convertAECompsToClips = true; var r = app.projectManager.process(app.project); then read app.projectManager.errors (array; errors[k][0] is the message).",
+   "scriptable": "yes",
+   "script_api": "app.projectManager.options: affectedSequences, clipTranscoderOption (CLIP_TRANSCODE_MATCH_PRESET | _MATCH_CLIPS | _MATCH_SEQUENCE), clipTransferOption (CLIP_TRANSFER_COPY | CLIP_TRANSFER_TRANSCODE), convertAECompsToClips, convertImageSequencesToClips, convertSyntheticsToClips, copyToPreventAlphaLoss, destinationPath, encoderPresetFilePath, excludeUnused, handleFrameCount, includeAllSequences, includeConformedAudio, includePreviews, renameMedia; app.projectManager.process(project); app.projectManager.errors",
+   "limits": "The options are documented; process() and errors are not on the docs page and come from Adobe's PProPanel sample (consolidateProject). Not yet exercised in AdobeBridge: run on a copy of the project first and check the output folder. Transcoding blocks Premiere for a long time. No UXP equivalent in the reference (checked to 26.5). See also: 'Collect a project for hand-off (AE Collect Files, Premiere Project Manager)'; 'Relink offline media (Link Media)'; 'Missing fonts (After Effects Resolve Fonts, Adobe Fonts, templates)'.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/projectmanager/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE DOM (undocumented): overview",
+   "summary": "The 'Quality Engineering' DOM Adobe uses for internal testing. It is the only ExtendScript way to ADD video/audio effects and transitions, add tracks and razor clips. Undocumented, unsupported, but working on 26.0.2 for what AdobeBridge uses.",
+   "use_for": [
+    "Applying effects and transitions from a script",
+    "Adding tracks beyond the default 3+3",
+    "Listing every installed effect and transition name"
+   ],
+   "how": "app.enableQE(); var qp = qe.project; var qs = qp.getActiveSequence() (only the ACTIVE sequence: app.project.openSequence first); var qt = qs.getVideoTrackAt(i) / getAudioTrackAt(i); loop qt.numItems, qt.getItemAt(k) and skip items whose type is not 'Clip' (gaps are 'Empty' items); match the QE item to the DOM TrackItem by start time (qeItem.start.secs). Inspect anything with obj.reflect.methods / obj.reflect.properties.",
+   "scriptable": "yes",
+   "script_api": "app.enableQE(); qe.project; qe.project.getActiveSequence(); QESequence.getVideoTrackAt(i), getAudioTrackAt(i), numVideoTracks, numAudioTracks; QETrack.numItems, getItemAt(i); QETrackItem.type, start.secs; obj.reflect.methods",
+   "limits": "Adobe: 'the QE DOM will remain undocumented, and unsupported'. QE objects go stale after DOM edits: re-fetch the QE sequence/track after changes and null-check every getItemAt. Names are display names (localised). Any QE method not listed in the QE cards as verified must be checked with reflect.methods on the installed build first.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/t5/premiere-pro/setspeed-bad-argument-list/td-p/10079476",
+    "https://community.adobe.com/questions-729/extendscript-no-longer-able-to-add-effects-using-qe-dom-1367569",
+    "https://github.com/qmasingarbe/pymiere/blob/master/example_and_documentation.md",
+    "https://vakago-tools.com/premiere-pro-qe-api/",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: add video effects (getVideoEffectList, getVideoEffectByName, addVideoEffect)",
+   "summary": "Lists all 143 video effects on this install and applies one to a clip by display name.",
+   "use_for": [
+    "Every Premiere effect in a PVE spec ('effects' with pr_name/pr_props)",
+    "Dumping the installed effect list (pr_build dump_lists)"
+   ],
+   "how": "var known = {}; var l = qe.project.getVideoEffectList(); for (...) known[l[k]] = true; if (known[name]) qeItem.addVideoEffect(qe.project.getVideoEffectByName(name)); then find the new component on the DOM TrackItem by displayName, searching from the LAST component, and set params with ComponentParam.",
+   "scriptable": "yes",
+   "script_api": "qe.project.getVideoEffectList() -> array of display names; qe.project.getVideoEffectByName(name); QETrackItem.addVideoEffect(effect)",
+   "limits": "getVideoEffectByName returns an object even for UNKNOWN names, so always check against getVideoEffectList first. Duplicate names exist in the list (two 'Noise', two 'Transform'): getVideoEffectByName picks one; check the component's matchName after adding. Source-settings entries (ARRIRAW, RED, MPEG Source Settings) are in the list but are not clip effects. Removing an effect needs UXP (createRemoveComponentAction); QE removeEffects is unverified.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/pr/pr_lists.json",
+    "pr_build.jsx",
+    "https://github.com/qmasingarbe/pymiere/blob/master/example_and_documentation.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: add audio effects (getAudioEffectList, getAudioEffectByName, addAudioEffect)",
+   "summary": "Lists all 53 audio effects on this install and applies one to an audio clip.",
+   "use_for": [
+    "Scripted VO chain: DeNoise, Parametric EQ, DeEsser, Dynamics, Hard Limiter",
+    "Reverb or delay on SFX hits, telephone EQ on archival audio"
+   ],
+   "how": "var qa = qe.project.getActiveSequence().getAudioTrackAt(i); find the 'Clip' item by start; qai.addAudioEffect(qe.project.getAudioEffectByName(name)); then the new component is the LAST in the DOM audio TrackItem's components: set its params by display name.",
+   "scriptable": "yes",
+   "script_api": "qe.project.getAudioEffectList(); qe.project.getAudioEffectByName(name); QETrackItem.addAudioEffect(effect)",
+   "limits": "Same unknown-name trap as video: check the list first. Many audio effects keep their settings in an opaque blob (VST-style state); only their exposed params (as in the pr_audio cards) are settable. Track-level (mixer) effects are not reachable.",
+   "status": "current",
+   "sources": [
+    "pve/harvest_pr.jsx",
+    "pve/harvest/pr/pr_lists.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: add transitions (getVideoTransitionList, getVideoTransitionByName, addTransition)",
+   "summary": "Lists 154 video transitions (plus 3 audio: Constant Power, Constant Gain, Exponential Fade) and applies one at a clip's head or tail with duration, alignment and single-sided control.",
+   "use_for": [
+    "Cross Dissolve, Dip to Black/White, Push, Whip, Glitch, VHS Damage, Light Leak, Zoom Blur transitions in reels and trailers",
+    "Head fades from black and tail fades to black"
+   ],
+   "how": "qeItem.addTransition(qe.project.getVideoTransitionByName(name), atStart, '00;00;SS;FF', '00;00;00;00', alignment, singleSided, true). atStart true = at the clip's head. alignment 0.5 = centred on the cut; for single-sided use alignment 0 at the head ('in') or 1 at the tail ('out') with singleSided true. Read back placement from seq.videoTracks[i].transitions (start/end seconds).",
+   "scriptable": "yes",
+   "script_api": "qe.project.getVideoTransitionList(); qe.project.getVideoTransitionByName(name); qe.project.getAudioTransitionList(); qe.project.getAudioTransitionByName(name); QETrackItem.addTransition(transition, atStart, durationTimecode, offsetTimecode, alignment, singleSided, alignToVideo); DOM Track.transitions (read)",
+   "limits": "A centred transition borrows media past the cut; when handles are short Premiere silently drops part of it, so always read back. Transition parameters (direction, border, colour) are not settable through the DOM (no components on transitions). The harvested list has duplicate display names ('Cross Dissolve (Legacy)', 'Dip to Black (Legacy)', 'Dip to White (Legacy)', 'Stretch'): getVideoTransitionByName picks one, so prefer the non-Legacy names. Adding AUDIO transitions with addTransition on a QE audio item is unverified. getVideoTransitionByName returns an object even for unknown names: check the list.",
+   "status": "current",
+   "sources": [
+    "pr_build.jsx",
+    "pve/harvest/pr/pr_lists.json",
+    "README.md",
+    "https://community.adobe.com/questions-729/premiere-pro-scripting-how-to-add-transition-to-clip-1381822"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: add tracks (QESequence.addTracks)",
+   "summary": "Adds video and audio tracks to the active sequence (the official DOM cannot).",
+   "use_for": [
+    "Layered edits: B-roll, overlays, .mogrt lanes, grunge plates, SFX lanes beyond the default 3+3"
+   ],
+   "how": "qe.project.getActiveSequence().addTracks(numVideo, afterVideoIndex, numAudio, audioTrackType, afterAudioIndex, 0, 0, 0). AdobeBridge: addTracks(needV - haveV, haveV, needA - haveA, 1, haveA, 0, 0, 0), then confirms seq.videoTracks.numTracks.",
+   "scriptable": "yes",
+   "script_api": "QESequence.addTracks(numVideoTracks, addVideoAfterIndex, numAudioTracks, audioTrackType, addAudioAfterIndex, numSubmixTracks, submixTrackType, addSubmixAfterIndex)",
+   "limits": "Argument meaning beyond the first five is community knowledge; audioTrackType 1 worked here (assumed stereo, unverified). Always re-count tracks after the call. Removing tracks (QE removeTracks) is unverified.",
+   "status": "current",
+   "sources": [
+    "pr_build.jsx"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: razor (cut clips at a time)",
+   "summary": "Cuts every clip on a QE track at a timecode, like the Razor tool.",
+   "use_for": [
+    "Splitting a long interview or archive clip into bites before re-arranging",
+    "Cutting at beat markers"
+   ],
+   "how": "qe.project.getActiveSequence().getVideoTrackAt(i).razor('00;00;12;05') (pymiere example passes one timecode string). Do the same on the linked audio track. Then re-read the DOM track: new TrackItems appear.",
+   "scriptable": "partial",
+   "script_api": "QETrack.razor(timecode) (community-documented); a QESequence-level razor also appears in reflection lists (arguments unknown)",
+   "limits": "Undocumented and unverified on 26.0.2 here. Usually unnecessary: placing several trimmed copies of the source (setInPoint/setOutPoint + overwriteClip) gives the same result with documented calls.",
+   "status": "current",
+   "sources": [
+    "https://github.com/qmasingarbe/pymiere/blob/master/example_and_documentation.md",
+    "https://vakago-tools.com/premiere-pro-qe-api/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: unsupported clip methods (setSpeed, setReverse, removeEffects, slip, slide, roll, moveToTrack)",
+   "summary": "Reflection of a QE track item lists more methods: addAudioEffect, addTransition, addVideoEffect, canDoMulticam, getClipPanComponent, getComponentAt, getProjectItem, move, moveToTrack, remove, removeEffects, rippleDelete, roll, setAntiAliasQuality, setBorderColor, setBorderWidth, setEndPercent, setEndPosition, setFrameBlend, setMulticam, setName, setReverse, setScaleToFrameSize, setSpeed, setStartPercent, setStartPosition, setSwitchSources, setTimeInterpolationType, slide, slip.",
+   "use_for": [
+    "Knowing these exist before spending time on them; do not plan an edit that depends on them"
+   ],
+   "how": "If a plan truly needs one, probe first: app.enableQE(); var it = qe.project.getActiveSequence().getVideoTrackAt(0).getItemAt(k); it.reflect.methods; try the call on a throwaway sequence and read the result back through the DOM (getSpeed(), start/end).",
+   "scriptable": "partial",
+   "script_api": "QETrackItem.setSpeed(...), setReverse(...), removeEffects(), slip(...), slide(...), roll(...), moveToTrack(...), setFrameBlend(...), setTimeInterpolationType(...), rippleDelete(); signatures unverified",
+   "limits": "No working setSpeed argument list was ever published; Adobe refuses to support QE. Known tooling deliberately leaves setSpeed/setReverse disabled. Treat every method here as unverified until probed on the installed build. Do not probe while another job is running in Premiere. See also: 'Trims: ripple, roll, slip and slide'; 'Closing gaps (Ripple Delete, Close Gap)'.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/t5/premiere-pro/setspeed-bad-argument-list/td-p/10079476",
+    "https://github.com/leancoderkavy/premiere-pro-mcp/issues/593",
+    "https://vakago-tools.com/premiere-pro-qe-api/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "QE: synthetic media, playback and frame export",
+   "summary": "QE can create synthetic items (transparent video, bars and tone, universal counter) and drive the player; frame-export helpers are reported but unverified.",
+   "use_for": [
+    "A transparent video item to hang generator effects on (4-Color Gradient, Lens Flare)",
+    "Bars and tone heads for broadcast deliveries"
+   ],
+   "how": "qe.project.newTransparentVideo(width, height, ...) (pymiere example: newTransparentVideo(1280, 720, 0, 1, 1), last three args unclear); official DOM: app.project.newBarsAndTone(width, height, timeBase, PARNum, PARDen, audioSampleRate, name). Player: qe.project.getActiveSequence().player.play(1) / stop(). Frames: prefer UXP Exporter.exportSequenceFrame (25.6+) or ffmpeg on the rendered MP4.",
+   "scriptable": "partial",
+   "script_api": "qe.project.newTransparentVideo(...); Project.newBarsAndTone(width, height, timeBase, PARNum, PARDen, audioSampleRate, name); QESequence.player.play(speed)/stop(); QESequence.exportFramePNG/exportFrameJPEG (reported in community reflection dumps, unverified)",
+   "limits": "All QE items here are unverified on 26.0.2 except via community docs. A transparent video is not an adjustment layer.",
+   "status": "current",
+   "sources": [
+    "https://github.com/qmasingarbe/pymiere/blob/master/example_and_documentation.md",
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/exporter/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP Premiere API: overview and versions",
+   "summary": "Adobe's modern JavaScript (ES6+, async) plugin API for Premiere: `const ppro = require('premierepro')`. Public beta in 25.2 (Dec 2024), official in 25.6, the only surface getting new features (26.2 hybrid C++ plugins, 26.3 and 26.5 additions).",
+   "use_for": [
+    "Removing effects, adding transitions and effects by match name without QE",
+    "Undoable, grouped edits (transactions)",
+    "Transcripts, OTIO export (newer builds)"
+   ],
+   "how": "Inside a UXP plugin: const ppro = require('premierepro'); const project = await ppro.Project.getActiveProject(); const seq = await project.getActiveSequence(); edits are Action objects executed in a transaction (see the transaction card). TypeScript types: github.com/adobe/premierepro-types. Each member lists the version it appeared in.",
+   "scriptable": "yes",
+   "script_api": "require('premierepro'): Project, Sequence, SequenceEditor, VideoTrack/AudioTrack/CaptionTrack, VideoClipTrackItem/AudioClipTrackItem, VideoComponentChain/AudioComponentChain, VideoFilterFactory, AudioFilterFactory, TransitionFactory, ComponentParam, Keyframe, Markers, EncoderManager, Exporter, Transcript, ClipProjectItem, TickTime, Constants",
+   "limits": "Installed Premiere is 26.0.2: everything marked 25.6 is available, anything marked 26.2, 26.3 or 26.5 is NOT (e.g. ProjectConverter, createSubClipAction, WorkAreaUtils, createSequenceWithPresetPath). Some class pages say 'Since 25.6' for members the changelog lists as added in 26.5 (Transcript.transcribeClipProjectItem, isLanguagePackAvailable): trust the changelog and probe. Several calls were buggy before 26.5 (ClipProjectItem.createSetInPointAction/createSetOutPointAction errored, Markers.getMarkers(filters) threw, importAEComps without a bin could resolve true and add nothing). Most methods are async (await them); some are synchronous (lockedAccess, executeTransaction, SequenceEditor.getEditor, EncoderManager.getManager, setSelection since 26.3). Runs only inside a plugin: AdobeBridge's BridgeTalk/ExtendScript route cannot call it. No speed setter, no time remap, no nest, no adjustment-layer creation, no preset application in the reference (checked to 26.5).",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/tree/main/src/pages/ppro-reference/classes"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: transactions and Actions (lockedAccess, executeTransaction)",
+   "summary": "UXP changes the project only through Action objects added to a CompoundAction inside project.executeTransaction, which must run inside project.lockedAccess. One transaction = one undo step.",
+   "use_for": [
+    "Any UXP edit: placing clips, adding effects, setting params, adding markers, keyframes"
+   ],
+   "how": "project.lockedAccess(() => { project.executeTransaction((compound) => { compound.addAction(chain.createAppendComponentAction(fx)); compound.addAction(param.createSetValueAction(param.createKeyframe(50), true)); }, 'PVE: add blur'); });",
+   "scriptable": "yes",
+   "script_api": "Project.lockedAccess(callback); Project.executeTransaction(callback(compoundAction), undoString); CompoundAction.addAction(action); object.create...Action(...) methods",
+   "limits": "Create every Action inside project.lockedAccess (Adobe's 26.3 example creates it in the lock and adds it in the executeTransaction callback): from 26.3 this is enforced (a breaking change), and on earlier builds (incl. the installed 26.0.2) it was enforced inconsistently, so follow the rule anyway. executeTransaction returns a boolean. lockedAccess takes a synchronous callback (signature () => void): await the async getters BEFORE locking, then build and run the actions inside. Errors surface as a generic 'Script Action failed to execute'.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/project/",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog",
+    "https://forums.creativeclouddeveloper.com/t/creating-action-object-inside-locked-project/11792",
+    "https://community.adobe.com/questions-729/help-with-the-new-uxp-createinsertprojectitemaction-method-script-action-failed-to-execute-1417355"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: SequenceEditor (insert, overwrite, clone, remove, .mogrt)",
+   "summary": "Timeline editing in UXP: insert or overwrite project items at a TickTime on track indices, duplicate track items, remove (with ripple), insert .mogrts.",
+   "use_for": [
+    "Placing clips from a UXP panel",
+    "Ripple-deleting a selection",
+    "Duplicating a shot to another track for a split-screen or glow pass"
+   ],
+   "how": "const ed = ppro.SequenceEditor.getEditor(seq); compound.addAction(ed.createOverwriteItemAction(item, ppro.TickTime.createWithSeconds(4), 1, 1)); ed.createRemoveItemsAction(selection, true, ppro.Constants.MediaType.ANY, false) (MediaType: ANY, VIDEO, AUDIO, DATA). A track index beyond the last track creates a new track (insert).",
+   "scriptable": "yes",
+   "script_api": "SequenceEditor.getEditor(sequence); createInsertProjectItemAction(projectItem, time, videoTrackIndex, audioTrackIndex, limitShift); createOverwriteItemAction(projectItem, time, videoTrackIndex, audioTrackIndex); createCloneTrackItemAction(trackItem, timeOffset, videoTrackVerticalOffset, audioTrackVerticalOffset, alignToVideo, isInsert); createRemoveItemsAction(trackItemSelection, ripple, mediaType, shiftOverLapping); insertMogrtFromPath(path, time, vIdx, aIdx); insertMogrtFromLibrary(lib, name, time, vIdx, aIdx); SequenceEditor.getInstalledMogrtPath()",
+   "limits": "All 25.6, so available on 26.0.2 (signatures match the reference; not exercised here). Not used by AdobeBridge (ExtendScript route).",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/sequenceeditor/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: effects add/remove (VideoFilterFactory, AudioFilterFactory, ComponentChain)",
+   "summary": "Supported (non-QE) way to add video effects by MATCH NAME, add audio effects by display name, insert at an index, and REMOVE effects.",
+   "use_for": [
+    "Applying effects by stable match name (e.g. 'AE.ADBE Timewarp', 'PR.ADBE Solarize') instead of localised names",
+    "Removing or reordering effects, which ExtendScript cannot do"
+   ],
+   "how": "const fx = await ppro.VideoFilterFactory.createComponent('AE.ADBE Mosaic'); const chain = await trackItem.getComponentChain(); in a transaction: chain.createAppendComponentAction(fx) or chain.createInsertComponentAction(fx, index); remove: chain.createRemoveComponentAction(chain.getComponentAtIndex(i)). Audio: await ppro.AudioFilterFactory.createComponentByDisplayName(name, audioTrackItem).",
+   "scriptable": "yes",
+   "script_api": "VideoFilterFactory.createComponent(matchName), getMatchNames(), getDisplayNames(); AudioFilterFactory.createComponentByDisplayName(displayName, audioClipTrackItem), getDisplayNames(); VideoComponentChain/AudioComponentChain.createAppendComponentAction(component), createInsertComponentAction(component, index), createRemoveComponentAction(component), getComponentAtIndex(i), getComponentCount()",
+   "limits": "UXP only (plugin). The match names in PVE's pr_effect cards (harvested 'match') are what createComponent expects. Effect presets still cannot be applied.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videofilterfactory/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videocomponentchain/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: video transitions (TransitionFactory, AddTransitionOptions)",
+   "summary": "Supported way to add or remove a video transition at a clip's start or end with duration, alignment and single-sided options.",
+   "use_for": [
+    "Adding dissolves and dips from a UXP panel without QE"
+   ],
+   "how": "const tr = ppro.TransitionFactory.createVideoTransition(matchName); const opts = new ppro.AddTransitionOptions().setApplyToStart(true).setDuration(ppro.TickTime.createWithSeconds(0.5)).setTransitionAlignment(0.5).setForceSingleSided(false); compound.addAction(videoTrackItem.createAddVideoTransitionAction(tr, opts)); remove: createRemoveVideoTransitionAction(ppro.Constants.TransitionPosition.START).",
+   "scriptable": "yes",
+   "script_api": "TransitionFactory.createVideoTransition(matchName), getVideoTransitionMatchNames(); AddTransitionOptions setApplyToStart(bool), setDuration(TickTime), setTransitionAlignment(number), setForceSingleSided(bool); VideoClipTrackItem.createAddVideoTransitionAction(videoTransition, options), createRemoveVideoTransitionAction(TransitionPosition.START|END)",
+   "limits": "Needs transition MATCH names (getVideoTransitionMatchNames), not the display names AdobeBridge's QE route uses. No audio-transition factory in the reference. Transition parameters are not exposed.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/transitionfactory/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/addtransitionoptions/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videocliptrackitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: parameters and keyframes (ComponentParam, Keyframe)",
+   "summary": "UXP sets values and keyframes through Keyframe objects and Actions.",
+   "use_for": [
+    "Setting effect values and animating them from a UXP panel"
+   ],
+   "how": "Static: compound.addAction(param.createSetValueAction(param.createKeyframe(50), true)). Animated: param.createSetTimeVaryingAction(true); const k = param.createKeyframe(500); k.position = ppro.TickTime.createWithSeconds(1); compound.addAction(param.createAddKeyframeAction(k)); interpolation: param.createSetInterpolationAtKeyframeAction(time, ppro.Constants.InterpolationMode.BEZIER, true). Values: number, string, boolean, PointF, Color.",
+   "scriptable": "yes",
+   "script_api": "ComponentParam.createKeyframe(value), createSetValueAction(keyframe, safeForPlayback), createSetTimeVaryingAction(bool), createAddKeyframeAction(keyframe), createRemoveKeyframeAction(time, updateUI), createRemoveKeyframeRangeAction(in, out, updateUI), createSetInterpolationAtKeyframeAction(time, mode, updateUI), getValueAtTime(time), getStartValue(), getKeyframeListAsTickTimes(), findNearestKeyframe/findNextKeyframe/findPreviousKeyframe, areKeyframesSupported(), isTimeVarying(); Keyframe.value, position, setTemporalInterpolationMode(mode); Constants.InterpolationMode BEZIER, HOLD, LINEAR, TIME, TIME_TRANSITION_START, TIME_TRANSITION_END",
+   "limits": "A Feb 2026 GitHub report (26.2 beta) said createAddKeyframeAction only set the value; in Sept 2026 an Adobe docs contributor answered that the repro never added its second action to the CompoundAction and that keyframes do appear when done correctly. Pattern: commit createSetTimeVaryingAction(true) first, then add every keyframe action with compound.addAction, then read keys back (getKeyframeListAsTickTimes) to verify. Not exercised in AdobeBridge.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/componentparam/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/keyframe/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro-samples/issues/36"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: track items, tracks and selection",
+   "summary": "UXP reads track items and changes their timing, name and enabled state through Actions; speed and adjustment-layer status are read-only.",
+   "use_for": [
+    "Trimming, moving and disabling clips from a UXP panel",
+    "Reading a timeline for analysis"
+   ],
+   "how": "const vt = await seq.getVideoTrack(0); const items = vt.getTrackItems(ppro.Constants.TrackItemType.CLIP, false); actions: item.createSetStartAction(t), createSetEndAction(t), createSetInPointAction(t), createSetOutPointAction(t), createMoveAction(t), createSetDisabledAction(true), createSetNameAction(name). Selection: seq.getSelection(), seq.setSelection(selection) (sync boolean since 26.3), seq.clearSelection().",
+   "scriptable": "yes",
+   "script_api": "Sequence.getVideoTrack(i), getAudioTrack(i), getCaptionTrack(i), get*TrackCount(); VideoTrack.getTrackItems(trackItemType, includeEmpty), isMuted(), setMute(bool); VideoClipTrackItem/AudioClipTrackItem create*Action methods, getStartTime(), getEndTime(), getInPoint(), getOutPoint(), getSpeed(), isSpeedReversed(), isAdjustmentLayer(), getComponentChain(); TrackItemSelection",
+   "limits": "No speed setter, no razor, no lock/target setters listed. Track rename (createSetNameAction) is 26.3+, not on 26.0.2.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videocliptrackitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videotrack/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/sequence/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: export (EncoderManager, Exporter.exportSequenceFrame)",
+   "summary": "UXP renders sequences immediately or via Media Encoder, encodes files or clips, and exports single frames as images.",
+   "use_for": [
+    "Rendering from a UXP panel",
+    "Thumbnail or QC frame export at a given time"
+   ],
+   "how": "const em = await ppro.EncoderManager.getManager(); await em.exportSequence(seq, ppro.Constants.ExportType.IMMEDIATELY, outPath, eprPath, true); frames: await ppro.Exporter.exportSequenceFrame(seq, ppro.TickTime.createWithSeconds(3), 'thumb.png', 'C:/temp/', 1920, 1080) (bmp, dpx, gif, jpg, exr, png, tga, tif).",
+   "scriptable": "yes",
+   "script_api": "EncoderManager.getManager(); exportSequence(sequence, exportType QUEUE_TO_AME|QUEUE_TO_APP|IMMEDIATELY, outputFile, presetFile, exportFull); encodeFile(filePath, outputFile, presetFile, inPoint, outPoint, workArea, removeUponCompletion, startQueueImmediately); encodeProjectItem(clipProjectItem, outputFile, presetFile, workArea, removeUponCompletion, startQueueImmediately); isAMEInstalled; EncoderManager.getExportFileExtension(sequence, presetPath); events EVENT_RENDER_COMPLETE/ERROR/PROGRESS/QUEUE/CANCEL; Exporter.exportSequenceFrame(sequence, time, filename, filepath, width, height); 26.3+: launchEncoder(), startBatchEncode(), setSidecarXMPEnabled(), setEmbeddedXMPEnabled()",
+   "limits": "launchEncoder/startBatchEncode are 26.3+ (not on 26.0.2). UXP only.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/encodermanager/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/exporter/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: transcripts and caption tracks",
+   "summary": "UXP can transcribe a clip with Premiere's Speech-to-Text, export/import transcript JSON and attach external transcripts; caption tracks can be read, muted and (26.3+) renamed, but there is no call that creates captions from a transcript.",
+   "use_for": [
+    "Getting word-timed transcripts of interviews inside Premiere (newer builds)",
+    "Attaching a Whisper transcript to a clip for Text-Based Editing"
+   ],
+   "how": "await ppro.Transcript.transcribeClipProjectItem(clipItem, {language: 'hi-IN'}) (language must be one of querySupportedLanguages()); const json = await ppro.Transcript.exportToJSON(clipItem); import: const segs = ppro.Transcript.importFromJSON(jsonString); compound.addAction(ppro.Transcript.createImportTextSegmentsAction(segs, clipItem)).",
+   "scriptable": "partial",
+   "script_api": "Transcript.transcribeClipProjectItem(clipProjectItem, {language}), exportToJSON(clipProjectItem), importFromJSON(jsonString), createImportTextSegmentsAction(textSegments, clipProjectItem), isLanguagePackAvailable(code), hasTranscript(item) (26.3), querySupportedLanguages() (26.3); CaptionTrack.getTrackItems(type, includeEmpty), isMuted(), setMute(), createSetNameAction(name) (26.3)",
+   "limits": "The class page says transcribeClipProjectItem and isLanguagePackAvailable are 'Since 25.6' but the changelog lists both as added in 26.5: treat them as unavailable on 26.0.2 until probed. If the user's 'auto-detect language' transcription preference is on, it overrides the language option. Hindi language-pack availability unverified. Captions from a transcript and caption styling are UI-only; for scripted captions use ExtendScript createCaptionTrack with an SRT.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/transcript/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/captiontrack/",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: project, sequence and clip utilities",
+   "summary": "UXP project/sequence/source-clip calls: create sequences from media or presets, clone, subsequence, settings, input LUT and frame-rate overrides on clips, markers, work area, scene-edit detection, object masks.",
+   "use_for": [
+    "Setting a source clip's input LUT by GUID",
+    "Overriding clip frame rate for slow motion",
+    "Creating sequences from media in a UXP panel"
+   ],
+   "how": "project.createSequenceFromMedia(name, [clipItems], bin); seq.createCloneAction(); seq.createSubsequence(true); clipItem.createSetOverrideFrameRateAction(25); clipItem.createSetInputLUTIDAction(lutGuid); clipItem.createSetInOutPointsAction(inT, outT); markers: (await ppro.Markers.getMarkers(seq)).createAddMarkerAction(name, type, start, dur, comments).",
+   "scriptable": "yes",
+   "script_api": "Project.createSequence(name), createSequenceFromMedia(name, clipProjectItems, targetBin), createSequenceWithPresetPath(name, presetPath) (26.3), importFiles(paths, suppressUI, bin, asNumberedStills), importSequences(path, ids), openSequence(seq), setActiveSequence(seq), closeSequence(seq) (26.2), save(), saveAs(path); Sequence.createCloneAction(), createSubsequence(ignoreTrackTargeting), getSettings(), createSetSettingsAction(settings), createSetInPointAction/createSetOutPointAction(t), setPlayerPosition(t); ClipProjectItem.createSetOverrideFrameRateAction(fps), createSetInputLUTIDAction(id), createSetInOutPointsAction(in, out), createSetScaleToFrameSizeAction(), createSubClipAction(...) (26.3); Markers.createAddMarkerAction/createMoveMarkerAction/createRemoveMarkerAction; WorkAreaUtils (26.5); SequenceUtils.performSceneEditDetectionOnSelection(op, selection); ObjectMaskUtils.hasObjectMask(projectOrSequence) (26.3)",
+   "limits": "Members marked 26.2/26.3/26.5 are not on the installed 26.0.2. Before 26.5, ClipProjectItem.createSetInPointAction/createSetOutPointAction errored (use createSetInOutPointsAction), Markers.getMarkers(filters) threw, and importAEComps without a target bin could resolve true yet add nothing (pass a bin). Project.createSequence's presetPath argument is deprecated. Project.saveAs re-points the same Project object at the copy (documented quirk). Projects themselves: Project.createProject(path), Project.open(path, openProjectOptions), project.close().",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/project/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/sequence/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/clipprojectitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/markers/",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP: ProjectConverter (OpenTimelineIO, FCP XML, AAF export)",
+   "summary": "Newer UXP builds export a sequence to OpenTimelineIO, FCP XML or AAF.",
+   "use_for": [
+    "Reading back the exact built timeline as OTIO for automated QC",
+    "Round-tripping to Resolve or an audio post house"
+   ],
+   "how": "ppro.ProjectConverter.exportAsOpenTimelineIO(seq, 'C:/out/cut.otio', true); exportAsFinalCutProXML(seq, path, true); exportAAF(seq, path, aafExportOptions).",
+   "scriptable": "yes",
+   "script_api": "ProjectConverter.exportAsOpenTimelineIO(sequence, outputFilePath, suppressUI) (26.2); exportAsFinalCutProXML(sequence, outputFilePath, suppressUI) (26.2); exportAAF(sequence, filePath, AAFExportOptions) (26.3)",
+   "limits": "NOT available on the installed Premiere 26.0.2 (needs 26.2+ and a UXP plugin). On 26.0.2 use ExtendScript Sequence.exportAsFinalCutProXML and convert with the OTIO fcp_xml adapter.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/projectconverter/",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "UXP plugin hosting and external control (UDT, Developer Mode, WebSocket, hybrid plugins)",
+   "summary": "UXP code runs only as a loaded plugin; there is no command-line or file-menu way to run a UXP script. External tools drive it by having the plugin open a WebSocket to a local server.",
+   "use_for": [
+    "Planning a UXP route for AdobeBridge (for example to remove effects or add transitions by match name)"
+   ],
+   "how": "Enable Premiere Settings > Plugins > 'Enable developer mode' and restart Premiere (Adobe's prerequisite for loading plugins with UXP Developer Tool 2.2+ on Premiere 25.6+; developer mode must also be on in UDT), load the plugin folder with UXP Developer Tool (UDT) or install a packaged .ccx. Pattern used by Premiere MCP bridges: the plugin's WebSocket client connects to a local Node/Python server, receives commands, runs them with require('premierepro') and replies. 26.2+ allows hybrid plugins with native C++ modules.",
+   "scriptable": "partial",
+   "script_api": "manifest.json + UXP plugin entrypoints; WebSocket (UXP network API); require('premierepro'); UXP Developer Tool (UDT)",
+   "limits": "Plugin must be loaded in a running Premiere (UDT session or installed .ccx); a crash or restart unloads a UDT-loaded plugin. A UXP plugin cannot call ExtendScript, so an ExtendScript pipeline and a UXP plugin are two separate routes. Hybrid plugins need 26.2+.",
+   "status": "current",
+   "sources": [
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/resources/faq/index.md",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/plugins/index.md",
+    "https://community.adobe.com/questions-729/premiere-26-0-1-not-support-uxp-developer-tool-no-applications-are-connected-to-the-service-make-sure-the-target-application-is-running-and-connected-to-the-service-1550799",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog",
+    "https://github.com/leancoderkavy/premiere-pro-mcp"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "CEP panels (HTML panels calling ExtendScript)",
+   "summary": "The older extension system: an HTML/Node panel inside Premiere that runs ExtendScript with CSInterface.evalScript. Being retired in favour of UXP.",
+   "use_for": [
+    "A persistent in-app context that can receive app.encoder events or poll a local server",
+    "Existing tools such as pymiere's panel"
+   ],
+   "how": "Install an unsigned CEP extension (PlayerDebugMode registry key) and call csInterface.evalScript('jsx code', callback).",
+   "scriptable": "yes",
+   "script_api": "CSInterface.evalScript(script, callback) -> ExtendScript DOM + QE",
+   "limits": "Deprecated for Premiere: new CEP submissions to the Marketplace stop Dec 2027, CEP disabled by default Dec 2028, removed from new versions Dec 2029 (Adobe, Sept 2026). ExtendScript itself is stated as not affected. AdobeBridge does not need CEP (BridgeTalk works).",
+   "status": "current",
+   "sources": [
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/ReadMe.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_scripting",
+   "app": "PR",
+   "name": "Premiere scripting gap list (what no surface can do on 26.0.2)",
+   "summary": "Editing operations with no supported scripting path in ExtendScript, QE (known) or UXP, and the workaround PVE planners should use for each.",
+   "use_for": [
+    "Checking an edit plan before a build so nothing silently fails",
+    "Routing work to AE, ffmpeg, FCP XML or a human step"
+   ],
+   "how": "Speed/reverse: Timewarp effect, setOverrideFrameRate, ffmpeg pre-render, or FCP XML. Time remapping ramps: Timewarp 'Speed' keys or ffmpeg. Adjustment layer creation: template project item, per-clip effects, or a nest. Effect presets (.prfpset): rebuild as effect + values. Custom LUT/.cube in Lumetri: AE or ffmpeg lut3d, or by hand. Caption styling: AE/.mogrt text instead. Track-level audio automation, Essential Sound, Auto-Ducking: per-clip Volume keys instead. Transition parameters (direction, colour): pick a transition variant by name or build it in AE. Nest of an existing selection: build nests at build time.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "QE reflection shows setSpeed/setReverse and other methods that are unsupported and unverified; a probe on the installed build could move an item out of this list. Re-check the UXP changelog when Premiere is updated past 26.0.2.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/",
+    "https://community.adobe.com/t5/premiere-pro-discussions/extendscript-import-effect-preset-file/m-p/10848271",
+    "https://community.adobe.com/t5/premiere-pro/setspeed-bad-argument-list/td-p/10079476"
+   ],
+   "confidence": "medium"
+  }
+ ]
+}

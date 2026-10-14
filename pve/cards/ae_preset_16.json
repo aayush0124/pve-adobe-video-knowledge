@@ -1,0 +1,913 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom - 3D tumble",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "Transition-in: the layer starts at 0% scale and tumbles in 3D (Basic 3D swivel 360 deg on Y, tilt 60 deg on X) while zooming up to fill the frame, landing flat and square at 100%.",
+   "look": [
+    "3D tumble",
+    "spin zoom",
+    "flip-in",
+    "scale from zero",
+    "retro DVE"
+   ],
+   "use_for": [
+    "Pop a photo, screenshot or news card into frame over a background plate",
+    "Playful sticker / logo entrance in social reels",
+    "Retro TV-news DVE style move for satire segments"
+   ],
+   "avoid": [
+    "Looks dated and cheesy on documentary or serious political footage",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent",
+    "Fast Y spin smears faces and on-screen text mid-move"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Basic 3D",
+    "Transform",
+    "Zoom - 3D tumble"
+   ],
+   "duration_note": "Pseudo-effect 'Zoom - 3D tumble' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s (2 keys). Scale (Transform effect) and the motion are expressions driven by that slider, so before comp.time the layer is at scale 0 (invisible) and after +1 s it holds at 100%. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM Zoom3DTumble (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Controls: 'Transition Completion' (ADBE CM Zoom3DTumble-0001, keyed 0 -> 100 = layer arrives), 'X tumble' (-0002, 60 deg, drives Basic 3D Tilt) and 'Y tumble' (-0003, 360 deg, drives Basic 3D Swivel); both unwind linearly to 0. Set both to 0 for a plain zoom-in. The Transform effect's Anchor Point/Position follow the layer anchor point. Retime by moving key 2 of -0001. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/594a.png",
+    "note": "At 0.5 s the shot is small, tilted and mirrored mid-swivel over black, and by 1.4 s it sits flat at full size.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom - bubble",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "Transition-in: the layer grows from 0% to 100% scale (Transform effect, ease-out, full size at 67% completion) while a Spherize bulge with radius = half the layer diagonal holds until 55% completion and then eases flat by 100%, like a bubble inflating into the picture.",
+   "look": [
+    "bubble",
+    "spherize",
+    "fisheye pop",
+    "scale from zero",
+    "bulge"
+   ],
+   "use_for": [
+    "Bouncy pop-in of photos, thumbnails or stickers in reels",
+    "Light-hearted image-card reveal in explainers",
+    "Comic beat in satire edits"
+   ],
+   "avoid": [
+    "Spherize warps faces heavily mid-transition - avoid on politician portraits",
+    "Too toy-like for documentary or news",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Spherize",
+    "Transform",
+    "Zoom - bubble"
+   ],
+   "duration_note": "Pseudo-effect 'Zoom - bubble' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s (2 keys). Scale (Transform effect) and the motion are expressions driven by that slider, so before comp.time the layer is at scale 0 (invisible) and after +1 s it holds at 100%. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM ZoomBubble (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Only control is 'Transition Completion' (ADBE CM ZoomBubble-0001, keyed 0 -> 100 = layer arrives); Spherize Radius/Center and Transform Scale are expressions of it. Retime by moving key 2 of -0001. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/595a.png",
+    "note": "At 0.5 s the shot is almost full size with a strong spherize bulge (rounded, barrel-warped edges over black), and by 1.4 s it is flat at 100%.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom - spiral",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "Transition-in: the layer scales 0% -> 100% while its Transform-effect position makes one full orbit around the layer centre (start angle -360 -> end angle 0, starting from the top) with the orbit radius shrinking 200 px -> 0, so it spirals in and settles centred.",
+   "look": [
+    "spiral",
+    "fly-in",
+    "swirl",
+    "scale from zero",
+    "retro DVE"
+   ],
+   "use_for": [
+    "Fly a photo or quote card into an explainer frame",
+    "Energetic picture entrance in social reels",
+    "Game-show / retro satire graphics"
+   ],
+   "avoid": [
+    "Dated 90s DVE feel on serious news or documentary",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent",
+    "Spiral Size is in layer pixels: a 4K layer scaled down in an HD comp shows a much smaller orbit - raise Spiral Size"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Zoom - spiral"
+   ],
+   "duration_note": "Pseudo-effect 'Zoom - spiral' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s (2 keys). Scale (Transform effect) and the motion are expressions driven by that slider, so before comp.time the layer is at scale 0 (invisible) and after +1 s it holds at 100%. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM ZoomSpiral (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Controls: 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives), 'Spiral Size (pixels)' (-0002, 200, max 2000), 'Spiral Start Angle (degrees)' (-0003, -360) and 'Spiral End Angle (degrees)' (-0004, 0); the angle difference sets how many turns. Retime by moving key 2 of -0001. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/596a.png",
+    "note": "At 0.5 s the shot is about two-thirds size and slightly off-centre over black on its way in, and by 1.4 s it sits centred at full size.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom - wobbling",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "Transition-in: the layer scales from 0% to 100% while skew, skew axis and rotation (Wobble Amount 60) unwind to zero, giving a jelly-like wobbly pop into place.",
+   "look": [
+    "wobble",
+    "skew",
+    "jelly pop",
+    "scale from zero",
+    "cartoony"
+   ],
+   "use_for": [
+    "Cartoony pop-in of stickers, emojis or meme images in reels",
+    "Comic reveal in satire edits",
+    "Kids / light explainer image entrances"
+   ],
+   "avoid": [
+    "Skew distortion looks cheap on real footage and faces",
+    "Wrong tone for documentary or serious news",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Zoom - wobble"
+   ],
+   "duration_note": "Pseudo-effect 'Zoom - wobble' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s (2 keys). Scale (Transform effect) and the motion are expressions driven by that slider, so before comp.time the layer is at scale 0 (invisible) and after +1 s it holds at 100%. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM ZoomWobble (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. The control effect is named 'Zoom - wobble' (not 'wobbling'): 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and 'Wobble Amount' (-0002, 60; Transform Skew = amount, Skew Axis = amount x 6, Rotation = -amount, all unwinding linearly to 0). Retime by moving key 2 of -0001. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/597a.png",
+    "note": "At 0.5 s the shot is scaled down, skewed and rotated into a slanted parallelogram over black, and by 1.4 s it is square at full size.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Band Wipe - Build HD",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Mask-based reveal: seven horizontal bands (each ~1/7 of the 1080 px height) wipe in one after another, each growing from the LEFT edge to full width, top band first, so the image builds top to bottom over ~2 s.",
+   "look": [
+    "band wipe",
+    "horizontal stripes",
+    "sequential build",
+    "hard edge",
+    "broadcast"
+   ],
+   "use_for": [
+    "Build a full-frame graphic or map in stages in an explainer",
+    "Stepped reveal of a headline plate in a news package",
+    "Rhythmic reveal cut on beats in a trailer"
+   ],
+   "avoid": [
+    "HD-only: wrong coverage on 1080x1920 reels or 4K layers",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Hard-edged bands look like old broadcast DVE"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "7 masks, each animating for about 0.29 s (7 frames at 24 fps), staggered back-to-back: band 1 starts at comp.time and the last band finishes at about +2.04 s. Before its keys each band mask has zero width, so the layer is invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Adds 7 masks (Mask 1-7, mode Add, hard edges) whose vertices are fixed 1920x1080 coordinates (decoded as +/-960 x +/-540 around the layer centre): on a vertical 1080x1920 reel or a 4K clip they do not cover the whole layer - precompose the layer into a 1920x1080 comp first. Existing Add masks on the layer combine with them. Retime by moving the keys of layer.property('ADBE Mask Parade').property(i).property('ADBE Mask Shape') (i = 1..7). No effects are added. To use as an OUT, apply at (outPoint - duration) and time-reverse the mask-shape keys.",
+   "equivalent": "Premiere: Band Wipe transition (closest; Premiere's bands slide in together from alternating sides)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/598a.png",
+    "note": "Horizontal bands of about 1/7 frame height fill one at a time from the left edge, top first: band 2 is part-way across at 0.5 s and band 5 is part-way at 1.4 s, with black below.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Band Wipe - crossing HD",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Mask-based reveal: seven horizontal bands grow at the same time from alternating sides (bands 1, 3, 5, 7 from the left edge, bands 2, 4, 6 from the right) and interlock to fill the frame in ~1 s.",
+   "look": [
+    "band wipe",
+    "interlocking stripes",
+    "crossing bands",
+    "hard edge",
+    "broadcast"
+   ],
+   "use_for": [
+    "Punchy full-frame reveal of a news graphic or title plate",
+    "Energetic transition between B-roll shots in reels",
+    "Versus / two-sides story beats in political explainers"
+   ],
+   "avoid": [
+    "HD-only: wrong coverage on 1080x1920 reels or 4K layers",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Hard-edged bands look like old broadcast DVE"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "All 7 band masks animate together: zero width at comp.time -> full width at about +1.0 s. Before comp.time every mask has zero width (layer invisible). Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Adds 7 masks (Mask 1-7, mode Add, hard edges) whose vertices are fixed 1920x1080 coordinates (decoded as +/-960 x +/-540 around the layer centre): on a vertical 1080x1920 reel or a 4K clip they do not cover the whole layer - precompose the layer into a 1920x1080 comp first. Existing Add masks on the layer combine with them. Retime by moving the keys of layer.property('ADBE Mask Parade').property(i).property('ADBE Mask Shape') (i = 1..7). No effects are added. To use as an OUT, apply at (outPoint - duration) and time-reverse the mask-shape keys.",
+   "equivalent": "Premiere: Band Wipe transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/599a.png",
+    "note": "At 0.5 s all seven bands are about half drawn, odd bands from the left and even bands from the right, so they interlock; frame full by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Band Wipe - Zig Zag HD",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Mask-based reveal: seven horizontal bands wipe in one after another, top to bottom, alternating sides (band 1 from the left edge, band 2 from the right, ...), so the image builds down the frame in a zig-zag over ~2 s.",
+   "look": [
+    "band wipe",
+    "zig-zag",
+    "sequential build",
+    "alternating stripes",
+    "hard edge"
+   ],
+   "use_for": [
+    "Stepped reveal of a list / infographic plate in an explainer",
+    "Rhythmic beat-cut reveal in reels or trailers",
+    "Retro broadcast-style title plate reveal"
+   ],
+   "avoid": [
+    "HD-only: wrong coverage on 1080x1920 reels or 4K layers",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "At ~2 s it is slow for fast news edits - compress the keys"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "7 masks of about 0.29 s each, staggered back-to-back from comp.time to about +2.04 s, alternating start sides. Layer invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Adds 7 masks (Mask 1-7, mode Add, hard edges) whose vertices are fixed 1920x1080 coordinates (decoded as +/-960 x +/-540 around the layer centre): on a vertical 1080x1920 reel or a 4K clip they do not cover the whole layer - precompose the layer into a 1920x1080 comp first. Existing Add masks on the layer combine with them. Retime by moving the keys of layer.property('ADBE Mask Parade').property(i).property('ADBE Mask Shape') (i = 1..7). No effects are added. To use as an OUT, apply at (outPoint - duration) and time-reverse the mask-shape keys.",
+   "equivalent": "Premiere: Band Wipe transition (closest; Premiere runs all bands at once)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/600a.png",
+    "note": "Bands build top to bottom on alternating sides: band 2 comes in from the right at 0.5 s and band 5 from the left at 1.4 s, black below.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Barn Doors",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: the incoming layer appears from the left and right edges as two hard-edged 'doors' that close toward the vertical centre line until the shot below is covered. Two Linear Wipes (90 / -90 deg, each driven 0 -> 51%) followed by Invert (Alpha), so the wiped-away areas are what shows; driven by a 'Wipe Master Control 1' slider.",
+   "look": [
+    "barn doors",
+    "split wipe",
+    "doors closing",
+    "hard edge",
+    "symmetrical"
+   ],
+   "use_for": [
+    "Symmetrical scene change between two B-roll shots",
+    "Close in on a title card or chapter plate in an explainer",
+    "Dramatic 'doors shut' beat in a trailer"
+   ],
+   "avoid": [
+    "Invert (Alpha) flips existing transparency: on a cut-out PNG, logo or text layer the transparent areas turn opaque - use on full-frame footage only",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Hard edges (Feather 0) look dated; raise Feather on both Linear Wipes for a softer look"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Invert",
+    "Linear Wipe",
+    "Wipe Master Control"
+   ],
+   "duration_note": "'Wipe Master Control' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s; each Linear Wipe completion = linear(0..100 -> 0..51). Layer invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM TransWipe (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Here the control is named 'Wipe Master Control 1' (with ' 1'): 'Transition Completion' (ADBE CM TransWipe-0001, keyed 0 -> 100 = fully covered). Effect order matters: the Invert must stay after both Linear Wipes. Direction (edges closing inward) read from the wipe angles and the alpha Invert, not rendered. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Barn Doors transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/601a.png",
+    "note": "At 0.5 s the shot shows as two hard-edged strips at the left and right edges with a black gap in the middle closing in, and it fills the frame by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Checker Wipe HD",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Mask-based reveal in a staggered checker (brick) layout: 3 rows of 960 px wide cells - top and bottom rows 2 cells, middle row offset by half a cell (3 cells) - and every cell wipes in from its left edge at the same time, filling the frame in ~1 s.",
+   "look": [
+    "checkerboard",
+    "checker wipe",
+    "grid",
+    "hard edge",
+    "retro broadcast"
+   ],
+   "use_for": [
+    "Retro / game-show style scene change in satire reels",
+    "Reveal a full-frame graphic plate in an explainer",
+    "Playful transition between two photos"
+   ],
+   "avoid": [
+    "HD-only: wrong coverage on 1080x1920 reels or 4K layers",
+    "Very dated look on documentary or serious news",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "All 7 mask shapes animate together from comp.time to about +1.0 s; Mask Expansion also keys 0 -> 1 px over the first frame (closes seams between cells). Layer invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Adds 7 masks (Mask 1-7, mode Add, hard edges) whose vertices are fixed 1920x1080 coordinates (decoded as +/-960 x +/-540 around the layer centre): on a vertical 1080x1920 reel or a 4K clip they do not cover the whole layer - precompose the layer into a 1920x1080 comp first. Existing Add masks on the layer combine with them. Layout decoded from the mask vertices, not rendered. Retime by moving the keys of layer.property('ADBE Mask Parade').property(i).property('ADBE Mask Shape') (i = 1..7). No effects are added. To use as an OUT, apply at (outPoint - duration) and time-reverse the mask-shape keys.",
+   "equivalent": "Premiere: Checker Wipe transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/602a.png",
+    "note": "At 0.5 s a 3-row brick grid of cells (middle row offset by half a cell) is each half wiped in from its left edge, and the frame is full by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Clam Shell",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: the incoming layer appears from the top and bottom edges as two hard-edged halves that close toward the horizontal centre line, like a clam shell shutting over the shot below. Two Linear Wipes (0 / 180 deg) plus Invert on the alpha channel, driven by 'Wipe Master Control'.",
+   "look": [
+    "clam shell",
+    "split wipe",
+    "top-bottom close",
+    "hard edge",
+    "letterbox close"
+   ],
+   "use_for": [
+    "Letterbox-style close into a cinematic shot in trailers",
+    "Symmetrical scene change between B-roll shots",
+    "Close over to a title or chapter card in an explainer"
+   ],
+   "avoid": [
+    "Invert (Alpha) flips existing transparency - full-frame footage only, not logos/text/PNGs",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Hard edges look dated without Feather"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Invert",
+    "Linear Wipe",
+    "Wipe Master Control"
+   ],
+   "duration_note": "'Wipe Master Control' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s. The .ffx stores the keys 0.44 s in, but AE puts the first preset keyframe at the current time when it applies an .ffx, so the move starts at comp.time (render: about 50% closed at +0.5 s, full by +1.4 s). Layer invisible before comp.time.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM TransWipe (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Control 'Wipe Master Control' > 'Transition Completion' (ADBE CM TransWipe-0001). The move starts at comp.time (AE places the first preset key at the current time; the 0.44 s offset stored in the .ffx does not survive the apply). Invert must stay after both Linear Wipes. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Barn Doors transition with a horizontal (top/bottom) orientation",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/603a.png",
+    "note": "At 0.5 s the incoming picture covers top and bottom bands with black still in the middle; full frame at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Clock Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: a hard-edged radial sweep pivoting at the layer centre and starting at 12 o'clock uncovers the layer like a clock hand going round (standard Radial Wipe, Wipe = Counterclockwise, keyed 100 -> 0).",
+   "look": [
+    "clock wipe",
+    "radial sweep",
+    "countdown",
+    "hard edge",
+    "retro"
+   ],
+   "use_for": [
+    "'Hours later' / time-passing beat in documentaries",
+    "Countdown or deadline moments in political / election explainers",
+    "Game-show style reveal in satire reels"
+   ],
+   "avoid": [
+    "Cliched and dated if overused",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Feather 0 by default: add Feather for a softer sweep on cinematic footage"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Radial Wipe"
+   ],
+   "duration_note": "Radial Wipe 'Transition Completion' keys 100 at comp.time -> 0 at about +1.0 s. Layer invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Equivalent hand-built spec: {\"name\": \"ADBE Radial Wipe\", \"props\": {\"Transition Completion\": [[0, 100], [1, 0]], \"Start Angle\": 0, \"Wipe\": 2}} (Wipe Center defaults to the layer centre). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Clock Wipe (Legacy) transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/604a.png",
+    "note": "At 0.5 s the right half of the shot is uncovered by a hard radial edge that started at 12 o'clock and is moving clockwise, and the frame is full by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Corner Reveal",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: the image grows as a hard-edged rectangle from a chosen corner until it fills the frame, using two Linear Wipes (horizontal + vertical) driven by a 'Transition Completion' slider; a 'Corner' dropdown picks Left Top / Left Bottom / Right Top / Right Bottom and a 'Feather' slider softens the edges.",
+   "look": [
+    "corner wipe",
+    "rectangle grow",
+    "box reveal",
+    "hard edge",
+    "clean"
+   ],
+   "use_for": [
+    "Reveal a picture-in-picture or full-frame graphic from a corner in an explainer",
+    "Clean corner-in transition between B-roll shots",
+    "Directional scene change that follows on-screen movement"
+   ],
+   "avoid": [
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Hard edge by default - raise 'Feather' for cinematic footage",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Linear Wipe",
+    "Slider Control"
+   ],
+   "duration_note": "Slider 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s; both Linear Wipe completions = linear(0..100 -> 100..0). Layer invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. Controls are expression controls on the layer: a Dropdown Menu Control '\\tCorner' (1 Left Top default, 2 Left Bottom, 3 Right Top, 4 Right Bottom), Slider Controls '\\tTransition Completion' (keyed 0 -> 100 = layer arrives) and '\\tFeather' (0; feeds both Linear Wipes). Several Slider Controls share one match name, so find them by name. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Inset transition (incoming shot grows from a corner)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/605a.png",
+    "note": "At 0.5 s a hard-edged rectangle from the top-left corner shows the shot over about half the width and height, and it fills the frame by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grid Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: two crossed Venetian Blinds driven by a 'Grid Wipe' pseudo effect make a grid of small square cells that grow until they join into the full image (Cell Size 20 px, Grid Angle 0, Feather 0).",
+   "look": [
+    "grid",
+    "pixel grid",
+    "cell reveal",
+    "digital",
+    "hard edge"
+   ],
+   "use_for": [
+    "Digital / data-style reveal in tech or AI explainers",
+    "Reveal a screenshot or dashboard graphic",
+    "Quick stylised scene change in reels"
+   ],
+   "avoid": [
+    "Small cells shimmer / moire after Instagram compression - raise 'Cell Size'",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Grid Wipe",
+    "Venetian Blinds"
+   ],
+   "duration_note": "'Grid Wipe' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s; each Venetian Blinds completion = linear(0..100 -> 100..0). Layer invisible before comp.time. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM GridWipe (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Controls: 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives), 'Cell Size' (-0002, 20, range 1-2000; becomes both Venetian Blinds Widths), 'Grid Angle' (-0003, 0) and 'Feather' (-0004, 0). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/606a.png",
+    "note": "At 0.5 s the shot shows through an even grid of small square cells with black gaps, and the cells have joined into the full image by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inky Iris Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Organic iris transition: an ink-bleed circle with a boiling fractal-noise edge grows from 'Center' (frame centre by default) to uncover the layer. Built from Solid Composite, Circle, Fractal Noise, Shift Channels, Curves, CC Composite and Set Matte on the layer itself.",
+   "look": [
+    "ink bleed",
+    "organic edge",
+    "iris",
+    "watercolour",
+    "painterly",
+    "soft"
+   ],
+   "use_for": [
+    "Painterly chapter opener or archival-photo reveal in documentaries",
+    "History / culture explainer segments with an ink or watercolour theme",
+    "Soft organic scene change in trailers or emotional reels"
+   ],
+   "avoid": [
+    "Default 3.3 s is slow for reels and news - move the 2nd 'Progress' key to ~0.8-1.2 s",
+    "Heavy stack (Fractal Noise + Curves + mattes) renders slowly on 4K",
+    "Built for full-frame footage: the rig replaces the picture with an internal black-and-white matte and relies on CC Composite (RGB Only) + a final Set Matte to bring the picture back - test transparency on cut-out PNG/text layers first"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "CC Composite",
+    "Checkbox Control",
+    "Circle",
+    "Curves",
+    "Fractal Noise",
+    "Point Control",
+    "Set Matte",
+    "Shift Channels",
+    "Slider Control",
+    "Solid Composite"
+   ],
+   "duration_note": "'Progress' slider keys 0 at comp.time -> 100 at about +3.33 s (80 frames at 24 fps). Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. Controls are expression controls on the layer (find by name; several share a match name): Point '\\tCenter' (layer centre), Sliders '\\tProgress' (keyed 0 -> 100), '\\tUndulation' (720; Fractal Noise Evolution = linear(Progress, 0..100 -> 0..Undulation)), '\\tTransition Width' (495; width of the inky edge), Checkboxes '\\tReverse Transition' and '\\tChange Direction' (both off). Default reveals with the iris opening from Center; 'Change Direction' makes the circle shrink so the reveal closes in from the edges; 'Reverse Transition' turns it into a hide (read from the Circle expressions, not rendered - verify). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Iris Round transition (hard edge, no ink breakup)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/607a.png",
+    "note": "A smoky, ink-bleed edged circle grows from the frame centre: small at 0.5 s and covering most of the frame with dark wispy edges at 1.4 s (not finished, as the 3.33 s timing says).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inky Linear Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Organic straight wipe: an ink-bleed edge with fractal-noise breakup travels across the frame along the 'Direction' angle to uncover the layer (Linear Wipe + Fractal Noise + Shift Channels + Invert + Curves + CC Composite + Set Matte).",
+   "look": [
+    "ink bleed",
+    "organic edge",
+    "linear wipe",
+    "watercolour",
+    "painterly"
+   ],
+   "use_for": [
+    "Painterly scene change in history / culture documentaries",
+    "Ink-themed explainer section transitions",
+    "Soft organic wipe between B-roll shots in trailers"
+   ],
+   "avoid": [
+    "Default 3.3 s is slow for reels and news - shorten the 'Progress' keys",
+    "Heavy render on 4K",
+    "Built for full-frame footage: the rig replaces the picture with an internal black-and-white matte and relies on CC Composite (RGB Only) + a final Set Matte to bring the picture back - test transparency on cut-out PNG/text layers first"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Angle Control",
+    "CC Composite",
+    "Checkbox Control",
+    "Curves",
+    "Fractal Noise",
+    "Invert",
+    "Linear Wipe",
+    "Set Matte",
+    "Shift Channels",
+    "Slider Control"
+   ],
+   "duration_note": "'Progress' slider keys 0 at comp.time -> 100 at about +3.33 s. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. Controls are expression controls on the layer (find by name): Sliders '\\tProgress' (keyed 0 -> 100; drives Linear Wipe completion), Angle '\\tDirection' (0; becomes the Linear Wipe angle), Sliders '\\tUndulation' (270; noise evolution over the move) and '\\tTransition Width' (600; the Linear Wipe feather = width of the inky edge), Checkbox '\\tReverse Transition' (off). There is no 'Change Direction' control on this preset - rotate 'Direction' instead. Default reveals (the alpha Invert shows the wiped area); 'Reverse Transition' sets the Invert's Blend to 100% so it hides instead (read from the expressions - verify). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Wipe transition with feather (no ink breakup)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/608a.png",
+    "note": "A smoky ink-bleed edge rises from the bottom (default direction bottom to top): the lower quarter shows at 0.5 s and about half the frame at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Linear Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: a single hard-edged straight wipe (Wipe Angle -90 deg, Feather 0) uncovers the layer, sweeping from left to right over about a second.",
+   "look": [
+    "linear wipe",
+    "hard edge",
+    "clean",
+    "directional",
+    "classic"
+   ],
+   "use_for": [
+    "Clean directional scene change between B-roll shots",
+    "Wipe on a lower-third plate or headline bar in news",
+    "Match a wipe to on-screen motion (pan, car, walking subject)"
+   ],
+   "avoid": [
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Hard edge looks cheap on cinematic footage - add Feather (e.g. 50-200)",
+    "Needs a layer underneath to read as a transition; on its own it reveals over black/transparent"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Linear Wipe"
+   ],
+   "duration_note": "Linear Wipe 'Transition Completion' keys 100 at comp.time -> 0 at about +1.0 s. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Equivalent hand-built spec: {\"name\": \"ADBE Linear Wipe\", \"props\": {\"Transition Completion\": [[0, 100], [1, 0]], \"Wipe Angle\": -90, \"Feather\": 0}}. Sweep direction (left to right) inferred from the angle; confirm on first use. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Wipe transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/609a.png",
+    "note": "At 0.5 s the left half is uncovered by a hard vertical edge moving left to right, and the frame is full by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Paint On",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Scribble reveal: a Scribble effect (Composite = Reveal Original Image, Fill Type Inside, Angle 60, Spacing 47.5) draws zig-zag strokes across a full-frame mask and the layer shows only through the strokes; the strokes draw on over ~1 s and thicken 25 -> 50 px over ~1.5 s until they overlap into a solid fill, as if the picture were scribbled in by hand.",
+   "look": [
+    "scribble",
+    "hand-drawn",
+    "doodle",
+    "marker strokes",
+    "sketchy"
+   ],
+   "use_for": [
+    "Whiteboard / doodle-style reveal of a screenshot or infographic in AI-education explainers",
+    "Playful reveal of a photo or meme in reels",
+    "Kid-friendly or comic segment transitions"
+   ],
+   "avoid": [
+    "Crude scribble look on cinematic or documentary footage",
+    "Scribble is set to All Masks: any mask already on the layer gets scribble-filled too, on top of the added full-frame 'Mask 1'",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Scribble",
+    "Wipe Master Control"
+   ],
+   "duration_note": "'Wipe Master Control' > 'Transition Completion' keys 0 at comp.time -> 100 at about +1.5 s; Scribble End = linear(0..67 -> 0..100), so the strokes finish drawing at about +1.0 s, and Stroke Width easeIn 25 -> 50 px over the full 1.5 s closes the gaps (50 px > 47.5 spacing). Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. The master control is ADBE CM TransWipe (registered in Support Files/PresetEffects.xml, hidden from the Effects menu); find it by that match name. Adding it by match name gives the bare control only - the preset is what wires the expressions. Adds Mask 1 (path set by an expression to the full layer rectangle) plus the Scribble effect; its Stroke Width and End are expressions of 'Wipe Master Control' > 'Transition Completion' (ADBE CM TransWipe-0001). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/610a.png",
+    "note": "At 0.5 s diagonal scribble strokes with thin black gaps have filled the top-left half of the frame, and by 1.4 s they have merged into the full picture.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pixelated Iris Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Digital iris transition: a circle with a blocky Mosaic-pixelated, noise-broken edge grows from 'Center' to uncover the layer (Circle + Fractal Noise + Mosaic + Shift Channels + Curves + CC Composite + Set Matte; Block Size 60).",
+   "look": [
+    "pixelated",
+    "8-bit",
+    "mosaic edge",
+    "iris",
+    "digital",
+    "glitchy"
+   ],
+   "use_for": [
+    "Tech / AI explainer scene changes",
+    "Gaming or retro-digital themed reels",
+    "Digital 'data reveal' of a screenshot or interface"
+   ],
+   "avoid": [
+    "Default 3.3 s is slow - shorten the 'Progress' keys for reels",
+    "Blocky edges look cheap on cinematic documentary footage",
+    "Heavy render (Fractal Noise + Mosaic + Curves stack); built for full-frame footage: the rig replaces the picture with an internal black-and-white matte and relies on CC Composite (RGB Only) + a final Set Matte to bring the picture back - test transparency on cut-out PNG/text layers first"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "CC Composite",
+    "Checkbox Control",
+    "Circle",
+    "Curves",
+    "Fractal Noise",
+    "Mosaic",
+    "Point Control",
+    "Set Matte",
+    "Shift Channels",
+    "Slider Control",
+    "Solid Composite"
+   ],
+   "duration_note": "'Progress' slider keys 0 at comp.time -> 100 at about +3.33 s. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. Controls are expression controls on the layer (find by name): Point '\\tCenter', Sliders '\\tProgress' (keyed 0 -> 100), '\\tUndulation' (0 by default, so the noise edge does not evolve - raise it for a boiling edge), '\\tTransition Width' (270), '\\tBlock Size' (60 = block edge in px; Mosaic blocks = layer width/height / Block Size), Checkboxes '\\tReverse Transition' and '\\tChange Direction' (both off). Default reveals with the iris opening from Center; 'Change Direction' closes it in from the edges, 'Reverse Transition' turns it into a hide (read from the expressions, not rendered - verify). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Iris Round transition (closest; no pixelated edge)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/611a.png",
+    "note": "A circle with a blocky mosaic edge grows from the centre (the revealed area is itself pixelated at 0.5 s); at 1.4 s most of the frame is clear with a blocky black border left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pixelated Linear Wipe",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Digital straight wipe: a blocky Mosaic-pixelated, noise-broken edge travels across the frame along the 'Direction' angle to uncover the layer (Linear Wipe + Fractal Noise + Mosaic + Invert + Curves + CC Composite + Set Matte).",
+   "look": [
+    "pixelated",
+    "8-bit",
+    "mosaic edge",
+    "digital wipe",
+    "glitchy"
+   ],
+   "use_for": [
+    "Tech / AI explainer section transitions",
+    "Retro-gaming or digital themed reels",
+    "Stylised wipe onto a screen recording"
+   ],
+   "avoid": [
+    "Default 3.3 s is slow - shorten the 'Progress' keys",
+    "Blocky look is wrong for serious documentary or news",
+    "Heavy render; built for full-frame footage: the rig replaces the picture with an internal black-and-white matte and relies on CC Composite (RGB Only) + a final Set Matte to bring the picture back - test transparency on cut-out PNG/text layers first"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Angle Control",
+    "CC Composite",
+    "Checkbox Control",
+    "Curves",
+    "Fractal Noise",
+    "Invert",
+    "Linear Wipe",
+    "Mosaic",
+    "Set Matte",
+    "Shift Channels",
+    "Slider Control"
+   ],
+   "duration_note": "'Progress' slider keys 0 at comp.time -> 100 at about +3.33 s. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. Controls are expression controls on the layer (find by name): Sliders '\\tProgress' (keyed 0 -> 100), Angle '\\tDirection' (0; the Linear Wipe angle), Sliders '\\tUndulation' (270), '\\tTransition Width' (540; Linear Wipe feather), '\\tBlock Size' (60 = block edge in px), Checkbox '\\tReverse Transition' (off). There is no 'Change Direction' control on this preset - rotate 'Direction' instead. Default reveals; 'Reverse Transition' flips it to a hide (read from the expressions - verify). To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Wipe transition (closest; no pixelated edge)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/612a.png",
+    "note": "A blocky mosaic edge rises from the bottom (default bottom to top): lower quarter shows at 0.5 s, about half the frame at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Radial Wipe - Cardinal",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Wipe-OFF by default: a hard-edged radial sweep pivoting at one of nine cardinal points ('Center' dropdown: Left Top default ... Right Bottom), turning Clockwise / Counterclockwise / Both ('Direction' dropdown), erases the layer to reveal what is below. The sweep amount auto-scales (25% of a turn from corners, 50% from edge midpoints, 100% from the centre) so it just clears the frame. The preset also carries an Invert (Alpha) effect that is switched OFF; turning it on flips the rig into a reveal.",
+   "look": [
+    "radial wipe",
+    "corner sweep",
+    "fan wipe",
+    "hard edge",
+    "directional"
+   ],
+   "use_for": [
+    "Sweep a full-frame graphic, map or title card off screen to reveal the next shot in an explainer",
+    "Scene change pivoting from a corner or edge to follow the composition",
+    "Fan-style exit of a news title plate"
+   ],
+   "avoid": [
+    "It is an OUT transition as shipped: on an incoming layer it plays backwards (layer visible, then erased) - swap the keys or enable Invert for an IN",
+    "Hard edge, no feather control exposed (set Radial Wipe Feather directly)",
+    "If you enable the Invert for an IN, it flips existing transparency: cut-out logos/text/PNGs turn opaque - swap keys instead"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Invert",
+    "Radial Wipe",
+    "Slider Control"
+   ],
+   "duration_note": "Slider 'Transition Completion' keys 0 at comp.time -> 100 at about +1.0 s (1.0 s sweep). The .ffx stores the keys 0.2 s in, but AE puts the first preset keyframe at the current time when it applies an .ffx, so there is no hold: render shows about half the sweep done at +0.5 s and the layer fully erased by +1.4 s.",
+   "scripting": "Set comp.time = (layer.outPoint - 1.0) so the sweep ends at the out point, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Put this OUTGOING layer ABOVE the next clip with an overlap of at least 1.0 s. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: do not rename them, and strip the leading tab when searching by name. Controls (find by name): Slider '\\tTransition Completion' (keyed 0 -> 100 = layer erased), dropdowns '\\tCenter' (1 Left Top, 2 Left Center, 3 Left Bottom, 4 Middle Top, 5 Middle Center, 6 Middle Bottom, 7 Right Top, 8 Right Center, 9 Right Bottom) and '\\tDirection' (1 Clockwise, 2 Counterclockwise, 3 Both); Radial Wipe Transition Completion, Start Angle, Wipe Center and Wipe are expressions of them. The Invert (Alpha) effect is present but disabled (read from the .ffx enable flag). For an IN on an incoming layer, apply at layer.inPoint and swap the two slider keyframe values (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)). Direction semantics read from the expressions, not rendered.",
+   "equivalent": "Premiere: Radial Wipe (Legacy) transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/613a.png",
+    "note": "At 0.5 s most of the frame is erased by a sweep pivoting at the top-left corner (picture left only in the lower-left wedge); fully black at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Venetian Blinds",
+   "match": null,
+   "category": "Transitions - Wipes",
+   "status": "current",
+   "summary": "Reveal: thin hard-edged stripes (Width 24 px, Direction -90 deg, Feather 0) open like window blinds to uncover the layer over about a second (standard Venetian Blinds keyed 100 -> 0).",
+   "look": [
+    "venetian blinds",
+    "stripes",
+    "slats",
+    "hard edge",
+    "retro"
+   ],
+   "use_for": [
+    "Retro / noir-style scene change in trailers",
+    "Stylised reveal of a photo in a documentary montage",
+    "Quick graphic-plate reveal in explainers"
+   ],
+   "avoid": [
+    "Thin 24 px stripes shimmer after social-media compression - widen 'Width' for reels",
+    "The layer is invisible before the first keyframe: apply at the layer's in point, not mid-clip",
+    "Dated if used often"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Venetian Blinds"
+   ],
+   "duration_note": "Venetian Blinds 'Transition Completion' keys 100 at comp.time -> 0 at about +1.0 s. Times decoded from the .ffx keyframe data (23976 ticks/s), so treat them as +/-1 frame.",
+   "scripting": "Set comp.time to the transition start (layer.inPoint for an IN), deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Stack this incoming layer ABOVE the outgoing clip with an overlap at least as long as the transition: it reveals itself over whatever is below (transparent/black if nothing). Equivalent hand-built spec: {\"name\": \"ADBE Venetian Blinds\", \"props\": {\"Transition Completion\": [[0, 100], [1, 0]], \"Direction\": -90, \"Width\": 24, \"Feather\": 0}}. Stripe orientation not rendered - confirm on first use. To use it as an OUT transition, apply at (outPoint - duration) and swap the two keyframe values of the driver property (prop.setValueAtKey(1, v2); prop.setValueAtKey(2, v1)).",
+   "equivalent": "Premiere: Venetian Blinds transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/614a.png",
+    "note": "At 0.5 s the shot shows through thin horizontal slats about half open, and by 1.4 s the blinds are fully open.",
+    "rerender": false
+   }
+  }
+ ]
+}

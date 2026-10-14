@@ -1,0 +1,1216 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Focus Blur",
+   "match": "AE.Impact_Focus_Blur_FX",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Keeps an elliptical (or linear) focus area sharp and lens-blurs everything outside it, with feathered falloff, bokeh highlight gain and chromatic fringing, to steer the eye to the subject.",
+   "look": [
+    "shallow depth of field",
+    "selective focus",
+    "lens blur",
+    "bokeh",
+    "tilt-shift",
+    "vignette blur"
+   ],
+   "use_for": [
+    "isolate one leader in a group press shot or podium line-up",
+    "fake shallow depth of field on flat phone or news footage",
+    "tilt-shift miniature look on aerial rally / city shots (only if Focus Type 1 is the linear band: render-check)",
+    "defocus the background behind a lower-third or quote card",
+    "animated focus pull to reveal the subject in a trailer"
+   ],
+   "avoid": [
+    "focus area that does not follow a moving subject: track or keyframe Position",
+    "hard edges (low Feather) look like a cheap cut-out",
+    "very high Chromatic Aberration looks like a broken lens"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blur Amount",
+     "does": "strength of the out-of-focus blur",
+     "typical": "30-70 (default 40)"
+    },
+    {
+     "name": "Focus Type",
+     "does": "shape of the sharp area (dropdown 0..1); 0 default = spot/ellipse using Width/Height/Roundness, 1 assumed linear tilt-shift band",
+     "typical": "0"
+    },
+    {
+     "name": "Position",
+     "does": "centre of the sharp area (frame fractions)",
+     "typical": "[0.5, 0.45] or the subject's face"
+    },
+    {
+     "name": "Width",
+     "does": "width of the sharp area",
+     "typical": "25-50"
+    },
+    {
+     "name": "Height",
+     "does": "height of the sharp area",
+     "typical": "30-60"
+    },
+    {
+     "name": "Feather",
+     "does": "softness of the transition from sharp to blurred",
+     "typical": "40-100"
+    },
+    {
+     "name": "Gain",
+     "does": "boosts bright highlights in the blur into bokeh balls",
+     "typical": "10-40"
+    },
+    {
+     "name": "Chromatic Aberration",
+     "does": "colour fringing in the blurred zone",
+     "typical": "0-25"
+    }
+   ],
+   "demo_settings": {
+    "Blur Amount": 80,
+    "Position": [
+     0.5,
+     0.45
+    ],
+    "Width": 35,
+    "Height": 45,
+    "Feather": 60,
+    "Gain": 30
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Premiere: Gaussian Blur with an inverted, feathered effect mask; After Effects: Camera Lens Blur with a radial-gradient blur map",
+   "pairs_with": [
+    "Vignette",
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Bokeh Blur"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Focus Type labels are not harvested (0..1); keep 0 unless render-checked. Angle rotates the focus shape, Roundness 100 = ellipse, lower = rounded rectangle (assumed). Scale (0..200) resizes the whole focus shape. Seed only changes noise/bokeh randomness. Position does not follow the subject: keyframe it or apply to a tracked adjustment layer.",
+   "recipe": {
+    "Blur Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      70
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/102.png",
+    "note": "Centre ellipse around the middle of the frame stays sharp while stripes, foreground blocks and frame edges are lens-blurred, with bokeh blooms on the small lamps at right.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Glint",
+   "match": "AE.Impact_Glint_FX",
+   "category": "Lights & Glows",
+   "status": "current",
+   "summary": "Adds animated star / cross-shaped glints and shimmer to the brightest highlights of the clip, with control over star shape, size, colour and chromatic fringing.",
+   "look": [
+    "sparkle",
+    "star glint",
+    "shimmer",
+    "shine",
+    "glamour",
+    "cross filter"
+   ],
+   "use_for": [
+    "sparkle on trophies, medals, jewellery, gold or chrome logos",
+    "celebration / victory montage shots with bright lights",
+    "shiny title or logo reveal in a trailer or channel intro",
+    "night city lights or stage lights for an energetic reel"
+   ],
+   "avoid": [
+    "on faces or skin highlights it looks cheesy",
+    "noisy or flickery footage makes the glints flicker",
+    "low Highlights Only on bright daylight shots covers the frame in stars"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Intensity",
+     "does": "overall glint strength",
+     "typical": "60-100 (default 80)"
+    },
+    {
+     "name": "Highlights Only",
+     "does": "brightness threshold: higher = only the brightest highlights glint",
+     "typical": "30-60 (lower for more glints)"
+    },
+    {
+     "name": "Glint Scale",
+     "does": "length of the star rays",
+     "typical": "25-70"
+    },
+    {
+     "name": "Cross Scale",
+     "does": "size of the secondary cross rays",
+     "typical": "40-80"
+    },
+    {
+     "name": "Angle",
+     "does": "rotation of the star rays (degrees)",
+     "typical": "22.5 or 45"
+    },
+    {
+     "name": "Shimmer",
+     "does": "amount of animated twinkle",
+     "typical": "50-90"
+    },
+    {
+     "name": "Color",
+     "does": "tint colour (default warm gold #FFC36E)",
+     "typical": "#FFC36E or #FFFFFF"
+    },
+    {
+     "name": "Colorize",
+     "does": "how much the Color tints the glints",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Intensity": 100,
+    "Highlights Only": 30,
+    "Glint Scale": 50,
+    "Cross Scale": 60,
+    "Colorize": 30
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Glow (After Effects has no native star glint; Trapcode Starglow is the usual third-party match)",
+   "pairs_with": [
+    "Light Leaks",
+    "Wonder Glow",
+    "Lumetri Color",
+    "Volumetric Rays"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Glints are found automatically from the image highlights, so a dark frame shows little: lower 'Highlights Only' first. Shimmer animates by itself (Shimmer Speed); Variation Speed animates the colour. Blend Mode is a 0..1 dropdown with unharvested labels. Specular adds extra hot-spots; Position/Feather appear to limit where glints show (default centre, wide feather) - unverified. Seed changes the random twinkle pattern. Colour default decoded from the 64-bit harvest value as about #FFC36E.",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      100
+     ],
+     [
+      1.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/103.png",
+    "note": "Star/cross-shaped ray glints burst from the small lamps, flowers, faces and bright wall areas, with an overall soft glow haze over the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Grow",
+   "match": "AE.Impact_Grow_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Self-animating scale-up: the clip grows from Initial Scale to Target Scale (or keeps growing at a % per second rate) around an anchor, with easing curves and motion blur, i.e. a one-click Ken Burns push-in.",
+   "look": [
+    "push-in",
+    "slow zoom",
+    "Ken Burns",
+    "punch-in",
+    "scale up",
+    "eased motion"
+   ],
+   "use_for": [
+    "slow push-in on still photos and archive images in documentaries",
+    "punch-in on a speaker for emphasis in news/explainer reels",
+    "keep static B-roll alive under VO",
+    "pop-in of a logo or graphic with overshoot"
+   ],
+   "avoid": [
+    "growing low-resolution photos far past 150% shows softness",
+    "big fast zooms on every shot feel like a template",
+    "anchor left at centre when the subject is off-centre pushes the subject out of frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Initial Scale",
+     "does": "scale (%) at the start of the animation",
+     "typical": "100"
+    },
+    {
+     "name": "Target Scale",
+     "does": "scale (%) at the end of the animation",
+     "typical": "110-125 for documentary push-ins"
+    },
+    {
+     "name": "Anchor",
+     "does": "point the zoom grows toward (frame fractions)",
+     "typical": "the subject's face, e.g. [0.4, 0.35]"
+    },
+    {
+     "name": "Mode",
+     "does": "two modes per Film Impact keywords, Continuous (grows from Initial Scale at Grow (%/s)) and Destination (Initial -> Target Scale); index order unverified, 0 may be Continuous",
+     "typical": "set explicitly; render-check"
+    },
+    {
+     "name": "Grow (%/s)",
+     "does": "growth rate for the continuous mode",
+     "typical": "2-8"
+    },
+    {
+     "name": "Ease In",
+     "does": "slow start of the tween",
+     "typical": "20-60"
+    },
+    {
+     "name": "Ease Out",
+     "does": "slow end of the tween",
+     "typical": "20-60"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur amount",
+     "typical": "0-20"
+    }
+   ],
+   "demo_settings": {
+    "Initial Scale": 130,
+    "Target Scale": 150,
+    "Grow (%/s)": 3
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Transform effect / Motion Scale keyframes with easing (After Effects: layer Scale keyframes)",
+   "pairs_with": [
+    "Shrink",
+    "Move",
+    "Camera Shake",
+    "Directional Blur"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Self-animating: the effect tweens from the Initial value to the Target value on its own, so no keyframes are needed (recipe left empty). Mode 0..1 labels were not harvested. Film Impact's catalog keywords name the two modes 'continuous' (runs from the Initial value at the per-second rate) and 'destination' (Initial -> Target over the Effect Timing window), in that order, so 0 (default) may well be Continuous; the index order is unverified. Set Mode explicitly and also set the per-second rate to something sane, so the result is acceptable whichever mode index is live; render-check the first and last frame. 'Type' 0..3 picks the curve family, but there are five parameter groups for its four values: Ease In/Ease Out/Anticipate/Overshoot, Frequency/Amplitude/Decay, Anticipate#2/Bounces/Initial Velocity/Elasticity, Ease Peak/Ease Base/Center and Frequency#2/Phase Shift/Decay#2, so the mapping is unverified. Keep Type 0 (default, assumed the plain ease) and shape it only with Ease In / Ease Out. Effect Timing: Units 0..1, 'Start Offset' and 'Duration' each appear twice (#2 is assumed to be the twin used by the other Units setting, so set both); default Duration 0 appears to mean 'whole clip' (unverified, render-check before relying on timing). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it at default. 'Curve Graph' is a string and cannot be set. Edge Behavior 0..3 labels unknown (fills the area the clip uncovers). Motion Blur 0..100 is the built-in motion blur amount. Demo starts at Initial Scale 130 with a slow 3 %/s rate so the frame is visibly zoomed at any time, whatever Mode or Effect Timing does.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/104.png",
+    "note": "Whole clip is scaled up about 130% around the centre (stripes and foreground blocks pushed out toward the frame edges), a clean push-in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Light Leaks",
+   "match": "AE.Impact_Light_Leaks_FX",
+   "category": "Lights & Glows",
+   "status": "current",
+   "summary": "Generates animated, film-style light leaks (coloured strikes and soft spots of light) over the clip, with spectrum, hue, diffraction and blend controls and a Master amount.",
+   "look": [
+    "light leak",
+    "film burn",
+    "coloured flare",
+    "sun streak",
+    "dreamy",
+    "nostalgic"
+   ],
+   "use_for": [
+    "flash of light to hide or sell a cut in a reel or trailer",
+    "warm nostalgic look on flashback / archive segments",
+    "energetic title or channel intro",
+    "celebration or victory montage moments"
+   ],
+   "avoid": [
+    "serious news, tragedy or hard political reporting: it reads as playful or promotional",
+    "Master at 100 for long stretches washes out faces and text",
+    "same leak on every cut quickly looks cheap"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Master",
+     "does": "overall amount of the leak (fade it in and out)",
+     "typical": "40-100"
+    },
+    {
+     "name": "Strike Amount",
+     "does": "strength of the long light streaks",
+     "typical": "50-100"
+    },
+    {
+     "name": "Spot Amount",
+     "does": "strength of the soft round light spots",
+     "typical": "20-60"
+    },
+    {
+     "name": "Position",
+     "does": "where the light comes from (frame fractions)",
+     "typical": "a corner, e.g. [0.2, 0.25]"
+    },
+    {
+     "name": "Speed",
+     "does": "how fast the leak drifts",
+     "typical": "3-15"
+    },
+    {
+     "name": "Hue",
+     "does": "shifts the leak colours (degrees)",
+     "typical": "-30..30 for warm/cool variants"
+    },
+    {
+     "name": "Color Spectrum",
+     "does": "colour palette preset (dropdown 0..2, labels not harvested)",
+     "typical": "0"
+    },
+    {
+     "name": "Pattern",
+     "does": "scale/variant of the leak pattern",
+     "typical": "30-200"
+    }
+   ],
+   "demo_settings": {
+    "Master": 100,
+    "Strike Amount": 100,
+    "Spot Amount": 60,
+    "Position": [
+     0.2,
+     0.25
+    ]
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "no native one-click match. Premiere: the Film Impact 'Light Leak' transition, or stock light-leak footage in Screen/Add; After Effects: Lens Flare + colourised Fractal Noise in Screen mode",
+   "pairs_with": [
+    "Glint",
+    "Lumetri Color",
+    "Cross Dissolve",
+    "Light Leak (transition)"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Animates by itself (Speed, Hue Rotation); Seed picks a different random leak. Blend Mode (0..2) and Color Spectrum (0..2) labels are not harvested: keep 0 unless render-checked. For a leak over a cut, put it on an adjustment layer spanning the cut and keyframe Master. A separate 'Light Leak' transition exists in the same pack.",
+   "recipe": {
+    "Master": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      100
+     ],
+     [
+      0.9,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/105.png",
+    "note": "A cyan/teal light streak and soft glow spots wash diagonally from the upper right over the centre and right side; the leak is clearly there, but this default-spectrum render is cool, not warm.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Long Shadow",
+   "match": "AE.Impact_Long_Shadow_FX",
+   "category": "Perspective",
+   "status": "needs_input",
+   "summary": "Casts a long, flat-design extruded shadow from the alpha edges of text, logos or cut-outs at a chosen angle and length, with colourise, two-colour gradient and alpha falloff.",
+   "look": [
+    "long shadow",
+    "flat design",
+    "extruded text",
+    "3D-ish depth",
+    "graphic",
+    "bold title"
+   ],
+   "use_for": [
+    "bold flat-design titles and numbers in explainer graphics",
+    "give logos or icons depth in channel intros",
+    "stat cards and big headline words in news reels",
+    "cut-out leader PNGs on a plain background"
+   ],
+   "avoid": [
+    "full-frame opaque footage: the shadow falls behind the frame and nothing shows",
+    "very long dark shadows on busy backgrounds hurt legibility",
+    "mixing shadow angles across elements in one frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Angle",
+     "does": "direction the shadow extends (degrees)",
+     "typical": "135 (down-right, default)"
+    },
+    {
+     "name": "Length",
+     "does": "how far the shadow extends",
+     "typical": "30-200"
+    },
+    {
+     "name": "Shadow Color",
+     "does": "shadow colour (default dark grey, about #202020)",
+     "typical": "#000000-#303030 or a dark brand tint"
+    },
+    {
+     "name": "Colorize",
+     "does": "100 = solid Shadow Color, lower lets the layer's own colours smear into the shadow (assumed)",
+     "typical": "100"
+    },
+    {
+     "name": "Duo Color",
+     "does": "second colour for a gradient along the shadow",
+     "typical": "#000000"
+    },
+    {
+     "name": "Duo Amount",
+     "does": "strength of the Duo Color gradient",
+     "typical": "0-50"
+    },
+    {
+     "name": "Alpha Falloff",
+     "does": "fades the shadow out along its length",
+     "typical": "30-80"
+    },
+    {
+     "name": "Shadow Opacity",
+     "does": "opacity of the shadow",
+     "typical": "50-100"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "no native Premiere match (Drop Shadow only gives a short offset shadow); After Effects: Radial Shadow, or a Drop Shadow repeated with Echo",
+   "pairs_with": [
+    "Stroke",
+    "Drop Shadow",
+    "Move",
+    "Grow"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Film Impact's own catalog marks it motion-graphics only: apply it to a clip with transparency (Essential Graphics text, logo PNG, cut-out) on an upper track; on the full-frame test plate nothing is visible, hence needs_input and no demo_settings. Typical spec on a title: {\"Angle\": 135, \"Length\": 120, \"Shadow Color\": \"#1A1A1A\", \"Alpha Falloff\": 50}. Highlight (0..100) appears to brighten the lit edge of the graphic (unverified). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it.",
+   "recipe": {
+    "Length": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      120
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input, so no frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Mosaic",
+   "match": "AE.Impact_Mosaic_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Turns the image into a grid of square or hexagonal tiles, with optional bevel lighting, rounded tiles, distortion and coloured grout strokes; the modern replacement for Mosaic (Legacy).",
+   "look": [
+    "pixelate",
+    "censor",
+    "hexagon tiles",
+    "glass tiles",
+    "retro digital",
+    "blocky"
+   ],
+   "use_for": [
+    "censor a face, number plate or document (with an effect mask, tracked)",
+    "pixel-reveal or pixel-out transition on beats",
+    "hexagon tech texture for AI / data explainers",
+    "stylised background behind titles"
+   ],
+   "avoid": [
+    "more than ~25-30 tiles across the frame can leave a face or plate readable: check the censor at full size",
+    "censoring without tracking the mask lets the face slip out",
+    "heavy Light Amount bevels look dated"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Num. Tiles",
+     "does": "number of tiles across the frame (fewer = bigger blocks)",
+     "typical": "15-30 to censor, 40-80 for texture"
+    },
+    {
+     "name": "Shape",
+     "does": "tile shape dropdown 0..1 (0 default = square, 1 assumed hexagon)",
+     "typical": "0"
+    },
+    {
+     "name": "Softness",
+     "does": "softens the tile contents/edges",
+     "typical": "0-30"
+    },
+    {
+     "name": "Light Amount",
+     "does": "bevel lighting on each tile",
+     "typical": "0-50"
+    },
+    {
+     "name": "Tile Roundness",
+     "does": "rounds tile corners",
+     "typical": "0-40"
+    },
+    {
+     "name": "Stroke Amount",
+     "does": "grout line between tiles (Stroke Color)",
+     "typical": "0-30"
+    },
+    {
+     "name": "Opacity",
+     "does": "mix with the original image",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {
+    "Num. Tiles": 40,
+    "Light Amount": 30,
+    "Stroke Amount": 20
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Mosaic (After Effects) / Mosaic (Legacy) in Premiere",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Track Matte Key",
+    "RGB Split",
+    "Lumetri Color"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. For censoring, add an effect mask (ellipse) on this effect and track it; the effect itself covers the whole clip. Shape labels not harvested (keyword list mentions hexagons). Light Angle/Tile Height shape the bevel; Stroke Color default black. Distortion warps the grid. Do not confuse with the 'Mosaic' transition or 'Mosaic (Legacy)' effect.",
+   "recipe": {
+    "Num. Tiles": [
+     [
+      0,
+      8
+     ],
+     [
+      0.5,
+      200
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/106.png",
+    "note": "Image becomes a grid of about 40 square tiles across with dark grout lines and a slight bevel; faces are unreadable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Move",
+   "match": "AE.Impact_Move_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Self-animating position move: slides the clip or graphic from Initial Position to Target Position (or continuously in a Direction at a Speed), with easing / bounce curves, edge handling and motion blur.",
+   "look": [
+    "slide",
+    "pan",
+    "glide",
+    "eased move",
+    "bounce",
+    "slide-in"
+   ],
+   "use_for": [
+    "slide-in / slide-out of lower-thirds, logos and photo cards",
+    "slow drift on stills and maps in explainers",
+    "continuous scrolling ticker-style background",
+    "bouncy entrance of stickers or emojis in reels"
+   ],
+   "avoid": [
+    "moving a full-frame clip reveals empty edges unless Edge Behavior fills them",
+    "fast moves without motion blur stutter",
+    "too many elements sliding at once looks busy"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Initial Position",
+     "does": "start position (frame fractions)",
+     "typical": "[-0.5, 0.5] puts a full-frame layer (e.g. an Essential Graphics lower-third) one frame-width left, off-screen; [0.5, 0.5] = home"
+    },
+    {
+     "name": "Target Position",
+     "does": "end position (frame fractions)",
+     "typical": "[0.5, 0.5] = home (default [0.5, 0.25] = moved up a quarter frame)"
+    },
+    {
+     "name": "Mode",
+     "does": "two modes per Film Impact keywords, Continuous (travels from Initial Position along Direction at Speed) and Destination (Initial -> Target Position); index order unverified, 0 may be Continuous",
+     "typical": "set explicitly; render-check"
+    },
+    {
+     "name": "Direction",
+     "does": "travel angle for the continuous mode (degrees)",
+     "typical": "0-360"
+    },
+    {
+     "name": "Speed",
+     "does": "travel speed for the continuous mode",
+     "typical": "2-20"
+    },
+    {
+     "name": "Overshoot",
+     "does": "overshoot past the target before settling (Type 0 ease curve, assumed)",
+     "typical": "0-40"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "how uncovered edges are filled (dropdown 0..3, labels not harvested)",
+     "typical": "0"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur amount",
+     "typical": "5-30"
+    }
+   ],
+   "demo_settings": {
+    "Initial Position": [
+     0.62,
+     0.58
+    ],
+    "Target Position": [
+     0.38,
+     0.42
+    ],
+    "Speed": 2
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Transform effect / Motion Position keyframes with easing (After Effects: Position keyframes, Offset for loops)",
+   "pairs_with": [
+    "Grow",
+    "Shrink",
+    "Spin",
+    "Directional Blur"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Self-animating: the effect tweens from the Initial value to the Target value on its own, so no keyframes are needed (recipe left empty). Mode 0..1 labels were not harvested. Film Impact's catalog keywords name the two modes 'continuous' (runs from the Initial value at the per-second rate) and 'destination' (Initial -> Target over the Effect Timing window), in that order, so 0 (default) may well be Continuous; the index order is unverified. Set Mode explicitly and also set the per-second rate to something sane, so the result is acceptable whichever mode index is live; render-check the first and last frame. 'Type' 0..3 picks the curve family, but there are five parameter groups for its four values: Ease In/Ease Out/Anticipate/Overshoot, Frequency/Amplitude/Decay, Anticipate#2/Bounces/Initial Velocity/Elasticity, Ease Peak/Ease Base/Center and Frequency#2/Phase Shift/Decay#2, so the mapping is unverified. Keep Type 0 (default, assumed the plain ease) and shape it only with Ease In / Ease Out. Effect Timing: Units 0..1, 'Start Offset' and 'Duration' each appear twice (#2 is assumed to be the twin used by the other Units setting, so set both); default Duration 0 appears to mean 'whole clip' (unverified, render-check before relying on timing). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it at default. 'Curve Graph' is a string and cannot be set. Edge Behavior 0..3 labels unknown (fills the area the clip uncovers). Motion Blur 0..100 is the built-in motion blur amount. In Move, 'Scale#2' (default 100, 0..100) is the Motion Controls scale and 'Alignment Offset' is an angle (probably for orienting along the path) - both unverified. Demo keeps the clip offset from centre for the whole tween so the shift is visible on any frame.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/107.png",
+    "note": "Clip is displaced right and down from home, exposing black empty edges at the left and top, as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "RGB Split",
+   "match": "AE.Impact_RGB_Split_FX",
+   "category": "Lights & Glows",
+   "status": "current",
+   "summary": "Separates the red, green and blue channels horizontally, vertically or radially (depth), with vertigo twist, channel shift, softness and a feathered clean centre, for chromatic-aberration and glitch looks.",
+   "look": [
+    "chromatic aberration",
+    "RGB split",
+    "glitch",
+    "lens fringe",
+    "anaglyph",
+    "digital shock"
+   ],
+   "use_for": [
+    "glitch hit on a beat drop or hard cut in reels",
+    "punchy 'breaking' / reveal moment in political explainers",
+    "subtle lens fringing on trailer titles",
+    "tech / AI aesthetic for an AI-education channel",
+    "transition flash between shots"
+   ],
+   "avoid": [
+    "heavy split held for long makes viewers dizzy and text unreadable",
+    "on hard news footage it can look like a broken feed",
+    "large Depth Split zooms channels past the frame edge"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Horizontal Split",
+     "does": "sideways channel separation",
+     "typical": "1-3 subtle fringe (default 1), 5-12 glitch hit (units unverified)"
+    },
+    {
+     "name": "Vertical Split",
+     "does": "vertical channel separation",
+     "typical": "0-5"
+    },
+    {
+     "name": "Depth Split",
+     "does": "radial (zoom) separation from the centre",
+     "typical": "0-6"
+    },
+    {
+     "name": "Vertigo",
+     "does": "adds a twisting/rotational separation",
+     "typical": "0-30"
+    },
+    {
+     "name": "Channel Shift",
+     "does": "rotates which direction each channel moves (angle)",
+     "typical": "0-360"
+    },
+    {
+     "name": "Position",
+     "does": "centre of the effect",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Feather",
+     "does": "keeps a clean centre around Position and fades the split outward (assumed)",
+     "typical": "0-100"
+    },
+    {
+     "name": "Softness",
+     "does": "blurs the separated channels",
+     "typical": "0-30"
+    }
+   ],
+   "demo_settings": {
+    "Horizontal Split": 5,
+    "Depth Split": 3
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "VR Chromatic Aberrations (Premiere); in After Effects build it with Shift Channels on offset copies",
+   "pairs_with": [
+    "Camera Shake",
+    "Mosaic",
+    "Glitch (transition)",
+    "Directional Blur"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Split units are not documented (range -50..50, default 1; Film Impact defaults are meant to be visible on drop, so 1 is already a visible fringe); treat values above ~12 as extreme. Edge Behavior is a 0..2 dropdown with unharvested labels. Lightness appears to brighten the split fringes (unverified). For a glitch hit, keyframe Horizontal Split on an adjustment layer for 4-8 frames.",
+   "recipe": {
+    "Horizontal Split": [
+     [
+      0,
+      1
+     ],
+     [
+      0.08,
+      12
+     ],
+     [
+      0.2,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/108.png",
+    "note": "Strong red/green/blue channel offsets and ghost copies fringe every edge (stripes, faces, small lamps), a clear glitch/chromatic-aberration look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "3D Rotate",
+   "match": "AE.Impact_Rotate_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Self-animating 3D rotation: turns the clip in perspective around an axis from Initial Rotation to Target Rotation (or continuously at deg/s), with anchor, perspective, back-side colouring/flip and motion blur.",
+   "look": [
+    "3D flip",
+    "card turn",
+    "perspective rotate",
+    "door swing",
+    "spin in depth",
+    "reveal"
+   ],
+   "use_for": [
+    "card-flip reveal of photos, stats or before/after images",
+    "swing-in of lower-thirds, logos and quote cards",
+    "3D flip transition between two explainer graphics",
+    "tilted perspective photo cards in documentary montages"
+   ],
+   "avoid": [
+    "rotating a full-frame clip shows empty corners: scale it down or use on graphics",
+    "continuous spinning video is disorienting",
+    "back side visible without colourising reads as a mirrored glitch"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Initial Rotation",
+     "does": "rotation at the start (degrees)",
+     "typical": "-90 or 90 for flip-ins"
+    },
+    {
+     "name": "Target Rotation",
+     "does": "rotation at the end (degrees)",
+     "typical": "0 (default 90)"
+    },
+    {
+     "name": "Axis",
+     "does": "orientation of the rotation axis in the frame (angle)",
+     "typical": "0 or 90"
+    },
+    {
+     "name": "Perspective",
+     "does": "strength of the perspective distortion",
+     "typical": "50-100"
+    },
+    {
+     "name": "Anchor",
+     "does": "pivot point of the rotation (frame fractions)",
+     "typical": "[0.5, 0.5]; an edge for door swings"
+    },
+    {
+     "name": "Mode",
+     "does": "two modes per Film Impact keywords, Continuous (turns from Initial Rotation at Rotation (deg/s)) and Destination (Initial -> Target Rotation); index order unverified, 0 may be Continuous",
+     "typical": "set explicitly; render-check"
+    },
+    {
+     "name": "Colorize",
+     "does": "tints the back side with Color when it faces camera",
+     "typical": "50"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur amount",
+     "typical": "5-20"
+    }
+   ],
+   "demo_settings": {
+    "Initial Rotation": 35,
+    "Target Rotation": 55,
+    "Rotation (deg/s)": 3
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Basic 3D (Premiere / After Effects) or After Effects 3D layer rotation",
+   "pairs_with": [
+    "Grow",
+    "Move",
+    "Drop Shadow",
+    "Long Shadow"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Self-animating: the effect tweens from the Initial value to the Target value on its own, so no keyframes are needed (recipe left empty). Mode 0..1 labels were not harvested. Film Impact's catalog keywords name the two modes 'continuous' (runs from the Initial value at the per-second rate) and 'destination' (Initial -> Target over the Effect Timing window), in that order, so 0 (default) may well be Continuous; the index order is unverified. Set Mode explicitly and also set the per-second rate to something sane, so the result is acceptable whichever mode index is live; render-check the first and last frame. 'Type' 0..3 picks the curve family, but there are five parameter groups for its four values: Ease In/Ease Out/Anticipate/Overshoot, Frequency/Amplitude/Decay, Anticipate#2/Bounces/Initial Velocity/Elasticity, Ease Peak/Ease Base/Center and Frequency#2/Phase Shift/Decay#2, so the mapping is unverified. Keep Type 0 (default, assumed the plain ease) and shape it only with Ease In / Ease Out. Effect Timing: Units 0..1, 'Start Offset' and 'Duration' each appear twice (#2 is assumed to be the twin used by the other Units setting, so set both); default Duration 0 appears to mean 'whole clip' (unverified, render-check before relying on timing). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it at default. 'Curve Graph' is a string and cannot be set. Edge Behavior 0..3 labels unknown (fills the area the clip uncovers). Motion Blur 0..100 is the built-in motion blur amount. In 3D Rotate, 'Scale#2' is the Motion Controls scale (default 100). Axis is an angle that tilts the rotation axis (which value gives a vertical 'door' axis is unverified). Back Side Controls (Color, Colorize, Softness, Opacity, Flip 0..3) style the reverse face. Demo holds the clip between 35 and 55 degrees and slows the continuous rate from the default 45 deg/s to 3 (at 45 deg/s the clip turns edge-on or shows its back within seconds), so the perspective is visible on any frame.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/109.png",
+    "note": "Clip is tilted back in perspective around a horizontal axis (top edge narrower, black above and below), a clear 3D turn.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Shrink",
+   "match": "AE.Impact_Shrink_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Self-animating scale-down: the clip shrinks from Initial Scale to Target Scale (or keeps shrinking at a % per second rate) around an anchor, with easing, edge handling and motion blur; the pull-out counterpart of Grow.",
+   "look": [
+    "pull-out",
+    "zoom out",
+    "shrink",
+    "reveal",
+    "scale down",
+    "eased motion"
+   ],
+   "use_for": [
+    "slow pull-out on archive photos to reveal context",
+    "shrink a full-frame clip into a picture-in-picture or card",
+    "exit animation for logos and lower-thirds",
+    "zoom-out reveal at the end of a reel"
+   ],
+   "avoid": [
+    "shrinking full-frame video below 100% exposes edges unless something sits underneath or Edge Behavior fills them",
+    "starting a photo shrink above its native resolution looks soft"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Initial Scale",
+     "does": "scale (%) at the start",
+     "typical": "100-120"
+    },
+    {
+     "name": "Target Scale",
+     "does": "scale (%) at the end",
+     "typical": "100 for photo pull-outs, 30-60 for PiP"
+    },
+    {
+     "name": "Anchor",
+     "does": "point the clip shrinks toward (frame fractions)",
+     "typical": "[0.5, 0.5] or a corner for PiP"
+    },
+    {
+     "name": "Mode",
+     "does": "two modes per Film Impact keywords, Continuous (shrinks from Initial Scale at Shrink (%/s)) and Destination (Initial -> Target Scale); index order unverified, 0 may be Continuous",
+     "typical": "set explicitly; render-check"
+    },
+    {
+     "name": "Shrink (%/s)",
+     "does": "shrink rate in the continuous mode",
+     "typical": "2-8"
+    },
+    {
+     "name": "Ease Out",
+     "does": "slow end of the tween",
+     "typical": "30-60"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "fill for the uncovered area (dropdown 0..3, labels not harvested)",
+     "typical": "0"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur amount",
+     "typical": "0-20"
+    }
+   ],
+   "demo_settings": {
+    "Initial Scale": 70,
+    "Target Scale": 50,
+    "Shrink (%/s)": 3
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Transform effect / Motion Scale keyframes (After Effects: Scale keyframes, Motion Tile to fill exposed edges)",
+   "pairs_with": [
+    "Grow",
+    "Move",
+    "Drop Shadow",
+    "Rounded Crop"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Self-animating: the effect tweens from the Initial value to the Target value on its own, so no keyframes are needed (recipe left empty). Mode 0..1 labels were not harvested. Film Impact's catalog keywords name the two modes 'continuous' (runs from the Initial value at the per-second rate) and 'destination' (Initial -> Target over the Effect Timing window), in that order, so 0 (default) may well be Continuous; the index order is unverified. Set Mode explicitly and also set the per-second rate to something sane, so the result is acceptable whichever mode index is live; render-check the first and last frame. 'Type' 0..3 picks the curve family, but there are five parameter groups for its four values: Ease In/Ease Out/Anticipate/Overshoot, Frequency/Amplitude/Decay, Anticipate#2/Bounces/Initial Velocity/Elasticity, Ease Peak/Ease Base/Center and Frequency#2/Phase Shift/Decay#2, so the mapping is unverified. Keep Type 0 (default, assumed the plain ease) and shape it only with Ease In / Ease Out. Effect Timing: Units 0..1, 'Start Offset' and 'Duration' each appear twice (#2 is assumed to be the twin used by the other Units setting, so set both); default Duration 0 appears to mean 'whole clip' (unverified, render-check before relying on timing). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it at default. 'Curve Graph' is a string and cannot be set. Edge Behavior 0..3 labels unknown (fills the area the clip uncovers). Motion Blur 0..100 is the built-in motion blur amount. For a documentary pull-out on a photo use Initial Scale 120 -> Target Scale 100 so no edge is ever exposed. Demo keeps the clip at 50-70% so the shrink is visible on any frame.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/110.png",
+    "note": "Clip is scaled down to roughly 70% in the centre with black exposed all around, a clear pull-out/PiP framing.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Spacer",
+   "match": "AE.Impact_Spacer_FX",
+   "category": "Transform",
+   "status": "needs_input",
+   "summary": "Self-animating spacing for text and multi-object graphics: detects the separate letters / objects in the layer's alpha and spreads or gathers them from Initial Spacing to Target Spacing, with range, variation and motion blur.",
+   "look": [
+    "tracking animation",
+    "letter spacing",
+    "expanding title",
+    "kinetic typography",
+    "breathing text"
+   ],
+   "use_for": [
+    "slow letter-spacing expansion on trailer or documentary titles",
+    "kinetic title intros for explainer chapters",
+    "gather-in of scattered words for a reel hook",
+    "spread icons or logo parts apart"
+   ],
+   "avoid": [
+    "full-frame opaque video: there are no separate objects to space, so nothing visible happens",
+    "large spacing pushes letters off-frame",
+    "too fast spacing is hard to read"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Initial Spacing",
+     "does": "spacing at the start",
+     "typical": "0"
+    },
+    {
+     "name": "Target Spacing",
+     "does": "spacing at the end",
+     "typical": "20-100"
+    },
+    {
+     "name": "Direction",
+     "does": "spacing direction dropdown 0..2 (labels not harvested; assumed horizontal / vertical / both)",
+     "typical": "0"
+    },
+    {
+     "name": "Variation",
+     "does": "randomises spacing per object",
+     "typical": "0-30"
+    },
+    {
+     "name": "Anchor",
+     "does": "point the objects spread from (frame fractions)",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Range",
+     "does": "portion of the objects affected",
+     "typical": "25-100"
+    },
+    {
+     "name": "Strength",
+     "does": "overall amount of the spacing",
+     "typical": "100"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur amount",
+     "typical": "10-30"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "After Effects text animator Tracking Amount; Premiere native text has no smooth tracking animation (Source Text keyframes hold), so this effect is the Premiere route",
+   "pairs_with": [
+    "Move",
+    "Grow",
+    "Long Shadow",
+    "Stroke"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Self-animating: the effect tweens from the Initial value to the Target value on its own, so no keyframes are needed (recipe left empty). Mode 0..1 labels were not harvested. Film Impact's catalog keywords name the two modes 'continuous' (runs from the Initial value at the per-second rate) and 'destination' (Initial -> Target over the Effect Timing window), in that order, so 0 (default) may well be Continuous; the index order is unverified. Set Mode explicitly and also set the per-second rate to something sane, so the result is acceptable whichever mode index is live; render-check the first and last frame. 'Type' 0..3 picks the curve family, but there are five parameter groups for its four values: Ease In/Ease Out/Anticipate/Overshoot, Frequency/Amplitude/Decay, Anticipate#2/Bounces/Initial Velocity/Elasticity, Ease Peak/Ease Base/Center and Frequency#2/Phase Shift/Decay#2, so the mapping is unverified. Keep Type 0 (default, assumed the plain ease) and shape it only with Ease In / Ease Out. Effect Timing: Units 0..1, 'Start Offset' and 'Duration' each appear twice (#2 is assumed to be the twin used by the other Units setting, so set both); default Duration 0 appears to mean 'whole clip' (unverified, render-check before relying on timing). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it at default. 'Curve Graph' is a string and cannot be set. Motion Blur 0..100 is the built-in motion blur amount. Film Impact's catalog marks it text / multi-object only: apply it to an Essential Graphics text clip or a graphic with transparent gaps between parts; on the full-frame test frame nothing changes, hence needs_input and no demo_settings. Typical spec on a title: {\"Initial Spacing\": 0, \"Target Spacing\": 60}. Speed (-200..200) is the rate for the Continuous mode; Line Bias and Feather (Range Controls) meanings are unverified.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input, so no frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Spin",
+   "match": "AE.Impact_Spin_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Self-animating 2D rotation: spins the clip in the frame plane from Initial Spin to Target Spin (default one full turn) or continuously at deg/s, around an anchor, with easing, edge fill and motion blur.",
+   "look": [
+    "spin",
+    "rotate",
+    "twirl",
+    "spin-in",
+    "whirl",
+    "dynamic"
+   ],
+   "use_for": [
+    "spin-in of logos, stickers and badges",
+    "quick spin transition on a beat in social reels",
+    "slow rotation of a map, globe graphic or record in explainers",
+    "tilt a photo card a few degrees for a scrapbook look"
+   ],
+   "avoid": [
+    "spinning full-frame footage exposes corners unless Edge Behavior fills them",
+    "fast full turns on serious news content feel gimmicky",
+    "spinning text is hard to read"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Initial Spin",
+     "does": "rotation at the start (degrees)",
+     "typical": "-180 to 0"
+    },
+    {
+     "name": "Target Spin",
+     "does": "rotation at the end (degrees)",
+     "typical": "0 or 360 (default 360)"
+    },
+    {
+     "name": "Anchor",
+     "does": "pivot point (frame fractions)",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Mode",
+     "does": "two modes per Film Impact keywords, Continuous (spins from Initial Spin at Spin (deg/s)) and Destination (Initial -> Target Spin); index order unverified, 0 may be Continuous",
+     "typical": "set explicitly; render-check"
+    },
+    {
+     "name": "Spin (deg/s)",
+     "does": "rotation speed in the continuous mode",
+     "typical": "5-90"
+    },
+    {
+     "name": "Overshoot",
+     "does": "overshoot past the target before settling (Type 0 ease curve, assumed)",
+     "typical": "0-30"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "fill for uncovered corners (dropdown 0..3, labels not harvested)",
+     "typical": "0"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "built-in motion blur amount",
+     "typical": "10-40 for fast spins"
+    }
+   ],
+   "demo_settings": {
+    "Initial Spin": 20,
+    "Target Spin": 45,
+    "Spin (deg/s)": 3
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Transform effect Rotation keyframes (After Effects: layer Rotation, Motion Tile for edges)",
+   "pairs_with": [
+    "Grow",
+    "Shrink",
+    "Directional Blur",
+    "Spin Motion (transition)"
+   ],
+   "scripting": "Film Impact effect built into Premiere 2026 (match AE.Impact_*; Film Impact Dashboard catalog lists it). Header bools that repeat a name (e.g. 'Light Controls', 'Pre Transform', 'Motion Controls') are group open/close markers: never set them. Self-animating: the effect tweens from the Initial value to the Target value on its own, so no keyframes are needed (recipe left empty). Mode 0..1 labels were not harvested. Film Impact's catalog keywords name the two modes 'continuous' (runs from the Initial value at the per-second rate) and 'destination' (Initial -> Target over the Effect Timing window), in that order, so 0 (default) may well be Continuous; the index order is unverified. Set Mode explicitly and also set the per-second rate to something sane, so the result is acceptable whichever mode index is live; render-check the first and last frame. 'Type' 0..3 picks the curve family, but there are five parameter groups for its four values: Ease In/Ease Out/Anticipate/Overshoot, Frequency/Amplitude/Decay, Anticipate#2/Bounces/Initial Velocity/Elasticity, Ease Peak/Ease Base/Center and Frequency#2/Phase Shift/Decay#2, so the mapping is unverified. Keep Type 0 (default, assumed the plain ease) and shape it only with Ease In / Ease Out. Effect Timing: Units 0..1, 'Start Offset' and 'Duration' each appear twice (#2 is assumed to be the twin used by the other Units setting, so set both); default Duration 0 appears to mean 'whole clip' (unverified, render-check before relying on timing). The first 'Scale' is the Pre Transform scale (default 50, meaning not verified): leave it at default. 'Curve Graph' is a string and cannot be set. Edge Behavior 0..3 labels unknown (fills the area the clip uncovers). Motion Blur 0..100 is the built-in motion blur amount. In Spin, 'Scale#2' (default 100) is the Motion Controls scale. Demo holds the clip between 20 and 45 degrees so the rotation is visible on any frame. This is the effect. For a spin between two clips use the Film Impact 'Spin Motion' transition (the plain 'Spin' transition is the old native one).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/111.png",
+    "note": "Clip is rotated roughly 25-30 degrees clockwise in the frame plane around the centre, exposing black corners.",
+    "rerender": false
+   }
+  }
+ ]
+}

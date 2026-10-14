@@ -1,0 +1,671 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Cross Zoom",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "summary": "Outgoing clip zooms in hard with a radial zoom blur toward the centre, the switch happens at the blur peak, and the incoming clip zooms back out of the same blur to rest. New GPU version that replaces Cross Zoom (Legacy), which had no blur. Gallery render confirms strong radial streaking at the midpoint.",
+   "look": [
+    "radial zoom blur",
+    "punch-in",
+    "speed",
+    "energetic",
+    "centre-focused"
+   ],
+   "use_for": [
+    "fast reel cut on a beat drop",
+    "trailer montage push between action shots",
+    "news reel jump into a new location or headline",
+    "AI-explainer cut from overview to a detail shot"
+   ],
+   "avoid": [
+    "slow documentary or interview cuts, where it reads cheap and frantic",
+    "chaining it on every cut of a sequence",
+    "shots whose subject is far off-centre, since the blur pulls toward frame centre"
+   ],
+   "confidence": "high",
+   "family": "zoom",
+   "feel": "hard energetic, YouTube/reel punch",
+   "duration_typical": "0.3-0.6",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: keyframe Scale ~100->300% on the outgoing layer and 300->100% on the incoming one with Easy Ease, add CC Radial Fast Blur (Zoom mode) peaking at the cut; or Transform effect scale with Shutter Angle 180-360 for motion blur.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.Impact_Cross_Zoom; the batch has no match name, so match is null). Lives in the Lights & Blurs folder (not Zoom). Placed OK at 1 s centred: 385.52-386.52 s on the 386.0 s cut (starts 0.48 s before, about half a frame late of exact centre at 25 fps). Centred needs >=0.5 s handles on both clips. Zoom centre/strength and chromatic options exist in its controls but were not harvested: apply by name with a duration only.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/096b.png",
+    "note": "Mid frame is a full radial zoom blur streaking out from the centre, outgoing slightly zoomed/soft at -0.3 s and incoming still zoom-blurred at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to Black",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "summary": "Fades the outgoing clip down to black, then fades the incoming clip up from black, with eased (not linear) ramps. Replaces Dip to Black (Legacy). Single-sided it is the standard fade in from / fade out to black.",
+   "look": [
+    "fade to black",
+    "pause",
+    "chapter break",
+    "clean",
+    "classic"
+   ],
+   "use_for": [
+    "documentary chapter or act break",
+    "fade in at the start and fade out at the end of a video",
+    "trailer beat between title cards (short, on a hit)",
+    "time-passing break in an explainer"
+   ],
+   "avoid": [
+    "using it between every shot, which kills pace",
+    "fast reels where a 1s black gap loses viewers"
+   ],
+   "confidence": "high",
+   "family": "dip",
+   "feel": "calm, final, cinematic pause",
+   "duration_typical": "0.5-1.5 (0.2-0.4 for trailer blackouts)",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "AE: black solid under the layers and Opacity keyframes 100->0 on the outgoing and 0->100 on the incoming, meeting at black; or a black solid whose opacity goes 0->100->0 across the cut.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Dip_To_Black; the batch has no match name, so match is null). Placed OK at 1 s centred (389.52-390.52 s around the 390.0 s cut); the frame at the cut is black. Centred needs >=0.5 s handles on both clips; single-sided at a clip's start/end needs no handles. Optional blur/aberration controls (per catalog keywords) were not harvested; defaults are a clean dip. For a trailer 'boom to black' use sfx boom or hit instead of none.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/097b.png",
+    "note": "Mid frame is near-black with only a faint ghost of the outgoing shot; clean outgoing before and clean incoming after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to Color",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "summary": "Film Impact's 'Blur To Color' under a new name: the outgoing clip softens slightly while washing into a solid colour, holds the colour at the cut, then the incoming clip resolves out of it. In the gallery render the default colour is a flat grey-lavender (#837F8A measured at the cut), with only light blur.",
+   "look": [
+    "colour flash",
+    "brand colour wipe-through",
+    "solid frame",
+    "soft pause"
+   ],
+   "use_for": [
+    "dip through a channel/brand colour (party saffron, channel red) between segments",
+    "section break in an explainer that matches the graphic palette",
+    "softer alternative to a white flash in a reel"
+   ],
+   "avoid": [
+    "leaving the default grey-lavender, which looks like a mistake on air",
+    "saturated colours held too long, which feel like a broken frame",
+    "fast news cuts, where a ~0.4 s colour hold reads as dead air"
+   ],
+   "confidence": "medium",
+   "family": "dip",
+   "feel": "branded, soft, deliberate",
+   "duration_typical": "0.4-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: a colour solid between the two layers with opacity 0->100->0 across the cut (or Fill effect on an adjustment layer), outgoing/incoming opacity fades meeting at the solid.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Blur_To_Color; the batch has no match name, so match is null). Placed OK at 1 s centred (393.52-394.52 s around the 394.0 s cut); the colour is near-solid from about cut-0.1 to cut+0.1 s. The colour (and blur) controls were not harvested, so a spec cannot set the colour yet and the result is always the default #837F8A grey. Until that property is harvested, use Dip to Black / Dip to White when a scripted build needs a known colour, or set the colour by hand in Effect Controls.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/098b.png",
+    "note": "Mid frame is a flat solid grey-lavender with no image left; outgoing softens slightly before and incoming is still slightly washed after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to White",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "summary": "Fades the outgoing clip up to full white, then the incoming clip fades down out of white, with eased ramps. Replaces Dip to White (Legacy). Gentler and longer than Flash; reads as a memory, dream or bright reveal.",
+   "look": [
+    "fade to white",
+    "bright",
+    "dreamy",
+    "memory",
+    "heavenly",
+    "clean"
+   ],
+   "use_for": [
+    "flashback or memory entry in a documentary",
+    "tribute / emotional moment between photos",
+    "bright reveal of a result or achievement in an explainer",
+    "wedding-style soft reel transitions"
+   ],
+   "avoid": [
+    "fast news cuts, where it feels soft and slow",
+    "already overexposed footage, where the dip clips with no visible change"
+   ],
+   "confidence": "high",
+   "family": "dip",
+   "feel": "soft nostalgic, uplifting",
+   "duration_typical": "0.3-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: white solid with opacity 0->100->0 across the cut, or an adjustment layer with Exposure / Levels output ramping to white at the cut.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Dip_To_White; the batch has no match name, so match is null). Placed OK at 1 s centred (397.52-398.52 s around the 398.0 s cut); the frame at the cut is white and the incoming shot is still washed out at cut+0.3 s. Centred needs >=0.5 s handles on both clips; single-sided fades in from / out to white. For a flash-cut use 0.2-0.3 s or the Flash transition.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/099b.png",
+    "note": "Mid frame is solid white; outgoing is washed toward white at -0.3 s and incoming still washed out at +0.3 s.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 1,
+    "basis": "render: one dip, solid white mid-transition"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Directional Blur",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "summary": "Smears the outgoing clip with a strong linear motion blur, switches at the blur peak and resolves the incoming clip out of the same blur. Default angle in the render is diagonal (streaks run upper-left to lower-right). The catalog lists angle, chromatic and slice options.",
+   "look": [
+    "motion blur streak",
+    "whip feel",
+    "diagonal smear",
+    "speed",
+    "smooth"
+   ],
+   "use_for": [
+    "whip-pan style cut between B-roll shots",
+    "reel transitions on a swoosh",
+    "trailer montage between movement shots",
+    "news reel jump between locations"
+   ],
+   "avoid": [
+    "static talking-head cuts, where the smear looks unmotivated",
+    "mixing many blur angles in one sequence"
+   ],
+   "confidence": "medium",
+   "family": "blur",
+   "feel": "smooth fast, modern",
+   "duration_typical": "0.3-0.6",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: Directional Blur effect on both layers, Blur Length 0->max at the cut->0, with a short opacity crossfade; or Transform effect position slide with shutter angle 360 for a real whip.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Directional_Blur; the batch has no match name, so match is null). A video EFFECT is also named 'Directional Blur' (match AE.Impact_Directional_Blur_FX): apply this one from the transitions list, not the effects list. Placed OK at 1 s centred (401.52-402.52 s around the 402.0 s cut). Angle/amount controls were not harvested; set none from a spec.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/100b.png",
+    "note": "Mid frame is a strong linear motion-blur smear on a diagonal (streaks run upper-left to lower-right, measured; the card had the direction reversed, now corrected) and incoming is still smeared at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Earthquake",
+   "match": null,
+   "category": "Grunge & Distort",
+   "status": "current",
+   "summary": "Violently shakes both clips with motion-blurred ghosting through the transition and crossfades between them, settling on the incoming shot. Reads as an impact or tremor.",
+   "look": [
+    "camera shake",
+    "impact",
+    "motion-blur ghosting",
+    "chaotic",
+    "violent"
+   ],
+   "use_for": [
+    "explosion / breaking-news impact cut",
+    "trailer hit on a boom",
+    "political roast reel punchline slam",
+    "meme-style reaction cut"
+   ],
+   "avoid": [
+    "serious or sensitive news (disasters, deaths) where it looks flippant",
+    "long durations, which become nauseating",
+    "talking-head explainer cuts"
+   ],
+   "confidence": "medium",
+   "family": "motion",
+   "feel": "hard aggressive, impact",
+   "duration_typical": "0.4-0.8",
+   "sfx": "boom",
+   "single_sided_ok": true,
+   "equivalent": "AE: wiggle(15,60) expression on Position and wiggle(15,3) on Rotation of both layers (via Transform effect for motion blur, shutter 180+), amplitude keyframed up to the cut and back down, plus an opacity crossfade; or Motion Tile with mirror edges to hide borders.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Earthquake; the batch has no match name, so match is null). Placed OK at 1 s centred (405.52-406.52 s around the 406.0 s cut). In the render both shots shake and ghost into each other at the cut and the incoming shot is still blurred at cut+0.3 s. Intensity/frequency controls not harvested; set none from a spec. Pair with sfx boom or sub_drop.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/101b.png",
+    "note": "Mid frame shows both shots shaken and ghosted into each other with motion blur and displacement; incoming is still blurred/doubled at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Film Dissolve",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "summary": "A cross dissolve blended in linear light, the way film optically dissolves: bright areas of the incoming clip show through early and the mix looks richer than Cross Dissolve. Replaces Film Dissolve (Legacy) and adds curve / gamma-correction controls. In the render the incoming clip's pale highlights punch through the outgoing shot well before the midpoint.",
+   "look": [
+    "film-like dissolve",
+    "linear-light blend",
+    "highlights bleed through",
+    "organic",
+    "classic"
+   ],
+   "use_for": [
+    "documentary time-passing dissolves",
+    "slow emotional photo-to-photo montage",
+    "trailer slow section between wide shots",
+    "soft scene change in a cinematic explainer"
+   ],
+   "avoid": [
+    "fast reels (too slow)",
+    "shots with very different exposure, where highlights pop through unevenly"
+   ],
+   "confidence": "high",
+   "family": "dissolve",
+   "feel": "soft cinematic, natural",
+   "duration_typical": "0.5-1.5",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "AE: plain Opacity crossfade with Project Settings > Color > Blend Colors Using 1.0 Gamma (linearize working space) enabled, which gives the same linear-light film dissolve.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.Impact_Film_Dissolve; the batch has no match name, so match is null). Placed OK at 1 s centred (409.52-410.52 s around the 410.0 s cut). Centred needs >=0.5 s handles on both clips. Prefer it over Cross Dissolve for documentary/cinematic work; curve controls not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/102b.png",
+    "note": "Mid frame is a dissolve where the incoming clip's pale highlights punch through the outgoing shot, and B's texture already bleeds into the outgoing frame at -0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Film Roll",
+   "match": null,
+   "category": "Slide",
+   "status": "current",
+   "summary": "Shrinks the outgoing frame into a vertical film strip (rounded frames, black frame lines, sprocket edges), rolls the strip vertically to the incoming frame, then scales back up to full screen. Looks like a projector reel slipping; the catalog says gauge (8-70mm) and strip look are customisable.",
+   "look": [
+    "film strip",
+    "sprocket holes",
+    "vertical roll",
+    "retro projector",
+    "vintage",
+    "playful"
+   ],
+   "use_for": [
+    "archive / 'old footage' segment entry in a documentary",
+    "history or 'flashback to 1990s' beat in an explainer",
+    "retro-themed reels",
+    "listicle 'next item' roll in a social reel"
+   ],
+   "avoid": [
+    "modern serious news (looks gimmicky)",
+    "vertical 9:16 crops where the strip margins eat most of the frame",
+    "repeated use in one video"
+   ],
+   "confidence": "medium",
+   "family": "slide/push",
+   "feel": "retro playful, vintage",
+   "duration_typical": "0.5-1.0",
+   "sfx": "tape_rewind",
+   "single_sided_ok": false,
+   "equivalent": "AE: precomp both shots stacked vertically inside a film-strip frame graphic (rounded masks + black solid with sprocket holes), scale the precomp 100->80->100% and animate its Y position one frame height with Directional Blur (vertical) at peak speed.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Film_Roll; the batch has no match name, so match is null). Placed OK at 1 s centred (413.52-414.52 s around the 414.0 s cut); at the cut the strip is at its smallest showing incoming frames, at cut+0.3 s it is scaling back up. Roll direction is not verified. Needs real media on both sides; single-sided it would roll to an empty/black frame. Controls not harvested; set none from a spec. A projector rattle or shutter sound also fits if tape_rewind is too long.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/103b.png",
+    "note": "Frames show the picture shrunk into a vertical film strip with rounded frames and black frame lines, outgoing frames at -0.3 s, the strip smallest showing incoming frames at the cut, scaling back up at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Flare",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "summary": "A warm lens flare with rainbow/prismatic streaks sweeps across and blooms the frame to near-white at the cut, then fades away to reveal the incoming clip.",
+   "look": [
+    "lens flare",
+    "warm golden bloom",
+    "prismatic streaks",
+    "light burst",
+    "cinematic"
+   ],
+   "use_for": [
+    "cinematic trailer cuts between hero shots",
+    "uplifting reveal (launch, victory, result) in a reel",
+    "sunrise / hope beat in a documentary",
+    "AI-education intro title reveal"
+   ],
+   "avoid": [
+    "overuse (it reads as a cheap 2010s promo after two or three)",
+    "dark serious news segments",
+    "shots whose own light direction fights the flare"
+   ],
+   "confidence": "medium",
+   "family": "light/flare",
+   "feel": "warm cinematic, uplifting",
+   "duration_typical": "0.6-1.2",
+   "sfx": "riser",
+   "single_sided_ok": true,
+   "equivalent": "AE: Lens Flare (Generate) on an adjustment or black solid layer in Screen/Add mode with Flare Center animated across the frame and Flare Brightness 0->250%->0 peaking at the cut, plus Glow; opacity crossfade underneath.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Flare; the batch has no match name, so match is null). Placed OK at 1 s centred (417.52-418.52 s around the 418.0 s cut); the frame is almost fully white-gold at the cut and the incoming shot still carries flare at cut+0.3 s. Flare position/colour controls not harvested; set none from a spec.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/104b.png",
+    "note": "Warm prismatic flare on the outgoing at -0.3 s, frame blown almost fully white-gold at the cut, incoming still carrying flare and rainbow streaks at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Flash",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "summary": "A quick white-out flash: the outgoing clip blows to white and the incoming clip appears overexposed and settles. The event is front-loaded: in the 1 s render the frame is pure white at cut-0.3 s, the incoming shot is washed at cut-0.2 s and already normal by the cut, so the second half of the transition is plain incoming footage.",
+   "look": [
+    "white flash",
+    "camera flash",
+    "overexposure",
+    "punchy",
+    "snap"
+   ],
+   "use_for": [
+    "photo-to-photo cuts in a news or documentary montage (press-camera feel)",
+    "trailer hit cuts",
+    "reel beat-synced cut",
+    "'breaking' reveal in a political explainer"
+   ],
+   "avoid": [
+    "many flashes in a row (photosensitivity risk, keep under 3 per second)",
+    "very bright footage where the flash barely registers"
+   ],
+   "confidence": "medium",
+   "family": "light/flare",
+   "feel": "hard punchy, press-camera",
+   "duration_typical": "0.2-0.5",
+   "sfx": "hit",
+   "single_sided_ok": true,
+   "equivalent": "AE: white solid in Add mode (or Exposure on an adjustment layer) with opacity 0->100% over 2-3 frames ending on the cut and 100->0% over ~6-8 frames after; optional Glow on the incoming shot.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Flash; the batch has no match name, so match is null). Placed OK at 1 s centred (421.52-422.52 s around the 422.0 s cut), but the white peak lands ~0.2 s after the transition START (0.3 s before the edit point). To land the flash on a beat, use 0.3-0.4 s centred (peak about 0.1 s before the cut) or end the transition just after the beat; whether the peak scales with duration is not verified. Use shutter instead of hit for a press-camera feel. Controls not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/105a.png",
+    "note": "Frame is pure white at -0.3 s, while the cut and +0.3 s frames are already plain incoming footage, matching the front-loaded white flash the card describes.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 1,
+    "basis": "render: one white-out, pure white 0.3 s before the cut"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Flicker",
+   "match": null,
+   "category": "Grunge & Distort",
+   "status": "current",
+   "summary": "Cuts back and forth irregularly between the outgoing clip, the incoming clip and blended frames for the duration, then settles on the incoming clip, like a faulty projector or unstable signal. The catalog lists strobe, grain, scanline and shake options.",
+   "look": [
+    "flicker",
+    "strobe",
+    "unstable signal",
+    "old projector",
+    "nervous",
+    "tension"
+   ],
+   "use_for": [
+    "horror / tension / mystery beat in a documentary",
+    "trailer build-up cuts",
+    "'something is wrong' moment in an explainer",
+    "glitchy reel intro"
+   ],
+   "avoid": [
+    "photosensitive audiences (strobing)",
+    "calm or official news content",
+    "long durations, which get annoying"
+   ],
+   "confidence": "medium",
+   "family": "glitch/damage",
+   "feel": "nervous unstable, suspense",
+   "duration_typical": "0.3-0.8",
+   "sfx": "shutter",
+   "single_sided_ok": true,
+   "equivalent": "AE: on the incoming layer use an Opacity expression like (time < cutTime + 0.4) ? (Math.random() > 0.5 ? 100 : 0) : 100 with posterizeTime(12), plus slight Exposure flicker on an adjustment layer.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Flicker; the batch has no match name, so match is null). Placed OK at 1 s centred (425.52-426.52 s around the 426.0 s cut). In the render the outgoing shot keeps flashing back until about cut+0.1 s and the incoming shot holds from about cut+0.2 s, so the switch does not land exactly on the cut. Controls not harvested. Use glitch sfx for a digital feel.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/106b.png",
+    "note": "Outgoing at -0.3 s carries scanlines, the cut frame is a scanlined blend of both shots, and the incoming is clean at +0.3 s; consistent with an unstable-signal flicker.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 3,
+    "basis": "Premiere render, 1 s transition centred on an A -> B cut, 25 fps (work/pve_live/flash_rates.json): 1 luma flash of 25+ levels over the changing area, but the picture switches away and back 3 times in its second before B; each is a flash when the two shots differ in brightness, so PVE counts 3 per use"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Fold Motion",
+   "match": null,
+   "category": "Animation",
+   "status": "current",
+   "summary": "Flip-clock style 3D fold (catalog: 'Create a Flip Clock animation'): the picture flips over on a hinge like the leaf of a split-flap clock, with perspective and motion blur, revealing the incoming shot. In the default render the fold is horizontal and very fast, running from about cut-0.25 s to the cut, so the incoming shot is already full-frame at the cut point.",
+   "look": [
+    "flip clock",
+    "3D fold",
+    "hinged flap",
+    "perspective",
+    "motion blur",
+    "snappy"
+   ],
+   "use_for": [
+    "next-point / next-chapter change in an explainer",
+    "social reel scene change on a beat",
+    "news reel switch between stories",
+    "listicle item flip"
+   ],
+   "avoid": [
+    "slow cinematic or emotional sequences",
+    "using it next to many other 3D moves in one edit"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "snappy graphic, modern",
+   "duration_typical": "0.4-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: split each shot into top and bottom halves (precomp + masks), make them 3D and rotate the hinged half -180 deg on X around the middle edge with Easy Ease and motion blur (classic split-flap build); or CC Page Turn / a 3D layer hinged on its edge for a single fold.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Fold; the batch has no match name, so match is null). Placed OK at 1 s centred (429.52-430.52 s around the 430.0 s cut). The motion is front-loaded and finishes at the cut; the first ~0.25 s and the last 0.5 s are static. Fold angle/axis is adjustable (the Film Impact preview also shows diagonal folds) but no controls were harvested; set none from a spec.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/107b.png",
+    "note": "Incoming is already full-frame at the cut with motion blur on its lower half as the flap lands; a denser strip around 430 s shows the horizontal split-flap fold with the incoming top half flipping down over the outgoing.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Frame",
+   "match": null,
+   "category": "Transformers",
+   "status": "current",
+   "summary": "The incoming clip appears as a small rounded-corner card with a white border in the centre and grows over the outgoing clip (which pushes in slightly) until it fills the screen. A picture-in-picture 'card zoom' reveal.",
+   "look": [
+    "picture-in-picture",
+    "rounded card",
+    "white border",
+    "zoom reveal",
+    "clean graphic",
+    "social"
+   ],
+   "use_for": [
+    "reveal of a quoted clip / tweet-style video inside a news reel",
+    "explainer 'look at this' cut to evidence footage",
+    "social reel scene change with a modern card look",
+    "intro reveal over black"
+   ],
+   "avoid": [
+    "cinematic trailers (looks like UI)",
+    "when the incoming shot's subject is off-centre, since the small card hides it early"
+   ],
+   "confidence": "medium",
+   "family": "zoom",
+   "feel": "clean modern, social-media UI",
+   "duration_typical": "0.6-1.0",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: incoming layer with a rounded-rectangle mask + Stroke (white) or a shape layer matte, Scale keyframed ~5% -> 100% with Easy Ease and Drop Shadow; outgoing layer Scale 100 -> 110%.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Frame; the batch has no match name, so match is null). Placed OK at 1 s centred (433.52-434.52 s around the 434.0 s cut). The card appears at cut-0.3 s and is still only ~60% size at cut+0.3 s, so the shot only fills the frame at the very end; give it the full duration. Single-sided behaviour (card growing over black) is not verified. Border colour/corner/glow controls not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/108b.png",
+    "note": "Incoming appears as a white-bordered rounded card in the centre, measured ~10% wide at -0.3 s, ~29% at the cut and ~65% at +0.3 s, growing over the outgoing shot, which pushes in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Glass",
+   "match": null,
+   "category": "Grunge & Distort",
+   "status": "current",
+   "summary": "Defocuses the outgoing clip, then refracts it through a grid of glass blocks (reeded/tiled glass) that smear the image into squares, and resolves the incoming clip from blur. A textured, refractive dissolve.",
+   "look": [
+    "glass block refraction",
+    "grid tiles",
+    "frosted blur",
+    "abstract",
+    "textured"
+   ],
+   "use_for": [
+    "dreamy or abstract scene change in a cinematic explainer",
+    "tech / AI-theme reel transitions",
+    "privacy or 'hidden information' beat (obscured view)",
+    "music-driven montage"
+   ],
+   "avoid": [
+    "fast news cuts (too busy)",
+    "faces at the cut, since the tiling breaks them up badly"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "abstract textured, techy",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: adjustment layer with Displacement Map (or CC Glass) driven by a grid/Cell Pattern layer, displacement amount 0->max->0 across the cut, plus Fast Box Blur ramp and an opacity crossfade.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Glass; the batch has no match name, so match is null). Placed OK at 1 s centred (437.52-438.52 s around the 438.0 s cut); the outgoing shot is already blurred into blocks at cut-0.3 s and the incoming one is still tiled at cut+0.3 s, so most of the second is unreadable. Single-sided use is not verified. Grid size/refraction controls not harvested; set none from a spec.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/109b.png",
+    "note": "Mid frame is the image refracted through a grid of glass blocks; outgoing is already blurred into blocks at -0.3 s and incoming still tiled at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Glitch",
+   "match": null,
+   "category": "Grunge & Distort",
+   "status": "current",
+   "summary": "Digital glitch: horizontal slice displacement, scanline tearing and RGB colour fringing mix the two clips and resolve to the incoming one.",
+   "look": [
+    "digital glitch",
+    "RGB split",
+    "horizontal tearing",
+    "scanlines",
+    "datamosh-like",
+    "edgy"
+   ],
+   "use_for": [
+    "tech / AI news reels",
+    "political roast reel punchline or 'system error' gag",
+    "trailer hacker/cyber beats",
+    "fast social cut on a glitch sound"
+   ],
+   "avoid": [
+    "serious documentary or official government content",
+    "overuse in one video",
+    "long durations, which look like a broken file"
+   ],
+   "confidence": "high",
+   "family": "glitch/damage",
+   "feel": "hard edgy, digital",
+   "duration_typical": "0.2-0.5",
+   "sfx": "glitch",
+   "single_sided_ok": true,
+   "equivalent": "AE: VR Digital Glitch, or Displacement Map driven by a Fractal Noise (Block) layer with Shift Channels/channel offsets for RGB split, and Venetian Blinds/Wave Warp slices, keyframed only around the cut.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Glitch; the batch has no match name, so match is null). Placed OK at 1 s centred (441.52-442.52 s around the 442.0 s cut). Visible glitching runs about cut-0.4 to cut+0.4 s; 0.3 s is punchier. Not the VR Digital Glitch effect. Controls not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/110b.png",
+    "note": "Mid frame shows heavy horizontal slice displacement and colour tearing mixing both shots; tearing lines are present at -0.3 s and +0.3 s too.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Glow",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "summary": "A warm bloom builds on the outgoing clip and blows out to a soft warm-white glow right at the cut, then fades off the incoming clip. Softer than Flash, warmer than Dip to White.",
+   "look": [
+    "bloom",
+    "warm glow",
+    "soft white-out",
+    "dreamy",
+    "light leak-like"
+   ],
+   "use_for": [
+    "emotional or inspirational documentary cut",
+    "memory / tribute photo montage",
+    "uplifting end of an explainer",
+    "wedding/lifestyle-style reel transitions"
+   ],
+   "avoid": [
+    "hard news or roast content (too soft)",
+    "already bright, low-contrast footage where the bloom just washes everything out"
+   ],
+   "confidence": "medium",
+   "family": "light/flare",
+   "feel": "soft warm, nostalgic",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: Glow effect on both layers with Glow Intensity/Radius ramped up to the cut and down after, plus a warm white solid (Screen mode, radial gradient from a corner) at peak and an opacity crossfade.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Glow; the batch has no match name, so match is null). Placed OK at 1 s centred (445.52-446.52 s around the 446.0 s cut). The outgoing image is clean until ~cut-0.15 s and the incoming is clean by cut+0.3 s, so most of the change is in the middle 0.4 s. Controls not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/111b.png",
+    "note": "Outgoing is clean at -0.3 s, the cut frame is a warm-white bloom blow-out over a blend of both shots, and the incoming is clean at +0.3 s.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 1,
+    "basis": "render: one warm-white blow-out at the cut"
+   }
+  }
+ ]
+}

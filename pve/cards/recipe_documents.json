@@ -1,0 +1,509 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "documents",
+   "name": "Screenshot zoom with highlighter",
+   "summary": "A screenshot of an article, post or document sits on a dark desk; the frame pushes in on one line and a yellow marker stroke sweeps across it.",
+   "use_for": [
+    "quoting a tweet, post, headline or report line on screen",
+    "evidence beats in an explainer"
+   ],
+   "avoid": [
+    "unreadable sources: capture at 2x or more so the zoomed text stays sharp",
+    "fabricated or altered screenshots (show the real source, with the date)"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Opacity": 120,
+      "Distance": 10,
+      "Softness": 30
+     }
+    }
+   ],
+   "scenes": [
+    {
+     "name": "screenshot_zoom_highlight",
+     "dur": 4,
+     "bg": "#2B2F36",
+     "cam": [
+      [
+       0.3,
+       [
+        960,
+        540,
+        100
+       ],
+       1.5,
+       [
+        760,
+        420,
+        190
+       ],
+       "smooth"
+      ]
+     ],
+     "layers": [
+      {
+       "type": "solid",
+       "name": "DESK",
+       "color": "#2B2F36"
+      },
+      {
+       "type": "footage",
+       "name": "SCREENSHOT",
+       "src": "still.png",
+       "zoom": 0.45,
+       "cam": true,
+       "effects": [
+        {
+         "name": "ADBE Drop Shadow",
+         "props": {
+          "Opacity": 120,
+          "Distance": 10,
+          "Softness": 30
+         }
+        }
+       ]
+      },
+      {
+       "type": "shape",
+       "name": "HIGHLIGHT",
+       "cam": true,
+       "blend": "MULTIPLY",
+       "paths": [
+        {
+         "pts": [
+          [
+           640,
+           424
+          ],
+          [
+           880,
+           424
+          ]
+         ],
+         "closed": false
+        }
+       ],
+       "stroke": "#FFE14D",
+       "width": 40,
+       "trim": true,
+       "segs": [
+        {
+         "p": "trim",
+         "seg": [
+          1.6,
+          0,
+          2.05,
+          100,
+          "out"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "keyframes_note": "Scenes for vfx.render_scenes(scenes, aep, out_dir) at its defaults (1920x1080, 25 fps); segs are [t0, v0, t1, v1, ease] in comp seconds with ease lin | smooth | out | in (ae_lib.jsx seg). The scene's 'cam' is the vfx CAM null (a 2D zoom, not a 3D camera): [t0, [anchor x, anchor y, scale], t1, [...], ease]; the anchor point ends up in the centre of frame, so [760, 420, 190] centres that comp point at 190%. Layer 0 (DESK) must not use the CAM (it is created right after layer 0). The footage 'zoom' 0.45 = contain-fit / cover-fit for the 1080x1350 still (0.8 / 1.778), so the whole page shows. The highlight sits ON TOP with blend MULTIPLY (raster text below shows through) and, as a CAM child, its stroke width is divided by the CAM scale (vfx_build.jsx), so 40 means 40 px on screen after the zoom: size it to the zoomed text height and draw it after the push settles. Replace still.png and the line coordinates with the real screenshot's.",
+   "built_from": [
+    "Shape layers (vector graphics)",
+    "Trim Paths (shape operator)",
+    "Drop Shadow",
+    "Parenting, null objects and Create Nulls From Paths",
+    "Document treatments (screenshots, paper, redaction)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/012_scene_0_ae_c.png",
+    "note": "The still sits on the dark desk, the frame pushes in on it, then the marker stroke sweeps across one line; with blend MULTIPLY over the saturated test still it reads brown, as multiply over a white page would read yellow.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "documents",
+   "name": "Paper drop-in",
+   "summary": "A document drops into frame from above onto a dark desk, lands with a slight tilt and settles, with a soft contact shadow.",
+   "use_for": [
+    "introducing a letter, order, FIR, report or contract",
+    "a 'the documents show' beat"
+   ],
+   "avoid": [
+    "more than one or two drops per minute",
+    "unreadable pages: follow with a zoom on the line that matters"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Opacity": 150,
+      "Direction": 160,
+      "Distance": 22,
+      "Softness": 45
+     }
+    }
+   ],
+   "scenes": [
+    {
+     "name": "paper_drop_in",
+     "dur": 3,
+     "bg": "#2B2F36",
+     "layers": [
+      {
+       "type": "solid",
+       "name": "DESK",
+       "color": "#2B2F36"
+      },
+      {
+       "type": "footage",
+       "name": "DOCUMENT",
+       "src": "still.png",
+       "zoom": 0.4,
+       "effects": [
+        {
+         "name": "ADBE Drop Shadow",
+         "props": {
+          "Opacity": 150,
+          "Direction": 160,
+          "Distance": 22,
+          "Softness": 45
+         }
+        }
+       ],
+       "segs": [
+        {
+         "p": "position",
+         "seg": [
+          0.2,
+          [
+           960,
+           -700
+          ],
+          0.75,
+          [
+           960,
+           560
+          ],
+          "out"
+         ]
+        },
+        {
+         "p": "rotation",
+         "seg": [
+          0.2,
+          -9,
+          0.75,
+          -3,
+          "out"
+         ]
+        },
+        {
+         "p": "rotation",
+         "seg": [
+          0.75,
+          -3,
+          1.3,
+          -2,
+          "smooth"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "keyframes_note": "Scenes for vfx.render_scenes(scenes, aep, out_dir) at its defaults (1920x1080, 25 fps); segs are [t0, v0, t1, v1, ease] in comp seconds with ease lin | smooth | out | in (ae_lib.jsx seg). Footage 'zoom' 0.4 puts the 1080x1350 page at about 768x960 px. Position falls from y -700 to 560 in 0.55 s with ease 'out' (fast start, soft landing) while rotation goes -9 -> -3 degrees, then a second rotation seg settles to -2. Drop Shadow values are in the page's own pixels and the layer is scaled about 71%, so 22 px reads as about 16. Add an 'impact' or paper SFX at 0.75 s.",
+   "built_from": [
+    "Drop Shadow",
+    "Document treatments (screenshots, paper, redaction)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/015_scene_0_ae_b.png",
+    "note": "The page drops in from above, lands with a slight tilt and settles on the desk with a soft contact shadow.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "documents",
+   "name": "Redaction bars wipe on",
+   "summary": "Black bars wipe across sensitive lines of a document one by one, the classic redaction look.",
+   "use_for": [
+    "protecting names, numbers or addresses in a shown document",
+    "a 'what they did not want you to see' beat"
+   ],
+   "avoid": [
+    "using it as real redaction: the source pixels are still in the project and the .aep (redact the image itself before import for anything legally sensitive)"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [],
+   "scenes": [
+    {
+     "name": "redaction_bars",
+     "dur": 3,
+     "bg": "#2B2F36",
+     "layers": [
+      {
+       "type": "solid",
+       "name": "DESK",
+       "color": "#2B2F36"
+      },
+      {
+       "type": "footage",
+       "name": "DOCUMENT",
+       "src": "still.png",
+       "zoom": 0.45
+      },
+      {
+       "type": "shape",
+       "name": "REDACT_1",
+       "origin": [
+        795,
+        300
+       ],
+       "paths": [
+        {
+         "pts": [
+          [
+           0,
+           -15
+          ],
+          [
+           520,
+           -15
+          ],
+          [
+           520,
+           15
+          ],
+          [
+           0,
+           15
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#0A0A0A",
+       "segs": [
+        {
+         "p": "scale",
+         "seg": [
+          0.5,
+          [
+           0,
+           100
+          ],
+          0.75,
+          [
+           100,
+           100
+          ],
+          "out"
+         ]
+        }
+       ]
+      },
+      {
+       "type": "shape",
+       "name": "REDACT_2",
+       "origin": [
+        795,
+        360
+       ],
+       "paths": [
+        {
+         "pts": [
+          [
+           0,
+           -15
+          ],
+          [
+           520,
+           -15
+          ],
+          [
+           520,
+           15
+          ],
+          [
+           0,
+           15
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#0A0A0A",
+       "segs": [
+        {
+         "p": "scale",
+         "seg": [
+          0.7,
+          [
+           0,
+           100
+          ],
+          0.95,
+          [
+           100,
+           100
+          ],
+          "out"
+         ]
+        }
+       ]
+      },
+      {
+       "type": "shape",
+       "name": "REDACT_3",
+       "origin": [
+        885,
+        470
+       ],
+       "paths": [
+        {
+         "pts": [
+          [
+           0,
+           -15
+          ],
+          [
+           380,
+           -15
+          ],
+          [
+           380,
+           15
+          ],
+          [
+           0,
+           15
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#0A0A0A",
+       "segs": [
+        {
+         "p": "scale",
+         "seg": [
+          0.9,
+          [
+           0,
+           100
+          ],
+          1.15,
+          [
+           100,
+           100
+          ],
+          "out"
+         ]
+        }
+       ]
+      },
+      {
+       "type": "shape",
+       "name": "REDACT_4",
+       "origin": [
+        795,
+        530
+       ],
+       "paths": [
+        {
+         "pts": [
+          [
+           0,
+           -15
+          ],
+          [
+           520,
+           -15
+          ],
+          [
+           520,
+           15
+          ],
+          [
+           0,
+           15
+          ]
+         ],
+         "closed": true
+        }
+       ],
+       "fill": "#0A0A0A",
+       "segs": [
+        {
+         "p": "scale",
+         "seg": [
+          1.1,
+          [
+           0,
+           100
+          ],
+          1.35,
+          [
+           100,
+           100
+          ],
+          "out"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "keyframes_note": "Scenes for vfx.render_scenes(scenes, aep, out_dir) at its defaults (1920x1080, 25 fps); segs are [t0, v0, t1, v1, ease] in comp seconds with ease lin | smooth | out | in (ae_lib.jsx seg). Each bar's origin is its left end, so an x scale 0 -> 100 wipes it to the right; bars start 0.2 s apart. Line positions are placeholders on still.png (contained at zoom 0.45, page x 528..1392): move the origins onto the real lines.",
+   "built_from": [
+    "Shape layers (vector graphics)",
+    "Document treatments (screenshots, paper, redaction)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/016_scene_0_ae_b.png",
+    "note": "Black bars wipe across the page one line after another and hold.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ]
+   }
+  }
+ ]
+}

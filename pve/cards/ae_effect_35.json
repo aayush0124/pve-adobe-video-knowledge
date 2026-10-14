@@ -1,0 +1,819 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Rotation 3D",
+   "match": "ADBE DE Random Rotation 3D",
+   "category": "",
+   "status": "hidden",
+   "summary": "Expression-control pseudo effect: a panel of sliders (travel time, min/max X, Y and Z rotation, random start toggles) meant to drive a random 3D tumble of a layer. It draws nothing itself, and no preset shipped with AE 2026 wires expressions to it.",
+   "look": [
+    "random tumble",
+    "3D drift",
+    "floating cards",
+    "rotation",
+    "procedural motion"
+   ],
+   "use_for": [
+    "slow random 3D drift of floating photo cards or icons in an explainer",
+    "tumbling newspaper cut-outs or debris behind a trailer title",
+    "idle motion on a 3D logo plate between beats"
+   ],
+   "avoid": [
+    "adding it alone does nothing: the layer only moves once expressions read these sliders",
+    "the layer must be a 3D layer or X/Y rotation has no effect",
+    "large Y spins on footage expose the flat back of the layer and look cheap"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Travel Time",
+     "does": "seconds per random move from one target angle to the next",
+     "typical": "1-4"
+    },
+    {
+     "name": "Travel Time Variation",
+     "does": "random +/- seconds added to each travel time",
+     "typical": "0.3-1"
+    },
+    {
+     "name": "Min Y Rotation",
+     "does": "lowest random Y angle (degrees)",
+     "typical": "-25 to -10 for a subtle drift"
+    },
+    {
+     "name": "Max Y Rotation",
+     "does": "highest random Y angle (degrees)",
+     "typical": "10-25 for a subtle drift"
+    },
+    {
+     "name": "Min X Rotation",
+     "does": "lowest random X angle (degrees)",
+     "typical": "-10 to 0"
+    },
+    {
+     "name": "Max X Rotation",
+     "does": "highest random X angle (degrees)",
+     "typical": "0-10"
+    },
+    {
+     "name": "Max Z Rotation",
+     "does": "highest random Z (roll) angle (degrees)",
+     "typical": "0-8"
+    },
+    {
+     "name": "Random Start Value",
+     "does": "checkbox (0/1): start each layer at a different random angle",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Drop Shadow",
+    "CC Light Sweep",
+    "Camera Lens Blur"
+   ],
+   "scripting": "Pseudo effect defined in Support Files/PresetEffects.xml with no driving preset in AE 2026, so a script that wants the behaviour must enable 3D on the layer, add this effect, then write expressions on transform.xRotation / yRotation / zRotation, e.g. for Y: e=effect('Random Rotation 3D'); T=e('Travel Time'); s=Math.floor(time/T); seedRandom(s,true); a=random(e('Min Y Rotation'),e('Max Y Rotation')); seedRandom(s+1,true); b=random(e('Min Y Rotation'),e('Max Y Rotation')); ease(time%T,0,T,a,b). That sketch ignores Travel Time Variation and the Random Start checkboxes. Checkboxes are 0/1 numbers. Simpler alternative: wiggle(0.5,15) on Y Rotation. Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Scale",
+   "match": "ADBE DE Random Scale",
+   "category": "",
+   "status": "hidden",
+   "summary": "Expression-control pseudo effect holding settings for random scale changes (travel time, min/max scale, lock X and Y, random start toggles). It draws nothing itself, and no preset shipped with AE 2026 wires expressions to it.",
+   "look": [
+    "random pulse",
+    "breathing scale",
+    "procedural motion",
+    "bounce"
+   ],
+   "use_for": [
+    "subtle random 'breathing' scale on icons or map pins in an explainer infographic",
+    "random size flicker on particles or bokeh shapes behind a title",
+    "irregular pulse on a 'BREAKING' badge so several copies do not move in sync"
+   ],
+   "avoid": [
+    "adding it alone does nothing: the layer only scales once an expression reads these sliders",
+    "default Min Scale 25 to Max Scale 100 is far too wide for footage; keep the range narrow (95-110)",
+    "scaling a full-frame clip below 100% exposes black edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Travel Time",
+     "does": "seconds per random move to the next scale target",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Travel Time Variation",
+     "does": "random +/- seconds added to each travel time",
+     "typical": "0.2-0.5"
+    },
+    {
+     "name": "Min Scale",
+     "does": "lowest random scale (%)",
+     "typical": "95-100"
+    },
+    {
+     "name": "Max Scale",
+     "does": "highest random scale (%)",
+     "typical": "105-120"
+    },
+    {
+     "name": "Lock X And Y",
+     "does": "checkbox (0/1): same random value for X and Y (uniform scale)",
+     "typical": "1"
+    },
+    {
+     "name": "Random Start Value",
+     "does": "checkbox (0/1): each layer starts at a different random scale",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Random Rotation",
+    "Random Opacity",
+    "Slider Control",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect from PresetEffects.xml; no driving preset in AE 2026. A script must add it and write a Scale expression itself, e.g. e=effect('Random Scale'); T=e('Travel Time'); s=Math.floor(time/T); seedRandom(s,true); a=random(e('Min Scale'),e('Max Scale')); seedRandom(s+1,true); b=random(e('Min Scale'),e('Max Scale')); v=ease(time%T,0,T,a,b); [v,v] (use [v,v,v] on a 3D layer). That sketch ignores Lock X And Y = 0 (non-uniform), Travel Time Variation and the Random Start checkboxes. Checkboxes are 0/1 numbers. Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Rotate Over Time",
+   "match": "ADBE CM Spin",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the Behaviors preset 'Rotate Over Time': the preset adds this slider plus a Transform effect whose Rotation expression adds (time - inPoint) x the rate, so the layer spins continuously at a set speed. On its own the control does nothing.",
+   "look": [
+    "continuous spin",
+    "rotating graphic",
+    "loader",
+    "radial burst"
+   ],
+   "use_for": [
+    "slow-spinning sunburst or radial-ray background behind a title or quote card",
+    "rotating emblem, seal or badge in a political explainer graphic",
+    "spinning loader, vinyl record or gear icon in an AI-education explainer",
+    "slowly rotating globe or compass graphic in a news package"
+   ],
+   "avoid": [
+    "on a full-frame clip the rotation happens inside the layer bounds, so corners clip and transparent wedges appear",
+    "fast spins on detailed graphics strobe without motion blur",
+    "applying the bare effect by match name gives a slider with no motion"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Rotation (degrees/second)",
+     "does": "spin speed in degrees per second; negative values spin counter-clockwise",
+     "typical": "6-20 for backgrounds, 90-360 for loaders"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: keyframe Motion > Rotation linearly (no auto-spin effect)",
+   "pairs_with": [
+    "Transform",
+    "Radial Blur",
+    "Glow",
+    "Drop Shadow"
+   ],
+   "scripting": "Apply with layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Rotate Over Time.ffx')), then set effect('Rotate Over Time')('Rotation (degrees/second)'). The property is an Angle (degrees) with no harvested min/max. The preset adds a Transform effect whose Rotation expression is (time - inPoint) * rate, so the spin starts at the layer in-point and turns around the layer centre (for text/shape layers the Transform anchor/position are set to toComp(anchorPoint)). For fast spins give that Transform effect its own motion blur: uncheck 'Use Composition's Shutter Angle' and set 'Shutter Angle' to about 180. Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Sample Image",
+   "match": "ADBE Sample Image",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the preset 'Image - Utilities/Sample Image Expression': its Sampled Color Output colour is driven by sampleImage(Center, [Radius, Radius]) on the layer, so it continuously reads the average colour of an area of the image. It changes no pixels; other properties link to the sampled colour.",
+   "look": [
+    "colour pick",
+    "adaptive colour",
+    "auto-matched tint",
+    "utility"
+   ],
+   "use_for": [
+    "auto-tint a lower-third bar or caption box to the dominant colour of the shot behind it",
+    "drive a light, glow or vignette colour from the footage so graphics sit in the grade",
+    "read whether an area is bright or dark to switch caption text black/white in a reel template"
+   ],
+   "avoid": [
+    "default Radius 0.5 samples a single pixel and flickers with noise; use 20-100",
+    "sampleImage expressions are slow to render and slow previews on long timelines",
+    "colour jumps at every cut unless smoothed (e.g. smooth() or a short ease)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Center",
+     "does": "pixel point whose surrounding area is sampled",
+     "typical": "[960, 540] or the area under the graphic, e.g. [960, 900]"
+    },
+    {
+     "name": "Radius",
+     "does": "half-size of the square sample area in pixels",
+     "typical": "20-100"
+    },
+    {
+     "name": "Sampled Color Output",
+     "does": "result colour (expression-driven); pick-whip other colour properties to it",
+     "typical": "read-only in practice"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Tint",
+    "Color Control",
+    "Glow"
+   ],
+   "scripting": "Apply with layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Utilities/Sample Image Expression.ffx')); the preset expression is center=effect('Sample Image')(1); radius=effect('Sample Image')(2); sampleImage(center,[radius,radius]), which samples the layer it sits on. To sample a different layer, rewrite it as thisComp.layer('X').sampleImage(...). Downstream colours read it via effect('Sample Image')('Sampled Color Output'), which returns a 0-1 RGBA array. Do not set Sampled Color Output from a spec, because the expression overwrites it. Center is in layer pixels. Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Scale Bounce - layer markers",
+   "match": "ADBE CM ScaleBounceMarkers",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the Behaviors preset 'Scale Bounce - layer markers': at every layer marker the layer swells to the target scale and eases back to 100%, a pop that peaks exactly on the marker. On its own the control does nothing.",
+   "look": [
+    "beat pop",
+    "scale bounce",
+    "punch",
+    "music sync",
+    "kinetic"
+   ],
+   "use_for": [
+    "pop a logo, icon or stat card on music beats marked as layer markers in a reel",
+    "punch a keyword caption on the VO emphasis word",
+    "hit a 'BREAKING' or 'FACT CHECK' badge on each sting in a news package"
+   ],
+   "avoid": [
+    "default Target Scale Change 200 doubles the size: far too big for anything but a gag",
+    "no layer markers = no motion (the expression's catch returns 100)",
+    "the swell is symmetric around the marker (it starts Bounce Duration/2 before it), so put markers exactly on the beat frame, not early"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Bounce Duration (msec)",
+     "does": "total length of each pop in ms, centred on the marker (half before, half after)",
+     "typical": "200-400"
+    },
+    {
+     "name": "Target Scale Change",
+     "does": "peak scale (%) reached exactly at the marker",
+     "typical": "108-130"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: keyframe Motion > Scale per beat (no marker-driven effect)",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur",
+    "Glow",
+    "Drop Shadow"
+   ],
+   "scripting": "Apply with layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Scale Bounce - layer markers.ffx')). It needs LAYER markers (not comp markers): layer.property('Marker').setValueAtTime(t, new MarkerValue('')). Preset expression on the Transform effect's Scale: bounceWidth = msec/2000; easeIn(Math.abs(time - marker.nearestKey(time).time), bounceWidth, 0, target, 100), wrapped in try/catch returning 100. AE sorts the reversed tMin/tMax range, so distance 0 (on the marker) gives Target and the layer is back at 100% once it is bounceWidth away. It runs on a Transform effect, and for text/shape layers the Transform anchor is set to toComp(anchorPoint). Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Scale Bounce - random",
+   "match": "ADBE CM ScaleBounceRandom",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the Behaviors preset 'Scale Bounce - random': noise over time randomly pushes the layer's scale from 100% toward the target scale, giving irregular nervous pops. On its own the control does nothing.",
+   "look": [
+    "random pop",
+    "nervous pulse",
+    "jitter",
+    "kinetic",
+    "alert"
+   ],
+   "use_for": [
+    "irregular pulse on an alert or warning icon in a news reel",
+    "nervous 'buzzing' map pins or data points in an explainer",
+    "random pops on meme stickers or emoji in a satire reel"
+   ],
+   "avoid": [
+    "default Target Scale Change 200 is huge; use 110-130 for usable pops",
+    "not beat-synced: use the layer-markers version when music timing matters",
+    "high Bounce Nervousness on text makes it unreadable"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Chance of Bouncing",
+     "does": "how often noise crosses the bounce threshold (0 = never, 100 = most of the time)",
+     "typical": "30-60"
+    },
+    {
+     "name": "Bounce Nervousness",
+     "does": "speed of the underlying noise (higher = quicker, twitchier pops)",
+     "typical": "20-100"
+    },
+    {
+     "name": "Target Scale Change",
+     "does": "scale (%) reached at full bounce",
+     "typical": "110-130"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: no equivalent (keyframe Motion > Scale by hand)",
+   "pairs_with": [
+    "Transform",
+    "Wiggle - position",
+    "Glow",
+    "Drop Shadow"
+   ],
+   "scripting": "Apply with layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Scale Bounce - random.ffx')). Preset expression on the Transform effect's Scale: compare=(50-Chance)/50; n=noise(time*Nervousness/20); linear(n, compare, 1, 100, Target). noise() depends only on its input (comp time here), not on the layer or seedRandom, so every layer carrying this preset bounces in exact sync; to desynchronise copies edit the expression to noise(time*Nervousness/20 + index*10). Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Separate XYZ Position",
+   "match": "ADBE Separate XYZ Position",
+   "category": "",
+   "status": "obsolete",
+   "summary": "Legacy control from the preset 'Legacy/Separate XYZ Position': three sliders whose values are ADDED to the layer's Position by an expression, so X, Y and Z could be keyframed independently. It is superseded by the native Separate Dimensions on Position.",
+   "look": [
+    "position offset",
+    "utility",
+    "motion control"
+   ],
+   "use_for": [
+    "only for opening old projects that already use it",
+    "an independent X/Y offset layered on top of existing position keyframes (e.g. a slide added over tracked motion)"
+   ],
+   "avoid": [
+    "for new work use Position > Separate Dimensions instead",
+    "the values are offsets, not absolute positions: 0 means 'no change'",
+    "applying the bare effect by match name does nothing: only the preset's Position expression reads the sliders, so apply Legacy/Separate XYZ Position.ffx"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "X Position",
+     "does": "pixels added to the layer's X position",
+     "typical": "-1920 to 1920 for slide-ins"
+    },
+    {
+     "name": "Y Position",
+     "does": "pixels added to the layer's Y position",
+     "typical": "-1080 to 1080"
+    },
+    {
+     "name": "Z Position",
+     "does": "pixels added to Z (3D layers only)",
+     "typical": "-1000 to 1000"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Motion > Position (AE native replacement: Position > Separate Dimensions)",
+   "pairs_with": [
+    "Separate XYZ Scale"
+   ],
+   "scripting": "Preset file: Support Files/Presets/Legacy/Separate XYZ Position.ffx; expression: value + [X Position, Y Position, Z Position]. Modern replacement: layer.transform.position.dimensionsSeparated = true, then keyframe layer.transform.xPosition / yPosition / zPosition. Hidden: not in the Effects panel. The .ffx also stores a static layer Position of [320, 240, 0] (an old 640x480 default) next to the expression, so read transform.position before applyPreset and write it back afterwards in case the preset resets it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/ae/267.png",
+    "note": "Frame is pixel-identical to the untouched render (zero difference to 051.png): the gallery adds the bare effect with X/Y/Z 0 and no Position expression, so no demo_settings value can move the layer; the card is already obsolete, so status stays obsolete rather than needs_input.",
+    "rerender": false,
+    "second_opinion": "corrected: verdict broken, status obsolete and the new avoid line confirmed (267 is pixel-identical to 8 other no-op frames incl. 051 and keeps the ref framing; the Legacy .ffx carries the value + [X,Y,Z] Position expression, the bare effect has none, so no demo_settings can help); added a scripting note that the .ffx also stores layer Position [320, 240, 0], so restore Position after applyPreset",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Separate XYZ Scale",
+   "match": "ADBE Separate XYZ Scale",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the Behaviors preset 'Separate XYZ Scale': three sliders are added to the layer's Scale through an expression ([X, Y, Z] + value), so X, Y and Z scale offsets can be keyframed separately with different eases. AE still cannot natively separate Scale dimensions.",
+   "look": [
+    "squash and stretch",
+    "non-uniform scale",
+    "stretch reveal",
+    "utility"
+   ],
+   "use_for": [
+    "squash-and-stretch pops on icons or stickers in reels",
+    "horizontal-only stretch reveal of a lower-third bar or title underline",
+    "vertical bar-grow animation in a data explainer with its own easing per axis"
+   ],
+   "avoid": [
+    "the sliders are OFFSETS added to the layer's own Scale ([X,Y,Z] + value): the preset applies them at 0 with the layer at 100%, so 0 = no change and X Scale -100 = zero width; adding the bare effect by match name gives the PresetEffects default 100 but no expression, so nothing moves",
+    "non-uniform scale distorts faces and footage badly"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "X Scale",
+     "does": "percent added to the layer's horizontal scale (0 = no change)",
+     "typical": "-100 -> 0 keyframed for a stretch-in"
+    },
+    {
+     "name": "Y Scale",
+     "does": "percent added to the layer's vertical scale (0 = no change)",
+     "typical": "-20 to 20 for squash and stretch"
+    },
+    {
+     "name": "Z Scale",
+     "does": "percent added to depth scale (3D layers only)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Motion > Scale Height / Scale Width with Uniform Scale off",
+   "pairs_with": [
+    "Separate XYZ Position",
+    "Transform"
+   ],
+   "scripting": "Preset file: Support Files/Presets/Behaviors/Separate XYZ Scale.ffx; expression on the layer's Scale: [X Scale, Y Scale, Z Scale] + value. The .ffx stores the three sliders at 0 and the layer Scale at 100%, so right after applyPreset the layer is unchanged and the sliders work as offsets (slider UI range -100 to 100); applying may reset a fitted layer's Scale to 100%, so read transform.scale before and write it back. To make the sliders absolute instead, set transform.scale to [0,0,0] (2D: [0,0]) and the sliders to 100. Simpler alternative for scripts: keyframe transform.scale directly with a different value per axis ([x, y]). Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "corrected: not_rendered agreed (no gallery frame), but the '200% with default sliders' claim was wrong: the .ffx stores X/Y/Z Scale at 0 and layer Scale 100% (cdat values; PresetEffects slider range -100..100), so the preset leaves the layer at 100% and the sliders are offsets; summary, avoid, params and scripting rewritten as offsets"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Slide - variable",
+   "match": "ADBE CM SlideVariable",
+   "category": "",
+   "status": "hidden",
+   "summary": "Orphaned transition control: a Transition Completion slider with an Entrance Angle and Initial Scale, meant to slide a layer in from an angle while scaling up. No preset shipped with AE 2026 references it, so it does nothing unless a script writes the expressions.",
+   "look": [
+    "slide in",
+    "angled entrance",
+    "scale up",
+    "transition"
+   ],
+   "use_for": [
+    "angled slide-and-grow entrance of a photo or inset card in an explainer (with custom expressions)",
+    "a control to drive a self-written slide-in rig from one keyframed slider"
+   ],
+   "avoid": [
+    "adding it alone does nothing; prefer the shipped 'Slide - straight / drop / swoop' presets (Slide Master Control)"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = off-screen start, 100 = settled (%)",
+     "typical": "keyframe 0 -> 100 over 0.4-0.8 s"
+    },
+    {
+     "name": "Entrance Angle",
+     "does": "direction (degrees) the layer travels in from",
+     "typical": "-90 to 90"
+    },
+    {
+     "name": "Initial Scale",
+     "does": "scale (%) at the start of the slide",
+     "typical": "25-80"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Slide (Legacy) or Push video transition (closest; no angle or scale control)",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur"
+   ],
+   "scripting": "Low confidence: definition only in PresetEffects.xml; a grep of every .ffx under Support Files/Presets found no preset using it. The Entrance Angle mapping (0 = from top or from right?) is unknown, so a script must write and test its own Position/Scale expressions, e.g. p=effect('Slide - variable')('Transition Completion'); a=degreesToRadians(effect('Slide - variable')('Entrance Angle')); d=linear(p,0,100,2200,0); value + [Math.sin(a)*d, -Math.cos(a)*d]. Hidden: not in the Effects panel.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Slide Master Control",
+   "match": "ADBE CM TransSlide",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control for the 'Transitions - Movement' presets Slide - straight, Slide - drop and Slide - swoop: keyframing Transition Completion from 0 to 100 moves the layer into its resting position. Straight slides in horizontally by one layer width, drop slides in vertically by one layer height, swoop arcs in from a top corner while scaling up from 0%.",
+   "look": [
+    "slide in",
+    "push",
+    "transition",
+    "wipe-on motion"
+   ],
+   "use_for": [
+    "slide a B-roll photo or document scan into frame in a news package",
+    "slide a full-frame section card in or out between explainer chapters",
+    "slide a picture-in-picture inset in from the side (reverse direction for the other side)"
+   ],
+   "avoid": [
+    "without motion blur the slide looks stiff; enable motion blur or add Directional Blur",
+    "linear keyframes feel robotic; use Easy Ease on Transition Completion",
+    "the bare effect by match name does nothing; the preset's Transform expressions do the moving",
+    "the offset is one layer width/height from where the layer sits, so a small inset placed mid-frame starts partly on screen; use a full-frame precomp or add your own position offset"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = offset by one layer width (straight) / height (drop), or at the top corner at 0% scale (swoop); 100 = in place (%)",
+     "typical": "keyframe 0 -> 100 over 0.4-0.8 s (reverse for an exit)"
+    },
+    {
+     "name": "reverse direction",
+     "does": "checkbox (0/1): straight 0 = from the left, 1 = from the right; drop 0 = from the top, 1 = from the bottom; swoop 0 = from the top-left, 1 = from the top-right",
+     "typical": "0 or 1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Push or Slide (Legacy) video transition",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur",
+    "Drop Shadow"
+   ],
+   "scripting": "Apply a preset that carries it, e.g. layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Slide - straight.ffx')) (also 'Slide - drop.ffx', 'Slide - swoop.ffx'), then keyframe effect('Slide Master Control')('Transition Completion'). Each preset adds a Transform effect: straight sets its Position to [linear(c,0,100,-thisLayer.width,0), 0] (+width when reverse direction is 1); drop does the same on Y with thisLayer.height; swoop sets Anchor to the layer centre, Position along a sine arc from [0 or width, 0] to the centre, and Scale linear(c,0,100,0,100). The property name 'reverse direction' is lowercase. Delete any keyframes the preset already set before writing your own. Hidden: not in the Effects panel.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Stereo 3D Controls",
+   "match": "ADBE Stereo 3D Controls",
+   "category": "",
+   "status": "hidden",
+   "summary": "The control effect AE puts on the 'Stereo 3D Controls' layer when you run Layer > Camera > Create Stereo 3D Rig: it sets the left/right camera separation (scene depth) and convergence of a stereoscopic camera pair. It changes no pixels and needs a 3D camera rig.",
+   "look": [
+    "stereoscopic 3D",
+    "anaglyph",
+    "red-cyan",
+    "depth"
+   ],
+   "use_for": [
+    "retro red-cyan anaglyph 3D gimmick on a trailer or reel title (with the 3D Glasses effect)",
+    "stereo left/right renders of a 3D-layer graphics scene for VR or 3D-TV delivery"
+   ],
+   "avoid": [
+    "it is only meaningful inside a stereo rig created by AE; adding it to a layer by hand does nothing",
+    "the rig renders the scene twice, so heavy comps double in render time",
+    "anaglyph red-cyan looks dated and ruins skin tones on live action"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Configuration",
+     "does": "how the left/right cameras are placed: Center = both offset equally from the master camera; Hero Left / Hero Right = that eye stays on the master camera and only the other moves",
+     "typical": "1 (Center)"
+    },
+    {
+     "name": "Stereo Scene Depth",
+     "does": "interaxial separation as % of comp width (strength of the 3D)",
+     "typical": "2-5"
+    },
+    {
+     "name": "Converge Cameras",
+     "does": "checkbox (0/1): toe the cameras in to a convergence point",
+     "typical": "1"
+    },
+    {
+     "name": "Converge To",
+     "does": "what sets the convergence plane (zero parallax)",
+     "typical": "2 (Camera Point of Interest)"
+    },
+    {
+     "name": "Convergence Z Offset",
+     "does": "moves the zero-parallax plane forward/back in pixels",
+     "typical": "-500 to 500"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Configuration": {
+     "1": "Center",
+     "2": "Hero Left",
+     "3": "Hero Right"
+    },
+    "Converge To": {
+     "1": "Camera Position",
+     "2": "Camera Point of Interest",
+     "3": "Zoom Distance"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "3D Glasses",
+    "Camera Lens Blur"
+   ],
+   "scripting": "Needs a camera: build the rig in AE (Layer > Camera > Create Stereo 3D Rig; scripted via app.executeCommand(app.findMenuCommandId('Create Stereo 3D Rig')) with the comp active and its camera selected; command ID not harvested and untested from script). The rig adds a layer carrying this effect plus left/right-eye comps and a 3D Glasses output. Popup labels come from Support Files/PresetEffects.xml: Configuration = Center|Hero Left|Hero Right; Converge To = Camera Position|Camera Point of Interest|Zoom Distance. The group headers (Camera Separation, Convergence Options) are not addressable; set leaf names. Stereo Scene Depth is shown as a percent. Hidden: not in the Effects panel.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Stretch Master Control",
+   "match": "ADBE CM TransStretch",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control for the 'Transitions - Movement' presets Stretch & Slide, Stretch & Blur and Stretch Over - horizontal / vertical: keyframing Transition Completion from 0 to 100 snaps the layer from a stretched state to normal size. Stretch & Slide: width 2000% -> 100% while sliding in from the left and fading in over the first third; Stretch & Blur: width 500% / height 125% -> 100% as a Fast Box Blur clears and it eases in; Stretch Over: one axis grows from 0% while the other settles from 150% to 100%.",
+   "look": [
+    "stretch",
+    "snap in",
+    "whip",
+    "speed transition",
+    "kinetic"
+   ],
+   "use_for": [
+    "punchy stretch-in of a photo or headline card in a fast reel",
+    "snap a title into place at the start of a trailer beat",
+    "stretch transition between sections of a political explainer"
+   ],
+   "avoid": [
+    "on faces the extreme stretch frames look grotesque; keep it short (0.3-0.5 s)",
+    "slow stretch transitions read as cheap 2000s PowerPoint",
+    "the bare effect by match name does nothing; apply one of the Stretch presets"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = fully stretched (transparent, or 0% wide/high for Stretch Over), 100 = normal layer (%)",
+     "typical": "keyframe 0 -> 100 over 0.3-0.6 s"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Stretch In / Stretch Over video transitions (legacy set), or Stretch Wipe (GPU)",
+   "pairs_with": [
+    "Transform",
+    "Fast Box Blur",
+    "Directional Blur"
+   ],
+   "scripting": "Apply e.g. layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Stretch & Slide.ffx')) (also 'Stretch & Blur.ffx', 'Stretch Over - horizontal.ffx', 'Stretch Over - vertical.ffx'), then keyframe effect('Stretch Master Control')('Transition Completion'). All four drive a Transform effect: Stretch & Slide = Anchor linear(c,0,100,[w,h/2],[w/2,h/2]), Scale Width linear(c,0,100,2000,100), Opacity linear(c,0,33,0,100); Stretch & Blur = Fast Box Blur radius linear(c,0,100,w/10,0), Scale Height 125 -> 100, Scale Width 500 -> 100, Opacity easeOut 0 -> 100; Stretch Over horizontal = Scale Width = c (0 -> 100), Scale Height easeOut 150 -> 100; vertical = Scale Height easeOut 0 -> 100, Scale Width easeOut 150 -> 100. 'Stretch - Edge.ffx' uses a different control (Stretch Master Control (edge)). Hidden: not in the Effects panel.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression/preset control that draws nothing on its own), so the AE gallery rendered no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

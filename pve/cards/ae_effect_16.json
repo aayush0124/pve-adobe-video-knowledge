@@ -1,0 +1,1176 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Extract",
+   "match": "ADBE Extract",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Luminance (or single-channel) key: pixels darker than Black Point or brighter than White Point become transparent, with softness ramps at both ends. Keys out black or white backgrounds and can punch bright or dark areas out of footage.",
+   "look": [
+    "luma key",
+    "knock out black",
+    "knock out white",
+    "high-key cutout",
+    "graphic punch-through"
+   ],
+   "use_for": [
+    "remove a black or white background from stock smoke, sparks, ink or light-leak footage",
+    "pull a quick key off a white-backdrop product shot or a flat graphic/screenshot (not people: it also removes white shirts, teeth and eye highlights)",
+    "luminance wipe: animate White Point down so a press photo dissolves from its highlights",
+    "cut a scanned logo or signature off white paper for an explainer"
+   ],
+   "avoid": [
+    "on normal live-action it eats faces and shirts along with the background, leaving blotchy holes",
+    "hard Black/White Points with 0 softness give jagged, buzzing edges on compressed footage"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channel",
+     "does": "what the key is based on (dropdown: luminance, a colour channel or alpha)",
+     "typical": "1 (Luminance)"
+    },
+    {
+     "name": "Black Point",
+     "does": "pixels darker than this become transparent",
+     "typical": "20-60 to drop a black background"
+    },
+    {
+     "name": "White Point",
+     "does": "pixels brighter than this become transparent",
+     "typical": "200-240 to drop a white background; 255 keeps all brights"
+    },
+    {
+     "name": "Black Softness",
+     "does": "feather of the dark cut-off",
+     "typical": "10-40"
+    },
+    {
+     "name": "White Softness",
+     "does": "feather of the bright cut-off",
+     "typical": "10-40"
+    },
+    {
+     "name": "Invert",
+     "does": "checkbox: makes the range BETWEEN Black Point and White Point transparent instead of the range outside it",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Channel": 1,
+    "Black Point": 40,
+    "Black Softness": 20,
+    "White Point": 170,
+    "White Softness": 20
+   },
+   "enum_labels": {
+    "Channel": {
+     "1": "Luminance",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Luma Key (Premiere; keys the dark range only) or Logo Cutout for a plain black/white background. NOT Premiere's 'Extract', which is a different effect (black-and-white threshold, no transparency)",
+   "pairs_with": [
+    "Simple Choker",
+    "Matte Choker",
+    "Unmult",
+    "Levels"
+   ],
+   "scripting": "Values are 8-bit 0-255 levels even in 16/32 bpc projects. Keep White Point above Black Point. Invert is a 0/1 checkbox. Keyed areas show the comp background (black in our renders), so on an opaque comp it reads as black holes.",
+   "recipe": {
+    "White Point": [
+     [
+      0,
+      255
+     ],
+     [
+      1.2,
+      60
+     ]
+    ],
+    "White Softness": [
+     [
+      0,
+      0
+     ],
+     [
+      1.2,
+      40
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/129.png",
+    "note": "Luma key is obvious: the white wall, white stripes and skin highlights (above White Point 170) and the darkest hair/shadows (below Black Point 40) go to black comp background, leaving the mid-tone clothing, red foreground blocks and stripes with soft fringed edges (mean luma 155 to 74).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Inner/Outer Key",
+   "match": "ADBE ATG Extract",
+   "category": "Keying",
+   "status": "needs_input",
+   "summary": "Isolates a subject with fuzzy edges (hair, fur, smoke) from two rough masks: one drawn inside the subject and one outside it; the effect computes the soft edge in between. Without masks on the layer it does nothing.",
+   "look": [
+    "cutout",
+    "soft-edge isolation",
+    "hair key",
+    "subject extraction"
+   ],
+   "use_for": [
+    "cut a person with flyaway hair off a busy, non-green background for a cutout collage",
+    "isolate a leader from a press photo to place over a new graphic background",
+    "extract smoke or foliage edges that a hard mask cannot follow"
+   ],
+   "avoid": [
+    "on moving footage the masks must be animated frame by frame; Roto Brush is usually faster",
+    "low-contrast edges (dark hair on dark background) come out patchy"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Foreground (Inside)",
+     "does": "mask on the same layer drawn just inside the subject",
+     "typical": "mask index of the inner mask"
+    },
+    {
+     "name": "Background (Outside)",
+     "does": "mask drawn just outside the subject edge",
+     "typical": "mask index of the outer mask"
+    },
+    {
+     "name": "Single Mask Highlight Radius",
+     "does": "edge band width when only one mask is supplied",
+     "typical": "5-30 px"
+    },
+    {
+     "name": "Edge Thin",
+     "does": "shrinks (+) or grows (-) the matte edge",
+     "typical": "0 to 5"
+    },
+    {
+     "name": "Edge Feather",
+     "does": "softens the matte edge",
+     "typical": "2-10"
+    },
+    {
+     "name": "Edge Threshold",
+     "does": "removes low-opacity noise from the edge",
+     "typical": "0-0.2"
+    },
+    {
+     "name": "Blend with Original",
+     "does": "mixes the original layer back over the result",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Refine Soft Matte",
+    "Matte Choker",
+    "Advanced Spill Suppressor"
+   ],
+   "scripting": "All Foreground/Background/Path params are mask-reference params (value = mask index on the same layer, 0 = none): they cannot be set from a spec; create masks with ExtendScript first and set the indices directly. Path, Brush Radius and Brush Pressure repeat for 8 foreground then 8 background cleanup strokes; the repeats are addressed as \"Brush Radius#2\" ... \"Brush Radius#16\" (ae_lib child() resolves Name#N). Edge Threshold and Blend with Original are raw 0-1 values.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs foreground/background masks drawn on the layer; mask-reference params cannot be set from a spec), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "corrected: needs_input/not_rendered agreed (every Foreground/Background/Path param is mask-type); scripting wrongly said only the first repeated cleanup param is reachable, Name#N addressing reaches all 16"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Key Cleaner",
+   "match": "ADBE KeyCleaner",
+   "category": "Keying",
+   "status": "needs_input",
+   "summary": "Repairs the alpha of an already keyed layer: restores fine edge detail (hair, motion blur) lost to the key and reduces matte chatter. On footage without a key (fully opaque) it shows no change.",
+   "look": [
+    "clean key",
+    "recovered hair detail",
+    "stable matte edge"
+   ],
+   "use_for": [
+    "after Keylight on a green-screen anchor or explainer host to recover hair edges",
+    "reduce boiling edges on a keyed presenter in a news package",
+    "clean a key on compressed (H.264) green-screen footage"
+   ],
+   "avoid": [
+    "it cannot rescue a bad key: fix the Keylight screen matte first",
+    "large Additional Edge Radius brings back spill and background fringe"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Additional Edge Radius",
+     "does": "how far from the matte edge detail is recovered",
+     "typical": "5-20"
+    },
+    {
+     "name": "Reduce Chatter",
+     "does": "checkbox: temporal smoothing of jittery edges",
+     "typical": "1 for compressed footage"
+    },
+    {
+     "name": "Alpha Contrast",
+     "does": "hardens semi-transparent edge pixels",
+     "typical": "0-30"
+    },
+    {
+     "name": "Strength",
+     "does": "overall amount of the cleanup",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Ultra Key's Matte Cleanup section (Premiere; cleans only Ultra Key's own key, no standalone key cleaner)",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Advanced Spill Suppressor",
+    "Matte Choker"
+   ],
+   "scripting": "Must be stacked AFTER the keying effect (Keylight) on the same layer; needs a real alpha to act on. Reduce Chatter is a 0/1 checkbox. No visible demo on opaque footage, hence needs_input.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an already keyed layer with real alpha; on the opaque photo it is a no-op), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Keylight (1.2)",
+   "match": "Keylight 906",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Professional colour-difference keyer: removes a chosen screen colour (green or blue) and suppresses its spill on the foreground, with matte clipping, shrink/grow and edge colour controls. The standard tool for green-screen presenters.",
+   "look": [
+    "green screen key",
+    "chroma key",
+    "clean cutout",
+    "despill",
+    "composite"
+   ],
+   "use_for": [
+    "key a green-screen anchor or explainer host over a news set or B-roll",
+    "drop a presenter into a reel background or animated graphics",
+    "key screens/phone inserts shot with green content",
+    "punch out a sky or backdrop colour for a stylised trailer composite"
+   ],
+   "avoid": [
+    "uneven, wrinkled or spill-heavy screens need Clip Black/White tuning plus Key Cleaner, not just one colour pick",
+    "on footage without a real screen it eats every pixel of that hue (blue suits, flags) and tints skin magenta",
+    "heavy Screen Pre-blur or Softness gives a glowy, cheap halo"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Screen Colour",
+     "does": "the background colour to remove",
+     "typical": "the green/blue of the screen, e.g. #20B040"
+    },
+    {
+     "name": "View",
+     "does": "dropdown: what is displayed (Screen Matte to judge the key, Final Result to output)",
+     "typical": "11 for output, 5 to check the matte"
+    },
+    {
+     "name": "Screen Gain",
+     "does": "how aggressively the screen colour is removed",
+     "typical": "100-120"
+    },
+    {
+     "name": "Screen Balance",
+     "does": "balance between the other two channels when computing the key",
+     "typical": "50 (green), 95 (blue)"
+    },
+    {
+     "name": "Clip Black",
+     "does": "pushes grey background areas of the matte to fully transparent",
+     "typical": "10-30"
+    },
+    {
+     "name": "Clip White",
+     "does": "pushes grey foreground areas of the matte to fully opaque",
+     "typical": "70-90"
+    },
+    {
+     "name": "Screen Shrink/Grow",
+     "does": "erodes (-) or expands (+) the matte edge",
+     "typical": "-1 to -3"
+    },
+    {
+     "name": "Screen Softness",
+     "does": "blurs the matte edge",
+     "typical": "0-2"
+    }
+   ],
+   "demo_settings": {
+    "View": 11,
+    "Screen Colour": "#1A4FBF",
+    "Screen Gain": 130,
+    "Clip Black": 20,
+    "Clip White": 80
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Source",
+     "2": "Source Alpha",
+     "3": "Corrected Source",
+     "4": "Colour Correction Edges",
+     "5": "Screen Matte",
+     "6": "Inside Mask",
+     "7": "Outside Mask",
+     "8": "Combined Matte",
+     "9": "Status",
+     "10": "Intermediate Result",
+     "11": "Final Result"
+    },
+    "Replace Method": {
+     "1": "None",
+     "2": "Source",
+     "3": "Hard Colour",
+     "4": "Soft Colour"
+    },
+    "Replace Method#2": {
+     "1": "None",
+     "2": "Source",
+     "3": "Hard Colour",
+     "4": "Soft Colour"
+    },
+    "Source Alpha": {
+     "1": "Ignore",
+     "2": "Add To Inside Mask",
+     "3": "Normal"
+    },
+    "Suppress": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Cyan",
+     "6": "Magenta",
+     "7": "Yellow"
+    },
+    "Suppress#2": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Cyan",
+     "6": "Magenta",
+     "7": "Yellow"
+    },
+    "X Method": {
+     "1": "Colour",
+     "2": "Repeat",
+     "3": "Reflect",
+     "4": "Wrap"
+    },
+    "Y Method": {
+     "1": "Colour",
+     "2": "Repeat",
+     "3": "Reflect",
+     "4": "Wrap"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Ultra Key",
+   "pairs_with": [
+    "Key Cleaner",
+    "Advanced Spill Suppressor",
+    "Matte Choker",
+    "Simple Choker",
+    "Lumetri Color"
+   ],
+   "scripting": "Default Screen Colour is black, so nothing is keyed until Screen Colour is set (\"#RRGGBB\"). Many names repeat in this effect: Replace Method / Replace Colour (Screen Matte vs Inside Mask), Invert (Inside vs Outside Mask), Saturation, Contrast, Brightness, Suppress, Suppression Balance, Suppression Amount, Hue, Sat (Foreground vs Edge colour correction); our AE applier takes the FIRST property with a name, so the second copies need property-index access. Inside Mask / Outside Mask are mask-reference params (not settable from a spec). Group headers are flat rows, so use plain names, not Group/Name. Enum orders for View, Replace Method and Source Alpha follow the Keylight manual and match the harvested defaults (11, 4, 3); the Suppress order (1 None, 2 Red, 3 Green, 4 Blue, 5 Cyan, 6 Magenta, 7 Yellow) and X / Y Method (1 Colour, 2 Repeat, 3 Reflect, 4 Wrap) are read from After Effects 26.0, as are the others.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/130.png",
+    "note": "Blue screen colour #1A4FBF keys the navy areas and a blue block to solid black while faces, red stripes, foreground blocks and flowers stay intact, and the cool-white wall is despilled slightly warmer: exactly the 'eats every pixel of that hue' case the card warns about.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Linear Color Key",
+   "match": "ADBE Linear Color Key2",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Simple colour key: removes (or keeps) pixels close to a chosen Key Color, matched by RGB, hue or chroma, with tolerance and softness. Quick and crude compared with Keylight.",
+   "look": [
+    "colour key",
+    "colour cutout",
+    "punch-through",
+    "selective removal"
+   ],
+   "use_for": [
+    "quick key of a flat, evenly lit screen or solid graphic background",
+    "remove a single flat colour from a logo or chart screenshot",
+    "Keep Colors mode to isolate one colour (e.g. a party flag) for a stylised highlight",
+    "second pass on a Keylight key to remove a stubborn colour patch"
+   ],
+   "avoid": [
+    "on real green-screen footage edges are hard and spill stays; use Keylight",
+    "high tolerance on live action eats skin and clothing of similar hue",
+    "Match colors = Using Hue ignores saturation, so near-grey areas with a faint cool cast go too (on the demo it dropped the off-white wall along with the navy areas); use Using RGB or Chroma to spare neutrals"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Key Color",
+     "does": "colour to remove (or keep)",
+     "typical": "the background colour, e.g. #00B140"
+    },
+    {
+     "name": "Match colors",
+     "does": "dropdown: colour space used for matching",
+     "typical": "2 (Using Hue) for unevenly lit screens"
+    },
+    {
+     "name": "Matching Tolerance",
+     "does": "how far a colour may be from Key Color and still be keyed",
+     "typical": "10-30"
+    },
+    {
+     "name": "Matching Softness",
+     "does": "feather of the tolerance edge",
+     "typical": "5-20"
+    },
+    {
+     "name": "Key Operation",
+     "does": "dropdown: remove the key colour or keep only it",
+     "typical": "1 (Key Colors)"
+    },
+    {
+     "name": "View",
+     "does": "dropdown: final output, source only or matte only",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "View": 1,
+    "Key Color": "#1A4FBF",
+    "Match colors": 2,
+    "Matching Tolerance": 25,
+    "Matching Softness": 10,
+    "Key Operation": 1
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Final Output",
+     "2": "Source Only",
+     "3": "Matte Only"
+    },
+    "Match colors": {
+     "1": "Using RGB",
+     "2": "Using Hue",
+     "3": "Using Chroma"
+    },
+    "Key Operation": {
+     "1": "Key Colors",
+     "2": "Keep Colors"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Key",
+   "pairs_with": [
+    "Simple Choker",
+    "Matte Choker",
+    "Keylight (1.2)"
+   ],
+   "scripting": "Key Color takes \"#RRGGBB\". Stack a second Linear Color Key with Key Operation = 2 (Keep Colors) to protect a colour the first one removed. Tolerance/Softness are 0-100 percent.",
+   "recipe": {
+    "Matching Tolerance": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/131.png",
+    "note": "Hue-matched blue key removes the navy areas, a blue block and most of the cool grey-white wall and the left-hand colour block to black, keeping faces, red stripes, foreground blocks, flowers and plants; crude hard-edged blotches as the card says.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Unmult",
+   "match": "ADBE Unmult",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Turns brightness into transparency: a black background becomes transparent while bright elements keep their full colour (White mode does the reverse, removing a white background and keeping dark elements), so flares, fire, sparks and light leaks shot on black composite cleanly without a blend mode.",
+   "look": [
+    "remove black background",
+    "additive light",
+    "flare overlay",
+    "glow composite"
+   ],
+   "use_for": [
+    "overlay stock light leaks, lens flares, dust or embers shot on black over footage",
+    "use fire/explosion elements in a trailer while keeping Normal blend mode (so they still work inside precomps and track mattes)",
+    "drop black-background motion graphics or particles over B-roll",
+    "remove a white background from ink or paper texture (Background Color = White)"
+   ],
+   "avoid": [
+    "on normal live action it makes dark areas see-through, so the shot looks washed out over anything but black",
+    "dense, opaque elements (thick smoke) lose body because dark interior pixels become transparent"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Background Color",
+     "does": "dropdown: which background is made transparent",
+     "typical": "1 (Black) for flares/fire; 2 (White) for ink on paper"
+    },
+    {
+     "name": "Black Level",
+     "does": "raises the level treated as background, cleaning noisy near-black areas",
+     "typical": "0 to small positive values (unit unverified)"
+    },
+    {
+     "name": "Softness",
+     "does": "how gradually alpha ramps up from the background level",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Remove Color Matting",
+     "does": "checkbox: un-premultiplies colour so edges keep full colour",
+     "typical": "1"
+    },
+    {
+     "name": "Clip HDR Results",
+     "does": "checkbox: clamps over-range values in 32 bpc",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Background Color": 2
+   },
+   "enum_labels": {
+    "Background Color": {
+     "1": "Black",
+     "2": "White"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "none as such in Premiere; closest effect is Logo Cutout (keys a plain black/white background by brightness); for flares on black use the clip's Opacity > Blend Mode = Screen",
+   "pairs_with": [
+    "Glow",
+    "Levels",
+    "Fast Box Blur",
+    "Add Grain"
+   ],
+   "scripting": "Built-in AE effect doing what the third-party Unmult plug-ins (Knoll / Red Giant) did, so no plug-in is needed; the AE version that introduced it is unverified. Over a black comp background, Background Color = Black looks almost unchanged by design (it only adds alpha); the demo uses White so the effect is visible. Background Color: 1 Black (default), 2 White (read from After Effects 26.0); Black Level/Softness units are unverified, keep near defaults.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/132.png",
+    "note": "White mode turns brightness into transparency inverted: the white wall, stripes and highlights vanish and the whole frame falls to near black (mean luma 155 to 9.5), with only dim, saturated reds, blues and greens left where the image was dark or coloured.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Matte Choker",
+   "match": "ADBE Matte Choker",
+   "category": "Matte",
+   "status": "needs_input",
+   "summary": "Two-pass spread/choke of a layer's alpha with geometric and grey-level softness: fills small holes and tightens or softens the edges of a keyed or rotoscoped matte. Also used to merge shapes into gooey blobs.",
+   "look": [
+    "tight matte",
+    "soft edge",
+    "gooey merge",
+    "rounded corners"
+   ],
+   "use_for": [
+    "tighten a green-screen key that has a fringe after Keylight",
+    "fill speckle holes in a luma/colour key",
+    "gooey/metaball merge of blurred shapes or text for a reel transition",
+    "soften harsh edges of a roto cutout before compositing"
+   ],
+   "avoid": [
+    "large choke values round off fingers, hair and text corners",
+    "on opaque full-frame footage it does nothing at all (verified: not even the frame border changes, unlike Simple Choker)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Geometric Softness 1",
+     "does": "radius (px) of the first spread/choke pass",
+     "typical": "2-10"
+    },
+    {
+     "name": "Choke 1",
+     "does": "first pass: positive values choke (shrink) the matte, negative values spread it, which fills small holes",
+     "typical": "30-75 to tighten a fringe (default 75); -20 to -60 to fill holes, then choke back with a positive Choke 2"
+    },
+    {
+     "name": "Gray Level Softness 1",
+     "does": "how soft the resulting edge is (0 hard, 1 soft)",
+     "typical": "0.1-0.3"
+    },
+    {
+     "name": "Geometric Softness 2",
+     "does": "radius of the second pass",
+     "typical": "0-4"
+    },
+    {
+     "name": "Choke 2",
+     "does": "second pass choke (+) / spread (-), usually used to choke back after a spreading first pass",
+     "typical": "0-50"
+    },
+    {
+     "name": "Iterations",
+     "does": "repeats both passes",
+     "typical": "1-3"
+    }
+   ],
+   "demo_settings": {
+    "Geometric Softness 1": 10,
+    "Choke 1": 100,
+    "Gray Level Softness 1": 0.2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "none as a standalone effect in Premiere; Ultra Key's Matte Cleanup > Choke only chokes Ultra Key's own key",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Fast Box Blur",
+    "Simple Choker"
+   ],
+   "scripting": "Gray Level Softness values are raw 0-1 (UI shows %). Acts only on the alpha produced by masks or effects above it, so stack it after the key. Verified on the opaque demo clip: zero change at full 1920x1080, frame edge included, hence needs_input. demo_settings are a moderate ~8 px choke for a source with real alpha; the 40 px / Choke 127 push used for the opaque test would erase text strokes and fingers on a real matte. Measured live wave 3: on a cut-out with a soft alpha edge the demo pulled the edge in and hardened it (a 24 px feather became about 8 px); after Keylight on a green-screen plate it also removed the fine semi-transparent strands and the screen residue.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/S_choke_cutout_1.04.png",
+    "note": "On the alpha cut-out the disc's soft edge is choked to a tighter, harder edge (24 px ramp to about 8 px, the disc slightly smaller) and after Keylight the strands and screen residue are gone: it tightens a matte, as the card says.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/ae/133.png",
+      "note": "Frame is pixel-identical to the untouched render (zero difference, frame border not eroded either): Matte Choker treats the opaque full-frame layer as having no alpha edge to choke, so no demo value can show it; status set to needs_input (needs a keyed/rotoscoped layer, text or shapes with real alpha as the demo source).",
+      "second_opinion": "corrected: verdict agreed (full-res G133 render is pixel-identical to the no-op renders G051/G234, border included; Simple Choker 134 does erode the border); demo_settings 40/127/0.2 were a destructive ~40 px choke on any real matte, now 10/100/0.2 (top of the card's typical softness range, choke just above it so the demo stays visible); dropped the unverified 'treats outside-the-layer as opaque' claim and 'photo' -> clip"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Refine Hard Matte",
+   "match": "ADBE RefineRBMatte",
+   "category": "Matte",
+   "status": "needs_input",
+   "summary": "Roto Brush-style edge refinement for a hard-edged matte: feathers, contrasts, shifts the edge, reduces chatter, adds motion blur and decontaminates edge colours. Needs a layer that already has an alpha matte (key, mask or track matte).",
+   "look": [
+    "clean cutout edge",
+    "motion-blurred matte",
+    "decontaminated edge"
+   ],
+   "use_for": [
+    "smooth the edge of a masked or keyed object (podium, phone, vehicle) before compositing",
+    "add matching motion blur to a fast-moving roto cutout in a trailer",
+    "remove background colour fringe from a cut-out press photo subject"
+   ],
+   "avoid": [
+    "for hair and fur use Refine Soft Matte instead",
+    "Use Motion Blur with many samples is slow on long clips"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Feather",
+     "does": "softens the matte edge",
+     "typical": "1-5"
+    },
+    {
+     "name": "Contrast",
+     "does": "hardens the feathered edge",
+     "typical": "50-90"
+    },
+    {
+     "name": "Shift Edge",
+     "does": "moves the edge in (-) or out (+)",
+     "typical": "-20 to 10"
+    },
+    {
+     "name": "Reduce Chatter",
+     "does": "temporal smoothing of the edge",
+     "typical": "30-70"
+    },
+    {
+     "name": "Use Motion Blur",
+     "does": "checkbox: motion-blurs the matte edge",
+     "typical": "1 for moving subjects"
+    },
+    {
+     "name": "Decontaminate Edge Colors",
+     "does": "checkbox: removes background colour from edge pixels",
+     "typical": "1"
+    },
+    {
+     "name": "Amount",
+     "does": "strength of edge-colour decontamination",
+     "typical": "100"
+    },
+    {
+     "name": "View Map",
+     "does": "checkbox: shows the decontamination map for checking",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Roto Brush & Refine Edge",
+    "Keylight (1.2)",
+    "Simple Choker"
+   ],
+   "scripting": "Acts on the alpha produced by masks or effects above it; on opaque footage there is no visible change. Use Motion Blur, Higher Quality, Decontaminate Edge Colors, Extend Where Smoothed and View Map are 0/1 checkboxes. Samples Per Frame and Shutter Angle only matter when Use Motion Blur = 1.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a layer that already has an alpha matte; on the opaque photo it is a no-op), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Refine Soft Matte",
+   "match": "ADBE RefineMatte2",
+   "category": "Matte",
+   "status": "needs_input",
+   "summary": "Edge refinement for soft, detailed mattes (hair, fur, smoke): recalculates edge detail inside an edge band, then smooths, feathers, shifts and decontaminates it. Needs a layer that already has an alpha matte.",
+   "look": [
+    "hair detail",
+    "soft cutout edge",
+    "natural composite"
+   ],
+   "use_for": [
+    "recover flyaway hair on a roto-brushed or keyed presenter",
+    "soften a cutout of a leader from a press photo for a parallax explainer",
+    "remove green/background fringe from soft edges"
+   ],
+   "avoid": [
+    "a wide Additional Edge Radius pulls background texture into the matte",
+    "heavier than Refine Hard Matte; avoid on long clips when a hard edge is fine"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Additional Edge Radius",
+     "does": "width of the band where edge detail is recalculated",
+     "typical": "5-20"
+    },
+    {
+     "name": "Calculate Edge Details",
+     "does": "checkbox: enables the detail recalculation",
+     "typical": "1"
+    },
+    {
+     "name": "View Edge Region",
+     "does": "checkbox: displays the edge band for checking",
+     "typical": "0"
+    },
+    {
+     "name": "Smooth",
+     "does": "smooths the matte edge",
+     "typical": "0-5"
+    },
+    {
+     "name": "Feather",
+     "does": "softens the edge",
+     "typical": "0-5"
+    },
+    {
+     "name": "Shift Edge",
+     "does": "moves the edge in (-) or out (+)",
+     "typical": "-10 to 10"
+    },
+    {
+     "name": "Reduce Chatter",
+     "does": "temporal smoothing of edge jitter",
+     "typical": "30-100"
+    },
+    {
+     "name": "Decontaminate Edge Colors",
+     "does": "checkbox: removes background colour from edge pixels",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Chatter Reduction": {
+     "1": "Off",
+     "2": "(separator)",
+     "3": "More Detailed",
+     "4": "Smoother (Slower)"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Roto Brush & Refine Edge",
+    "Keylight (1.2)",
+    "Key Cleaner"
+   ],
+   "scripting": "Acts on the alpha produced by masks or effects above it; on opaque footage there is no visible change. Chatter Reduction: 1 Off (default), 2 a separator, 3 More Detailed, 4 Smoother (Slower) (read from After Effects 26.0); Reduce Chatter is its amount. Checkboxes are 0/1.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a layer that already has an alpha matte; on the opaque photo it is a no-op), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Simple Choker",
+   "match": "ADBE Simple Choker",
+   "category": "Matte",
+   "status": "current",
+   "summary": "Shrinks (positive) or spreads (negative) a layer's alpha edge by a number of pixels. A one-slider fix for fringes on keys and a way to fatten or thin text and shapes.",
+   "look": [
+    "tight edge",
+    "eroded matte",
+    "thicker text",
+    "rounded corners"
+   ],
+   "use_for": [
+    "remove a 1-2 px fringe from a green-screen key",
+    "animate text growing from thin to full weight in a reel title",
+    "fatten or thin a cut-out logo or shape layer",
+    "gooey merge after Fast Box Blur on shapes"
+   ],
+   "avoid": [
+    "large values round off corners and destroy thin strokes",
+    "on opaque full-frame footage it only eats into the frame border"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Choke Matte",
+     "does": "pixels to choke (+) or spread (-) the alpha edge",
+     "typical": "1-3 for keys; -5 to 20 for text animation"
+    },
+    {
+     "name": "View",
+     "does": "dropdown: final output or the matte",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "View": 1,
+    "Choke Matte": 80
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Final Output",
+     "2": "Matte"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "none as a standalone effect in Premiere; Ultra Key's Matte Cleanup > Choke only chokes Ultra Key's own key",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Linear Color Key",
+    "Extract",
+    "Fast Box Blur",
+    "Matte Choker"
+   ],
+   "scripting": "Stack after the key. Verified on the opaque demo frame: it treats outside-the-layer as transparent, so the visible result is an eroded black border with rounded corners around the frame edge, interior unchanged (Matte Choker, by contrast, shows nothing there). Set View = 2 to inspect the alpha.",
+   "recipe": {
+    "Choke Matte": [
+     [
+      0,
+      20
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/134.png",
+    "note": "Choke Matte 80 eats a solid black border about 8 px wide (in the 640 px frame) around the opaque layer with clearly rounded corners, interior untouched: the eroded-alpha-edge behaviour the card describes, shown on the only alpha edge the photo has.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Add Grain",
+   "match": "VISINF Grain Implant",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Synthesises realistic film grain with control over intensity, size, softness, per-channel response, colour and animation, optionally from film-stock presets. Unifies CG, stock and phone footage into one filmic texture.",
+   "look": [
+    "film grain",
+    "35mm",
+    "16mm",
+    "filmic texture",
+    "analog"
+   ],
+   "use_for": [
+    "give documentary archival recreations a film look",
+    "match the grain of graphics and AI shots to camera footage in a trailer",
+    "texture a cinematic title card or end slate",
+    "monochrome grain on black-and-white flashback sequences"
+   ],
+   "avoid": [
+    "left in the default Preview viewing mode it renders grain only inside a boxed region with an outline",
+    "heavy grain on 9:16 reels turns to mush after Instagram compression",
+    "slow render on long clips; apply on an adjustment layer once rather than per clip",
+    "Intensity above about 2 with Size 3 buries the picture in coarse colour noise (the demo at Intensity 4 is barely legible); keep Intensity 0.3-1.5 and turn Monochromatic on for a believable stock"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Viewing Mode",
+     "does": "dropdown: Preview box, Blending Matte or Final Output",
+     "typical": "3 (Final Output) always for renders"
+    },
+    {
+     "name": "Preset",
+     "does": "dropdown of film-stock grain presets (1 = none)",
+     "typical": "1, then tune by hand"
+    },
+    {
+     "name": "Intensity",
+     "does": "amount of grain",
+     "typical": "0.3-1.5"
+    },
+    {
+     "name": "Size",
+     "does": "grain particle size",
+     "typical": "0.8-1.5 (bigger = 16mm feel)"
+    },
+    {
+     "name": "Softness",
+     "does": "blur of the grain particles",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Monochromatic",
+     "does": "checkbox: grey grain without colour noise",
+     "typical": "1 for B&W or subtle looks"
+    },
+    {
+     "name": "Saturation",
+     "does": "colour saturation of the grain",
+     "typical": "0.3-1"
+    },
+    {
+     "name": "Animation Speed",
+     "does": "how fast the grain changes (0 = frozen)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Viewing Mode": 3,
+    "Preset": 1,
+    "Intensity": 4,
+    "Size": 3,
+    "Softness": 1
+   },
+   "enum_labels": {
+    "Viewing Mode": {
+     "1": "Preview",
+     "2": "Blending Matte",
+     "3": "Final Output"
+    },
+    "Preset": {
+     "1": "[None]",
+     "2": "(separator)",
+     "3": "Eastman Color Neg II 100T (5247)",
+     "4": "Eastman EXR 100T (5248)",
+     "5": "Eastman Color Neg 100T (5254)",
+     "6": "Kodak Vision 200T (5274)",
+     "7": "Kodak Vision 250D (5246)",
+     "8": "Kodak Vision 320T (5277)",
+     "9": "Eastman Color High Speed Neg 400T (5294)",
+     "10": "Kodak Vision 500T (5279)",
+     "11": "Kodak Expression 500T (5284)",
+     "12": "Eastman EXR 500T (5296)",
+     "13": "Eastman EXR 50D (5245)",
+     "14": "Kodak Vision 800T (5289)",
+     "15": "Kodak SFX 200T"
+    },
+    "Blending Mode": {
+     "1": "Film",
+     "2": "Multiply",
+     "3": "Add",
+     "4": "Screen",
+     "5": "Overlay"
+    },
+    "Combine Match and Mask Using": {
+     "1": "Multiply",
+     "2": "Screen"
+    },
+    "Match Color Using": {
+     "1": "Off",
+     "2": "(separator)",
+     "3": "RGB",
+     "4": "Hue",
+     "5": "Chroma",
+     "6": "Luminance",
+     "7": "Red Channel",
+     "8": "Green Channel",
+     "9": "Blue Channel"
+    },
+    "Masking Mode": {
+     "1": "Intensity",
+     "2": "Alpha",
+     "3": "Inverted Intensity",
+     "4": "Inverted Alpha"
+    },
+    "If Mask Size Differs": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Noise (Premiere; plain per-pixel noise, no film-stock, size or softness controls)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Match Grain",
+    "Remove Grain",
+    "Glow"
+   ],
+   "scripting": "ALWAYS set Viewing Mode = 3 (Final Output); the default 1 (Preview) shows grain only inside the Preview Region box (Center/Width/Height, drawn with Box Color). Preset (read from After Effects 26.0): 1 [None], 2 a separator, 3-15 film stocks from Eastman Color Neg II 100T (5247) to Kodak SFX 200T (enum_labels); a non-1 preset may override the Tweaking values (not rendered). Mask Layer is a layer-reference param (not settable from a spec). Amount (Blend with Original) is 0-100.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/135.png",
+    "note": "Coarse multicoloured grain covers the whole frame so heavily (Intensity 4, Size 3, well above the 0.3-1.5 typical) that the figures and stripes are barely legible: unmistakably Add Grain, far past a realistic film look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Dust & Scratches",
+   "match": "ADBE Dust & Scratches",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Median-style filter that replaces pixels differing from their neighbourhood (within Radius) by more than Threshold, removing specks, dust and noise; large radii give a smeared, painterly look.",
+   "look": [
+    "denoise",
+    "smoothed",
+    "painterly",
+    "oil paint",
+    "plastic skin"
+   ],
+   "use_for": [
+    "clean dust specks and scratches from scanned archival photos in a documentary",
+    "light denoise on low-light phone footage",
+    "painterly / oil-paint stylisation of a still at high Radius",
+    "smooth a noisy matte before choking"
+   ],
+   "avoid": [
+    "Radius above 3-4 with Threshold 0 smears faces into plastic",
+    "on moving footage it can flicker; a real denoiser is better for noise"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "size of the area searched for differing pixels",
+     "typical": "1-3 to clean, 8-20 for a painterly look"
+    },
+    {
+     "name": "Threshold",
+     "does": "how different a pixel must be to be replaced (0 = all pixels)",
+     "typical": "0.05-0.2 raw, assuming 1 = panel 255 (unverified)"
+    },
+    {
+     "name": "Operate on Alpha channel",
+     "does": "checkbox: also filters the alpha",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 10,
+    "Threshold": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "none in Premiere 2026 (its effect list has neither Dust & Scratches nor Median); do the cleanup in AE",
+   "pairs_with": [
+    "Add Grain",
+    "Unsharp Mask",
+    "Remove Grain",
+    "Simple Choker"
+   ],
+   "scripting": "The harvest reports Threshold as 0-1, while the AE panel is documented as 0-255; values above 1 are clamped. Whether 1 here means panel 255 (so convert UI/255) or panel 1 is unverified: read the value back in the panel after setting it. Render time grows quickly with Radius. For real noise on moving footage use Remove Grain instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/136.png",
+    "note": "Radius 10 at Threshold 0 median-smooths the frame: faces lose features and turn plastic, hair and fine detail smear and fine texture drops (edge energy down about 60%) while big shapes and stripes stay put.",
+    "rerender": false
+   }
+  }
+ ]
+}

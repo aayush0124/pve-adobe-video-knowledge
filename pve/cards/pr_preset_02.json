@@ -1,0 +1,1687 @@
+{
+ "cards": [
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Light Emboss",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "equivalent": "Color Emboss (Relief ~3, Blend With Original ~50) in Premiere; approximation only",
+   "summary": "Diagonal (top-left to bottom-right) relief filter: output = pixel + (bottom-right minus top-left neighbour) + 128, so edges get embossed ridges and the +128 offset pushes the whole picture up by half the range: everything above mid-grey clips to white, leaving a bright, washed-out relief.",
+   "look": [
+    "emboss",
+    "relief",
+    "washed-out",
+    "bright",
+    "engraved",
+    "stylized"
+   ],
+   "use_for": [
+    "engraved / relief texture on a background plate behind a title",
+    "stylized treatment of a logo or still in a retro explainer",
+    "abstract texture layer blended at low opacity"
+   ],
+   "avoid": [
+    "washes faces out completely; not for people or news footage",
+    "the Convolution Kernel effect is absent from Premiere 2026's video effect list, so a script cannot rebuild it"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "preset_values": "M11 -10, M12 0, M13 0, M21 0, M22 10, M23 0, M31 0, M32 0, M33 10, Offset 128, Scale 10, Process Alpha on",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Convolution Kernel (match PR.ADBE Convolution Kernel New) with M11 -10, M12 0, M13 0, M21 0, M22 10, M23 0, M31 0, M32 0, M33 10, Offset 128, Scale 10, Process Alpha on (read from Factory Presets.prfpset). Convolution Kernel is NOT in qe.project.getVideoEffectList() for Premiere 2026 (143 video effects harvested), so pr_build's addFx would warn \"no Premiere effect\"; the preset still sits in the Presets bin, but whether it still applies by hand in v26 is unverified. Replacement: {\"name\": \"Color Emboss\", \"pr_props\": {\"Relief\": 3, \"Contrast\": 100, \"Blend With Original\": 50}} (Direction left at default; set it in degrees if the light must come from top-left)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Sharpen",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "equivalent": "Unsharp Mask (Amount ~400, Radius ~1)",
+   "summary": "Strong 3x3 sharpen (centre 16 against -2 edge / -1 corner neighbours, divided by 4): each pixel is pushed away from a blur of its neighbourhood with about 4x gain, roughly Unsharp Mask 400% at a 1 px radius; crisp edges and fine texture with visible halos.",
+   "look": [
+    "strong sharpen",
+    "crisp",
+    "detail",
+    "edge contrast",
+    "halos"
+   ],
+   "use_for": [
+    "recover softness in upscaled archive or press-pool footage",
+    "crisp up screen recordings or slides in an explainer",
+    "slightly soft AI-generated b-roll"
+   ],
+   "avoid": [
+    "amplifies compression blocks and noise in low-bitrate news feeds",
+    "the Convolution Kernel effect is absent from Premiere 2026's video effect list, so a script cannot rebuild it"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "preset_values": "M11 -1, M12 -2, M13 -1, M21 -2, M22 16, M23 -2, M31 -1, M32 -2, M33 -1, Offset 0, Scale 4, Process Alpha on",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Convolution Kernel (match PR.ADBE Convolution Kernel New) with M11 -1, M12 -2, M13 -1, M21 -2, M22 16, M23 -2, M31 -1, M32 -2, M33 -1, Offset 0, Scale 4, Process Alpha on (read from Factory Presets.prfpset). Convolution Kernel is NOT in qe.project.getVideoEffectList() for Premiere 2026 (143 video effects harvested), so pr_build's addFx would warn \"no Premiere effect\"; the preset still sits in the Presets bin, but whether it still applies by hand in v26 is unverified. Replacement (the kernel equals pixel + 4 x (pixel - 1-2-1 blur), i.e. about Unsharp Mask 400% at ~1 px): {\"name\": \"Unsharp Mask\", \"pr_props\": {\"Amount\": 400, \"Radius\": 1, \"Threshold\": 0}}; for a gentler result on compressed news footage drop Amount to 150-250. The Sharpen effect also works but its \"Sharpen Amount\" scale is not calibrated against the kernel, so judge it by eye."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Sharpen Edges",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "equivalent": "none exact; Unsharp Mask at Amount 500 for crunch, or Find Edges for an outline look",
+   "summary": "Harsh edge filter, not a real sharpen: each pixel becomes the sum of its 8 neighbours minus 7x itself (= pixel - 8 x (pixel - neighbour average)), so flat areas stay put but edge and texture detail is inverted and multiplied about 7x: loud, inverted halos and gritty noise.",
+   "look": [
+    "edge halos",
+    "gritty",
+    "harsh",
+    "over-sharpened",
+    "stylized"
+   ],
+   "use_for": [
+    "deliberately crunchy, gritty texture for a glitchy reel beat",
+    "stylized edge-heavy look on graphics or text plates"
+   ],
+   "avoid": [
+    "destroys faces and skin; never on interviews",
+    "explodes noise and compression artefacts",
+    "the Convolution Kernel effect is absent from Premiere 2026's video effect list, so a script cannot rebuild it"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "preset_values": "M11 1, M12 1, M13 1, M21 1, M22 -7, M23 1, M31 1, M32 1, M33 1, Offset 0, Scale 1, Process Alpha on",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Convolution Kernel (match PR.ADBE Convolution Kernel New) with M11 1, M12 1, M13 1, M21 1, M22 -7, M23 1, M31 1, M32 1, M33 1, Offset 0, Scale 1, Process Alpha on (read from Factory Presets.prfpset). Convolution Kernel is NOT in qe.project.getVideoEffectList() for Premiere 2026 (143 video effects harvested), so pr_build's addFx would warn \"no Premiere effect\"; the preset still sits in the Presets bin, but whether it still applies by hand in v26 is unverified. Replacement: closest real-sharpen substitute {\"name\": \"Unsharp Mask\", \"pr_props\": {\"Amount\": 150, \"Radius\": 2, \"Threshold\": 0}}; for an outline look use {\"name\": \"Find Edges\", \"pr_props\": {\"Blend With Original\": 0.5}}."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Sharpen More",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "equivalent": "Unsharp Mask (Amount 500, Radius ~0.8)",
+   "summary": "Strongest sharpen of the set: classic 4-neighbour Laplacian (centre 5, up/down/left/right -1), i.e. pixel + 5 x (pixel - local blur), roughly Unsharp Mask 500% at a sub-pixel radius; a little harder and crunchier than 'Convolution Kernel Sharpen', with visible halos.",
+   "look": [
+    "strong sharpen",
+    "crisp",
+    "edge halos",
+    "hard detail"
+   ],
+   "use_for": [
+    "punch up very soft upscaled archive stills",
+    "crisp text/UI in a blurry screen capture"
+   ],
+   "avoid": [
+    "visible halos and amplified noise on compressed footage; makes skin look rough",
+    "the Convolution Kernel effect is absent from Premiere 2026's video effect list, so a script cannot rebuild it"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "preset_values": "M11 0, M12 -1, M13 0, M21 -1, M22 5, M23 -1, M31 0, M32 -1, M33 0, Offset 0, Scale 1, Process Alpha on",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Convolution Kernel (match PR.ADBE Convolution Kernel New) with M11 0, M12 -1, M13 0, M21 -1, M22 5, M23 -1, M31 0, M32 -1, M33 0, Offset 0, Scale 1, Process Alpha on (read from Factory Presets.prfpset). Convolution Kernel is NOT in qe.project.getVideoEffectList() for Premiere 2026 (143 video effects harvested), so pr_build's addFx would warn \"no Premiere effect\"; the preset still sits in the Presets bin, but whether it still applies by hand in v26 is unverified. Replacement (about Unsharp Mask 500% at a sub-pixel radius; 500 is the harvested maximum): {\"name\": \"Unsharp Mask\", \"pr_props\": {\"Amount\": 500, \"Radius\": 0.8, \"Threshold\": 0}}. The Sharpen effect also works but its \"Sharpen Amount\" scale is not calibrated against the kernel, so judge it by eye."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "2 Strip",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Two-strip Technicolor emulation: colour is rebuilt from red-orange and cyan-green only, so skin goes coral, skies and blues turn teal-cyan and yellows/purples largely vanish; 1920s-30s vintage colour.",
+   "look": [
+    "two-strip technicolor",
+    "vintage",
+    "red-cyan",
+    "orange-teal",
+    "1930s",
+    "retro film"
+   ],
+   "use_for": [
+    "1920s-40s period flashback or reconstruction in a documentary",
+    "stylized 'old newsreel in colour' archive treatment",
+    "retro aesthetic beat in a reel or trailer"
+   ],
+   "avoid": [
+    "shifts flag and party colours (greens to cyan, blues to teal): not for brand-, flag- or symbol-critical shots",
+    "garish on faces at full strength; lower Intensity#2 to 50-70"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Lumetri Blob (custom layer) embedding the whole look: the fxTechnicolor(2strip) shader (Lumetri\\Film\\fxTechnicolor(2strip).irtp, from a '2strip.look'), Look stored as legacy slot 1, Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name. Unlike the other Lumetri presets in this bin, this one is self-contained: its Lumetri 'Blob' parameter carries the full shader stack, including the fxTechnicolor(2strip) shader (Lumetri\\Film\\fxTechnicolor(2strip).irtp) inside a group made from '2strip.look', at Intensity 100 with every other control default (read from Lumetri Presets.prfpset). Applying the preset by hand therefore reproduces it, but a spec cannot: the Blob is a string property the spec cannot set, and v26's Creative Look list (Lumetri\\LUTs\\Creative) has no 2-strip entry. The stored Look number 1 is a slot in the LEGACY dropdown; do NOT send {\"Look\": 1} expecting 2 Strip, because in v26 slot 1 is very likely a different look (the first file in LUTs\\Creative is CineSpace2383sRGB6bit). Labels of v26's Look dropdown (0-68) were not harvested, so read the label back after setting any index. No exact rebuild exists; approximate by hand with Lumetri HSL/Curves (push reds to orange-red, blues/greens to cyan, desaturate yellows and purples)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Cinespace 100",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Kodak 2383 print-film emulation (CineSpace2383sRGB6bit LUT): denser contrast and deeper blacks, warm yellowish highlights, slightly teal shadows and richer reds; a classic cinema-print look at full strength.",
+   "look": [
+    "film print",
+    "Kodak 2383",
+    "cinematic",
+    "warm highlights",
+    "teal shadows",
+    "contrast"
+   ],
+   "use_for": [
+    "trailer or cinematic short where a strong print look is wanted",
+    "dramatic recreation segments in a documentary",
+    "title-sequence b-roll"
+   ],
+   "avoid": [
+    "at 100% blacks crush and skin goes orange on already-contrasty phone or news footage; prefer Cinespace 50/25"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 ('Cinespace' = Lumetri\\LUTs\\Creative\\CineSpace2383sRGB6bit.itx, encrypted 64-point ITX), Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 ('Cinespace' = Lumetri\\LUTs\\Creative\\CineSpace2383sRGB6bit.itx, encrypted 64-point ITX), Intensity 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Cinespace 100 Faded Film",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Kodak 2383 print-film emulation (CineSpace2383sRGB6bit LUT): denser contrast and deeper blacks, warm yellowish highlights, slightly teal shadows and richer reds; a classic cinema-print look at full strength, plus Faded Film 100 which lifts the blacks into a milky, matte grey for a faded-print feel.",
+   "look": [
+    "faded film",
+    "matte blacks",
+    "Kodak 2383",
+    "vintage",
+    "lifted shadows",
+    "filmic"
+   ],
+   "use_for": [
+    "nostalgic or memory sequence in a documentary",
+    "soft matte 'film' look for lifestyle or travel reels",
+    "archive-style recreation"
+   ],
+   "avoid": [
+    "lifted blacks look washed-out after Instagram compression; check on a phone",
+    "not for hard news: reads as nostalgic, not factual"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 (Cinespace = CineSpace2383sRGB6bit.itx), Intensity 100, Faded Film 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 (Cinespace = CineSpace2383sRGB6bit.itx), Intensity 100, Faded Film 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 100, \"Faded Film\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Cinespace 25",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Kodak 2383 print-film emulation (CineSpace2383sRGB6bit LUT): denser contrast and deeper blacks, warm yellowish highlights, slightly teal shadows and richer reds; a classic cinema-print look at a subtle quarter strength.",
+   "look": [
+    "film print",
+    "Kodak 2383",
+    "cinematic",
+    "warm highlights",
+    "teal shadows",
+    "contrast",
+    "subtle"
+   ],
+   "use_for": [
+    "cinematic base grade for a documentary or trailer",
+    "make flat news or phone footage feel filmic",
+    "consistent look across mixed b-roll in an explainer"
+   ],
+   "avoid": [
+    "stack it on top of basic correction, not instead of it"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 ('Cinespace' = Lumetri\\LUTs\\Creative\\CineSpace2383sRGB6bit.itx, encrypted 64-point ITX), Intensity 25",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 ('Cinespace' = Lumetri\\LUTs\\Creative\\CineSpace2383sRGB6bit.itx, encrypted 64-point ITX), Intensity 25, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 25}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Cinespace 25 Faded Film",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Kodak 2383 print-film emulation (CineSpace2383sRGB6bit LUT): denser contrast and deeper blacks, warm yellowish highlights, slightly teal shadows and richer reds; a classic cinema-print look at a subtle quarter strength, plus Faded Film 100 which lifts the blacks into a milky, matte grey for a faded-print feel.",
+   "look": [
+    "faded film",
+    "matte blacks",
+    "Kodak 2383",
+    "vintage",
+    "lifted shadows",
+    "filmic"
+   ],
+   "use_for": [
+    "nostalgic or memory sequence in a documentary",
+    "soft matte 'film' look for lifestyle or travel reels",
+    "archive-style recreation"
+   ],
+   "avoid": [
+    "lifted blacks look washed-out after Instagram compression; check on a phone",
+    "not for hard news: reads as nostalgic, not factual"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 (Cinespace = CineSpace2383sRGB6bit.itx), Intensity 25, Faded Film 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 (Cinespace = CineSpace2383sRGB6bit.itx), Intensity 25, Faded Film 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 25, \"Faded Film\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Cinespace 50",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Kodak 2383 print-film emulation (CineSpace2383sRGB6bit LUT): denser contrast and deeper blacks, warm yellowish highlights, slightly teal shadows and richer reds; a classic cinema-print look at half strength.",
+   "look": [
+    "film print",
+    "Kodak 2383",
+    "cinematic",
+    "warm highlights",
+    "teal shadows",
+    "contrast"
+   ],
+   "use_for": [
+    "cinematic base grade for a documentary or trailer",
+    "make flat news or phone footage feel filmic",
+    "consistent look across mixed b-roll in an explainer"
+   ],
+   "avoid": [
+    "stack it on top of basic correction, not instead of it"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 ('Cinespace' = Lumetri\\LUTs\\Creative\\CineSpace2383sRGB6bit.itx, encrypted 64-point ITX), Intensity 50",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 ('Cinespace' = Lumetri\\LUTs\\Creative\\CineSpace2383sRGB6bit.itx, encrypted 64-point ITX), Intensity 50, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 50}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Cinespace 50 Faded Film",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Cinematic",
+   "bin": "Presets/Lumetri Presets/Cinematic",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Kodak 2383 print-film emulation (CineSpace2383sRGB6bit LUT): denser contrast and deeper blacks, warm yellowish highlights, slightly teal shadows and richer reds; a classic cinema-print look at half strength, plus Faded Film 100 which lifts the blacks into a milky, matte grey for a faded-print feel.",
+   "look": [
+    "faded film",
+    "matte blacks",
+    "Kodak 2383",
+    "vintage",
+    "lifted shadows",
+    "filmic"
+   ],
+   "use_for": [
+    "nostalgic or memory sequence in a documentary",
+    "soft matte 'film' look for lifestyle or travel reels",
+    "archive-style recreation"
+   ],
+   "avoid": [
+    "lifted blacks look washed-out after Instagram compression; check on a phone",
+    "not for hard news: reads as nostalgic, not factual"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 (Cinespace = CineSpace2383sRGB6bit.itx), Intensity 50, Faded Film 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 (Cinespace = CineSpace2383sRGB6bit.itx), Intensity 50, Faded Film 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 50, \"Faded Film\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fuji Eterna 250D Fuji 3510 (by Adobe)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Filmstocks",
+   "bin": "Presets/Lumetri Presets/Filmstocks",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Film-stock emulation (Fuji Eterna 250D negative printed on Fuji 3510): deep blacks and a firm S-curve, cool cyan-tinted shadows against warm yellow-orange highlights, dense saturated reds and greens. Measured on Rec.709 input: 10% grey -> 3%, 85% grey -> warm 0.92/0.86/0.82.",
+   "look": [
+    "film emulation",
+    "contrasty",
+    "teal shadows",
+    "warm highlights",
+    "deep blacks",
+    "rich"
+   ],
+   "use_for": [
+    "cinematic grade for documentary interviews and b-roll",
+    "trailer look with deep blacks",
+    "make AI or phone footage feel shot on film"
+   ],
+   "avoid": [
+    "crushes shadow detail on already-dark footage; lift Shadows first or lower Intensity#2"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 14 (Fuji ETERNA 250D Fuji 3510 (by Adobe)), Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 14 (Fuji ETERNA 250D Fuji 3510 (by Adobe)), Intensity 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Fuji ETERNA 250D Fuji 3510 (by Adobe)' entry (file C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji ETERNA 250D Fuji 3510 (by Adobe).cube, made for Rec.709 input; the .cube also works outside Premiere, e.g. ffmpeg lut3d)>, \"Intensity#2\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fuji Eterna 250d Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Filmstocks",
+   "bin": "Presets/Lumetri Presets/Filmstocks",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Film-stock emulation (Fuji Eterna 250D on Kodak 2395 print): low-contrast matte look with lifted, warm milky blacks (pure black lands near 13-15% grey, 10% grey near 17%), neutral mids, softened colour and slightly magenta highlights.",
+   "look": [
+    "faded film",
+    "matte",
+    "low contrast",
+    "lifted warm blacks",
+    "soft colour",
+    "vintage"
+   ],
+   "use_for": [
+    "gentle nostalgic look for memory or backstory segments",
+    "soft lifestyle or travel reel grade",
+    "calm, low-contrast documentary interviews"
+   ],
+   "avoid": [
+    "milky blacks band and look washed out after heavy social compression",
+    "too soft for punchy news or hype reels"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 15 (Fuji ETERNA 250D Kodak 2395 (by Adobe)), Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 15 (Fuji ETERNA 250D Kodak 2395 (by Adobe)), Intensity 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Fuji ETERNA 250D Kodak 2395 (by Adobe)' entry (file C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji ETERNA 250D Kodak 2395 (by Adobe).cube, made for Rec.709 input; the .cube also works outside Premiere, e.g. ffmpeg lut3d)>, \"Intensity#2\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fuji F125 Kodak 2393 (by Adobe)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Filmstocks",
+   "bin": "Presets/Lumetri Presets/Filmstocks",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Film-stock emulation (Fuji F-125 negative on Kodak 2393 print): the most contrasty of the set, crushed blacks, warm yellowish highlights, greens pushed dark and deep (almost no blue added), reds leaning magenta; dramatic and dense.",
+   "look": [
+    "film emulation",
+    "high contrast",
+    "crushed blacks",
+    "dark deep greens",
+    "warm highlights",
+    "dramatic"
+   ],
+   "use_for": [
+    "trailer and cinematic short grade",
+    "dramatic political recreation scenes",
+    "night or interior moody sequences"
+   ],
+   "avoid": [
+    "foliage and green party colours go very dark, saturated green",
+    "faces in shadow block up; lower intensity for flat-lit interviews"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 16 (Fuji F125 Kodak 2393 (by Adobe)), Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 16 (Fuji F125 Kodak 2393 (by Adobe)), Intensity 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Fuji F125 Kodak 2393 (by Adobe)' entry (file C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji F125 Kodak 2393 (by Adobe).cube, made for Rec.709 input; the .cube also works outside Premiere, e.g. ffmpeg lut3d)>, \"Intensity#2\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fuji F125 Kodak 2395 (by Adobe)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Filmstocks",
+   "bin": "Presets/Lumetri Presets/Filmstocks",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Film-stock emulation (Fuji F-125 on Kodak 2395 print): low-contrast matte grade with lifted warm blacks, neutral mids and vivid but soft greens; a gentle faded-print look.",
+   "look": [
+    "faded film",
+    "matte",
+    "lifted blacks",
+    "low contrast",
+    "soft",
+    "warm shadows"
+   ],
+   "use_for": [
+    "soft nostalgic grade for documentary memories",
+    "lifestyle or food reels with a film feel",
+    "gentle look for explainer b-roll"
+   ],
+   "avoid": [
+    "washed-out on low-bitrate platforms",
+    "reads nostalgic rather than factual for hard news"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 17 (Fuji F125 Kodak 2395 (by Adobe)), Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 17 (Fuji F125 Kodak 2395 (by Adobe)), Intensity 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Fuji F125 Kodak 2395 (by Adobe)' entry (file C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji F125 Kodak 2395 (by Adobe).cube, made for Rec.709 input; the .cube also works outside Premiere, e.g. ffmpeg lut3d)>, \"Intensity#2\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fuji Reala 500D Kodak 2393 (by Adobe)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Filmstocks",
+   "bin": "Presets/Lumetri Presets/Filmstocks",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Film-stock emulation (Fuji Reala 500D on Kodak 2393 print): deep blacks and solid contrast, slightly green-cyan shadows, warm highlights and natural-looking skin; a balanced cinematic print look, less extreme than F125/2393.",
+   "look": [
+    "film emulation",
+    "cinematic",
+    "deep blacks",
+    "natural skin",
+    "cool shadows",
+    "warm highlights"
+   ],
+   "use_for": [
+    "all-purpose cinematic grade for documentaries",
+    "interview grade that keeps skin natural",
+    "polished look for explainer b-roll"
+   ],
+   "avoid": [
+    "still crushes very dark footage; check shadows on night shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 18 (Fuji REALA 500D Kodak 2393 (by Adobe)), Intensity 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 18 (Fuji REALA 500D Kodak 2393 (by Adobe)), Intensity 100, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Fuji REALA 500D Kodak 2393 (by Adobe)' entry (file C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\Fuji REALA 500D Kodak 2393 (by Adobe).cube, made for Rec.709 input; the .cube also works outside Premiere, e.g. ffmpeg lut3d)>, \"Intensity#2\": 100}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Faded",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black-and-white built from the Fuji Eterna / Kodak 2395 film LUT: soft contrast with lifted, milky grey blacks and gentle highlights; a faded old-print monochrome.",
+   "look": [
+    "black and white",
+    "faded",
+    "lifted blacks",
+    "soft contrast",
+    "vintage print"
+   ],
+   "use_for": [
+    "archive / flashback section in a documentary",
+    "memorial or tribute segment",
+    "quiet reflective reel beat"
+   ],
+   "avoid": [
+    "low contrast can look muddy on dark footage",
+    "lifted blacks band after heavy compression"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 29 ('Monochrome Fuji ETERNA 250D Kodak 2395 (by Adobe)' .look = that film LUT then full desaturation), Intensity 121.77",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 29 ('Monochrome Fuji ETERNA 250D Kodak 2395 (by Adobe)' .look = that film LUT then full desaturation), Intensity 121.77, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Monochrome Fuji ETERNA 250D Kodak 2395 (by Adobe)' entry>, \"Intensity#2\": 121.77}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Faded Film 100",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Plain black-and-white (Creative Saturation 0) with Faded Film 100 lifting the blacks into a matte grey; no film LUT, so the tonal curve is otherwise untouched.",
+   "look": [
+    "black and white",
+    "faded",
+    "matte blacks",
+    "lifted shadows",
+    "flat"
+   ],
+   "use_for": [
+    "archive or 'past' section of a political explainer",
+    "flashback in a documentary",
+    "faded mono background plate behind text"
+   ],
+   "avoid": [
+    "looks flat and grey on already low-contrast footage; add Contrast in Basic Correction"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "no Look; Creative Saturation 0, Faded Film 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with no Look; Creative Saturation 0, Faded Film 100, everything else default (read from Lumetri Presets.prfpset). Fully reproducible from a spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Saturation#2\": 0, \"Faded Film\": 100}} ('Saturation#2' = Creative saturation, 'Intensity#2' = Creative look intensity, per the Lumetri Color card)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Faded Film 150",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black-and-white with Faded Film 100 lifting the blacks to matte grey. The stored Intensity 150 only scales a creative Look and none is set, so it most likely renders the same as Monochrome Faded Film 100.",
+   "look": [
+    "black and white",
+    "faded",
+    "matte blacks",
+    "lifted shadows",
+    "flat"
+   ],
+   "use_for": [
+    "archive or flashback section",
+    "faded mono background plate behind headlines"
+   ],
+   "avoid": [
+    "flat and grey on low-contrast footage",
+    "do not expect it to be stronger than 'Faded Film 100' despite the name (unverified)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "no Look; Creative Intensity 150, Saturation 0, Faded Film 100",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with no Look; Creative Intensity 150, Saturation 0, Faded Film 100, everything else default (read from Lumetri Presets.prfpset). Fully reproducible from a spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Intensity#2\": 150, \"Saturation#2\": 0, \"Faded Film\": 100}} ('Saturation#2' = Creative saturation, 'Intensity#2' = Creative look intensity, per the Lumetri Color card)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Faded Film 50",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black-and-white with a milder Faded Film 50: blacks lifted to a soft dark grey, more contrast left than the 100 version.",
+   "look": [
+    "black and white",
+    "slightly faded",
+    "soft blacks",
+    "documentary mono"
+   ],
+   "use_for": [
+    "archive / historical section in a documentary",
+    "black-and-white quote or testimony segment",
+    "mono reel beat that still has some punch"
+   ],
+   "avoid": [
+    "still lifts blacks; add Contrast if the source is flat"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "no Look; Creative Saturation 0, Faded Film 50",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with no Look; Creative Saturation 0, Faded Film 50, everything else default (read from Lumetri Presets.prfpset). Fully reproducible from a spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Saturation#2\": 0, \"Faded Film\": 50}} ('Saturation#2' = Creative saturation, 'Intensity#2' = Creative look intensity, per the Lumetri Color card)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Normal Contrast",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black-and-white through the Kodak 5205 / Fuji 3510 film curve: normal, filmic contrast with near-true blacks and clean highlights; a neutral, versatile mono.",
+   "look": [
+    "black and white",
+    "filmic",
+    "normal contrast",
+    "neutral mono",
+    "classic"
+   ],
+   "use_for": [
+    "black-and-white archive or historical section",
+    "serious interview or testimony in mono",
+    "trailer mono beat"
+   ],
+   "avoid": [
+    "mono flattens colour-coded information (party colours, maps): not on graphics that rely on colour"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 30 ('Monochrome Kodak 5205 Fuji 3510 (by Adobe)' .look = that film LUT then desaturation), Intensity 121.77",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 30 ('Monochrome Kodak 5205 Fuji 3510 (by Adobe)' .look = that film LUT then desaturation), Intensity 121.77, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Monochrome Kodak 5205 Fuji 3510 (by Adobe)' entry>, \"Intensity#2\": 121.77}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Punch",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "High-impact black-and-white: the Cinespace (Kodak 2383 print) curve at about 64% adds dense contrast and deep blacks, then Creative Saturation 0 removes colour.",
+   "look": [
+    "black and white",
+    "punchy",
+    "high contrast",
+    "deep blacks",
+    "graphic",
+    "noir"
+   ],
+   "use_for": [
+    "hard-hitting mono beat in a trailer or hype reel",
+    "dramatic political quote-card background",
+    "noir-style recreation"
+   ],
+   "avoid": [
+    "crushes shadow detail on dark footage",
+    "too harsh for soft interviews"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 10 (Cinespace 2383 print LUT), Intensity 64.35, Creative Saturation 0",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 10 (Cinespace 2383 print LUT), Intensity 64.35, Creative Saturation 0, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'CineSpace2383sRGB6bit' entry>, \"Intensity#2\": 64.35, \"Saturation#2\": 0}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Monochrome Strong Faded ",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Monochrome",
+   "bin": "Presets/Lumetri Presets/Monochrome",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black-and-white on the Kodak 5205 / Fuji 3510 curve with a strong Faded Film (about 113): blacks lifted well into grey, very matte, old-photograph feel.",
+   "look": [
+    "black and white",
+    "strongly faded",
+    "matte",
+    "washed blacks",
+    "old photo",
+    "vintage"
+   ],
+   "use_for": [
+    "old-photograph or 'decades ago' archive treatment",
+    "dreamy memory sequence",
+    "background plate under bold headline text"
+   ],
+   "avoid": [
+    "very flat; can look like a mistake on news footage",
+    "blacks band after compression",
+    "the preset name ends with a trailing space ('Monochrome Strong Faded '); match it exactly"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Creative Look slot 30 ('Monochrome Kodak 5205 Fuji 3510 (by Adobe)'), Intensity 121.77, Faded Film 112.93",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with Creative Look slot 30 ('Monochrome Kodak 5205 Fuji 3510 (by Adobe)'), Intensity 121.77, Faded Film 112.93, everything else default (read from Lumetri Presets.prfpset). The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'Monochrome Kodak 5205 Fuji 3510 (by Adobe)' entry>, \"Intensity#2\": 121.77, \"Faded Film\": 112.93}}; only the Intensity / Saturation / Faded Film values are exact."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Cold (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Cold' for Arri Alexa footage (camera profile + look): Cold cyan-blue cast through shadows and mid-tones (mid-grey lands cyan, red well below green/blue), bright near-white highlights, reds and skin muted toward neutral; wintry and clinical.",
+   "look": [
+    "cold",
+    "cyan-blue",
+    "wintry",
+    "clinical",
+    "muted warmth",
+    "bright"
+   ],
+   "use_for": [
+    "cold, clinical tone for scam, crisis or cyber-crime explainers",
+    "winter, mountain or night-shift b-roll",
+    "tech segment in an AI explainer"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 4 (Blue Cold), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 4 = 'Blue Cold' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Cold.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE COLD - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE COLD' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE COLD.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Day4Nite (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Day4Nite' for Arri Alexa footage (camera profile + look): Day-for-night: mid-tones drop roughly 1.5-2 stops, everything pushes strongly blue and skin loses most saturation, so daylight shots read as moonlit night.",
+   "look": [
+    "day-for-night",
+    "moonlight",
+    "dark",
+    "heavy blue",
+    "desaturated",
+    "night"
+   ],
+   "use_for": [
+    "turn daylight b-roll into night for a reconstruction",
+    "ominous night-time recreation in a crime or political documentary",
+    "'darkness falls' beat in a trailer"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 5 (Blue Day4Nite), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 5 = 'Blue Day4Nite' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Day4Nite.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE DAY4NITE - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE DAY4NITE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE DAY4NITE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Ice (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Ice' for Arri Alexa footage (camera profile + look): Icy cyan-blue mid-tones with very saturated greens and blues while reds stay strong; crisp, cold and vivid rather than muted.",
+   "look": [
+    "icy",
+    "cyan",
+    "cold",
+    "vivid",
+    "saturated blues",
+    "crisp"
+   ],
+   "use_for": [
+    "cold, vivid look for tech or futuristic AI segments",
+    "snow, water or glacier b-roll",
+    "sharp cool reel aesthetic"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 6 (Blue Ice), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 6 = 'Blue Ice' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Ice.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE ICE - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE ICE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE ICE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Intense (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Intense' for Arri Alexa footage (camera profile + look): Darker, contrasty grade with a strong blue-cyan cast in shadows and mids (mid-grey falls to about 25% red / 44% blue), saturated blues and greens; moody and heavy.",
+   "look": [
+    "intense blue",
+    "dark",
+    "contrasty",
+    "moody",
+    "cyan shadows",
+    "thriller"
+   ],
+   "use_for": [
+    "thriller or investigation tone in a documentary",
+    "tense trailer beat",
+    "night city b-roll"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 7 (Blue Intense), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 7 = 'Blue Intense' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Intense.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE INTENSE - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE INTENSE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE INTENSE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Moon (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Moon' for Arri Alexa footage (camera profile + look): Gentle blue-teal cast with slightly lifted, milky shadows; colours stay fairly natural, a soft moonlit coolness.",
+   "look": [
+    "moonlit",
+    "soft blue",
+    "teal",
+    "lifted blacks",
+    "cool",
+    "calm"
+   ],
+   "use_for": [
+    "calm evening or night b-roll",
+    "reflective, quiet documentary passage",
+    "soft cool reel aesthetic"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 8 (Blue Moon), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 8 = 'Blue Moon' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Moon.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE MOON - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE MOON' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE MOON.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Steel (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Steel' for Arri Alexa footage (camera profile + look): Bright steely look: cyan-blue mid-tones, highlights roll to clean white early, warm tones muted; cold metallic sheen.",
+   "look": [
+    "steel blue",
+    "metallic",
+    "cold",
+    "bright",
+    "high-key",
+    "corporate"
+   ],
+   "use_for": [
+    "corporate, banking or tech b-roll in an explainer",
+    "cold institutional tone (courts, offices)",
+    "sleek product or gadget shots"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 9 (Blue Steel), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 9 = 'Blue Steel' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Steel.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE STEEL - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE STEEL' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE STEEL.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch HDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Clean Punch HDR' for Arri Alexa footage (camera profile + look): Clean, punchy grade: extra saturation and contrast with mildly lifted blacks and a slight green-cyan bias in the mids; the darkest of the three Clean Punch variants (HDR = tuned for high-contrast, wide-dynamic-range scenes: the gentlest curve of the three, it holds the most highlight range).",
+   "look": [
+    "clean",
+    "punchy",
+    "saturated",
+    "contrast",
+    "natural",
+    "commercial"
+   ],
+   "use_for": [
+    "ARRI LogC interviews or exteriors with a wide brightness range (bright windows, harsh sun)",
+    "vivid but natural grade that keeps highlight detail",
+    "polished explainer b-roll"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "highlights clip on bright sky or white clothing; pull Highlights down first"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 11 (Clean Punch HDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 11 = 'Clean Punch HDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch HDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\CLEAN PUNCH HDR - SL - 3563.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of this look; v26's LUTs\\Creative folder has no matching 'SL ...' file, so it may be missing from the v26 Look dropdown and reachable only through this preset or by browsing to C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch HDR.look>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch LDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Clean Punch LDR' for Arri Alexa footage (camera profile + look): Clean, punchy grade, brightest of the Clean Punch set: lifted mids, hot highlights that clip early, the most saturated skin and colours (LDR = tuned for low-contrast, flat-lit scenes, which it stretches: the steepest curve of the three).",
+   "look": [
+    "clean",
+    "punchy",
+    "bright",
+    "saturated",
+    "hot highlights",
+    "commercial"
+   ],
+   "use_for": [
+    "flat, overcast or low-contrast scenes that need life",
+    "bright upbeat reel or promo",
+    "vivid lifestyle b-roll"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "highlights clip on bright sky or white clothing; pull Highlights down first"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 12 (Clean Punch LDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 12 = 'Clean Punch LDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch LDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\CLEAN PUNCH LDR - SL - 3563.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of this look; v26's LUTs\\Creative folder has no matching 'SL ...' file, so it may be missing from the v26 Look dropdown and reachable only through this preset or by browsing to C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch LDR.look>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch NDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Clean Punch NDR' for Arri Alexa footage (camera profile + look): Clean, punchy grade between the HDR and LDR variants: added saturation and contrast, slight green-cyan bias, normal brightness (NDR = tuned for scenes of normal contrast).",
+   "look": [
+    "clean",
+    "punchy",
+    "saturated",
+    "balanced",
+    "natural",
+    "commercial"
+   ],
+   "use_for": [
+    "default vivid grade for interviews and b-roll",
+    "social reel colour boost",
+    "news-feature b-roll that needs life"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "highlights clip on bright sky or white clothing; pull Highlights down first"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 13 (Clean Punch NDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 13 = 'Clean Punch NDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch NDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\CLEAN PUNCH NDR - SL - 3563.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of this look; v26's LUTs\\Creative folder has no matching 'SL ...' file, so it may be missing from the v26 Look dropdown and reachable only through this preset or by browsing to C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Clean Punch NDR.look>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Heat (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Heat' for Arri Alexa footage (camera profile + look): Hot golden-orange grade: highlights shift strongly yellow-orange, skin becomes deep saturated orange-tan, greens muted, blacks stay deep; desert-heat feel.",
+   "look": [
+    "hot",
+    "golden",
+    "orange",
+    "desert",
+    "saturated skin",
+    "warm highlights"
+   ],
+   "use_for": [
+    "heatwave, drought or summer story b-roll",
+    "rural / desert landscapes",
+    "intense warm trailer beat"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 19 (Gold Heat), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 19 = 'Gold Heat' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Heat.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD HEAT - SL - 3528.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL GOLD HEAT' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL GOLD HEAT.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Orange (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Orange' for Arri Alexa footage (camera profile + look): Teal-and-orange blockbuster split: greys stay neutral but skin and reds go saturated orange while blues stay strongly blue; bright, glossy contrast.",
+   "look": [
+    "teal-orange",
+    "blockbuster",
+    "orange skin",
+    "saturated blues",
+    "glossy",
+    "cinematic"
+   ],
+   "use_for": [
+    "trailer and action-style recaps",
+    "hype reel for rallies or events",
+    "cinematic AI short"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 20 (Gold Orange), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 20 = 'Gold Orange' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Orange.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD ORANGE - SL - 3528.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL GOLD ORANGE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL GOLD ORANGE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush HDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Rush HDR' for Arri Alexa footage (camera profile + look): Golden skin and warm reds against slightly cool neutral greys and teal-blue blues, with bright highlights; warm commercial gloss (SpeedLooks HDR/LDR variants are tuned for high- vs low-dynamic-range scenes; here HDR has the brighter mids).",
+   "look": [
+    "golden",
+    "warm skin",
+    "glossy",
+    "bright",
+    "teal blues",
+    "commercial"
+   ],
+   "use_for": [
+    "warm flattering interview look",
+    "festive or celebration b-roll",
+    "positive 'success story' segment"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 21 (Gold Rush HDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 21 = 'Gold Rush HDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Rush HDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD RUSH HDR - SL - 3528.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL GOLD RUSH HDR' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL GOLD RUSH HDR.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush LDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Rush LDR' for Arri Alexa footage (camera profile + look): Same golden direction as Gold Rush HDR but warmer, more saturated skin and slightly darker mids (LDR = tuned for low-dynamic-range, flatter scenes).",
+   "look": [
+    "golden",
+    "warm",
+    "saturated skin",
+    "glossy",
+    "rich"
+   ],
+   "use_for": [
+    "festive, wedding or celebration reels",
+    "warm 'achievement' segment in an explainer",
+    "sunset b-roll"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 22 (Gold Rush LDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 22 = 'Gold Rush LDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Rush LDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD RUSH LDR - SL - 3528.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL GOLD RUSH LDR' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL GOLD RUSH LDR.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Sport (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Sport' for Arri Alexa footage (camera profile + look): Punchy, saturated, near-neutral grade (greys very slightly cool) with deep shadows and vivid greens and blues; energetic sports / promo look.",
+   "look": [
+    "punchy",
+    "vivid",
+    "sports",
+    "deep shadows",
+    "saturated",
+    "energetic"
+   ],
+   "use_for": [
+    "sports or event highlight reels",
+    "energetic promo or hype edit",
+    "outdoor rally b-roll"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 23 (Gold Sport), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 23 = 'Gold Sport' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Sport.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD SPORT - SL - 3561.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of this look; v26's LUTs\\Creative folder has no matching 'SL ...' file, so it may be missing from the v26 Look dropdown and reachable only through this preset or by browsing to C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Sport.look>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Tobacco (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Tobacco' for Arri Alexa footage (camera profile + look): Brown-yellow nicotine warmth in mids and highlights, slightly lifted milky blacks, greens desaturated; gritty, aged, smoky-interior feel.",
+   "look": [
+    "tobacco",
+    "brown-yellow",
+    "gritty",
+    "aged",
+    "lifted blacks",
+    "warm"
+   ],
+   "use_for": [
+    "corruption or crime-story recreation in a documentary",
+    "old-office or period interior b-roll",
+    "gritty retro reel"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 24 (Gold Tobacco), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 24 = 'Gold Tobacco' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Tobacco.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD TOBACCO - SL - 3528.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL GOLD TOBACCO' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL GOLD TOBACCO.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Western (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Gold Western' for Arri Alexa footage (camera profile + look): Dusty sepia-gold: warm yellow-brown highlights, lifted red-brown blacks, greens muted; sun-baked Western look.",
+   "look": [
+    "sepia",
+    "dusty",
+    "western",
+    "sun-baked",
+    "yellow-brown",
+    "lifted blacks"
+   ],
+   "use_for": [
+    "rural or desert landscapes",
+    "historic / period recreation",
+    "stylized standoff beat in a trailer or meme reel"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 25 (Gold Western), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 25 = 'Gold Western' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Gold Western.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\GOLD WESTERN - SL - 3528.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL GOLD WESTERN' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL GOLD WESTERN.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Neutral Start (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Neutral Start' for Arri Alexa footage (camera profile + look): Clean neutral starting grade: the SpeedLooks camera conversion with a gentle filmic contrast curve, faithful saturated colour and only a hint of cool in the shadows; meant as a base to grade on top of.",
+   "look": [
+    "neutral",
+    "natural",
+    "filmic curve",
+    "clean",
+    "base grade"
+   ],
+   "use_for": [
+    "base normalisation for real ARRI LogC interview footage",
+    "starting point before a creative look",
+    "matching log b-roll to Rec.709"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "highlights clip on bright sky or white clothing; pull Highlights down first"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 32 (Neutral Start), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 32 = 'Neutral Start' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Neutral Start.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NEUTRAL START - SL - 3560.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NEUTRAL START' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NEUTRAL START.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir 1965 (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir 1965' for Arri Alexa footage (camera profile + look): Black-and-white with strong contrast (deep blacks, highlights clip early) and a yellow/green-filter response: greens and skin render light, blues dark; classic 1960s newsreel / film-noir mono.",
+   "look": [
+    "black and white",
+    "high contrast",
+    "1960s",
+    "newsreel",
+    "noir",
+    "classic"
+   ],
+   "use_for": [
+    "1960s-era political history section",
+    "newsreel-style archive recreation",
+    "noir beat in a trailer"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 33 (Noir 1965), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 33 = 'Noir 1965' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir 1965.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR 1965 - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR 1965' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR 1965.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir HDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir HDR' for Arri Alexa footage (camera profile + look): Black-and-white, bright and low-contrast: shadows lifted to a soft grey, gentle highlights; open, airy monochrome.",
+   "look": [
+    "black and white",
+    "low contrast",
+    "airy",
+    "soft",
+    "lifted shadows"
+   ],
+   "use_for": [
+    "soft mono for testimony or memorial segments",
+    "background plate behind text",
+    "gentle flashback"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 34 (Noir HDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 34 = 'Noir HDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir HDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR HDR - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR HDR' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR HDR.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir LDR (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir LDR' for Arri Alexa footage (camera profile + look): Black-and-white, very high contrast: blacks crushed, mids bright and highlights clipping; skin and greens render bright, blues dark; graphic and harsh.",
+   "look": [
+    "black and white",
+    "very high contrast",
+    "graphic",
+    "harsh",
+    "crushed blacks"
+   ],
+   "use_for": [
+    "hard-hitting mono beat in a trailer or hype reel",
+    "graphic quote background",
+    "stark recreation"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 35 (Noir LDR), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 35 = 'Noir LDR' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir LDR.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR LDR - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR LDR' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR LDR.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir Nouvelle' for Arri Alexa footage (camera profile + look): Soft black-and-white with lifted grey blacks and capped highlights (no pure white), neutral filter response; gentle French New Wave texture.",
+   "look": [
+    "black and white",
+    "soft",
+    "lifted blacks",
+    "new wave",
+    "matte",
+    "gentle"
+   ],
+   "use_for": [
+    "reflective or memory passage",
+    "arty interview treatment",
+    "soft mono reel"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 36 (Noir Nouvelle), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 36 = 'Noir Nouvelle' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Nouvelle.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR NOUVELLE - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR NOUVELLE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR NOUVELLE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle Red (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir Nouvelle Red' for Arri Alexa footage (camera profile + look): Noir Nouvelle with a red-filter response: reds and skin render brighter, greens and blues darker, with the same lifted blacks and soft capped highlights.",
+   "look": [
+    "black and white",
+    "red filter",
+    "soft",
+    "bright skin",
+    "lifted blacks",
+    "new wave"
+   ],
+   "use_for": [
+    "flattering soft mono for faces / interviews",
+    "artistic portrait b-roll",
+    "nostalgic mono reel"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 37 (Noir Nouvelle Red), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 37 = 'Noir Nouvelle Red' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Nouvelle Red.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR NOUVELLE RED - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR NOUVELLE RED' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR NOUVELLE RED.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Red Wave (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir Red Wave' for Arri Alexa footage (camera profile + look): Black-and-white with a strong red filter: reds and skin glow bright while greens and blues fall almost to black (dark skies and foliage); dramatic and graphic.",
+   "look": [
+    "black and white",
+    "strong red filter",
+    "dark skies",
+    "glowing skin",
+    "dramatic",
+    "graphic"
+   ],
+   "use_for": [
+    "dramatic mono landscapes with dark skies",
+    "striking portrait b-roll",
+    "trailer mono beat"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 38 (Noir Red Wave), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 38 = 'Noir Red Wave' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Red Wave.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR RED WAVE - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR RED WAVE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR RED WAVE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Tri-X (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Noir Tri-X' for Arri Alexa footage (camera profile + look): Kodak Tri-X style black-and-white: neutral filter response, moderate contrast and good shadow detail; classic photojournalism mono.",
+   "look": [
+    "black and white",
+    "Tri-X",
+    "photojournalism",
+    "classic",
+    "moderate contrast"
+   ],
+   "use_for": [
+    "photojournalistic archive or reportage section",
+    "serious documentary mono",
+    "black-and-white stills montage"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "mono removes colour-coded information (party colours, maps, charts)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 39 (Noir Tri-X), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 39 = 'Noir Tri-X' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Noir Tri-X.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\NOIR TRI-X - SL - 3522.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL NOIR TRI-X' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL NOIR TRI-X.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Retro Brown (Arri Alexa)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/ARRI Alexa",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Retro Brown' for Arri Alexa footage (camera profile + look): Vintage brown grade: warm brown cast across greys, blues collapse to near-black, greens darkened and muted; 1970s faded-print / old-photo feel.",
+   "look": [
+    "retro",
+    "brown",
+    "1970s",
+    "vintage",
+    "sepia-ish",
+    "muted blues"
+   ],
+   "use_for": [
+    "1970s-80s era section of a political history",
+    "old home-video / memory feel",
+    "retro reel aesthetic"
+   ],
+   "avoid": [
+    "built for ARRI Alexa LogC footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 8 (Arri Alexa profile), Look slot 40 (Retro Brown), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 8, the ARRI Alexa SpeedLooks camera profile (Lumetri\\LUTs\\Legacy\\ARRI ALEXA - SL - PROFILE.itx, per the preset name), which converts ARRI LogC to SpeedLooks log; Creative Look = stored slot 40 = 'Retro Brown' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Retro Brown.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\RETRO BROWN - SL - 3562.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of this look; v26's LUTs\\Creative folder has no matching 'SL ...' file, so it may be missing from the v26 Look dropdown and reachable only through this preset or by browsing to C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Retro Brown.look>, \"Intensity#2\": 100}}; set Input LUT only for real ARRI Alexa LogC footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Cold (BMC ProRes)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/Blackmagic Cinema Camera",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/Blackmagic Cinema Camera",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Cold' for BMC ProRes footage (camera profile + look): Cold cyan-blue cast through shadows and mid-tones (mid-grey lands cyan, red well below green/blue), bright near-white highlights, reds and skin muted toward neutral; wintry and clinical.",
+   "look": [
+    "cold",
+    "cyan-blue",
+    "wintry",
+    "clinical",
+    "muted warmth",
+    "bright"
+   ],
+   "use_for": [
+    "cold, clinical tone for scam, crisis or cyber-crime explainers",
+    "winter, mountain or night-shift b-roll",
+    "tech segment in an AI explainer"
+   ],
+   "avoid": [
+    "the stored Input LUT slot 12 is outside v26's Input LUT range (0-11), so in Premiere 2026 the BMC camera conversion may be dropped or replaced: read the Input LUT label back after applying, and on real BMCC film-log footage set the camera conversion by hand",
+    "built for Blackmagic Cinema Camera ProRes film-log footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 12 (BMC ProRes profile), Look slot 4 (Blue Cold), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 12 (12 is outside v26's harvested Input LUT range 0-11: more evidence the stored slots are legacy indices that v26 remaps or drops), the Blackmagic Cinema Camera ProRes SpeedLooks profile (Lumetri\\LUTs\\Legacy\\BMC PRORES - SL - PROFILE.itx, per the preset name), which converts BMCC ProRes film-log to SpeedLooks log; Creative Look = stored slot 4 = 'Blue Cold' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Cold.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE COLD - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE COLD' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE COLD.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real Blackmagic Cinema Camera ProRes film-log footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Day4Nite (BMC ProRes)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/Blackmagic Cinema Camera",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/Blackmagic Cinema Camera",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "SpeedLooks 'Blue Day4Nite' for BMC ProRes footage (camera profile + look): Day-for-night: mid-tones drop roughly 1.5-2 stops, everything pushes strongly blue and skin loses most saturation, so daylight shots read as moonlit night.",
+   "look": [
+    "day-for-night",
+    "moonlight",
+    "dark",
+    "heavy blue",
+    "desaturated",
+    "night"
+   ],
+   "use_for": [
+    "turn daylight b-roll into night for a reconstruction",
+    "ominous night-time recreation in a crime or political documentary",
+    "'darkness falls' beat in a trailer"
+   ],
+   "avoid": [
+    "the stored Input LUT slot 12 is outside v26's Input LUT range (0-11), so in Premiere 2026 the BMC camera conversion may be dropped or replaced: read the Input LUT label back after applying, and on real BMCC film-log footage set the camera conversion by hand",
+    "built for Blackmagic Cinema Camera ProRes film-log footage: the preset's Input LUT converts that log first, so on normal Rec.709 footage (phones, news feeds, AI clips) it double-converts: crushed blacks, clipped highlights, oversaturation; use the look alone at Intensity#2 40-70 instead",
+    "strong colour cast skews skin, flags and party colours; keep it off brand- or flag-critical shots"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "preset_values": "Input LUT slot 12 (BMC ProRes profile), Look slot 5 (Blue Day4Nite), Intensity 100; all else default",
+   "scripting": "Premiere's scripting API cannot apply a .prfpset preset by name; rebuild it from the effect + settings below. Preset = one Lumetri Color with only two non-default values (read from Lumetri Presets.prfpset): Basic Correction Input LUT = stored slot 12 (12 is outside v26's harvested Input LUT range 0-11: more evidence the stored slots are legacy indices that v26 remaps or drops), the Blackmagic Cinema Camera ProRes SpeedLooks profile (Lumetri\\LUTs\\Legacy\\BMC PRORES - SL - PROFILE.itx, per the preset name), which converts BMCC ProRes film-log to SpeedLooks log; Creative Look = stored slot 5 = 'Blue Day4Nite' (C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\Looks\\Legacy\\Blue Day4Nite.look -> C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Legacy\\BLUE DAY4NITE - SL - 3527.itx), Intensity 100. The Look/Input LUT numbers stored in the preset are slots in Lumetri's LEGACY dropdown lists (slot-to-name mapping inferred from the alphabetical legacy list and confirmed by the preset names); they are NOT verified against v26's dropdowns (harvest: Look 0-68, Input LUT 0-11, labels not harvested), so dump the clip's Lumetri properties and read the Look label back before trusting an index. Rebuild the look part as {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <v26 index of the 'SL BLUE DAY4NITE' entry (v26 ships it as C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Lumetri\\LUTs\\Creative\\SL BLUE DAY4NITE.itx, encrypted)>, \"Intensity#2\": 100}}; set Input LUT only for real Blackmagic Cinema Camera ProRes film-log footage. Outside Premiere the legacy LUT is an unencrypted 32-point ITX (40-byte header, then float32 RGB, red fastest) that converts to .cube for ffmpeg lut3d; it expects SpeedLooks log input, so chain the camera-profile ITX before it. Grade description measured by sampling the ARRI Alexa profile -> look LUT chain (the BMC profile was not sampled)."
+  }
+ ]
+}

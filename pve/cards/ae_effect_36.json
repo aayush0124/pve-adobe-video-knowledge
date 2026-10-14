@@ -1,0 +1,866 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Stretch Master Control (edge)",
+   "match": "ADBE CM TransDirection",
+   "category": "",
+   "status": "hidden",
+   "summary": "A pseudo-effect (expression control container from PresetEffects.xml) holding a Transition Completion % slider and a '...the other side' checkbox for a legacy edge-stretch transition preset. On its own it renders nothing; it only drives expressions that read it.",
+   "look": [
+    "no visual by itself",
+    "transition controller",
+    "edge stretch",
+    "legacy preset control"
+   ],
+   "use_for": [
+    "only as the controller left behind by an old 'stretch from edge' transition preset",
+    "reading a 0-100 progress value from expressions when rebuilding such a transition by hand"
+   ],
+   "avoid": [
+    "applying it by match name and expecting a stretch: nothing changes on screen",
+    "no AE 2026 shipped preset uses it; use 'Transitions - Movement/Stretch - Edge.ffx' or 'Stretch Over - horizontal.ffx' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "transition progress in % read by the preset's expressions (0 = start, 100 = done)",
+     "typical": "keyframe 0 -> 100 over 0.4-0.8 s"
+    },
+    {
+     "name": "...the other side",
+     "does": "checkbox (0/1): stretch from the opposite edge",
+     "typical": "0 or 1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform"
+   ],
+   "scripting": "Hidden pseudo-effect (empty category, not in the Effects panel). Defined in Support Files/PresetEffects.xml; harvest shows NO AE 2026 preset uses it (the shipped 'Stretch - Edge.ffx' uses Slider Control + Transform). Adding it alone is a no-op: the visual comes from expressions on a Transform effect that read effect(...)('Transition Completion'). For an edge-stretch in-transition, apply the preset 'Transitions - Movement/Stretch - Edge.ffx' (or 'Stretch Over - horizontal/vertical.ffx') via layer.applyPreset instead. '...the other side' is a checkbox: 0/1.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Stretch Master Control(corner)",
+   "match": "ADBE CM TransCorner",
+   "category": "",
+   "status": "hidden",
+   "summary": "A pseudo-effect (expression control container) holding a Transition Completion % slider and a '...the other corner' checkbox for a legacy corner-stretch transition preset. By itself it changes nothing on screen.",
+   "look": [
+    "no visual by itself",
+    "transition controller",
+    "corner stretch",
+    "legacy preset control"
+   ],
+   "use_for": [
+    "only as the controller of an old 'stretch from corner' transition preset",
+    "a 0-100 progress slider for hand-written stretch expressions"
+   ],
+   "avoid": [
+    "applying it alone and expecting a corner stretch: it is a no-op",
+    "no AE 2026 shipped preset uses it; pick a 'Transitions - Movement' preset instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "transition progress in % read by the preset's expressions",
+     "typical": "keyframe 0 -> 100 over 0.4-0.8 s"
+    },
+    {
+     "name": "...the other corner",
+     "does": "checkbox (0/1): stretch from the opposite corner",
+     "typical": "0 or 1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform"
+   ],
+   "scripting": "Hidden pseudo-effect from PresetEffects.xml; no AE 2026 preset in the harvest references it. Alone it is a no-op (no expressions read it). For a stretch in-transition use layer.applyPreset with 'Transitions - Movement/Stretch & Slide.ffx', 'Stretch & Blur.ffx' or 'Stretch - Edge.ffx'. Checkbox value is 0/1.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Swarm",
+   "match": "ADBE DE Swarm",
+   "category": "",
+   "status": "hidden",
+   "summary": "A pseudo-effect (expression control container) with Amplitude, Frequency and a Leader layer picker, meant for a 'swarm' behavior where layers jitter around a leader layer. It renders nothing by itself; the motion only exists if expressions read these controls.",
+   "look": [
+    "no visual by itself",
+    "behavior controller",
+    "swarm",
+    "follow leader"
+   ],
+   "use_for": [
+    "controller for hand-written expressions that make icons / dots buzz around a leader null",
+    "insect / particle-like swarm of small graphic layers in an explainer"
+   ],
+   "avoid": [
+    "applying it alone: nothing moves",
+    "Leader is a layer reference and cannot be set from a spec"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "how far (px, assumed) followers wander from the leader",
+     "typical": "50-200"
+    },
+    {
+     "name": "Frequency",
+     "does": "wander speed in cycles per second (assumed)",
+     "typical": "1-5"
+    },
+    {
+     "name": "Leader",
+     "does": "layer the followers swarm around (layer reference)",
+     "typical": "a null or the hero icon layer"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Slider Control"
+   ],
+   "scripting": "Hidden pseudo-effect defined in PresetEffects.xml next to Follow / Orbit 'DE' behavior controls; no AE 2026 preset in the harvest uses it (the 'Shapes/Backgrounds/Box Swarm.ffx' preset is unrelated). It is a no-op until expressions on Position read it, e.g. position = effect('Swarm')('Leader').transform.position + wiggle-style offset scaled by Amplitude/Frequency. Units of Amplitude/Frequency are inferred, not verified (low confidence). Leader is a layer param: a script must setValue(layerIndex) on it; 0 = none. Simpler route: write a wiggle() expression on Position parented to the leader.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Timer Controls",
+   "match": "Pseudo/ADBE Timer Controls",
+   "category": "",
+   "status": "hidden",
+   "summary": "The control panel of the 'Text/Number Counters/Timer Countdown Monospaced' preset: an Animate Value slider plus formatting options that the preset's text expressions turn into a clock readout (MM:SS, HH:MM:SS or DD:HH:MM:SS) with optional unit labels. Alone, on a layer without the preset's expressions, it shows nothing.",
+   "look": [
+    "countdown timer",
+    "digital clock",
+    "monospaced digits",
+    "time labels",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "countdown to a vote / result / deadline in a news reel",
+    "'time left' clock in an explainer or quiz",
+    "trailer countdown beat",
+    "elapsed-time readout over a documentary sequence"
+   ],
+   "avoid": [
+    "adding the effect without the preset: no text appears",
+    "renaming the effect instance: the preset's expressions look it up by its instance name 'Timer Countdown Controls'",
+    "entering seconds into Animate Value: the unit is minutes/hours/days depending on Time Format"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Animate Value",
+     "does": "the time shown, in the LARGEST unit of Time Format: minutes for MM:SS (1.5 = 01:30), hours for HH:MM:SS (default 9.9999 = 09:59:59), days for DD:HH:MM:SS; fraction = smaller units; sign ignored (Math.abs)",
+     "typical": "MM:SS 10-s real-time countdown: keyframe 0.16667 -> 0 over 10 s (seconds / 60)"
+    },
+    {
+     "name": "Time Format",
+     "does": "dropdown: which clock fields are shown; also sets the unit of Animate Value",
+     "typical": "1 (MM:SS) for short countdowns"
+    },
+    {
+     "name": "Show Labels",
+     "does": "checkbox (0/1): show unit labels (Mins Secs ...) under the digits",
+     "typical": "1 for explainers, 0 for clean news graphics"
+    },
+    {
+     "name": "Label Position Offset",
+     "does": "x/y pixel offset of the label line",
+     "typical": "[0, 0]"
+    },
+    {
+     "name": "Label Size",
+     "does": "label scale",
+     "typical": "24-40"
+    },
+    {
+     "name": "Separator Character",
+     "does": "dropdown: separator between fields",
+     "typical": "1 (Colons)"
+    },
+    {
+     "name": "Spacing",
+     "does": "extra spacing between digit groups",
+     "typical": "0-20"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Time Format": {
+     "1": "MM:SS",
+     "2": "HH:MM:SS",
+     "3": "DD:HH:MM:SS"
+    },
+    "Separator Character": {
+     "1": "Colons",
+     "2": "Dots",
+     "3": "Spaces"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Text/Number Counters presets",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Hidden pseudo-effect (labels from PresetEffects.xml). Do NOT add it by match name; apply the preset 'Text/Number Counters/Timer Countdown Monospaced.ffx' to a TEXT layer with layer.applyPreset, then find the effect by match name 'Pseudo/ADBE Timer Controls' (its instance is named 'Timer Countdown Controls'; expressions reference that name, so never rename it) and set/keyframe Animate Value. Verified from the preset's per-digit expression: Animate Value is in the largest unit of Time Format (MM:SS = minutes, HH:MM:SS = hours, DD:HH:MM:SS = days) and its fraction fills the smaller fields, so a 60-second countdown in MM:SS is 1 -> 0, NOT 60 -> 0 (60 would read 60:00). Keyframe linearly for a real-time clock. Default Time Format is 2 (HH:MM:SS): set it to 1 for short countdowns. Time Format / Separator are 1-based popups; Show Labels is 0/1. Use a monospaced-looking font for steady digits.",
+   "recipe": {
+    "Time Format": 1,
+    "Animate Value": [
+     [
+      0,
+      0.16667
+     ],
+     [
+      10,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Trace Path",
+   "match": "Pseudo/ADBE Trace Path",
+   "category": "",
+   "status": "hidden",
+   "summary": "The control added by AE's 'Create Nulls From Paths' panel (Trace Path button): a Progress % slider and a Loop checkbox that drive a null along a mask or shape path (position via pointOnPath, rotation auto-oriented to the path tangent). Alone, without the generated expressions and a path, it does nothing.",
+   "look": [
+    "motion along path",
+    "route animation",
+    "map path follow",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "move a pin / plane / car icon along a route on a map in an explainer",
+    "follow a drawn arrow path in a news graphic",
+    "parent a glow or text label to a null that traces a shape outline"
+   ],
+   "avoid": [
+    "adding it without a path and the generated null expression: no motion",
+    "needs a mask or shape path to trace"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Progress",
+     "does": "position along the path in % (0 = path start, 100 = path end)",
+     "typical": "keyframe 0 -> 100 over the move"
+    },
+    {
+     "name": "Loop",
+     "does": "checkbox (0/1, default 1): when on, the script's expression on Progress does loopOut('cycle') over its keyframes; without that expression it does nothing",
+     "typical": "0 for a one-off move along a route"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Trim Paths",
+    "Stroke",
+    "Drop Shadow"
+   ],
+   "scripting": "needs_input in practice: a mask or shape path. Hidden pseudo-effect added to a NEW NULL by Window > Create Nulls From Paths.jsx ('Trace Path' button; AE 2026 shows a deprecation note pointing to the native Layer > Create / Keyframe Assistant commands). The script keys Progress 0 -> 100 over 0-1 s, sets Loop on with a Progress expression that loopOut('cycle')s when Loop is on, sets null Position = pathLayer.toComp(pathToTrace.pointOnPath(progress)) and Rotation = atan2 of tangentOnPath(progress). To reproduce by script: add a null, add 'Pseudo/ADBE Trace Path', set Position expression var L = thisComp.layer('<path layer>'); L.toComp(L.mask(1).maskPath.pointOnPath(effect('Trace Path')('Progress')/100)) (toComp is required: pointOnPath returns layer space; use the shape group's Path property for shape layers). Set Loop 0 for a one-off move. Pair with Trim Paths End keyframed to the same timing to draw the route as the icon travels.",
+   "recipe": {
+    "Progress": [
+     [
+      0,
+      0
+     ],
+     [
+      3,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Transition Master Control",
+   "match": "ADBE CM TransComplete",
+   "category": "",
+   "status": "hidden",
+   "summary": "A pseudo-effect holding a single Transition Completion % slider, used as the one-knob controller for legacy multi-effect transition presets. It renders nothing by itself.",
+   "look": [
+    "no visual by itself",
+    "transition controller",
+    "single progress slider"
+   ],
+   "use_for": [
+    "one keyframable 0-100 control to drive several effects of a hand-built transition via expressions",
+    "inspecting old projects that used legacy transition presets"
+   ],
+   "avoid": [
+    "adding it alone and expecting a transition",
+    "no AE 2026 shipped preset references it; use a 'Transitions - *' preset"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "transition progress in % read by expressions (0 = start, 100 = done)",
+     "typical": "keyframe 0 -> 100 over 0.5-1 s"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Linear Wipe",
+    "Fast Box Blur"
+   ],
+   "scripting": "Hidden pseudo-effect from PresetEffects.xml; the harvest finds no AE 2026 preset using it (current presets use per-family controllers such as Slide / Stretch / Wipe / Fade / Dissolve Master Control). It is a no-op unless expressions read effect('Transition Master Control')('Transition Completion'). Useful as a single driver if a script writes such expressions; otherwise apply a 'Transitions - Movement/Dissolves/Wipes' preset.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wiggle - gelatin",
+   "match": "ADBE CM WiggleGelatin",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Behaviors/Wiggle - gelatin' preset: speed and amount sliders that the preset's Transform-effect expressions use to wiggle Skew (by Wiggle Amount) while Skew Axis also wanders randomly (+/-180 deg), so the layer wobbles like jelly in changing directions. Scale is NOT touched. Added alone (without the preset) it does nothing.",
+   "look": [
+    "jelly wobble",
+    "random-direction skew",
+    "rubbery",
+    "cartoon",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "playful jelly wobble on a sticker, emoji or logo in a reel",
+    "comic emphasis on a cut-out photo in a satire explainer",
+    "idle motion on an icon in an AI-education explainer"
+   ],
+   "avoid": [
+    "full-frame live action: the wobble looks cheap and distorts faces",
+    "large amounts make text unreadable",
+    "adding the bare effect: no motion without the preset's expressions"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wiggle Speed (wigs/sec)",
+     "does": "wobbles per second (also the speed of the skew-axis drift)",
+     "typical": "1-3"
+    },
+    {
+     "name": "Wiggle Amount",
+     "does": "max Transform Skew around 0 (Skew units, capped at 70)",
+     "typical": "10-30"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Wiggle - position"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply the preset 'Behaviors/Wiggle - gelatin.ffx' with layer.applyPreset: it adds a Transform effect whose Skew = wiggle(speed, Wiggle Amount) and Skew Axis = wiggle(speed, 180) (verified in the .ffx). Then set the sliders via the effect found by match name 'ADBE CM WiggleGelatin'. Adding only this match name is a no-op. Behavior runs continuously from the layer start; keyframe Wiggle Amount to 0 to stop it. For a fixed-direction lean use 'Wiggle - shear'; for a squash/stretch pulse use 'Wiggle - scale'.",
+   "recipe": {
+    "Wiggle Amount": [
+     [
+      0,
+      25
+     ],
+     [
+      1.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wiggle - position",
+   "match": "ADBE CM WigglePosition",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Behaviors/Wiggle - position' preset: speed and pixel-amount sliders that the preset's Transform-effect expressions use to jitter the layer's position randomly (a handheld / floating drift). Alone it does nothing.",
+   "look": [
+    "handheld jitter",
+    "floating drift",
+    "random shake",
+    "camera shake",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "subtle handheld float on a still photo in a documentary",
+    "camera-shake hit on an impact beat in a trailer (high speed, brief)",
+    "gentle drift on lower-thirds or stickers in reels"
+   ],
+   "avoid": [
+    "big amounts on full-frame footage reveal the frame edge: scale the layer up ~105-110% first",
+    "adding the bare effect: no motion without the preset"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wiggle Speed (wigs/sec)",
+     "does": "random moves per second",
+     "typical": "0.5-2 for a float, 8-15 for a shake hit"
+    },
+    {
+     "name": "Wiggle Amount (pixels)",
+     "does": "max offset in pixels",
+     "typical": "5-20 float, 30-80 shake"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform (keyframed Position) - Premiere has no built-in wiggle",
+   "pairs_with": [
+    "Transform",
+    "Motion Tile",
+    "Directional Blur"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply 'Behaviors/Wiggle - position.ffx' with layer.applyPreset (adds Transform + this control with wiggle expressions), then set sliders on the effect with match name 'ADBE CM WigglePosition'. Adding this effect alone is a no-op. Equivalent hand route: expression wiggle(freq, amp) on Position. For a shake hit, keyframe Wiggle Amount (pixels) up then down.",
+   "recipe": {
+    "Wiggle Amount (pixels)": [
+     [
+      0,
+      0
+     ],
+     [
+      0.05,
+      60
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wiggle - rotation",
+   "match": "ADBE CM WiggleRotation",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Behaviors/Wiggle - rotation' preset: speed and angle sliders that the preset's Transform expressions use to rock the layer randomly back and forth. Alone it does nothing.",
+   "look": [
+    "random rocking",
+    "tilt jitter",
+    "handheld rotation",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "slight handheld roll on a photo or screenshot in an explainer",
+    "nervous rocking of a sticker or icon for comic effect in a reel",
+    "adds rotational shake to a trailer impact together with position wiggle"
+   ],
+   "avoid": [
+    "large degrees on full-frame footage show black corners: scale up first",
+    "adding the bare effect: no motion without the preset"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wiggle Speed (wigs/sec)",
+     "does": "random moves per second",
+     "typical": "0.5-3"
+    },
+    {
+     "name": "Wiggle Amount (degrees)",
+     "does": "max rotation in degrees (angle property, no harvested limit)",
+     "typical": "1-5 subtle, 10-30 cartoon"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform (keyframed Rotation) - no wiggle in Premiere",
+   "pairs_with": [
+    "Transform",
+    "Wiggle - position"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply 'Behaviors/Wiggle - rotation.ffx' via layer.applyPreset, then set sliders on match name 'ADBE CM WiggleRotation'. 'Wiggle Amount (degrees)' is an angle control with no harvested min/max; keep it under ~45. Alone it is a no-op.",
+   "recipe": {
+    "Wiggle Amount (degrees)": [
+     [
+      0,
+      8
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wiggle - scale",
+   "match": "ADBE CM WiggleScale",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Behaviors/Wiggle - scale' preset: speed and % amount sliders (with optional separate width wiggle) that the preset's Transform expressions use to pulse the layer's size randomly. Alone it does nothing.",
+   "look": [
+    "random pulse",
+    "breathing scale",
+    "zoom jitter",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "nervous pulsing of a headline or icon in a reel",
+    "subtle breathing zoom on a still in a documentary",
+    "beat-like size jitter on a logo bumper"
+   ],
+   "avoid": [
+    "large amounts on full-frame footage look like a glitchy zoom",
+    "adding the bare effect: no motion without the preset"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wiggle Speed (wigs/sec)",
+     "does": "random pulses per second",
+     "typical": "1-4"
+    },
+    {
+     "name": "Wiggle Amount",
+     "does": "max scale change in %",
+     "typical": "3-15"
+    },
+    {
+     "name": "Wiggle Width Separately?",
+     "does": "checkbox (0/1): wiggle width independently (non-uniform squash)",
+     "typical": "0"
+    },
+    {
+     "name": "Wiggle Width",
+     "does": "max width change in % when the checkbox is on",
+     "typical": "5-15"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform (keyframed Scale) - no wiggle in Premiere",
+   "pairs_with": [
+    "Transform",
+    "Wiggle - position"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply 'Behaviors/Wiggle - scale.ffx' via layer.applyPreset, then set sliders on match name 'ADBE CM WiggleScale'. Checkbox is 0/1. Alone it is a no-op.",
+   "recipe": {
+    "Wiggle Amount": [
+     [
+      0,
+      12
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wiggle - shear",
+   "match": "ADBE CM WiggleShear",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Behaviors/Wiggle - shear' preset: speed and amount sliders that the preset's Transform-effect expressions use to skew the layer back and forth randomly along one fixed axis, a wobbly, rubbery lean. Alone it does nothing.",
+   "look": [
+    "skew wobble",
+    "rubbery lean",
+    "cartoon",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "wobbly lean on a cut-out character or sticker in a satire reel",
+    "rubbery idle motion on an icon or title in an explainer"
+   ],
+   "avoid": [
+    "full-frame live action: skew warps the frame and looks cheap",
+    "adding the bare effect: no motion without the preset"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wiggle Speed (wigs/sec)",
+     "does": "wobbles per second",
+     "typical": "1-3"
+    },
+    {
+     "name": "Wiggle Amount",
+     "does": "max Transform Skew around 0 (Skew units, capped at 70); skew axis stays fixed",
+     "typical": "10-30"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Wiggle - position"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply 'Behaviors/Wiggle - shear.ffx' via layer.applyPreset (adds a Transform effect whose Skew = wiggle(speed, Wiggle Amount); Skew Axis is not animated, verified in the .ffx), then set sliders on match name 'ADBE CM WiggleShear'. Alone it is a no-op. Do not stack with 'Wiggle - gelatin': both drive Skew on their own Transform effects.",
+   "recipe": {
+    "Wiggle Amount": [
+     [
+      0,
+      25
+     ],
+     [
+      1.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wigglerama",
+   "match": "ADBE CM Wigglerama",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel of the 'Behaviors/Wigglerama' preset: one panel that wiggles position, rotation and scale together (with a nervousness/octaves control) through the preset's Transform-effect expressions, giving an all-round random float or shake. Alone it does nothing.",
+   "look": [
+    "handheld float",
+    "random shake",
+    "nervous jitter",
+    "combined wiggle",
+    "no visual by itself"
+   ],
+   "use_for": [
+    "organic handheld float on stills / screenshots in a documentary",
+    "camera-shake hit on a trailer impact (high speed, short)",
+    "lively idle motion on stickers and lower-thirds in reels"
+   ],
+   "avoid": [
+    "full-frame footage without scaling up shows frame edges",
+    "high nervousness + big amounts looks chaotic, not cinematic",
+    "adding the bare effect: no motion without the preset"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wiggle Speed (wigs/sec)",
+     "does": "random moves per second",
+     "typical": "0.5-2 float, 8-15 shake"
+    },
+    {
+     "name": "Wiggle Nervousness",
+     "does": "detail / octaves of the wiggle (higher = jittery)",
+     "typical": "1-3"
+    },
+    {
+     "name": "Wiggle Position (pixels)",
+     "does": "max position offset in pixels",
+     "typical": "5-25"
+    },
+    {
+     "name": "Wiggle Rotation (degrees)",
+     "does": "max rotation in degrees (angle, no harvested limit)",
+     "typical": "0.5-3"
+    },
+    {
+     "name": "Wiggle Scale",
+     "does": "max scale change in %",
+     "typical": "1-5"
+    },
+    {
+     "name": "Wiggle Width Separately?",
+     "does": "checkbox (0/1): wiggle width independently",
+     "typical": "0"
+    },
+    {
+     "name": "Wiggle Width",
+     "does": "max width change in % when the checkbox is on",
+     "typical": "1-5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform (keyframed Position/Rotation/Scale) - Premiere has no built-in wiggle",
+   "pairs_with": [
+    "Transform",
+    "Motion Tile",
+    "Directional Blur"
+   ],
+   "scripting": "Hidden pseudo-effect. Apply 'Behaviors/Wigglerama.ffx' via layer.applyPreset (adds Transform + this control), then set sliders on match name 'ADBE CM Wigglerama'. Defaults (25 px, 30 deg, 15 %) are far too strong for live action: lower rotation to ~2 and scale to ~3 for a handheld float. Checkbox is 0/1. Alone it is a no-op.",
+   "recipe": {
+    "Wiggle Position (pixels)": [
+     [
+      0,
+      50
+     ],
+     [
+      0.6,
+      8
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card status is 'hidden' (pseudo-effect controller that renders nothing without its preset expressions), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

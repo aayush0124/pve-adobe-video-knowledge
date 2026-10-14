@@ -1,0 +1,1165 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Scripting surface: ExtendScript + QE DOM (what AdobeBridge uses)",
+   "summary": "Premiere's classic JavaScript API (app.project, Sequence, Track, TrackItem, ProjectItem, Component, ComponentParam, app.encoder) plus the undocumented QE DOM (app.enableQE(); qe.project...) that AdobeBridge uses to add effects and transitions. Adobe froze the ExtendScript API at 23.0: no Premiere feature added after 2022 (Object Mask, Generative Extend, media intelligence, text-based editing, Remix, Enhance Speech, Properties panel) has an ExtendScript call.",
+   "use_for": [
+    "deciding whether a planned edit step can be automated at all",
+    "adding effects/transitions by display name (QE) and setting their properties (ComponentParam)",
+    "inserting clips, MOGRTs, AE comps, captions (SRT), markers; exporting via AME"
+   ],
+   "how": "Sent over BridgeTalk (target 'premierepro') by pr_build.jsx / harvest_pr.jsx. Effects: qeItem.addVideoEffect(qe.project.getVideoEffectByName(name)) then trackItem.components[last].properties[i].setValue(v, true). Transitions: qeItem.addTransition(qe.project.getVideoTransitionByName(name), addToStart, 'durTC', 'offsetTC', 0.5, singleSided, alignToVideo) (signature as used in pve/harvest_pr.jsx).",
+   "scriptable": "partial",
+   "script_api": "app.enableQE(); qe.project.getVideoEffectByName/getVideoTransitionByName/getAudioEffectByName; Sequence.*, TrackItem.*, ProjectItem.*, ComponentParam.setValue/addKey/setValueAtKey/setInterpolationTypeAtKey, app.encoder.*",
+   "limits": "API frozen at 23.0: the official guide says no further ExtendScript changes are planned until Premiere moves to UXP. QE is unsupported and can change between builds. No setter for clip speed, no mask paths, no adjustment-layer/multicam/nest creation, no transcription. Adobe's Sept 2026 extensibility post says 'ExtendScripts are not affected' by the CEP retirement (Premiere: no new CEP Marketplace submissions from Dec 2027, CEP disabled by default Dec 2028, CEP removed from the apps Dec 2029).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Scripting surface: UXP Premiere API",
+   "summary": "The modern plugin API (Premiere DOM classes: Project, Sequence, SequenceEditor, VideoClipTrackItem, ComponentParam, VideoFilterFactory, TransitionFactory, Transcript, EncoderManager, Markers, SequenceUtils, ObjectMaskUtils...). Most classes exist since 25.6; a few were added in 26.2/26.3/26.5. Edits are built as Actions and committed with project.executeTransaction / lockedAccess. It is the only scripted route to transcription (Transcript.transcribeClipProjectItem).",
+   "use_for": [
+    "transcribing clips from a script",
+    "importing a transcript JSON",
+    "future-proof replacement for ExtendScript"
+   ],
+   "how": "Needs a UXP plugin (manifest + UXP Developer Tool) running inside Premiere; it is not reachable through BridgeTalk/ExtendScript. AdobeBridge currently has no UXP plugin.",
+   "scriptable": "partial",
+   "script_api": "require('premierepro'): Project.getActiveProject(), Transcript.transcribeClipProjectItem(item, {language}), SequenceUtils.performSceneEditDetectionOnSelection(op, selection), TransitionFactory.createVideoTransition(matchName), VideoFilterFactory.createComponent(matchName), SequenceEditor.insertMogrtFromPath(path, tickTime, vIdx, aIdx), EncoderManager.getManager().exportSequence(seq, Constants.ExportType.IMMEDIATELY|QUEUE_TO_AME, out, preset, exportFull)",
+   "limits": "Methods marked 'Since 26.3' or 'Since 26.5' (ObjectMaskUtils.hasObjectMask, Transcript.hasTranscript/querySupportedLanguages, EncoderManager.launchEncoder/startBatchEncode/setSidecarXMPEnabled, ClipProjectItem.createSubClipAction, Project.createSequenceWithPresetPath (26.3); WorkAreaUtils, C2PAService (26.5)) are NOT in 26.0.2. Most calls are async (return Promises). No API for clip speed setters, Auto Reframe, mask drawing, Generative Extend, Remix, Enhance Speech. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026).",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/transcript.md",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/encodermanager.md",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/sequenceutils.md",
+    "https://hyperbrew.co/blog/uxp-plugins-in-premiere-2026/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Morph Cut",
+   "summary": "A video transition that hides a jump cut inside one talking-head shot by face-tracking and optical-flow morphing between the two frames, so a removed 'umm' or sentence looks like continuous speech.",
+   "use_for": [
+    "interview/talking-head jump cuts in documentaries and explainers",
+    "tightening a politician's soundbite without a cutaway"
+   ],
+   "how": "Effects panel > Video Transitions > Dissolve > Morph Cut; drop it on the edit point between two pieces of the same shot. Analysis starts immediately ('Analyzing in background' banner in the Program Monitor). Default length = the Video Transition Default Duration (30 frames); helpx says about 10-20 frames usually works best. Cut where words end (use the waveform) to avoid lip-sync errors.",
+   "scriptable": "yes",
+   "script_api": "QE: qeItem.addTransition(qe.project.getVideoTransitionByName('Morph Cut'), true, '00;00;00;12', '00;00;00;00', 0.5, false, true) (placement verified by the PVE harvest on 26.0.2). Before exporting, poll Sequence.isDoneAnalyzingForVideoEffects() until true. UXP: TransitionFactory.createVideoTransition(<matchName>) + VideoClipTrackItem.createAddVideoTransitionAction (match name unverified).",
+   "limits": "Needs a single static talking head, fixed camera, static background, consistent lighting. Fails/ghosts on moving cameras, hands crossing the face, different shots, or large head movement. Every change to a Morph Cut (even undo) re-triggers analysis; exporting before analysis finishes renders an unfinished result (measured 2026-10-14: an export 150 s after the build still carried the 'Analyzing in background' banner, one at 159 s was clean; on a synthetic face jump the finished Morph Cut left no frame-change spike, 0.24 against 0.75 for a hard cut).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/apply-video-transitions/apply-morph-cut-to-smoothen-jump-cuts.html",
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/apply-video-transitions/morph-cut-overview.html",
+    "https://blog.adobe.com/en/publish/2015/06/18/morph-cut-tips-tricks-for-best-results",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Auto Reframe (sequence command and effect)",
+   "summary": "AI subject tracking that pans/scales footage to keep the action in frame when changing aspect ratio (16:9 -> 9:16, 1:1, 4:5). Works as a whole-sequence command that builds a new sequence, or as the 'Auto Reframe' effect on a single clip.",
+   "use_for": [
+    "turning a 16:9 news package or explainer into a 9:16 reel",
+    "square/4:5 social cut-downs of a trailer"
+   ],
+   "how": "Sequence > Auto Reframe Sequence: pick Target Aspect Ratio (presets or custom), optional custom Resolution, Motion Tracking (Slower Motion / Default / Faster Motion) and whether to nest clips (keeps original cuts, keyframes and speed changes; graphics and audio untouched). The duplicate sequence lands in an 'Auto Reframe Sequences' bin. Per clip: Effects > Video Effects > Transform > Auto Reframe; then Motion Tracking, Overwrite generated path, Adjust Position, Reframe Offset, Reframe Scale, Reframe Rotation in Effect Controls.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript (since 14.0): newSeq = seq.autoReframeSequence(9, 16, 'default', 'MyReel_9x16', false)  // motionPreset 'slower'|'default'|'faster'; last arg = useNestedSequences; returns the new Sequence. Effect: {\"name\": \"Auto Reframe\", \"pr_props\": {\"Motion Tracking\": 1}} (harvested range 0-2, default 1; helpx lists Slower/Default/Faster in that order, so 0=Slower, 2=Faster is likely but not read back). No UXP equivalent.",
+   "limits": "Analysis takes time on long sequences; text/graphics are not reframed (rebuild lower-thirds for vertical). Two people far apart in frame get cut. Nesting loses soft transitions (no handle media inside the nests). The effect only does something when the clip aspect differs from the sequence aspect. Check every shot by eye.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/nz/premiere-pro/using/auto-reframe.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/commonly-used-effects/add-auto-reframe-effect-to-a-sequence.html",
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/commonly-used-effects/add-auto-reframe-effect-to-a-clip.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Scene Edit Detection",
+   "summary": "Finds the original cuts inside a flattened video file (a downloaded news clip, a finished trailer, an old programme) and re-creates them as edit points, subclips or markers.",
+   "use_for": [
+    "chopping a downloaded news bulletin or archive programme into shots",
+    "re-editing a flattened trailer/reference reel",
+    "logging B-roll"
+   ],
+   "how": "Select the clip in the timeline, right-click > Scene Edit Detection (or Clip menu). Choose: Apply a cut at each detected cut point, Create bin of subclips from each detected cut point, and/or Create clip marker at each detected cut point; click Analyze.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: select the item (trackItem.setSelected(1, 1)) then seq.performSceneEditDetectionOnSelection('ApplyCuts'|'CreateMarkers', applyCutsToLinkedAudio(bool), 'LowSensitivity'|'MediumSensitivity'|'HighSensitivity') -> boolean (no subclip option). UXP (25.6+): await SequenceUtils.performSceneEditDetectionOnSelection(Constants.SequenceOperation.APPLYCUT|CREATEMARKER|CREATESUBCLIP, trackItemSelection) -> Promise<boolean>.",
+   "limits": "Misses dissolves/fades and very fast flashes; can false-trigger on camera flashes and whip pans (common in news footage). Verify cuts on a contact sheet; alternative 0-cr route is ffmpeg/PySceneDetect before import.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/change-clip-sequence/detect-edit-points-using-scene-edit-detection.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/sequenceutils.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Speech to Text (transcription)",
+   "summary": "On-device transcription of clips/sequences into a word-timed transcript in the Text panel; the base for captions, text-based editing, Paper Edit, censored-word bleeping and media-intelligence dialogue search.",
+   "use_for": [
+    "transcribing interviews/speeches for documentaries",
+    "finding a quote in a long press conference",
+    "feeding captions"
+   ],
+   "how": "Window > Text > Transcript tab > Transcribe (or enable auto-transcribe on import in Preferences > Media Analysis & Transcription). Pick the language (or enable auto-detect); download the language pack on first use. Speaker labels can be edited.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: none. UXP (25.6+): await Transcript.transcribeClipProjectItem(clipProjectItem, {language: 'en-US'}) (language code must be one returned by Transcript.querySupportedLanguages(), which is 26.3+; an unsupported code throws; omitted = the transcription-preference default); await Transcript.exportToJSON(clipProjectItem); Transcript.isLanguagePackAvailable(code); import an external transcript with Transcript.importFromJSON(json) + Transcript.createImportTextSegmentsAction(segments, clipProjectItem).",
+   "limits": "18 languages on the helpx list (incl. Hindi, English, English UK); code-mixed Hinglish and Indian proper names transcribe poorly, so set the language explicitly. If the 'auto-detect language' preference is on, it overrides the language passed from UXP (UXP docs). The exact Hindi code accepted on 26.0.2 is unverified (querySupportedLanguages is not available there). The 0-cr local alternative already used elsewhere is faster-whisper.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/languages-supported-by-speech-to-text.html",
+    "https://helpx.adobe.com/premiere/desktop/get-started/preferences-and-settings/transcription-preferences.html",
+    "https://www.adobe.com/products/premiere/speech-to-text.html",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/transcript.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Captions (caption tracks, styles, export)",
+   "summary": "Caption tracks built from a transcript or imported SRT/SCC/etc., styled as text and exported either as a sidecar file or burned into the picture.",
+   "use_for": [
+    "Hindi/English subtitles on news reels and explainers",
+    "accessibility captions for YouTube documentaries",
+    "burned-in social captions"
+   ],
+   "how": "Text panel > Captions tab > Create captions (from transcript): choose format (Subtitle), max characters per line, min duration, gap, single/double lines. Style a caption in the Properties panel and save it as a Track Style. Export: Export mode > Captions section > Create Sidecar File (.srt etc.) or Burn Captions Into Video; or Captions panel menu > Export to SRT file.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: import the .srt (app.project.importFiles([srt])) then seq.createCaptionTrack(srtProjectItem, 0, Sequence.CAPTION_FORMAT_SUBTITLE). Caption styling is not scriptable (unverified); burn-in can be baked into an .epr export preset saved from the Export mode (unverified). UXP: CaptionTrack is read/mute only.",
+   "limits": "Generating captions from a transcript is UI-only. Styled 'social' captions (per-word pop, colour highlight) need a MOGRT or AE comp; see 'Single-word captions' for the 26.3 native option. Keep captions off faces (house rule).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/about-captions.html",
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/create-styles-for-captions.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Translate Captions",
+   "summary": "AI translation of an existing caption track (generated or imported, e.g. SRT) into other languages; each language lands on its own caption track. Released in Premiere Pro 25.2 (April 2025).",
+   "use_for": [
+    "English versions of Hindi political explainers",
+    "multi-language subtitle deliverables"
+   ],
+   "how": "Text panel > Captions tab > Translate captions icon (also in the Captions tab More menu and the caption context menu); choose the target language > Translate. Progress shows in the Progress panel; a new caption track is created; toggle tracks with the eye icon (Alt-click isolates one).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "27 target languages (Adobe blog, April 2025). Runs in the cloud using third-party models (Google Translate and Microsoft Translator), so needs internet; included in the membership as an assistive AI feature (no generative credits per the Gen Extend FAQ). Political terms, names and idioms need human review before publishing.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere-pro/using/translate-captions-faq.html",
+    "https://community.adobe.com/announcements-732/now-in-beta-translate-captions-for-premiere-pro-311740",
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/translate-captions.html",
+    "https://blog.adobe.com/en/publish/2025/04/02/introducing-new-ai-powered-features-workflow-enhancements-premiere-pro-after-effects"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Single-word captions",
+   "summary": "Native caption mode that shows one word at a time (social-reel style) with customizable styling and export.",
+   "use_for": [
+    "fast-paced reel captions",
+    "lyric-style emphasis on a punchline"
+   ],
+   "how": "Window > Workspaces > Captions and Graphics; transcribe the sequence; Text panel > Captions tab > Create captions from transcript > expand Captioning Preferences > Layout: Single Word > Create captions. Style like any caption (Properties panel).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Requires Premiere 26.3 or later. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026).",
+   "status": "current",
+   "sources": [
+    "https://www.kylerholland.com/blog/premiere-pro-june-2026-whats-new",
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-3-june-2026-1628369",
+    "https://larryjordan.com/articles/new-features-in-adobe-premiere-26-3/",
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/create-single-word-captions.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Text-based editing (pauses and filler words)",
+   "summary": "Edit the timeline by editing the transcript: select text to insert/overwrite into a sequence, or delete words, pauses and filler words ('um', 'uh') with an automatic ripple.",
+   "use_for": [
+    "rough-cutting long interviews",
+    "removing dead air from a voice-over or podcast-style explainer"
+   ],
+   "how": "Text panel > Transcript: select text and Insert/Overwrite into the sequence, or select and delete (Extract = ripple, Lift = leave gap). Filter icon > Text, Filler words, Pauses or Speakers; Delete removes one instance, Delete all removes every match.",
+   "scriptable": "no",
+   "script_api": "none (UXP can only read/write transcripts, not perform transcript edits)",
+   "limits": "Ripple deletes shift everything after, including music and graphics on other tracks unless they are locked. Cuts land on word boundaries and can clip breaths; add Morph Cut or cutaways over the jump cuts.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-video-using-text-based-editing/detect-and-delete-pauses-in-transcripts.html",
+    "https://community.adobe.com/t5/premiere-pro-beta-discussions/now-in-beta-filler-words-and-other-text-based-editing-updates-in-premiere-pro/m-p/14084589"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Paper Edit",
+   "summary": "Builds a new sequence from transcript selections: highlight the lines to keep across one or more interviews, preview, and create a sequence with the matching video/audio in edit order.",
+   "use_for": [
+    "assembling a documentary or explainer from interview selects",
+    "podcast-to-video cut-downs"
+   ],
+   "how": "Text panel > Paper Edit icon; select sentences or parts of sentences (several selections from different parts of the transcript); the panel shows the selection and total duration; Preview, then Create new sequence (Clear resets).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Requires Premiere 26.5 or later. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026).",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-5-september-2026-1641187",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-video-using-text-based-editing/create-a-sequence-with-paper-edit.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Bleep or mute censored words",
+   "summary": "Transcript-driven bulk censoring: keep a censored-words list, then mute every occurrence or cut in a bleep (or other sound) on a new track.",
+   "use_for": [
+    "censoring abuse/profanity in political speech clips and street interviews",
+    "platform-safe versions of a reel"
+   ],
+   "how": "Transcribe the sequence. Text panel > More options > Censored word list: add words (or Import/Export a word list). Filter dropdown > Censored words to show the flagged words; Apply dropdown > choose a censorship tone (bleep or mute) and apply it to one or all instances.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Only as good as the transcript: misheard or code-mixed words are missed; check the full list by ear. Released in 26.0 (bulk bleep or mute). How Premiere builds the mute/bleep on the timeline is not documented on helpx; inspect the result before export.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/advanced-audio-techniques/clean-audio-with-bulk-mute-or-bleep.html",
+    "https://community.adobe.com/announcements-732/now-in-premiere-pro-beta-bleep-censored-words-311911"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Remix (music retiming)",
+   "summary": "AI retiming of a music track to a target duration by cutting or looping musical sections at beat-matched points with automatic crossfades.",
+   "use_for": [
+    "fitting a music bed exactly to a 30/60/90 s reel or a trailer",
+    "ending music on the last frame without a fade"
+   ],
+   "how": "Remix tool (in the Ripple Edit tool group): drag the end of a music clip to the length you want. Or select the clip > Essential Sound > Music > Duration > Remix, set Target Duration; Segments (fewer = fewer edits; more for complex songs) and Variations (melodic vs harmonic focus). The clip shows zig-zag marks at the remix edits.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Not frame-exact: helpx says it typically lands within one second of the target; trim or fade the last second. Keeps the start and end, edits the middle. Ignores lyrics, so vocal tracks can cut mid-line. To pin a hit point, split the clip there and remix each part.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/remix-in-premiere.html",
+    "https://larryjordan.com/articles/the-new-remix-tool-in-adobe-premiere-pro-beta/",
+    "https://filmit.io/blog/remix-tool-music/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Enhance Speech",
+   "summary": "AI dialogue cleanup that removes background noise/room and makes speech sound studio-recorded, with a Mix Amount to blend back the original.",
+   "use_for": [
+    "cleaning field/phone recordings of speeches and interviews",
+    "noisy rally or street audio"
+   ],
+   "how": "Select the dialogue clip > Essential Sound panel > Enhance (also in the Properties panel audio section); analysis runs in the background; then adjust Mix Amount (lower keeps more natural ambience).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Dialogue clips only. Very high mix values sound processed/robotic and can drop words; music under the voice gets removed. Included as an assistive AI feature (no generative credits). Compare against the 0-cr local route (DeNoise / Adaptive Noise Reduction / DeReverb audio effects, which ARE scriptable via QE).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/enhance-speech.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/audio-editing-with-essential-sound-panel.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Essential Sound panel and audio auto-tagging",
+   "summary": "Task-based audio panel: each clip is typed Dialogue, Music, SFX or Ambience (AI auto-tagging adds clickable badges), and each type exposes simple controls (Loudness, Repair, Clarity, Enhance Speech, Ducking, Remix, Reverb, Pan).",
+   "use_for": [
+    "fast clean mixes for news reels",
+    "consistent dialogue level across many interview clips"
+   ],
+   "how": "Window > Essential Sound (audio controls also appear in the Properties panel). Select clips, pick a type, then apply presets or individual sections.",
+   "scriptable": "no",
+   "script_api": "none for the panel. Scriptable alternative: add the underlying audio effects by name via QE (qeAudioItem.addAudioEffect(qe.project.getAudioEffectByName('DeNoise'|'Dynamics'|'Parametric Equalizer'|...))) and set params.",
+   "limits": "Panel settings are stored as effects on the clip; panel type cannot be set from a script (unverified). Auto-tagging can re-apply presets when it runs.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/audio-editing-with-essential-sound-panel.html",
+    "https://helpx.adobe.com/premiere-pro/using/audio-auto-tagging.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Auto-ducking (music under dialogue)",
+   "summary": "Essential Sound writes volume keyframes on Music (or other) clips so they dip whenever dialogue/SFX/etc. is present.",
+   "use_for": [
+    "music beds under voice-over in explainers",
+    "news reels with VO over music"
+   ],
+   "how": "Tag music clips Music > Ducking: tick it, choose 'Duck against' types (Dialogue, Music, SFX, Ambience, Unassigned), set Sensitivity, Reduce By (dB) and Fades, then Generate Keyframes. Regenerate after changing the edit.",
+   "scriptable": "no",
+   "script_api": "none. Scriptable equivalent: compute VO regions and write keyframes on the music clip's Volume > Level param (ComponentParam.setTimeVarying(true), addKey/setValueAtKey). Note: Level is linear with 0 dB = 10^(-15/20) (AdobeBridge README).",
+   "limits": "Keyframes are static: re-run after any edit. Tends to pump on short gaps; raise Fades or lower Sensitivity. See also: 'Scripted ducking from VO ranges'; 'Music ducks under VO (scripted, from VO ranges)'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/ph_fil/premiere-pro/how-to/automatic-audio-ducking.html",
+    "https://blog.frame.io/2024/08/07/insider-tips-premiere-pro-essential-sound-automation/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Loudness: Auto-Match, Loudness Radar/Meter and export normalization",
+   "summary": "Three ways to hit a loudness target: Essential Sound Loudness > Auto-Match per clip type, Loudness Radar / Loudness Meter audio effects for measuring, and Loudness Normalization in the export settings for the final file.",
+   "use_for": [
+    "hitting platform loudness (e.g. about -14 LUFS for YouTube/Instagram) consistently",
+    "broadcast deliverables (EBU R128 / ATSC A/85)"
+   ],
+   "how": "Essential Sound > (type) > Loudness > Auto-Match. Measurement: add 'Loudness Radar' or 'Loudness Meter' (both in the harvested audio-effect list) to a track or the Mix. Final: Export mode > Effects > Loudness Normalization: choose standard (ITU BS.1770 / EBU R128 / ATSC A/85), target loudness and true-peak limit; save as an .epr preset.",
+   "scriptable": "partial",
+   "script_api": "Bake Loudness Normalization into an .epr and export with seq.exportAsMediaDirect(out, epr, 0) or app.encoder.encodeSequence(seq, out, epr, 0, true). Auto-Match itself: none.",
+   "limits": "Auto-Match target values per type are not documented in the sources found (unverified). Export normalization changes the whole mix, not per clip; check true peak after encoding with an external meter (ffmpeg ebur128).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/audio-editing-with-essential-sound-panel.html",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/export-options-in-premiere.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Transition handles, fade handles and Multi Transitions",
+   "summary": "On-clip handles in the timeline: audio clips get interactive fade handles, and since 26.0 video clips get transition handles that apply the default video transition (Cross Dissolve unless changed) and set its length by dragging. Multi Transitions applies or adjusts transitions across many selected clips/edits at once.",
+   "use_for": [
+    "quick fades on many reel clips",
+    "consistent dissolves across a montage",
+    "live waveform update while trimming"
+   ],
+   "how": "Drag the handle at a video clip's start or end: the default video transition is applied and its duration follows the drag; works on several selected clips on different tracks. Select edit points and Ctrl+D (video) / Ctrl+Shift+D (audio) applies the default transition.",
+   "scriptable": "partial",
+   "script_api": "Transitions are scriptable one by one via QE qeItem.addTransition(...) (see Morph Cut card) or UXP createAddVideoTransitionAction; the handles themselves are UI only. Audio crossfades: QE audio transitions 'Constant Power' / 'Constant Gain' / 'Exponential Fade'.",
+   "limits": "A transition needs media handles beyond the cut; without them Premiere shortens or one-sides it (AdobeBridge reads back placement).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/apply-video-transitions/video-transitions-using-clip-handles.html",
+    "https://community.adobe.com/announcements-732/now-released-multi-transitions-in-premiere-pro-fast-flexible-audio-and-video-transitions-at-scale-311887"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Auto Color (Lumetri)",
+   "summary": "One-click AI correction of exposure, white balance and contrast, written into the Lumetri Basic Correction sliders with an Intensity control.",
+   "use_for": [
+    "first-pass balancing of mixed news/stock/phone footage",
+    "normalising LOG clips before a look"
+   ],
+   "how": "Window > Lumetri Color > Basic Correction > Auto (with playhead on the clip); tune with Intensity and the individual sliders.",
+   "scriptable": "no",
+   "script_api": "none for the Auto analysis. Scriptable alternative: add 'Lumetri Color' via QE and set its harvested properties (Exposure, Contrast, Temperature, etc.; repeated names use 'Name#2').",
+   "limits": "Analyses the frame under the playhead; a shot that changes lighting needs a manual check. Not a creative grade.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/use-auto-color.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Color Match (Comparison View)",
+   "summary": "Matches the current shot to a reference frame by writing Lumetri colour-wheel and saturation values, optionally weighting skin tones (Face Detection).",
+   "use_for": [
+    "matching two cameras in an interview",
+    "matching stock B-roll to the main grade"
+   ],
+   "how": "Lumetri Color > Color Wheels & Match > Comparison View; pick the reference frame in the Program Monitor split; Face Detection on/off; Apply Match.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Works on one frame pair; strong colour casts or very different lighting give odd results. Face Detection slows the match.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/ca/premiere/desktop/correct-color/add-color-effects/match-color-between-shots.html",
+    "https://helpx.adobe.com/mena_en/premiere-pro/using/color-match-comparison-view.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Lumetri Scopes",
+   "summary": "Waveform (RGB/Luma/YC), RGB Parade, Vectorscope (YUV, HLS) and Histogram for judging exposure, skin tone and legal levels.",
+   "use_for": [
+    "checking skin tones of leaders against the skin-tone line",
+    "keeping graphics and footage broadcast-legal"
+   ],
+   "how": "Window > Lumetri Scopes; right-click in the panel to choose scopes and the colour space/scale (Rec.709, Rec.2020, HDR).",
+   "scriptable": "no",
+   "script_api": "none. Automated QC substitute: ffmpeg signalstats / waveform / vectorscope filters on the rendered file.",
+   "limits": "Display only; nothing is exported.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/display-lumetri-scopes.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Color management (log/raw auto-detect, tone mapping)",
+   "summary": "Since 25.0 Premiere colour-manages media: it can auto-detect log and raw footage, convert it to the sequence working space, and tone-map HDR/wide-gamut sources to SDR Rec.709 with gamut compression.",
+   "use_for": [
+    "mixing phone HDR/HLG clips with Rec.709 news footage",
+    "dropping log footage into a Rec.709 timeline without LUTs"
+   ],
+   "how": "Project settings / Lumetri Settings: 'Color Manage Auto Detected Log and Raw Media', 'Auto Tone Map Media'; Sequence Settings: working/output colour space (Rec.709 for social); per clip: Modify > Interpret Footage (Color Space Override, Input LUT).",
+   "scriptable": "partial",
+   "script_api": "ExtendScript (read only for colour): projectItem.getColorSpace(), getOriginalColorSpace(), getEmbeddedLUTID(), getInputLUTID(); the footage-interpretation object has NO colour-space field (only alpha, field type, frame rate, PAR, pulldown, VR), so setFootageInterpretation cannot override colour space; seq.getSettings().autoToneMapEnabled + seq.setSettings(s) toggles sequence auto tone mapping. UXP: ClipProjectItem.createSetInputLUTIDAction(id) / FootageInterpretation.setInputLUTID; Project.getColorSettings() only exposes graphics white luminance.",
+   "limits": "Auto-detect can misread some files (community reports of overexposed Source Monitor); verify phone HDR clips by eye.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/about-color-management.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/tone-mapping-in-premiere.html",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/clipprojectitem.md"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Adjustment layers",
+   "summary": "A transparent clip whose effects apply to every track below it for its duration; one place to grade, blur, shake or add grain to a whole section.",
+   "use_for": [
+    "one grade over a whole documentary act",
+    "glitch/shake/flash over several cuts in a trailer",
+    "film grain over a reel",
+    "One grade or film-damage look over a whole section",
+    "Global vignette, grain or glow over a reel"
+   ],
+   "how": "File > New > Adjustment Layer (or Project panel > New Item); drag onto a track above the clips; add effects; use Opacity and blend mode to dial it. Scripted workarounds: (1) keep a template .prproj with an Adjustment Layer item in a bin; start the build by copying it and app.openDocument(copy) instead of app.newProject, then overwriteClip that item onto the top track and add effects via QE; (2) put the effect on every clip; (3) nest the section and put the effect on the nest. Check for one with trackItem.isAdjustmentLayer().",
+   "scriptable": "partial",
+   "script_api": "No create API in ExtendScript or UXP (TrackItem.isAdjustmentLayer() only reads). Workaround (unverified): keep a template .prproj containing an adjustment layer, import it with app.project.importFiles([template]), then track.overwriteClip(adjItem, seconds) and add effects via QE. Placing a sequence that contains an adjustment layer does NOT work (it nests; nested adjustment layers do not affect tracks below).",
+   "limits": "Effects on it see the composited image of all tracks below, including graphics; put titles above it if they must stay clean. Template route (1) is unverified in AdobeBridge; it changes the project lifecycle and the dialog watchdog must cover openDocument. A QE creator for adjustment layers is unknown (reflect qe.project.reflect.methods to check before assuming). A transparent PNG with effects is NOT an adjustment layer: its effects only touch its own pixels.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/apply-video-effects/create-adjustment-layers.html",
+    "https://community.adobe.com/t5/premiere-pro-discussions/creating-adjustment-layers-with-cep-extendscript/m-p/15210016",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videocliptrackitem/",
+    "https://ppro-scripting.docsforadobe.dev/application/application/"
+   ],
+   "confidence": "medium",
+   "merged": "2026-10-13: the duplicate card in tools_pr_scripting.json was merged here; use_for / avoid (and look, pairs_with, sources) are the union, and that card is kept whole in merged_from",
+   "merged_from": [
+    {
+     "kind": "tool",
+     "topic": "pr_scripting",
+     "app": "PR",
+     "name": "Adjustment layers",
+     "summary": "A script cannot CREATE an adjustment layer item in ExtendScript or UXP (no such call in the docs); it can only detect one (isAdjustmentLayer). An existing adjustment-layer project item can be placed and given effects like any clip.",
+     "use_for": [
+      "One grade or film-damage look over a whole section",
+      "Global vignette, grain or glow over a reel"
+     ],
+     "how": "Workarounds: (1) keep a template .prproj with an Adjustment Layer item in a bin; start the build by copying it and app.openDocument(copy) instead of app.newProject, then overwriteClip that item onto the top track and add effects via QE; (2) put the effect on every clip; (3) nest the section and put the effect on the nest. Check for one with trackItem.isAdjustmentLayer().",
+     "scriptable": "partial",
+     "script_api": "TrackItem.isAdjustmentLayer() (read); UXP VideoClipTrackItem.isAdjustmentLayer() (read); placing an existing item: Track.overwriteClip(adjustmentItem, time)",
+     "limits": "Template route (1) is unverified in AdobeBridge; it changes the project lifecycle and the dialog watchdog must cover openDocument. A QE creator for adjustment layers is unknown (reflect qe.project.reflect.methods to check before assuming). A transparent PNG with effects is NOT an adjustment layer: its effects only touch its own pixels.",
+     "status": "current",
+     "sources": [
+      "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+      "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videocliptrackitem/",
+      "https://ppro-scripting.docsforadobe.dev/application/application/"
+     ],
+     "confidence": "low",
+     "file": "tools_pr_scripting.json"
+    }
+   ]
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Nesting (nested sequences)",
+   "summary": "Wraps selected timeline clips into a sequence that sits as one clip, so effects, speed or transforms can be applied to the group.",
+   "use_for": [
+    "moving/scaling a stacked picture-in-picture as one",
+    "one transition or speed change over a multi-layer section"
+   ],
+   "how": "Select clips > right-click > Nest; double-click the nest to edit inside. The timeline toggle 'Insert and overwrite sequences as nests or individual clips' controls how dropped sequences land.",
+   "scriptable": "partial",
+   "script_api": "No 'nest' call. Workaround: set seq in/out around the range, sub = seq.createSubsequence(true) (new sequence, not inserted back), then remove the originals (trackItem.remove(0, 0)) and track.overwriteClip(sub.projectItem, startSeconds) (sequence ProjectItem via sub.projectItem; unverified).",
+   "limits": "Nests render as one layer: effects inside are rendered first; Auto Reframe on nests uses nest content. Audio inside a nest mixes to the nest's channels.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://vakago-tools.com/how-to-nest-a-sequence-using-extendscript-in-premiere-pro/",
+    "https://filmora.wondershare.com/adobe-premiere/premiere-pro-nesting.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Multi-camera editing",
+   "summary": "Syncs several angles into a multicam source sequence and lets the editor cut between angles live during playback.",
+   "use_for": [
+    "2-3 camera interviews and debates",
+    "event/rally coverage with several phones/cameras"
+   ],
+   "how": "Select clips in the Project panel > right-click > Create Multi-Camera Source Sequence; sync by In points, Out points, Timecode, Clip Marker or Audio; audio from Camera 1, all cameras or switching. Put it in a sequence, Program Monitor > Multi-Camera view (Shift+0), press 1-9 while playing; right-click > Multi-Camera > Flatten when locked.",
+   "scriptable": "no",
+   "script_api": "none for creating or switching (ProjectItem.isMulticamClip() only reads). Scriptable substitute: sync externally (audio cross-correlation) and place angles on separate tracks with overwriteClip, then cut by trimming.",
+   "limits": "Audio sync needs usable scratch audio on every angle; very long or drifting recordings can mis-sync. See also: 'Multi-camera source sequence: syncing the angles'; 'Synchronize clips in the timeline (Clip > Synchronize)'; 'Scripted sync fallback: offset by audio cross-correlation'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/set-up-multi-camera-sequences-for-editing/create-a-multi-camera-source-sequence.html",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Proxies and ingest",
+   "summary": "Low-resolution stand-ins attached to full-res media for smooth editing; one button switches back to full quality for export.",
+   "use_for": [
+    "editing 4K/6K or long-GOP H.265 on the 8 GB laptop",
+    "remote edits over a shared drive"
+   ],
+   "how": "Project panel: select clips > right-click > Proxy > Create Proxies (format, preset, destination; encoded in Media Encoder) or Attach Proxies for existing files. Program Monitor button editor (+) > Toggle Proxies. Ingest settings (Project Settings > Ingest) can copy/transcode/create proxies on import.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: projectItem.canProxy(), projectItem.attachProxy(proxyPath, 0)  // 0 = proxy, 1 = hi-res; projectItem.hasProxy(), getProxyPath(); app.getEnableProxies()/app.setEnableProxies(1); create the proxy file with app.encoder.encodeProjectItem(item, out, proxyPreset.epr, 0, true) + app.encoder.startBatch(); project.setEnableTranscodeOnIngest(bool). UXP: ClipProjectItem.attachProxy/canProxy/hasProxy, IngestSettings.setIngestEnabled.",
+   "limits": "Proxy must match the original's duration/frame rate and audio channel count or attach fails. Exports use full-res automatically.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/organize-media/ingest-proxy-workflow/create-proxies.html",
+    "https://helpx.adobe.com/premiere/desktop/organize-media/ingest-proxy-workflow/attach-proxies-to-full-resolution-media.html",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://ppro-scripting.docsforadobe.dev/general/encoder/",
+    "https://blog.frame.io/2024/07/29/updated-guide-premiere-pro-proxies-and-proxy-workflows/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Speed/Duration, Rate Stretch and Optical Flow",
+   "summary": "Constant speed change of a clip (slow motion, fast motion, reverse) with a choice of frame interpolation.",
+   "use_for": [
+    "slow-motion of a rally crowd or a leader's walk",
+    "speeding B-roll to fit VO",
+    "reverse shots in trailers"
+   ],
+   "how": "Clip > Speed/Duration (Ctrl+R): Speed %, Duration, Reverse Speed, Maintain Audio Pitch, Ripple Edit Shifting Trailing Clips, Time Interpolation (Frame Sampling / Frame Blending / Optical Flow). Rate Stretch tool (R): drag a clip edge to fit a gap.",
+   "scriptable": "no",
+   "script_api": "No supported setter: ExtendScript and UXP only read (TrackItem.getSpeed(), isSpeedReversed()). QE setSpeed exists in reflection but is unsupported and failed in a 26.3 report ('Not Enough Parameters'). Workarounds: pre-render the speed change with ffmpeg (setpts/minterpolate) and import, or use the 'Timewarp' effect (harvested: Speed -5000..5000, Method, Adjust Time By).",
+   "limits": "Optical Flow artefacts on crossing limbs/flags and edges; heavy slow-mo needs high-fps source. Reverse speed drops audio sync meaning.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/change-clip-speed/change-clip-speed-using-the-speedduration-option.html",
+    "https://helpx.adobe.com/sa_en/premiere/desktop/edit-projects/change-clip-speed/change-clip-speed-and-duration-using-the-rate-stretch-tool.html",
+    "https://community.adobe.com/questions-729/change-speed-of-clip-with-scripting-1352921",
+    "https://github.com/leancoderkavy/premiere-pro-mcp/issues/189"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Time Remapping (speed ramps)",
+   "summary": "Variable speed inside one clip using speed keyframes on the clip's rubber band, with smooth Bezier ramps between speeds.",
+   "use_for": [
+    "trailer speed ramps (fast-slow-fast) on action beats",
+    "beat-synced ramps on reels"
+   ],
+   "how": "Clip fx badge or right-click > Show Clip Keyframes > Time Remapping > Speed; Ctrl/Cmd-click the rubber band to add keyframes; drag a segment up/down to change its speed; Alt/Option-drag a keyframe to split it into a ramp and bend the handles. Interpolation follows the clip's Time Interpolation setting.",
+   "scriptable": "no",
+   "script_api": "unverified: no documented call sets Time Remapping. Workaround: render ramps in AE (Time Remap with keyframes via AdobeBridge AE side) or ffmpeg, then place the rendered clip.",
+   "limits": "Ramps change clip length and push later clips only if ripple is used; audio is not remapped (unlinked/disabled).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/change-clip-speed/change-clip-speed-and-duration-using-time-remapping.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Frame Hold / freeze frame",
+   "summary": "Freezes a frame: from the playhead to the clip end (Add Frame Hold), as an inserted still segment (Insert Frame Hold Segment), or for a part of a clip via a 0% Time Remapping segment.",
+   "use_for": [
+    "freeze on a leader's expression with a caption/stamp",
+    "'record scratch' beats in satire reels",
+    "documentary photo-style holds"
+   ],
+   "how": "Right-click clip > Add Frame Hold or Insert Frame Hold Segment; Frame Hold Options (hold on In point, Out point, playhead/marker; Hold Filters). Alternative: Export Frame (camera icon in Program Monitor) and import the still.",
+   "scriptable": "no",
+   "script_api": "none. Scriptable substitute: export a still with ffmpeg (or UXP Exporter.exportSequenceFrame(sequence, tickTime, filename, folderPath, width, height)) and place it with overwriteClip at the hold time.",
+   "limits": "Frame holds keep the clip's effects unless Hold Filters is set; the held frame is not optical-flow-cleaned (motion blur stays).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/organize-media/file-organization/freeze-a-frame-for-a-portion-of-a-clip-using-time-remapping.html",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/exporter.md"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Sequences and sequence settings (incl. vertical)",
+   "summary": "Creating timelines with the right frame size, frame rate and audio settings: from a preset, from a clip, or by editing Sequence Settings (e.g. 1080x1920 for reels, 1080x1080 for square).",
+   "use_for": [
+    "setting up 9:16 reels, 1:1 posts and 16:9 YouTube masters",
+    "matching the frame rate of source footage"
+   ],
+   "how": "File > New > Sequence (presets; Settings tab for custom size), or drag a clip onto the New Item button / right-click > New Sequence From Clip; Sequence > Sequence Settings to change later.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: app.project.newSequence(name, sqpresetPath); app.project.createNewSequenceFromClips(name, [items], bin); s = seq.getSettings(); s.videoFrameWidth = 1080; s.videoFrameHeight = 1920; seq.setSettings(s). UXP: Project.createSequence, createSequenceFromMedia, createSequenceWithPresetPath (26.3+), Sequence.createSetSettingsAction.",
+   "limits": "Changing frame size later does not rescale existing clips (use Set to Frame Size / Scale). Mixed frame rates need Optical Flow or Frame Blending.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/project.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Markers",
+   "summary": "Timeline/clip markers (Comment, Chapter, Segmentation, Web Link) with names, comments, colours and durations (range markers); used for beats, review notes and YouTube chapters.",
+   "use_for": [
+    "beat-sync points for music edits",
+    "chapters on long documentaries",
+    "notes from Scene Edit Detection",
+    "handing cut lists to later agents"
+   ],
+   "how": "M adds a marker at the playhead; Window > Markers to list/edit/search. 26.2 added range-marker shortcuts (including In-to-Out) and marker search by name, comment and colour.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: m = seq.markers.createMarker(seconds); m.name = '...'; m.comments = '...'; m.end = <Time>; m.setColorByIndex(i) with 0=Green, 1=Red, 2=Purple, 3=Orange, 4=Yellow, 5=White, 6=Blue, 7=Cyan; m.setTypeAsChapter() / setTypeAsComment / setTypeAsSegmentation / setTypeAsWebLink; projectItem.getMarkers(); iterate getFirstMarker/getNextMarker. UXP: Markers.getMarkers(seqOrClip) then createAddMarkerAction(name, type, startTick, durationTick, comments); Marker.createSetColorByIndexAction / createSetTypeAction.",
+   "limits": "Chapter markers only export to formats that carry chapters. Colour indexes per the scripting guide (verify one by eye on 26.x).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/collection/markercollection/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/markers.md",
+    "https://www.provideocoalition.com/my-top-5-new-features-in-adobe-premiere-26-2/",
+    "https://ppro-scripting.docsforadobe.dev/general/marker/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Sequence Index panel",
+   "summary": "Searchable, sortable spreadsheet view of every clip in the open timeline, with filters for offline media, flash frames (shown in red), transitions, effects, label colour and media type, and CSV export of the filtered rows.",
+   "use_for": [
+    "QC before export: flash frames and offline media",
+    "auditing a finished edit for sources/credits",
+    "finding every use of a clip before a takedown"
+   ],
+   "how": "Window > Sequence Index (26.2+); search field, filter icon, drag column headers to reorder; export icon writes a CSV of the filtered rows; click a row to jump the playhead.",
+   "scriptable": "no",
+   "script_api": "none (script equivalent: walk seq.videoTracks[i].clips / audioTracks)",
+   "limits": "Requires Premiere 26.2 or later. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026).",
+   "status": "current",
+   "sources": [
+    "https://www.provideocoalition.com/my-top-5-new-features-in-adobe-premiere-26-2/",
+    "https://larryjordan.com/articles/new-features-in-adobe-premiere-26-2/",
+    "https://helpx.adobe.com/premiere/desktop/organize-media/file-organization/navigate-timelines-with-sequence-index.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Generative Extend",
+   "summary": "Firefly-generated extra frames at the head or tail of a clip (and extra room tone/ambience on audio) to cover a short shot, hold a reaction, or fit a transition.",
+   "use_for": [
+    "a B-roll shot that is a second too short",
+    "holding on a face for a beat",
+    "extending ambience under a cut"
+   ],
+   "how": "Generative Extend tool in the Tools panel: drag the clip's start or end outward; the generated clip is added to the project with Content Credentials.",
+   "scriptable": "no",
+   "script_api": "none (no ExtendScript or UXP call)",
+   "limits": "Video: up to 2 s; audio: up to 10 s (room tone/ambience; spoken dialogue cannot be extended and is muted; music not eligible; mono/stereo only). FAQ (May 2026): source 16:9 or 9:16, 360p-4K; 12-60 fps source but extensions are generated at max 30 fps; output 8-bit/SDR when the sequence is. 26.5 adds any aspect ratio, interlaced and non-square-pixel sources, so on 26.0.2 expect 16:9/9:16 only. Needs sign-in, internet and generative credits (cost varies with resolution and frame rate). Do not use to fabricate news content: extending a real politician's face/speech in news is a credibility risk; restrict to B-roll/ambience.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generative-extend-overview.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generative-extend-faq.html",
+    "https://www.cined.com/adobe-premiere-pro-and-after-effects-25-2-introduced-ai-generative-extend-media-intelligence-and-more/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Generative Media tool (text-to-video and SFX in the timeline)",
+   "summary": "Select a gap or range on a track, describe a shot or sound effect, and Premiere generates editable video or SFX clips in place through a floating 'generative task bar'; video can use Firefly or partner models (helpx names Google Veo, Kling and Luma) with reference frames sampled from the sequence.",
+   "use_for": [
+    "filler B-roll or establishing shots for explainers",
+    "custom whooshes/impacts for trailers"
+   ],
+   "how": "Generative Media tool in the toolbar (26.5+): drag a range on a video/audio track or double-click a gap, write the prompt, pick the model and optional reference frames, generate. Results are stored in a Generation history bin; click the clip's AI badge to reopen the task bar with the original prompt and regenerate. For SFX you can record your voice to guide timing and intensity.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Requires Premiere 26.5 or later. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026). Cloud only (internet). Generate Music and Generate Soundscape are still in the beta. Uses generative credits; cost varies by model and settings (not verified). Some partner models are not available on business plans. Content Credentials are applied on export; label AI footage in news/political work.",
+   "status": "current",
+   "sources": [
+    "https://www.kylerholland.com/blog/premiere-pro-september-2026-whats-new/",
+    "https://adamallegrucci.com/journal/adobe-premiere-26-5-generative-media-editorial-workflow",
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-5-september-2026-1641187",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generative-media-tool-faq.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Firefly app and Firefly Boards integration",
+   "summary": "Send images/video/concepts from Firefly and Firefly Boards straight into a Premiere project; since 26.3 a Boards selection can become a ready sequence (selection order = edit order).",
+   "use_for": [
+    "storyboards/animatics for trailers and documentaries",
+    "filling B-roll gaps with generated assets"
+   ],
+   "how": "Firefly Boards: send to Premiere desktop / import into the project; 26.3+ create a sequence from Boards media.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Needs Creative Cloud sign-in and internet; sequence-from-Boards needs 26.3+ (Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026).).",
+   "status": "current",
+   "sources": [
+    "https://www.provideocoalition.com/new-ai-and-masking-tools-in-premiere-plus-major-upgrade-to-after-e%EF%AC%80ects/",
+    "https://www.kylerholland.com/blog/premiere-pro-june-2026-whats-new",
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-3-june-2026-1628369"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Media Intelligence and the Search panel",
+   "summary": "On-device analysis of imported footage (objects, places, camera angles, dialogue, metadata) so clips can be found with natural-language search; 26.0 added search by sound description and by similar visuals.",
+   "use_for": [
+    "finding 'crowd waving flags at night' in a big B-roll library",
+    "finding every clip where a name is spoken"
+   ],
+   "how": "Analysis runs in the background after import (progress in Window > Progress); open the Search panel with the magnifying-glass icon at the top right of the app; results come back for Visuals, Audio, Text and Metadata (dropdown to limit); advanced filters stack up to eight metadata rules; markers are searchable by name, comment and colour.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Visual search is English-only. The model sees downscaled stills, so small details and fast motion are missed. Footage, analysis and searches stay on the computer (no internet needed) and are not used for training.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/in/premiere/desktop/organize-media/file-organization/search-for-media-using-ai-powered-media-intelligence.html",
+    "https://larryjordan.com/articles/ai-powered-media-intelligence-search-in-premiere-pro-2025/",
+    "https://blog.adobe.com/en/publish/2025/04/02/introducing-new-ai-powered-features-workflow-enhancements-premiere-pro-after-effects",
+    "https://www.kylerholland.com/blog/premiere-pro-january-2026-whats-new",
+    "https://helpx.adobe.com/premiere/desktop/organize-media/file-organization/search-for-media-using-ai-powered-media-intelligence.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Properties panel",
+   "summary": "Context-sensitive panel (since 25.0) that shows the most-used controls for whatever is selected: transform, crop, speed and opacity for video; type, loudness and Enhance Speech for audio; font/fill/stroke/background for text and captions; parameters of MOGRTs. Can edit several clips at once.",
+   "use_for": [
+    "fast manual tweaks during review",
+    "styling titles and captions"
+   ],
+   "how": "Window > Properties (default in the Editing workspace). Links out to Lumetri Color, Effect Controls, effects/transitions browsing and motion graphics.",
+   "scriptable": "no",
+   "script_api": "none for the panel; the same values are reachable as component params (Motion: Position [x,y] fractions, Scale; Opacity: Opacity, Blend Mode) via ExtendScript.",
+   "limits": "Replaced the Essential Graphics panel's Edit tab in 25.0 (Browse tab moved to the Graphics Templates panel).",
+   "status": "current",
+   "sources": [
+    "https://larryjordan.com/articles/the-new-properties-panel-in-adobe-premiere-pro-25-0/",
+    "https://helpx.adobe.com/ie/premiere-pro/using/about-properties-panel.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "both",
+   "name": "Motion Graphics Templates (.mogrt) and Graphics Templates panel",
+   "summary": "Reusable animated titles/lower-thirds/end cards authored in After Effects (or Premiere) with exposed parameters (text, colours, checkboxes, sliders) that are edited per use in Premiere. The proven way for AdobeBridge to put designed, animated text on a Premiere timeline.",
+   "use_for": [
+    "news lower-thirds and name straps",
+    "explainer callouts and counters",
+    "end cards/CTA",
+    "styled captions"
+   ],
+   "how": "Window > Graphics Templates (Browse, formerly the Essential Graphics Browse tab) to install/drag templates; edit exposed parameters in the Properties panel or Effect Controls. Author in AE: Essential Properties / Essential Graphics, export as .mogrt.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: ti = seq.importMGT(path, String(Math.round(seconds*254016000000)), vTrackOffset, aTrackOffset); mc = ti.getMGTComponent(); find params by mc.properties[i].displayName; text params hold JSON: parse getValue(), set textEditValue (+ fontTextRunLength, fontEditValue, fontSizeEditValue), setValue(JSON.stringify(o), true) (as in AdobeBridge pr_build.jsx); set ti.end to change length. Library: seq.importMGTFromLibrary(lib, name, ticks, v, a). UXP: SequenceEditor.insertMogrtFromPath(path, tickTime, vIdx, aIdx).",
+   "limits": "Only parameters the author exposed are editable; repeated display names need 'Name#2'. Premiere-authored MOGRTs return no component from getMGTComponent (AdobeBridge warns 'not an After Effects template'). Fonts must be installed.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/sequenceeditor.md",
+    "https://larryjordan.com/articles/the-new-properties-panel-in-adobe-premiere-pro-25-0/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Type tool, graphics layers and text/track styles",
+   "summary": "Native titles: the Type tool (T) creates a graphic clip with text/shape layers styled in the Properties panel; Text Styles and Track Styles keep fonts/colours consistent.",
+   "use_for": [
+    "quick on-the-fly titles during review",
+    "consistent caption/title branding via styles"
+   ],
+   "how": "Type tool (T) > click in the Program Monitor and type; style in Properties (font, size, fill, stroke, background, shadow); save as Text Style or Track Style.",
+   "scriptable": "partial",
+   "script_api": "No API creates a native text layer. Options: (1) import a .mogrt and set its text (see MOGRT card); (2) the 'Text' effect component exists on graphic clips (harvested 'Source Text' is a string param, not settable from a spec); (3) the 'Simple Text' effect (harvested: Position, Justification, Size, Opacity).",
+   "limits": "Indic scripts (Devanagari) need fonts that support conjuncts; check shaping in the render.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/stylize-text/create-titles.html",
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/stylize-text/create-text-styles.html",
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/stylize-text/create-linked-and-track-styles.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Track mattes (Track Matte Key)",
+   "summary": "Uses the alpha or luminance of a clip on a higher track as the visibility matte of the clip it is applied to (text-filled video, shape reveals, luma wipes).",
+   "use_for": [
+    "video inside big title text in trailers",
+    "shape reveals for explainers",
+    "luma-matte transitions"
+   ],
+   "how": "Put the matte (text/shape/luma clip) on the track above; apply Effects > Keying > Track Matte Key to the fill clip; set Matte to that track, Composite Using Matte Alpha or Matte Luma, Reverse to invert.",
+   "scriptable": "partial",
+   "script_api": "QE add by name, then set harvested params: {\"name\": \"Track Matte Key\", \"pr_props\": {\"Composite Using:\": 1}} (harvested range 0-1, default 0; 0 = Matte Alpha, 1 = Matte Luma, measured). 'Matte:' is the track number, 1-based: {\"Matte:\": 2, \"Composite Using:\": 1} mattes with Video 2's luminance; 0 and the default 4294967295 = none (measured 2026-10-14, live wave 3).",
+   "limits": "Matte and fill must overlap in time (where the matte track is empty the fill disappears); the matte track is left out of the composite; nested or moved tracks break the reference. Property names include the trailing colon as harvested.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/ph_fil/premiere-pro/how-to/add-track-matte-key.html",
+    "https://motionarray.com/learn/premiere-pro/track-mattes-premiere-pro/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Shape masks with tracking (redesigned in 26.0)",
+   "summary": "Rectangle, Ellipse and Pen masks on Opacity or on any effect, with feather/expansion/opacity/invert and automatic tracking. 26.0 rewrote them: tracking up to 20x faster, rounded corners, numeric control, add/subtract/intersect blend modes and a 3D perspective tracking mode.",
+   "use_for": [
+    "blurring faces/number plates of private persons",
+    "spot-grading a face",
+    "highlighting part of a document or screen"
+   ],
+   "how": "Rectangle/Ellipse/Pen mask tools (26.0) or the mask icons under an effect in Effect Controls; new masks appear under 'Unassigned Masks' and are assigned to Opacity or an effect; Track Mask Forward/Backward (or bi-directional / one frame).",
+   "scriptable": "partial",
+   "script_api": "Mask paths and tracking are not scriptable (harvested 'Mask Path'/'Path'/'Tracker' are binary string params). Numeric params on an existing mask (Mask Feather 0-5000, Mask Opacity 0-100, Mask Expansion -5000..5000, Inverted) were harvested on the 'Mask'/'Mask2' components but setting them by script is unverified.",
+   "limits": "Tracking drifts on occlusions and fast motion; check every frame of a privacy blur before publishing.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/announcements-732/now-released-new-masking-tools-311921",
+    "https://digitalproduction.com/2026/01/22/premiere-drops-the-pro-and-picks-up-some-serious-ai/",
+    "https://www.provideocoalition.com/new-ai-and-masking-tools-in-premiere-plus-major-upgrade-to-after-e%EF%AC%80ects/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Object Mask (AI subject masking)",
+   "summary": "Hover and click a person or object and Premiere builds an AI mask and tracks it through the shot (on-device). Use it as an opacity mask or to limit any effect.",
+   "use_for": [
+    "isolating a leader to grade/blur the background",
+    "text-behind-subject reels",
+    "privacy blur on bystanders"
+   ],
+   "how": "Object Mask tool in the toolbar: hover the subject in the Program Monitor, click; refine with add (+) / subtract (-), lasso and rectangle; in Effect Controls the mask sits in 'Unassigned Masks': Track forward/backward/bi-directional/frame; right-click > Change to Opacity Mask or drag onto an effect; Feather and Expansion. Later builds: 26.2 Sharp/Smooth edge modes; 26.3 faster tracking and Restore Mask Data (recover mask data after a project moves); 26.5 Sharpness slider, mask expansion after the AI pass, wider object detection.",
+   "scriptable": "no",
+   "script_api": "none to create or track. UXP 26.3+: ObjectMaskUtils.hasObjectMask(projectOrSequence) (detect only).",
+   "limits": "Weak on noisy, low-contrast, small or overlapping subjects. Edge modes need 26.2+, Restore Mask Data 26.3+, Sharpness 26.5+. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026).",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/announcements-732/now-released-new-masking-tools-311921",
+    "https://spotlightfx.com/blog/no-more-after-effects-premiere-pros-ai-masking-is-here",
+    "https://www.kylerholland.com/blog/premiere-pro-september-2026-whats-new/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/objectmaskutils.md",
+    "https://larryjordan.com/articles/new-features-in-adobe-premiere-26-2/",
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-3-june-2026-1628369"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Film Impact effects and transitions pack (90+)",
+   "summary": "Adobe bought Film Impact and built its 90+ GPU-accelerated effects, transitions and text animations into Premiere 25.5 (Sept 2025): glitches, VHS damage, light leaks, blurs, motion/zoom/spin transitions, typewriter and text animators.",
+   "use_for": [
+    "trailer/meme energy (Glitch, RGB Split, Camera Shake, Flash, Light Leak)",
+    "clean modern moves (Push, Pop/Spring/Travel Motion)",
+    "satire beats (VHS Damage, TV Power)"
+   ],
+   "how": "Effects panel: the new effects/transitions sit beside the legacy ones (legacy versions are renamed '... (Legacy)'). Drag on clips/edits; real-time playback.",
+   "scriptable": "yes",
+   "script_api": "Same as any effect/transition: QE getVideoEffectByName / getVideoTransitionByName with the exact harvested display name (e.g. effects 'Camera Shake', 'RGB Split', 'Light Leaks', 'Volumetric Rays', 'Long Shadow', 'Wiggle'; transitions 'Glitch', 'VHS Damage', 'Light Leak', 'Typewriter', 'Text Animator', 'Spring Motion'). Use per-effect PVE cards for property names.",
+   "limits": "Effects whose names collide with legacy ones (e.g. 'Cross Dissolve' vs 'Cross Dissolve (Legacy)', 'Gaussian Blur' vs 'Gaussian Blur (Legacy)') are different effects with different properties; always use the exact harvested name.",
+   "status": "current",
+   "sources": [
+    "https://blog.adobe.com/en/publish/2025/09/09/introducing-more-than-90-new-effects-transitions-animations-in-premiere-pro",
+    "https://www.provideocoalition.com/adobe-acquires-film-impact-premiere-pro-25-5/",
+    "https://www.newsshooter.com/2025/09/09/adobe-acquires-film-impact-transitions-and-effects-for-premiere-pro/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "2026 effect and transition additions (26.2-26.5)",
+   "summary": "Later 2026 builds add: Channel Blur, Gradient and Noise effects plus 3D Spinback and Slide transitions (26.2); Shape Dissolve transition and Magnify lens effect (26.3); new Lens Flare, updated Twirl and Mosaic softness (26.5).",
+   "use_for": [
+    "Magnify for zooming into documents/screens in explainers",
+    "Shape Dissolve for branded wipes"
+   ],
+   "how": "Effects panel after updating Premiere.",
+   "scriptable": "yes",
+   "script_api": "Add by exact display name once installed; harvest them first (pve harvest_pr) so their properties are known.",
+   "limits": "NOT installed on this machine: the 26.0.2 harvest has no 'Shape Dissolve', 'Magnify' (only 'Magnify (Legacy)'), 'Channel Blur' or 'Gradient'. Re-harvest after an update. Also: helpx (updated Mar 2026) says the Obsolete Effects/Transitions folders are removed in current Premiere; several of those (e.g. 'Fast Blur', 'Compound Blur', 'Camera Blur', 'Clip Name', 'Timecode') are still in the 26.0.2 harvest, so do not build new templates on them (old projects keep working; exact removal build unverified).",
+   "status": "current",
+   "sources": [
+    "https://larryjordan.com/articles/new-features-in-adobe-premiere-26-2/",
+    "https://jonahleewalker.com/2026/04/22/adobe-premiere-april-2026-version-26-2/",
+    "https://www.kylerholland.com/blog/premiere-pro-june-2026-whats-new",
+    "https://www.kylerholland.com/blog/premiere-pro-september-2026-whats-new/",
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/commonly-used-effects/effects-and-transitions-removed-from-adobe-premiere.html",
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-3-june-2026-1628369"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Export mode and Quick Export",
+   "summary": "Premiere's export page: destinations (Media File, social platforms), preset, format, range, Effects section (Lumetri Look/LUT, SDR Conform, Image/Name/Timecode overlays, Time Tuner, Video Limiter, Loudness Normalization), Captions (sidecar or burn-in); Quick Export is the one-click version.",
+   "use_for": [
+    "final masters of reels and documentaries",
+    "saving house .epr presets that bake loudness/captions/overlays"
+   ],
+   "how": "File > Export > Media (Ctrl+M) opens Export mode; choose preset/format, Range (Entire, In-Out, Work Area, Custom); Export, or Send to Media Encoder. Quick Export icon (top-right) for a preset export.",
+   "scriptable": "yes",
+   "script_api": "seq.exportAsMediaDirect(outPathNative, eprPathNative, 0)  // 0 entire, 1 in-out, 2 work area (synchronous, blocks Premiere); seq.getExportFileExtension(epr). UXP: EncoderManager.getManager().exportSequence(seq, Constants.ExportType.IMMEDIATELY, out, epr, true). Example preset path on this machine: C:/Program Files/Adobe/Adobe Media Encoder 2026/MediaIO/systempresets/4E49434B_48323634/00 - Match Source - High bitrate.epr.",
+   "limits": "Paths must be native (backslashes on Windows; AdobeBridge README). Export mode settings not in the .epr (destinations/publishing) are UI only. 26.5 Match Source also matches audio channels/sample rate with downmix warnings. See also: 'Export encoding choices: VBR 2-pass vs CBR, maximum depth and quality, field order'; 'Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift' and the 'Delivery spec: ...' cards (YouTube upload, vertical Reels/Shorts/TikTok, broadcast masters, mezzanine and archive masters, alpha overlays).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/export-video.html",
+    "https://helpx.adobe.com/premiere-pro/using/quick-export.html",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/export-options-in-premiere.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "both",
+   "name": "Adobe Media Encoder queue, presets and batch",
+   "summary": "Background encoder shared by Premiere and After Effects: queue many sequences/comps, render while editing, custom .epr presets, watch folders.",
+   "use_for": [
+    "batch exporting multiple aspect ratios/versions of a reel",
+    "proxy creation",
+    "rendering AE comps without opening AE"
+   ],
+   "how": "Export mode > Send to Media Encoder (or File > Export > Media > Queue); in AME: Queue, Preset Browser (save/import .epr), Watch Folders, Start Queue.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: app.encoder.launchEncoder(); jobID = app.encoder.encodeSequence(seq, outPath, eprPath, app.encoder.ENCODE_ENTIRE, 1); app.encoder.encodeProjectItem(item, out, epr, 0, 1); app.encoder.encodeFile(file, out, epr, 0, 1, inPoint, outPoint); app.encoder.startBatch(); ENCODE_ENTIRE=0, ENCODE_IN_TO_OUT=1, ENCODE_WORK_AREA=2. UXP: EncoderManager.getManager().encodeFile(file, out, preset, inTick, outTick, workArea, removeUponCompletion, startQueueImmediately) (note: in/out come BEFORE workArea in UXP), encodeProjectItem, exportSequence(QUEUE_TO_AME), events EVENT_RENDER_COMPLETE/ERROR/CANCEL/PROGRESS/QUEUE; launchEncoder/startBatchEncode are 26.3+.",
+   "limits": "AME must be the same major version as Premiere (2026). Queued jobs run asynchronously: wait for the output file to stop growing or use completion events. Preset scanning code may miss 2026 install paths; pass explicit .epr paths. See also: 'Export encoding choices: VBR 2-pass vs CBR, maximum depth and quality, field order'; 'Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift' and the 'Delivery spec: ...' cards (YouTube upload, vertical Reels/Shorts/TikTok, broadcast masters, mezzanine and archive masters, alpha overlays).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/export-directly-to-adobe-media-encoder.html",
+    "https://helpx.adobe.com/premiere-pro/using/preset-manager.html",
+    "https://ppro-scripting.docsforadobe.dev/general/encoder/",
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/encodermanager.md"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Content Credentials (C2PA)",
+   "summary": "Provenance metadata attached to exports; generative-AI usage (Generative Extend, Generative Media) is recorded so viewers/platforms can see AI was used.",
+   "use_for": [
+    "transparent labelling of AI-generated shots in political/news content",
+    "proving origin of original reporting"
+   ],
+   "how": "26.2+: export settings can apply Content Credentials (linked social accounts, generative AI usage/training preferences), configured once on the Adobe Content Authenticity site and then applied automatically on export. Generative features (Generative Extend, Generative Media) attach credentials to their output.",
+   "scriptable": "partial",
+   "script_api": "UXP 26.5+: C2PAService.getManifest(filePath, withValidation) -> {manifest (JSON string), manifestLocation (0 none, 1 embedded, 2 sidecar, 4 cloud)} (read only). ExtendScript: none.",
+   "limits": "The export option needs 26.2+ and UXP C2PAService.getManifest(filePath, withValidation) needs 26.5+. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026). Exact export control names unverified.",
+   "status": "current",
+   "sources": [
+    "https://github.com/AdobeDocs/uxp-premiere-pro/blob/main/src/pages/ppro-reference/classes/c2paservice.md",
+    "https://www.kylerholland.com/blog/premiere-pro-september-2026-whats-new/",
+    "https://larryjordan.com/articles/new-features-in-adobe-premiere-26-2/",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generative-media-tool-faq.html"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "both",
+   "name": "Dynamic Link: After Effects comps in Premiere",
+   "summary": "Live link between an AE composition and a Premiere clip: no intermediate render; edits in AE update in Premiere. 'Replace With After Effects Composition' sends selected clips to a new linked comp with the sequence's settings.",
+   "use_for": [
+    "heavy VFX/motion design shots inside a Premiere edit",
+    "AE-built title sequences and transitions for trailers"
+   ],
+   "how": "Right-click clips > Replace With After Effects Composition; or File > Adobe Dynamic Link > New/Import After Effects Composition.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: app.project.importAEComps(aepPath, [compName], targetBin) or app.project.importAllAEComps(aepPath, targetBin) (both also exist in UXP 25.6+), then find the item and track.overwriteClip(item, startSeconds); set in/out with item.setInPoint(sec, 4)/setOutPoint (the guide calls the value ticks, but AdobeBridge pr_build.jsx 'aecomps' passes seconds and works).",
+   "limits": "AE, Premiere and Media Encoder must be on matching versions; linked comps render slowly in Premiere (render previews or pre-render for long comps). 'Replace With After Effects Composition' itself is UI only.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/use-premiere-with-other-apps/working-with-other-adobe-applications/replace-clips-with-a-dynamically-linked-after-effects-composition.html",
+    "https://helpx.adobe.com/be_en/premiere-pro/using/dynamic-link.html",
+    "https://ppro-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Frame.io V4 and Adobe Stock panels",
+   "summary": "In-app panels: Frame.io V4 for uploading versions and reading time-coded review comments; Adobe Stock for searching and licensing stock video/audio/images without leaving Premiere.",
+   "use_for": [
+    "client/team review of cuts",
+    "licensed B-roll and stock music for documentaries"
+   ],
+   "how": "Frame.io V4 panel (Window menu, 26.0). Adobe Stock: search from the Stock panel / Properties panel; 26.3+ licenses directly from the Stock panel; licensing uses the Stock plan or pay-per-asset.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Needs internet and the relevant accounts; Stock licences cost money (never license without approval).",
+   "status": "current",
+   "sources": [
+    "https://www.kylerholland.com/blog/premiere-pro-january-2026-whats-new",
+    "https://www.newsshooter.com/2026/01/20/whats-new-in-adobe-premiere-pro-26-0/",
+    "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-3-june-2026-1628369"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "pr_tools",
+   "app": "PR",
+   "name": "Premiere AI Assistant (beta)",
+   "summary": "Chat panel in the Premiere public beta that carries out project chores from plain-language requests: create/organise bins, rename and label clips, generate transcripts, detect slates, add markers, build stringouts and rough assemblies on a timeline.",
+   "use_for": [
+    "sorting a large rally/interview ingest into bins",
+    "first stringout of selects before a human cut"
+   ],
+   "how": "Premiere (beta) app: Window > Assistant; type a request (e.g. 'Organize this footage into bins by scene', 'Build a stringout from selected clips'); set Permission settings to Always ask permission or Auto approve; expand Reasoning to see the steps; every action is in Undo/History and the Undo button reverts the last turn.",
+   "scriptable": "no",
+   "script_api": "none (no ExtendScript or UXP entry point; it is an in-app chat).",
+   "limits": "Public beta only (Premiere beta app); not in the release build. Installed build on this machine is Premiere 26.0.2 (checked C:/Program Files/Adobe/Adobe Premiere Pro 2026). Adobe advises against client work during the beta: use duplicate projects. Capabilities change during the beta.",
+   "status": "hidden",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/premiere-ai-assistant/overview.html"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

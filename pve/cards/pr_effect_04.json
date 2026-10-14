@@ -1,0 +1,1138 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Reduce Interlace Flicker",
+   "match": "AE.ADBE Reduce Interlace Flicker",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Applies a small vertical-only blur to calm the line twitter / flicker of thin horizontal detail (fine text, stripes, venetian blinds) on interlaced or downscaled output. On progressive footage it simply softens vertically.",
+   "look": [
+    "vertical softening",
+    "anti-twitter",
+    "smoothed fine lines",
+    "broadcast-safe detail"
+   ],
+   "use_for": [
+    "Calm shimmering thin horizontal lines in a lower-third or ticker made for an interlaced broadcast (1080i) delivery",
+    "Stop moire / twitter on scanned documents, newspaper clippings or spreadsheets zoomed in an explainer",
+    "Soften striped shirts or blinds that buzz after heavy downscaling of a 4K news clip"
+   ],
+   "avoid": [
+    "Using it as a general blur: it blurs only vertically, so values well above 10 build into a vertical smear that reads as a broken deinterlace, not a defocus",
+    "Leaving it on progressive web deliveries (Reels, YouTube) where there is no flicker to fix: it just costs sharpness"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Softness",
+     "does": "Amount of vertical blur used to suppress line flicker",
+     "typical": "0.5-1.5 for flicker fixes; 0 = off. Range 0-1000. On a 1080p sequence 10 is only about a 4 px vertical blur (barely visible full-frame); larger values build into a visible vertical smear"
+    }
+   ],
+   "demo_settings": {
+    "Softness": 50
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Reduce Interlace Flicker",
+   "pairs_with": [
+    "Motion",
+    "Transform",
+    "Fast Blur"
+   ],
+   "scripting": "Single number property 'Softness' (0..1000 clamp, useful 0-3). The demo value 50 is deliberately exaggerated so the vertical softening is visible in a test frame (10 rendered as only a ~4 px vertical blur plus a ~5 px upward shift on 1080p, invisible full-frame); real use is 0.5-1.5, which is invisible on a still. Apply to the graphic, ticker or document clip (after any scaling), not to the whole sequence via an adjustment layer, so faces stay sharp. Folder placement (Blur & Sharpen vs Video) in the v26 Effects panel is not verified.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/033.png",
+    "note": "Softness 50 gives a strong vertical-only smear (horizontal edges like block tops and stripes soften, vertical edges stay), as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Find Edges",
+   "match": "AE.ADBE Find Edges",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Detects high-contrast edges and draws them as dark, colour-tinted lines on a white field (or bright coloured lines on black when inverted), giving a pencil-sketch or line-art version of the shot.",
+   "look": [
+    "pencil sketch",
+    "line art",
+    "outline",
+    "blueprint",
+    "graphic novel",
+    "high contrast edges"
+   ],
+   "use_for": [
+    "Sketch-to-photo reveal on a key press photo in a documentary (animate Blend With Original from sketch to real)",
+    "Line-art background behind a quote card or explainer graphic so text reads clearly",
+    "Inverted neon-outline look for a trailer or reel transition beat",
+    "Stylised 'case file' treatment of archival stills in a political explainer"
+   ],
+   "avoid": [
+    "Noisy, low-light or heavily compressed footage: grain becomes a mess of speckled lines",
+    "Holding it for long on faces: people read as harsh and unflattering"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Invert",
+     "does": "false = dark lines on white (sketch); true = bright lines on black (neon/blueprint)",
+     "typical": "false for sketch, true for neon outlines"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back the original image; harvest clamps this to 0-1, so it is a fraction (UI shows %)",
+     "typical": "0 for full sketch, 0.3-0.6 for a tinted sketch-over-photo"
+    }
+   ],
+   "demo_settings": {
+    "Invert": false,
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Find Edges",
+   "pairs_with": [
+    "Tint",
+    "Lumetri Color",
+    "Posterize",
+    "Noise",
+    "Black & White"
+   ],
+   "scripting": "Blend With Original is 0..1 here (unlike Invert / Lens Flare where it is 0..100): send 0.5 for 50%, not 50. Default (Invert false, Blend 0) already gives the full effect. Add Tint or Lumetri after it to colour the lines; add a light blur before it on noisy footage.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      0
+     ],
+     [
+      1.6,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/034.png",
+    "note": "Whole shot becomes dark, slightly colour-tinted edge lines on a white field, a clear pencil-sketch look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Four-Point Garbage Matte",
+   "match": "AE.ADBE Garbage Matte",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Cuts the clip to a four-cornered polygon defined by four corner points; everything outside becomes transparent. Used to crop away rigs, edges or unwanted areas, often before keying.",
+   "look": [
+    "polygon crop",
+    "hard-edged cutout",
+    "transparent outside",
+    "angled frame"
+   ],
+   "use_for": [
+    "Remove a light stand, boom or studio edge from a green-screen anchor shot before Ultra Key",
+    "Cut a TV screen, phone or banner out of a shot so another clip on a lower track shows through",
+    "Make an angled or trapezoid picture-in-picture panel for a news split screen",
+    "Trim a black border, letterbox edge or frame-edge artefact off an archival or screen-recorded clip with an angled cut"
+   ],
+   "avoid": [
+    "Moving subjects crossing the matte edge: the edge is hard (no feather) and points are not tracked",
+    "Leaving any point unset: harvested defaults all read [0, 0], which can collapse the matte and make the clip vanish"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Top Left",
+     "does": "Top-left corner of the kept area, frame fraction",
+     "typical": "[0.05, 0.05]"
+    },
+    {
+     "name": "Top Right",
+     "does": "Top-right corner",
+     "typical": "[0.95, 0.05]"
+    },
+    {
+     "name": "Bottom Right",
+     "does": "Bottom-right corner",
+     "typical": "[0.95, 0.95]"
+    },
+    {
+     "name": "Bottom Left",
+     "does": "Bottom-left corner",
+     "typical": "[0.05, 0.95]"
+    }
+   ],
+   "demo_settings": {
+    "Top Left": [
+     0.2,
+     0.15
+    ],
+    "Top Right": [
+     0.8,
+     0.1
+    ],
+    "Bottom Right": [
+     0.85,
+     0.85
+    ],
+    "Bottom Left": [
+     0.15,
+     0.9
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Opacity mask in Premiere for feathered shapes; AE: layer mask (no effect equivalent)",
+   "pairs_with": [
+    "Ultra Key",
+    "Track Matte Key",
+    "Crop",
+    "Drop Shadow",
+    "Basic 3D"
+   ],
+   "scripting": "Always set all four points explicitly: the harvest read every default as [0, 0] (in the UI they start at the frame corners), so a script that sets only some points may get a degenerate matte. Points are frame fractions and may go outside 0..1. Outside area is transparent, so put a background clip on a lower track or it shows black. No feather control on the matte edge: use an opacity mask with feather when a soft edge is needed. In After Effects the same job is done with a layer mask, not an effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/035.png",
+    "note": "Image is cropped to a tilted four-corner polygon at the demo points; everything outside is transparent (black).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Sixteen-Point Garbage Matte",
+   "match": "AE.ADBE Garbage Matte 16",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Same as the four-point garbage matte but with sixteen points (corner vertices plus intermediate edge points) for a more detailed polygon cutout; everything outside becomes transparent.",
+   "look": [
+    "polygon cutout",
+    "detailed crop",
+    "transparent outside",
+    "hard edge"
+   ],
+   "use_for": [
+    "Rough-cut around an irregular studio set or rig before keying an anchor",
+    "Isolate an oddly shaped screen, poster or podium in a press-event shot",
+    "Cut a shaped panel (rounded or angled) for a split-screen debate layout"
+   ],
+   "avoid": [
+    "Animated subjects: sixteen points are tedious to keyframe and the edge is hard; use a feathered mask instead",
+    "Leaving points at the harvested [0, 0] default: the matte collapses"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Top Left Vertex",
+     "does": "Top-left corner point of the polygon (frame fraction); the 16 points run clockwise from here in the order listed",
+     "typical": "[0.05, 0.05]"
+    },
+    {
+     "name": "Top Left Tangent",
+     "does": "intermediate polygon point on the top edge (Top Left Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.275, 0.05]"
+    },
+    {
+     "name": "Top Center Tangent",
+     "does": "intermediate polygon point on the top edge (Top Center Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.5, 0.05]"
+    },
+    {
+     "name": "Top Right Tangent",
+     "does": "intermediate polygon point on the top edge (Top Right Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.725, 0.05]"
+    },
+    {
+     "name": "Right Top Vertex",
+     "does": "right top corner point of the polygon (frame fraction)",
+     "typical": "[0.95, 0.05]"
+    },
+    {
+     "name": "Right Top Tangent",
+     "does": "intermediate polygon point on the right edge (Right Top Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.95, 0.275]"
+    },
+    {
+     "name": "Right Center Tangent",
+     "does": "intermediate polygon point on the right edge (Right Center Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.95, 0.5]"
+    },
+    {
+     "name": "Right Bottom Tangent",
+     "does": "intermediate polygon point on the right edge (Right Bottom Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.95, 0.725]"
+    },
+    {
+     "name": "Bottom Right Vertex",
+     "does": "bottom right corner point of the polygon (frame fraction)",
+     "typical": "[0.95, 0.95]"
+    },
+    {
+     "name": "Bottom Right Tangent",
+     "does": "intermediate polygon point on the bottom edge (Bottom Right Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.725, 0.95]"
+    },
+    {
+     "name": "Bottom Center Tangent",
+     "does": "intermediate polygon point on the bottom edge (Bottom Center Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.5, 0.95]"
+    },
+    {
+     "name": "Bottom Left Tangent",
+     "does": "intermediate polygon point on the bottom edge (Bottom Left Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.275, 0.95]"
+    },
+    {
+     "name": "Left Bottom Vertex",
+     "does": "left bottom corner point of the polygon (frame fraction)",
+     "typical": "[0.05, 0.95]"
+    },
+    {
+     "name": "Left Bottom Tangent",
+     "does": "intermediate polygon point on the left edge (Left Bottom Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.05, 0.725]"
+    },
+    {
+     "name": "Left Center Tangent",
+     "does": "intermediate polygon point on the left edge (Left Center Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.05, 0.5]"
+    },
+    {
+     "name": "Left Top Tangent",
+     "does": "intermediate polygon point on the left edge (Left Top Tangent); a straight-line point, not a curve handle",
+     "typical": "[0.05, 0.275]"
+    }
+   ],
+   "demo_settings": {
+    "Top Left Vertex": [
+     0.2,
+     0.15
+    ],
+    "Top Left Tangent": [
+     0.35,
+     0.15
+    ],
+    "Top Center Tangent": [
+     0.5,
+     0.08
+    ],
+    "Top Right Tangent": [
+     0.65,
+     0.15
+    ],
+    "Right Top Vertex": [
+     0.8,
+     0.15
+    ],
+    "Right Top Tangent": [
+     0.8,
+     0.32
+    ],
+    "Right Center Tangent": [
+     0.88,
+     0.5
+    ],
+    "Right Bottom Tangent": [
+     0.8,
+     0.68
+    ],
+    "Bottom Right Vertex": [
+     0.8,
+     0.85
+    ],
+    "Bottom Right Tangent": [
+     0.65,
+     0.85
+    ],
+    "Bottom Center Tangent": [
+     0.5,
+     0.92
+    ],
+    "Bottom Left Tangent": [
+     0.35,
+     0.85
+    ],
+    "Left Bottom Vertex": [
+     0.2,
+     0.85
+    ],
+    "Left Bottom Tangent": [
+     0.2,
+     0.68
+    ],
+    "Left Center Tangent": [
+     0.12,
+     0.5
+    ],
+    "Left Top Tangent": [
+     0.2,
+     0.32
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Opacity mask in Premiere for feathered shapes; AE: layer mask (no effect equivalent)",
+   "pairs_with": [
+    "Ultra Key",
+    "Track Matte Key",
+    "Crop",
+    "Drop Shadow"
+   ],
+   "scripting": "Set all 16 points: harvest defaults are [0, 0] for every point. The points run clockwise in the harvested order (Top Left Vertex, Top Left Tangent, Top Center Tangent, Top Right Tangent, Right Top Vertex, ... Left Top Tangent); despite the name 'Tangent' they are ordinary polygon points joined by straight lines, which is what the demo assumes (medium confidence). Points are frame fractions. Outside is transparent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/036.png",
+    "note": "Image is cut to a 16-point hard-edged polygon with points pushed out at each side centre; outside is transparent.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Eight-Point Garbage Matte",
+   "match": "AE.ADBE Garbage Matte 8",
+   "category": "Keying",
+   "status": "current",
+   "summary": "An eight-point polygon cutout (four corner vertices plus four edge mid points); everything outside the shape becomes transparent.",
+   "look": [
+    "octagon cutout",
+    "polygon crop",
+    "transparent outside",
+    "hard edge"
+   ],
+   "use_for": [
+    "Rough garbage matte around a green-screen presenter before Ultra Key",
+    "Cut out a bevelled or angled panel for a news split screen or picture-in-picture",
+    "Cut an irregular shape (e.g. a podium or a tilted screen) out of a press-event shot so a clip on a lower track shows through"
+   ],
+   "avoid": [
+    "Hard, unfeathered edge looks cheap on a visible cutout; add a border or shadow or use a mask with feather",
+    "Unset points default to [0, 0] and collapse the matte"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Top Left Vertex",
+     "does": "Top-left corner (frame fraction)",
+     "typical": "[0.05, 0.05]"
+    },
+    {
+     "name": "Top Center Tangent",
+     "does": "Top edge mid point",
+     "typical": "[0.5, 0.05]"
+    },
+    {
+     "name": "Right Top Vertex",
+     "does": "Top-right corner",
+     "typical": "[0.95, 0.05]"
+    },
+    {
+     "name": "Right Center Tangent",
+     "does": "Right edge mid point",
+     "typical": "[0.95, 0.5]"
+    },
+    {
+     "name": "Bottom Right Vertex",
+     "does": "Bottom-right corner",
+     "typical": "[0.95, 0.95]"
+    },
+    {
+     "name": "Bottom Center Tangent",
+     "does": "Bottom edge mid point",
+     "typical": "[0.5, 0.95]"
+    },
+    {
+     "name": "Left Bottom Vertex",
+     "does": "Bottom-left corner",
+     "typical": "[0.05, 0.95]"
+    },
+    {
+     "name": "Left Center Tangent",
+     "does": "Left edge mid point",
+     "typical": "[0.05, 0.5]"
+    }
+   ],
+   "demo_settings": {
+    "Top Left Vertex": [
+     0.2,
+     0.15
+    ],
+    "Top Center Tangent": [
+     0.5,
+     0.06
+    ],
+    "Right Top Vertex": [
+     0.8,
+     0.15
+    ],
+    "Right Center Tangent": [
+     0.9,
+     0.5
+    ],
+    "Bottom Right Vertex": [
+     0.8,
+     0.85
+    ],
+    "Bottom Center Tangent": [
+     0.5,
+     0.94
+    ],
+    "Left Bottom Vertex": [
+     0.2,
+     0.85
+    ],
+    "Left Center Tangent": [
+     0.1,
+     0.5
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Opacity mask in Premiere for feathered shapes; AE: layer mask (no effect equivalent)",
+   "pairs_with": [
+    "Ultra Key",
+    "Track Matte Key",
+    "Drop Shadow",
+    "Crop"
+   ],
+   "scripting": "Set all 8 points (harvest defaults are all [0, 0]). Order is clockwise from Top Left Vertex; the 'Tangent' points are straight-line polygon points on each edge mid. Frame-fraction coordinates; outside the polygon is transparent, so place a background on a lower track.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/037.png",
+    "note": "Image is cut to an eight-sided hard-edged polygon (corners plus side mid points); outside is transparent.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Gaussian Blur (Legacy)",
+   "match": "AE.ADBE Gaussian Blur 2",
+   "category": "Blur & Sharpen",
+   "status": "obsolete",
+   "summary": "The old Gaussian blur: smooth, even blur in both or one direction. Superseded by the newer Gaussian Blur effect; kept so old projects still open.",
+   "look": [
+    "soft focus",
+    "smooth blur",
+    "defocused background",
+    "dreamy"
+   ],
+   "use_for": [
+    "Only when an existing project already uses it: keep or tweak a blurred background plate behind explainer text (new work: Gaussian Blur)",
+    "Blur-in / blur-out between documentary stills in an old project (keyframe Blurriness)",
+    "One-direction blur (Blur Dimensions 1 or 2) for a fake motion streak, which the new Gaussian Blur does not offer as a dropdown"
+   ],
+   "avoid": [
+    "Building new edits on it: use the current Gaussian Blur",
+    "Repeat Edge Pixels off on full-frame clips: dark soft edges bleed in"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "Blur amount in pixels",
+     "typical": "10-40 for background plates, 60+ for full abstraction"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "Direction: 0 both, 1 horizontal, 2 vertical",
+     "typical": "0"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "Keeps the frame edges from going soft/dark",
+     "typical": "true for full-frame clips"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 40,
+    "Blur Dimensions": 0,
+    "Repeat Edge Pixels": true
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "0": "Horizontal and Vertical",
+     "1": "Horizontal",
+     "2": "Vertical"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Gaussian Blur",
+   "pairs_with": [
+    "Lumetri Color",
+    "Crop",
+    "Transform",
+    "Vignette"
+   ],
+   "scripting": "Obsolete: plan with 'Gaussian Blur' (the current effect) instead. If an old project already uses it: Blurriness 0..30000 (default 25), Blur Dimensions dropdown 0..2 (0 = Horizontal and Vertical), Repeat Edge Pixels bool default true.",
+   "recipe": {
+    "Blurriness": [
+     [
+      0,
+      60
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/038.png",
+    "note": "A frame exists despite the obsolete status: Blurriness 40 gives an even, clearly visible soft blur in both directions.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Gradient Wipe",
+   "match": "AE.ADBE Gradient Wipe",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Makes the clip transparent pixel by pixel in order of brightness of a gradient source, as Transition Completion rises: dark areas of the gradient disappear first. With no gradient layer chosen it uses the clip's own luminance.",
+   "look": [
+    "luma wipe",
+    "organic reveal",
+    "ink bleed",
+    "shadows-first dissolve",
+    "textured transition"
+   ],
+   "use_for": [
+    "Luma-driven reveal of a clip on a lower track (shadows of the top clip vanish first) for a documentary scene change",
+    "Ink / smoke / paper-burn style transition using a gradient or texture clip on another track as the Gradient Layer (the layer has to be picked by hand in Effect Controls; a spec cannot set it)",
+    "Stylised reveal of a headline graphic or map in an explainer"
+   ],
+   "avoid": [
+    "Expecting a clean directional wipe: with the clip's own luminance it looks blotchy; use the Linear Wipe transition (or the Linear Wipe (Legacy) effect) for clean edges",
+    "Softness 0 on detailed footage gives a noisy, crunchy edge"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "How far the wipe has progressed, 0-1 fraction",
+     "typical": "keyframe 0 to 1 over 0.5-1.5 s"
+    },
+    {
+     "name": "Transition Softness",
+     "does": "Feathers the wipe edge, 0-1 fraction",
+     "typical": "0.1-0.3 (set as a static value)"
+    },
+    {
+     "name": "Gradient Layer",
+     "does": "Track/layer whose luminance drives the wipe (layer popup)",
+     "typical": "leave default (clip itself) unless a gradient clip sits on another track"
+    },
+    {
+     "name": "Gradient Placement",
+     "does": "How a gradient layer of a different size is fitted: 0 tile, 1 centre, 2 stretch to fit",
+     "typical": "2"
+    },
+    {
+     "name": "Invert Gradient",
+     "does": "Bright areas disappear first instead of dark",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 0.5,
+    "Transition Softness": 0.15
+   },
+   "enum_labels": {
+    "Gradient Placement": {
+     "0": "Tile Gradient",
+     "1": "Center Gradient",
+     "2": "Stretch Gradient to Fit"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Gradient Wipe",
+   "pairs_with": [
+    "Linear Wipe (Legacy)",
+    "Ramp",
+    "Turbulent Displace",
+    "Cross Dissolve"
+   ],
+   "scripting": "Transition Completion and Transition Softness are 0..1 fractions (send 0.5, not 50). Gradient Layer is a layer popup: harvested value 4294967294 with a nonsense range (min 3294967296 > max 1000000000), so do not set it from a spec; leave it on its default, which (medium confidence) makes the clip use its own luminance. To use a texture or gradient clip, the user must pick it in the UI. Transparent areas show the track below, so place the incoming clip underneath. Gradient Placement labels follow the After Effects order (Tile, Center, Stretch), default 2.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/039.png",
+    "note": "At 50% completion the darker areas (clothing, shadows) have gone transparent/black while brighter areas remain, a luma wipe using the clip itself.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Vector Motion",
+   "match": "AE.ADBE Graphic Group",
+   "category": "Graphics (Essential Graphics component; not an Effects-panel effect)",
+   "status": "needs_input",
+   "summary": "The built-in transform of a Premiere graphic clip (Essential Graphics text and shapes): position, scale, rotation and anchor for the whole graphic, applied as vectors so it stays sharp at any scale. It is not an effect you add from the Effects panel.",
+   "look": [
+    "sharp vector scaling",
+    "graphic transform",
+    "crisp title zoom"
+   ],
+   "use_for": [
+    "Slow push-in on a title or lower-third graphic without softening the text",
+    "Reposition or rescale a whole Essential Graphics template for a 9:16 reel version",
+    "Animate a full graphic group (logo plus text) onto the frame in an explainer"
+   ],
+   "avoid": [
+    "Applying it to camera footage or stills: it belongs to graphic clips; use Motion or Transform for video",
+    "Scale above 100% on graphics that contain embedded raster images: those still soften"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Where the graphic's anchor sits, frame fraction",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Scale",
+     "does": "Uniform scale in percent",
+     "typical": "90-120"
+    },
+    {
+     "name": "Scale Width",
+     "does": "Horizontal scale in percent when Uniform Scale is off",
+     "typical": "100"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Locks width to Scale",
+     "typical": "true"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotation in degrees",
+     "typical": "-10 to 10"
+    },
+    {
+     "name": "Anchor Point",
+     "does": "Pivot for scale/rotation, frame fraction",
+     "typical": "[0.5, 0.5]"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Motion (the raster transform on every clip); AE: layer Transform with Continuously Rasterize on",
+   "pairs_with": [
+    "Group",
+    "Drop Shadow",
+    "Gaussian Blur",
+    "Transform"
+   ],
+   "scripting": "Exists only as a fixed component on graphic clips (Essential Graphics titles/shapes and many .mogrt templates); a script should find it on the graphic clip's components and set it, not add it to a video clip. Whether adding it to ordinary video does anything is untested (low confidence), hence status needs_input. Scale and Scale Width 0..10000 %, Rotation -32768..32767 degrees, Position/Anchor Point frame fractions.",
+   "recipe": {
+    "Scale": [
+     [
+      0,
+      100
+     ],
+     [
+      3.0,
+      108
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input and no frame was rendered for it (no entry in the gallery index).",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Group",
+   "match": "AE.ADBE Graphic SubGroup",
+   "category": "Graphics (Essential Graphics component; not an Effects-panel effect)",
+   "status": "needs_input",
+   "summary": "The transform of a group of layers inside a Premiere graphic clip (layers grouped in the Essential Graphics panel): position, scale, rotation and anchor for just that group.",
+   "look": [
+    "grouped graphic transform",
+    "sharp vector scaling",
+    "sub-layer animation"
+   ],
+   "use_for": [
+    "Animate a logo plus its tag line together inside a lower-third while other text stays put",
+    "Slide a grouped name strap in from the side for a news anchor super",
+    "Rescale one part of a template (e.g. a badge) for a vertical reel layout"
+   ],
+   "avoid": [
+    "Using it to move ordinary video: QE will add it to a video clip (the harvest did, all 6 properties appear) but whether it transforms footage is unverified; use Motion or Transform there"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Group position, frame fraction",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Scale",
+     "does": "Uniform scale in percent",
+     "typical": "90-120"
+    },
+    {
+     "name": "Scale Width",
+     "does": "Horizontal scale in percent when Uniform Scale is off",
+     "typical": "100"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Locks width to Scale",
+     "typical": "true"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotation in degrees",
+     "typical": "-10 to 10"
+    },
+    {
+     "name": "Anchor Point",
+     "does": "Pivot for scale/rotation, frame fraction",
+     "typical": "[0.5, 0.5]"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE: parenting layers to a null, or a precomp's Transform",
+   "pairs_with": [
+    "Vector Motion",
+    "Drop Shadow"
+   ],
+   "scripting": "A component Premiere creates when layers are grouped in a graphic; the reliable use is to look it up among an existing graphic clip's components (there may be several, one per group) and set it. QE addVideoEffect does add it to an ordinary video clip (harvest: no error, component 'Group' with these 6 properties), but its effect on footage there is unverified. Same property set and ranges as Vector Motion: Scale and Scale Width 0..10000 %, Rotation -32768..32767 degrees, Position/Anchor Point frame fractions.",
+   "recipe": {
+    "Position": [
+     [
+      0,
+      [
+       0.3,
+       0.5
+      ]
+     ],
+     [
+      0.4,
+      [
+       0.5,
+       0.5
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input and no frame was rendered for it (no entry in the gallery index).",
+    "rerender": false,
+    "second_opinion": "corrected: card said Group is not addable to video clips; the harvest added it via QE to an ordinary video clip without error (pr_video_effects.json i=44), so avoid/scripting now say it is addable but its effect on footage is unverified. not_rendered verdict itself is right (needs_input, no gallery frame)."
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Horizontal Flip",
+   "match": "AE.ADBE Horizontal Flip",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Mirrors the clip left to right. It has no controls.",
+   "look": [
+    "mirrored",
+    "reversed direction",
+    "flipped frame"
+   ],
+   "use_for": [
+    "Make a subject face into the frame / toward the text side in an explainer layout (only when no text is visible in the shot)",
+    "Match screen direction of a generic stock B-roll vehicle or walking shot so action reads continuously across a cut",
+    "Build a mirrored split-screen symmetry for a trailer beat (with a second copy unflipped)"
+   ],
+   "avoid": [
+    "Any shot with readable text, flags, party symbols, logos, number plates or watches: they appear reversed and look fake",
+    "News or political footage where flipping a real person could be seen as altering the record",
+    "Recognisable faces of known people: the mirror image looks subtly wrong to viewers"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Transform (Scale Width -100) in After Effects, or layer Scale [-100, 100]",
+   "pairs_with": [
+    "Crop",
+    "Transform",
+    "Lumetri Color"
+   ],
+   "scripting": "No properties: apply with {\"name\": \"Horizontal Flip\", \"pr_props\": {}}; adding the effect is the flip, so demo_settings is necessarily empty and the flip is visible immediately. Cannot be keyframed; for an animated flip keyframe Basic 3D Swivel 0 to 180 instead (medium confidence that Premiere's Motion/Transform scale cannot go negative). In After Effects use Transform with Scale Width -100 (or the layer's own scale).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/040.png",
+    "note": "Frame is mirrored left to right (right-hand content now on the left, left-hand content on the right).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Invert",
+   "match": "AE.ADBE Invert",
+   "category": "Channel",
+   "status": "current",
+   "summary": "Inverts the colour information of the chosen channel (by default RGB, giving a photo-negative look). Other channel choices invert only hue, lightness, a single colour channel or alpha.",
+   "look": [
+    "photo negative",
+    "x-ray",
+    "inverted colours",
+    "flash frame",
+    "psychedelic"
+   ],
+   "use_for": [
+    "One- or two-frame negative flash on a beat hit in a reel or trailer",
+    "X-ray / film-negative treatment of archival stills in a documentary flashback",
+    "Invert a black-on-white document scan into white-on-black for a dark explainer layout",
+    "Flip a matte's alpha (Channel = Alpha) when a key or track matte is the wrong way round"
+   ],
+   "avoid": [
+    "Holding full RGB inversion on people for long: skin turns blue-green and looks alarming",
+    "Rapid repeated negative flashes: photosensitivity risk, keep flashes short and few"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Channel",
+     "does": "Which channel to invert (dropdown, 0-based; see enum_labels)",
+     "typical": "0 (RGB) for negative; 15 (Alpha) to flip a matte"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back the original, 0-100 percent",
+     "typical": "0 for full effect, 40-70 for a washed half-negative"
+    }
+   ],
+   "demo_settings": {
+    "Channel": 0,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Channel": {
+     "0": "RGB",
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "5": "HLS",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "10": "YIQ",
+     "11": "Luminance",
+     "12": "In Phase Chrominance",
+     "13": "Quadrature Chrominance",
+     "15": "Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Invert",
+   "pairs_with": [
+    "Tint",
+    "Lumetri Color",
+    "Black & White",
+    "Find Edges"
+   ],
+   "scripting": "Channel range 0..15 matches the After Effects list with separators counted: 0 RGB, 1 Red, 2 Green, 3 Blue, 4 (separator), 5 HLS, 6 Hue, 7 Lightness, 8 Saturation, 9 (separator), 10 YIQ, 11 Luminance, 12 In Phase Chrominance, 13 Quadrature Chrominance, 14 (separator), 15 Alpha. 0 and 15 are near-certain; 5-13 are inferred from that layout (medium confidence). Never send 4, 9 or 14. Blend With Original is 0..100 here (unlike Find Edges, where it is 0..1). For a flash, keyframe Blend With Original rather than toggling the effect.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.04,
+      0
+     ],
+     [
+      0.12,
+      0
+     ],
+     [
+      0.16,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/041.png",
+    "note": "Full RGB photo-negative: dark clothing turns white/cream, stripes and flowers invert to cyan/blue tones.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Lens Flare",
+   "match": "AE.ADBE Lens Flare",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Renders a simulated camera lens flare (bright hotspot plus coloured ghost rings along a line through frame centre) over the clip, using one of three lens types.",
+   "look": [
+    "sun flare",
+    "lens ghosts",
+    "cinematic",
+    "hot highlight",
+    "dated 2000s"
+   ],
+   "use_for": [
+    "Sun hit over a rally crowd or skyline establishing shot in a political documentary",
+    "Light sweep across a title or logo reveal in a trailer (animate Flare Center)",
+    "Add warmth / energy to a flat stock shot in a reel hook",
+    "Glint on a product, award or trophy shot"
+   ],
+   "avoid": [
+    "Flare placed where no light source exists in the shot: reads instantly fake",
+    "Brightness over ~150 on faces or text: blows them out and looks cheap",
+    "Overuse on news footage: it reads as stylised and editorialised"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Flare Center",
+     "does": "Position of the flare hotspot, frame fraction",
+     "typical": "on a real light source, e.g. [0.8, 0.15] for sun top-right"
+    },
+    {
+     "name": "Flare Brightness",
+     "does": "Intensity in percent",
+     "typical": "80-130"
+    },
+    {
+     "name": "Lens Type",
+     "does": "Lens model (dropdown 0-2): changes ring pattern and size",
+     "typical": "0 (50-300mm Zoom) for the classic multi-ring flare; 1 and 2 give simpler ring patterns, compare visually"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back the original, 0-100 percent",
+     "typical": "0-30"
+    }
+   ],
+   "demo_settings": {
+    "Flare Center": [
+     0.78,
+     0.22
+    ],
+    "Flare Brightness": 130,
+    "Lens Type": 0,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Lens Type": {
+     "0": "50-300mm Zoom",
+     "1": "35mm Prime",
+     "2": "105mm Prime"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Lens Flare",
+   "pairs_with": [
+    "Lumetri Color",
+    "Wonder Glow",
+    "Light Leaks",
+    "Vignette"
+   ],
+   "scripting": "Flare Center is a frame-fraction point (default [0.4, 0.4]); Flare Brightness 0..300; Lens Type dropdown 0..2 (0 50-300mm Zoom, 1 35mm Prime, 2 105mm Prime, AE order); Blend With Original 0..100. The flare is drawn on the clip itself, so on a transparent clip it only appears where there are pixels: apply it to the footage, or to a black Color Matte on the track above with Blend Mode Screen so it can be moved and faded independently. Animating Flare Center across the frame gives the light-sweep reveal. Not the same as the newer Light Leaks, Glint or Volumetric Rays effects.",
+   "recipe": {
+    "Flare Center": [
+     [
+      0,
+      [
+       0.15,
+       0.3
+      ]
+     ],
+     [
+      2.0,
+      [
+       0.85,
+       0.3
+      ]
+     ]
+    ],
+    "Flare Brightness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      120
+     ],
+     [
+      1.6,
+      120
+     ],
+     [
+      2.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/042.png",
+    "note": "Bright hotspot at top right (~0.78, 0.22) with coloured ghost rings along a line through the centre toward lower left.",
+    "rerender": false
+   }
+  }
+ ]
+}

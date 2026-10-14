@@ -1,0 +1,1212 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Logo Cutout",
+   "match": "AE.Impact_Alpha_FX",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Removes the plain white or black background from a flat logo or graphic by keying on brightness. The result is a logo with real transparency that you can lay over footage. It works without a mask or a second clip.",
+   "look": [
+    "transparent logo",
+    "luma key",
+    "background removed",
+    "clean cut-out",
+    "soft edge"
+   ],
+   "use_for": [
+    "drop a party / channel logo supplied as a JPG on white over news footage",
+    "cut out a scanned signature, stamp or emblem for an explainer card",
+    "remove the black background from a flare or graphic element shot on black",
+    "key a sponsor logo for a reel end card"
+   ],
+   "avoid": [
+    "on live-action footage it punches holes in every bright or dark area, not just the background",
+    "logos with white or near-white fills inside them lose those fills; lower Threshold or use a proper PNG",
+    "heavy Feather makes small text look fuzzy",
+    "a PNG/PSD logo that already has transparency does not need it; it only adds fringe"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Auto Detection",
+     "does": "dropdown (0..2) choosing which background tone is keyed out; labels unverified. Render-checked: the default 2 removed the DARK side on the test photo (kept only highlights), so 2 is not a fixed white-background key (it is either auto-detect or a black key); for a logo on white, try 0 or 1 and read back the result",
+     "typical": "2 (default); if the subject keys out instead of the background, try 0 or 1"
+    },
+    {
+     "name": "Threshold",
+     "does": "how far from the background tone a pixel can be and still be removed; render-checked: 30 with the default detection removed everything below roughly 63% luma, so it is a wide setting",
+     "typical": "5 (default) for clean digital logos; 15-30 for JPG artefacts or scans"
+    },
+    {
+     "name": "Feather",
+     "does": "softness of the transition between kept and removed pixels",
+     "typical": "5-15"
+    },
+    {
+     "name": "Choke Mask",
+     "does": "shrinks the matte to eat away the fringe/halo left round the logo",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Mode",
+     "does": "dropdown (0..1) inside the curve group with Threshold and Feather; role unverified (possibly the falloff shape or an invert)",
+     "typical": "0 (default)"
+    },
+    {
+     "name": "Preserve Red",
+     "does": "red weight in the brightness calculation (defaults 21.3 / 71.5 / 7.2 are the Rec.709 luma weights)",
+     "typical": "leave at default unless a coloured logo part keys out"
+    }
+   ],
+   "demo_settings": {
+    "Threshold": 30,
+    "Feather": 10
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Extract (or Luma Key)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Auto Align",
+    "Rounded Crop",
+    "Clone"
+   ],
+   "scripting": "Film Impact's Alpha FX, now built into Premiere 26 (match AE.Impact_Alpha_FX); the category is inferred. Apply it to the logo clip on an upper track. The labels for Auto Detection (0..2) and Mode (0..1) are not verified; read back what each index does before relying on it. 'Visual Curve Editor' (repeated) and 'Curve Graph' are UI rows that a spec cannot set. Preserve Red/Green/Blue are the luma weights, not colour picks.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/091.png",
+    "note": "Everything darker than roughly mid-high luma (wall, clothing, block fronts) went transparent over black and only the brightest areas (a small round motif, lamps, flowers, a wall patch) survived: a clear brightness key that punches holes in live footage, as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Auto Align",
+   "match": "AE.Impact_Auto_Align_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Snaps a clip's visible content (the non-transparent pixels of a logo, lower third or cut-out) to a chosen edge or centre of the frame, with optional scale and offset. You don't have to set positions by hand.",
+   "look": [
+    "aligned graphic",
+    "corner bug",
+    "centred logo",
+    "layout snap"
+   ],
+   "use_for": [
+    "pin a channel logo / watermark bug to a corner consistently across reels",
+    "centre a cut-out graphic or PNG regardless of its padding",
+    "line up a title graphic to the safe edge in 9:16 and 16:9 versions",
+    "shrink a logo or graphic with Scale while it stays pinned to its chosen edge"
+   ],
+   "avoid": [
+    "on a full-frame opaque clip there is nothing to align, so only Scale/Offset do anything",
+    "the alignment indices are unlabeled here; verify each index visually before batch use"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Horizontal Alignment",
+     "does": "dropdown (0..4) choosing the horizontal anchor (likely none/left/centre/right variants)",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Vertical Alignment",
+     "does": "dropdown (0..4) choosing the vertical anchor",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Scale",
+     "does": "size of the aligned content in percent (0..100, default 100); whether 100 means the content's own size or a fit to the frame is unverified",
+     "typical": "30-60 for a corner bug, then check the size by eye"
+    },
+    {
+     "name": "Offset",
+     "does": "nudge from the aligned position",
+     "typical": "[0, 0] default; small values for safe-margin padding"
+    },
+    {
+     "name": "Line Bias",
+     "does": "unclear; probably biases alignment for text lines (baseline vs bounding box)",
+     "typical": "18 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Scale": 50
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "no single effect: AE's Align panel, or a Position expression using sourceRectAtTime()",
+   "pairs_with": [
+    "Logo Cutout",
+    "Drop Shadow",
+    "Rounded Crop"
+   ],
+   "scripting": "Formerly Film Impact Auto Align (match AE.Impact_Auto_Align_FX); the category and the dropdown meanings are inferred. 'Layer' is a track picker whose harvested range is broken (min 3294967296 > max 1e9, default 4294967294 = -2, probably 'sequence frame'); do not set it from a spec. Offset is a point, but it is unclear whether it uses frame fractions or pixels: test it with small values. Confidence is low; check the result in the Program monitor. Horizontal/Vertical Alignment have 5 options each (default 1) and their labels are unknown.",
+   "recipe": {
+    "Scale": [
+     [
+      0,
+      0
+     ],
+     [
+      0.35,
+      50
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/092.png",
+    "note": "The clip is shrunk to exactly half size and sits centred on black, matching Scale 50 with the default alignment on a full-frame clip.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Gaussian Blur",
+   "match": "AE.Impact_Blur_FX",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Premiere 26's GPU blur (from Film Impact), which replaces the older Gaussian Blur. It softens the whole clip evenly and has optional chromatic-aberration fringing and edge handling.",
+   "look": [
+    "soft focus",
+    "defocused",
+    "dreamy",
+    "background blur",
+    "chromatic fringe"
+   ],
+   "use_for": [
+    "blur a background plate behind text or a quote card",
+    "blur-to-sharp reveal at the start of a doc scene",
+    "fill bars: blurred copy of a 16:9 clip behind it in a 9:16 reel",
+    "soften a distracting background behind a lower third"
+   ],
+   "avoid": [
+    "it is not a privacy blur for faces or number plates unless masked and strong enough to be unreadable",
+    "low Amount just looks out of focus by mistake; commit to a clear value",
+    "edges darken/transparent at high Amount if Edge Behavior is wrong"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "blur strength",
+     "typical": "10-25 soft background, 40-70 heavy, 100 abstract"
+    },
+    {
+     "name": "Chromatic Aberration",
+     "does": "splits RGB fringes into the blur for a lens-like look",
+     "typical": "0 clean; 10-30 stylised"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "dropdown (0..2) for how frame edges are treated (labels unverified; likely transparent / repeat / mirror)",
+     "typical": "1 (default); check the frame edges at high Amount"
+    },
+    {
+     "name": "Angle",
+     "does": "orientation of the blur kernel when it is not round (interacts with Thickness)",
+     "typical": "0"
+    },
+    {
+     "name": "Thickness",
+     "does": "appears to shape the kernel perpendicular to Angle; unverified",
+     "typical": "20 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 60
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Gaussian Blur",
+   "pairs_with": [
+    "Rounded Crop",
+    "Brightness & Contrast",
+    "Lumetri Color",
+    "Directional Blur"
+   ],
+   "scripting": "The old effect is now 'Gaussian Blur (Legacy)' (AE.ADBE Gaussian Blur 2), so the name 'Gaussian Blur' gets this Film Impact one (match AE.Impact_Blur_FX). Its controls differ from the legacy one: Amount 0..100 (not Blurriness), Edge Behavior dropdown (not Repeat Edge Pixels). Seed is irrelevant for a plain blur. The labels for Edge Behavior (0..2) and the exact role of Angle/Thickness are not verified, so leave them at their defaults unless you test. Keyframe Amount for reveals.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      60
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/093.png",
+    "note": "The whole frame is evenly and very heavily blurred into colour blobs, with figures and stripes unreadable, no fringing and no dark edges.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Bokeh Blur",
+   "match": "AE.Impact_Bokeh_Blur_FX",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "A lens-style defocus: bright points bloom into aperture-shaped bokeh discs, with a polygonal iris, diffraction fringe and lens distortion. It reads as a real camera going out of focus rather than a flat blur.",
+   "look": [
+    "cinematic defocus",
+    "bokeh balls",
+    "shallow depth of field",
+    "lens blur",
+    "dreamy highlights"
+   ],
+   "use_for": [
+    "trailer rack-defocus between scenes",
+    "out-of-focus background behind a title or quote",
+    "soft defocused intro under a channel logo",
+    "defocus-in / focus-pull transition on a reel"
+   ],
+   "avoid": [
+    "it blurs the whole frame evenly, so there is no real depth separation unless you mask it",
+    "high Gain on bright skies or flags can blow out into blobs",
+    "heavier than Gaussian Blur; long 4K stretches may need a render"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blur Amount",
+     "does": "defocus strength",
+     "typical": "20-40 soft, 60-90 heavy defocus"
+    },
+    {
+     "name": "Gain",
+     "does": "boosts highlights so they turn into visible bokeh discs",
+     "typical": "70-95"
+    },
+    {
+     "name": "Aperture Edges",
+     "does": "number of iris blades (shape of the bokeh)",
+     "typical": "5-8"
+    },
+    {
+     "name": "Aperture Roundness",
+     "does": "rounds the polygon iris toward a circle",
+     "typical": "25-80"
+    },
+    {
+     "name": "Aperture Rotation",
+     "does": "rotation of the iris shape (degrees)",
+     "typical": "0-60"
+    },
+    {
+     "name": "Chromatic Aberration",
+     "does": "colour fringing on the bokeh edges",
+     "typical": "10-30"
+    },
+    {
+     "name": "Lens Distortion",
+     "does": "cat's-eye / distortion of discs toward the frame edges",
+     "typical": "10-30"
+    }
+   ],
+   "demo_settings": {
+    "Blur Amount": 70,
+    "Gain": 95
+   },
+   "enum_labels": {},
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "Camera Lens Blur",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Echo Glow",
+    "Lumetri Color",
+    "Rounded Crop"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Bokeh_Blur_FX). Seed is not needed for a static defocus. Aperture Edges is an integer from 3 to 10. Keyframe Blur Amount for focus pulls; keep Gain moderate on bright backgrounds.",
+   "recipe": {
+    "Blur Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/094.png",
+    "note": "A strong lens-style defocus in which the lamps, flowers and stripe highlights bloom into soft bright discs while the scene stays readable as shapes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Camera Shake",
+   "match": "AE.Impact_Camera_Shake_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Adds procedural handheld camera movement (sideways strafe, forward stride and roll) chosen from preset camera modes, with speed, variation, lean and motion blur. It turns a locked-off shot or still into something that feels handheld or hit by an impact.",
+   "look": [
+    "handheld",
+    "shaky cam",
+    "impact jolt",
+    "documentary realism",
+    "motion blur",
+    "tension"
+   ],
+   "use_for": [
+    "make a locked-off interview or still photo feel handheld in a doc",
+    "impact hit on a beat or explosion in a trailer",
+    "a short jolt (under 0.5 s) as a breaking-news headline card lands, with Camera Mode 3 or 4 and Master keyed back to 0",
+    "earthquake / blast emphasis on a reel cut"
+   ],
+   "avoid": [
+    "running it at full Master for long stretches is nauseating; keep big modes to short hits",
+    "the frame edges can show if the clip is not overscanned; check the corners",
+    "continuous shake under text-heavy cards or lower thirds hurts readability; keep it to a brief hit",
+    "at the demo settings (Camera Mode 4, Master 100) the frame came out pushed in about 1.8x, cropping heads and the edges of the shot; check framing and burnt-in captions before using a strong mode",
+    "the default Camera Mode 1 (and mode 0) for a visible shake: at Master 100 they move under 1 px at 1920 (measured), which is why recipe renders at the defaults saw a smooth drift and no jitter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Camera Mode",
+     "does": "dropdown 0..4 of shake presets; mode m (0-based) reads the (m+1)-th Strafe / Stride / Roll set (mode 0 = Strafe/Stride/Roll, mode 1 = Strafe#2.., mode 4 = Strafe#5..), measured; the mode names are not exposed",
+     "typical": "2 for a moderate handheld shake, 3 strong, 4 violent; the default 1 and mode 0 barely move (measured at Master 100: rms jitter about 0.3 / 0.7 / 8 / 22 / 44 px at 1920 for modes 0-4)"
+    },
+    {
+     "name": "Master",
+     "does": "overall strength of the shake",
+     "typical": "20-40 doc handheld, 100 impact hits"
+    },
+    {
+     "name": "Speed",
+     "does": "how fast the shake moves",
+     "typical": "80-120; 150-200 for jitter"
+    },
+    {
+     "name": "Variation",
+     "does": "randomness between movements",
+     "typical": "20-40"
+    },
+    {
+     "name": "Stabilize",
+     "does": "damps the motion for a smoother float",
+     "typical": "25 (default); 50+ for a gentle drift"
+    },
+    {
+     "name": "Lean (deg)",
+     "does": "static tilt of the camera (dutch angle)",
+     "typical": "0; +/-3-8 for tension"
+    },
+    {
+     "name": "Motion Blur",
+     "does": "blur that follows the shake movement",
+     "typical": "20-60"
+    },
+    {
+     "name": "Scale",
+     "does": "Pre Transform scale (0..100, default 50); 50 is probably the neutral size and higher values zoom in to hide the edges the shake exposes (unverified)",
+     "typical": "50 (default); raise it if edges show"
+    }
+   ],
+   "demo_settings": {
+    "Camera Mode": 4,
+    "Master": 100,
+    "Speed": 150,
+    "Lean (deg)": 5,
+    "Motion Blur": 60
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Transform with a wiggle() expression (AE has no built-in camera shake effect)",
+   "pairs_with": [
+    "Directional Blur",
+    "Echo Glow",
+    "Lumetri Color",
+    "Gaussian Blur"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Camera_Shake_FX). Strafe, Stride and Roll repeat five times ('Strafe', 'Strafe#2' .. 'Strafe#5'); Camera Mode m uses the (m+1)-th set (measured 2026-10-14, live wave 3: zeroing that set alone stopped the shake, zeroing the other four kept it), so edit the set that matches the chosen mode. Mode labels are not exposed to scripting. Seed changes the random pattern; give each clip a different Seed so repeated hits don't look identical. A still frame only shows the offset, lean and blur; the shake itself needs playback. For a hit, keyframe Master. Film Impact advertised vlog, distant-observer, slow-walk, fast-walk and earthquake-style presets, but which Camera Mode index carries which name is not exposed; the default values of sets 1-2 are small (5-10) and sets 3-5 large (22-76), and the measured jitter follows them (rms at Master 100, 1920 px: mode 0 about 0.3 px, 1 about 0.7, 2 about 8, 3 about 22, 4 about 44, peaks up to 90 px).",
+   "recipe": {
+    "Master": [
+     [
+      0,
+      100
+     ],
+     [
+      0.15,
+      80
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/two_track/shake_mode_4.png",
+    "note": "Measured on a static still per mode (frame-to-frame shift of the luma profiles): Camera Mode 2-4 shake 8-44 px rms at 1920 with Master 100, modes 0-1 under 1 px, each mode driven by its own Strafe/Stride/Roll set; the playback shows the handheld shake the card describes.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "pass",
+      "changed": "2026-10-14",
+      "why": "judged again on the live wave 3 two-track test (work/pve_live/wave3/two_track.json) jitter measurement; the old pass rested on one still frame",
+      "frame": "pve/gallery/pr/095.png",
+      "note": "The frame is pushed in about 1.8x toward the upper left, slightly tilted and motion-blurred: a handheld offset on a still (the shake itself needs playback)."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Channel Mix",
+   "match": "AE.Impact_Channel_Mix_FX",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Scales and inverts individual channels in RGB, HSV or YCbCr space (for example red, hue or chroma), with a Master mix. It gives quick stylised colour shifts, channel inversions and hue rotations.",
+   "look": [
+    "colour shift",
+    "hue rotate",
+    "channel swap",
+    "stylised grade",
+    "inverted channel",
+    "pop-art"
+   ],
+   "use_for": [
+    "hue-shift a graphic or flag background to match a channel palette",
+    "glitchy channel-inversion hit on a reel beat (test the Invert Channel index first)",
+    "boost or kill one channel for a stylised trailer look",
+    "desaturate via Saturation for a flashback"
+   ],
+   "avoid": [
+    "it is not a skin-safe grade; faces go odd fast; use Lumetri for real correction",
+    "shifting hue on political party colours or national flags can misrepresent them"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color Space",
+     "does": "dropdown choosing which channel set is active: RGB, HSV or YCbCr",
+     "typical": "0 RGB"
+    },
+    {
+     "name": "Red",
+     "does": "red channel gain (RGB mode), 100 = unchanged",
+     "typical": "50-150"
+    },
+    {
+     "name": "Hue",
+     "does": "hue rotation in degrees (HSV mode)",
+     "typical": "+/-20 subtle, 90-180 stylised"
+    },
+    {
+     "name": "Saturation",
+     "does": "saturation scale (HSV mode), 100 = unchanged",
+     "typical": "0 mono, 120-150 punchy"
+    },
+    {
+     "name": "Invert Channel",
+     "does": "dropdown (0..5); three rows ('Invert Channel', '#2', '#3'), most likely one per Color Space (RGB / HSV / YCbCr), possibly one per channel slot; labels unverified",
+     "typical": "0 (default, presumably no inversion)"
+    },
+    {
+     "name": "Master",
+     "does": "mix of the effect over the original",
+     "typical": "100; 30-60 subtle"
+    }
+   ],
+   "demo_settings": {
+    "Color Space": 0,
+    "Red": 200,
+    "Green": 60,
+    "Blue": 40
+   },
+   "enum_labels": {
+    "Color Space": {
+     "0": "RGB",
+     "1": "HSV",
+     "2": "YCbCr"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Channel Mixer (RGB gains) or Hue/Saturation (hue / saturation shifts)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Echo Glow",
+    "Camera Shake"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Channel_Mix_FX). The Color Space labels are inferred from the slider order (Red/Green/Blue, Hue/Saturation/Value, Luma/Chroma Blue/Chroma Red); only the sliders of the active space apply. 'Invert Channel' repeats three times ('Invert Channel', '#2', '#3'), most likely one per Color Space (possibly one per channel slot); the labels for 0..5 are unknown. Keyframe Master for a flash or hit.",
+   "recipe": {
+    "Master": [
+     [
+      0,
+      0
+     ],
+     [
+      0.1,
+      100
+     ],
+     [
+      0.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/096.png",
+    "note": "The whole frame turned a saturated red (red doubled and clipped, green and blue cut), a clear stylised channel grade.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Clone",
+   "match": "AE.Impact_Clone_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Repeats the clip as a grid or row of copies (left/right/top/bottom clone counts) with spacing, shift, rotation and scale/alpha falloff. It has built-in eased animation toward target values, so the grid can spread, slide or rotate without keyframes.",
+   "look": [
+    "grid of copies",
+    "video wall",
+    "kaleidoscope tile",
+    "repeating pattern",
+    "multiplied subject",
+    "pop-art grid"
+   ],
+   "use_for": [
+    "video-wall montage of a speech clip for a news reel opener",
+    "repeating logo pattern background for an end card",
+    "multiply a cut-out person or icon for an explainer about crowds / numbers",
+    "spread-out grid reveal on a beat in a reel"
+   ],
+   "avoid": [
+    "on a full-frame opaque clip nothing shows: two render checks (Scale 35 with spacing 100, and Rotation Angle 20 with spacing 100) both came out identical to the source, most likely because the original is drawn on top of its copies at the default Depth Sorting 3 (unverified); use it on a cut-out, logo or text, or on a clip shrunk by an effect placed ABOVE Clone (Shrink or Transform), not by Motion Scale, which Premiere renders after every standard effect",
+    "too many clones on 4K are slow"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Scale",
+     "does": "Pre Transform scale (0..100, default 50). Render-checked: Scale 35 on a full-frame clip gave a frame identical to the source, so it does NOT simply set the size of each copy (in Shrink the same row at default 50 is neutral); leave it at default",
+     "typical": "50 (default)"
+    },
+    {
+     "name": "Left Clones",
+     "does": "number of copies to the left (Right/Top/Bottom Clones likewise)",
+     "typical": "1-3"
+    },
+    {
+     "name": "Horizontal Spacing",
+     "does": "gap between copies horizontally (percent of a copy)",
+     "typical": "90-110"
+    },
+    {
+     "name": "Vertical Spacing",
+     "does": "gap between copies vertically",
+     "typical": "90-110"
+    },
+    {
+     "name": "Hor. Spacing Speed",
+     "does": "continuous drift of the spacing per second (procedural animation)",
+     "typical": "0; +/-10-30 for a slow spread"
+    },
+    {
+     "name": "Rotation (deg/s)",
+     "does": "continuous rotation speed of the clone field",
+     "typical": "0; 10-30 for a slow spin"
+    },
+    {
+     "name": "Alpha Falloff",
+     "does": "fades the outer copies",
+     "typical": "20-60"
+    },
+    {
+     "name": "Type",
+     "does": "dropdown (0..3) easing curve used to reach the Target values (probably ease / elastic / bounce / wave)",
+     "typical": "0"
+    },
+    {
+     "name": "Animation Mode",
+     "does": "dropdown (0..2), probably choosing static, ease-to-Target or constant-Speed animation; unverified",
+     "typical": "0 (default)"
+    },
+    {
+     "name": "Depth Sorting",
+     "does": "dropdown (0..4) for the stacking order of the original and its copies; labels unverified. Two renders at the default 3 showed only the untouched original on a full-frame clip, so 3 probably draws the original on top",
+     "typical": "3 (default) for a cut-out; test 0 when the copies must cover a full-frame clip"
+    }
+   ],
+   "demo_settings": {
+    "Left Clones": 2,
+    "Right Clones": 2,
+    "Top Clones": 1,
+    "Bottom Clones": 1,
+    "Horizontal Spacing": 50,
+    "Hor. Spacing Target": 50,
+    "Vertical Spacing": 50,
+    "Ver. Spacing Target": 50,
+    "Depth Sorting": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Motion Tile",
+   "pairs_with": [
+    "Rounded Crop",
+    "Logo Cutout",
+    "Echo Glow",
+    "Camera Shake"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Clone_FX). Each animated value has three rows: the start value (e.g. 'Horizontal Spacing'), a '... Target' and a '... Speed'. The effect appears to ease from start to Target over the 'Effect Timing' window (Units 0..1, 'Start Offset', 'Duration', both repeated as '#2' for the second unit) using the 'Type' curve and its sub-controls ('Frequency', 'Decay' and 'Anticipate' repeat as '#2'). This reading of the timing is unverified. A static grid needs the clone counts and spacing on a clip that is already smaller than the frame (shrink it with an effect above Clone; Motion renders after it); the Pre Transform Scale row did not shrink a full-frame clip in the render check. Render-checked: Rotation Angle 20 with spacing 100 also rendered identical to the source, consistent with the original being drawn untransformed on top of the copies at Depth Sorting 3; the demo now tries Depth Sorting 0 with spacing 50, so any copy drawn above the original covers half the frame (unverified). 'Curve Graph' is not settable. 'Clones' (0..32, default 1) and 'Pattern' (1..1000) have unknown roles; leave them at their defaults.",
+   "recipe": {
+    "Horizontal Spacing": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ],
+    "Vertical Spacing": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/097.png",
+    "note": "Re-rendered with Depth Sorting 0, spacing 50 and 2/2/1/1 clones: a rotated 2x2 tiling of the frame is clearly visible.",
+    "rerender": false,
+    "second_opinion": "lead check after re-render"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Compound Blur",
+   "match": "AE.Impact_Compound_Blur_FX",
+   "category": "Blur & Sharpen",
+   "status": "needs_input",
+   "summary": "Blurs the clip by different amounts across the frame, driven by the brightness of a blur map layer picked on another track. It is used for fake depth of field or selective blur.",
+   "look": [
+    "selective blur",
+    "fake depth of field",
+    "variable focus",
+    "map-driven blur"
+   ],
+   "use_for": [
+    "fake depth of field on a still using a depth/gradient matte on another track",
+    "blur only the background of a cut-out shot with a luma matte"
+   ],
+   "avoid": [
+    "with no Blur Layer picked it did nothing (render-checked at Blur Amount 80 with Depth, Threshold and Weight at defaults), so it cannot be used from a spec alone",
+    "without a proper blur map the result is an uneven blur that reads as a mistake",
+    "the map track must be aligned and the same size as the clip"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Blur Amount",
+     "does": "maximum blur where the map is fully on",
+     "typical": "10-40"
+    },
+    {
+     "name": "Softness",
+     "does": "smooths transitions between blurred and sharp regions",
+     "typical": "10-30"
+    },
+    {
+     "name": "Depth",
+     "does": "shifts which map brightness counts as in-focus (-100..100)",
+     "typical": "0"
+    },
+    {
+     "name": "Threshold",
+     "does": "map level where blur starts (-100..100)",
+     "typical": "0"
+    },
+    {
+     "name": "Feather",
+     "does": "width of the blur ramp around Threshold",
+     "typical": "25"
+    },
+    {
+     "name": "Gain",
+     "does": "brightens blurred highlights (bloom)",
+     "typical": "10-40"
+    }
+   ],
+   "demo_settings": {
+    "Blur Amount": 80,
+    "Softness": 30,
+    "Gain": 40
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Compound Blur",
+   "pairs_with": [
+    "Bokeh Blur",
+    "Gaussian Blur",
+    "Track Matte Key"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Compound_Blur_FX). 'Blur Layer' is a track picker whose harvested range is broken (min 3294967296 > max 1e9, default 4294967295 = -1, probably 'none'); a spec cannot set it. Render-checked: there is NO self-mapped behaviour. With Blur Layer at its default (none) the clip passes through unchanged even at Blur Amount 80, so the effect needs a human to pick the map track in the Effect Controls panel (status needs_input). Whether Depth, Threshold or Weight can force a blur with no map is untested. For a uniform blur use Gaussian Blur instead.",
+   "recipe": {
+    "Blur Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      40
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Not rendered because the status is needs_input (Blur Layer must be picked by hand), so there is no frame in this gallery.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Rounded Crop",
+   "match": "AE.Impact_Crop_FX",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Crops the clip from each side with rounded (per-corner) corners, feather, and its own offset, angle and scale. In one effect it turns a clip into a modern rounded picture-in-picture card.",
+   "look": [
+    "rounded card",
+    "picture-in-picture",
+    "modern UI frame",
+    "soft crop",
+    "inset window"
+   ],
+   "use_for": [
+    "rounded PiP of a speaker or source clip in an explainer",
+    "social-style rounded video card over a blurred background in a reel",
+    "split-screen panels with rounded corners for a debate / comparison",
+    "pop-in card reveal by keyframing Scale"
+   ],
+   "avoid": [
+    "negative Feather or heavy Roundness on tiny crops can look like a blob",
+    "crop numbers are percent of each side; cropping both sides past 50 removes everything"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Left",
+     "does": "crop from the left edge (percent); Right/Top/Bottom likewise",
+     "typical": "5-25"
+    },
+    {
+     "name": "Roundness",
+     "does": "corner radius for all corners",
+     "typical": "10-40"
+    },
+    {
+     "name": "Roundness Top Left",
+     "does": "extra/override radius for one corner (others likewise)",
+     "typical": "0"
+    },
+    {
+     "name": "Feather",
+     "does": "edge softness (-100..100)",
+     "typical": "0-5"
+    },
+    {
+     "name": "Scale",
+     "does": "scale of the cropped card (0..400 percent)",
+     "typical": "60-100 for PiP"
+    },
+    {
+     "name": "Offset",
+     "does": "moves the cropped card",
+     "typical": "[0, 0] default"
+    },
+    {
+     "name": "Angle",
+     "does": "rotates the card",
+     "typical": "0; +/-3 for a playful tilt"
+    }
+   ],
+   "demo_settings": {
+    "Left": 12,
+    "Right": 12,
+    "Top": 12,
+    "Bottom": 12,
+    "Roundness": 35
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "rounded-rectangle layer mask with feather (AE has no crop effect)",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Drop Shadow",
+    "Clone",
+    "Auto Align"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Crop_FX). Left/Right/Top/Bottom appear twice; the second set ('Left#2' .. 'Bottom#2') has an unknown role, possibly a separate crop applied before Scale/Offset. Use the first set. Whether Offset uses frame fractions or pixels is unverified; test it with small values. Put a blurred copy of the clip on the track below for a social card.",
+   "recipe": {
+    "Scale": [
+     [
+      0,
+      0
+     ],
+     [
+      0.35,
+      105
+     ],
+     [
+      0.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/098.png",
+    "note": "The clip is cropped about 12% on every side into a card with clearly rounded corners on black, a clean picture-in-picture inset.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Directional Blur",
+   "match": "AE.Impact_Directional_Blur_FX",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Smears the clip along one angle, as if it moved fast in that direction, with optional chromatic fringing. It sells whips, speed and impact.",
+   "look": [
+    "motion streak",
+    "speed",
+    "whip",
+    "smear",
+    "kinetic"
+   ],
+   "use_for": [
+    "whip-pan across a cut: the 'Directional Blur' transition does it in one step; use this effect when each side needs its own Amount keyframes",
+    "speed feel on a push-in or slide in a reel",
+    "trailer hit frames with chromatic streak",
+    "motion-blur a sliding graphic or text card"
+   ],
+   "avoid": [
+    "a constant streak on a static shot reads as an error; animate it",
+    "high Amount on faces smears features"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "length/strength of the streak",
+     "typical": "20-40 subtle, 70-100 whip"
+    },
+    {
+     "name": "Angle",
+     "does": "direction of the streak in degrees; render-checked: the default 0 gives VERTICAL streaks, so use 90 for a horizontal whip-pan",
+     "typical": "0 or 90 to match the move"
+    },
+    {
+     "name": "Chromatic Aberration",
+     "does": "RGB split along the streak",
+     "typical": "0-30"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "dropdown (0..2) for frame-edge handling",
+     "typical": "2 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 70
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Directional Blur",
+   "pairs_with": [
+    "Camera Shake",
+    "Transform",
+    "Gaussian Blur",
+    "Channel Mix"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Directional_Blur_FX); it replaces 'Directional Blur (Legacy)', and a transition with the same name also exists, so apply it as an effect, not a transition. Angle 0 (default) gives vertical streaks (render-checked); set Angle 90 for a horizontal whip. Seed is not needed. For a whip across a cut, put it on both clips: ramp Amount up into the cut and down out of it.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.12,
+      90
+     ],
+     [
+      0.25,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/099.png",
+    "note": "The whole frame is smeared into long vertical streaks at the default Angle 0, a strong single-direction motion smear.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Echo Glow",
+   "match": "AE.Impact_Echo_Glow_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "A glow built from stacked echoes of the highlights that radiate from an anchor point. It can be tinted, outlined, spun and animated over time, giving a dreamy or energetic halo.",
+   "look": [
+    "radiant glow",
+    "light echoes",
+    "halo",
+    "dreamy",
+    "energetic",
+    "music-video"
+   ],
+   "use_for": [
+    "glowing title or logo reveal on an AI-channel intro",
+    "trailer hit frame with radiating highlights",
+    "dreamy flashback glow in a documentary",
+    "beat-synced glow pulse on a reel"
+   ],
+   "avoid": [
+    "it washes out skin and news footage at high Intensity; a hard sell for serious news",
+    "a strong Colorize tint over party colours or flags can misrepresent them"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Intensity",
+     "does": "glow strength",
+     "typical": "40-80"
+    },
+    {
+     "name": "Highlights Only",
+     "does": "limits glow to brighter areas",
+     "typical": "40-80"
+    },
+    {
+     "name": "Steps",
+     "does": "number of echo copies",
+     "typical": "6-16"
+    },
+    {
+     "name": "Range",
+     "does": "how far the echoes spread from the anchor",
+     "typical": "50-90"
+    },
+    {
+     "name": "Anchor",
+     "does": "point the echoes radiate from",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Speed",
+     "does": "built-in animation speed of the echoes (-100..100)",
+     "typical": "5 (default); 0 static"
+    },
+    {
+     "name": "Colorize",
+     "does": "amount of tint from Color; render-checked: 60 with #FF8A00 left the echoes pale yellow-white, so use 90-100 for a visible tint",
+     "typical": "20-60"
+    },
+    {
+     "name": "Color",
+     "does": "tint colour of the glow",
+     "typical": "#FF8A00 warm, #00B4FF cool"
+    }
+   ],
+   "demo_settings": {
+    "Intensity": 100,
+    "Highlights Only": 50,
+    "Steps": 12,
+    "Range": 85,
+    "Colorize": 60,
+    "Color": "#FF8A00"
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Glow (plus Radial Blur for the echo trails)",
+   "pairs_with": [
+    "Edge Glow",
+    "Camera Shake",
+    "Bokeh Blur",
+    "Channel Mix"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Echo_Glow_FX). Anchor is a point in frame fractions ([0.5, 0.5] = centre). Colours are '#RRGGBB'; the harvested defaults are packed integers. Blend Mode 0..1 is unlabeled. The glow animates by itself while Speed or Spin is non-zero; set both to 0 for a static look.",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      100
+     ],
+     [
+      0.2,
+      100
+     ],
+     [
+      1.0,
+      40
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/100.png",
+    "note": "Highlights (lamps, a small round motif, flowers, stripes) throw stepped, dotted echo trails radiating out from the frame centre; the orange tint at Colorize 60 barely shows.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Edge Glow",
+   "match": "AE.Impact_Edge_Glow_FX",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "A highlight glow with a width/height-shapeable bloom (round or stretched like an anamorphic streak) plus colour tint, vibrance and chromatic aberration. It gives bright, neon or cinematic bloom.",
+   "look": [
+    "bloom",
+    "neon glow",
+    "anamorphic streak",
+    "cinematic highlights",
+    "luminous"
+   ],
+   "use_for": [
+    "neon glow on titles, icons and logos in AI-channel reels",
+    "cinematic bloom on lights in a trailer",
+    "glow pulse on a hit or beat",
+    "anamorphic-style horizontal streak on night shots (only if Width/Height respond; see scripting)"
+   ],
+   "avoid": [
+    "on bright daylight news shots it fogs the whole frame; raise Highlights Only",
+    "big Size values soften everything"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Intensity",
+     "does": "glow strength",
+     "typical": "40-80"
+    },
+    {
+     "name": "Highlights Only",
+     "does": "threshold for what feeds the glow: higher = only the brightest areas glow (less glow)",
+     "typical": "0-15 on dim / low-key footage, 20-60 on bright high-key shots",
+     "note": "Render-checked on a dim indoor shot: 0 with Size 100, Width/Height 200 gave a clear cyan bloom on lamps and a small round motif; 40 left almost nothing; 15 with Width/Height 40 read as a colour cast. Bloom size (Width/Height) matters as much as the threshold."
+    },
+    {
+     "name": "Size",
+     "does": "glow radius; render-checked: 90 (Intensity 100, Highlights Only 15, Colorize 90) on a daylight still photo gave only a teal tint on bright detail and a faint cool haze, not a visible bloom",
+     "typical": "10-40"
+    },
+    {
+     "name": "Width",
+     "does": "horizontal stretch of the glow (percent)",
+     "typical": "15 round; 100-300 anamorphic streak"
+    },
+    {
+     "name": "Height",
+     "does": "vertical stretch of the glow",
+     "typical": "15"
+    },
+    {
+     "name": "Colorize",
+     "does": "amount of tint from Color",
+     "typical": "0-60"
+    },
+    {
+     "name": "Color",
+     "does": "tint colour",
+     "typical": "#00B4FF neon blue"
+    }
+   ],
+   "demo_settings": {
+    "Intensity": 100,
+    "Highlights Only": 0,
+    "Size": 100,
+    "Width": 200,
+    "Height": 200,
+    "Colorize": 100,
+    "Vibrance": 40,
+    "Color": "#00B4FF"
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Glow",
+   "pairs_with": [
+    "Echo Glow",
+    "Channel Mix",
+    "Directional Blur"
+   ],
+   "scripting": "Film Impact effect (match AE.Impact_Edge_Glow_FX). It is unclear whether the 'Edge' in the name means edge detection or edge-of-highlight bloom; the controls suggest a shaped highlight glow (unverified). Width and Height reach 400; a Width much larger than Height gives a horizontal streak. Colours are '#RRGGBB'. Blend Mode 0..1 is unlabeled. An unnamed toggle row right after Height defaults to on and cannot be set from a spec; it may be a 'uniform' switch that makes Size override Width/Height. If Width changes nothing, shape the glow with Size only.",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.1,
+      100
+     ],
+     [
+      0.6,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/101.png",
+    "note": "Four variants rendered; with Highlights Only 0 the lamps, a small round motif and the foreground blocks bloom cyan-white (Highlights Only 40 had left almost nothing above threshold).",
+    "rerender": false,
+    "second_opinion": "lead check: corrected demo, Highlights Only is a threshold"
+   }
+  }
+ ]
+}

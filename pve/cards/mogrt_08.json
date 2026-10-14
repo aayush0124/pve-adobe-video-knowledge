@@ -1,0 +1,206 @@
+{
+ "cards": [
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Rectangle Stroke Fixed Duration [Trim Path 2]",
+   "match": null,
+   "category": "(5) Shape Elements",
+   "status": "current",
+   "origin": "premiere_composer",
+   "folder": "(5) Shape Elements",
+   "params": [
+    "Position",
+    "Rotation",
+    "Scale",
+    "Skew",
+    "Flip Horizontal",
+    "Flip Vertical",
+    "Color",
+    "Width",
+    "Height",
+    "Stroke Round Cap",
+    "Stroke Width",
+    "Stroke Offset Path",
+    "Round Corners",
+    "Show Guide"
+   ],
+   "summary": "A single stroke segment (a light trail, never a closed box) runs one lap clockwise around an invisible rectangle and disappears, in a fixed 1.33 s. Trim Path 2 pattern (measured from the bundled preview): a dot sits at the bottom-right corner for ~0.25 s, then whips round with the longest tail of the three variants (about half the perimeter at its peak) and drains down the right side, gone by ~1.15 s. Transparent 1920x1080 overlay with a built-in slide whoosh; colour, size, stroke width, rounded corners and round caps exposed.",
+   "look": [
+    "light trail",
+    "comet stroke",
+    "line trace around a box",
+    "outline box",
+    "minimal",
+    "flat motion graphic"
+   ],
+   "use_for": [
+    "one-shot 'trace' accent around a number, headline or face in a news screenshot or document B-roll, cut on the beat just before a zoom or a highlight lands",
+    "flag a stat or quote card as it appears in an explainer (the trail circles it once and leaves)",
+    "fast beat-hit accent in a social reel, with its built-in slide whoosh",
+    "accent around a map region or chart bar while the VO names it"
+   ],
+   "avoid": [
+    "it is NOT a box that stays: the rectangle is never closed and the frame is empty again by ~1.2 s; for a highlight box that holds use 'Rectangle Stroke Custom Duration' (draws the full box, holds, undraws) or 'Rectangle Frame'",
+    "extending the clip past 1.33 s only adds empty frames; trim it to 1.33 s",
+    "carries its own slide SFX on the audio track passed to importMGT: delete or mute that audio clip when the edit has its own SFX bed, or under sombre documentary VO",
+    "leave Show Guide off for render (it shows the full rectangle at 50% opacity as a layout guide)",
+    "thin strokes (<6 px) break up after Instagram compression; 8-20 px reads on social (default 20)"
+   ],
+   "confidence": "medium",
+   "duration_note": "Fixed Duration: comp is 1.335 s (1001/750 s = 40 frames at 29.97 fps); the animation is baked to that time and does not follow the clip length. Measured from the pack's bundled preview: nothing is visible for the first ~5 frames, and the trail has fully left by frame ~35-37 (about 1.2 s), so the end state is an empty transparent frame. Trim the clip to 1.33 s; lengthening it only adds empty frames.",
+   "scripting": "seq.importMGT(path, ticks, vTrack, aTrack); the template has audio ('Slide Box Low Long 01.wav', 1.24 s, peaks about -18 dBFS), which lands on aTrack, plus the video on vTrack. No text fields. Set params by display name via clip.getMGTComponent().properties.getParamForDisplayName(n).setValue(v): Position = [x, y] offset from the frame centre in frame fractions ([0, 0] = centre; the AE expression is comp centre + point, and mg.py measured frame fractions on the sibling shape elements); Rotation degrees; Scale percent (0-2000, default 100); Skew -50..50; Color \"#RRGGBB\" (default white); Width / Height = rectangle path size in pixels (0-2000, default 400 x 400; the preview measures ~400 px, unlike Rectangle Frame's ~2.1 px per unit); Stroke Width px (0-300, default 20; the stroke is centred on the path); Stroke Offset Path (0-300, default 0) drives an Offset Paths operator, so it expands the rectangle outward by that many px; Round Corners = corner radius px (0-400); Flip Horizontal / Flip Vertical mirror the shape, which reverses the travel direction and moves the start corner; Stroke Round Cap = round line ends; Show Guide = layout guide. Premiere clamps values to these slider ranges. Example params: {\"Position\": [0, 0], \"Width\": 520, \"Height\": 200, \"Color\": \"#E0242B\", \"Stroke Width\": 12, \"Stroke Round Cap\": true, \"Show Guide\": false}."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Rectangle Stroke Fixed Duration [Trim Path 3]",
+   "match": null,
+   "category": "(5) Shape Elements",
+   "status": "current",
+   "origin": "premiere_composer",
+   "folder": "(5) Shape Elements",
+   "params": [
+    "Position",
+    "Rotation",
+    "Scale",
+    "Skew",
+    "Flip Horizontal",
+    "Flip Vertical",
+    "Color",
+    "Width",
+    "Height",
+    "Stroke Round Cap",
+    "Stroke Width",
+    "Stroke Offset Path",
+    "Round Corners",
+    "Show Guide"
+   ],
+   "summary": "A single stroke segment (a light trail, never a closed box) runs one lap clockwise around an invisible rectangle and disappears, in a fixed 1.33 s. Trim Path 3 pattern (measured from the bundled preview): a fast start from the bottom-right corner that reaches the top-right corner by ~0.55 s with a segment about one side long, then a slow ease-out tail that shrinks down the right side until ~1.25 s. Transparent 1920x1080 overlay with a built-in slide whoosh; colour, size, stroke width, rounded corners and round caps exposed.",
+   "look": [
+    "light trail",
+    "comet stroke",
+    "line trace around a box",
+    "outline box",
+    "minimal",
+    "flat motion graphic"
+   ],
+   "use_for": [
+    "one-shot 'trace' accent around a number, headline or face in a news screenshot or document B-roll, cut on the beat just before a zoom or a highlight lands",
+    "flag a stat or quote card as it appears in an explainer (the trail circles it once and leaves)",
+    "fast beat-hit accent in a social reel, with its built-in slide whoosh",
+    "accent around a map region or chart bar while the VO names it"
+   ],
+   "avoid": [
+    "it is NOT a box that stays: the rectangle is never closed and the frame is empty again by ~1.2 s; for a highlight box that holds use 'Rectangle Stroke Custom Duration' (draws the full box, holds, undraws) or 'Rectangle Frame'",
+    "extending the clip past 1.33 s only adds empty frames; trim it to 1.33 s",
+    "carries its own slide SFX on the audio track passed to importMGT: delete or mute that audio clip when the edit has its own SFX bed, or under sombre documentary VO",
+    "leave Show Guide off for render (it shows the full rectangle at 50% opacity as a layout guide)",
+    "thin strokes (<6 px) break up after Instagram compression; 8-20 px reads on social (default 20)"
+   ],
+   "confidence": "medium",
+   "duration_note": "Fixed Duration: comp is 1.335 s (1001/750 s = 40 frames at 29.97 fps); the animation is baked to that time and does not follow the clip length. Measured from the pack's bundled preview: nothing is visible for the first ~5 frames, and the trail has fully left by frame ~35-37 (about 1.2 s), so the end state is an empty transparent frame. Trim the clip to 1.33 s; lengthening it only adds empty frames.",
+   "scripting": "seq.importMGT(path, ticks, vTrack, aTrack); the template has audio ('Slide Box Low Long 01.wav', 1.24 s, peaks about -18 dBFS), which lands on aTrack, plus the video on vTrack. No text fields. Set params by display name via clip.getMGTComponent().properties.getParamForDisplayName(n).setValue(v): Position = [x, y] offset from the frame centre in frame fractions ([0, 0] = centre; the AE expression is comp centre + point, and mg.py measured frame fractions on the sibling shape elements); Rotation degrees; Scale percent (0-2000, default 100); Skew -50..50; Color \"#RRGGBB\" (default white); Width / Height = rectangle path size in pixels (0-2000, default 400 x 400; the preview measures ~400 px, unlike Rectangle Frame's ~2.1 px per unit); Stroke Width px (0-300, default 20; the stroke is centred on the path); Stroke Offset Path (0-300, default 0) drives an Offset Paths operator, so it expands the rectangle outward by that many px; Round Corners = corner radius px (0-400); Flip Horizontal / Flip Vertical mirror the shape, which reverses the travel direction and moves the start corner; Stroke Round Cap = round line ends; Show Guide = layout guide. Premiere clamps values to these slider ranges. Example params: {\"Position\": [0, 0], \"Width\": 520, \"Height\": 200, \"Color\": \"#E0242B\", \"Stroke Width\": 12, \"Stroke Round Cap\": true, \"Show Guide\": false}."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "HB Counter",
+   "match": null,
+   "category": "house",
+   "status": "current",
+   "origin": "house",
+   "folder": "house",
+   "params": [
+    "Label Colour",
+    "Number Colour",
+    "Label",
+    "Suffix",
+    "Prefix",
+    "Thousands Comma",
+    "Count Seconds",
+    "To",
+    "From"
+   ],
+   "summary": "House big-number counter: a 260 px Bebas Neue Bold number (white, AE Drop Shadow) fades in over 0.15 s and counts with an ease-out from From to To between 0.1 s and 0.1 s + Count Seconds; a Montserrat Bold 44 px label with wide tracking (red #E0242B by default) fades in under it from 0.6 x Count Seconds, so it arrives while the count is settling. Transparent 1920x1080, horizontally centred (number at y 490, label at y 660), no out-animation, no audio.",
+   "look": [
+    "big number",
+    "stat counter",
+    "count-up",
+    "bold sans",
+    "news data graphic",
+    "red accent"
+   ],
+   "use_for": [
+    "casualty / vote / budget figures in political explainers and news reels",
+    "count-up stat reveal in a documentary ('166 LIVES LOST')",
+    "views / price / percentage numbers in AI-education reels (Prefix '₹' or '$', Suffix '%', ' CR', 'K')",
+    "full-screen stat card over a dimmed or blurred background clip"
+   ],
+   "avoid": [
+    "Thousands Comma groups in Western threes (1,000,000), not Indian lakh/crore (10,00,000); for Indian figures turn it off and use a Suffix like ' CR' / ' LAKH'",
+    "integers only: the shown value is rounded, so 4.7 shows as 5 (put decimals in a text template instead)",
+    "Prefix and Suffix are joined into the number's text, so they render at the full 260 px number size; keep the whole string short (about 12 characters) or it runs wide",
+    "label is one line with tracking 700: keep it under ~25 characters or it runs off the 1920 px frame",
+    "no background plate: over busy footage add a dim/blur clip underneath or the white number loses contrast",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animation splits dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi use a per-word or per-line template, or one that moves the whole line"
+   ],
+   "confidence": "high",
+   "duration_note": "Comp is 4 s at 25 fps; default clip length 4 s. Number fades in 0-0.15 s and counts from 0.1 s to 0.1 s + Count Seconds (default 1.5); the label fades in from 0.6 x Count Seconds to 0.6 x Count Seconds + 0.3 s; the final number then holds to the end of the 4 s comp. Clips up to 4 s are safe (the pilot edit used 3.1-3.6 s); past 4 s the comp's layers end and the graphic vanishes (measured 2026-10-13: in a 5 s clip it was last visible at 3.96 s and blank from 4.0 s), so keep the clip at 4 s or less and Count Seconds well under the clip length. Measured 2026-10-13 (5 s clip, 25 fps): visible from 0.04 s, count settles 1.60 s, no out animation, last visible 3.96 s and blank for the rest of the 5 s clip; Devanagari identical.",
+   "scripting": "seq.importMGT(path, ticks, vTrack, aTrack), path mgt/house/HB Counter.mogrt. Text fields (JSON with textEditValue): From and To (numbers as text, so there is no 0-100 slider clamp; everything except digits, '.' and '-' is stripped, so '1,500' or '2,00,000' parse fine), Label, Prefix and Suffix (pass a single space ' ' for empty, as the house mg.py helper counter() does; one leading and one trailing space of the joined string are trimmed, so ' CR' keeps its inner space). By display name via getMGTComponent(): Count Seconds (slider 0-100, seconds of the count; published with 0 decimal places, so Premiere may round fractional values such as 1.4 to whole seconds: unverified, whole seconds are safe), Thousands Comma (bool, default on), Number Colour and Label Colour (\"#RRGGBB\"). Example params: {\"Count Seconds\": 2, \"Thousands Comma\": true, \"Number Colour\": \"#F2F2F2\", \"Label Colour\": \"#E0242B\"}. Helper: the house mg.py counter(frm, to, label, start, dur, ...). Fonts: Bebas Neue Bold (number, has the rupee sign) and Montserrat Bold (label) render; Hind Bold is also listed as a used font (hidden FROM/TO input layers), so install it to avoid a missing-font prompt. Devanagari run 2026-10-13: The Devanagari label rendered with identical timing (the number stays in Latin digits), but its static wide tracking pulls the ि matra away from भ ('अ ि भ ले ख') for the whole hold.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/mogrts/009_lat_template_b.png",
+    "note": "A large white condensed number counts up (655 at 0.5 s, 1,936 at 1.5 s on its way to 1947) with a widely tracked red label fading in under it from about 0.9 s, and the graphic simply disappears when its 4 s comp ends.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "HB Counter_v1_slider",
+   "match": null,
+   "category": "house",
+   "status": "obsolete",
+   "equivalent": "HB Counter",
+   "origin": "house",
+   "folder": "house",
+   "params": [
+    "Label Colour",
+    "Number Colour",
+    "Label",
+    "Suffix",
+    "Prefix",
+    "Thousands Comma",
+    "Count Seconds",
+    "To",
+    "From"
+   ],
+   "summary": "Earlier build of the house counter (same look and timing: big white Bebas number counting up, red label fading in under it) where From and To are slider controls published with the default 0-100 slider range (its own default To of 166 is already out of range), so Premiere clamps them and it cannot count past 100. Superseded by HB Counter, which takes From/To as text.",
+   "look": [
+    "big number",
+    "stat counter",
+    "count-up",
+    "bold sans"
+   ],
+   "use_for": [
+    "none for new edits: use HB Counter",
+    "only re-opening old sequences that already reference this file"
+   ],
+   "avoid": [
+    "any From/To above 100 is clamped to 100 by Premiere",
+    "do not pick it for new cues"
+   ],
+   "confidence": "high",
+   "duration_note": "Same 4 s, 25 fps timing as HB Counter (count over Count Seconds, label fade, final number holds).",
+   "scripting": "Obsolete: import HB Counter.mogrt instead. If touched, From/To are sliders (0-100, 0 decimals) set by display name via getMGTComponent(); Label/Prefix/Suffix are text fields (JSON textEditValue); Count Seconds slider (0-100), Thousands Comma bool, Number Colour / Label Colour \"#RRGGBB\"."
+  }
+ ]
+}

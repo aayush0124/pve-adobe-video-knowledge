@@ -1,0 +1,1244 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cartoon",
+   "match": "ADBE Cartoonify",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Turns live action into a flat cel-shaded cartoon: smooths detail into a few flat shading bands and draws dark ink outlines along strong edges.",
+   "look": [
+    "cartoon",
+    "cel shading",
+    "comic",
+    "ink outline",
+    "flat colour",
+    "illustrated"
+   ],
+   "use_for": [
+    "comic-panel style recap of a political event in a satire reel",
+    "stylised flashback or 'imagine this' segment in an explainer",
+    "illustrated look behind a title or quote card",
+    "transition into an animated/graphic section"
+   ],
+   "avoid": [
+    "faces turn waxy and lose identity at high Detail Radius",
+    "busy crowd shots become noisy outline soup",
+    "heavy render on 4K, slow previews on long clips"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Render",
+     "does": "what is drawn: 1 Fill only, 2 Edges only, 3 Fill & Edges",
+     "typical": "3"
+    },
+    {
+     "name": "Detail Radius",
+     "does": "blur radius used to simplify detail before shading",
+     "typical": "8-15"
+    },
+    {
+     "name": "Detail Threshold",
+     "does": "tolerance of the edge-preserving pre-blur; higher = more fine detail smoothed away (more abstract)",
+     "typical": "10-30"
+    },
+    {
+     "name": "Shading Steps",
+     "does": "number of flat tone bands in the fill",
+     "typical": "4-8"
+    },
+    {
+     "name": "Shading Smoothness",
+     "does": "softness of the transitions between bands (low = hard cel bands)",
+     "typical": "30-70"
+    },
+    {
+     "name": "Threshold",
+     "does": "edge-detection threshold that decides how many outlines are drawn (direction unverified: test 1.3-3 and compare)",
+     "typical": "1.3-2.5"
+    },
+    {
+     "name": "Width",
+     "does": "outline thickness in pixels",
+     "typical": "1.5-3"
+    },
+    {
+     "name": "Opacity",
+     "does": "outline opacity (%)",
+     "typical": "80-100"
+    }
+   ],
+   "demo_settings": {
+    "Render": 3,
+    "Detail Radius": 12,
+    "Detail Threshold": 20,
+    "Shading Steps": 5,
+    "Shading Smoothness": 35,
+    "Threshold": 1.6,
+    "Width": 2.5,
+    "Opacity": 100
+   },
+   "enum_labels": {
+    "Render": {
+     "1": "Fill",
+     "2": "Edges",
+     "3": "Fill & Edges"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Posterize",
+    "Vibrance",
+    "Curves",
+    "Find Edges",
+    "Noise"
+   ],
+   "scripting": "Group headers (Fill, Edge, Advanced) are not addressable; set leaf names directly (Shading Steps, Width, Edge Contrast...). Render is a 3-item popup (1-based). Premiere has no direct equivalent (approximate with Posterize + Find Edges blended). Render 2 (Edges) gives a line-art look usable as a matte for a sketch reveal. The direction of the Edge Threshold control (more vs fewer outlines as it rises) is unverified.",
+   "recipe": {
+    "Shading Steps": [
+     [
+      0,
+      30
+     ],
+     [
+      0.6,
+      5
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/190.png",
+    "note": "Flat posterised cel-shaded fill with dark speckled outlines on the foreground blocks, a small round motif and the stripes; reads clearly as a cartoon/comic panel.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Emboss",
+   "match": "ADBE Color Emboss",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Embosses the image like a raised relief while keeping its original colours, so edges get light/dark bevelled ridges.",
+   "look": [
+    "emboss",
+    "relief",
+    "bevel",
+    "sharpened edges",
+    "texture",
+    "metallic"
+   ],
+   "use_for": [
+    "stamped/relief texture on a logo or title layer",
+    "gritty hyper-detailed look on a still photo in a trailer",
+    "subtle edge punch blended with the original"
+   ],
+   "avoid": [
+    "high Contrast blows out into harsh grey halos",
+    "looks dated on faces; keep it to graphics or blend it back"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Direction",
+     "does": "angle of the virtual light source (degrees)",
+     "typical": "45-135"
+    },
+    {
+     "name": "Relief",
+     "does": "height of the emboss / offset in pixels",
+     "typical": "2-8"
+    },
+    {
+     "name": "Contrast",
+     "does": "strength of the relief shading (%)",
+     "typical": "100-300"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mix the untouched image back in (%)",
+     "typical": "0-60"
+    }
+   ],
+   "demo_settings": {
+    "Direction": 45,
+    "Relief": 6,
+    "Contrast": 300,
+    "Blend With Original": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Emboss",
+   "pairs_with": [
+    "Bevel Alpha",
+    "Curves",
+    "Unsharp Mask"
+   ],
+   "scripting": "Direction is an angle property (degrees, no clamp). Contrast range is 0-32767 but anything above ~500 is just harsh. Blend With Original is 0-100 (%).",
+   "recipe": {
+    "Relief": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      6
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/191.png",
+    "note": "Original colours kept with bevelled light/dark ridges and a sharpened relief along every edge.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Emboss",
+   "match": "ADBE Emboss",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Converts the image to a grey bas-relief: flat grey everywhere except light and dark ridges along edges, like a stamped metal plate.",
+   "look": [
+    "emboss",
+    "grey relief",
+    "metal stamp",
+    "bas-relief",
+    "monochrome",
+    "texture"
+   ],
+   "use_for": [
+    "stamped coin/medal look on a logo or emblem",
+    "grey relief texture layer set to Overlay for grit on titles",
+    "stylised freeze-frame in a trailer"
+   ],
+   "avoid": [
+    "kills all colour; on footage it reads as a cheap filter",
+    "fine noise in the source becomes visible grain"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Direction",
+     "does": "angle of the virtual light source (degrees)",
+     "typical": "45-135"
+    },
+    {
+     "name": "Relief",
+     "does": "height of the emboss in pixels",
+     "typical": "2-8"
+    },
+    {
+     "name": "Contrast",
+     "does": "strength of the relief (%)",
+     "typical": "100-300"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mix the original back in (%)",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Direction": 45,
+    "Relief": 5,
+    "Contrast": 250,
+    "Blend With Original": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Emboss (closest; Premiere 2026 has no grey Emboss, add Black & White after it)",
+   "pairs_with": [
+    "Tint",
+    "Fill",
+    "Curves"
+   ],
+   "scripting": "Same property set as Color Emboss. For a textured overlay, duplicate the layer, apply Emboss, set the duplicate's blend mode to Overlay/Soft Light.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/192.png",
+    "note": "Frame turns into a flat grey bas-relief with light/dark ridges on edges (only faint red/cyan fringes on the stripes).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Find Edges",
+   "match": "ADBE Find Edges",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Replaces the image with its detected edges: coloured lines on white (or glowing lines on black when inverted), like a sketch or X-ray outline.",
+   "look": [
+    "edge detect",
+    "sketch",
+    "line art",
+    "neon outline",
+    "x-ray",
+    "pencil"
+   ],
+   "use_for": [
+    "sketch-to-photo reveal in a documentary intro",
+    "neon outline look (Invert on) for a tech/AI explainer",
+    "outline matte for a stylised transition",
+    "comic/drawn look combined with Posterize"
+   ],
+   "avoid": [
+    "noisy or compressed footage turns into speckle",
+    "full strength is unreadable on wide crowd shots"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Invert",
+     "does": "0 = dark edges on white, 1 = bright edges on black",
+     "typical": "1 for neon/tech look"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mixes the original image back in",
+     "typical": "0-0.5 (harvested range is 0-1)"
+    }
+   ],
+   "demo_settings": {
+    "Invert": 1,
+    "Blend With Original": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Find Edges",
+   "pairs_with": [
+    "Glow",
+    "Tint",
+    "Levels",
+    "Posterize",
+    "Gaussian Blur"
+   ],
+   "scripting": "Invert is a checkbox (0/1). Blend With Original was harvested with range 0-1 even though the UI shows a percent; the exact scaling is unverified, keep values in 0-1. For a sketch reveal, keyframe Blend With Original from 0 to the top of the range, or crossfade an un-effected duplicate.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/193.png",
+    "note": "Inverted mode gives thin glowing coloured edge lines on black, like a neon/x-ray outline of the scene.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Glow",
+   "match": "ADBE Glo2",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Finds the bright parts of the image (or alpha edges) and blooms them outward into a soft light halo, for neon, highlight bloom and dreamy looks.",
+   "look": [
+    "glow",
+    "bloom",
+    "neon",
+    "halation",
+    "dreamy",
+    "light"
+   ],
+   "use_for": [
+    "neon glow on titles, lower thirds and line graphics",
+    "soft highlight bloom on a cinematic trailer shot",
+    "glowing map lines / route animations in an explainer",
+    "flash bloom at a hard cut or impact"
+   ],
+   "avoid": [
+    "low threshold (under ~50%, raw 128) on bright daylight footage blows the whole frame to white with false-colour blobs",
+    "stacking several Glows with big radius kills render speed",
+    "on flat news footage it can look cheap; keep it subtle"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Glow Based On",
+     "does": "1 Alpha Channel (glows around the layer shape), 2 Color Channels (glows bright pixels)",
+     "typical": "2 for footage, 1 for text/shapes"
+    },
+    {
+     "name": "Glow Threshold",
+     "does": "brightness above which pixels glow; raw 0-255 (153 = 60%)",
+     "typical": "100-200"
+    },
+    {
+     "name": "Glow Radius",
+     "does": "size of the halo in pixels",
+     "typical": "10-60 footage, 20-150 text"
+    },
+    {
+     "name": "Glow Intensity",
+     "does": "brightness multiplier of the halo",
+     "typical": "0.5-3"
+    },
+    {
+     "name": "Composite Original",
+     "does": "1 On Top, 2 Behind, 3 None (glow only)",
+     "typical": "2"
+    },
+    {
+     "name": "Glow Operation",
+     "does": "blend mode of the glow (popup, 25 items)",
+     "typical": "3 (default, Add)"
+    },
+    {
+     "name": "Glow Colors",
+     "does": "1 Original Colors, 2 A & B Colors, 3 Arbitrary Map",
+     "typical": "1 footage, 2 for a tinted neon"
+    },
+    {
+     "name": "Color A",
+     "does": "glow colour A when Glow Colors = A & B",
+     "typical": "#FF9A2E saffron or #2EC4FF cyan"
+    }
+   ],
+   "demo_settings": {
+    "Glow Based On": 2,
+    "Glow Threshold": 180,
+    "Glow Radius": 30,
+    "Glow Intensity": 1.0,
+    "Composite Original": 2,
+    "Glow Operation": 3,
+    "Glow Colors": 1
+   },
+   "enum_labels": {
+    "Glow Based On": {
+     "1": "Alpha Channel",
+     "2": "Color Channels"
+    },
+    "Composite Original": {
+     "1": "On Top",
+     "2": "Behind",
+     "3": "None"
+    },
+    "Glow Operation": {
+     "1": "None",
+     "2": "Normal",
+     "3": "Add",
+     "4": "Multiply",
+     "5": "Dissolve",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "Darken",
+     "11": "Lighten",
+     "12": "Difference",
+     "13": "Hue",
+     "14": "Saturation",
+     "15": "Color",
+     "16": "Luminosity",
+     "17": "Color Dodge",
+     "18": "Color Burn",
+     "19": "Exclusion",
+     "20": "Stencil Alpha",
+     "21": "Stencil Luma",
+     "22": "Silhouette Alpha",
+     "23": "Silhouette Luma",
+     "24": "Luminescent Premultiply",
+     "25": "Alpha Add"
+    },
+    "Glow Colors": {
+     "1": "Original Colors",
+     "2": "A & B Colors",
+     "3": "Arbitrary Map"
+    },
+    "Color Looping": {
+     "1": "Sawtooth A>B",
+     "2": "Sawtooth B>A",
+     "3": "Triangle A>B>A",
+     "4": "Triangle B>A>B"
+    },
+    "Glow Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Wonder Glow (Film Impact highlight bloom in Premiere 2026; Alpha Glow for alpha-edge glow only)",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Curves",
+    "Fill",
+    "CC Light Rays",
+    "Fast Box Blur"
+   ],
+   "scripting": "Glow Threshold is the raw 0-255 value, not a percent (UI 60% = 153). Glow Intensity raw range goes to 255 but anything above ~5 is blown out. Glow Operation is a 25-item blend-mode popup (1 None, 2 Normal, 3 Add (default), 4 Multiply, 5 Dissolve, 6 Screen ... 25 Alpha Add; enum_labels (read from After Effects 26.0)); only 3 has been rendered. Color A/B only matter when Glow Colors = 2. For a classic layered glow, stack 2-3 Glows with increasing radius and decreasing intensity.",
+   "recipe": {
+    "Glow Intensity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      3
+     ],
+     [
+      1.0,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/194.png",
+    "note": "Threshold 180 now blooms only the bright wall, white stripes and highlights into a warm soft halation while faces, stripes and foreground blocks stay readable, instead of v1's frame blown to white with magenta/blue false-colour blobs (the bright wall still glows close to white and leaves faint yellow/magenta fringes).",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mosaic",
+   "match": "ADBE Mosaic",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Pixelates the layer into a grid of solid-colour blocks.",
+   "look": [
+    "pixelate",
+    "mosaic",
+    "censor",
+    "8-bit",
+    "blocky",
+    "retro game"
+   ],
+   "use_for": [
+    "blur out a face, number plate or private document (with a mask or on a tracked solid)",
+    "pixel-dissolve transition between shots",
+    "retro 8-bit look for a gaming/internet-culture reel",
+    "censoring abusive text in a social post screenshot"
+   ],
+   "avoid": [
+    "too many (small) blocks leave faces and plates recognisable: for redaction keep blocks large (roughly 6-10 across a face) and track the mask; never rely on it alone for sensitive text",
+    "full-frame use reads as a glitch, not a style, if left too long"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Horizontal Blocks",
+     "does": "number of blocks across the layer",
+     "typical": "20-60 censor, 8-30 transition"
+    },
+    {
+     "name": "Vertical Blocks",
+     "does": "number of blocks down the layer",
+     "typical": "keep ratio square: H * 1080/1920"
+    },
+    {
+     "name": "Sharp Colors",
+     "does": "0 = averaged block colour, 1 = sampled colour (crisper)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Horizontal Blocks": 48,
+    "Vertical Blocks": 27,
+    "Sharp Colors": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Mosaic (Legacy)",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Fast Box Blur",
+    "Posterize"
+   ],
+   "scripting": "Blocks are counted over the layer's own size, so on a 1920x1080 layer use H:V = 16:9 for square pixels (e.g. 48x27). For censoring only part of the frame, put Mosaic on an adjustment layer with a mask, or on a duplicate layer with a mask. Sharp Colors is a checkbox (0/1). In Premiere the same effect is listed as \"Mosaic (Legacy)\"; Premiere's plain \"Mosaic\" is a different Film Impact effect.",
+   "recipe": {
+    "Horizontal Blocks": [
+     [
+      0,
+      1920
+     ],
+     [
+      0.4,
+      32
+     ],
+     [
+      0.8,
+      1920
+     ]
+    ],
+    "Vertical Blocks": [
+     [
+      0,
+      1080
+     ],
+     [
+      0.4,
+      18
+     ],
+     [
+      0.8,
+      1080
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/195.png",
+    "note": "Whole frame pixelated into a 48x27 grid of solid-colour blocks.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Motion Tile",
+   "match": "ADBE Tile",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Repeats the layer as tiles beyond its own edges, optionally mirrored, so you can move, shake or zoom the image without exposing empty edges.",
+   "look": [
+    "tile",
+    "repeat",
+    "mirror edges",
+    "grid",
+    "kaleidoscope",
+    "infinite"
+   ],
+   "use_for": [
+    "edge fill for whip-pan / slide / shake transitions (Output Width/Height 300 + Mirror Edges)",
+    "camera shake or rotation without black corners",
+    "tiled grid of the same shot for a 'multiple screens' look",
+    "endless scrolling background pattern for an explainer"
+   ],
+   "avoid": [
+    "without Mirror Edges the seam between tiles is visible during moves",
+    "output size increases render cost; don't use more than needed"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Tile Center",
+     "does": "centre of the main tile (px); animate for a slide/offset",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Tile Width",
+     "does": "width of each tile as % of the layer",
+     "typical": "100 for edge fill, 33-50 for a grid"
+    },
+    {
+     "name": "Tile Height",
+     "does": "height of each tile as % of the layer",
+     "typical": "100 for edge fill, 33-50 for a grid"
+    },
+    {
+     "name": "Output Width",
+     "does": "width of the output area as % of the layer",
+     "typical": "300 for transitions"
+    },
+    {
+     "name": "Output Height",
+     "does": "height of the output area as % of the layer",
+     "typical": "300 for transitions"
+    },
+    {
+     "name": "Mirror Edges",
+     "does": "flips neighbouring tiles so seams are invisible",
+     "typical": "1"
+    },
+    {
+     "name": "Phase",
+     "does": "offsets alternate rows/columns (degrees)",
+     "typical": "0 or 180 for brick pattern"
+    }
+   ],
+   "demo_settings": {
+    "Tile Center": [
+     960,
+     540
+    ],
+    "Tile Width": 50,
+    "Tile Height": 50,
+    "Output Width": 100,
+    "Output Height": 100,
+    "Mirror Edges": 1
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Replicate (grid only; Premiere has no edge-extending Motion Tile, Offset gives a wrap-around shift)",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur",
+    "Offset",
+    "CC Force Motion Blur"
+   ],
+   "scripting": "Output Width/Height above 100 extends beyond the layer bounds; the layer itself must be scaled/moved (Transform effect placed AFTER Motion Tile, or layer transform) to show the extra area. Classic whip-pan: Motion Tile (Output 300/300, Mirror Edges 1) then Transform effect keyframing Position by +/-1920 with Directional Blur. Mirror Edges and Horizontal Phase Shift are checkboxes (0/1); Phase is an angle.",
+   "recipe": {
+    "Tile Center": [
+     [
+      0,
+      [
+       960,
+       540
+      ]
+     ],
+     [
+      0.35,
+      [
+       2880,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/196.png",
+    "note": "Image shrunk to 50% tiles and repeated in a 2x2 grid with mirrored edges.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Posterize",
+   "match": "ADBE Posterize",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Reduces each colour channel to a few tonal levels, producing flat colour bands like a screen print or poster.",
+   "look": [
+    "posterize",
+    "screen print",
+    "flat colour",
+    "pop art",
+    "banding",
+    "propaganda poster"
+   ],
+   "use_for": [
+    "poster / pop-art treatment of a leader photo for a satire reel",
+    "retro propaganda-poster look on a quote card background",
+    "graphic flashback or stylised freeze-frame",
+    "pairs with Cartoon/Find Edges for a comic look"
+   ],
+   "avoid": [
+    "skin tones break into ugly blotches at very low levels",
+    "gradients (sky) band badly; add slight blur or noise first"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Level",
+     "does": "number of tonal levels per channel",
+     "typical": "3-6 strong, 8-12 subtle"
+    }
+   ],
+   "demo_settings": {
+    "Level": 4
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Posterize",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Tint",
+    "Find Edges",
+    "Cartoon",
+    "Hue/Saturation"
+   ],
+   "scripting": "Single integer property; keep 2-255. A slight Gaussian Blur before Posterize gives cleaner, larger shapes.",
+   "recipe": {
+    "Level": [
+     [
+      0,
+      32
+     ],
+     [
+      0.5,
+      4
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/197.png",
+    "note": "Colours collapse into a few flat bands, screen-print/pop-art look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Roughen Edges",
+   "match": "ADBE Roughen Edges",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Distorts the layer's alpha edges with fractal noise so they look torn, eroded, rusty or photocopied; on a full-frame clip it roughens the frame border.",
+   "look": [
+    "torn paper",
+    "rough edges",
+    "eroded",
+    "rusty",
+    "photocopy",
+    "grunge"
+   ],
+   "use_for": [
+    "torn-paper cut-out for photos and newspaper clippings in a documentary",
+    "grungy edges on titles and stamps",
+    "eroding/boiling text reveal for a trailer title",
+    "scrapbook collage look in an explainer"
+   ],
+   "avoid": [
+    "works on alpha edges only: a full-frame shot only changes at the frame border",
+    "high Border on small text eats the letters"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Edge Type",
+     "does": "style of roughening (8-item popup)",
+     "typical": "1 Roughen, 3 Cut for torn paper, 5 Rusty for grunge"
+    },
+    {
+     "name": "Border",
+     "does": "depth of the roughened edge in pixels",
+     "typical": "5-30 text, 30-80 photo cut-outs"
+    },
+    {
+     "name": "Edge Sharpness",
+     "does": "crisp vs soft edge",
+     "typical": "1-3"
+    },
+    {
+     "name": "Fractal Influence",
+     "does": "amount of fractal distortion (0-1)",
+     "typical": "0.7-1"
+    },
+    {
+     "name": "Scale",
+     "does": "size of the noise pattern (%)",
+     "typical": "50-200"
+    },
+    {
+     "name": "Complexity",
+     "does": "detail levels of the noise",
+     "typical": "3-6"
+    },
+    {
+     "name": "Evolution",
+     "does": "animates the noise shape (degrees)",
+     "typical": "keyframe or time*90 for boiling"
+    },
+    {
+     "name": "Edge Color",
+     "does": "colour of the edge band for the 'Color' edge types",
+     "typical": "#F2E8D5 paper"
+    }
+   ],
+   "demo_settings": {
+    "Edge Type": 1,
+    "Border": 70,
+    "Edge Sharpness": 1,
+    "Fractal Influence": 1,
+    "Scale": 100,
+    "Complexity": 4
+   },
+   "enum_labels": {
+    "Edge Type": {
+     "1": "Roughen",
+     "2": "Roughen Color",
+     "3": "Cut",
+     "4": "Spiky",
+     "5": "Rusty",
+     "6": "Rusty Color",
+     "7": "Photocopy",
+     "8": "Photocopy Color"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Roughen Edges",
+   "pairs_with": [
+    "Drop Shadow",
+    "Bevel Alpha",
+    "Fractal Noise",
+    "Turbulent Displace"
+   ],
+   "scripting": "Operates on the layer's alpha: apply to text, shapes, keyed or masked layers, or a scaled-down photo; on a full-frame opaque clip only the frame border changes. Edge Type labels are read from After Effects 26.0. Evolution is an angle; Cycle Evolution is a checkbox (0/1). Offset (Turbulence) is in pixels. Edge Color only shows with the 'Color' edge types (2, 6, 8).",
+   "recipe": {
+    "Border": [
+     [
+      0,
+      300
+     ],
+     [
+      0.8,
+      20
+     ]
+    ],
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      2.0,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/198.png",
+    "note": "Frame border is eaten into a torn, jagged black edge while the interior is untouched.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Scatter",
+   "match": "ADBE Scatter",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Randomly displaces pixels within a radius, dissolving the image into a frosted, diffused or sand-like scatter.",
+   "look": [
+    "scatter",
+    "diffuse",
+    "frosted glass",
+    "dissolve",
+    "sand",
+    "noise"
+   ],
+   "use_for": [
+    "dissolve-into-dust transition on a title or photo",
+    "frosted-glass background behind text",
+    "disintegration effect on an old photo in a documentary"
+   ],
+   "avoid": [
+    "large amounts on faces look like a broken codec",
+    "static scatter on footage looks like a render error; animate it or keep it brief"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scatter Amount",
+     "does": "radius of the pixel displacement",
+     "typical": "10-60 subtle, 100-400 dissolve"
+    },
+    {
+     "name": "Grain",
+     "does": "direction: 1 Both, 2 Horizontal, 3 Vertical",
+     "typical": "1"
+    },
+    {
+     "name": "Scatter Randomness",
+     "does": "re-randomise every frame (0/1); 1 makes it shimmer",
+     "typical": "1 for animated dissolve"
+    }
+   ],
+   "demo_settings": {
+    "Scatter Amount": 150,
+    "Grain": 1,
+    "Scatter Randomness": 0
+   },
+   "enum_labels": {
+    "Grain": {
+     "1": "Both",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fast Box Blur",
+    "Turbulent Displace",
+    "CC Pixel Polly",
+    "Linear Wipe"
+   ],
+   "scripting": "Scatter Randomness is a checkbox (Randomize Every Frame). Grain: 1 Both (default), 2 Horizontal, 3 Vertical (read from After Effects 26.0). Premiere has no Scatter; approximate with Noise + Gaussian Blur or a Turbulent Displace.",
+   "recipe": {
+    "Scatter Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      400
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/199.png",
+    "note": "Amount 150 dissolves the whole frame into a clearly visible frosted-glass scatter of displaced grains (faces and stripes reduced to soft granular shapes), where v1's Amount 60 was only a slight grainy softening.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Strobe Light",
+   "match": "ADBE Strobe",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Flashes the layer to a solid colour (or makes it transparent) on a fixed clock: each Period starts in the strobe colour, which holds for Period minus Duration, then the picture shows for the last Duration (Duration 0.1 / Period 0.5 = a 0.4 s flash twice a second). The clock is the layer's own, from its source's first frame. Measured under aerender frame for frame the same as Premiere's Strobe Light (same plug-in); Random Strobe Probablity between 0 and 100 turns it into random bursts.",
+   "look": [
+    "strobe",
+    "flash",
+    "flicker",
+    "camera flash",
+    "lightning",
+    "beat flash"
+   ],
+   "use_for": [
+    "paparazzi/press-conference camera flashes",
+    "lightning or power-flicker in a trailer",
+    "beat-synced flash on a music reel",
+    "random flicker for an old-film or horror vibe"
+   ],
+   "avoid": [
+    "Duration as the flash length: it is the gap, so a small Duration gives a long flash; for a one-frame flash at 25 fps set Duration = Period - 0.04",
+    "Trimmed layers: the clock runs from the source's first frame (the layer's startTime), not the in point, so a layer trimmed into its source can open mid-flash (trimmed to source 0.8 s, it was coloured on its first 3 frames)",
+    "A long regular strobe reads as mechanical: switch it off with a Blend With Original key or keep the burst short",
+    "Photosensitivity (Harding test / ITU-R BT.1702): no more than 3 flashes in any one second, and a flash to or from saturated red counts even when it is not bright. With Random Strobe Probablity 0 or 100 it flashes exactly once per Period (keep Period at 0.34 s or longer); any value in between inverts about that share of frames in random bursts (10 reached 7 flashes in one second, 50 also 7), which cannot be held under the limit. pve.check_scenes flags it."
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Strobe Color",
+     "does": "colour of the flash",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "how much original shows through the flash (%)",
+     "typical": "0-50"
+    },
+    {
+     "name": "Strobe Duration (secs)",
+     "does": "Despite the name, the un-coloured gap at the END of each Period: the colour holds for Period minus Duration, then the picture shows for Duration (0.1 of a 0.5 s Period = a 0.4 s flash; Duration equal to Period draws nothing). Measured identically in After Effects and Premiere",
+     "typical": "Period minus the flash length (0.46 with a 0.5 Period = a one-frame flash at 25 fps)"
+    },
+    {
+     "name": "Strobe Period (secs)",
+     "does": "Time from the start of one flash to the next, in layer time from the source's first frame (a layer starting at comp 0.6 s flashes at comp 0.6, 1.1, 1.6 ...)",
+     "typical": "0.34-2; match the beat (60 / BPM)"
+    },
+    {
+     "name": "Random Strobe Probablity",
+     "does": "Share (%) of frames inverted against the Probability-0 pattern, in bursts; the same seed gives the same pattern every render. 10 inverted 11% of frames, 50 about half; 100 is the exact inverse (colour only for the last Duration of each Period, so again one flash per Period)",
+     "typical": "0 (or 100); anything in between is a random burst generator"
+    },
+    {
+     "name": "Strobe",
+     "does": "1 Operates On Color Only, 2 Makes Layer Transparent",
+     "typical": "1"
+    },
+    {
+     "name": "Strobe Operator",
+     "does": "how the strobe colour combines with the image (13-item popup)",
+     "typical": "1 (default, Copy)"
+    }
+   ],
+   "demo_settings": {
+    "Strobe Color": "#FFFFFF",
+    "Blend With Original": 0,
+    "Strobe Duration (secs)": 0.1,
+    "Strobe Period (secs)": 0.5,
+    "Random Strobe Probablity": 0,
+    "Strobe": 1,
+    "Strobe Operator": 1
+   },
+   "enum_labels": {
+    "Strobe": {
+     "1": "Operates On Color Only",
+     "2": "Makes Layer Transparent"
+    },
+    "Strobe Operator": {
+     "1": "Copy",
+     "2": "Add",
+     "3": "Subtract",
+     "4": "Multiply",
+     "5": "Difference",
+     "6": "And",
+     "7": "Or",
+     "8": "Xor",
+     "9": "Lighter",
+     "10": "Darker",
+     "11": "Minimum",
+     "12": "Maximum",
+     "13": "Screen"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Strobe Light",
+   "pairs_with": [
+    "Exposure",
+    "Glow",
+    "Camera Shake Deluxe",
+    "Photosensitive flash rule (Harding / ITU-R BT.1702) and pve check"
+   ],
+   "scripting": "Property name is misspelled in AE: use \"Random Strobe Probablity\" exactly. Measured 2026-10-13 under aerender (work/pve_live/strobe.json, per-frame luma at 25 fps): Duration 0.1 / Period 0.5 / Probability 0 gave 10 coloured frames then 2-3 picture frames every Period, on footage and on a grey solid, frame for frame the same as Premiere. Clock: layer time from startTime, i.e. the source's first frame: a layer starting at comp 0.6 s flashed at comp 0.6, 1.1, 1.6 ...; a layer trimmed to source 0.8 s flashed at source 1.0, 1.5 ... with its first 3 frames still coloured from the period that began at source 0.5. Probability 10 / 50 / 100 inverted 11% / 51% / 100% of the frames, the same frames on footage and on grey. The earlier 'no flash' gallery result was the harness: a 0.4 s comp on a layer starting at source 1.5 s, where Probability 100 colours only source 1.9-2.0 s, after the comp ended. Strobe: 1 Operates On Color Only, 2 Makes Layer Transparent; Strobe Operator: 1 Copy, 2 Add, 3 Subtract, 4 Multiply, 5 Difference, 6 And, 7 Or, 8 Xor, 9 Lighter, 10 Darker, 11 Minimum, 12 Maximum, 13 Screen (read from After Effects 26.0); only 1 has been rendered.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.04,
+      0
+     ],
+     [
+      0.12,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/strobe/renders_1791905584/S_ae_p0.mp4",
+    "note": "Measured, not by eye: with the demo values the aerender strip is 10 coloured frames then 2-3 picture frames per 0.5 s Period (6 flashes in 2.8 s, at most 2 in one second), and the layer-at-0.6 s and trimmed-source renders follow the layer-time clock the card describes.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the strobe measurement renders showed the effect works under aerender; the gallery's 'no flash' was its 0.4 s comp on a layer starting at source 1.5 s (with Probability 100 the colour fell after the comp ended)",
+      "frame": "pve/gallery/ae/200.png"
+     }
+    ],
+    "recheck": "2026-10-14: gallery frame pve/gallery/ae/200.png re-rendered in live wave 2 with the demo values: all 10 frames of its 0.4 s window (source 1.5-1.9 s) are white, the colour phase of the Period that starts at source 1.5 s, as the card's clock predicts; a still from this window cannot show a flash, so the measured strip stays the evidence"
+   },
+   "flash": {
+    "per_frame": "Random Strobe Probablity",
+    "period": "Strobe Period (secs)",
+    "duration": "Strobe Duration (secs)",
+    "quiet": {
+     "Blend With Original": 90
+    },
+    "basis": "aerender measurements (work/pve_live/strobe.json): Probability 0 or 100 = one flash per Period (0.5 s Period: at most 2 in any second); 10 reached 7 in one second and 50 also 7 (random bursts). Blend With Original 90+ is PVE's faint-flash cut-off, not a measurement"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Texturize",
+   "match": "ADBE Texturize",
+   "category": "Stylize",
+   "status": "needs_input",
+   "summary": "Embosses the luminance of another layer (canvas, paper, brick, concrete) into this layer, so the image looks printed or painted on that texture.",
+   "look": [
+    "texture",
+    "canvas",
+    "paper",
+    "emboss",
+    "printed",
+    "wall poster"
+   ],
+   "use_for": [
+    "photo or poster that looks pasted on a brick/concrete wall",
+    "canvas or paper texture on a title card or quote card",
+    "printed-newspaper feel on a headline screenshot"
+   ],
+   "avoid": [
+    "low-resolution textures look blurry and tiled",
+    "strong Texture Contrast on faces looks like skin disease"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Texture Layer",
+     "does": "layer whose luminance is used as the texture (layer reference)",
+     "typical": "a hidden texture image in the same comp"
+    },
+    {
+     "name": "Light Direction",
+     "does": "angle of the light across the texture (degrees)",
+     "typical": "135"
+    },
+    {
+     "name": "Texture Contrast",
+     "does": "strength of the texture relief (0-2)",
+     "typical": "0.5-1.2"
+    },
+    {
+     "name": "Texture Placement",
+     "does": "1 Tile Texture, 2 Center Texture, 3 Stretch Texture to Fit",
+     "typical": "1 for small textures, 3 for full-frame textures"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Texture Placement": {
+     "1": "Tile Texture",
+     "2": "Center Texture",
+     "3": "Stretch Texture to Fit"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise",
+    "Roughen Edges",
+    "Curves",
+    "Tint"
+   ],
+   "scripting": "Needs a second layer: Texture Layer is a layer reference (set by layer index; 0 = none, the effect then does nothing). The texture layer can be hidden (video switch off) but must stay in the comp. AE reads the referenced layer's SOURCE, ignoring its effects and masks: a Fractal Noise solid only works as a texture after it is precomposed. Premiere 2026 has no Texture effect. Light Direction is an angle; Texture Placement is a 3-item popup.",
+   "recipe": {
+    "Texture Contrast": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (needs a Texture Layer reference), so the gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

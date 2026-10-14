@@ -1,0 +1,117 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "audio_mix",
+   "name": "Music ducks under VO (scripted, from VO ranges)",
+   "summary": "The music bed sits at full level in the gaps and drops 12 dB under every VO line, with short ramps, built from the VO clip times instead of Premiere's UI-only Auto Ducking.",
+   "use_for": [
+    "documentary and explainer narration over a music bed",
+    "reels with VO and a trending track",
+    "any automated edit where Auto Ducking cannot be clicked"
+   ],
+   "avoid": [
+    "ducking under every short pause (gaps under about 1.2 s should stay ducked, or the music pumps)",
+    "ducking dialogue-heavy music (songs with vocals fight VO at any level: pick an instrumental)"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [],
+   "spec": {
+    "name": "duck_under_vo",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "still.png",
+      "dur": 12
+     }
+    ],
+    "audio": [
+     {
+      "src": "../pve/media/test_vo.wav",
+      "in": 0,
+      "start": 1.0,
+      "dur": 3.5,
+      "track": 2,
+      "gain_db": 0
+     },
+     {
+      "src": "../pve/media/test_vo.wav",
+      "in": 4.0,
+      "start": 6.0,
+      "dur": 4.0,
+      "track": 2,
+      "gain_db": 0
+     },
+     {
+      "src": "music.mp3",
+      "in": 0,
+      "start": 0,
+      "dur": 12,
+      "track": 3,
+      "gain_db": -18
+     },
+     {
+      "src": "music.mp3",
+      "in": 0,
+      "start": 0,
+      "dur": 1.0,
+      "track": 4,
+      "gain_db": -8.51,
+      "fade_out": 0.3
+     },
+     {
+      "src": "music.mp3",
+      "in": 4.6,
+      "start": 4.6,
+      "dur": 1.4,
+      "track": 4,
+      "gain_db": -8.51,
+      "fade_in": 0.5,
+      "fade_out": 0.3
+     },
+     {
+      "src": "music.mp3",
+      "in": 10.2,
+      "start": 10.2,
+      "dur": 1.8,
+      "track": 4,
+      "gain_db": -8.51,
+      "fade_in": 0.6
+     }
+    ]
+   },
+   "keyframes_note": "Spec (put it in example/): picture = still.png for 12 s; VO = two slices of pve/media/test_vo.wav (make_test_media.py) at 1.0-4.5 s and 6.0-10.0 s. Plan (working defaults, not a standard): music in the clear -6 dB, under VO -18 dB (a 12 dB duck), ramp down 0.3 s ending at the VO start, ramp up 0.5-0.6 s starting 0.2 s after the VO ends, and only recover in gaps of 1.2 s or more. Premiere's own Auto Ducking presets bracket these numbers (-18 dB / 800 ms balanced, -24 dB / 1200 ms smooth: PVE Auto Ducking card). Bridge form, because spec audio has only gain_db / fade_in / fade_out: one continuous copy of the bed at the ducked level (-18 dB, track 3) plus sample-aligned 'lift' copies on track 4 in each gap ('in' = 'start', same file, both a multiple of 0.2 s: see the measurement below) at -8.51 dB, where 10^(-6/20) - 10^(-18/20) = 10^(-8.51/20): identical signals add in amplitude, so bed + lift = -6 dB, and the lift's linear fades make the ramps. Premiere only: ae_build.jsx sets Audio Levels from gain_db and ignores fades, so the After Effects half plays hard steps. The direct route (one music clip, Volume Level keys via ComponentParam.addKey / setValueAtKey with Level = 10^((dB - 15) / 20)) is in 'Scripted ducking from VO ranges'. Check the mix with ffmpeg ebur128 against the delivery target. Measured 2026-10-13 (Premiere render, music relative to the file at 0 dB): -18.06 dB under both VO lines and -6.01 dB in the first and last gaps, as planned, but only -9.63 dB in the middle gap. Cause: the .prproj stores that lift's media in point as 4.666667 s for the requested 4.7 s, one 30 fps frame early, while 0 and 10.2 s were kept exactly. The audio-only file carries a 25 fps media timebase in the project, and 4.7 s is a whole frame at 30 fps but not at 25 fps (0 and 10.2 s are both), so Premiere snapped it. The lift then plays 33 ms late against the bed and the test tones partly cancel (a 33.3 ms offset of this bed predicts exactly -9.63 dB). Not MP3-specific: any audio-only item gets the same timebase. Fix (applied 2026-10-14, not re-rendered): the middle lift now starts at 4.6 s (fade-in 0.5 s, dur 1.4 s). Keep every lift's 'in' = 'start' on a multiple of 0.2 s (a whole frame at both 25 and 30 fps), or use the Volume-key route in 'Scripted ducking from VO ranges', which needs no second copy.",
+   "built_from": [
+    "Scripted ducking from VO ranges",
+    "Auto Ducking",
+    "Clip volume (Volume effect 'Level')",
+    "Delivery loudness targets (YouTube, Instagram, broadcast)",
+    "Audio Levels (layer property)"
+   ],
+   "status": "current",
+   "confidence": "low",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/recipe_specs/builds/gal_003_music_only_pr.mp4",
+    "note": "Audio measured: -18.06 dB under both VO lines and -6.01 dB in the first and last gaps as planned, but -9.63 dB in the middle gap, where the lift copy plays one frame (33 ms) late against the bed, so the 12 dB duck recovers only 8.4 dB there; integrated mix -18.4 LUFS.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "the middle lift copy moved from 4.7 s to 4.6 s ('in' = 'start' on the 0.2 s grid both Premiere timebases share), see keyframes_note; not rendered again",
+      "frame": "pve/gallery/recipe_specs/builds/gal_003_music_only_pr.mp4"
+     }
+    ]
+   }
+  }
+ ]
+}

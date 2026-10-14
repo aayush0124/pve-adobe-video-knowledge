@@ -1,0 +1,1608 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sunburst",
+   "match": null,
+   "category": "Shapes/Backgrounds",
+   "status": "current",
+   "summary": "Radial sunburst: a disc of alternating Foreground Color rays clipped to Outer Radius, spinning at Rotation Speed, with an optional Background Color fill and an optional feathered hole in the middle (Inner Radius).",
+   "look": [
+    "sunburst",
+    "radial rays",
+    "retro",
+    "comic",
+    "pop-art",
+    "spinning background"
+   ],
+   "use_for": [
+    "hype backdrop behind a cut-out face or product in reels",
+    "'big announcement' or giveaway title-card background",
+    "retro comic-style explainer bumper",
+    "meme/punchline reveal background"
+   ],
+   "avoid": [
+    "fast rotation with high-contrast colours strobes and breaks up in Instagram compression",
+    "reads cheesy behind serious documentary or political news",
+    "too busy behind small text; lower contrast or add a text plate"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "Expression-driven: animates continuously from the layer in-point with no keyframes, so comp.time does not matter; it never ends. Rotation = Rotation Speed (degrees per second) * (time - inPoint); Rotation Speed 0 = static.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Number of Rays, Rotation Speed (deg/s), Ray Width Mode (dropdown: 1 Auto = width from ray count, 2 Custom = use Custom Ray Width, degrees), Custom Ray Width, Outer Radius (px), Inner Radius (0-100 = % of Outer Radius; 0 = no hole), Inner Radius Feather (x10 px), Background (dropdown: 1 No Background, 2 With Background Color), Foreground Color, Background Color. It also adds two layer masks named 'Outer Radius' and 'Inner Radius' that clip the disc. To cover a 1920x1080 frame set Outer Radius >= 1102 (half-diagonal) and Background = 2.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/200b.png",
+    "note": "Yellow rays on the dark background radiate from the layer origin (the comp's top-left corner in this render) and have visibly rotated between 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "2D Text Box (Shape)",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Rectangle plate (square corners by default; Roundness rounds them, per corner if wanted) that auto-sizes to a chosen text layer's bounds, with padding, offset and scaling, and updates when the text changes. Default look: mid-grey fill with a white stroke.",
+   "look": [
+    "text box",
+    "caption plate",
+    "lower third",
+    "optional rounded corners",
+    "pill",
+    "auto-resize"
+   ],
+   "use_for": [
+    "auto-fitting caption or subtitle plates in reels",
+    "lower-third name strap background",
+    "quote or fact cards in explainers",
+    "label callouts on maps or charts"
+   ],
+   "avoid": [
+    "without a valid text layer it draws a fixed 500x250 px box in the comp centre that will not fit the text",
+    "measuring live while the text animates per-character makes the box jitter; measure at a fixed time",
+    "keep the shape layer directly below its text layer or it covers the words"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "2D Text Box",
+    "Layer Control"
+   ],
+   "duration_note": "No keyframes; the box path is an expression that re-measures the target text every frame (or at the chosen measure time), so comp.time does not matter.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Link it: fx(L,\"Select a Text Layer\")(1).setValue(textLayer.index) (Layer Control). The '2D Text Box' pseudo effect (Pseudo/ADBE 2D Text Box) has untabbed sub-controls, so fx(L,\"2D Text Box\")(\"Padding Overall\").setValue(40) works: Measure Text (dropdown: 1 At Single Time, 2 During Whole Comp, 3 After Time, 4 Before Time), Measure At Time [sec], Uniform Scale, Scale X, Scale Y, Scale Origin (dropdown: 1 Center, 2 Upper Left, 3 Upper Right, 4 Lower Right, 5 Lower Left), Padding Overall, Padding Left/Right/Top/Bottom, Offset X, Offset Y, Roundness, Uniform Roundness, Scale Roundness, Corner Sharpness and the Round Upper Left/Upper Right/Lower Right/Lower Left toggles (under Enable Per Corner). Box points are mapped through the text layer's transform, so the box follows its position, scale and rotation. If the target is missing or not a text layer the path falls back to a fixed 500x250 px rectangle centred in the comp. Fill/stroke colours: Contents > Text Box > Fill 1 / Stroke 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/201b.png",
+    "note": "With no text layer linked it drew the fallback ~500x250 px box at comp centre: mid-grey fill, white stroke, square corners, unchanged between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Analogue Clock",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Flat white clock face (60 small minute dots, 12 larger hour dots) with tapered hour and minute hands driven by an angle control; the hands sweep and can loop forever.",
+   "look": [
+    "clock",
+    "time passing",
+    "flat icon",
+    "dot markers",
+    "ticking",
+    "countdown"
+   ],
+   "use_for": [
+    "'hours later' or passage-of-time bridges in documentaries",
+    "deadline or 'time running out' beat in political explainers",
+    "counting down to results or a launch",
+    "timeline sections in AI-education videos"
+   ],
+   "avoid": [
+    "hands spinning very fast read as cartoonish; slow the Driver keys",
+    "it does not show a real time of day unless you set Driver by hand",
+    "flat line-art style can clash with photoreal documentary footage",
+    "it carries its own layer Transform (anchor, position, scale, rotation, opacity), so applying it repositions the target layer for a 1920x1080 comp (face centred on comp point [960, 540]); in other comp sizes re-set Position after applying, and use an empty shape layer"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Angle Control",
+    "Checkbox Control",
+    "Slider Control"
+   ],
+   "duration_note": "Driver (Angle Control) is keyframed from comp.time to about +4.8 s (decoded from the .ffx); with 'Loop Movement' checked a loopOut(\"continue\") keeps the hands turning past the last key.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Radius (px), Movement Driver (dropdown: 1 Hour = Driver is the hour-hand angle and the minute hand turns 12x, 2 Minute = Driver is the minute-hand angle and the hour hand turns 1/12), Driver (Angle Control, keyframed), Loop Movement (checkbox: on = loopOut(\"continue\") on Driver). Retime by moving the two Driver keyframes; for a static time delete them and setValue an angle. Face: 60 minute dots and 12 larger hour dots built with repeaters.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/202b.png",
+    "note": "A large white clock face (small minute dots, bigger hour dots, tapered hand) centred on comp point [960, 540], the bottom-right corner of this 960x540 comp; a hand has swept into view by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bar Graph",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Animated bar chart: X/Y axes grow in, then up to 12 bars grow up in a stagger; each bar height maps its Data slider between Floor and Ceiling to 0-500 px.",
+   "look": [
+    "bar chart",
+    "infographic",
+    "data viz",
+    "flat",
+    "minimal",
+    "growing bars"
+   ],
+   "use_for": [
+    "vote share, seat counts or budget comparisons in political explainers",
+    "year-over-year stats in news reels",
+    "benchmark or adoption numbers in AI-education videos",
+    "before/after comparisons in documentaries"
+   ],
+   "avoid": [
+    "no value labels, axis labels or titles: add text layers",
+    "bar height = linear(Data, Floor, Ceiling, 0, 500), which clamps: data above Ceiling all draw at the full 500 px and below Floor at 0, so set Floor/Ceiling to bracket the real data range",
+    "each bar has its own default fill (purple, violet, magenta, blue shades), which can look off-brand: restyle the Bar NN fills",
+    "the chart grows up and to the right from the layer origin (axes corner): at layer Position [0,0] it is entirely above the frame; place the layer where the chart's bottom-left corner should be, and remember bars reach 500 px above the axis and 12 bars run several hundred px right, so in a 960x540 comp lower Ceiling/Spacing or scale the layer"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keyframed from comp.time: axes scale in over about 0-0.6 s, bars grow one after another starting ~0.27-0.67 s and finishing ~1.3-1.9 s (decoded from the .ffx; approximate).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Spacing, Bar Width, Bars in Use (1-12, floored; bars above it are hidden), Axis Stroke Width, Ceiling, Floor, Data 01 ... Data 12 (all Slider Controls). E.g. fx(L,\"Data 01\")(1).setValue(42); fx(L,\"Bars in Use\")(1).setValue(5). Graph origin (corner of the axes) is the layer origin; move the layer to place it.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/203b.png",
+    "note": "From the axes corner at the centred layer origin (hidden under the host square, which stays) the axes run up and right off-frame and the bars grow in a stagger, four started by 0.5 s and eight tall bars in different purple, magenta and blue shades by 1.4 s, the tallest running off the top and the rest off the right edge of this 960x540 comp.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bouncing Map Icons",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Map marker icon (six styles: three map markers, a push pin and two arrows) in one flat colour with a Bevel Alpha edge, bobbing up and down on a continuous sine wave.",
+   "look": [
+    "map pin",
+    "location marker",
+    "bouncing",
+    "bevel",
+    "flat icon",
+    "travel"
+   ],
+   "use_for": [
+    "mark a city or constituency on a map in political or news explainers",
+    "incident location callouts in news reels",
+    "travel or event location spots in documentaries"
+   ],
+   "avoid": [
+    "Bevel Alpha edge looks dated; lower Edge Thickness or delete the effect for a flat look",
+    "constant bobbing distracts in serious news; lower Bounce Amplitude (0 = static pin)",
+    "no label; pair with a text layer",
+    "the icon sits at the layer origin and bobs upward from it: at layer Position [0,0] it is completely off-frame; set Position to the map point"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Bevel Alpha",
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "Expression-driven from the layer in-point with no keyframes, so comp.time does not matter; it never ends. y offset = Amplitude * sin(2*pi * Frequency * (time - inPoint + Offset)) - Amplitude: 'Bounce Frequency (seconds)' is really cycles per second, and the icon rises up to 2x Amplitude px above its rest position.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Map Icon Style (dropdown: 1 Map Marker 1, 2 Map Marker 2, 3 Map Marker 3, 4 Push Pin, 5 Arrow 1, 6 Arrow 2; only the chosen group is visible), Bounce Frequency (seconds) (cycles per second), Bounce Amplitude (px), Bounce Offset (seconds of phase shift), Color (Color Control), plus an unrenamed Bevel Alpha effect (address it by match name: L.property(\"ADBE Effect Parade\").property(\"ADBE Bevel Alpha\")). Give several copies different Bounce Offset values so pins do not bob in sync.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/204b.png",
+    "note": "A light-grey map-marker pin sits above the centred host square (its tip hidden behind it) and bobs about 50 px up and down once per second.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bounding Box",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Design-tool style selection box: a thin rectangle with eight square handles that can fit itself around a reference layer's bounds.",
+   "look": [
+    "selection box",
+    "transform handles",
+    "UI",
+    "design tool",
+    "tech",
+    "highlight"
+   ],
+   "use_for": [
+    "'look at this' highlight on a headline, stat or object in news explainers",
+    "AI/design tool tutorial reels that mimic an editor UI",
+    "callouts on screen recordings",
+    "framing a subject in documentary B-roll"
+   ],
+   "avoid": [
+    "handles can look huge or tiny after scaling; set Handle Size",
+    "on footage it fits the whole frame, not the subject"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Layer Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes; position, rotation and size are expressions that follow the reference layer, so comp.time does not matter.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Fit to a layer: fx(L,\"Reference Layer\")(1).setValue(target.index) (Layer Control). 'Measure Reference' dropdown: 1 At Single Time (measured once at 'Measure At Time [sec]'), 2 During Whole Comp (every frame), 3 After Time (held until that time, then live), 4 Before Time (live, then held). With no reference (or itself) the expression falls back to the stored box size, so something always shows. The measurement uses sourceRectAtTime and the target's scale and rotation; footage layers measure as their full frame, so point it at a text/shape/solid/precomp sized to the subject. Other controls: Padding, Handle Size. Groups: Main Rectangle, Corner Boxes, Middle Boxes (stroke/fill colours there).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/205b.png",
+    "note": "The lower-right corner of a thin white rectangle with purple, white-outlined square handles at the corner and side midpoints shows around the layer origin (comp top-left here); static, as expected with no reference layer.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Burst Pop",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Cartoon 'pop' accent: a ring of stroked line particles shoots out from the centre and trims away, with optional gravity, twist and randomised spacing.",
+   "look": [
+    "burst",
+    "pop",
+    "sparkle",
+    "comic accent",
+    "radial lines",
+    "celebration"
+   ],
+   "use_for": [
+    "accent when a number, logo or icon lands in explainers",
+    "punchline or meme emphasis in reels",
+    "subscribe/like or 'new' badge pop",
+    "celebration beat (results, milestones)"
+   ],
+   "avoid": [
+    "using it on every cut cheapens the edit",
+    "the expressions read key(1)/key(2) of 'Burst Animate'; deleting those keyframes breaks it",
+    "too small to see on 9:16 phone screens unless radii are increased"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Angle Control",
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "'Burst Animate' is keyframed from comp.time to about +0.8 s (decoded from the .ffx), then the trail finishes over 'Burst Length' frames. Set comp.time to the hit point before applying; retime by moving both keys.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Burst Animate (keyframed 0 to 100; the expressions read its key(1)/key(2) times), Burst Easing (dropdown: 1 Cubic, 2 Quartic, 3 Quintic, 4 Expo, 5 Custom = use the Burst Animate keyframes' own easing), Burst Particle Amount, Burst Color, Burst Length (frames), Burst Inner Radius, Burst Outer Radius, Burst Stroke Width, Burst Distribute, Randomize Burst Distribute (drives a Wiggle Transform on the particles), Burst Gravity, Burst Twist (Angle Control).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/206a.png",
+    "note": "At 0.5 s white round-capped line particles are flying outward from the layer origin; by 1.4 s they have trimmed away completely.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Chasing Line - Boxes",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "A short train of boxes (Elements copies, Spread px apart; purple with a white outline by default) that marches across the full comp width in discrete steps and wraps around, like an LED chaser or loading strip.",
+   "look": [
+    "LED chaser",
+    "loading bar",
+    "stepping boxes",
+    "ticker",
+    "digital",
+    "retro"
+   ],
+   "use_for": [
+    "loading or 'processing' indicator in AI-tool explainers",
+    "decorative divider above a news ticker",
+    "transition strip between sections",
+    "data-processing visual"
+   ],
+   "avoid": [
+    "the stepped motion can look jerky at low frame rates",
+    "spans thisComp.width; in 9:16 comps check Size/Spread so it is not sparse",
+    "the train runs along the layer origin's y and starts at -comp width/2: at layer Position [0,0] it hugs the top edge, half cut off, and is off-frame for much of the cycle; put the layer at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Chaser Control"
+   ],
+   "duration_note": "Expression-driven: animates continuously with no keyframes, so comp.time does not matter; it never ends. Repeater offset = round(time * Box Step Speed) wrapped across the comp width (Box Step Speed 0 = no motion).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Chaser Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Box Step Speed\") E.property(i).setValue(v). Controls live in the 'Chaser Control' pseudo effect (match ADBE CM Animated Shape 2): Box Step Speed (steps per second), Size (box size), Spread (px between boxes), Elements (boxes in the train). Box colours: Contents > Group 1 > Fill 1 / Stroke 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/207a.png",
+    "note": "A train of six purple, white-outlined boxes runs along the comp's centre line and steps right, leaving at the right edge around 1.0 s and re-entering from the left by 1.25 s; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Crinkle Cut Sticker",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Sticker-style frame with wavy crinkle-cut edges inside and out (smooth zig-zag, not sharp pinking): an outer rectangle minus an inset rectangle, each with a Zig Zag, that can wrap a reference layer. Default: purple fill with a white outline.",
+   "look": [
+    "sticker",
+    "wavy crinkle border",
+    "scrapbook",
+    "playful",
+    "frame",
+    "cut-out"
+   ],
+   "use_for": [
+    "sticker frames around photos or faces in reels",
+    "meme and reaction callouts",
+    "playful explainer cards",
+    "collage-style social posts"
+   ],
+   "avoid": [
+    "too playful for serious news or political documentary",
+    "on footage it frames the whole frame, not the subject"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Layer Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes; size and position are expressions following the reference layer, so comp.time does not matter.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Fit to a layer: fx(L,\"Reference Layer\")(1).setValue(target.index) (Layer Control). 'Measure Reference' dropdown: 1 At Single Time (measured once at 'Measure At Time [sec]'), 2 During Whole Comp (every frame), 3 After Time (held until that time, then live), 4 Before Time (live, then held). With no reference (or itself) the expression falls back to the stored box size, so something always shows. The measurement uses sourceRectAtTime and the target's scale and rotation; footage layers measure as their full frame, so point it at a text/shape/solid/precomp sized to the subject. Other controls: Padding, Frame Thickness. Shape: Outer Rectangle and Inner Rectangle, each with a Zig Zag whose detail scales with the box, combined by Merge Paths (Subtract); recolour Fill 1/Stroke 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/208b.png",
+    "note": "The lower-right corner of a purple frame with wavy crinkle-cut inner and outer edges and a white outline sits around the layer origin; static.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "DNA Helix",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Animated double helix of dots joined by rungs that twists continuously, coloured by a Gradient Ramp run through Colorama.",
+   "look": [
+    "DNA",
+    "helix",
+    "science",
+    "biotech",
+    "gradient",
+    "loop"
+   ],
+   "use_for": [
+    "science, health or biotech explainer element",
+    "genetics/AI-biology topic opener",
+    "background motif for tech stories"
+   ],
+   "avoid": [
+    "Colorama colouring can go rainbow and look cheap; check the palette",
+    "it is a 2D fake rotation, not true 3D",
+    "needs a dark or plain background to read",
+    "Gradient Ramp and Colorama are layer effects: they recolour every other shape on the same layer (the host's orange square turned cyan); use an empty shape layer"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Colorama",
+    "Gradient Ramp",
+    "Slider Control"
+   ],
+   "duration_note": "Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends. Twist speed = 'Animation Speed'.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Animation Speed, Width (helix width), Spacing (vertical gap between rungs), Appearance (dropdown: 1 Dots & Rungs, 2 Rungs Only, 3 Dots Only), Dot Size, Rung Thickness, Height Multiplier (number of 12-rung sections stacked; drives the 'Repeat Rungs' repeater), plus Gradient Ramp (Start Color/End Color; start/end pinned to the layer's top and bottom by expression) and Colorama effects for colour. 'Repeat Rungs' is a repeater in Contents, not a control.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/209b.png",
+    "note": "A vertical column of dot-ended rungs in a cyan-to-teal gradient at the layer origin has visibly twisted between frames; the layer's Gradient Ramp/Colorama also recoloured the host's orange square cyan.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grid of Crosses",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Static grid of plus-sign crosses built with two repeaters, with size, thickness, rotation, colour, counts and gaps on controls.",
+   "look": [
+    "grid",
+    "plus pattern",
+    "swiss",
+    "technical",
+    "background texture",
+    "minimal"
+   ],
+   "use_for": [
+    "subtle tech/graph-paper backdrop for explainer titles",
+    "texture behind data visuals",
+    "framing pattern for AI channel cards",
+    "animate Cross Rotation for a gentle moving texture"
+   ],
+   "avoid": [
+    "dense grids shimmer (moire) when scaled or moved",
+    "high-contrast crosses steal focus from text"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Angle Control",
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "Static: no keyframes or time expressions; comp.time does not matter. Keyframe 'Cross Rotation' yourself for motion.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Cross Size, Cross Thickness, Cross Rotation (Angle, rotates each cross), Cross Color, X Copies, Y Copies, X Gap, Y Gap. The repeater offsets centre the grid on the layer origin; raise copies/gaps to fill 1920x1080.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/210b.png",
+    "note": "A grid of white plus-sign crosses around the layer origin (comp top-left here), identical in both frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Line Graph",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Animated line chart: axes grow in, then a line through up to 12 data points draws on left to right; point heights map Data values between Data Floor and Data Ceiling to Chart Height.",
+   "look": [
+    "line chart",
+    "trend",
+    "infographic",
+    "data viz",
+    "draw-on",
+    "minimal"
+   ],
+   "use_for": [
+    "price, inflation or GDP trends in political/economic explainers",
+    "poll trend lines in news",
+    "user or adoption growth in AI-education videos",
+    "stock-style rise/fall beats in reels"
+   ],
+   "avoid": [
+    "no labels, gridlines or point markers: add them",
+    "straight segments only (no smoothing)",
+    "point height = linear(Data, Floor, Ceiling, 0, Chart Height), which clamps: out-of-range data sit flat on the axis or the top instead of overshooting; Floor/Ceiling are abs()'d, so negative data cannot be shown",
+    "the chart is drawn up and to the right from the layer origin (axes corner): at layer Position [0,0] it is entirely above the frame; place the layer where the chart's bottom-left corner should be"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keyframed from comp.time: axes scale in over about 0-0.67 s, the line's Trim Paths End draws from ~0.57 s to ~2.4 s (decoded from the .ffx; approximate).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Spacing (px between points), Points In Use (dropdown 1-12 = number of points), Axis Stroke Width, Chart Height (px), Data Ceiling, Data Floor, Data 01 ... Data 12 (Slider Controls); e.g. fx(L,\"Data 03\")(1).setValue(70).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/211b.png",
+    "note": "The white axes grow from the centred layer origin (the host square stays over the corner) by 0.5 s, and by 1.4 s a magenta zigzag line is drawing on left to right, its peaks running off the top of this 960x540 comp.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Marquee Chasers",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "A 600x300 px rectangle outline (20 px stroke, 40/40 dashes) whose dashes crawl around the edge continuously (marching ants / chaser lights).",
+   "look": [
+    "marching ants",
+    "dashed border",
+    "selection",
+    "chaser lights",
+    "frame",
+    "marquee"
+   ],
+   "use_for": [
+    "selection highlight in software or AI-tool tutorials",
+    "attention frame around a stat or headline",
+    "retro theatre-marquee border on titles"
+   ],
+   "avoid": [
+    "high Speed flickers",
+    "thin strokes vanish in mobile compression; thicken the stroke"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Expression-driven: animates continuously with no keyframes, so comp.time does not matter; it never ends. Stroke dash Offset = time * Speed * 10 (Speed 0 = still).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Control: Speed (Slider). Rectangle size, stroke colour and dash lengths are in Contents > Group 1 > Rect 1 / Stroke 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/212b.png",
+    "note": "The lower-right corner of a white, round-cornered dashed rectangle outline (round dash caps) sits around the layer origin and its dashes have crawled between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Popping Map Pin",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Map pin (five selectable styles: Arrow, Drop, Flag, X, Pin; the default Pin is a red ball on a white stick) that pops on with a scale overshoot and a short rotational wobble.",
+   "look": [
+    "map pin",
+    "pop-in",
+    "overshoot",
+    "location",
+    "flat icon",
+    "bouncy"
+   ],
+   "use_for": [
+    "drop location pins on maps in news (incident, rally, constituency)",
+    "travel or route stops in documentaries",
+    "store or event locations in reels"
+   ],
+   "avoid": [
+    "pops from its own anchor; place the layer at the exact map point",
+    "no label; add text",
+    "small on 9:16 screens",
+    "it carries its own layer Transform (anchor, position, scale and rotation keys): applying it moves the target layer, so use an empty shape layer and set Position after applying"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Keyframed from comp.time: scale pops over about 0-0.4 s and rotation wobbles over about 0-0.73 s (decoded from the .ffx). Set comp.time to when the pin should land.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Control: Pin Type (Dropdown Menu pseudo effect, not listed in effects_used: 1 Arrow, 2 Drop, 3 Flag, 4 X, 5 Pin; only the chosen group is visible). No other expression controls; colours are in Contents > Shapes 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/213b.png",
+    "note": "A red push pin (red ball on a white stick) stands near the lower centre of the frame, tilted at 0.5 s and settled upright at 1.4 s; the host square vanished because the preset sets the layer's own Transform.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Postage Stamp",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Postage-stamp frame: a border with semicircular perforation cut-outs along every edge that can wrap a reference layer.",
+   "look": [
+    "postage stamp",
+    "perforated edge",
+    "vintage",
+    "collage",
+    "frame",
+    "scrapbook"
+   ],
+   "use_for": [
+    "frame archival or historical photos in documentaries",
+    "'on this day' or commemorative history segments",
+    "collage-style reels and travel stories"
+   ],
+   "avoid": [
+    "perforations can end in half-holes at corners; adjust Cut Size or Padding",
+    "on footage it frames the whole frame, not the subject"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Layer Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes; size and position follow the reference layer by expression, so comp.time does not matter.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Fit to a layer: fx(L,\"Reference Layer\")(1).setValue(target.index) (Layer Control). 'Measure Reference' dropdown: 1 At Single Time (measured once at 'Measure At Time [sec]'), 2 During Whole Comp (every frame), 3 After Time (held until that time, then live), 4 Before Time (live, then held). With no reference (or itself) the expression falls back to the stored box size, so something always shows. The measurement uses sourceRectAtTime and the target's scale and rotation; footage layers measure as their full frame, so point it at a text/shape/solid/precomp sized to the subject. Other controls: Padding, Frame Thickness, Cut Size. The perforations are ellipse repeaters along each side subtracted (Merge Paths) from the frame.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/214b.png",
+    "note": "The lower-right corner of a white frame with semicircular perforation cut-outs along both edges sits around the layer origin; static.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Radial Graph",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Donut chart with up to 10 ring segments, each sized to its share of the total, sweeping on one after another.",
+   "look": [
+    "donut chart",
+    "pie",
+    "share",
+    "infographic",
+    "data viz",
+    "ring"
+   ],
+   "use_for": [
+    "vote share or seat share donut in election coverage",
+    "budget allocation breakdowns in explainers",
+    "market share or survey results in AI-education videos"
+   ],
+   "avoid": [
+    "no labels or legend: add text",
+    "set unused Data NN Value sliders to 0 or they take a share of the ring",
+    "recolour the Data NN stroke groups or segments may be hard to tell apart"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keyframed from comp.time: each 'Data NN Animation' slider goes 0 to 100; the first segment sweeps over about 0-0.8 s, the last over about 0.53-1.77 s (decoded from the .ffx; approximate).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Radius, Thickness (clamped to Radius), Data 01 Value ... Data 10 Value, Data 01 Animation ... Data 10 Animation (0-100 % sweep, keyframed). Each segment's Trim End = value / sum of all values * Animation; each segment starts where the previous one ends.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/215b.png",
+    "note": "The lower-right quarter of a donut ring in violet, purple and blue segments sits around the layer origin, and the segment boundaries moved between 0.5 s and 1.4 s as they swept on.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Repeating Lines",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Static set of parallel bars repeated side by side and centred on the layer, with width, length, count, gap, overall rotation and colour on controls; Skew Lines shifts each copy vertically for a staircase stagger.",
+   "look": [
+    "stripes",
+    "hatching",
+    "speed lines",
+    "pattern",
+    "graphic",
+    "minimal"
+   ],
+   "use_for": [
+    "diagonal stripes behind titles or warning cards in news",
+    "speed-line accent behind a subject in reels",
+    "divider texture for lower thirds"
+   ],
+   "avoid": [
+    "thin lines alias and shimmer when moving",
+    "busy behind text"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Angle Control",
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "Static: no keyframes or time expressions; comp.time does not matter. Keyframe Line Rotation or layer position yourself for motion.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Line Width, Line Length, Line Copies, Line Gap, Line Rotation (Angle, rotates the whole set), Line Color, Skew Lines (vertical step per copy, px).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/216b.png",
+    "note": "The right half of a set of evenly spaced white vertical bars centred on the layer origin (comp top-left here), identical in both frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ring Chart",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Decorative HUD element: five concentric ring arcs whose Trim Start/End and offset wiggle randomly, each stroked in a random blend of two colours, with a Bevel Alpha edge. Not driven by data.",
+   "look": [
+    "HUD",
+    "rings",
+    "sci-fi",
+    "tech",
+    "loader",
+    "random arcs"
+   ],
+   "use_for": [
+    "sci-fi or AI HUD decoration around a subject",
+    "processing/loading indicator",
+    "tech background texture in AI-education reels"
+   ],
+   "avoid": [
+    "it is random, not a real chart: never use it to show actual numbers (use Radial Graph)",
+    "Bevel Alpha looks dated",
+    "random colours can clash with the brand; set Color Control A/B"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control",
+    "Bevel Alpha",
+    "Color Control"
+   ],
+   "duration_note": "Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends. Wiggle speed from 'Animated Shape Control' Speed.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Random Seed), Color Control A, Color Control B, plus an unrenamed Bevel Alpha effect (address by match name ADBE Bevel Alpha).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/217b.png",
+    "note": "Concentric bevelled arcs (dark red, blue, dark purple) around the layer origin whose trimmed lengths changed between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scalloped Frame",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Ornamental frame with concave circular cut-outs (scallops) at each corner and at the middle of each side, an outer rectangle minus an inset rectangle, that can wrap a reference layer like a ticket or badge border.",
+   "look": [
+    "scalloped edge",
+    "ornamental frame",
+    "badge",
+    "vintage",
+    "decorative",
+    "festive"
+   ],
+   "use_for": [
+    "decorative frames for festive or greeting posts",
+    "badges for 'fact' or quote cards",
+    "vintage photo frames in light documentaries"
+   ],
+   "avoid": [
+    "twee for hard news or political content",
+    "on footage it frames the whole frame, not the subject"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Layer Control",
+    "Point Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes; size and position follow the reference layer by expression, so comp.time does not matter.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Fit to a layer: fx(L,\"Reference Layer\")(1).setValue(target.index) (Layer Control). 'Measure Reference' dropdown: 1 At Single Time (measured once at 'Measure At Time [sec]'), 2 During Whole Comp (every frame), 3 After Time (held until that time, then live), 4 Before Time (live, then held). With no reference (or itself) the expression falls back to the stored box size, so something always shows. The measurement uses sourceRectAtTime and the target's scale and rotation; footage layers measure as their full frame, so point it at a text/shape/solid/precomp sized to the subject. Other controls: Padding, Frame Thickness, Middle Round Size (Point Control, [w, h]), Middle Round Offset (Slider), Corner Round Size (Point Control, [w, h]), Corner Round Offset (Slider). All circles and the inner rectangle are subtracted from the outer rectangle by Merge Paths.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/218b.png",
+    "note": "The lower-right corner of a purple, white-outlined frame with concave round scallops at the corner and side midpoints sits around the layer origin; static.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Simple Map Marker",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Circular map dot with an outer ring that pulses outward on a loop, like a radar ping.",
+   "look": [
+    "map marker",
+    "pulsing dot",
+    "radar ping",
+    "location",
+    "live",
+    "minimal"
+   ],
+   "use_for": [
+    "pinpoint a city or incident on a map in news",
+    "'live' or 'here' indicator",
+    "highlight locations in travel or documentary maps"
+   ],
+   "avoid": [
+    "a very short Animation Duration looks frantic",
+    "thin stroke is lost on busy satellite maps; raise Stroke Width"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "Expression-driven: no keyframes, so comp.time does not matter; it never ends. The pulse repeats every 'Animation Duration (seconds)' on comp time (time % period, not from the layer in-point): the ring grows outward by Stroke Offset px while fading 100 to 0 % opacity.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Scale (dot diameter, px), Fill Color, Stroke Width, Stroke Color, Stroke Offset (how far the ring travels outward, px), Animation Duration (seconds) (pulse period).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/219b.png",
+    "note": "A white dot with a grey outer ring centred on the layer origin; the ring's radius and brightness differ between 0.5 s and 1.4 s as it pulses outward.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Switchable Cursor Element",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Static mouse-cursor icon picked from ten shapes by a dropdown: arrow cursor, pointer hand, open hand, hour glass, text I-beam and five resize/move arrows.",
+   "look": [
+    "cursor",
+    "mouse pointer",
+    "UI",
+    "screen demo",
+    "tech",
+    "flat icon"
+   ],
+   "use_for": [
+    "fake screen-recording or UI demos in AI-tool tutorials",
+    "animate its position to 'click' buttons in explainers",
+    "point at items in app mock-ups"
+   ],
+   "avoid": [
+    "the path's ten hold keyframes are the shape library: do not delete or retime them",
+    "it does not move or click by itself; keyframe the layer Position/Scale"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "The Path has ten hold keyframes (0 to ~3 s) used only as a shape lookup by the expression key(menu), so the look does not change over time and comp.time does not matter.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Control: Cursor Shape (Dropdown Menu pseudo effect, not listed in effects_used: 1 Cursor, 2 Pointer Hand, 3 Open Hand, 4 Hour Glass, 5 Text Cursor, 6 Vertical Arrow, 7 Horizontal Arrow, 8 \\ Arrow, 9 / Arrow, 10 Cross Arrow). The path expression returns key(Cursor Shape) of the path's ten hold keyframes.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/220b.png",
+    "note": "A large black arrow cursor with a white outline, tip at the layer origin (comp top-left here), identical in both frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wireframe Worm",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Repeated round-cornered rectangles (purple fill with a light outline by default) whose positions, scales and rotations wiggle, forming a writhing worm or tunnel.",
+   "look": [
+    "wireframe",
+    "abstract",
+    "sci-fi",
+    "organic motion",
+    "tunnel",
+    "loop"
+   ],
+   "use_for": [
+    "abstract tech or AI 'neural' background",
+    "transition or bumper element",
+    "music or hype reel texture"
+   ],
+   "avoid": [
+    "very busy; keep it behind content at low opacity",
+    "many repeater copies render slowly"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Angle Control",
+    "Animated Shape Control",
+    "Point Control",
+    "Slider Control"
+   ],
+   "duration_note": "Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends. Wiggle speed from 'Animated Shape Control' Speed.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Random Seed), Rectangle Size (Point Control), Rotation Variation (Angle), Scale Variation, Position Variation (Sliders); the variations wiggle the repeater's transform.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/221b.png",
+    "note": "A stack of round-cornered rectangles (purple fill, light outline) offset from each other around the layer origin, shifting and tilting between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Write On Arrow",
+   "match": null,
+   "category": "Shapes/Elements",
+   "status": "current",
+   "summary": "Stroked arrow that draws itself along a curved path while the arrowhead rides the tip and turns with the path. Default: white stroke; the head is a black triangle with a white outline.",
+   "look": [
+    "arrow",
+    "write-on",
+    "callout",
+    "hand-drawn",
+    "pointer",
+    "annotation"
+   ],
+   "use_for": [
+    "point at a face, headline or map location in news explainers",
+    "tutorial callouts on screen recordings",
+    "flow arrows in explainer diagrams"
+   ],
+   "avoid": [
+    "the path shape is fixed: edit Contents > Path > Path 1 vertices to aim it",
+    "keys start at comp.time; set it to the beat first",
+    "it carries its own layer Transform: applying it sets the layer Position to the fixed comp point [540, 540] (anchor [0, 0], scale and opacity 100 %), and the arrow spans roughly 350 px left to 420 px right of the layer origin, at and just below its height; that is left of centre in a 1920x1080 comp but along the bottom edge, mostly off-frame, in a 960x540 comp, so re-set Position after applying. The layer's existing shapes stay and move with it, so use an empty shape layer"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Keyframed from comp.time: Trim Paths End draws 0 to 100 over about 0.67 s and the arrowhead Polystar's Outer Radius grows 0 to 50 over about 0.3 s (decoded from the .ffx); the head also scales 50 to 100 % with the draw.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). No expression controls. Recolour Stroke 1 / Fill 1; the arrowhead is Polystar 1, positioned on the trim end and rotated along the path tangent by expression. The path is static: edit Contents > Path > Path 1 vertices to aim it.",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/222b.png",
+    "note": "Still mostly off-frame on the centred host: the preset reset the layer Position to [540, 540] (the host square, kept, moved there to the bottom edge), so only the stroke's round start cap at the bottom-left and the white-outlined black arrowhead at the bottom-right, in place by about 1.0 s, peek above the bottom edge.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Alien Face - animated",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Abstract polystar glyph (lime-green fill, light outline by default) whose inner/outer radius and roundness wiggle continuously, so it morphs like a blobby alien face.",
+   "look": [
+    "abstract",
+    "morphing",
+    "organic",
+    "glyph",
+    "playful",
+    "loop"
+   ],
+   "use_for": [
+    "decorative loop element in fun explainers",
+    "background sprite or texture in music reels",
+    "abstract transition accent"
+   ],
+   "avoid": [
+    "abstract and odd: rarely fits news or political content",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Dimensions [inner, outer radius], Rounding, Spread (multiplies outer roundness), Random Seed).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/223b.png",
+    "note": "A lime-green, light-outlined three-lobed glyph is centred on the layer origin and visibly morphs between 0.5 s and 1.4 s (lobes, holes and outline loops change); the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Circular - cellular division",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Dashed circle outline (thick yellow round-capped stroke by default) whose dash and gap lengths wiggle, so the segments split and merge like dividing cells (at default settings the first 1.6 s show a single arc growing, shrinking and turning), while the ring slowly drifts in rotation.",
+   "look": [
+    "organic",
+    "cell",
+    "dashed ring",
+    "circle outline",
+    "biology",
+    "loop"
+   ],
+   "use_for": [
+    "biology or health explainer accent",
+    "abstract loading ring",
+    "background motif for science content"
+   ],
+   "avoid": [
+    "the morphing dashes look unsteady behind text",
+    "rotation drift is a fixed wiggle(0.2, 360) that Speed does not control",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Random Seed) driving the stroke's Dash 1 and Gap 1 wiggles.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/224b.png",
+    "note": "A thick yellow round-capped arc of a ~100 px ring is centred on the layer origin; over the 1.6 s render only one arc shows, and it lengthens, shortens and turns; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dancing Knot",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Stroked star outline (thin light-green line by default) twisted by two Pucker & Bloat operators whose amounts and rotation wiggle, so it knots and unknots continuously.",
+   "look": [
+    "knot",
+    "morphing",
+    "abstract",
+    "line art",
+    "organic",
+    "loop"
+   ],
+   "use_for": [
+    "abstract loop element for music or hype reels",
+    "transition accent",
+    "decorative background motif"
+   ],
+   "avoid": [
+    "busy; keep it small or low opacity",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Random Seed) driving the star rotation and the two Pucker & Bloat amounts.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/225b.png",
+    "note": "Thin light-green lines knot at the centred layer origin, a small three-petal twist at 0.5 s that has opened into long crossing strokes by 1.4 s; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Mandala - animated",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Filled and stroked polystar (orange fill, white stroke by default) whose radii and roundness wiggle, producing a continuously morphing mandala flower.",
+   "look": [
+    "mandala",
+    "flower",
+    "ornamental",
+    "morphing",
+    "spiritual",
+    "loop"
+   ],
+   "use_for": [
+    "festival (Diwali, Yoga Day) greeting backgrounds",
+    "meditation or wellness reel visuals",
+    "decorative title backdrop"
+   ],
+   "avoid": [
+    "overlapping fill can look muddy; try stroke only",
+    "decorative tone does not fit hard news"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Dimensions, Rounding, Spread, Random Seed).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/226b.png",
+    "note": "The lower-right quarter of overlapping orange petals with white outlines around the layer origin, clearly reshaped between 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Phase Scope",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Thin light-grey stroked circles copied by a repeater and jittered by a Wiggle Transform, giving a shimmering oscilloscope-like trace. Not audio reactive.",
+   "look": [
+    "oscilloscope",
+    "HUD",
+    "tech",
+    "jitter",
+    "sci-fi",
+    "loop"
+   ],
+   "use_for": [
+    "fake scope/HUD element in tech or AI explainers",
+    "podcast or audio-themed visual accent",
+    "sci-fi background"
+   ],
+   "avoid": [
+    "it does not react to audio; for that use an audio-driven effect",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Point Control",
+    "Slider Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Speed (wiggle frequency), Size (Point Control, circle [w, h]), Spread (wiggle position/scale amount), Random Seed, Copies (Sliders).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/227b.png",
+    "note": "Several thin light-grey circle outlines overlap at the centred layer origin and shift and spread between 0.5 s and 1.4 s; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "SpiroMandala",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Two rectangles (thin white strokes by default) spun through a repeater with wiggled size and rotation, drawing a rotating spirograph-like mandala.",
+   "look": [
+    "spirograph",
+    "mandala",
+    "geometric",
+    "hypnotic",
+    "rotating",
+    "loop"
+   ],
+   "use_for": [
+    "hypnotic background for music or meditation reels",
+    "festive geometric backdrop",
+    "transition accent"
+   ],
+   "avoid": [
+    "can strobe at high Speed",
+    "heavy repeater renders slowly",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. The pseudo effect's sub-controls also start with a TAB: match them the same way inside it, e.g. var E=fx(L,\"Animated Shape Control\"); for(var i=1;i<=E.numProperties;i++) if(E.property(i).name.replace(/^\\s+/,\"\")==\"Speed\") E.property(i).setValue(v). Controls: 'Animated Shape Control' pseudo effect (Speed, Dimensions, Rounding, Spread, Random Seed); the repeater rotation is -2x the group's wiggled rotation.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/228b.png",
+    "note": "Thin white rounded squares nest at the centred layer origin: aligned at 0.5 s, rotated into a square-and-diamond mandala by 1.4 s; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "TwinkleStar",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "An 8-point and a 4-point star layered (thin white rays fading toward the tips by default), whose outer radius (size) and rotation wiggle so the star twinkles.",
+   "look": [
+    "twinkle",
+    "sparkle",
+    "star",
+    "magic",
+    "festive",
+    "loop"
+   ],
+   "use_for": [
+    "sparkle accent on product, logo or text reveals",
+    "festive greetings",
+    "'magic' AI-moment emphasis in reels"
+   ],
+   "avoid": [
+    "scattered everywhere it looks cheap",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Control: Speed (Slider; wiggle frequency of the star radii and rotation).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/229b.png",
+    "note": "A thin white 8-ray star with rays fading toward their tips is centred on the layer origin and has grown and turned slightly between 0.5 s and 1.4 s; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Vintage Star",
+   "match": null,
+   "category": "Shapes/Sprites - Animated",
+   "status": "current",
+   "summary": "Four-point sparkle made of two 4-sided polygons merged and rounded (Round Corners), whose scale stretches tall and thin on a sine wave: a retro twinkle.",
+   "look": [
+    "vintage",
+    "sparkle",
+    "four-point star",
+    "retro",
+    "shine",
+    "loop"
+   ],
+   "use_for": [
+    "retro sparkle on titles or logos",
+    "shine accent on a product or medal",
+    "vintage-style explainer decoration"
+   ],
+   "avoid": [
+    "too many at once looks dated and cheesy"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Animated sprite. Expression-driven: animates continuously from time 0 / the layer in-point with no keyframes, so comp.time does not matter; it never ends.",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. Controls: Speed, Amplitude (Sliders); scale y = value + sin((time - inPoint) * Speed * pi - pi) * Amplitude, x shrinks by Amplitude/5.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/230b.png",
+    "note": "The lower-right quarter of a large white four-point star with concave rounded sides fills the top-left corner, and its vertical point is shorter at 1.4 s than at 0.5 s as it stretches.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Alien Calligraphy",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static abstract stroke glyph: a trimmed, pucker-bloated polystar line (thin light-green stroke by default) that looks like an alien calligraphy mark.",
+   "look": [
+    "abstract glyph",
+    "calligraphy",
+    "line art",
+    "decorative",
+    "organic"
+   ],
+   "use_for": [
+    "decorative glyph or accent on title cards",
+    "keyframe Length for a write-on stroke flourish"
+   ],
+   "avoid": [
+    "abstract meaning; can read as a random scribble",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Angle Control",
+    "Slider Control"
+   ],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. No keyframes. Controls: Spread (Angle Control, drives the polystar's Outer Roundness), Length (Slider, drives Trim Paths End %, keyframe it 0 to 100 for a write-on).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/231b.png",
+    "note": "A thin light-green looping, star-like scribble is centred on the layer origin, pixel-identical in both frames; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Alien Face",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static abstract glyph: a 3-point polystar with 1000 % roundness and an inner radius larger than the outer, giving a looping three-lobed blob, filled lime green with a light stroke.",
+   "look": [
+    "abstract",
+    "blob",
+    "looping lobes",
+    "glyph",
+    "flat"
+   ],
+   "use_for": [
+    "decorative badge or sticker shape in fun reels",
+    "background sprite"
+   ],
+   "avoid": [
+    "abstract shape rarely fits news",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). No keyframes or controls. Shape: Contents > Group 1 > Polystar 1 (Points, radii, roundness) with Fill 1 / Stroke 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/232b.png",
+    "note": "A lime-green, light-outlined three-lobed glyph (a rounded triangle with three dark holes) is centred on the layer origin, pixel-identical in both frames; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Box - dashed lines",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static 100x100 px square with a white 10/10 dashed outline and a blue fill at 25 % opacity.",
+   "look": [
+    "dashed box",
+    "outline",
+    "placeholder",
+    "UI",
+    "selection"
+   ],
+   "use_for": [
+    "highlight a region on screen recordings or documents",
+    "'cut here' coupon or placeholder frames",
+    "UI mock-ups in AI tutorials"
+   ],
+   "avoid": [
+    "thin dashes break up in compression; thicken the stroke",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). No keyframes or controls. Edit size in Contents > Group 1 > Rect 1; stroke and dashes in Stroke 1; fill opacity in Fill 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/233b.png",
+    "note": "The lower-right quarter of a small square with a white dashed outline and a translucent blue fill (dark navy on the dark background) sits at the comp's top-left corner (the layer origin here); static.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bullseye",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static target: seven concentric circles (25 to 175 px) under one fill with the Even-Odd fill rule, so rings alternate filled and empty in a single colour.",
+   "look": [
+    "bullseye",
+    "target",
+    "concentric circles",
+    "flat icon",
+    "graphic"
+   ],
+   "use_for": [
+    "'target' metaphors (goals, voter targeting) in explainers",
+    "focus point on a map",
+    "dartboard-style graphic"
+   ],
+   "avoid": [
+    "on a real person it reads as aggression"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). No keyframes or controls. Contents > Group 1 holds Ellipse 1-7 and one Fill 1 (Fill Rule = Even-Odd): all rings share that one colour; for two-colour rings put a solid disc of the second colour behind it.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/234b.png",
+    "note": "White concentric rings alternating with empty gaps (even-odd fill) around the layer origin at the comp's top-left corner; static.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Circular - half round",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static thick semicircular arc: a 100 px circle stroked 33 px wide (white, round caps) and trimmed to 50 %.",
+   "look": [
+    "arc",
+    "semicircle",
+    "gauge",
+    "HUD",
+    "line art"
+   ],
+   "use_for": [
+    "base for a gauge or progress meter",
+    "HUD ring decoration",
+    "keyframe Trim 1 End for a loader"
+   ],
+   "avoid": [
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). No keyframes or controls. Trim amount in Contents > Group 1 > Trim 1 (keyframe End for a loader); stroke in Stroke 1.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/235b.png",
+    "note": "A thick white semicircular arc (left half, round caps) is centred on the layer origin, pixel-identical in both frames; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Circular - tri dash",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static 100 px ring: a 10 px white stroke dashed into three round-capped arcs (dash 50, gap 55). It also carries a lime-green 50 % opacity Fill 1 that is switched off in the preset, so only the arcs render.",
+   "look": [
+    "dashed ring",
+    "HUD",
+    "reticle",
+    "spinner",
+    "tech"
+   ],
+   "use_for": [
+    "rotate it for a loading spinner",
+    "HUD focus ring around an object",
+    "tech decoration"
+   ],
+   "avoid": [
+    "over a real person's face it can read as targeting",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). No keyframes or controls. Contents > Group 1 > Ellipse 1 / Stroke 1 (dashes) / Fill 1 (lime green, 50 % opacity, disabled; show it with L.property(\"ADBE Root Vectors Group\").property(\"Group 1\").property(\"ADBE Vectors Group\").property(\"ADBE Vector Graphic - Fill\").enabled = true). Resizing the ellipse changes the dash count unless Dash/Gap are scaled with it; animate Group 1 rotation for a spinner.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/236b.png",
+    "note": "Three white round-capped dash arcs form a ~100 px ring at the centred layer origin, pixel-identical in both frames, with no fill inside (the inside matches the background exactly; the preset's Fill 1 is switched off); the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Crosshair - brackets",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static viewfinder brackets: a square frame whose side middles are cut away, leaving four corner brackets.",
+   "look": [
+    "crosshair",
+    "brackets",
+    "viewfinder",
+    "HUD",
+    "tech",
+    "surveillance"
+   ],
+   "use_for": [
+    "camera viewfinder framing in documentaries",
+    "'object detected' HUD in tech/AI explainers",
+    "focus on an object or map point"
+   ],
+   "avoid": [
+    "over a real politician or person it implies targeting: avoid in political content"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Point Control",
+    "Slider Control"
+   ],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) adds the preset's Contents groups and Expression Controls to L (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. No keyframes. Controls: Size (Point Control, frame [w, h] px), Thickness (Slider, line thickness, default 20), Cutout % (Slider, share of each side cut away, default 33). Shape: Outside Lines minus Outside Lines 2 minus the H Clip/V Clip cross (Merge Paths).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/237b.png",
+    "note": "One white L-shaped corner bracket (the lower-right one of the set) sits just right of and below the comp's top-left corner, the layer origin here; static.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Crosshair - round",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static round reticle: a circle (grey fill, white outline) with two thin cross lines extending past it (1.5x its size).",
+   "look": [
+    "crosshair",
+    "reticle",
+    "scope",
+    "HUD",
+    "target"
+   ],
+   "use_for": [
+    "scope/HUD element in tech or gaming content",
+    "focus marker on maps or diagrams"
+   ],
+   "avoid": [
+    "over a real person it implies targeting: avoid in political content",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Point Control"
+   ],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). Control names in the .ffx start with a TAB (\"\\tName\") and the preset's own expressions reference them that way: never rename them, and look them up whitespace-insensitively rather than with L.effect(\"Name\"), e.g. function fx(L,n){var P=L.property(\"ADBE Effect Parade\");for(var i=1;i<=P.numProperties;i++){if(P.property(i).name.replace(/^\\s+/,\"\")==n)return P.property(i);}return null;} then fx(L,\"Name\")(1).setValue(v); dropdowns take a 1-based index. No keyframes. Control: Size (Point Control, circle [w, h] px); the cross lines are 1.5x that size.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/238b.png",
+    "note": "A grey-filled, white-outlined circle with two thin white cross lines extending past it is centred on the layer origin, pixel-identical in both frames; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Crosshair - square",
+   "match": null,
+   "category": "Shapes/Sprites - Still",
+   "status": "current",
+   "summary": "Static square reticle: a square (grey fill, white outline) with two thin cross lines extending past it (1.5x its size).",
+   "look": [
+    "crosshair",
+    "square reticle",
+    "HUD",
+    "viewfinder",
+    "tech"
+   ],
+   "use_for": [
+    "viewfinder or focus box in tech explainers",
+    "mark a point on maps or screenshots"
+   ],
+   "avoid": [
+    "over a real person it implies targeting: avoid in political content",
+    "drawn centred on the layer origin: on a shape layer at Position [0,0] (paths in comp pixels) only its lower-right quarter is in frame; addShape() puts the origin at comp centre"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Point Control"
+   ],
+   "duration_note": "Still sprite: no keyframes or expressions, so comp.time does not matter; it sits at the layer origin (comp centre with addShape).",
+   "scripting": "Shape preset: var L = comp.layers.addShape(); make L the only selected layer (L.selected = true); comp.time = t; L.applyPreset(new File(<file>)) puts the preset's Contents groups and Expression Controls on L and removes L's own existing shapes (the gallery host layer's square vanished when this preset was applied), so apply it to an empty shape layer (with no layer selected AE creates a new layer instead). No keyframes. One Point Control stored as \"(Point Control)\" (no TAB; the preset's expression references that exact name) drives the square size [w, h] px; the cross lines are 1.5x that size. Address it by match name: L.property(\"ADBE Effect Parade\").property(\"ADBE Point Control\")(1).setValue([200, 200]).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/239b.png",
+    "note": "A grey-filled, white-outlined square with two thin white cross lines extending past it is centred on the layer origin, pixel-identical in both frames; the host square is gone.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  }
+ ]
+}

@@ -1,0 +1,628 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Additive Dissolve (Legacy)",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "Old dissolve that adds clip B's pixel values onto clip A before fading A out, so the middle of the transition blows out hot and bright. Replaced by the newer GPU 'Additive Dissolve'.",
+   "look": [
+    "bright flash",
+    "blown highlights",
+    "hot",
+    "dreamy",
+    "overexposed blend"
+   ],
+   "use_for": [
+    "Dreamy memory or flashback link in a documentary",
+    "Soft but energetic link between two mid-tone or darker B-roll shots in a reel (night rallies, interiors)",
+    "Glowing blend into a reveal shot; for new edits prefer the current 'Additive Dissolve', 'Flash' or 'Light Leak' transitions"
+   ],
+   "avoid": [
+    "Two already bright shots (snow, white kurtas, stage lights) clip to pure white mid-way",
+    "Serious news or explainer cuts: reads as stylised, not neutral"
+   ],
+   "confidence": "high",
+   "family": "dissolve",
+   "feel": "hot bright flash, dreamy",
+   "duration_typical": "0.3-0.8",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Additive Dissolve (new GPU version). AE: put B above A with blend mode Add, keyframe B opacity 0 to 100 over the first half, then fade A's opacity out over the second half.",
+   "scripting": "Harvest placed the 1 s centred instance at 1.52-2.52 s around the 2.0 s cut (12 frames before, 13 after at 25 fps); centred needs media handles on both clips or Premiere shortens it. Probably linear like Cross Dissolve / Dip (Legacy), which were measured linear on PR 26; this one was not timed. adobe_bridge has no automatic AE version (not in XFADE/DIP): AE shows a cut unless the spec gives an ae_preset.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/000b.png",
+    "note": "Mid frame is a hot, washed-out additive mix of plate A and plate B with highlights blown toward white; the bright blend is already visible at -0.3 s.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 1,
+    "basis": "render: one hot blow-out mid-way"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Band Slide",
+   "match": null,
+   "category": "Slide",
+   "status": "current",
+   "summary": "Horizontal bands of clip B slide in from alternate sides of the frame and interlock to cover clip A. Classic old-style Premiere slide.",
+   "look": [
+    "horizontal bars",
+    "interlocking strips",
+    "alternating slide",
+    "busy",
+    "2000s"
+   ],
+   "use_for": [
+    "Retro or deliberately cheesy segment change in a satire reel",
+    "Switching between two list items in a quick explainer",
+    "Parody of old TV-news packages"
+   ],
+   "avoid": [
+    "Faces: bands slice through them for most of the transition",
+    "Premium documentary or cinematic trailer: looks dated"
+   ],
+   "confidence": "medium",
+   "family": "slide/push",
+   "feel": "busy, cheap 2000s",
+   "duration_typical": "0.4-0.7",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: split B into horizontal strips (several duplicates with rectangle masks) and keyframe Position so odd strips enter from the left and even strips from the right; or Card Wipe with rows set and Flip Axis off as a rough stand-in.",
+   "scripting": "Band count and direction live in Premiere's transition settings (not settable from the spec); defaults give a handful of bands sliding horizontally. Harvest placed the 1 s centred instance at 5.52-6.52 s on the 6.0 s cut; centred needs handles on both clips. Not sure whether Premiere 26 still lists it in the Effects panel or only keeps it for scripting/old projects. No automatic AE version: AE shows a cut unless an ae_preset is given.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/001b.png",
+    "note": "Horizontal bands of plate B slide in from alternating left and right edges over the static plate A, the moving B strips misaligned with each other until they interlock by +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Band Wipe",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "Clip B is revealed through horizontal bands that wipe in from alternate sides while both images stay still. Like Band Slide but the picture does not move, only the reveal does.",
+   "look": [
+    "horizontal bars",
+    "alternating wipe",
+    "striped reveal",
+    "mechanical",
+    "2000s"
+   ],
+   "use_for": [
+    "Retro news-package or game-show parody",
+    "Quick switch between two data or chart slides in an explainer",
+    "Stylised interlude in a satire reel"
+   ],
+   "avoid": [
+    "Serious documentary or trailer: reads cheap and dated",
+    "Busy footage on both sides: the stripes become visual noise"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "mechanical, cheap 2000s",
+   "duration_typical": "0.4-0.7",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: Venetian Blinds on A (Transition Completion 0 to 100) is the nearest one-effect match; for true alternate-side bands use strips of A with Linear Wipe at 90 and 270 degrees alternated.",
+   "scripting": "Band count set in transition settings, not from the spec. Harvest placed the 1 s centred instance at 9.52-10.52 s on the 10.0 s cut; centred needs handles on both clips. No automatic AE version: AE shows a cut unless an ae_preset is given.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/002b.png",
+    "note": "Alternating horizontal bands reveal plate B from left and right while both pictures stay still (B lines up across bands, unlike Band Slide).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Center Merge",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Clip A splits into four quarters that slide and shrink into the centre of the frame, revealing clip B behind. Old CS6-era slide.",
+   "look": [
+    "shrinking rectangle",
+    "quarters merge to centre",
+    "reveal behind",
+    "gimmicky",
+    "2000s"
+   ],
+   "use_for": [
+    "Deliberately retro or kitsch transition in a satire or meme reel",
+    "Collapsing a title card into the centre before the next shot"
+   ],
+   "avoid": [
+    "Any premium or serious edit: looks like a 2005 wedding DVD",
+    "Subjects off-centre get torn apart by the quarter split"
+   ],
+   "confidence": "medium",
+   "family": "slide/push",
+   "feel": "cheap 2000s, gimmicky",
+   "duration_typical": "0.4-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "Premiere: Iris Box with Reverse ticked (A closes to the centre as one box; Reverse is an Effect Controls setting, not settable from the spec) gives a cleaner result. AE: four masked quarter copies of A, each scaled to 0 toward the comp centre with Position/Scale keyframes over B.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015 (medium confidence), yet QE getVideoTransitionByName applied it fine: harvest placed the 1 s centred instance at 13.52-14.52 s on the 14.0 s cut. Centred needs handles on both clips. No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/003b.png",
+    "note": "Plate A shrinks toward the centre as four quarters with plate B behind; by +0.3 s only a small rectangle is left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Center Peel",
+   "match": null,
+   "category": "Page Peel",
+   "status": "obsolete",
+   "summary": "Clip A tears open from the centre as four page curls peeling toward the corners, showing grey shaded curl backs and clip B underneath.",
+   "look": [
+    "four page curls",
+    "grey curl backs",
+    "peel from centre",
+    "kitsch",
+    "2000s"
+   ],
+   "use_for": [
+    "Ironic retro reveal in a satire or meme reel",
+    "Parody of old wedding or slideshow videos"
+   ],
+   "avoid": [
+    "The grey metallic curl backs look cheap on any serious piece",
+    "Faces in the centre are the first thing torn"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "dated, wedding-video kitsch",
+   "duration_typical": "0.6-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "Premiere: Page Peel / Page Turn for a single curl. AE: CC Page Turn on four masked quarter copies of A, each peeling toward its own corner.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015 (medium confidence); QE still applied it: harvest placed the 1 s centred instance at 17.52-18.52 s on the 18.0 s cut, frames show the four grey curls. Centred needs handles on both clips. No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/004b.png",
+    "note": "Plate A peels open from the centre as four curls with grey gradient backs, plate B showing through and nearly filling the frame by +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Channel Map",
+   "match": null,
+   "category": "Map",
+   "status": "needs_input",
+   "summary": "Builds the transition frames from colour channels picked from clip A and clip B in a settings dialog. With the default mapping the harvest shows plain, unaltered clip A for the whole transition, then a hard cut to B at the end, so the cut lands about half the duration late.",
+   "look": [
+    "no visible blend",
+    "hold on clip A",
+    "hard cut at end",
+    "channel swap only if set by hand"
+   ],
+   "use_for": [
+    "None from a script: at defaults it only holds clip A and cuts late; set a channel mapping by hand in the dialog if a channel-swap look is wanted"
+   ],
+   "avoid": [
+    "Expecting a blend between the clips: B never appears until the transition ends",
+    "Long durations: just a hold on clip A that moves the cut to the end of the transition"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "reads as a late hard cut",
+   "duration_typical": "0.1-0.3",
+   "sfx": "glitch",
+   "single_sided_ok": false,
+   "equivalent": "AE: Shift Channels or Set Channels on A, keyframed to pull channels from B (as a layer source), then cut; for a real RGB glitch use a channel-offset (e.g. Shift Channels plus Transform on separate channels).",
+   "scripting": "Channel choices live in a modal Channel Map Settings dialog that QE cannot set, so a scripted instance keeps the defaults (A only). Harvest placed the 1 s centred instance at 21.52-22.52 s on the 22.0 s cut; frames at -0.3, 0 and +0.3 s all show clip A, unaltered (the mid frame matches clip A in the Band Wipe render to about 1/255; the colour change between frames is the source footage). Believed hidden from the Effects panel since CC 2015. Use a glitch transition instead.",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/tr/005b.png",
+    "note": "All three frames show only clip A and the mid frame is pixel-identical (mean diff about 1/255) to untouched clip A at the same instant in the Band Wipe render, so the colour change between frames is the source footage, not the transition; channel choices sit in a modal dialog QE cannot set, so a human must pick a mapping before this can be demoed.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "CheckerBoard",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "Clip B appears in a checkerboard pattern of squares that fill in over clip A, in two passes (alternate squares first, then the rest).",
+   "look": [
+    "checkerboard",
+    "blocky squares",
+    "grid reveal",
+    "game-show",
+    "2000s"
+   ],
+   "use_for": [
+    "Game-show or quiz-style segment switch in a reel",
+    "Retro pixel or 8-bit themed explainer",
+    "Ironic old-TV transition in satire"
+   ],
+   "avoid": [
+    "Serious news or documentary: reads like a 2000s slideshow",
+    "Faces in the middle of a busy cut get chopped into squares"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "blocky, game-show 2000s",
+   "duration_typical": "0.4-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: Gradient Wipe on A (Transition Completion 0 to 100) with a precomp of tiled vertical ramps as the Gradient Layer, alternate tiles darker so one set of squares wipes first; a Generate > Checkerboard matte on B gives a cruder two-step pop. Block Dissolve is a looser random-block alternative.",
+   "scripting": "Square count is set in transition settings, not from the spec. Harvest placed the 1 s centred instance at 25.52-26.52 s on the 26.0 s cut; centred needs handles on both clips. No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/006b.png",
+    "note": "Alternate squares of plate B fill in over plate A row by row, the rest of the squares follow, and by +0.3 s only a few A squares remain at the bottom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Checker Wipe",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "Clip B wipes across clip A in a checkerboard of squares, each square wiping in the same direction at staggered times.",
+   "look": [
+    "checker squares",
+    "staggered wipe",
+    "grid",
+    "mechanical",
+    "2000s"
+   ],
+   "use_for": [
+    "Retro grid-style transition for a quiz or list reel",
+    "Switching between two infographic slides in an explainer",
+    "Parody of old broadcast packages"
+   ],
+   "avoid": [
+    "Premium documentary or trailer: dated",
+    "Long durations drag; keep it short"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "blocky, mechanical",
+   "duration_typical": "0.5-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: Gradient Wipe on A (Transition Completion 0 to 100) with a precomp of tiled horizontal ramps laid out as a checkerboard as the Gradient Layer, so every square wipes the same way with alternate squares offset; Card Wipe is a flipping-card alternative, not a true match.",
+   "scripting": "Direction and square count are in transition settings, not settable from the spec. Harvest placed the 1 s centred instance at 29.52-30.52 s on the 30.0 s cut; centred needs handles on both clips. No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/007b.png",
+    "note": "Squares of plate B wipe in vertically at staggered times in a checker grid over plate A, with only slivers of A left at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Cross Dissolve (Legacy)",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "The classic crossfade: clip A fades out while clip B fades in, with a linear ramp. Replaced by the newer GPU 'Cross Dissolve', which eases (smoothstep).",
+   "look": [
+    "soft blend",
+    "crossfade",
+    "invisible",
+    "time passing",
+    "soft",
+    "gradual",
+    "classic",
+    "overlap"
+   ],
+   "use_for": [
+    "Passage of time between documentary scenes",
+    "Soft link between B-roll shots under VO",
+    "Single-sided fade in/out at a clip edge (fades to transparency: black only when no track below; use Dip to Black for a true black fade)",
+    "Gentle montage of archive photos",
+    "passage of time between interview answers in a documentary",
+    "softening a cut between two B-roll shots under VO",
+    "fade up from black at a clip start (single-sided)",
+    "slow emotional montage beats"
+   ],
+   "avoid": [
+    "Fast reels and trailers on the beat: feels slow and soft",
+    "Dissolving between two shots of the same person framed similarly looks like a mistake (use a cut or Morph Cut)",
+    "between two shots of the same framing (reads as a mistake, use Morph Cut or a punch-in)",
+    "fast reels where every cut dissolves: feels slow and amateur"
+   ],
+   "confidence": "high",
+   "family": "dissolve",
+   "feel": "soft, neutral, time passing",
+   "duration_typical": "0.5-1.5",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "Premiere replacement: Cross Dissolve (eased). AE: opacity keyframes on the top layer 100 to 0 (or B 0 to 100) over the overlap, linear for this legacy version.",
+   "scripting": "Linear timing (measured on PR 26). adobe_bridge builds the AE version automatically (XFADE: linear crossfade using handles). Harvest placed the 1 s centred instance at 33.52-34.52 s on the 34.0 s cut (12 frames before, 13 after at 25 fps). The QE transition list contains this name twice (both entries share this card); getVideoTransitionByName returns one of them, treat them as the same. Apply by the exact name including ' (Legacy)'; centred it needs handles on both clips, single-sided it fades from / to whatever is below (black on an empty track). Prefer 'Cross Dissolve' for new edits.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/064b.png",
+    "note": "Even 50/50 crossfade of plate A and plate B at the cut, with faint B at -0.3 s and faint A at +0.3 s.",
+    "rerender": false
+   },
+   "merged": "2026-10-13: the duplicate card in pr_transition_05.json was merged here; use_for / avoid (and look, pairs_with, sources) are the union, and that card is kept whole in merged_from",
+   "merged_from": [
+    {
+     "kind": "pr_transition",
+     "app": "PR",
+     "name": "Cross Dissolve (Legacy)",
+     "match": null,
+     "category": "Dissolve",
+     "status": "obsolete",
+     "summary": "Older build of the standard cross dissolve: the outgoing clip fades out while the incoming clip fades in over the same frames, with a linear ramp. Kept so old projects open; the current GPU 'Cross Dissolve' does the same job with an eased ramp.",
+     "look": [
+      "soft",
+      "gradual",
+      "invisible",
+      "classic",
+      "overlap"
+     ],
+     "use_for": [
+      "passage of time between interview answers in a documentary",
+      "softening a cut between two B-roll shots under VO",
+      "fade up from black at a clip start (single-sided)",
+      "slow emotional montage beats"
+     ],
+     "avoid": [
+      "between two shots of the same framing (reads as a mistake, use Morph Cut or a punch-in)",
+      "fast reels where every cut dissolves: feels slow and amateur"
+     ],
+     "confidence": "high",
+     "family": "dissolve",
+     "feel": "soft, neutral, time passing",
+     "duration_typical": "0.5-1.0",
+     "sfx": "none",
+     "single_sided_ok": true,
+     "equivalent": "Premiere replacement: Cross Dissolve (current, eased). After Effects: overlap the layers and keyframe Opacity 100->0 on the upper (outgoing) layer, or 0->100 on the incoming layer above it, linear keyframes to match this legacy version.",
+     "scripting": "Apply by the exact name including ' (Legacy)'. The QE transition list contains this name twice (the other entry is carded in pr_transition_01); both behave the same. Harvest placed it centred for 1 s (257.52-258.52 s) with no error; gallery frames show a plain linear mix. Centred needs handles on both clips; single-sided at a clip start/end fades from/to whatever is below (black on an empty track). Prefer 'Cross Dissolve' for new edits.",
+     "verified": {
+      "verdict": "pass",
+      "frame": "pve/gallery/tr/064b.png",
+      "note": "Plain even mix of A and B at the cut, B faint at -0.3 s and A faint at +0.3 s: a straight cross dissolve.",
+      "rerender": false
+     },
+     "file": "pr_transition_05.json"
+    }
+   ]
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Cross Stretch",
+   "match": null,
+   "category": "Stretch",
+   "status": "obsolete",
+   "summary": "Clip B stretches in from one side while clip A squashes toward the other, like a flat fake cube turn. Old CS6-era transition.",
+   "look": [
+    "squash and stretch",
+    "fake cube turn",
+    "horizontal squeeze",
+    "distorted",
+    "2000s"
+   ],
+   "use_for": [
+    "Comic squeeze between two reaction shots in a meme or satire reel",
+    "Retro side-by-side switch in a list reel"
+   ],
+   "avoid": [
+    "Faces get squashed thin: unflattering for politicians and anchors",
+    "Serious or cinematic edits: dated"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "springy, cheap 2000s",
+   "duration_typical": "0.3-0.6",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "Premiere: the newer GPU Stretch / Stretch Wipe or a 3D Spin for a real cube. AE: anchor A on its right edge and keyframe Scale X 100 to 0 while B, anchored on its left edge, goes 0 to 100; or a real cube with two 3D layers rotating 90 degrees.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015 (medium confidence); QE still applied it: harvest placed the 1 s centred instance at 37.52-38.52 s on the 38.0 s cut (frames show B stretching in from the left). Centred needs handles on both clips. No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/009b.png",
+    "note": "Plate B stretches in from the left while plate A squashes toward the right edge, roughly half and half at the cut.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Cross Zoom (Legacy)",
+   "match": null,
+   "category": "Zoom",
+   "status": "obsolete",
+   "summary": "Clip A zooms hard into its centre, the cut happens at maximum zoom, then clip B zooms back out from close-up. No motion blur, so the midpoint is a flat blow-up of a few pixels.",
+   "look": [
+    "punch zoom",
+    "zoom through",
+    "hard push in",
+    "pixelated midpoint",
+    "no motion blur"
+   ],
+   "use_for": [
+    "Fast energetic jump between beats in a reel (keep it short)",
+    "Zooming into a detail then landing on the next shot in an explainer",
+    "Trailer impact cut when combined with a whoosh"
+   ],
+   "avoid": [
+    "Durations over ~0.5 s: the flat pixel blow-up at the midpoint is obvious",
+    "Low-resolution archive footage: falls apart even faster",
+    "Use the newer Cross Zoom (with blur) when available"
+   ],
+   "confidence": "high",
+   "family": "zoom",
+   "feel": "hard energetic, but crude without blur",
+   "duration_typical": "0.2-0.5",
+   "sfx": "whoosh",
+   "single_sided_ok": false,
+   "equivalent": "Premiere replacement: Cross Zoom (new GPU version, adds blur). AE: keyframe Scale of A up to ~400-1000% into the cut and B down from the same to 100%, with CC Radial Fast Blur or Transform shutter angle for motion blur.",
+   "scripting": "Zoom centre is in transition settings (defaults to frame centre). Harvest placed the 1 s centred instance at 41.52-42.52 s on the 42.0 s cut; the frame at the cut is a single flat colour (extreme zoom). Centred needs handles on both clips. Zoom speed probably linear like the other (Legacy) transitions (not timed for this one). No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/010b.png",
+    "note": "A is punched in hard at -0.3 s, the mid frame is a flat brown blow-up with no detail, and B is zoomed in and pulling back at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Curtain",
+   "match": null,
+   "category": "3D Motion",
+   "status": "obsolete",
+   "summary": "Clip A splits down the middle and both halves swing open in perspective like stage curtains, revealing clip B. Old CS6-era 3D transition.",
+   "look": [
+    "stage curtain",
+    "perspective halves",
+    "swing open",
+    "theatrical",
+    "kitsch"
+   ],
+   "use_for": [
+    "Ironic 'grand unveiling' gag in a satire reel",
+    "Opening a show segment parody with a theatrical reveal"
+   ],
+   "avoid": [
+    "Any serious news or documentary: looks like a 2000s slideshow",
+    "Faces in the centre are split down the middle"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "theatrical, kitsch reveal",
+   "duration_typical": "0.8-1.2",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "Premiere: Barn Doors for a flat version. AE: mask A into left and right halves as 3D layers, anchor each at its outer edge and keyframe Y Rotation 0 to about +/-90 degrees with a camera for perspective.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015 (medium confidence); QE still applied it: harvest placed the 1 s centred instance at 45.52-46.52 s on the 46.0 s cut (frames show the halves swinging outward in 3D). Centred needs handles on both clips. No automatic AE version.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/011b.png",
+    "note": "Plate A splits down the middle and both halves swing open in perspective like curtains, revealing plate B, nearly gone by +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to Black (Legacy)",
+   "match": null,
+   "merged_into": "pr_transition_05.json"
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dip to White (Legacy)",
+   "match": null,
+   "merged_into": "pr_transition_05.json"
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Displace",
+   "match": null,
+   "category": "Special Effect",
+   "status": "needs_input",
+   "summary": "Old CS6-era transition meant to warp one clip using the colour channels of the other. With default settings the harvest shows clip B from the start of the transition with only a faint displacement (a few pixels, invisible at normal viewing size), so it reads as a hard cut.",
+   "look": [
+    "hard cut",
+    "faint few-pixel warp on clip B, not visible at viewing size"
+   ],
+   "use_for": [
+    "None from a script; use a glitch or Liquid Distortion style transition for a warp"
+   ],
+   "avoid": [
+    "Expecting a displacement warp: at defaults the warp is a few pixels and reads as nothing",
+    "It moves the cut to the transition start, putting it about half the duration earlier than planned"
+   ],
+   "confidence": "low",
+   "family": "stylized",
+   "feel": "reads as a hard cut",
+   "duration_typical": "0.3-0.6",
+   "sfx": "glitch",
+   "single_sided_ok": false,
+   "equivalent": "AE: Displacement Map on A with B (or a noise layer) as the map layer, keyframe Max Horizontal/Vertical Displacement up to the cut and back down on B; or Turbulent Displace for an organic warp.",
+   "scripting": "Scale and wrap options are in a settings dialog QE cannot set. Harvest placed the 1 s centred instance at 57.52-58.52 s on the 58.0 s cut; frames at -0.3, 0 and +0.3 s all show clip B (no clip A), so the visible switch happens at 57.52 s. B is not pristine: block-matching against the untouched source shows a spatially varying shift of about 3 px at 640 wide (about 9 px at 1080p) in nearly every block, i.e. a weak default displacement. Believed hidden from the Effects panel since CC 2015. Low confidence on what it does with other settings.",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/tr/014b.png",
+    "note": "All three frames, even 0.3 s before the cut, show clip B with no clip A, so the transition is just a hard cut at its start; scale/wrap live in a settings dialog QE cannot set, so a human must set them before a real demo.",
+    "rerender": false,
+    "second_opinion": "corrected: frames are not clean clip B; vs the untouched test_b source they differ by ~22/255 mean (clean-B controls ~4/255) and 171-179 of 180 blocks are shifted by up to ~3 px at 640 wide, so a faint default displacement warp is present on B throughout; still reads as a hard cut at the transition start, so needs_input/broken verdict kept and summary/look/scripting reworded",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Dither Dissolve",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "Dissolve where clip B replaces clip A through a fine, regular one-pixel dot (ordered dither) pattern, giving a grainy, screen-door blend instead of a smooth one. Old CS6-era transition.",
+   "look": [
+    "grainy dissolve",
+    "speckled",
+    "dither noise",
+    "lo-fi",
+    "retro digital"
+   ],
+   "use_for": [
+    "Lo-fi or retro-computer themed explainer",
+    "Gritty archive-to-present link in a documentary",
+    "Meme or nostalgia reel with a pixel aesthetic"
+   ],
+   "avoid": [
+    "Heavy compression on Instagram turns the dither into mush; looks like a bad encode",
+    "Clean corporate or premium pieces: just use Cross Dissolve",
+    "Delivery below the source resolution: the one-pixel dot grid averages out into what looks like a plain dissolve"
+   ],
+   "confidence": "medium",
+   "family": "dissolve",
+   "feel": "gritty, lo-fi, retro digital",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "Premiere: no direct GPU replacement; Cross Dissolve for a clean blend, Mosaic or Grunge (new) for a blockier or textured break. AE: Block Dissolve on A with Block Width/Height 1-2 px and Soft Edges off, Transition Completion 0 to 100.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015 (medium confidence); QE still applied it: harvest placed the 1 s centred instance at 61.52-62.52 s on the 62.0 s cut (mid frame is a speckled blend). Centred needs handles on both clips. adobe_bridge does not map it to an AE crossfade (not in XFADE): AE shows a cut unless an ae_preset is given.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/015b.png",
+    "note": "At 640 px the mid frame is a mottled blend; in the 1080p render it is a fine regular one-pixel dot grid mixing A and B (ordered, not random), so the card wording was corrected to an ordered dither.",
+    "rerender": false
+   }
+  }
+ ]
+}

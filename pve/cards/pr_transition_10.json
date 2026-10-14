@@ -1,0 +1,537 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Stretch",
+   "match": null,
+   "category": "Distort (Film Impact set, folder inferred)",
+   "status": "unusable",
+   "summary": "New Premiere 26 GPU 'Stretch' (Film Impact set, list index 144): from Film Impact's description, the outgoing shot is pulled and smeared out of frame in one direction like rubber and the incoming shot snaps back from a stretched state. NOT VERIFIED: the scripted route never reaches this transition. Applying 'Stretch' by name always gives the old CS-era Stretch (match 'ADBE Stretch'), where clip B squeezes in from the left edge and widens across the frame while A is squashed to the right.",
+   "look": [
+    "elastic",
+    "smear",
+    "directional",
+    "snappy",
+    "rubber",
+    "kinetic"
+   ],
+   "use_for": [
+    "fast cuts between B-roll beats in a social reel (apply by hand in the UI)",
+    "energetic topic switches in an AI-education explainer (by hand)",
+    "for an automated build, spec 'Stretch Wipe' instead: modern pixel-stretch look, reachable by name"
+   ],
+   "avoid": [
+    "putting 'Stretch' in a build spec: you get the dated CS-era squeeze, not this transition",
+    "sombre news or documentary moments: reads playful",
+    "faces at the moment of stretch: distorts people unflatteringly"
+   ],
+   "confidence": "low",
+   "family": "stylized",
+   "feel": "snappy, elastic, playful energy",
+   "duration_typical": "0.3-0.6",
+   "sfx": "whoosh",
+   "single_sided_ok": false,
+   "equivalent": "In Premiere: 'Stretch Wipe' (match AE.AE_Impact_Stretch_Wipe) is the reachable modern stretch look. After Effects: keyframe Scale on one axis (e.g. width 100 -> 400 %) plus Position off frame on the outgoing layer with strong ease and Directional Blur (or layer motion blur), mirrored on the incoming layer; CC Scale Wipe for an edge-pixel stretch.",
+   "scripting": "UNREACHABLE BY NAME (confirmed). The transition list holds two 'Stretch' entries: index 44 is the old one, index 144 is this new one. qe.project.getVideoTransitionByName('Stretch') resolves to the old one. In the transition gallery project (pve/gallery/tr/pve_tr_gallery.prproj), both the index-44 and the index-144 placements carry MatchName 'ADBE Stretch', and their rendered frames are identical. No AE_Impact_Stretch item exists anywhere in the project. So the harvest placement at 577.52-578.52 s ('no error') was the OLD transition. pr_build.jsx applies transitions only by name, so this one can be used only by hand in the Effects panel, or through an untested route by match name (the UXP TransitionFactory). Its controls and match name were never harvested. Folder name is a best guess.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/144b.png",
+    "note": "Render is the old CS-era Stretch exactly as the card warns (pixel-match to k=44): B squeezed in from the left edge widening across while A is squashed to the right; the Film Impact rubber-smear look stays unverified, status unusable is right.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Stripe",
+   "match": null,
+   "category": "Wipe (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Film Impact stripes transition. A pattern of thin diagonal stripes (45 degrees by default, tinted a pale cream colour) slides over the whole frame. The outgoing and incoming shots interleave through the stripes, and the pattern clears off the incoming shot. It reads as a graphic striped blend rather than a wipe with one moving edge.",
+   "look": [
+    "diagonal stripes",
+    "45-degree bars",
+    "graphic",
+    "tinted overlay",
+    "interleaved",
+    "designed"
+   ],
+   "use_for": [
+    "section change in a political explainer with branded graphics",
+    "revealing a data card or quote card in a reel",
+    "news-package bumpers between stories",
+    "AI-education topic switches"
+   ],
+   "avoid": [
+    "emotional documentary scenes: too designed",
+    "talking-head to talking-head cuts: stripes slice across faces",
+    "mixing with other wipe styles in one piece (keep one graphic language)"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "clean graphic, broadcast-modern",
+   "duration_typical": "0.4-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: an animated 45-degree stripe pattern (Venetian Blinds on a white solid with Direction 45, or repeated shape-layer bars) used as a track matte between the two layers and slid along its normal, plus the same stripes at about 30-50 % opacity tinted pale yellow in Overlay/Add mode, faded out at the end.",
+   "scripting": "Match name AE.AE_Impact_Stripes. Harvest placed it centred for 1 s (581.52-582.52 s) with no error, and the gallery render shows the striped blend described above. Centred needs handles on both clips. Effect Controls defaults from the gallery project are: Stripes 48 and 8 (two stripe sets), Angle 45, Length 45, Edge Feather 50, Cross Motion on, Colorize 50 with a colour, Seed. These are not harvested as spec properties, so set none from a spec.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/145b.png",
+    "note": "Mid-cut frame shows thin pale-cream 45-degree stripes over the whole frame with A and B interleaved through them, and the stripes have cleared off B by 0.3 s after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "TV Power",
+   "match": null,
+   "category": "Stylize (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Old CRT television switch-off and switch-on. The outgoing picture turns magenta-tinted with scanlines and shrinks into a keystoned (trapezoid) screen, then collapses to a bright horizontal line and a dot with an RGB flare. A few frames of black follow. The incoming picture then powers on in reverse: dot, line, trapezoid, full frame.",
+   "look": [
+    "CRT",
+    "retro TV",
+    "switch off",
+    "bright line",
+    "collapse",
+    "magenta tint",
+    "analog"
+   ],
+   "use_for": [
+    "cutting into or out of archive TV news footage in a documentary",
+    "satirical 'switch off' beat in a political roast reel",
+    "ending a reel with a TV-off (single-sided at the last clip)",
+    "retro 90s Doordarshan-style flashback"
+   ],
+   "avoid": [
+    "using it as a generic transition between modern shots: gimmicky",
+    "more than once or twice per piece",
+    "durations under about 0.5 s: the collapse, black hold and power-on phases blur into a flicker"
+   ],
+   "confidence": "high",
+   "family": "stylized",
+   "feel": "retro, punchy, comedic switch-off",
+   "duration_typical": "0.6-1.2",
+   "sfx": "glitch",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: keyframe the outgoing layer's Scale Y 100 -> 1 % then Scale X 100 -> 0 % over about 6 frames, with Exposure/Glow boosted to white, a Corner Pin keystone and a magenta Tint. Reverse this on the incoming layer. Add Venetian-style scanlines, a small RGB-split flare on the dot, and 2-4 black frames between the two halves.",
+   "scripting": "Match name AE.AE_Impact_TV_Power. Harvest placed it centred for 1 s (585.52-586.52 s) with no error. The gallery render confirms the look and shows a near-black hold of roughly 0.3 s around the cut. Works single-sided at a clip start (power on) or end (power off). Controls (Ghost Block / Retrace / Burn colours, Colorize Footage, Burn, Feedback and RGB Circle intensity) are not harvested, so keep the defaults.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/146b.png",
+    "note": "A collapses into a keystoned dark screen with a bright line flare and RGB fringes, the cut is black with a single dot, and B powers back on magenta-tinted in a trapezoid.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Text Animator",
+   "match": null,
+   "category": "Text (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Film Impact text animator. On a title or graphic clip with transparency, it finds the separate objects (letters, words or lines, detected from gaps in the alpha) and animates them on or off with a stagger. The objects offset, zoom and fade with an elastic overshoot curve, and a Preset menu offers other styles. On two full-frame video clips there is nothing to split: the gallery render is just a dip through black with a slight move.",
+   "look": [
+    "animated text",
+    "staggered build-on",
+    "kinetic type",
+    "elastic bounce",
+    "motion graphics"
+   ],
+   "use_for": [
+    "animating a static name super or lower-third PNG on and off",
+    "quote cards in a political explainer",
+    "headline text in a news reel without building it in After Effects",
+    "logo or channel-name sting at the start of a reel"
+   ],
+   "avoid": [
+    "between two full-frame video clips: it only dips through black",
+    "Hindi/Devanagari titles: the headline bar joins the letters of a word into one object, so it animates word by word, and detached marks (anusvara, chandrabindu, nukta) may move on their own; check the render"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "kinetic, polished motion-graphics",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: a Text layer with a Text Animator (Position/Scale/Opacity) and a Range Selector Offset keyframed 0 -> 100 % (bounce via an overshoot expression), or the Animation Presets > Text folder presets.",
+   "scripting": "Match name AE.AE_Impact_Text_Animator. Use it single-sided at the start and/or end of a text or graphic clip with alpha, on a track above the video. The harvest placed it centred for 1 s (589.52-590.52 s) between two plain video clips with no error. That placement only showed the dip-to-black fallback. Controls (Preset, Object Type, Line/Word Bias, Distribution, Fade, zoom/spacing, motion blur) are not harvested, so keep the defaults. Folder name is a best guess.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/147b.png",
+    "note": "On the two full-frame clips it is a dip through black with a slight offset/scale on A before and B after, as the card says; the per-letter animation cannot show here.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Typewriter",
+   "match": null,
+   "category": "Text (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Film Impact typewriter. It reveals a title or graphic with transparency one character at a time, left to right and line by line (characters are detected from gaps in the alpha), and removes it the same way at the out point. An optional blinking caret is off by default. On two full-frame video clips the whole frame counts as one character: the gallery render shows the outgoing shot cutting to black for about 0.35 s and the incoming shot popping on.",
+   "look": [
+    "typed on",
+    "character by character",
+    "terminal",
+    "report",
+    "reveal"
+   ],
+   "use_for": [
+    "typing on a headline, date or location super in a news reel",
+    "AI-education chat or prompt text appearing like a terminal",
+    "documentary caption cards (place, year)",
+    "quote reveal timed to VO"
+   ],
+   "avoid": [
+    "full-frame video clips: it just hard-cuts through black",
+    "long sentences over short durations: letters flash by unreadably",
+    "Devanagari text: letters joined by the headline bar are detected as one object, so it types word by word and loose marks may pop separately; check the render"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "precise, informational, reporter's notebook",
+   "duration_typical": "0.5-1.5",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: Animation Presets > Text > Animate In > Typewriter on a Text layer, or a Text Animator with Opacity 0 and a Range Selector Start keyframed 0 -> 100 % (Shape Square, smoothness 0).",
+   "scripting": "Match name AE.AE_Impact_Typewriter. Use it single-sided at the start of a text or graphic clip with alpha, on an upper track. Scale the duration with character count (roughly 0.03-0.06 s per character). The sfx list has no typing sound, so use none or a key-click loop. Harvest placed it centred for 1 s (593.52-594.52 s) with no error. Controls (Left to Right, Top to Bottom, Line Bias, Caret Controls with Visible off by default) are not harvested, so keep the defaults.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/148b.png",
+    "note": "A is untouched at -0.3 s, the cut frame is pure black and B is untouched at +0.3 s, matching the card's cut-to-black description for full-frame clips.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VHS Damage",
+   "match": null,
+   "category": "Distort (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Analog tape damage between shots: white tracking-noise bands, horizontal line displacement and vertical jumps, channel noise and slight desaturation, as if a VHS tape rolls over from one recording to the next.",
+   "look": [
+    "VHS",
+    "tracking lines",
+    "tape noise",
+    "horizontal tearing",
+    "jitter",
+    "90s"
+   ],
+   "use_for": [
+    "entering archive or old-footage sections in a documentary",
+    "'flashback to 2014' beats in a political explainer",
+    "nostalgia or meme reels",
+    "trailer glitch beats with a retro tone"
+   ],
+   "avoid": [
+    "clean corporate or government-information pieces: reads as a fault",
+    "pairing with digital glitch transitions in the same piece (mixed eras)"
+   ],
+   "confidence": "high",
+   "family": "glitch/damage",
+   "feel": "retro, gritty, nostalgic",
+   "duration_typical": "0.3-0.8",
+   "sfx": "tape_rewind",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: Wave Warp (Square, small height) plus Displacement Map from a Fractal Noise layer, a horizontal Offset jitter (wiggle expression), Shift Channels/channel offset for colour bleed and Noise, all keyframed only around the cut.",
+   "scripting": "Match name AE.AE_Impact_VHS_Damage. Harvest placed it centred for 1 s (597.52-598.52 s) with no error, and the gallery render confirms the tracking bands and tearing. Centred needs handles on both clips. Single-sided at a clip start works as a 'tape starts' intro. Controls (Pattern, Detune, Ramp Height/Length, Vertical Jump, Channel Noise, Desaturation) are not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/149b.png",
+    "note": "Mid-cut frame shows horizontal line displacement, vertically repeated and jumped bands of A, and grey-white tracking noise across the lower half, slightly desaturated.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Wave",
+   "match": null,
+   "category": "Distort (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "The outgoing shot ripples and warps in sine waves, dissolves into the incoming shot at the peak of the distortion, and the waves settle out. A liquid, dreamy distortion transition with motion blur on by default.",
+   "look": [
+    "ripple",
+    "liquid",
+    "dreamy",
+    "warp",
+    "wavy",
+    "flashback"
+   ],
+   "use_for": [
+    "memory or flashback entry in a documentary",
+    "dream or imagination beat in an explainer",
+    "softer stylised switch in a lifestyle reel"
+   ],
+   "avoid": [
+    "news and political fact segments: reads like a 2000s wedding video",
+    "fast-paced edits: the warp needs time",
+    "talking-head cuts: warped faces look ugly"
+   ],
+   "confidence": "high",
+   "family": "stylized",
+   "feel": "dreamy, soft, nostalgic",
+   "duration_typical": "0.6-1.2",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: Wave Warp (or Turbulent Displace) keyframed Wave Height 0 -> high -> 0 across the cut on both layers, with an Opacity crossfade between them.",
+   "scripting": "Match name AE.AE_Impact_Wave. Harvest placed it centred for 1 s (601.52-602.52 s) with no error, and the gallery render confirms the ripple dissolve. Centred needs handles on both clips. Controls (Angle 90, Amplitude 80, Length 60, Dissolve Time 50, Edge Behavior, Colorize, motion blur) are not harvested. Near-identical in feel to 'Liquid Distortion': do not use both in one piece.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/150b.png",
+    "note": "Mid-cut frame is a dissolve between A and B with both warped by long sine waves (the stripes bend), and B still shows a slight warp at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Whip",
+   "match": null,
+   "category": "Slide (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Whip pan with heavy horizontal motion blur. By default the picture travels right to left: the outgoing shot is flung off to the left and the incoming shot arrives from the right, as if the camera swung fast to the right. A Direction control changes the travel and an optional Chromatic Aberration adds colour fringes. This is the current replacement for Whip (Legacy).",
+   "look": [
+    "whip pan",
+    "motion blur",
+    "fast",
+    "directional",
+    "energetic"
+   ],
+   "use_for": [
+    "fast location or topic changes in reels",
+    "trailer pacing between action shots",
+    "hook-to-content handoff in an explainer",
+    "comparison cuts (before/after, leader A vs leader B)"
+   ],
+   "avoid": [
+    "slow interviews or sombre content",
+    "durations over ~0.5 s: the blur gets mushy and loses its snap",
+    "whipping against strong on-screen motion in the opposite direction"
+   ],
+   "confidence": "high",
+   "family": "slide/push",
+   "feel": "hard energetic, kinetic",
+   "duration_typical": "0.2-0.4",
+   "sfx": "whoosh",
+   "single_sided_ok": false,
+   "equivalent": "After Effects: animate Position of both layers across the frame (outgoing off one side, incoming in from the other) with strong ease and layer motion blur on (shutter angle 360-720), or the Transform effect with its own shutter angle; Directional Blur (90 degrees) keyframed on the peak frames.",
+   "scripting": "Match name AE.Impact_Whip (the legacy one is AE.ADBE Whip). Apply by the bare name 'Whip'; 'Whip (Legacy)' is a separate entry. Harvest placed it centred for 1 s (605.52-606.52 s) with no error, and the gallery render shows the right-to-left whip described above. Centred needs handles on both clips. Single-sided only makes sense on an upper track, where it whips the clip in over what is below. The Direction and Chromatic Aberration controls are not harvested, so a spec gets the default direction.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/151b.png",
+    "note": "Heavy horizontal motion blur smears the cut frame; B's edge enters at the right of the -0.3 s frame and A's remnant trails at the left of the +0.3 s frame, so travel is right to left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Soft Wipe",
+   "match": null,
+   "category": "Wipe (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "Film Impact wipe with a wide, blurred and feathered edge. By default it runs diagonally (45 degrees) from the lower-left corner to the upper-right, with a slight brightening along the edge. The incoming shot sweeps in behind a soft gradient border instead of a hard line.",
+   "look": [
+    "soft edge",
+    "feathered",
+    "diagonal sweep",
+    "gentle",
+    "clean"
+   ],
+   "use_for": [
+    "gentle reveal of B-roll under VO in a documentary",
+    "transition into a map or data graphic in an explainer",
+    "single-sided wipe-on of a graphic or lower third",
+    "softer alternative to a dissolve that still shows direction"
+   ],
+   "avoid": [
+    "hard-hitting trailer or reel beats: too gentle",
+    "very busy shots on both sides: the soft band reads as muddy double exposure"
+   ],
+   "confidence": "high",
+   "family": "wipe",
+   "feel": "soft, smooth, unobtrusive",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: Linear Wipe on the outgoing layer (Wipe Angle 45 degrees, Feather 150-300 px), Transition Completion keyframed 0 -> 100 % with easing; or Gradient Wipe with a ramp layer and high Transition Softness.",
+   "scripting": "Match name AE.AE_Impact_Wipe (displayed as 'Soft Wipe' to avoid clashing with the old 'Wipe'). Do not confuse it with 'Wipe' (old hard-edge wipe) or 'Linear Wipe' (the Film Impact straight wipe). Harvest placed it centred for 1 s (609.52-610.52 s) with no error, and the gallery render confirms the soft diagonal sweep. Centred needs handles on both clips. Controls (Wipe Type, Angle 45, Feather 32, Blur Amount 50, Exposure 25, easing curve) are not harvested.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/152b.png",
+    "note": "B occupies the lower-left and A the upper-right, divided by a wide blurred, feathered diagonal band, consistent with a 45-degree soft wipe from lower-left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Zoom Blur",
+   "match": null,
+   "category": "Lights & Blurs (Film Impact set, folder inferred)",
+   "status": "current",
+   "summary": "The outgoing shot rushes forward into a radial zoom blur and the incoming shot resolves out of the same blur, like a fast punch through the centre of the frame. The zoom centre is movable and a slight exposure lift is on by default.",
+   "look": [
+    "punch zoom",
+    "radial blur",
+    "rush",
+    "impact",
+    "energetic",
+    "speed"
+   ],
+   "use_for": [
+    "hook-to-body transitions in reels",
+    "trailer hits on the beat",
+    "punching from a wide to a detail in a news reel",
+    "revealing a big number or headline card"
+   ],
+   "avoid": [
+    "over-use: every cut zooming feels like a 2015 YouTube vlog",
+    "sombre documentary moments",
+    "an off-centre subject with Zoom Center left at frame centre"
+   ],
+   "confidence": "high",
+   "family": "zoom",
+   "feel": "hard energetic, impact",
+   "duration_typical": "0.3-0.5",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: keyframe Scale 100 -> 200-300 % on the outgoing layer and 300 -> 100 % on the incoming one with sharp ease, plus Radial Blur (Type: Zoom) or CC Radial Fast Blur keyframed up to the cut and back down.",
+   "scripting": "Match name AE.AE_Impact_Zoom_Blur. Harvest placed it centred for 1 s (613.52-614.52 s) with no error, and the gallery render confirms the radial punch. Centred needs handles on both clips. Controls (Mode, Zoom Center, Zoom Amount 50, Vertigo 40, Blur Amount 75, Chromatic Aberration, Exposure) are not harvested, so a spec always zooms on frame centre. For a spin blur use 'Radial Blur'.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/153b.png",
+    "note": "A picks up radial blur before the cut, the cut frame is a full radial zoom-blur rush through the centre, and B resolves out of residual radial blur after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Constant Power",
+   "match": null,
+   "category": "Crossfade",
+   "status": "current",
+   "summary": "Premiere's default audio crossfade, an equal-power curve. The outgoing sound drops slowly at first and fast at the end, while the incoming sound rises fast and then levels off, so loudness stays even through the overlap. The audio equivalent of a cross dissolve.",
+   "look": [
+    "equal power",
+    "smooth",
+    "no dip",
+    "natural",
+    "default crossfade"
+   ],
+   "use_for": [
+    "joining two music edits so the cut is inaudible",
+    "smoothing VO or interview edits (2-4 frame crossfade kills clicks)",
+    "fading music in or out at the start/end of a reel (single-sided)",
+    "blending room tone or ambience between scenes in a documentary"
+   ],
+   "avoid": [
+    "between two copies of the same correlated sound (same mic, overlapping take): can bump loudness about 3 dB mid-fade, use Constant Gain",
+    "very long crossfades between two different songs: both are audible at near full level in the middle"
+   ],
+   "confidence": "high",
+   "family": "audio",
+   "feel": "smooth, invisible",
+   "duration_typical": "0.05-0.2 for dialogue, 0.5-3.0 for music",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "After Effects has no audio transitions. Keyframe Audio Levels: outgoing 0 dB at the start, about -3 dB at the midpoint, about -48 dB at the end. Mirror this on the incoming layer (-48, -3, 0 dB). Plain Easy Ease between two dB keyframes does NOT give an equal-power curve. Better to do audio crossfades in Premiere.",
+   "scripting": "Audio transition (from qe.project.getAudioTransitionList()); not placed by the harvest. pr_build.jsx currently applies video transitions only. An audio version would use qe.project.getAudioTransitionByName('Constant Power') with the QE audio track item's addTransition (untested). Fallback: keyframe the clip's Volume > Level. It is the default audio transition: Ctrl+Shift+D applies it in the UI.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Audio transition: the gallery renders video only, so there is no frame to judge.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Constant Gain",
+   "match": null,
+   "category": "Crossfade",
+   "status": "current",
+   "summary": "Linear audio crossfade: gain changes at a constant rate on both clips. Loudness dips about 3 dB in the middle of a crossfade between different sounds, and the change can sound abrupt. Useful for very short click-removal fades and for correlated audio.",
+   "look": [
+    "linear",
+    "straight ramp",
+    "slight dip",
+    "abrupt",
+    "mechanical"
+   ],
+   "use_for": [
+    "2-4 frame fades on hard dialogue cuts to remove clicks",
+    "crossfading two takes from the same mic or two halves of the same music (correlated audio)",
+    "quick fade-out of a sound effect tail"
+   ],
+   "avoid": [
+    "long music crossfades between different tracks: audible dip in the middle",
+    "fade-outs at the end of a film: the linear ramp sounds like it cuts off"
+   ],
+   "confidence": "high",
+   "family": "audio",
+   "feel": "abrupt, mechanical",
+   "duration_typical": "0.05-0.3",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: keyframe Audio Levels outgoing 0 dB -> about -6 dB at the midpoint -> about -48 dB at the end, and mirror this on the incoming layer. AE levels are in dB, so a straight dB ramp is not linear gain. The -6 dB midpoint keyframe approximates it.",
+   "scripting": "Audio transition; not placed by the harvest. pr_build.jsx applies video transitions only. Scripted use would go through qe.project.getAudioTransitionByName('Constant Gain') and the QE audio track item's addTransition (untested). Fallback: keyframe Volume > Level.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Audio transition: the gallery renders video only, so there is no frame to judge.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Exponential Fade",
+   "match": null,
+   "category": "Crossfade",
+   "status": "current",
+   "summary": "Audio crossfade on a smooth logarithmic curve: the outgoing clip fades out while the incoming clip fades in. Used single-sided, it gives the most natural-sounding fade from or to silence.",
+   "look": [
+    "logarithmic",
+    "natural fade",
+    "smooth tail",
+    "music out",
+    "silence"
+   ],
+   "use_for": [
+    "fading music out at the end of a reel, film or documentary (single-sided)",
+    "fading music or ambience in from silence at the start",
+    "long musical crossfades in trailers",
+    "letting a VO bed tail away under an end card"
+   ],
+   "avoid": [
+    "very short dialogue join fades: Constant Power is the safer default there"
+   ],
+   "confidence": "high",
+   "family": "audio",
+   "feel": "natural, gentle, cinematic tail",
+   "duration_typical": "1.0-3.0",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "After Effects: keyframe Audio Levels from 0 dB to about -48 dB linearly in dB (a straight dB ramp is already an exponential gain curve), then to silence.",
+   "scripting": "Audio transition; not placed by the harvest. pr_build.jsx applies video transitions only. Scripted use would go through qe.project.getAudioTransitionByName('Exponential Fade') and the QE audio track item's addTransition (untested). Fallback: keyframe Volume > Level.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Audio transition: the gallery renders video only, so there is no frame to judge.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

@@ -1,0 +1,1120 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Noise",
+   "match": "AE.ADBE Noise2",
+   "category": "Noise & Grain",
+   "status": "current",
+   "summary": "Adds random per-pixel noise to the clip, either coloured or monochrome. The noise re-randomises every frame on its own, so it moves without keyframes.",
+   "look": [
+    "digital noise",
+    "grain",
+    "gritty",
+    "VHS / CCTV texture",
+    "low-light camera",
+    "texture",
+    "film",
+    "TV static",
+    "analogue"
+   ],
+   "use_for": [
+    "Light mono grain (3-6) on an adjustment layer to glue AI or stock shots into one documentary look",
+    "Match clean graphics or screen recordings to noisy archival footage in an explainer",
+    "Short noise burst on a cut as a cheap glitch / signal-loss transition in a news reel",
+    "CCTV / surveillance-style texture on a clearly labelled reconstruction or dramatisation (never to pass staged footage off as real CCTV in news)",
+    "Light grain to blend AI-generated or clean stock shots with archive footage",
+    "Gritty texture on documentary reenactments",
+    "Heavy static for glitch/TV-off hits in reels and trailers",
+    "Break up banding in gradients and dark title backgrounds"
+   ],
+   "avoid": [
+    "Colour noise above ~15 on faces: looks like a broken sensor, not film grain",
+    "Heavy noise before export to social: platform compression smears it into blocky mush and wastes bitrate",
+    "Turning off Clip Result Values with high amounts: values wrap and produce harsh coloured specks",
+    "Above ~10% on full-frame shots it reads as bad video, and grain balloons file size and compresses poorly on Instagram",
+    "Colour noise looks digital, not filmic; switch Use Color Noise off for film grain"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount of Noise",
+     "does": "Strength of the noise in percent",
+     "typical": "3-6 subtle grain; 20-40 obvious texture; 60+ glitch burst"
+    },
+    {
+     "name": "Use Color Noise",
+     "does": "On = independent RGB noise (coloured specks); off = luminance-only mono noise",
+     "typical": "false for film-like grain"
+    },
+    {
+     "name": "Clip Result Values",
+     "does": "Clamps noisy pixels to legal values instead of letting them wrap around",
+     "typical": "true"
+    }
+   ],
+   "demo_settings": {
+    "Amount of Noise": 70,
+    "Use Color Noise": true,
+    "Clip Result Values": true
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Noise",
+   "pairs_with": [
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Posterize Time",
+    "Offset",
+    "Adjustment layer",
+    "Lighting Effects"
+   ],
+   "scripting": "Use Color Noise and Clip Result Values are real booleans in the Premiere harvest (AE exposes them as 0/1). Amount of Noise is 0-100. Put it on an adjustment layer above a section so all clips share one grain. GPU: the install ships an AEFX_Noise GPU kernel, so treat it as accelerated.",
+   "recipe": {
+    "Amount of Noise": [
+     [
+      0,
+      0
+     ],
+     [
+      0.12,
+      60
+     ],
+     [
+      0.35,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/053.png",
+    "note": "Coloured speckle grain now covers the whole frame (mean diff 8.2/255 vs 4.4 at Amount 40): a gritty low-light texture at gallery size and clearly RGB noise when zoomed.",
+    "rerender": false
+   },
+   "merged": "2026-10-13: the duplicate card in pr_effect_05.json was merged here; use_for / avoid (and look, pairs_with, sources) are the union, and that card is kept whole in merged_from",
+   "merged_from": [
+    {
+     "kind": "pr_effect",
+     "app": "PR",
+     "name": "Noise",
+     "match": "AE.ADBE Noise2",
+     "category": "Noise & Grain",
+     "status": "current",
+     "summary": "Adds random pixel noise (colour or monochrome) to the clip, from subtle film-like grain to heavy TV static.",
+     "look": [
+      "grain",
+      "texture",
+      "film",
+      "gritty",
+      "TV static",
+      "analogue"
+     ],
+     "use_for": [
+      "Light grain to blend AI-generated or clean stock shots with archive footage",
+      "Gritty texture on documentary reenactments",
+      "Heavy static for glitch/TV-off hits in reels and trailers",
+      "Break up banding in gradients and dark title backgrounds"
+     ],
+     "avoid": [
+      "Above ~10% on full-frame shots it reads as bad video, and grain balloons file size and compresses poorly on Instagram",
+      "Colour noise looks digital, not filmic; switch Use Color Noise off for film grain"
+     ],
+     "confidence": "high",
+     "params": [
+      {
+       "name": "Amount of Noise",
+       "does": "Percent of noise added",
+       "typical": "2-6 grain, 30-60 static"
+      },
+      {
+       "name": "Use Color Noise",
+       "does": "Coloured noise per channel (true) or monochrome (false)",
+       "typical": "false for film grain"
+      },
+      {
+       "name": "Clip Result Values",
+       "does": "Clips values so noise cannot wrap around to odd colours",
+       "typical": "true"
+      }
+     ],
+     "demo_settings": {
+      "Amount of Noise": 60
+     },
+     "enum_labels": {},
+     "cost": "light",
+     "gpu": "yes",
+     "equivalent": "Noise",
+     "pairs_with": [
+      "Lumetri Color",
+      "Gaussian Blur",
+      "Lighting Effects"
+     ],
+     "scripting": "Amount of Noise is a percent (0-100). For grain on a whole sequence put it on an adjustment layer. The noise pattern is regenerated every frame automatically; no keyframes are needed for moving grain.",
+     "recipe": {
+      "Amount of Noise": [
+       [
+        0,
+        0
+       ],
+       [
+        0.08,
+        60
+       ],
+       [
+        0.25,
+        0
+       ]
+      ]
+     },
+     "verified": {
+      "verdict": "pass",
+      "frame": "pve/gallery/pr/052.png",
+      "note": "At Amount 60 a visible colour grain covers the whole frame (walls, faces, stripes), clearly gritty against the clean reference.",
+      "rerender": false
+     },
+     "file": "pr_effect_05.json"
+    }
+   ]
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Offset",
+   "match": "AE.ADBE Offset",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Slides the image inside its frame and wraps whatever leaves one edge back in from the opposite edge, like a tiled texture. Blend With Original mixes the shifted copy over the untouched image.",
+   "look": [
+    "wrap-around slide",
+    "tiled",
+    "seamless pan",
+    "whip slide",
+    "split seam"
+   ],
+   "use_for": [
+    "Fast keyframed Offset plus Directional Blur as a whip/slide transition between two shots in a reel",
+    "Endless horizontal scroll of a map, ticker strip or texture background in an explainer",
+    "Seamless looping background plate for titles",
+    "Quick glitch-style frame shift on a beat in a news promo"
+   ],
+   "avoid": [
+    "Slow offsets on live-action: the visible wrap seam looks like a mistake",
+    "Using it as a transition without motion blur: the shift reads as a jump, not a whip"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Shift Center To",
+     "does": "Where the image centre is moved to; the image wraps around the frame edges",
+     "typical": "[0.5, 0.5] = no shift; [1.5, 0.5] = one full width, looks identical (loop point)"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix of the original image back over the shifted one (harvested as a 0-1 fraction)",
+     "typical": "0 for a clean wrap; 0.5 for a double-exposure ghost"
+    }
+   ],
+   "demo_settings": {
+    "Shift Center To": [
+     0.8,
+     0.5
+    ],
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Offset",
+   "pairs_with": [
+    "Directional Blur",
+    "Transform",
+    "Motion Tile",
+    "Noise"
+   ],
+   "scripting": "Effects-panel bin is Transform in the installed v26 plugin (older Premiere versions listed Offset under Distort). Points are frame fractions; values beyond 0..1 should be accepted (the image just wraps more times) but the harvest gave no point range, so verify a value like 2.5 reads back before building a whip on it. A shift of exactly one frame width/height lands on an identical frame, which is the trick for a seamless whip: shift by whole widths so start and end match. Blend With Original is 0-1 (UI shows %). GPU kernel 'Offset' ships with the install.",
+   "recipe": {
+    "Shift Center To": [
+     [
+      0,
+      [
+       0.5,
+       0.5
+      ]
+     ],
+     [
+      0.4,
+      [
+       2.5,
+       0.5
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/054.png",
+    "note": "Image slid right by 30% with the right-hand side (a figure and the plant) wrapped back in on the left, leaving a hard vertical seam at about x=30%.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Posterize",
+   "match": "AE.ADBE Posterize",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Reduces the number of tonal levels per colour channel, turning smooth gradients into flat bands of colour like a screen print or poster.",
+   "look": [
+    "flat colour bands",
+    "poster",
+    "screen print",
+    "pop-art",
+    "comic",
+    "banding"
+   ],
+   "use_for": [
+    "Stylised pop-art look on a politician's portrait for a satire or explainer title card",
+    "Graphic, comic-style treatment of a stock clip behind bold text",
+    "Retro low-bit look for a meme or gaming segment in a reel"
+   ],
+   "avoid": [
+    "Low levels on noisy or compressed footage: bands crawl and flicker frame to frame",
+    "Skin at low levels looks blotchy unless that is the intent"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Level",
+     "does": "Number of tonal levels per channel",
+     "typical": "4-6 strong poster look; 8-12 subtle"
+    }
+   ],
+   "demo_settings": {
+    "Level": 4
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Posterize",
+   "pairs_with": [
+    "Median",
+    "Gaussian Blur",
+    "Find Edges",
+    "Lumetri Color",
+    "Threshold"
+   ],
+   "scripting": "Single property Level, 2-255 (default 7). A light blur or Median before it gives cleaner, less noisy bands. Keyframing Level from 255 down reads as a stepped reveal, not a smooth fade.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/055.png",
+    "note": "Smooth tones collapsed into flat green, orange, maroon and pink bands; it reads as a screen print, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Posterize Time",
+   "match": "AE.ADBE Posterize Time",
+   "category": "Time",
+   "status": "current",
+   "summary": "Locks the clip to a lower frame rate so motion becomes choppy and stepped, like stop-motion or a dropped-frame feed.",
+   "look": [
+    "choppy",
+    "stop-motion",
+    "stutter",
+    "low frame rate",
+    "dropped frames",
+    "hand-made"
+   ],
+   "use_for": [
+    "Stop-motion / cut-out feel on animated graphics or maps in an explainer (6-12 fps)",
+    "Stutter on a beat drop or a dramatic reveal in a trailer",
+    "Fake glitchy live-feed or CCTV look in a news reel"
+   ],
+   "avoid": [
+    "On talking heads for more than a beat: lip-sync looks broken",
+    "Expecting it to show on a still image or a static shot: there is nothing to step"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Frame Rate",
+     "does": "Frame rate the clip is held to",
+     "typical": "6-8 stop-motion; 12 animated-graphics feel; 15 subtle stutter"
+    }
+   ],
+   "demo_settings": {
+    "Frame Rate": 6
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Posterize Time",
+   "pairs_with": [
+    "Noise",
+    "Roughen Edges",
+    "Echo"
+   ],
+   "scripting": "Only visible on moving footage or animated layers; the demo frame of a still photo will look unchanged, which is expected. Premiere applies the clip's intrinsic Motion/Opacity after its effects, so Motion keyframes on the same clip still animate smoothly: to step an animated graphic, nest it and apply Posterize Time to the nest. Time effects on an adjustment layer are unreliable in Premiere (it may not step the layers below), so prefer nesting and render-test. Frame Rate harvested range is ~0.01-99; values at or above the sequence rate change nothing.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/056.png",
+    "note": "Still matches the reference as expected (1.0 s lands on a held frame); in builds/pve_pr_gallery_045_pr.mp4 at 24-26 s each image is held for 4 frames with zero change between, i.e. stepped ~6 fps motion.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "ProcAmp",
+   "match": "AE.ADBE ProcAmp",
+   "category": "Adjust",
+   "status": "current",
+   "summary": "Broadcast-style processing amplifier: one-stop brightness, contrast, hue rotation and saturation, with an optional split-screen before/after.",
+   "look": [
+    "punchy",
+    "desaturated",
+    "black and white",
+    "hue shift",
+    "boosted colour"
+   ],
+   "use_for": [
+    "Fast saturation drop to near-zero for a flashback or archival-style segment in a documentary",
+    "Quick contrast/saturation punch on dull stock clips in a reel",
+    "Animated drain-to-black-and-white on a freeze-frame before a reveal or 'fact check' card",
+    "Split Screen on to show before/after of a grade"
+   ],
+   "avoid": [
+    "Brightness lifts blacks to grey (it is an offset, not a gamma); use Lumetri for real grading",
+    "Large Hue rotations on people: skin turns green or blue"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Brightness",
+     "does": "Adds or subtracts a constant to all pixels",
+     "typical": "-10 to +10"
+    },
+    {
+     "name": "Contrast",
+     "does": "Contrast in percent, 100 = unchanged",
+     "typical": "105-125 for punch"
+    },
+    {
+     "name": "Hue",
+     "does": "Rotates all hues, in degrees",
+     "typical": "0; +-10 to nudge; 180 for an inverted-colour stylisation"
+    },
+    {
+     "name": "Saturation",
+     "does": "Saturation in percent, 100 = unchanged, 0 = black and white",
+     "typical": "0 mono; 110-130 vivid"
+    },
+    {
+     "name": "Split Screen",
+     "does": "Shows the effect on only part of the frame for before/after",
+     "typical": "false for output"
+    },
+    {
+     "name": "Split Percent",
+     "does": "Where the split line sits, percent of width",
+     "typical": "50"
+    }
+   ],
+   "demo_settings": {
+    "Hue": 45,
+    "Saturation": 150,
+    "Contrast": 120
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color (modern Premiere route); AE: Hue/Saturation + Brightness & Contrast",
+   "pairs_with": [
+    "Lumetri Color",
+    "Noise",
+    "Gaussian Blur"
+   ],
+   "scripting": "Contrast and Saturation are percents where 100 = neutral (range 0-200); Brightness -100..100; Hue is degrees (harvested range is the raw -32768..32767, keep within -180..180). Remember to leave Split Screen false on final renders.",
+   "recipe": {
+    "Saturation": [
+     [
+      0,
+      100
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/057.png",
+    "note": "Hue +45 turns the cream walls and skin green and the red stripes orange, with visibly higher saturation and contrast: the hue-shift / boosted-colour look the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "RGB Difference Key",
+   "match": "AE.ADBE Legacy Key RGBDifference",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Old simple colour keyer (lives in Premiere's Obsolete bin): makes pixels close to a chosen colour transparent, with a basic similarity threshold and None/Low/High edge smoothing. Ultra Key does the same job far better.",
+   "look": [
+    "hard key",
+    "transparent background",
+    "jagged edges",
+    "colour cutout"
+   ],
+   "use_for": [
+    "Quick-and-dirty removal of a flat, evenly lit coloured background from a graphic or logo",
+    "Legacy projects that already use it"
+   ],
+   "avoid": [
+    "Any green-screen talking head or presenter: no spill suppression, hard aliased edges; use Ultra Key",
+    "Unevenly lit or compressed backgrounds: holes and fringes appear"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Color",
+     "does": "Background colour to key out",
+     "typical": "#00B140 for a green screen, sampled from the plate"
+    },
+    {
+     "name": "Similarity",
+     "does": "How far from the key colour pixels can be and still drop out",
+     "typical": "20-40"
+    },
+    {
+     "name": "Smoothing",
+     "does": "Edge anti-aliasing amount (dropdown)",
+     "typical": "2 (High) for the least jagged edge"
+    }
+   ],
+   "demo_settings": {
+    "Color": "#FFFFFF",
+    "Similarity": 60,
+    "Smoothing": 1
+   },
+   "enum_labels": {
+    "Smoothing": {
+     "0": "None",
+     "1": "Low",
+     "2": "High"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Ultra Key",
+   "pairs_with": [
+    "Crop",
+    "Alpha Adjust",
+    "Track Matte Key"
+   ],
+   "scripting": "Verified from the installed plugin: category Obsolete; Smoothing menu is None|Low|High (0-2). The two unnamed boolean rows are Mask Only and Drop Shadow, in that order; they cannot be addressed by name. Demo keys out near-white areas (they turn transparent/black), which only proves the effect runs; for real work use Ultra Key.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/058.png",
+    "note": "At Similarity 60 the near-white areas (white stripes, lamps, wall highlights, a small round motif) drop out as jagged black holes, a hard colour key with aliased edges as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Ramp",
+   "match": "AE.ADBE Ramp",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Generates a linear or radial colour gradient between two points and colours, replacing the clip's image unless blended back with the original.",
+   "look": [
+    "gradient",
+    "colour wash",
+    "sky gradient",
+    "duotone fade",
+    "radial glow"
+   ],
+   "use_for": [
+    "Gradient background plate for title cards, quote cards and lower thirds in explainers",
+    "Bottom-darkening scrim behind captions in a reel: white-to-black Ramp on a Color Matte above the footage, blend mode Multiply",
+    "Saffron-to-green or brand-colour wash over a stock shot for a political promo",
+    "Radial ramp as a cheap spotlight / vignette layer"
+   ],
+   "avoid": [
+    "Applying it straight to footage with Blend With Original 0: the shot is completely replaced",
+    "Wide, subtle gradients on 8-bit export without Ramp Scatter: visible banding after compression"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Start of Ramp",
+     "does": "Where the start colour sits",
+     "typical": "[0.5, 0] top centre"
+    },
+    {
+     "name": "Start Color",
+     "does": "Colour at the start point",
+     "typical": "brand colour, e.g. #FF9933"
+    },
+    {
+     "name": "End of Ramp",
+     "does": "Where the end colour sits",
+     "typical": "[0.5, 1] bottom centre"
+    },
+    {
+     "name": "End Color",
+     "does": "Colour at the end point",
+     "typical": "#000000 or a darker shade"
+    },
+    {
+     "name": "Ramp Shape",
+     "does": "Linear or radial gradient (dropdown)",
+     "typical": "0 linear; 1 radial from the start point"
+    },
+    {
+     "name": "Ramp Scatter",
+     "does": "Dithers the gradient to hide banding",
+     "typical": "10-30"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mixes the original image back in (0-1 fraction)",
+     "typical": "0 on a colour matte; 0.5-0.7 as a wash over footage"
+    }
+   ],
+   "demo_settings": {
+    "Start Color": "#FF6A00",
+    "End Color": "#1A0040",
+    "Ramp Shape": 0,
+    "Ramp Scatter": 10,
+    "Blend With Original": 0.4
+   },
+   "enum_labels": {
+    "Ramp Shape": {
+     "0": "Linear Ramp",
+     "1": "Radial Ramp"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Gradient Ramp",
+   "pairs_with": [
+    "Color Matte",
+    "Blend modes (Multiply, Overlay, Soft Light)",
+    "Crop",
+    "Lumetri Color"
+   ],
+   "scripting": "Points are frame fractions; Blend With Original is a 0-1 fraction (UI shows %), so 0 = pure gradient. Ramp Shape menu verified as Linear Ramp|Radial Ramp. Ramp makes no transparency: for a caption scrim put it on a Color Matte with Start Color #FFFFFF at [0.5, 0.55], End Color #000000 at [0.5, 1], blend mode Multiply, opacity 60-80. Start/End Color defaults are black/white. GPU kernel 'Ramp' ships with the install.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/059.png",
+    "note": "Orange-to-deep-purple linear gradient runs top to bottom over the shot, blended at 40% so the people stay readable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Replicate",
+   "match": "AE.ADBE Replicate",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Tiles the whole clip into a grid of identical copies (Count x Count) inside the frame.",
+   "look": [
+    "video wall",
+    "grid",
+    "multi-screen",
+    "tiled copies",
+    "TV bank"
+   ],
+   "use_for": [
+    "Video-wall / wall-of-TVs look for a news montage or media-coverage segment",
+    "Grid transition on a beat: snap from one image to a 3x3 wall of it in a reel",
+    "Repeating a logo or face for a 'everyone is saying this' satire beat"
+   ],
+   "avoid": [
+    "Small tiles of busy footage on a phone screen: nothing is readable",
+    "Expecting different clips per tile: every tile is the same clip"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Count",
+     "does": "Number of tiles per row and column (2 = 2x2 = 4 copies)",
+     "typical": "2-4"
+    }
+   ],
+   "demo_settings": {
+    "Count": 3
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Replicate",
+   "pairs_with": [
+    "Transform",
+    "Lumetri Color",
+    "Noise",
+    "Posterize Time"
+   ],
+   "scripting": "Count is an integer 2-16 per side; there is no 1 (remove the effect to get a single image). Count steps are hard cuts when keyframed, so animate a grid reveal by keyframing Scale on a nest instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/060.png",
+    "note": "Frame tiled into a 3x3 grid of identical copies (video-wall look).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Pixel Motion Blur",
+   "match": "AE.ADBE OFMotionBlur",
+   "category": "Time",
+   "status": "unusable",
+   "summary": "Adds realistic motion blur to footage by tracking pixel movement between frames (optical flow) and smearing along it, for shots that were shot or rendered with too little blur.",
+   "look": [
+    "motion blur",
+    "smooth motion",
+    "filmic",
+    "speed smear",
+    "180-degree shutter"
+   ],
+   "use_for": [
+    "Make sped-up timelapse or fast-forward crowd footage look natural instead of strobing",
+    "Add blur to AI-generated or CGI shots that came out crisp and jittery",
+    "Smooth a speed-ramped action beat in a trailer",
+    "Soften strobing on fast pans shot with a high shutter speed"
+   ],
+   "avoid": [
+    "Shots with overlapping motion (crossing people, waving flags in front of faces): optical flow tears and warps edges",
+    "Static shots: nothing happens, but it still costs render time",
+    "Unattended scripted exports: in PVE's Premiere 2026 H.264 renders this effect failed in all eight attempts, three at Shutter Angle 720 / 16 samples and five more at 360 / 8 (software 'Software effect returned error', GPU 'Unable to process frame'), while Timewarp's Pixel Motion from the same plugin rendered fine; keep it out of automated builds until a manual render of it succeeds"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Shutter Control",
+     "does": "Manual (use Shutter Angle) or Automatic (follows host motion-blur settings, which Premiere does not have) (dropdown)",
+     "typical": "0 (Manual), the default"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "Amount of blur; 180 = natural film shutter, higher = longer smear",
+     "typical": "180-360; 720+ for stylised smears"
+    },
+    {
+     "name": "Shutter Samples",
+     "does": "Quality of the blur (more samples = smoother, slower)",
+     "typical": "8-16"
+    },
+    {
+     "name": "Vector Detail",
+     "does": "Density of motion vectors analysed",
+     "typical": "20 default; lower if edges warp"
+    }
+   ],
+   "demo_settings": {
+    "Shutter Control": 0,
+    "Shutter Angle": 360,
+    "Shutter Samples": 8
+   },
+   "enum_labels": {
+    "Shutter Control": {
+     "0": "Manual",
+     "1": "Automatic"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Pixel Motion Blur",
+   "pairs_with": [
+    "Timewarp",
+    "Warp Stabilizer",
+    "Speed/Duration with Optical Flow"
+   ],
+   "scripting": "Only visible on footage with motion; a still shot shows no change (expected). Shutter Control order verified from the installed plugin strings (Manual|Automatic): 0 = Manual, the default, so Shutter Angle applies. Ships inside Premiere's AEFilterRollingShutter plugin with category Time and is applied fine by script, but it may not be listed in the Effects panel (not verified). CPU optical-flow effect: slow, render-test a short range first.",
+   "recipe": {},
+   "verified": {
+    "verdict": "broken",
+    "frame": "pve/gallery/pr/061.png",
+    "note": "No frame exists: Premiere refused to export it every time (pr_v1 builds 063, 063_v2, 063_v3 at 720 / 16; builds 060, 060_v2, 060_v3, 061, 061_v2 at 360 / 8: Software effect returned error, then GPU Unable to process frame) and it is in gallery/pr/failed.json, so the shutter values are not the cause.",
+    "rerender": false,
+    "second_opinion": "corrected: verdict not_rendered -> broken (a refused render, same convention as AE failed.json); status current -> unusable, since 8/8 scripted exports failed and 'current' keeps it in gallery reruns and boosts it in pve find; attempt count fixed (3 at 720/16 + 5 at 360/8, not five in all)"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Rolling Shutter Repair",
+   "match": "AE.ADBE Rolling Shutter",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Corrects the jello / skew distortion that CMOS cameras and phones produce during fast pans or vibration, by analysing motion and un-warping each scanline.",
+   "look": [
+    "corrected skew",
+    "straight verticals",
+    "no jello",
+    "stable geometry"
+   ],
+   "use_for": [
+    "Fix wobbly phone footage of rallies, protests or crowds shot on the move",
+    "Straighten leaning buildings and poles in fast handheld or drone pans for a documentary",
+    "Clean up vibration jello in car-mounted or helicopter footage before stabilising"
+   ],
+   "avoid": [
+    "Footage without rolling-shutter artefacts: it can introduce subtle warping",
+    "Applying after scaling, speed changes or stabilisation: apply it first on the source clip"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Rolling Shutter Rate",
+     "does": "Fraction of the frame time spent scanning; matches the camera's readout",
+     "typical": "50-70 for most DSLR/mirrorless cameras; close to 100 for phones; tweak until verticals go straight"
+    },
+    {
+     "name": "Scan Direction",
+     "does": "Direction the sensor reads out (dropdown)",
+     "typical": "0 (Top -> Bottom) for nearly all cameras"
+    },
+    {
+     "name": "Method",
+     "does": "Warp (faster) or Pixel Motion (more accurate, slower) (dropdown)",
+     "typical": "0 Warp; 1 if Warp leaves wobble"
+    },
+    {
+     "name": "Pixel Motion Detail",
+     "does": "Vector density used by the Pixel Motion method",
+     "typical": "20"
+    }
+   ],
+   "demo_settings": {
+    "Rolling Shutter Rate": 100,
+    "Scan Direction": 0,
+    "Method": 0
+   },
+   "enum_labels": {
+    "Scan Direction": {
+     "0": "Top -> Bottom",
+     "1": "Bottom -> Top",
+     "2": "Left -> Right",
+     "3": "Right -> Left"
+    },
+    "Method": {
+     "0": "Warp",
+     "1": "Pixel Motion"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Rolling Shutter Repair",
+   "pairs_with": [
+    "Warp Stabilizer",
+    "Lumetri Color",
+    "Pixel Motion Blur"
+   ],
+   "scripting": "Only does anything on footage with rolling-shutter skew from motion; the demo on a still shot will look unchanged (expected). It analyses the clip after being applied; render only after analysis finishes. Pixel Motion Detail matters only when Method = 1. 'Advanced' and 'Advanced#2' are group markers; the unnamed boolean between Method and Pixel Motion Detail is the Detailed Analysis checkbox (Warp method), not addressable by name. Warp Stabilizer also has its own rolling-shutter option, so do not stack both corrections blindly. Scan Direction and Method labels verified from the installed plugin strings. Measured on a 300 px/s pan with a synthetic 48 px skew (live wave 3): the correction is about Rolling Shutter Rate % of one frame of pan motion (Rate 80: 9.5 px of 1920, Rate 100: 10-12 px), which is all a real sensor can skew (readout time <= one frame); the test plate's extra skew stayed, as it should.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/pr_000.0_0.54.png",
+    "note": "On the skewed pan the bars stand straighter than in the control slot (skew down from 39 to 29 px of 1920 on average, Rate 100): it removes rolling-shutter skew, up to one frame of pan motion.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/pr/062.png",
+      "note": "Frame (and every frame of builds/pve_pr_gallery_062_pr.mp4) matches the untouched clip within encode noise (mean diff 1-3.8/255) because the test clip has no rolling-shutter skew; Rate is already at its 100 maximum, so no demo value can fix it and status is now needs_input (needs skewed phone/handheld footage).",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Timewarp",
+   "match": "AE.ADBE Timewarp",
+   "category": "Time",
+   "status": "current",
+   "summary": "Retimes the clip from inside an effect, with keyframable speed (or a direct source-frame map) and optical-flow frame interpolation plus optional synthetic motion blur, for smooth slow motion and speed ramps.",
+   "look": [
+    "slow motion",
+    "speed ramp",
+    "smooth interpolation",
+    "optical flow",
+    "dramatic"
+   ],
+   "use_for": [
+    "Smooth slow-motion on a key moment (handshake, crowd wave, slogan) in a documentary or trailer",
+    "Keyframed speed ramp (fast-slow-fast) on an action beat in a reel",
+    "Freeze-style hold by mapping Source Frame to a constant in Source Frame mode",
+    "Interpolated slow-mo for footage shot at only 25/30 fps"
+   ],
+   "avoid": [
+    "Pixel Motion on shots with crossing objects, waving flags or hair: rubbery warping artefacts",
+    "Speeds above 100 on a clip with no extra media after it: frames run out and hold",
+    "Expecting the timeline clip to change length: Timewarp retimes inside the clip, the clip duration stays the same"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Method",
+     "does": "How in-between frames are made (dropdown)",
+     "typical": "2 Pixel Motion for smooth slow-mo; 1 Frame Mix if Pixel Motion warps"
+    },
+    {
+     "name": "Adjust Time By",
+     "does": "Drive timing by Speed or by direct Source Frame mapping (dropdown)",
+     "typical": "0 (Speed)"
+    },
+    {
+     "name": "Speed",
+     "does": "Playback speed in percent of the source",
+     "typical": "25-50 slow-mo; 100 normal"
+    },
+    {
+     "name": "Source Frame",
+     "does": "Which source frame to show when Adjust Time By = Source Frame",
+     "typical": "keyframed frame numbers"
+    },
+    {
+     "name": "Vector Detail",
+     "does": "Motion-vector density for Pixel Motion",
+     "typical": "20; lower for fewer warps"
+    },
+    {
+     "name": "Filtering",
+     "does": "Normal or Extreme quality interpolation (dropdown)",
+     "typical": "0 Normal; 1 for final render only"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "Synthetic motion-blur amount when motion blur is enabled",
+     "typical": "180"
+    },
+    {
+     "name": "Shutter Samples",
+     "does": "Motion-blur quality",
+     "typical": "5-10"
+    },
+    {
+     "name": "Shutter Control",
+     "does": "Manual (Shutter Angle) or Automatic motion-blur shutter (dropdown)",
+     "typical": "0 (Manual); default is 1 (Automatic)"
+    }
+   ],
+   "demo_settings": {
+    "Method": 2,
+    "Adjust Time By": 0,
+    "Speed": 25
+   },
+   "enum_labels": {
+    "Method": {
+     "0": "Whole Frames",
+     "1": "Frame Mix",
+     "2": "Pixel Motion"
+    },
+    "Adjust Time By": {
+     "0": "Speed",
+     "1": "Source Frame"
+    },
+    "Filtering": {
+     "0": "Normal",
+     "1": "Extreme"
+    },
+    "Shutter Control": {
+     "0": "Manual",
+     "1": "Automatic"
+    },
+    "Matte Channel": {
+     "0": "Luminance",
+     "1": "Inverted Luminance",
+     "2": "Alpha",
+     "3": "Inverted Alpha"
+    },
+    "Show": {
+     "0": "Normal",
+     "1": "Matte",
+     "2": "Foreground",
+     "3": "Background"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Timewarp",
+   "pairs_with": [
+    "Pixel Motion Blur",
+    "Warp Stabilizer",
+    "Lumetri Color"
+   ],
+   "scripting": "Only visible on moving footage; the still-shot demo looks unchanged (expected). Many rows are group markers that repeat their name (Tuning, Smoothing, Weighting, Motion Blur, Source Crops each appear twice as booleans): ignore them. The unnamed booleans are, in order, Build From One Image, Correct Luminance Changes and Enable Motion Blur: none is addressable by name, so Shutter Angle/Samples do nothing until motion blur is switched on by hand. All menu labels verified from the installed plugin strings. Matte Layer and Warp Layer are layer references with a nonsense harvested range: not settable from a spec. Ships inside Premiere's AEFilterRollingShutter plugin with category Time and applies fine by script, but it may not be listed in the Effects panel (not verified). Prefer Premiere's own Speed/Duration with Optical Flow or Time Remapping for simple constant slow-mo; use Timewarp when a keyframed Speed curve or Source Frame map is needed. CPU-only, slow.",
+   "recipe": {
+    "Speed": [
+     [
+      0,
+      100
+     ],
+     [
+      0.8,
+      20
+     ],
+     [
+      2.0,
+      20
+     ],
+     [
+      2.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/063.png",
+    "note": "Frame at clip time 1.0 s matches source time ~1.2 s (diff 4.5 vs 32 against the 2.0 s reference), i.e. 25% speed, and the render shows smooth interpolated in-betweens.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Roughen Edges",
+   "match": "AE.ADBE Roughen Edges",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Eats into the clip's alpha edges with fractal noise to make torn, eroded, rusty or photocopied borders; on a full-frame opaque clip it roughens the frame border.",
+   "look": [
+    "torn paper",
+    "ragged edge",
+    "grunge",
+    "eroded",
+    "photocopy",
+    "distressed"
+   ],
+   "use_for": [
+    "Torn-paper cutout look for photos and newspaper clippings in a documentary or explainer collage",
+    "Distressed, grungy edges on title text or logos (apply to the graphic layer)",
+    "Ragged border on a scaled-down picture-in-picture for a scrapbook / evidence-board style",
+    "Animated boiling edges with keyframed Evolution for a hand-made stop-motion feel"
+   ],
+   "avoid": [
+    "Huge Border values on small text: letters dissolve and become unreadable",
+    "Expecting it to change the interior of a full-frame shot: it works only on alpha edges"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Edge Type",
+     "does": "Style of edge erosion (dropdown)",
+     "typical": "0 Roughen; 1 Roughen Color for a coloured torn rim; 6 Photocopy"
+    },
+    {
+     "name": "Edge Color",
+     "does": "Colour of the edge band for the 'Color' edge types",
+     "typical": "#FFFFFF for a paper rim"
+    },
+    {
+     "name": "Border",
+     "does": "How far into the layer the roughness reaches, in pixels",
+     "typical": "10-40 for photos; 3-8 for text"
+    },
+    {
+     "name": "Edge Sharpness",
+     "does": "Soft vs crisp eroded edge",
+     "typical": "1-3"
+    },
+    {
+     "name": "Scale",
+     "does": "Size of the fractal detail",
+     "typical": "60-200"
+    },
+    {
+     "name": "Complexity",
+     "does": "Fractal detail layers",
+     "typical": "2-5"
+    },
+    {
+     "name": "Evolution",
+     "does": "Animates the fractal pattern (degrees)",
+     "typical": "keyframe for a boiling edge"
+    },
+    {
+     "name": "Random Seed",
+     "does": "Picks a different random pattern",
+     "typical": "any integer to vary duplicate layers"
+    }
+   ],
+   "demo_settings": {
+    "Edge Type": 0,
+    "Border": 80,
+    "Edge Sharpness": 1,
+    "Scale": 150,
+    "Complexity": 4
+   },
+   "enum_labels": {
+    "Edge Type": {
+     "0": "Roughen",
+     "1": "Roughen Color",
+     "2": "Cut",
+     "3": "Spiky",
+     "4": "Rusty",
+     "5": "Rusty Color",
+     "6": "Photocopy",
+     "7": "Photocopy Color"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Roughen Edges",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "Crop",
+    "Posterize Time",
+    "Turbulent Displace"
+   ],
+   "scripting": "Works on alpha: for a photo cutout, scale the clip down (Motion) or crop it first so it has edges inside the frame; on the full-frame demo only a thick ragged border appears. Edge Type menu verified from the installed plugin strings (8 items, 0-based here). 'Random Seed' is the number; 'Random Seed#2' and 'Evolution Options' are group-marker booleans, ignore them. Offset (Turbulence) is a frame-fraction point. Edge Color only shows with the Color edge types (1, 5, 7). GPU kernels for RoughenEdges ship with the install.",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      4,
+      720
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/064.png",
+    "note": "Frame border eaten into a ragged, torn black edge all round while the interior stays untouched, as the summary says for a full-frame clip.",
+    "rerender": false
+   }
+  }
+ ]
+}

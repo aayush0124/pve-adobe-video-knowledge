@@ -1,0 +1,1614 @@
+{
+ "cards": [
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Automatic Click Remover",
+   "match": "433322b0-d25a-4cfa-a4f1-4a1ab2d7615b",
+   "category": "Noise Reduction/Restoration",
+   "status": "current",
+   "summary": "Finds and repairs short clicks, pops and crackle automatically (Adobe Audition's restoration algorithm). It treats brief impulses only, not steady hiss or hum.",
+   "look": [
+    "declicked",
+    "cleaner transients",
+    "crackle removal",
+    "restored archival audio"
+   ],
+   "use_for": [
+    "Remove mouth clicks and lip smacks from documentary or explainer VO",
+    "Clean crackle from archival or vinyl-sourced speeches and old newsreel audio",
+    "Repair digital pops from dropouts or bad edits in field interviews"
+   ],
+   "avoid": [
+    "Low Threshold plus high Complexity dulls consonants and plosives (speech sounds lispy or smeared)",
+    "It does nothing for steady hiss, hum or room tone: use Adaptive Noise Reduction or DeHummer",
+    "Heavy settings can stutter playback on long clips: render audio previews"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold",
+     "does": "Click detection sensitivity; LOWER catches more clicks but risks treating speech as clicks. Measured: a single full-scale click was removed completely at 0.1, 0.29 and 0.9 (output peak 149 dB below it).",
+     "typical": "UI 1-100, default 30 = normalized 0.293 (inferred (v-1)/99). Light VO declick 30-40 (0.29-0.39); heavy archival crackle 15-25 (0.14-0.24)",
+     "measured": {
+      "figure": "output peak change (dB)",
+      "signal": "a single click",
+      "points": [
+       [
+        0.1,
+        -149.08
+       ],
+       [
+        0.2929,
+        -149.08
+       ],
+       [
+        0.9,
+        -149.08
+       ]
+      ],
+      "line": {
+       "slope": 0.0,
+       "intercept": -149.08,
+       "worst_residual": 0.0
+      }
+     }
+    },
+    {
+     "name": "Complexity",
+     "does": "How complex the clicks it tries to repair can be; higher = more processing and more artefacts",
+     "typical": "UI 1-100, default 16 = 0.152. VO 10-25 (0.09-0.24); archival crackle 30-50 (0.29-0.49)"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "DeHummer",
+    "Adaptive Noise Reduction",
+    "DeEsser",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Audio effect: add with the QE audio track item's addAudioEffect(qe.project.getAudioEffectByName('Automatic Click Remover')), then set values on the DOM component (the harvest found it as the LAST component of the audio TrackItem). Every audio-effect property reads and writes NORMALIZED 0..1 (the harvest clamped to 0..1), not UI units; the (v-1)/99 mapping for Threshold/Complexity is inferred from the Audition defaults 30/16, so read back once to confirm. Ignore 'IsProcessing' and 'Reset' (internal) and the unnamed bool row. pr_build.jsx addFx only adds VIDEO effects today, so an audio-effect path is needed. Set once; do not keyframe.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "DeHummer",
+   "match": "25f78adc-442b-4221-8a59-d19d3bf14687",
+   "category": "Noise Reduction/Restoration",
+   "status": "current",
+   "summary": "Removes electrical hum (mains frequency and its harmonics) with a comb of narrow notch filters. Frequency, notch width, depth and number of harmonics are adjustable.",
+   "look": [
+    "hum removed",
+    "cleaner low end",
+    "notch comb",
+    "ground-loop fix"
+   ],
+   "use_for": [
+    "Remove 50 Hz mains hum from Indian field interviews, press-conference feeds and rally recordings",
+    "Clean ground-loop buzz from a camera or mixer XLR feed",
+    "Fix hum on archival broadcast clips before using them in a documentary"
+   ],
+   "avoid": [
+    "Wrong base frequency: India runs on 50 Hz mains; the default is believed to be 60 Hz (US), so it can miss Indian hum entirely. Always set the base frequency explicitly (after calibrating the normalized value)",
+    "Too many harmonics or too low a Q (wide notches) thins out male voices and music bass",
+    "Leaving Output Hum Only on renders only the removed hum"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Harmonic Base Frequency",
+     "does": "Root hum frequency the notches are built on",
+     "typical": "50 Hz for India/Europe, 60 Hz for US sources. Harvest default 0.002002 is believed to be 60 Hz but the normalized scale is NOT verified: calibrate once (set 50 Hz in the UI, read the value back) before scripting"
+    },
+    {
+     "name": "Harmonic Base Q",
+     "does": "Width of the root notch and its harmonics; higher Q = narrower, less tonal damage",
+     "typical": "keep default 0.0101 (narrow) for VO"
+    },
+    {
+     "name": "Harmonic Base Gain",
+     "does": "Depth of the hum cut. Measured on 50 Hz hum with harmonics: 0 cuts about 13 dB overall, the default 0.235 about 5 dB, 1 nothing, so lower = deeper cut (confirmed).",
+     "typical": "default 0.235 (about -5 dB on hum); 0-0.1 for a deep cut (about -13 dB)",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "50 Hz hum with harmonics",
+      "points": [
+       [
+        0,
+        -12.97
+       ],
+       [
+        0.2353,
+        -4.85
+       ],
+       [
+        1,
+        0.01
+       ]
+      ],
+      "line": {
+       "slope": 11.3449,
+       "intercept": -10.6081,
+       "worst_residual": 3.089
+      }
+     }
+    },
+    {
+     "name": "Num Harmonics",
+     "does": "How many harmonics above the root are notched",
+     "typical": "default 1.0 (the harvested maximum); reduce if voices get thin"
+    },
+    {
+     "name": "Harmonic Slope",
+     "does": "Attenuation of higher harmonics relative to the root",
+     "typical": "0.5 default"
+    },
+    {
+     "name": "Output Hum Only",
+     "does": "0 = cleaned audio, 1 = monitor only what is removed",
+     "typical": "0 always for export"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ (AE, manual narrow cuts only)",
+   "pairs_with": [
+    "Automatic Click Remover",
+    "Adaptive Noise Reduction",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last component on the TrackItem). Values are normalized 0..1; UI units for frequency, Q and gain could not be derived from the harvest (only defaults are known), so a script should either keep defaults or use values calibrated by a read-back from the UI. Ignore the unnamed bool row. Set once; no keyframes.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -0.12,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Parametric Equalizer",
+   "match": "8edcd326-33de-4a4d-985b-f1bf48ed1427",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Audition's full parametric EQ: low and high shelves, five peaking bands, plus switchable high-pass and low-pass filters and an output gain. The workhorse tone-shaping tool for VO, music and SFX.",
+   "look": [
+    "tonal shaping",
+    "warmth",
+    "presence",
+    "clarity",
+    "rumble cut",
+    "telephone / radio band-limit",
+    "muffled"
+   ],
+   "use_for": [
+    "VO cleanup: high-pass rumble below ~80 Hz and cut boxiness around 250-400 Hz",
+    "Add presence (+2-4 dB around 3-5 kHz) so explainer VO cuts through a music bed",
+    "Carve a dip in the music bed where the voice sits",
+    "Telephone / walkie-talkie / archival radio voice: high-pass ~300 Hz + low-pass ~3.4 kHz",
+    "Muffled-to-clear reveal on a trailer hit by sweeping the low-pass cutoff"
+   ],
+   "avoid": [
+    "Big boosts (>6 dB) raise noise and clip; cut before you boost and lower 'Gain' if you boost",
+    "Narrow, high-gain boosts ring and whistle",
+    "Frequency mapping is inferred, not verified: listen or read back before trusting exact Hz"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "High-Pass Filter Enable",
+     "does": "Turns the high-pass (rumble) filter on (1) or off (0)",
+     "typical": "1 for VO"
+    },
+    {
+     "name": "High-Pass Cutoff Frequency",
+     "does": "High-pass corner frequency",
+     "typical": "VO 70-100 Hz = 0.003-0.004 on the measured 24 000 x v scale (if HP shares it)"
+    },
+    {
+     "name": "EQ Band 2 Center Frequency",
+     "does": "Band 2 centre (default 0.01126, about 270 Hz on the measured scale): mud / boxiness area",
+     "typical": "250-400 Hz = 0.0104-0.0167"
+    },
+    {
+     "name": "EQ Band 2 Gain",
+     "does": "Band 2 gain; 0.5 = 0 dB, below 0.5 cuts, above boosts (+-48 dB range, about 0.0104 per dB, measured on Band 3)",
+     "typical": "0.45-0.48 for a gentle mud cut on VO"
+    },
+    {
+     "name": "EQ Band 4 Center Frequency",
+     "does": "Band 4 centre (default 0.199, about 4.8 kHz on the measured scale): presence / intelligibility",
+     "typical": "3-5 kHz = 0.125-0.21"
+    },
+    {
+     "name": "EQ Band 4 Gain",
+     "does": "Band 4 gain; 0.5 = 0 dB",
+     "typical": "0.52-0.55 for a gentle presence lift on VO"
+    },
+    {
+     "name": "Low-Pass Filter Enable",
+     "does": "Turns the low-pass filter on (1) or off (0)",
+     "typical": "1 only for telephone / muffled looks"
+    },
+    {
+     "name": "Low-Pass Cutoff Frequency",
+     "does": "Low-pass corner frequency (default 1.0 = top of the range)",
+     "typical": "telephone 3.4 kHz = 0.142; through-a-wall 500 Hz = 0.021 (if LP shares the measured scale)"
+    },
+    {
+     "name": "EQ Band 3 Gain",
+     "does": "Band 3 gain (default 0.5 = 0 dB). Measured: 0.5 = 0 dB, 0.75 = +23.7 dB, 1 = +35.6 dB (third-octave readings), which fits a +/-48 dB band range (about 0.0104 per dB); cuts show only as a notch, not in this boost reading.",
+     "typical": "0.475-0.48 for a gentle 2-2.5 dB cut, 0.52-0.53 for a 2-3 dB lift",
+     "measured": {
+      "figure": "largest boost (dB, third-octave)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        -5.1
+       ],
+       [
+        0.25,
+        -0.06
+       ],
+       [
+        0.75,
+        23.66
+       ],
+       [
+        1,
+        35.55
+       ]
+      ],
+      "line": {
+       "slope": 42.008,
+       "intercept": -7.4915,
+       "worst_residual": 3.071
+      }
+     }
+    },
+    {
+     "name": "EQ Band 3 Center Frequency",
+     "does": "Band 3 centre (default 0.0426, about 1 kHz). Measured: linear in Hz, 0.01 = 250 Hz, 0.05 = 1.26 kHz, 0.2 = 5 kHz, 0.5 = 12.7 kHz (third-octave readings, so the scale is 22 600-28 100 Hz per unit; 24 000 x v fits every reading). The default-derived 25 + 19975 v reads about a fifth low.",
+     "typical": "Hz / 24 000: 1 kHz = 0.042, 3 kHz = 0.125",
+     "measured": {
+      "figure": "band of the largest boost (Hz, third-octave resolution)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.01,
+        250.0
+       ],
+       [
+        0.05,
+        1259.9
+       ],
+       [
+        0.2,
+        5039.7
+       ],
+       [
+        0.5,
+        12699.2
+       ]
+      ],
+      "line": {
+       "slope": 25410.0067,
+       "intercept": -15.7013,
+       "worst_residual": 26.6
+      }
+     }
+    }
+   ],
+   "demo_settings": {
+    "High-Pass Filter Enable": 1,
+    "High-Pass Cutoff Frequency": 0.01377,
+    "Low-Pass Filter Enable": 1,
+    "Low-Pass Cutoff Frequency": 0.169
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "Adaptive Noise Reduction",
+    "DeEsser",
+    "Dynamics Processing",
+    "Hard Limiter",
+    "Convolution Reverb",
+    "Distortion"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). All values normalized 0..1. Frequency rows are linear in Hz (measured on EQ Band 3 Center Frequency: about 24 000 x v Hz, 0.01 = 250 Hz, 0.05 = 1.26 kHz, 0.2 = 5 kHz; the earlier default-derived 25 + 19975 v reads about a fifth low); HP/LP cutoffs presumably share it (not measured). Gains: 0.5 = 0 dB for shelves and bands; measured on Band 3: 0.75 = +23.7 dB, 1 = +35.6 dB, which fits the +-48 dB range (about 0.0104 per dB), so keep moves small; master 'Gain' 0.6667 = 0 dB. Q and Bandwidth scales unknown: leave them. Telephone voice (300 Hz-3.4 kHz on the measured scale) = {High-Pass Filter Enable: 1, High-Pass Cutoff Frequency: 0.0125, Low-Pass Filter Enable: 1, Low-Pass Cutoff Frequency: 0.142}. Bands are enabled at 0 dB by default, so untouched bands are neutral. Ignore Bypass, LowGraphRange, Original Sample Rate, Ultra-Quiet Mode and the unnamed bool. The recipe (muffled-to-clear reveal) needs Low-Pass Filter Enable = 1 first; it has a middle key at 0.1 (~2 kHz) because the frequency scale is linear in Hz, so a straight 0.024 -> 1 ramp would spend almost all its time above 3 kHz.",
+   "recipe": {
+    "Low-Pass Cutoff Frequency": [
+     [
+      0,
+      0.024
+     ],
+     [
+      1.0,
+      0.1
+     ],
+     [
+      1.5,
+      1
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Adaptive Noise Reduction",
+   "match": "f83ad984-04c6-4474-b8c0-e31d98875cfe",
+   "category": "Noise Reduction/Restoration",
+   "status": "current",
+   "summary": "Learns the steady background noise (hiss, fan, AC, traffic wash) on the fly and reduces it, without a noise print. Strong settings cause watery, bubbly artefacts.",
+   "look": [
+    "hiss reduced",
+    "quieter background",
+    "cleaner VO",
+    "watery artefacts if pushed"
+   ],
+   "use_for": [
+    "Reduce fan, AC or laptop hiss under home-recorded explainer VO",
+    "Clean steady background wash from field interviews and press-conference audio",
+    "Tidy noisy archival clips before mixing under narration"
+   ],
+   "avoid": [
+    "Pushing Reduce Noise By too far makes voices underwater / bubbly",
+    "It adapts over time: the first moments of a clip may be untreated, so leave a little room tone at the head",
+    "Not for clicks or hum (use Automatic Click Remover / DeHummer); for heavy noise the newer DeNoise or Essential Sound Enhance Speech may do better"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Reduce Noise By",
+     "does": "Amount of noise reduction (Adobe suggests 6-30 dB in the UI). Measured on pink noise: 0 = no change, 0.5 = -4.9 dB, 1 = -5.1 dB (it levels off).",
+     "typical": "default 0.5; gentle VO cleanup 0.3-0.5, lower if voices turn watery (measured: 0.5 = -4.9 dB, 1 = -5.1 dB on pink noise)",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        0.5,
+        -4.86
+       ],
+       [
+        1,
+        -5.1
+       ]
+      ],
+      "line": {
+       "slope": -5.1,
+       "intercept": -0.77,
+       "worst_residual": 1.54
+      }
+     }
+    },
+    {
+     "name": "Noisiness",
+     "does": "Estimated share of the audio that is noise (UI %)",
+     "typical": "default 0.3 (= 30%); 0.2-0.4 for VO"
+    },
+    {
+     "name": "Fine Tune Noise Floor",
+     "does": "Shifts the auto-detected noise floor up or down",
+     "typical": "keep 0.6 default"
+    },
+    {
+     "name": "Signal Threshold",
+     "does": "Shifts the auto-detected threshold of wanted audio",
+     "typical": "keep 0.5625 default"
+    },
+    {
+     "name": "Spectral Decay Rate",
+     "does": "How fast processing falls off; too short = bubbly, too long = reverby",
+     "typical": "keep 0.164 default"
+    },
+    {
+     "name": "Broadband Preservation",
+     "does": "Protects audio near detected artefacts; lower removes more noise but sounds processed",
+     "typical": "default 0.2 (likely 100 Hz); keep for VO"
+    },
+    {
+     "name": "High Quality Mode (slower)",
+     "does": "Higher-quality, slower processing (0/1)",
+     "typical": "1 for final renders"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Automatic Click Remover",
+    "DeHummer",
+    "Parametric Equalizer",
+    "DeEsser",
+    "Dynamics Processing"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). All values normalized 0..1; only defaults are known, the UI-unit scales (dB, ms, Hz) are unverified except Noisiness which reads as a percentage. Ignore 'Is Processing' and the unnamed bool. Put it FIRST in a VO chain (before EQ and compression). Adds latency and CPU load; do not keyframe.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -3.87,
+     "thd_pct": 0.005,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Amplify",
+   "match": "f14fee7d-fe5f-4202-b790-f53209e56411",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Boosts or cuts the level of the clip by a fixed amount, with a gain slider per channel (linked by default).",
+   "look": [
+    "louder",
+    "quieter",
+    "gain staging",
+    "level match"
+   ],
+   "use_for": [
+    "Bring a quiet interview or phone recording up before compression",
+    "Level-match clips from different sources in a news compilation",
+    "Pre-gain a whisper or SFX before other effects in the chain"
+   ],
+   "avoid": [
+    "Big boosts on already-loud clips clip the output: add a Hard Limiter after it",
+    "Simple level changes are easier on the clip's own Volume > Level (pr_build gain_db already does this)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Gain",
+     "does": "Master gain for all channels when Link Sliders is on. Measured on a stereo clip: 'Gain' does not exist there (setting it found no such property and the level did not change); a stereo Amplify exposes 'Left' and 'Right' sliders instead (pve/harvest/pr_audio_params_w3.json).",
+     "typical": "0.6667 = 0 dB. If the scale is -96..+48 dB (fits the default but unverified), 1 dB = 0.00694: +3 dB = 0.6875, +6 dB = 0.7083, -6 dB = 0.625",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        0.333,
+        0.0
+       ],
+       [
+        0.6667,
+        0.0
+       ],
+       [
+        1,
+        0.0
+       ]
+      ],
+      "line": {
+       "slope": 0.0,
+       "intercept": 0.0,
+       "worst_residual": 0.0
+      }
+     }
+    },
+    {
+     "name": "Link Sliders",
+     "does": "1 = per-channel sliders follow Gain together",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Audio Levels (layer property) / Stereo Mixer",
+   "pairs_with": [
+    "Hard Limiter",
+    "Dynamics Processing",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values. The 32 unnamed rows are per-channel gain sliders (all 0.6667 = 0 dB) and cannot be addressed by name; with Link Sliders = 1 setting 'Gain' is enough on a MONO clip. On a stereo clip the component has no 'Gain': it exposes 'Left' and 'Right' (stereo dump, live wave 3), setting 'Gain' there fails ('no such property') and changes nothing, so set Left and Right (their dB scale is not measured; 0.6667 = 0 dB by the default). 'Channel Count' (1/32 for the mono test clip) and 'Link Keyframes' are bookkeeping: do not set. Keyframes on Gain work but clip Volume keyframes are the normal way to ride levels.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Analog Delay",
+   "match": "c4ad21d8-9748-4d79-b4a3-d88ab7e4be34",
+   "category": "Delay and Echo",
+   "status": "current",
+   "summary": "Echo modelled on tape, tube and analog delay units: repeats of the sound with warm, slightly dirty colouring. Delay time, feedback, wet/dry mix and saturation are adjustable.",
+   "look": [
+    "echo",
+    "slapback",
+    "tape delay",
+    "warm repeats",
+    "dub",
+    "dreamy"
+   ],
+   "use_for": [
+    "Echo on a trailer title hit or last word of a line ('...forever ... forever')",
+    "Slapback on a satire stinger or meme SFX",
+    "Dreamy / flashback treatment of a quote in a documentary",
+    "Rhythmic echo on music stings in reels"
+   ],
+   "avoid": [
+    "Echo on running narration hurts intelligibility; use only on isolated words or SFX",
+    "High Feedback builds up into runaway self-oscillation",
+    "Echo tails get cut at the clip's out point: extend the clip or put it on a track/nest"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Delay",
+     "does": "Time between repeats. Measured: the first echo comes 8 x value seconds after the dry sound (0.01 = 0.09 s, 0.0238 = 0.20 s, 0.1 = 0.81 s, 0.3 = 2.4 s), i.e. ms = 10 + 7990 v as inferred; each echo about 16 dB below the dry signal at the default Wet / Dry Out.",
+     "typical": "measured linear ms = 10 + 7990*n (default 200 ms = 0.0238). Slapback 80-120 ms = 0.0088-0.0138; trailer echo 300-500 ms = 0.0363-0.0613",
+     "measured": {
+      "figure": "first echo after the click (s)",
+      "signal": "a single click",
+      "points": [
+       [
+        0.01,
+        0.09
+       ],
+       [
+        0.0238,
+        0.2
+       ],
+       [
+        0.1,
+        0.805
+       ],
+       [
+        0.3,
+        2.405
+       ]
+      ],
+      "line": {
+       "slope": 7.9836,
+       "intercept": 0.0092,
+       "worst_residual": 0.003
+      }
+     }
+    },
+    {
+     "name": "Feedback",
+     "does": "How much of each echo is fed back (number and decay of repeats)",
+     "typical": "default 0.1; 0.2-0.4 for a decaying echo; keep below 0.5 (if the range is Audition's 0-200%, 0.5 = 100% = endless repeats)"
+    },
+    {
+     "name": "Wet Out",
+     "does": "Level of the echoed signal",
+     "typical": "default 0.3; 0.15-0.3 subtle, 0.5 obvious"
+    },
+    {
+     "name": "Dry Out",
+     "does": "Level of the original signal",
+     "typical": "default 0.7; 0.7-1"
+    },
+    {
+     "name": "Trash",
+     "does": "Adds distortion and low-end warmth to the repeats",
+     "typical": "default 0.25; 0-0.25 clean, higher for lo-fi"
+    },
+    {
+     "name": "Spread",
+     "does": "Stereo width of the repeats",
+     "typical": "default 0.5"
+    },
+    {
+     "name": "Mode",
+     "does": "Delay-unit character: Tape / Tape-Tube / Analog",
+     "typical": "0 (Tape) default"
+    }
+   ],
+   "demo_settings": {
+    "Delay": 0.0363,
+    "Wet Out": 0.5,
+    "Feedback": 0.35
+   },
+   "enum_labels": {
+    "Mode": {
+     "0": "Tape",
+     "0.5": "Tape/Tube",
+     "1": "Analog"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Delay",
+   "pairs_with": [
+    "Convolution Reverb",
+    "Parametric Equalizer",
+    "Flanger"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values. Delay scale measured (ms = 10 + 7990 v: 0.0238 = 0.20 s, 0.1 = 0.81 s); Dry/Wet read as 0..1 = 0..100%. Mode is a 3-item dropdown in normalized space (0, 0.5, 1): order Tape, Tape/Tube, Analog is from Audition docs, not verified by harvest. For a single echoed word, cut that word to its own clip and apply the delay there, with tail room after it.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -0.2,
+     "thd_pct": 0.006,
+     "freq_hz": 999.99
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Channel Mixer",
+   "match": "c5ca9e29-df07-42a6-8800-ba80324e5cbc",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Routes and mixes the input channels into each output channel (L to L, R to L, L to R ... up to 8 channels): swap, fold to mono, invert one side or blend left and right on a stereo or multichannel clip.",
+   "look": [
+    "channel routing",
+    "dual-mono fix",
+    "mono fold-down",
+    "swap left/right"
+   ],
+   "use_for": [
+    "Interview recorded with the lav on one channel only: send it to both sides",
+    "Swap or blend channels on a stereo camera track",
+    "Use only the clean channel of a dual-channel camera recording when the other mic is noisy or distorted"
+   ],
+   "avoid": [
+    "It needs a stereo (or multichannel) clip; on the mono harvest clip it did not attach at all",
+    "For a whole-clip fix, Modify > Audio Channels or Fill Left with Right / Fill Right with Left is simpler"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channel Count",
+     "does": "Channel count of the mixer (bookkeeping; the stereo default is 0.25). Measured: no audible change at 0 / 0.5 / 1.",
+     "typical": "leave the default",
+     "measured": {
+      "figure": "left channel level (dBFS rms)",
+      "signal": "a split stereo pair (L 440 Hz at -12 dBFS, R 1 kHz at -24 dBFS)",
+      "points": [
+       [
+        0,
+        -15.05
+       ],
+       [
+        0.5,
+        -15.05
+       ],
+       [
+        1,
+        -15.05
+       ]
+      ],
+      "line": {
+       "slope": 0.0,
+       "intercept": -15.05,
+       "worst_residual": 0.0
+      }
+     }
+    },
+    {
+     "name": "L to L",
+     "does": "Share of the left input in the left output. Measured: bipolar, 0 = -100 % (the left input at full level, polarity inverted), 0.5 = 0 % (silent), 1 = +100 % (unchanged, the default): v = 0.5 + 0.5 x gain.",
+     "typical": "1 = pass; 0.5 = drop; 0.75 = +50 % (-6 dB)",
+     "measured": {
+      "figure": "left channel level (dBFS rms)",
+      "signal": "a split stereo pair (L 440 Hz at -12 dBFS, R 1 kHz at -24 dBFS)",
+      "points": [
+       [
+        0,
+        -15.05
+       ],
+       [
+        0.5,
+        -150.0
+       ],
+       [
+        1,
+        -15.05
+       ]
+      ],
+      "line": {
+       "slope": 0.0,
+       "intercept": -60.0333,
+       "worst_residual": 89.967
+      }
+     }
+    },
+    {
+     "name": "R to L",
+     "does": "share of the right input in the left output, bipolar like L to L (0.5 = 0 %, the default)",
+     "typical": "0.75 + L to L 0.75 to fold both into the left at -6 dB each"
+    },
+    {
+     "name": "L to R",
+     "does": "share of the left input in the right output (0.5 = 0 %, the default)",
+     "typical": "0.5"
+    },
+    {
+     "name": "R to R",
+     "does": "share of the right input in the right output (1 = +100 %, the default)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer",
+   "pairs_with": [
+    "Amplify",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Stereo / multichannel clips only: on a mono clip it does not attach (the 2026-10-03 mono harvest read the clip Volume row instead; the batch now holds the stereo dump from pve/harvest/pr_audio_params_w3.json, match c5ca9e29-df07-42a6-8800-ba80324e5cbc). Properties '<input> to <output>' for inputs L, R, 3..8 and outputs L, R, 3..8 (64 rows) plus 'Channel Count'. Every amount is bipolar: v = 0.5 + 0.5 x gain, so 0 = -100 % (full level, polarity inverted), 0.5 = 0 % (silent), 1 = +100 %; the defaults (L to L 1, R to R 1, everything else 0.5) pass the clip unchanged (measured on a split stereo pair, live wave 3). Mono fold: L to L 0.75, R to L 0.75, L to R 0.75, R to R 0.75 (each input at 50 %). Apply with QE addAudioEffect and check that the last component's displayName is 'Channel Mixer'.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Chorus/Flanger",
+   "match": "1ffc7dd8-df1b-475b-bff6-f5240aa6a097",
+   "category": "Modulation",
+   "status": "current",
+   "summary": "Modulated short delays in one effect: chorus thickens a sound into several slightly detuned voices, flanger sweeps a hollow jet-plane comb filter. Mode picks which.",
+   "look": [
+    "chorus",
+    "flanger",
+    "swirl",
+    "thickened",
+    "jet whoosh",
+    "synthetic"
+   ],
+   "use_for": [
+    "Robotic / AI voice texture for AI-education explainers (sparingly)",
+    "Dream or flashback swirl on SFX and music stings",
+    "Thicken a synth riser or drone in a trailer",
+    "Whooshy sweep on a transition SFX"
+   ],
+   "avoid": [
+    "On running news or documentary narration it sounds cheap and seasick",
+    "High Intensity on full mixes smears the music"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Mode",
+     "does": "Chorus or Flanger (2-item switch, 0 or 1)",
+     "typical": "default 1 (= Flanger if the UI order Chorus, Flanger holds; not verified, listen once)"
+    },
+    {
+     "name": "Speed",
+     "does": "LFO rate of the delay sweep",
+     "typical": "default 0.264; slower (0.1-0.25) for subtle swirl"
+    },
+    {
+     "name": "Width",
+     "does": "Maximum delay depth of the sweep",
+     "typical": "default 0.86; 0.4-0.86"
+    },
+    {
+     "name": "Intensity",
+     "does": "Ratio of processed to original sound. Measured on pink noise: +1.4 dB at 0, +1.8 dB at 0.5, +3.9 dB at 1 with comb ripple up to 9.5 dB; at its defaults it raises a tone by 5.8 dB.",
+     "typical": "default 0.87; 0.3-0.5 for a subtle effect",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        1.38
+       ],
+       [
+        0.5,
+        1.84
+       ],
+       [
+        1,
+        3.92
+       ]
+      ],
+      "line": {
+       "slope": 2.54,
+       "intercept": 1.11,
+       "worst_residual": 0.54
+      }
+     }
+    },
+    {
+     "name": "Transience",
+     "does": "Emphasizes transients for a sharper, more distinct sound",
+     "typical": "default 0.522"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Flange & Chorus",
+   "pairs_with": [
+    "Analog Delay",
+    "Convolution Reverb",
+    "Parametric Equalizer",
+    "Flanger"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values; UI units unknown beyond the defaults. Defaults are already clearly audible. Mode is a 2-way switch in normalized space (0 / 1) with unverified labels (enum_labels assume the UI order Chorus, Flanger).",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      0.7
+     ],
+     [
+      1.2,
+      0
+     ]
+    ]
+   },
+   "enum_labels": {
+    "Mode": {
+     "0": "Chorus",
+     "1": "Flanger"
+    }
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 5.77,
+     "thd_pct": 0.121,
+     "freq_hz": 997.92
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Convolution Reverb",
+   "match": "99c2e75f-0bdb-48d8-8b51-2bac2e26b2cf",
+   "category": "Reverb",
+   "status": "current",
+   "summary": "Places audio in a real space by convolving it with an impulse response (rooms, halls, churches, plates); the space is chosen from a built-in Impulse list.",
+   "look": [
+    "room",
+    "hall",
+    "spacious",
+    "reverb tail",
+    "epic",
+    "distant"
+   ],
+   "use_for": [
+    "Match a clean studio VO or ADR line to the on-screen room in a documentary",
+    "Big hall tail on trailer impacts and title slams",
+    "Make a quote sound as if spoken in a hall, parliament or rally ground",
+    "Memory / flashback voice treatment",
+    "Glue foley and SFX into a scene"
+   ],
+   "avoid": [
+    "Reverb on main narration kills intelligibility; keep VO dry or barely wet",
+    "Harvest default Mix is 1.0 (maximum): always set Mix explicitly",
+    "Tails are cut at the clip out point: extend the clip or apply on a track / nested sequence"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Impulse",
+     "does": "Which built-in impulse response (space) to use, stepped dropdown in normalized space",
+     "typical": "0 (first impulse); label order unverified"
+    },
+    {
+     "name": "Mix",
+     "does": "Wet/dry balance. Measured on a click with the default impulse: decay T30 0 s at 0, 0.15 s at 0.5, 0.16 s at 1 (a short room).",
+     "typical": "subtle room on VO 0.1-0.25; trailer hit tail 0.4-0.7",
+     "measured": {
+      "figure": "reverb decay T30 (s)",
+      "signal": "a single click",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        0.5,
+        0.152
+       ],
+       [
+        1,
+        0.163
+       ]
+      ],
+      "line": {
+       "slope": 0.163,
+       "intercept": 0.0235,
+       "worst_residual": 0.047
+      }
+     }
+    },
+    {
+     "name": "Room Size",
+     "does": "Scales the impulse length (size of the space)",
+     "typical": "default 1.0 (100%); 0.3-0.6 for small rooms"
+    },
+    {
+     "name": "Damping HF",
+     "does": "Darkens the tail by cutting high frequencies",
+     "typical": "default 0.7"
+    },
+    {
+     "name": "Damping LF",
+     "does": "Cuts low-frequency build-up in the tail (less boom/mud)",
+     "typical": "default 0.667"
+    },
+    {
+     "name": "Pre-Delay",
+     "does": "Time the reverb takes to build to full level: 0-10 ms sounds natural, 50 ms or more is a special effect",
+     "typical": "0 default; small values for big spaces"
+    },
+    {
+     "name": "Width",
+     "does": "Stereo width of the tail (default 0.333 likely = 100%)",
+     "typical": "0.333"
+    },
+    {
+     "name": "Gain",
+     "does": "Output gain (default 0.4167, assumed 0 dB)",
+     "typical": "0.4167"
+    }
+   ],
+   "demo_settings": {
+    "Mix": 0.5
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Reverb",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "Analog Delay",
+    "Dynamics Processing"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values; percent controls (Mix, Room Size) read as 0..1 = 0..100%, the rest only by default. Impulse is a list index stored in normalized form: stepping it blindly picks an unknown space. Convolution is CPU-heavier than Studio Reverb; render audio previews. Recipe = reverb throw: the line stays nearly dry, then the last word (from ~1.0 s, shift to the word) blooms into the space; leave tail room after the clip.",
+   "recipe": {
+    "Mix": [
+     [
+      0,
+      0.1
+     ],
+     [
+      1.0,
+      0.1
+     ],
+     [
+      1.05,
+      0.7
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -0.14,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "DeEsser",
+   "match": "ffbe710f-cd69-4139-ad26-65603616d9d4",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Frequency-targeted compressor that turns down harsh sibilance ('s', 'sh', 'ch') in voices when it crosses a threshold.",
+   "look": [
+    "smoother esses",
+    "less harsh",
+    "polished voice",
+    "broadcast VO"
+   ],
+   "use_for": [
+    "Tame harsh esses on close-miked documentary or explainer VO",
+    "Smooth sibilant AI / TTS voiceover lines",
+    "Fix sibilance made worse by a presence EQ boost or heavy compression",
+    "Soften harsh field-interview mics"
+   ],
+   "avoid": [
+    "Over-de-essing makes speakers sound lispy",
+    "Leaving Output Sibilance Only on renders only the hiss band"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold",
+     "does": "Level above which sibilance is reduced; LOWER = more de-essing. Measured on pink noise: 0.25 cuts the sibilance band by up to 12 dB (-0.6 dB overall), the default 0.625 by up to 2 dB, 1 does nothing: lower = more de-essing (confirmed).",
+     "typical": "default 0.625; 0.5-0.62 for VO",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.25,
+        -0.58
+       ],
+       [
+        0.625,
+        -0.12
+       ],
+       [
+        1,
+        0.02
+       ]
+      ],
+      "line": {
+       "slope": 0.8,
+       "intercept": -0.7267,
+       "worst_residual": 0.107
+      }
+     }
+    },
+    {
+     "name": "Center Frequency",
+     "does": "Centre of the sibilance band",
+     "typical": "default 0.391; male VO ~4-6 kHz, female ~6-8 kHz in the UI (normalized scale unverified)"
+    },
+    {
+     "name": "Bandwidth",
+     "does": "Width of the band that is detected and reduced",
+     "typical": "default 0.392"
+    },
+    {
+     "name": "Mode",
+     "does": "Broadband (whole signal ducks) or Multiband (only the sibilance band)",
+     "typical": "default 1 (= Multiband if the UI order Broadband, Multiband holds; not verified)"
+    },
+    {
+     "name": "Output Sibilance Only",
+     "does": "1 = monitor only the detected sibilance",
+     "typical": "0 for export"
+    },
+    {
+     "name": "Attack",
+     "does": "How fast reduction starts",
+     "typical": "default 0.2"
+    },
+    {
+     "name": "Release",
+     "does": "How fast reduction recovers",
+     "typical": "default 0.184"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "Dynamics Processing",
+    "Adaptive Noise Reduction",
+    "Hard Limiter"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values; only defaults are known. Place after noise reduction and EQ, before or after the compressor. Set once, no keyframes.",
+   "enum_labels": {
+    "Mode": {
+     "0": "Broadband",
+     "1": "Multiband"
+    }
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.04,
+     "thd_pct": 0.008,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Distortion",
+   "match": "9b66ab13-4d1b-469a-88c6-b807fcf1df16",
+   "category": "Special",
+   "status": "current",
+   "summary": "Waveshaping distortion: an amplitude transfer curve (drawn on positive and negative graphs in the UI) clips and bends the waveform for grit, fuzz or a broken-speaker sound.",
+   "look": [
+    "gritty",
+    "fuzz",
+    "clipped",
+    "megaphone",
+    "broken speaker",
+    "lo-fi"
+   ],
+   "use_for": [
+    "Megaphone / rally loudspeaker voice (with a band-limiting Parametric Equalizer)",
+    "Walkie-talkie or radio-intercept voice in trailers",
+    "Gritty glitch stingers and meme SFX in satire reels"
+   ],
+   "avoid": [
+    "The transfer curves are NOT exposed to scripting, so a script cannot set how hard it distorts",
+    "On full mixes or narration it sounds harsh and cheap",
+    "Distortion raises level: follow with Hard Limiter"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Positive Smoothing",
+     "does": "Curve smoothing of the positive-sample graph",
+     "typical": "default 0.524"
+    },
+    {
+     "name": "Negative Smoothing",
+     "does": "Curve smoothing of the negative-sample graph",
+     "typical": "default 0.417"
+    },
+    {
+     "name": "Time Smoothing",
+     "does": "How quickly distortion reacts to level changes",
+     "typical": "default 0.555"
+    },
+    {
+     "name": "dB Range",
+     "does": "Amplitude range the graphs cover (limits distortion to that range). Measured on a 1 kHz tone: THD 1.6 % at 0.333, 0.76 % at the default 0.667, 1.3 % at 1; at its defaults it also raises the level by 10.8 dB.",
+     "typical": "default 0.667",
+     "measured": {
+      "figure": "total harmonic distortion (%)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0.3333,
+        1.599
+       ],
+       [
+        0.6667,
+        0.76
+       ],
+       [
+        1,
+        1.257
+       ]
+      ],
+      "line": {
+       "slope": -0.5131,
+       "intercept": 1.5474,
+       "worst_residual": 0.445
+      }
+     }
+    },
+    {
+     "name": "Symmetric",
+     "does": "1 = negative curve mirrors the positive one",
+     "typical": "0 default"
+    },
+    {
+     "name": "Post-Filter DC Offset",
+     "does": "Removes DC offset introduced by asymmetric curves",
+     "typical": "1 (keep on)"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "Hard Limiter",
+    "Analog Delay"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values. Only smoothing / range / mode switches are exposed; the curve points live in a custom graph that the harvest did not list, and the default curve distorts mildly but loudly (measured on a 1 kHz tone: +10.8 dB, THD 0.76 %). For scripted grit prefer GuitarSuite ('Dist Amount' is numeric) with a band-limiting Parametric Equalizer; a configured instance saved as an effect preset in the UI is an option only if preset application from script is proven. 'Linear Scale' switches the graphs between dB and normalized scales; leave 0.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 10.83,
+     "thd_pct": 0.76,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Dynamics Processing",
+   "match": "f76dad9c-77da-477a-9939-eefefc5c23bd",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Audition's graph-based dynamics processor: a drawn input-to-output level curve makes it a compressor, limiter, expander or noise gate, with separate level-detector and gain-processor timing.",
+   "look": [
+    "compressed",
+    "even level",
+    "punchy",
+    "gated",
+    "controlled peaks"
+   ],
+   "use_for": [
+    "Even out VO level before the final limiter",
+    "Gate room noise between sentences in an interview",
+    "Squash a music bed so it sits steadily under narration",
+    "Punch up trailer hits and SFX"
+   ],
+   "avoid": [
+    "Default curve is a straight line (no processing): it does nothing until the curve is changed",
+    "Fast attack/release on music pumps audibly",
+    "Curve point scale is not verified; Single-band Compressor or Hard Limiter are easier to script, and Dynamics (AutoGate section) is the scriptable gate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Number of X/Y Pairs",
+     "does": "How many curve points are active, out of 7 (default 3/7 = 0.4286)",
+     "typical": "0.4286 (3 points)"
+    },
+    {
+     "name": "Location2",
+     "does": "Input level of curve point 2 (the knee); default 0.8",
+     "typical": "0.8 (believed -20 dBFS if the axis is -100..0 dB)"
+    },
+    {
+     "name": "Value2",
+     "does": "Output level of curve point 2",
+     "typical": "same as Location2 for no gain change at the knee"
+    },
+    {
+     "name": "Value3",
+     "does": "Output level at full-scale input (Location3 = 1); below 1 compresses above the knee",
+     "typical": "0.85 for roughly 4:1 above -20 dB on the assumed axis"
+    },
+    {
+     "name": "Make-Up Gain",
+     "does": "Gain added after processing",
+     "typical": "default 0; raise a little after compressing"
+    },
+    {
+     "name": "Gain Processor - Attack Time",
+     "does": "How fast gain reduction engages",
+     "typical": "default 0.048"
+    },
+    {
+     "name": "Gain Processor - Release Time",
+     "does": "How fast gain reduction recovers",
+     "typical": "default 0.05"
+    },
+    {
+     "name": "Peak/RMS",
+     "does": "Level detector reacts to peaks or average (RMS) level",
+     "typical": "1 default (likely RMS, unverified); RMS suits VO"
+    },
+    {
+     "name": "Output Gain",
+     "does": "Gain after the transfer curve (default 0.5 = 0 dB). Measured: 0.25 = -24 dB, 0.5 = 0 dB, 0.75 = +20 dB (not quite symmetric).",
+     "typical": "0.5 = 0 dB; small moves only",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0.25,
+        -24.01
+       ],
+       [
+        0.5,
+        0.0
+       ],
+       [
+        0.75,
+        19.96
+       ]
+      ],
+      "line": {
+       "slope": 87.94,
+       "intercept": -45.32,
+       "worst_residual": 1.35
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "DeEsser",
+    "Adaptive Noise Reduction",
+    "Hard Limiter",
+    "Amplify"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values. The transfer curve is Location1..7 (input) / Value1..7 (output) with 'Number of X/Y Pairs' points active; defaults (0,0) (0.8,0.8) (1,1) = unity. The dB meaning of the axis is assumed (-100..0 dB linear), not verified: confirm with a read-back in the UI before relying on thresholds. Ignore 'Current Tab' (UI page), 'Envelope Only', 'Spline Curves' unless needed, 'Noise Gating (if expanding more than 50:1)' (only for gate curves), 'Lock Filter', Low/High Cutoff (side-chain band, default full range).",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "FFT Filter",
+   "match": "4f327230-f04c-4c34-9ea5-a998b4459221",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Draw-a-curve filter: an FFT-based gain-vs-frequency graph built from up to 128 X/Y points, good for very steep notches, band-passes and telephone or radio shapes.",
+   "look": [
+    "band-limited",
+    "telephone",
+    "radio",
+    "steep notch",
+    "filtered"
+   ],
+   "use_for": [
+    "Steep notch for a single whine or tone in an interview",
+    "Telephone / radio / walkie-talkie voice with brick-wall edges",
+    "Remove everything below a frequency for a thin archival feel"
+   ],
+   "avoid": [
+    "Large FFT sizes smear transients (pre-echo, ringing)",
+    "Point coordinates are hard to place blind; Parametric Equalizer is easier to script for normal EQ"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Number of X/Y pairs",
+     "does": "How many curve points are active, out of 128 (default 2/128 = 0.015625)",
+     "typical": "n/128, e.g. 4 points = 0.03125"
+    },
+    {
+     "name": "X 1",
+     "does": "Frequency of point 1 (normalized)",
+     "typical": "default 0.00125 (bottom of the range)"
+    },
+    {
+     "name": "Y 1",
+     "does": "Gain of point 1; 0.75 is the flat default (inferred 0 dB). Measured on pink noise (point 1 moved, point 2 left at 0.75): 0.25 = -16.5 dB overall, 0.75 = flat (+0.8), 1 = +14.9 dB, so 0.75 = 0 dB (confirmed).",
+     "typical": "0.75 = pass, lower = cut",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.25,
+        -16.52
+       ],
+       [
+        0.75,
+        0.79
+       ],
+       [
+        1,
+        14.88
+       ]
+      ],
+      "line": {
+       "slope": 40.8314,
+       "intercept": -27.5043,
+       "worst_residual": 2.329
+      }
+     }
+    },
+    {
+     "name": "X 2",
+     "does": "Frequency of point 2",
+     "typical": "default 1.0 (top of the range)"
+    },
+    {
+     "name": "Y 2",
+     "does": "Gain of point 2",
+     "typical": "0.75 = pass"
+    },
+    {
+     "name": "Splines",
+     "does": "0 = straight segments between points, 1 = smooth curve",
+     "typical": "0"
+    },
+    {
+     "name": "FFT Size",
+     "does": "Frequency resolution vs time smearing",
+     "typical": "keep default 0.0616"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "High-Low Pass / Parametric EQ",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "Distortion",
+    "Amplify"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values. The graph is X n / Y n points (n = 1..128) with 'Number of X/Y pairs' = count/128; points must be in rising X order. Default is a flat line (0.00125, 0.75) to (1, 0.75). The Hz meaning of X depends on 'Scale' (0 default, probably log vs linear) and Frequency Start/End; Y = 0.75 = 0 dB is measured (0.25 = -16.5 dB, 1 = +14.9 dB overall when point 1 moves). Window Type, Lock, Gain Start/End: leave defaults.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.01,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Flanger",
+   "match": "d30b6731-3e00-4a11-9650-e816f58a9d12",
+   "category": "Modulation",
+   "status": "current",
+   "summary": "Audition's flanger: mixes the sound with a copy whose short delay sweeps between an initial and a final time, giving the classic jet-plane whoosh and metallic comb sweep.",
+   "look": [
+    "jet whoosh",
+    "swept",
+    "metallic",
+    "psychedelic",
+    "sci-fi"
+   ],
+   "use_for": [
+    "Jet-sweep on a transition whoosh or riser in trailers",
+    "Sci-fi / AI / hologram voice tag in AI-education reels (short lines only)",
+    "Psychedelic flashback or dream treatment on music",
+    "Glitchy satire stinger"
+   ],
+   "avoid": [
+    "On narration it sounds cheap and tiring",
+    "High Feedback becomes harsh and ringing"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Mix",
+     "does": "Ratio of flanged to original sound. Measured on pink noise: 0.4 = -4.5 dB overall with comb notches to -10 dB, 1 = -2.5 dB; at its defaults a tone drops 4 dB.",
+     "typical": "default 0.4; 0.5-0.7 obvious",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        0.4,
+        -4.48
+       ],
+       [
+        1,
+        -2.47
+       ]
+      ],
+      "line": {
+       "slope": -2.0105,
+       "intercept": -1.3784,
+       "worst_residual": 2.297
+      }
+     }
+    },
+    {
+     "name": "Feedback",
+     "does": "How much flanged signal is fed back (resonance, metallic edge)",
+     "typical": "default 0.6; lower for subtle"
+    },
+    {
+     "name": "Initial Delay Time",
+     "does": "Delay at the start of the sweep",
+     "typical": "default 0"
+    },
+    {
+     "name": "Final Delay Time",
+     "does": "Delay at the end of the sweep (sweep depth)",
+     "typical": "default 0.208"
+    },
+    {
+     "name": "Modulation Rate (Frequency)",
+     "does": "Sweep speed in Hz (used when not synced to beats)",
+     "typical": "default 0.00385 (slow)"
+    },
+    {
+     "name": "Stereo Phasing",
+     "does": "Offset between left and right sweeps (UI degrees; default 0.0778 likely 28 of 360)",
+     "typical": "default"
+    },
+    {
+     "name": "Inverted Mode",
+     "does": "Inverts the delayed copy for a hollower sound",
+     "typical": "0"
+    },
+    {
+     "name": "Sinusoidal Mode",
+     "does": "Sweep follows a sine curve instead of a linear ramp",
+     "typical": "0 or 1 by taste"
+    }
+   ],
+   "demo_settings": {
+    "Mix": 0.6
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Flange & Chorus",
+   "pairs_with": [
+    "Chorus/Flanger",
+    "Analog Delay",
+    "Convolution Reverb",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Audio effect: QE addAudioEffect on the audio track item, then set the DOM component (last on the TrackItem). Normalized 0..1 values; only defaults known. 'Special Effects Mode' mixes normal and inverted flanging; 'Modulation Rate (Beats)' is the tempo-synced rate. Keyframing Mix gives a one-off whoosh on a transition.",
+   "recipe": {
+    "Mix": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      0.7
+     ],
+     [
+      1.2,
+      0
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -4.04,
+     "thd_pct": 0.01,
+     "freq_hz": 999.96
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  }
+ ]
+}

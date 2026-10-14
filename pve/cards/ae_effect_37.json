@@ -1,0 +1,919 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wipe Master Control",
+   "match": "ADBE CM TransWipe",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master slider of AE's wipe transition presets Barn Doors, Clam Shell and Paint On (Transitions - Wipes): one 'Transition Completion' value drives the preset's two Linear Wipes (+ Invert) or its Scribble reveal through expressions. On its own it shows nothing.",
+   "look": [
+    "wipe",
+    "barn doors",
+    "clam shell",
+    "paint on",
+    "reveal"
+   ],
+   "use_for": [
+    "one-slider barn-door or clam-shell reveal of a press photo or headline card",
+    "'Paint On' scribble reveal of a map, signature or handwritten title in an explainer",
+    "graphic wipe between two news cards in a reel"
+   ],
+   "avoid": [
+    "adding it by match name and expecting a wipe: it is only a slider",
+    "Paint On scribble looks dated/cheap on serious documentary footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "progress of the whole wipe 0-100 %; preset expressions map it onto the driven effects (Barn Doors and Clam Shell: both Linear Wipes = linear(TC, 0, 100, 0, 51); Paint On: Scribble End = linear(TC, 0, 67, 0, 100), Stroke Width eases 25 -> 50)",
+     "typical": "keyframe 0 -> 100 over 0.5-1 s (retime the 2 keys the preset ships with)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Barn Doors transition (Video Transitions > Wipe); Linear Wipe transition or Linear Wipe (Legacy) effect for a one-clip wipe. No paint-on equivalent in PR 2026",
+   "pairs_with": [
+    "Linear Wipe",
+    "Scribble",
+    "Invert",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect (expression-control slider defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE CM TransWipe') only adds the slider and changes NO pixels. To get the look, open the comp, select ONLY the target layer, then layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Wipes/Barn Doors.ffx')) (or Clam Shell.ffx, Paint On.ffx); the preset adds this control plus the effects its expressions drive. The preset ALREADY carries two linear keyframes on Transition Completion (0 -> 100) that land starting at the comp's current time, so set comp.time first and then retime those keys (keyTime/removeKey + setValueAtTime) instead of adding a second pair. Verified from the .ffx files: Barn Doors and Clam Shell = Linear Wipe 1 + Linear Wipe 2 (completion = linear(TC, 0, 100, 0, 51)) + Invert; Paint On = full-layer mask + Scribble (End = linear(TC, 0, 67, 0, 100)). Instance names differ: Barn Doors names the control 'Wipe Master Control 1' and its expressions use that name; Clam Shell and Paint On use 'Wipe Master Control'. So find it by match name (layer.property('ADBE Effect Parade').property('ADBE CM TransWipe')) and never rename it. Which end (0 or 100) is fully visible is not verified per preset: render frames at 0 and 100 before relying on direction. Card Wipe presets use the separate 'Card Wipe Master Control'.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wipe Master Controls",
+   "match": "ADBE CM TransWipeFeath",
+   "category": "",
+   "status": "hidden",
+   "summary": "Feathered variant of the wipe master control: a 'Transition Completion' slider plus a 'Feather' slider meant to drive a wipe's progress and edge softness through expressions. No installed preset uses it, so it does nothing visible on its own.",
+   "look": [
+    "wipe",
+    "soft edge",
+    "feathered reveal"
+   ],
+   "use_for": [
+    "master slider for a custom expression-rigged Linear Wipe with soft edge on a title card",
+    "drive several wipes (split-screen panels) from one slider in a news template"
+   ],
+   "avoid": [
+    "expecting a visual result: nothing in the AE 2026 Presets folder references it",
+    "large Feather values on small graphics turn the edge into a blur"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "progress slider 0-100 % for expressions to read",
+     "typical": "keyframe 0 -> 100 over 0.5-1 s"
+    },
+    {
+     "name": "Feather",
+     "does": "edge-softness value for expressions to pass to a wipe's Feather (0-1000)",
+     "typical": "20-80"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Linear Wipe (Legacy) effect (Transition Completion, Wipe Angle, Feather) or the Linear Wipe transition",
+   "pairs_with": [
+    "Linear Wipe",
+    "Radial Wipe",
+    "Venetian Blinds"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE CM TransWipeFeath') only adds the sliders and changes NO pixels. No .ffx in AE 2026 Presets references it (scanned 2026-10-03). To use it, add it, then set expressions on the target effect, e.g. Linear Wipe 'Transition Completion' = effect(\"Wipe Master Controls\")(\"Transition Completion\") and 'Feather' = effect(\"Wipe Master Controls\")(\"Feather\"). Simpler: apply Linear Wipe directly and keyframe it.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wobble Bounce",
+   "match": "ADBE DE Wobble Bounce",
+   "category": "",
+   "status": "hidden",
+   "summary": "Expression-control set (Dan Ebberts behaviour family) for a decaying bounce with a secondary wobble, starting after a delay and optionally repeating. It has no expressions attached, so alone it does nothing visible.",
+   "look": [
+    "bounce",
+    "wobble",
+    "elastic",
+    "jelly",
+    "cartoon pop"
+   ],
+   "use_for": [
+    "bouncy drop-in of a sticker, icon or logo bug in a social reel",
+    "playful pop of a 'FACT CHECK' or emoji badge in an explainer",
+    "elastic entrance for a lower-third plate on a light-hearted segment"
+   ],
+   "avoid": [
+    "serious news, obituary or documentary beats: reads cartoonish",
+    "full-frame footage: bounce exposes the frame edges and black background",
+    "assuming the control animates anything by itself: it does not"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "size of the bounce in pixels (sign flips direction)",
+     "typical": "150-300"
+    },
+    {
+     "name": "Frequency",
+     "does": "bounces per second",
+     "typical": "1-3"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast the bounce dies out (higher = settles sooner)",
+     "typical": "0.7-3"
+    },
+    {
+     "name": "Wobble Amplitude",
+     "does": "strength of the secondary wobble riding on the bounce",
+     "typical": "20-40"
+    },
+    {
+     "name": "Wobble Frequency",
+     "does": "wobbles per second",
+     "typical": "3-6"
+    },
+    {
+     "name": "Wobble Decay",
+     "does": "how fast the wobble dies out",
+     "typical": "0.7-2"
+    },
+    {
+     "name": "Delay",
+     "does": "seconds after the layer in-point before the motion starts",
+     "typical": "0-1"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "repeat the motion every N seconds (0 = play once)",
+     "typical": "0 for once, 2-4 to loop"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none; keyframe Motion Position/Scale with overshoot (Bezier) easing",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Motion Tile",
+    "CC Bend It"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE DE Wobble Bounce') only adds the sliders and changes NO pixels. No .ffx preset in the AE 2026 (or 2024/2025) Presets folder uses this control (scanned 2026-10-03), so nothing drives it: a script must write its own expression that reads these sliders, or simply keyframe the transform instead. Slider meanings are inferred from names and ranges (unverified). Example on Position: c=effect('Wobble Bounce'); t=time-inPoint-c('Delay'); if(t>=0 && c('Cycle Time')>0) t=t%c('Cycle Time'); t<0 ? value : value+[0,-c('Amplitude')*Math.abs(Math.sin(c('Frequency')*2*Math.PI*t))/Math.exp(c('Decay')*t)]; wobble on Rotation (degrees) or Scale (squash %): value + c('Wobble Amplitude')*Math.sin(c('Wobble Frequency')*2*Math.PI*t)/Math.exp(c('Wobble Decay')*t) with the same t and guard. Ready-made alternatives that DO ship: Presets/Transitions - Movement/Pop and Wobble In.ffx and Presets/Behaviors/Scale Bounce - layer markers.ffx / Scale Bounce - random.ffx.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "corrected: example Position expression had Amplitude inside Math.abs, so its sign did nothing (contradicting 'sign flips direction'); moved Amplitude outside Math.abs. not_rendered verdict is right (gallery.py skips hidden cards; no frame exists)"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wobble Bounce At Marker",
+   "match": "ADBE DE Wobble Bounce At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Marker-triggered version of the Wobble Bounce controls: the bounce-plus-wobble is meant to restart at each layer marker. Only sliders; no expressions ship with it.",
+   "look": [
+    "bounce",
+    "wobble",
+    "elastic",
+    "jelly",
+    "cartoon pop",
+    "marker-synced"
+   ],
+   "use_for": [
+    "re-trigger a bouncing icon on each beat marker of a reel",
+    "pop a stat badge every time the VO names a number (markers on the VO beats)",
+    "bouncy emphasis on key words in a kinetic-type explainer"
+   ],
+   "avoid": [
+    "serious news, obituary or documentary beats: reads cartoonish",
+    "full-frame footage: bounce exposes the frame edges and black background",
+    "no markers on the layer = no motion even with an expression"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "size of the bounce in pixels (sign flips direction)",
+     "typical": "150-300"
+    },
+    {
+     "name": "Frequency",
+     "does": "bounces per second",
+     "typical": "1-3"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast the bounce dies out (higher = settles sooner)",
+     "typical": "0.7-3"
+    },
+    {
+     "name": "Wobble Amplitude",
+     "does": "strength of the secondary wobble riding on the bounce",
+     "typical": "20-40"
+    },
+    {
+     "name": "Wobble Frequency",
+     "does": "wobbles per second",
+     "typical": "3-6"
+    },
+    {
+     "name": "Wobble Decay",
+     "does": "how fast the wobble dies out",
+     "typical": "0.7-2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none; keyframe Motion Position/Scale with overshoot (Bezier) easing",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Motion Tile",
+    "CC Bend It"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE DE Wobble Bounce At Marker') only adds the sliders and changes NO pixels. No .ffx preset in the AE 2026 (or 2024/2025) Presets folder uses this control (scanned 2026-10-03), so nothing drives it: a script must write its own expression that reads these sliders, or simply keyframe the transform instead. Slider meanings are inferred from names and ranges (unverified). Same bounce/wobble maths as Wobble Bounce, but t is measured from the latest layer marker at or before the current time (m=marker.nearestKey(time); if m.time>time step to the previous key; no marker before time -> return value); this control has no Delay or Cycle Time. Add markers via layer.property('Marker').setValueAtTime(t, new MarkerValue('')). Shipping alternative: Presets/Behaviors/Scale Bounce - layer markers.ffx.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wobble Bounce On Beat",
+   "match": "ADBE DE Wobble Bounce On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Audio-triggered version of the Wobble Bounce controls: the bounce is meant to fire whenever an audio-amplitude layer crosses a threshold. Only sliders plus a layer picker; nothing animates on its own.",
+   "look": [
+    "bounce",
+    "wobble",
+    "elastic",
+    "jelly",
+    "cartoon pop",
+    "beat-synced",
+    "music-reactive"
+   ],
+   "use_for": [
+    "icon or logo that bounces on the kick drum of a reel's music bed",
+    "beat-reactive sticker in a trend-format social video"
+   ],
+   "avoid": [
+    "needs an 'Audio Amplitude' keyframe layer; without it nothing triggers",
+    "busy music triggers constant bouncing that looks jittery: raise Audio Threshold",
+    "serious news content: reads cartoonish"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "size of the bounce in pixels (sign flips direction)",
+     "typical": "150-300"
+    },
+    {
+     "name": "Frequency",
+     "does": "bounces per second",
+     "typical": "1-3"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast the bounce dies out (higher = settles sooner)",
+     "typical": "0.7-3"
+    },
+    {
+     "name": "Wobble Amplitude",
+     "does": "strength of the secondary wobble riding on the bounce",
+     "typical": "20-40"
+    },
+    {
+     "name": "Wobble Frequency",
+     "does": "wobbles per second",
+     "typical": "3-6"
+    },
+    {
+     "name": "Wobble Decay",
+     "does": "how fast the wobble dies out",
+     "typical": "0.7-2"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "amplitude level (0-100) the audio layer must exceed to trigger a bounce",
+     "typical": "15-40, set above the music's average level"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none; keyframe Motion Position/Scale with overshoot (Bezier) easing",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Motion Tile",
+    "CC Bend It",
+    "Convert Audio to Keyframes"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE DE Wobble Bounce On Beat') only adds the sliders and changes NO pixels. No .ffx preset in the AE 2026 (or 2024/2025) Presets folder uses this control (scanned 2026-10-03), so nothing drives it: a script must write its own expression that reads these sliders, or simply keyframe the transform instead. Slider meanings are inferred from names and ranges (unverified). Same bounce/wobble maths as Wobble Bounce, with t measured from the last time the audio crossed 'Audio Threshold' (the expression must scan back frame by frame); this control has no Delay or Cycle Time. 'Audio Keyframe Layer' is a layer-reference property (cannot be set from a spec): create the layer with app.executeCommand(app.findMenuCommandId('Convert Audio to Keyframes')) with the audio layer selected, then setValue(<that 'Audio Amplitude' layer's index>). The expression reads its 'Both Channels' Slider.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wobble Bounce Random",
+   "match": "ADBE DE Wobble Bounce Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Random-interval version of the Wobble Bounce controls: the bounce-plus-wobble is meant to re-fire after a random pause between Min and Max Delay seconds. Only sliders; no expressions ship with it.",
+   "look": [
+    "bounce",
+    "wobble",
+    "elastic",
+    "jelly",
+    "cartoon pop",
+    "random",
+    "idle loop"
+   ],
+   "use_for": [
+    "idle 'alive' motion on a subscribe button or channel bug",
+    "staggered random bounces across a grid of icons in an explainer"
+   ],
+   "avoid": [
+    "serious news, obituary or documentary beats: reads cartoonish",
+    "full-frame footage: bounce exposes the frame edges and black background",
+    "touching 'Internal Use Only' (bookkeeping slider)"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "size of the bounce in pixels (sign flips direction)",
+     "typical": "150-300"
+    },
+    {
+     "name": "Frequency",
+     "does": "bounces per second",
+     "typical": "1-3"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast the bounce dies out (higher = settles sooner)",
+     "typical": "0.7-3"
+    },
+    {
+     "name": "Wobble Amplitude",
+     "does": "strength of the secondary wobble riding on the bounce",
+     "typical": "20-40"
+    },
+    {
+     "name": "Min Delay",
+     "does": "shortest random pause between bounces, seconds",
+     "typical": "0.75-2"
+    },
+    {
+     "name": "Max Delay",
+     "does": "longest random pause between bounces, seconds",
+     "typical": "1.5-4"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none; keyframe Motion Position/Scale with overshoot (Bezier) easing",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Motion Tile",
+    "CC Bend It"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE DE Wobble Bounce Random') only adds the sliders and changes NO pixels. No .ffx preset in the AE 2026 (or 2024/2025) Presets folder uses this control (scanned 2026-10-03), so nothing drives it: a script must write its own expression that reads these sliders, or simply keyframe the transform instead. Slider meanings are inferred from names and ranges (unverified). Same bounce/wobble maths as Wobble Bounce, re-fired after a seeded random pause between Min Delay and Max Delay seconds (seedRandom(index, true) so renders repeat). Leave 'Internal Use Only' at 0. Keep Max Delay >= Min Delay. Shipping alternative: Presets/Behaviors/Scale Bounce - random.ffx.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Z Spring",
+   "match": "ADBE DE Z Spring",
+   "category": "",
+   "status": "hidden",
+   "summary": "Expression-control set (Dan Ebberts behaviour family) for a layer that springs in along the Z axis from an offset, overshoots and settles, with random drift and rotational wobble. No expressions ship with it, so alone it does nothing.",
+   "look": [
+    "z-axis spring",
+    "3D pop",
+    "elastic",
+    "fly-in",
+    "wobble rotation"
+   ],
+   "use_for": [
+    "3D pop-in of a photo card toward camera in a news reel",
+    "springy arrival of a headline plate or quote card in an explainer",
+    "trailer-style punch-in of a logo"
+   ],
+   "avoid": [
+    "2D layers: Z motion needs the 3D layer switch on (and reads best with a camera)",
+    "serious documentary beats: springy pop feels gimmicky",
+    "assuming the control animates anything by itself: it does not"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "start offset along Z in pixels (negative = starts toward the camera)",
+     "typical": "-300 to -600"
+    },
+    {
+     "name": "Frequency",
+     "does": "spring oscillations per second",
+     "typical": "2-4"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast the spring settles",
+     "typical": "2-4"
+    },
+    {
+     "name": "Wander Amount",
+     "does": "random X/Y drift added while springing, pixels",
+     "typical": "0-80"
+    },
+    {
+     "name": "Rotational Amplitude",
+     "does": "degrees of rotational wobble during the spring",
+     "typical": "10-50"
+    },
+    {
+     "name": "Rotational Frequency",
+     "does": "rotational wobbles per second",
+     "typical": "1-2"
+    },
+    {
+     "name": "Delay",
+     "does": "seconds after the layer in-point before the motion starts",
+     "typical": "0-1"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "repeat the motion every N seconds (0 = play once)",
+     "typical": "0 for once, 2-4 to loop"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none; keyframe Motion Scale with overshoot (or Basic 3D) to fake the Z spring",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "Camera layer"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE DE Z Spring') only adds the sliders and changes NO pixels. No .ffx preset in the AE 2026 (or 2024/2025) Presets folder uses this control (scanned 2026-10-03), so nothing drives it: a script must write its own expression that reads these sliders, or simply keyframe the transform instead. Slider meanings are inferred from names and ranges (unverified). Needs layer.threeDLayer = true. A spring starts AT the offset, so use cosine, not a bounce: c=effect('Z Spring'); t=time-inPoint-c('Delay'); if(t>=0 && c('Cycle Time')>0) t=t%c('Cycle Time'); on Position: t<0 ? value+[0,0,c('Amplitude')] : value+[0,0,c('Amplitude')*Math.cos(c('Frequency')*2*Math.PI*t)/Math.exp(c('Decay')*t)]; on Z Rotation: value + c('Rotational Amplitude')*Math.sin(c('Rotational Frequency')*2*Math.PI*t)/Math.exp(c('Decay')*t); Wander Amount as a decaying wiggle on X/Y.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Z Spring At Marker",
+   "match": "ADBE DE Z Spring At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Marker-triggered version of the Z Spring controls: the Z-axis spring with drift and rotational wobble is meant to restart at each layer marker. Only sliders; no expressions ship with it.",
+   "look": [
+    "z-axis spring",
+    "3D pop",
+    "elastic",
+    "fly-in",
+    "wobble rotation",
+    "marker-synced"
+   ],
+   "use_for": [
+    "re-trigger a 3D pop on a photo card at each VO beat marker",
+    "springy emphasis on each new bullet card in an explainer"
+   ],
+   "avoid": [
+    "2D layers: Z motion needs the 3D layer switch on (and reads best with a camera)",
+    "serious documentary beats: springy pop feels gimmicky",
+    "no markers on the layer = no motion even with an expression"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "start offset along Z in pixels (negative = starts toward the camera)",
+     "typical": "-300 to -600"
+    },
+    {
+     "name": "Frequency",
+     "does": "spring oscillations per second",
+     "typical": "2-4"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast the spring settles",
+     "typical": "2-4"
+    },
+    {
+     "name": "Wander Amount",
+     "does": "random X/Y drift added while springing, pixels",
+     "typical": "0-80"
+    },
+    {
+     "name": "Rotational Amplitude",
+     "does": "degrees of rotational wobble during the spring",
+     "typical": "10-50"
+    },
+    {
+     "name": "Rotational Frequency",
+     "does": "rotational wobbles per second",
+     "typical": "1-2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none; keyframe Motion Scale with overshoot (or Basic 3D) to fake the Z spring",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "Camera layer"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE DE Z Spring At Marker') only adds the sliders and changes NO pixels. No .ffx preset in the AE 2026 (or 2024/2025) Presets folder uses this control (scanned 2026-10-03), so nothing drives it: a script must write its own expression that reads these sliders, or simply keyframe the transform instead. Slider meanings are inferred from names and ranges (unverified). Same spring maths as Z Spring (cosine from the Z offset, decaying), but t is measured from the latest layer marker at or before the current time; this control has no Delay or Cycle Time. Needs layer.threeDLayer = true and layer markers (layer.property('Marker').setValueAtTime(t, new MarkerValue(''))).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Zoom - 2D spin",
+   "match": "ADBE CM Zoom2DSpin",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control of the 'Zoom - 2D spin' transition preset: as Transition Completion goes 0 -> 100 the layer scales up from 0 to 100 % while rotating from minus Spin Amount back to 0 (via a Transform effect).",
+   "look": [
+    "spin zoom",
+    "spinning entrance",
+    "zoom-in",
+    "retro slideshow"
+   ],
+   "use_for": [
+    "spinning pop-in of a photo card or newspaper clipping (the classic 'newspaper spin')",
+    "comic entrance of a meme or reaction image in a satire reel",
+    "reverse (100 -> 0) to spin a card out before the next beat"
+   ],
+   "avoid": [
+    "adding the control by match name and expecting motion: it is only sliders",
+    "using it on every cut: gimmicky spinning-zoom transitions read as 2000s slideshow",
+    "serious documentary footage: reads cheesy"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = scale 0 and rotated by -Spin Amount (invisible); 100 = full size, upright",
+     "typical": "keyframe 0 -> 100 over 0.5-0.8 s, eased (retime the 2 keys the preset ships with)"
+    },
+    {
+     "name": "Spin Amount",
+     "does": "total degrees of spin during the entrance (angle, no harvested limit)",
+     "typical": "180-720 (720 = two turns for the newspaper spin)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Spin effect (self-animating 2D rotation, Initial Spin -> Target Spin) plus Motion > Scale keyframed 0 -> 100; Spin Motion transition is the nearest one-click option",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Directional Blur",
+    "CC Force Motion Blur"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE CM Zoom2DSpin') only adds the sliders and changes NO pixels. To get the look, open the comp, select ONLY the target layer, then layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Zoom - 2D spin.ffx')); the preset adds this control plus the effects its expressions drive. The preset ALREADY carries two linear keyframes on Transition Completion (0 -> 100) that land starting at the comp's current time, so set comp.time first and then retime those keys (keyTime/removeKey + setValueAtTime) instead of adding a second pair. Expressions address the control by its display name ('Zoom - 2D spin'), so never rename the effect. Verified from the preset: Transform Scale = linear(TC, 0, 100, 0, 100); Transform Rotation = linear(TC, 0, 100, -Spin Amount, 0). Mapping is linear (and so are the shipped keys), so ease the keyframes. Keep Spin Amount within -3600..3600.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.7,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Zoom - 3D tumble",
+   "match": "ADBE CM Zoom3DTumble",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control of the 'Zoom - 3D tumble' transition preset: the layer scales up from 0 while Basic 3D swivels and tilts it from the X/Y tumble angles back to flat, so it tumbles into frame.",
+   "look": [
+    "3D tumble",
+    "flip-in",
+    "zoom-in",
+    "card flip"
+   ],
+   "use_for": [
+    "tumbling entrance of a photo card or document in an explainer",
+    "card-flip reveal of a quote or stat card in a reel",
+    "reverse (100 -> 0) to tumble a card away"
+   ],
+   "avoid": [
+    "adding the control by match name and expecting motion: it is only sliders",
+    "using it on every cut: gimmicky spinning-zoom transitions read as 2000s slideshow",
+    "text or logo cards: Basic 3D draws the back of the layer mirror-imaged, so with Y tumble past 90 deg the headline reads backwards mid-move; keep Y tumble under 90 or accept it",
+    "Basic 3D ignores comp cameras and lights; for real 3D use a 3D layer + camera instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = scale 0 and fully tumbled; 100 = full size and flat",
+     "typical": "keyframe 0 -> 100 over 0.6-1 s, eased (retime the 2 keys the preset ships with)"
+    },
+    {
+     "name": "X tumble",
+     "does": "starting tilt (Basic 3D Tilt) in degrees, unwinds to 0",
+     "typical": "45-90"
+    },
+    {
+     "name": "Y tumble",
+     "does": "starting swivel (Basic 3D Swivel) in degrees, unwinds to 0",
+     "typical": "180-360"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: Basic 3D effect with keyframed Swivel/Tilt plus Motion > Scale 0 -> 100; Flip Motion or 3D Spin transitions are the nearest one-click options (Tumble Away is obsolete)",
+   "pairs_with": [
+    "Basic 3D",
+    "Transform",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE CM Zoom3DTumble') only adds the sliders and changes NO pixels. To get the look, open the comp, select ONLY the target layer, then layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Zoom - 3D tumble.ffx')); the preset adds this control plus the effects its expressions drive. The preset ALREADY carries two linear keyframes on Transition Completion (0 -> 100) that land starting at the comp's current time, so set comp.time first and then retime those keys (keyTime/removeKey + setValueAtTime) instead of adding a second pair. Expressions address the control by its display name ('Zoom - 3D tumble'), so never rename the effect. Verified from the preset: Basic 3D Swivel = linear(TC, 0, 100, Y tumble, 0), Tilt = linear(TC, 0, 100, X tumble, 0), Transform Scale = linear(TC, 0, 100, 0, 100). Mapping is linear, so ease the keyframes.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Zoom - bubble",
+   "match": "ADBE CM ZoomBubble",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control of the 'Zoom - bubble' transition preset: the layer grows from 0 to full size (ease-out over the first two thirds) while a Spherize bulge that starts at half the layer diagonal flattens to 0 near the end, like a bubble popping into place.",
+   "look": [
+    "bubble",
+    "bulge",
+    "fisheye pop",
+    "zoom-in",
+    "playful"
+   ],
+   "use_for": [
+    "bubbly pop-in of a sticker, emoji or reaction image in a reel",
+    "playful entrance of a product or app screenshot in an AI explainer",
+    "kid-friendly or comic transitions in satire segments"
+   ],
+   "avoid": [
+    "adding the control by match name and expecting motion: it is only sliders",
+    "using it on every cut: gimmicky spinning-zoom transitions read as 2000s slideshow",
+    "faces through the bulge look distorted; avoid on close-ups of leaders"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = scale 0; 67 = full size but still bulged; 100 = full size and flat",
+     "typical": "keyframe 0 -> 100 over 0.6-0.9 s (retime the 2 keys the preset ships with)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none built in; keyframe Motion Scale plus a Spherize effect radius",
+   "pairs_with": [
+    "Spherize",
+    "Transform",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE CM ZoomBubble') only adds the sliders and changes NO pixels. To get the look, open the comp, select ONLY the target layer, then layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Zoom - bubble.ffx')); the preset adds this control plus the effects its expressions drive. The preset ALREADY carries two linear keyframes on Transition Completion (0 -> 100) that land starting at the comp's current time, so set comp.time first and then retime those keys (keyTime/removeKey + setValueAtTime) instead of adding a second pair. Expressions address the control by its display name ('Zoom - bubble'), so never rename the effect. Verified from the preset: Transform Scale = easeOut(TC, 0, 67, 0, 100); Spherize Radius = easeIn(TC, 55, 100, half the layer diagonal, 0).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Zoom - spiral",
+   "match": "ADBE CM ZoomSpiral",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control of the 'Zoom - spiral' transition preset: as Transition Completion goes 0 -> 100 the layer scales up from 0 to 100 % while it circles inward from Spiral Size pixels off its centre (radius shrinking to 0) between the start and end angles, so it swirls into place.",
+   "look": [
+    "spiral",
+    "swirl-in",
+    "zoom-in",
+    "playful motion"
+   ],
+   "use_for": [
+    "swirling entrance of an icon, coin or logo in an explainer",
+    "comic swirl-in of a reaction image in a satire reel",
+    "reverse (100 -> 0) to swirl a card out of frame"
+   ],
+   "avoid": [
+    "adding the control by match name and expecting motion: it is only sliders",
+    "using it on every cut: gimmicky spinning-zoom transitions read as 2000s slideshow",
+    "huge Spiral Size pushes the layer off-frame mid-move"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = scale 0 at the spiral start; 100 = full size at rest",
+     "typical": "keyframe 0 -> 100 over 0.6-1 s, eased (retime the 2 keys the preset ships with)"
+    },
+    {
+     "name": "Spiral Size (pixels)",
+     "does": "starting radius of the spiral in pixels; shrinks linearly to 0 as Transition Completion reaches 100",
+     "typical": "150-400 for a 1920x1080 comp"
+    },
+    {
+     "name": "Spiral Start Angle (degrees)",
+     "does": "angle where the swirl starts (the preset subtracts 90, so 0 = straight above centre); End minus Start sets how far it turns (default -360 -> 0 = one turn)",
+     "typical": "-360 to -720"
+    },
+    {
+     "name": "Spiral End Angle (degrees)",
+     "does": "angle where the spiral ends",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none built in; keyframe Motion Position along a curved path plus Scale",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml), not a renderer: addProperty('ADBE CM ZoomSpiral') only adds the sliders and changes NO pixels. To get the look, open the comp, select ONLY the target layer, then layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Zoom - spiral.ffx')); the preset adds this control plus the effects its expressions drive. The preset ALREADY carries two linear keyframes on Transition Completion (0 -> 100) that land starting at the comp's current time, so set comp.time first and then retime those keys (keyTime/removeKey + setValueAtTime) instead of adding a second pair. Expressions address the control by its display name ('Zoom - spiral'), so never rename the effect. Verified from the preset: Transform Scale = linear(TC, 0, 100, 0, 100); Transform Position = layer centre + [cos a, sin a] * linear(TC, 0, 100, Spiral Size, 0) with a = linear(TC, 0, 100, Start-90, End-90) degrees, so the radius shrinks to 0 and the layer lands at its own centre. Angles have no harvested limit; keep them within -3600..3600.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect, changes no pixels on its own), so no gallery frame was rendered for it.",
+    "rerender": false,
+    "second_opinion": "agree: hidden pseudo effect, gallery.py skips hidden cards so no frame exists; card claims re-checked against PresetEffects ranges and the shipped .ffx expressions/keys"
+   }
+  }
+ ]
+}

@@ -1,0 +1,1309 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Clean newsroom",
+   "summary": "Neutral, honest broadcast correction: a little contrast, recovered highlights, opened shadows and near-natural colour, so mixed press, phone and studio clips cut together without looking graded.",
+   "use_for": [
+    "News reels and bulletins",
+    "A-roll of political explainers and press conferences",
+    "Base correction under every other grade in this family",
+    "Matching mismatched agency / phone / studio sources"
+   ],
+   "avoid": [
+    "Treating it as a white-balance fix: correct Temperature/Tint per source first (about -15..15)",
+    "Stacking a second Lumetri Color on the same clip: add these values to the clip's existing Lumetri instead",
+    "Raising Saturation past ~115 on Indian skin tones: faces go orange"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 12,
+      "Highlights": -15,
+      "Shadows": 12,
+      "Whites": 6,
+      "Blacks": -6,
+      "Saturation": 104,
+      "Vibrance": 10
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 12,
+      "Highlights": -15,
+      "Shadows": 12,
+      "Whites": 6,
+      "Blacks": -6,
+      "Saturation": 104,
+      "Vibrance": 10
+     }
+    }
+   ],
+   "keyframes_note": "Static, no keyframes. Per-source matching goes on top of the same instance: Temperature -15..15 and Exposure -0.3..0.3 per camera. When every clip shares it, apply once on an adjustment layer (AE) or per clip (Premiere).",
+   "built_from": [
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/028b.png",
+    "note": "Near-identical to the reference with slightly richer colour and the same tonal range (sat 0.54 -> 0.61), the invisible base correction it promises.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/040b.png",
+     "note": "Near-identical to the reference with slightly richer colour (saturation 0.54 -> 0.61) and the same tonal range, an invisible base correction; vs Premiere: Matches Premiere (saturation 0.54 -> 0.61 there too).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Newsroom broadcast-safe finish",
+   "summary": "Last step for TV delivery: pull hot whites down a touch in Lumetri, then clamp anything above the legal level with Broadcast Colors (reduce luminance, PAL).",
+   "use_for": [
+    "Bulletins and packages delivered to Indian TV channels (PAL)",
+    "Bright studio walls, white kurtas and window-lit interviews that run hot",
+    "Final pass after any grade in this family"
+   ],
+   "avoid": [
+    "Instagram / YouTube-only delivery: not needed and dulls highlights",
+    "Low IRE limits (90) or a Key Out mode: hard grey plateaus or holes in the picture",
+    "Grading after it: keep it last in the chain",
+    "Stacking with Video Limiter: pick one"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Highlights": -10,
+      "Whites": -12
+     }
+    },
+    {
+     "name": "Broadcast Colors",
+     "pr_props": {
+      "Broadcast Locale": 1,
+      "How to Make Color Safe": 0,
+      "Maximum Signal Amplitude (IRE)": 105
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Highlights": -10,
+      "Whites": -12
+     }
+    },
+    {
+     "name": "ADBE Broadcast Colors",
+     "props": {
+      "Broadcast Locale": 2,
+      "How to Make Color Safe": 1,
+      "Maximum Signal Amplitude (IRE)": 105
+     }
+    }
+   ],
+   "keyframes_note": "Static. Premiere dropdowns are 0-based (Locale 1 = PAL, Make Color Safe 0 = Reduce Luminance); After Effects popups are 1-based (Locale 2 = PAL, 1 = Reduce Luminance). Use 100 IRE for a strict channel spec. Apply last, ideally on a top adjustment layer.",
+   "built_from": [
+    "Lumetri Color",
+    "Broadcast Colors"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/029b.png",
+    "note": "Highlights sit a touch lower than the reference (99th-percentile luma 214 -> 205) with nothing else changed, a quiet legal-range finish as described.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/041b.png",
+     "note": "Highlights sit a little lower (98th percentile luma 201 -> 191, mean 106 -> 100) with colour unchanged, a quiet legal-range finish; vs Premiere: Same small highlight pull as Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Documentary interview soft cinematic",
+   "summary": "Gentle cinematic interview look: slightly warm, highlights rolled off, shadows opened, a hint of faded blacks and a soft vignette that pulls the eye to the speaker.",
+   "use_for": [
+    "Sit-down documentary interviews",
+    "Expert / witness talking heads in political explainers",
+    "Long-form YouTube documentaries"
+   ],
+   "avoid": [
+    "Adding Premiere's Vignette effect too: the darkening doubles",
+    "Vertical reels with captions near the edges: drop the vignette (Amount 0)",
+    "Mixed-light rooms that are already warm: set Temperature 0"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 6,
+      "Contrast": 14,
+      "Highlights": -22,
+      "Shadows": 14,
+      "Blacks": -8,
+      "Saturation": 96,
+      "Vibrance": 8,
+      "Faded Film": 6,
+      "Amount": -0.7,
+      "Midpoint": 45,
+      "Feather": 75
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 6,
+      "Contrast": 14,
+      "Highlights": -22,
+      "Shadows": 14,
+      "Blacks": -8,
+      "Saturation": 96,
+      "Vibrance": 8,
+      "Faded Film": 6,
+      "Amount": -0.7,
+      "Midpoint": 45,
+      "Feather": 75
+     }
+    }
+   ],
+   "keyframes_note": "Static for the whole interview. The vignette (Amount/Midpoint/Feather) stays centred; for an off-centre speaker use Premiere's Vignette effect with Center on the face instead, and set Lumetri Amount to 0.",
+   "built_from": [
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/030b.png",
+    "note": "Slightly warm, softly darkened corners (corner luma 129 -> 101) and rolled highlights pull the eye to the centre of the frame.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/042b.png",
+     "note": "A gentle change: highlights roll off slightly and the corners darken by about a fifth (152/130/77 -> 121/100/42), pulling the eye inward, while the warmth is not measurable on this already warm footage; vs Premiere: Renders the same as Premiere (corner and centre colours within 1 level).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Cinematic teal-orange",
+   "summary": "Blockbuster split tone: base cooled, contrast up, shadows pushed teal and highlights and skin pushed warm orange, as a numeric primary grade (Lumetri Temperature + ASC CDL + per-channel Levels in Premiere, Color Balance in After Effects).",
+   "use_for": [
+    "Trailer and teaser cuts",
+    "Cinematic B-roll and drone shots in documentaries",
+    "Hero / profile segments and title sequences",
+    "Night city and sunset shots"
+   ],
+   "avoid": [
+    "Straight news or fact-check footage: reads as a movie, not a record",
+    "Flags and party colours: tricolour green drifts teal and saffron goes orange-red",
+    "Faces lit from the shadow side: they turn cyan",
+    "Raising the offsets above ~0.05: the shift becomes a colour wash"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 20,
+      "Highlights": -12,
+      "Shadows": -6,
+      "Blacks": -8,
+      "Saturation": 105,
+      "Vibrance": 6,
+      "Temperature": -15
+     }
+    },
+    {
+     "name": "ASC CDL",
+     "pr_props": {
+      "Red Slope": 1.15,
+      "Green Slope": 1.0,
+      "Blue Slope": 0.9,
+      "Red Offset": -0.02,
+      "Green Offset": 0.01,
+      "Blue Offset": 0.02
+     }
+    },
+    {
+     "name": "Levels",
+     "pr_props": {
+      "(R) Black Input Level": 40,
+      "(G) Black Output Level": 8,
+      "(B) Black Output Level": 34
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 20,
+      "Highlights": -12,
+      "Shadows": -6,
+      "Blacks": -8,
+      "Saturation": 105,
+      "Vibrance": 6,
+      "Temperature": -15
+     }
+    },
+    {
+     "name": "ADBE Color Balance 2",
+     "props": {
+      "Midtone Red Balance": 6,
+      "Midtone Blue Balance": -6,
+      "Highlight Red Balance": 18,
+      "Highlight Blue Balance": -18,
+      "Preserve Luminosity": 1
+     }
+    },
+    {
+     "name": "ADBE Pro Levels2",
+     "props": {
+      "Red Input Black": 0.157,
+      "Green Output Black": 0.031,
+      "Blue Output Black": 0.133
+     }
+    }
+   ],
+   "keyframes_note": "Static. In Premiere the teal comes from Levels after the CDL: (R) Black Input 40 pulls red out of the darks and (B) / (G) Black Output 34 / 8 lift blue-green into them, while CDL Red / Blue Slope 1.15 / 0.9 keeps highlights and skin orange. On warm tungsten footage Lumetri Temperature plus CDL offsets (max +-0.05) only turn the shadows olive, never teal. For a lighter version halve the moves (Levels 20 / 4 / 17, Red Slope 1.07, Blue Slope 0.95, Temperature -8). The green lift keeps the shadows teal rather than purple (blue alone turns navy tones purple). To ease the look in on a reveal, keyframe Premiere Levels (B) Black Output [[0, 0], [1.0, 34]] or the AE Color Balance Shadow Blue and Highlight Red Balance from 0 to their values over 1 s. After Effects: the teal comes from Levels (Individual Controls) Red Input Black 0.157, Green Output Black 0.031 and Blue Output Black 0.133, so ease it in by keying Blue Output Black [[0, 0], [1.0, 0.133]].",
+   "built_from": [
+    "Lumetri Color",
+    "ASC CDL",
+    "Levels",
+    "Color Balance"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/031b.png",
+    "note": "Now a real split tone: the darkest 15% went from warm brown (56,38,14) to dark teal (24,48,44) while highlights, skin and flowers stay warm orange (214,177,128), though the beige wall drifts slightly olive.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/043b.png",
+     "note": "Contrast is up and the highlights stay warm orange, but the shadows go olive-brown (darkest 15% at 32/26/8) instead of teal, so there is no split tone; vs Premiere: Premiere turns the same shadows dark teal (24,48,44) with its Levels move; the AE half has no teal at all.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Mirrors the Premiere-verified teal: Levels (Individual Controls) Red Input Black 40/255 with Green / Blue Output Black 8/255 and 34/255 after Lumetri Temperature -15, keeping Color Balance only for the warm mids and highlights.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/043b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Warm nostalgic",
+   "summary": "Memory look: warm amber cast, softened contrast, faded milky blacks, lowered saturation, a soft vignette and fine mono grain.",
+   "use_for": [
+    "Flashbacks and 'back then' sections",
+    "Childhood, family and personal-story segments",
+    "Tribute and anniversary pieces",
+    "Re-enactments of past events"
+   ],
+   "avoid": [
+    "Genuine archive film: it is already faded; use the archive_looks recipes instead",
+    "Grain above ~8 on 9:16 reels: it turns to mush after Instagram compression",
+    "Already-warm tungsten interiors: drop Temperature to ~12"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 28,
+      "Tint": 6,
+      "Contrast": -8,
+      "Highlights": -20,
+      "Whites": -10,
+      "Saturation": 82,
+      "Faded Film": 30,
+      "Amount": -0.8,
+      "Feather": 70
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 4,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 28,
+      "Tint": 6,
+      "Contrast": -8,
+      "Highlights": -20,
+      "Whites": -10,
+      "Saturation": 82,
+      "Faded Film": 30,
+      "Amount": -0.8,
+      "Feather": 70
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.5,
+      "Size": 1.2,
+      "Softness": 1,
+      "Monochromatic": 1
+     }
+    }
+   ],
+   "transition": {
+    "name": "Film Dissolve",
+    "dur": 1.0
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "Drifting into the memory: keyframe Lumetri Temperature [[0, 0], [1.0, 28]] and Faded Film [[0, 0], [1.0, 30]] from the first frame of the section, under a 1 s Film Dissolve from the present-day shot. Grain needs no keyframes (it re-randomises every frame). AE grain uses Add Grain (Viewing Mode 3 = Final Output is mandatory; the default Preview shows grain only inside a box); it is slow, so put it on one adjustment layer.",
+   "built_from": [
+    "Lumetri Color",
+    "Noise",
+    "Film Dissolve",
+    "Add Grain"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/032b.png",
+    "note": "Milky lifted blacks, softer contrast, muted amber colour and clearly darkened corners give a faded memory look; the fine grain is barely visible at this size.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/044b.png",
+     "note": "Softer contrast (luma spread 46 -> 39), milky blacks with the blue lifted (darkest tones 59/41/32 vs 63/42/21), lower saturation (0.54 -> 0.46), darker corners and fine grain give a faded memory look with a muted amber-pink cast; vs Premiere: Renders the same as Premiere apart from the grain.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Golden hope",
+   "summary": "Clean, warm, vivid optimism: golden temperature, a touch of exposure, crisp contrast and richer colour without any fade.",
+   "use_for": [
+    "Achievement and development B-roll (roads, launches, inaugurations)",
+    "Sunrise and closing 'the future' sections",
+    "Upbeat explainer outros and social reels"
+   ],
+   "avoid": [
+    "Night or tungsten-lit footage: goes orange",
+    "Saffron/brand-heavy frames: colours oversaturate and clip",
+    "Serious or tragic segments: the warmth reads as celebratory"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 22,
+      "Tint": 4,
+      "Exposure": 0.15,
+      "Contrast": 18,
+      "Highlights": -15,
+      "Shadows": 8,
+      "Saturation": 112,
+      "Vibrance": 18
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 22,
+      "Tint": 4,
+      "Exposure": 0.15,
+      "Contrast": 18,
+      "Highlights": -15,
+      "Shadows": 8,
+      "Saturation": 112,
+      "Vibrance": 18
+     }
+    }
+   ],
+   "keyframes_note": "Static. For a 'dawn' lift on a hopeful line keyframe Temperature [[0, 0], [1.5, 22]] and Exposure [[0, -0.3], [1.5, 0.15]] from the hit.",
+   "built_from": [
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/033b.png",
+    "note": "Visibly more golden and saturated than the reference (R 129 -> 142, B 63 -> 48) with crisp contrast and no fade.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/045b.png",
+     "note": "Visibly more golden and saturated (mean 128/102/62 -> 141/101/47, saturation 0.54 -> 0.69) with crisp contrast and no fade; vs Premiere: Matches Premiere (R 129 -> 142, B 63 -> 48 there).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Cold tense",
+   "summary": "Suspense grade: drains the warm cast to a cold, muted grey with blue-teal blacks, slightly under-exposed, deeper shadows and a firm vignette; on warm tungsten footage it reads cold-neutral, not a strong blue-cyan cast.",
+   "use_for": [
+    "Investigation and crime documentaries",
+    "Crisis, scam and security explainers",
+    "Build-up before a reveal",
+    "Night interrogation / courtroom reconstructions"
+   ],
+   "avoid": [
+    "Talking heads that must look trustworthy: skin goes grey-blue",
+    "Brand and flag colours: saffron dulls to brown",
+    "Combining with Day-for-night: double blue and too dark"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": -28,
+      "Tint": -4,
+      "Exposure": -0.2,
+      "Contrast": 28,
+      "Highlights": -12,
+      "Shadows": -18,
+      "Blacks": -10,
+      "Saturation": 72,
+      "Amount": -1.1,
+      "Feather": 65
+     }
+    },
+    {
+     "name": "Levels",
+     "pr_props": {
+      "(B) Black Output Level": 32,
+      "(G) Black Output Level": 14
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": -28,
+      "Tint": -4,
+      "Exposure": -0.2,
+      "Contrast": 28,
+      "Highlights": -12,
+      "Shadows": -18,
+      "Blacks": -10,
+      "Saturation": 72,
+      "Amount": -1.1,
+      "Feather": 65
+     }
+    },
+    {
+     "name": "ADBE Pro Levels2",
+     "props": {
+      "Blue Output Black": 0.125,
+      "Green Output Black": 0.055
+     }
+    }
+   ],
+   "sfx": [
+    "heartbeat",
+    "amb_*"
+   ],
+   "keyframes_note": "Creeping dread: keyframe Lumetri Temperature [[0, 0], [3.0, -28]] and Saturation [[0, 100], [3.0, 72]] across the build, then hold. Levels are 8-bit in Premiere (32 / 14) and normalised in After Effects (32/255 = 0.125, 14/255 = 0.055); 12 / 6 left the blacks warm on tungsten footage.",
+   "built_from": [
+    "Lumetri Color",
+    "Levels",
+    "Levels (Individual Controls)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/034b.png",
+    "note": "Teal blacks now read (34,33,27 -> 35,40,45) and it is darker, muted (sat 0.27 -> 0.19) and vignetted, but the mids and highlights stay neutral-beige (mean 92,90,82), so it reads cold grey rather than blue-cyan; summary made honest.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/046b.png",
+     "note": "Darker, muted (saturation 0.54 -> 0.19) cold-neutral grey with blue-teal blacks (35/39/45) and a firm vignette, cold grey rather than blue as the summary says; vs Premiere: Practically identical to Premiere (blacks 35,40,45 and mean 92,90,82 there).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Noir high-contrast",
+   "summary": "Hard black-and-white: full desaturation, steep contrast with crushed-but-not-dead blacks and bright whites, crisp detail, a heavy vignette and fine mono grain.",
+   "use_for": [
+    "Crime, scandal and corruption segments",
+    "Dramatic quote cards over footage",
+    "Era change into a historical section",
+    "Trailer beats"
+   ],
+   "avoid": [
+    "Blacks below ~-40: shadow detail vanishes after platform compression",
+    "Footage where colour carries meaning (flags, party colours, maps)",
+    "Using Premiere's Black & White effect for an animated change: it has no controls; keyframe Lumetri Saturation instead"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 45,
+      "Highlights": 8,
+      "Shadows": -25,
+      "Whites": 18,
+      "Blacks": -22,
+      "Sharpen": 12,
+      "Amount": -1.6,
+      "Midpoint": 40,
+      "Feather": 60
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 4,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {
+      "Reds": 70,
+      "Yellows": 85,
+      "Greens": 40,
+      "Cyans": 60,
+      "Blues": 0,
+      "Magentas": 80,
+      "Tint:": 0
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 45,
+      "Highlights": 8,
+      "Shadows": -25,
+      "Whites": 18,
+      "Blacks": -22,
+      "Sharpen": 12,
+      "Amount": -1.6,
+      "Midpoint": 40,
+      "Feather": 60
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.6,
+      "Size": 1.0,
+      "Softness": 1,
+      "Monochromatic": 1
+     }
+    }
+   ],
+   "keyframes_note": "Colour-to-noir on a hit: Premiere Lumetri Saturation [[0, 100], [0.8, 0]] from the hit; in After Effects keyframe Lumetri Saturation the same way and leave Black & White off (or fade its layer). The AE Black & White weights keep skin light and darken blue skies like a red filter. AE grain uses Add Grain (Viewing Mode 3 = Final Output is mandatory; the default Preview shows grain only inside a box); it is slow, so put it on one adjustment layer.",
+   "built_from": [
+    "Lumetri Color",
+    "Noise",
+    "Black & White",
+    "Add Grain"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/035b.png",
+    "note": "Full black-and-white with steep contrast, deep but detailed blacks, bright whites and a heavy vignette.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/047b.png",
+     "note": "Full black-and-white with steep contrast (luma spread 46 -> 58), deep but detailed blacks, bright whites, darkened corners and fine grain; vs Premiere: Matches Premiere, slightly brighter (mean luma 102 vs 94).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Desaturated war",
+   "summary": "Bleach-bypass style conflict grade: colour drained to about 40%, hard contrast, a faint olive-green cast, gritty sharpening, a dark vignette and mono grain.",
+   "use_for": [
+    "War and partition history",
+    "Border tension and defence explainers",
+    "Reconstructions of attacks or disasters",
+    "Gritty trailer sections"
+   ],
+   "avoid": [
+    "Real casualty or atrocity footage: do not stylise it",
+    "Faces that must stay identifiable and natural: skin goes sallow",
+    "Grain above ~8 on reels"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 4,
+      "Tint": -8,
+      "Contrast": 38,
+      "Highlights": -18,
+      "Shadows": -12,
+      "Blacks": -14,
+      "Saturation": 40,
+      "Sharpen": 20,
+      "Amount": -0.9,
+      "Feather": 60
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 6,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 4,
+      "Tint": -8,
+      "Contrast": 38,
+      "Highlights": -18,
+      "Shadows": -12,
+      "Blacks": -14,
+      "Saturation": 40,
+      "Sharpen": 20,
+      "Amount": -0.9,
+      "Feather": 60
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.8,
+      "Size": 1.0,
+      "Softness": 1,
+      "Monochromatic": 1
+     }
+    }
+   ],
+   "sfx": [
+    "boom",
+    "amb_*"
+   ],
+   "keyframes_note": "Static. On an explosion or impact hit, flash Lumetri Exposure [[0, 0], [0.06, 1.2], [0.3, 0]] on top of the grade. AE grain uses Add Grain (Viewing Mode 3 = Final Output is mandatory; the default Preview shows grain only inside a box); it is slow, so put it on one adjustment layer.",
+   "built_from": [
+    "Lumetri Color",
+    "Noise",
+    "Add Grain"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/036b.png",
+    "note": "Colour drained to about half with hard contrast, a faint olive cast and a dark vignette, a clear bleach-bypass conflict look.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/048b.png",
+     "note": "Colour drained to under half (saturation 0.54 -> 0.25), hard contrast, a faint olive shift, gritty grain and a dark vignette: a bleach-bypass conflict look; vs Premiere: Practically identical to Premiere (mean 99,89,76 vs 99,89,77).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Saffron colour splash",
+   "summary": "Drains the frame to grey and keeps only the tones closest to bright saffron #FF9933; on the dim test plate that is just a few orange specks (flower petals), so sample the real flag colour into Color before relying on the flag staying in colour.",
+   "use_for": [
+    "Rally and campaign footage where the saffron must lead",
+    "Brand-accent beats in political reels",
+    "Festival and cultural segments (marigolds, robes)"
+   ],
+   "avoid": [
+    "Faces: skin hue sits next to saffron, so faces stay partly coloured and patchy; sample the real flag colour and keep Similarity / Tolerance low",
+    "Factual news footage: selective colour editorialises",
+    "Compressed phone footage: the kept colour's edges flicker"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Color Pass",
+     "pr_props": {
+      "Color": "#FF9933",
+      "Similarity": 25,
+      "Reverse": false
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 18,
+      "Vibrance": 20
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Leave Color",
+     "props": {
+      "Amount to Decolor": 92,
+      "Color To Leave": "#FF9933",
+      "Tolerance": 25,
+      "Edge Softness": 15,
+      "Match colors": 1
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 18,
+      "Vibrance": 20
+     }
+    }
+   ],
+   "sfx": [
+    "riser"
+   ],
+   "keyframes_note": "Colour drains away except saffron: Premiere Color Pass Similarity [[0, 120], [1.0, 25]], After Effects Leave Color Amount to Decolor [[0, 0], [1.0, 92]], starting on the beat. Replace #FF9933 with the colour sampled from the actual flag for a clean key. At Similarity 18 a bright #FF9933 matched nothing on the dim test plate and the whole frame went grey; 25 keeps the saffron-orange tones only.",
+   "built_from": [
+    "Color Pass",
+    "Leave Color",
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/037b.png",
+    "note": "No longer fully grey: a few orange flower petals and a stray yellow wall patch keep colour (sat 0.000 -> 0.006), but the plate's own saffron area and the rest of the frame stay grey, so it is a speck splash, not a saffron one; summary made honest.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/049b.png",
+     "note": "Nothing drains: both frames keep full colour (saturation 0.54 -> 0.57, mean difference 3 levels), because Leave Color matching by hue treats the whole warm tungsten frame as close to #FF9933; vs Premiere: Premiere drains the frame to grey with only a few orange petals left; the AE half stays in full colour.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Matching by RGB (Match colors 1) instead of hue should keep only the bright saffron-orange pixels in colour, as Premiere's Color Pass does, instead of every warm-hued pixel.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/049b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Saffron brand warm grade",
+   "summary": "Brand-tinted warmth: golden-saffron temperature and richer colour, with a soft saffron glow creeping in from the frame edges (Premiere).",
+   "use_for": [
+    "Party / campaign brand reels and promos",
+    "Title, logo and slogan beats over footage",
+    "Festival greetings and celebratory explainers"
+   ],
+   "avoid": [
+    "News or fact-check footage: a brand tint reads as propaganda",
+    "Stacking with Lumetri's own vignette (Amount): double edge",
+    "Vertical reels with captions at the edges: drop the Vignette opacity to ~30"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 18,
+      "Tint": 6,
+      "Contrast": 16,
+      "Highlights": -10,
+      "Saturation": 108,
+      "Vibrance": 14
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 70,
+      "Color": "#FF9933",
+      "Scale": 80,
+      "Feather": 60,
+      "Softness": 40,
+      "Chromatic Aberration": 0,
+      "Opacity": 85
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 18,
+      "Tint": 6,
+      "Contrast": 16,
+      "Highlights": -10,
+      "Saturation": 108,
+      "Vibrance": 14
+     }
+    },
+    {
+     "name": "ADBE PhotoFilterPS",
+     "props": {
+      "Filter": 1,
+      "Density": 15,
+      "Preserve Luminosity": 1
+     }
+    }
+   ],
+   "keyframes_note": "Bloom the saffron edge in on a title or logo beat: Premiere Vignette Master [[0, 0], [0.6, 100]]. After Effects has no coloured-edge vignette in one effect, so its version adds an even amber warmth (Photo Filter, Warming 85) instead; keyframe Density [[0, 0], [0.6, 15]] for the same bloom. Vignette Scale above ~100 pushes the edge off-frame: at Scale 105-110 with Vignette 40-55 the coloured edge did not show at all, so keep Scale 75-80.",
+   "built_from": [
+    "Lumetri Color",
+    "Vignette",
+    "Photo Filter"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/038b.png",
+    "note": "The saffron glow now shows: all four edges bloom orange (corners 161,122,55 -> 197,127,51) around the same warm golden grade, which is the brand look the summary promises.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/050b.png",
+     "note": "Warmer golden-saffron colour (mean 128/102/62 -> 136/96/46, saturation 0.54 -> 0.68) with an even amber cast and no edge glow, which the summary scopes to Premiere; vs Premiere: Same warm grade as Premiere without its orange edge bloom.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Day-for-night",
+   "summary": "Fake night from daylight: about 1.5 stops under, strong blue moonlight cast, sky and highlights pulled down hard, colour reduced and heavy dark edges.",
+   "use_for": [
+    "Night scenes in reconstructions built from daylight B-roll",
+    "Suspense beats in crime documentaries",
+    "Night montage in a trailer"
+   ],
+   "avoid": [
+    "Visible sun, bright sky or hard daylight shadows: they give it away",
+    "Faces in direct sun",
+    "Combining with Cold tense: too dark and too blue"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": -1.5,
+      "Temperature": -40,
+      "Contrast": 15,
+      "Highlights": -45,
+      "Whites": -35,
+      "Shadows": -10,
+      "Saturation": 60,
+      "Amount": -1.8,
+      "Feather": 70
+     }
+    },
+    {
+     "name": "Color Balance (RGB)",
+     "pr_props": {
+      "Red": 180,
+      "Green": 235,
+      "Blue": 360
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Exposure": -1.5,
+      "Temperature": -40,
+      "Contrast": 15,
+      "Highlights": -45,
+      "Whites": -35,
+      "Shadows": -10,
+      "Saturation": 60,
+      "Amount": -1.8,
+      "Feather": 70
+     }
+    },
+    {
+     "name": "ADBE Gamma/Pedestal/Gain2",
+     "props": {
+      "Red Gain": 0.71,
+      "Green Gain": 0.92,
+      "Blue Gain": 1.41
+     }
+    }
+   ],
+   "keyframes_note": "Static. Color Balance (RGB) units are 0..510 with 255 neutral, so 180/235/360 equal the AE gains 0.71/0.92/1.41 (the milder 225/240/285 left warm footage neutral grey, not blue). For a dusk-to-night fall keyframe Exposure [[0, 0], [2.0, -1.5]] and Temperature [[0, 0], [2.0, -40]].",
+   "notes": "Optional upgrade by hand: the SpeedLooks 'Blue Day4Nite' look (Lumetri Creative > Look, or the SL Blue Day4Nite preset) gives a richer moonlight, but a spec cannot select a LUT; apply it manually and drop Temperature to about -15.",
+   "built_from": [
+    "Lumetri Color",
+    "Color Balance (RGB)",
+    "Gamma/Pedestal/Gain"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/039b.png",
+    "note": "Now a blue moonlight night instead of grey: mean 42,41,40 -> 33,40,50 with blue highlights (61,74,99), about 1.5 stops down with heavy dark edges.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/051b.png",
+     "note": "About 1.4 stops darker (mean luma 106 -> 40) with a blue moonlight cast (33/40/50), reduced colour and heavy dark edges; vs Premiere: Practically identical to Premiere (33,40,50 there).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Promise-to-reality swing",
+   "summary": "Animated grade change on one shot: warm, saturated 'promise' swings to a cold, muted, harder 'reality' over about a second.",
+   "use_for": [
+    "'But the reality is...' turns in political explainers",
+    "Before / after and claim vs fact segments",
+    "Mood flips in documentaries"
+   ],
+   "avoid": [
+    "Using it on every claim: the move loses its punch after two or three uses per video",
+    "Shots with faces in close-up during the swing: skin visibly changes colour"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": [
+       [
+        0,
+        22
+       ],
+       [
+        1.0,
+        -22
+       ]
+      ],
+      "Saturation": [
+       [
+        0,
+        112
+       ],
+       [
+        1.0,
+        72
+       ]
+      ],
+      "Contrast": [
+       [
+        0,
+        12
+       ],
+       [
+        1.0,
+        26
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": [
+       [
+        0,
+        22
+       ],
+       [
+        1.0,
+        -22
+       ]
+      ],
+      "Saturation": [
+       [
+        0,
+        112
+       ],
+       [
+        1.0,
+        72
+       ]
+      ],
+      "Contrast": [
+       [
+        0,
+        12
+       ],
+       [
+        1.0,
+        26
+       ]
+      ]
+     }
+    }
+   ],
+   "sfx": [
+    "sub_drop"
+   ],
+   "keyframes_note": "Times are relative to the hit word ('but', 'reality'): the swing starts on it and lands 1.0 s later, sub_drop on the hit. Across a cut instead of within one shot, use the end values as static grades: promise clips Temperature 22 / Saturation 112 / Contrast 12, reality clips -22 / 72 / 26.",
+   "built_from": [
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/040b.png",
+    "note": "0.2 s frame is warm and saturated, 1.0 s frame is cold, muted and harder (sat 0.64 -> 0.36, B 53 -> 79), the swing lands as described.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/052b.png",
+     "note": "0.2 s is warm and saturated (saturation 0.63) and 1.0 s is cold, muted and harder (saturation 0.35, blue 79), so the swing lands as described; vs Premiere: Matches Premiere (saturation 0.64 -> 0.36, B 53 -> 79 there).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Crisis red edge",
+   "summary": "Alarm grade for breaking or crisis beats: cool, muted, contrasty picture with a red glow pressing in from the frame edges.",
+   "use_for": [
+    "Breaking-news and alert segments",
+    "Disaster, scam and threat explainers",
+    "'Danger' beats in reels"
+   ],
+   "avoid": [
+    "Holding it for long sections: it tires fast; use it for 2-6 s beats",
+    "Captions near the frame edges on 9:16",
+    "Sensitive tragedy footage where the red reads as sensational"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": -8,
+      "Contrast": 30,
+      "Highlights": -10,
+      "Shadows": -15,
+      "Saturation": 65
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 90,
+      "Color": "#C8102E",
+      "Scale": 75,
+      "Feather": 50,
+      "Softness": 40,
+      "Chromatic Aberration": 0,
+      "Opacity": 90
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": -8,
+      "Contrast": 30,
+      "Highlights": -10,
+      "Shadows": -15,
+      "Saturation": 65,
+      "Amount": -1.2,
+      "Feather": 60
+     }
+    },
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Radius": 620,
+      "Edge": 1,
+      "Feather Outer Edge": 380,
+      "Invert Circle": 1,
+      "Color": "#C8102E",
+      "Opacity": 70,
+      "Blending Mode": 2
+     }
+    }
+   ],
+   "sfx": [
+    "heartbeat"
+   ],
+   "keyframes_note": "Pulse the red edge with the heartbeat: Premiere Vignette Master [[0, 0], [0.12, 100], [0.6, 60], [0.9, 100], [1.4, 60]]. After Effects has no coloured-edge vignette effect, so its version uses a dark Lumetri vignette; keyframe Amount [[0, 0], [0.12, -1.2]] for the same hit. Vignette Scale above ~100 pushes the edge off-frame: at Scale 105-110 with Vignette 40-55 the coloured edge did not show at all, so keep Scale 75-80. After Effects: the red edge is the inverted Circle, so pulse it by keying its Opacity [[0, 0], [0.12, 70], [0.6, 42], [0.9, 70], [1.4, 42]] rather than Lumetri Amount.",
+   "built_from": [
+    "Lumetri Color",
+    "Vignette"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/041b.png",
+    "note": "The red alarm edge now presses in from both sides (corners 140,114,88 -> 164,31,50) around a muted, contrasty, slightly cooled centre.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/053b.png",
+     "note": "A cool, muted, contrasty picture with slightly darkened edges but no red anywhere (corners 100/88/55), so the red alarm edge the summary promises is missing; vs Premiere: Premiere's corners go red (164,31,50); the AE half only darkens them.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: An inverted, feathered red Circle (#C8102E, Opacity 70, Normal blend) after the grade adds the red edge pressing in from the sides and corners that Lumetri's vignette cannot colour.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/053b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "grades",
+   "name": "Punchy social",
+   "summary": "Clean, vivid feed-ready grade: more contrast and vibrance, held highlights, a little sharpening, with skin kept natural.",
+   "use_for": [
+    "Instagram and YouTube Shorts versions of news and explainers",
+    "B-roll montages in reels",
+    "Thumbnails pulled from footage"
+   ],
+   "avoid": [
+    "Saturation above ~140: skin goes orange and colours clip after upload",
+    "Heavily compressed footage: sharpening and vibrance reveal blocking",
+    "Long-form documentaries: too loud"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 25,
+      "Highlights": -12,
+      "Shadows": 10,
+      "Whites": 10,
+      "Blacks": -10,
+      "Saturation": 110,
+      "Vibrance": 25,
+      "Sharpen": 15
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 25,
+      "Highlights": -12,
+      "Shadows": 10,
+      "Whites": 10,
+      "Blacks": -10,
+      "Saturation": 110,
+      "Vibrance": 25,
+      "Sharpen": 15
+     }
+    }
+   ],
+   "keyframes_note": "Static.",
+   "built_from": [
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/042b.png",
+    "note": "Cleanly more vivid and contrasty than the reference (sat 0.54 -> 0.67) with held highlights and skin still natural.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/054b.png",
+     "note": "Cleanly more vivid and contrasty (saturation 0.54 -> 0.67) with held highlights and nothing clipped; vs Premiere: Matches Premiere (saturation 0.54 -> 0.67 there).",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

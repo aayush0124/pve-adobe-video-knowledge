@@ -1,0 +1,1393 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Digital Glitch",
+   "match": "Mettle SkyBox Digital Glitch",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Seam-aware digital glitch for 360 (equirectangular) footage: block displacement, RGB colour splitting and noise that wrap cleanly across the left/right seam. It also renders on flat footage, where it reads as a strong data-corruption glitch.",
+   "look": [
+    "glitch",
+    "datamosh",
+    "RGB split",
+    "block displacement",
+    "digital noise",
+    "signal corruption"
+   ],
+   "use_for": [
+    "Short glitch burst on a cut between two news shots or a reveal",
+    "Corrupted 'breaking signal' feel on a hacked/fake-news segment in an explainer",
+    "Glitch transitions inside 360 / VR documentary footage without a visible seam",
+    "Trailer stingers: 2-6 frame glitch hits synced to bass drops"
+   ],
+   "avoid": [
+    "Leaving it on for whole shots: at default Master Amplitude 100 it destroys faces and on-screen text",
+    "Expecting it to animate by itself: without Evolution keyframes the glitch is a frozen pattern",
+    "Using it on a flat comp without checking the top/bottom edges: the frame is treated as a sphere, so glitch blocks near the edges can stretch differently than in the centre",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Master Amplitude",
+     "does": "Scales every other glitch setting at once (50 = all values halved, 0 = no effect)",
+     "typical": "0 at rest, 60-100 on the hit frames"
+    },
+    {
+     "name": "Color Distortion",
+     "does": "RGB split: slides the colour channels apart horizontally",
+     "typical": "50-90"
+    },
+    {
+     "name": "Geometry Distortion X",
+     "does": "Stretches/displaces pixels along X; works together with Distortion Rate",
+     "typical": "40-80"
+    },
+    {
+     "name": "Geometry Distortion Y",
+     "does": "Stretches/displaces pixels along Y",
+     "typical": "0-40"
+    },
+    {
+     "name": "Distortion Complexity",
+     "does": "Size of the glitch areas: low = big blocky chunks, high = fine small glitches",
+     "typical": "30-70"
+    },
+    {
+     "name": "Distortion Rate",
+     "does": "How much of the frame is covered by geometry distortion (0 = none, 100 = whole frame); NOT a speed control",
+     "typical": "40-70"
+    },
+    {
+     "name": "Distortion Evolution",
+     "does": "Phase of the distortion pattern (angle); keyframe it to make the glitch move",
+     "typical": "keyframe 0 -> 720+ over the hit"
+    },
+    {
+     "name": "Color Evolution",
+     "does": "Phase of the RGB split (angle); keyframe to make the colour fringes shift",
+     "typical": "keyframe 0 -> 360+ over the hit"
+    },
+    {
+     "name": "POI Scale",
+     "does": "Share of the frame affected around Point of Interest (100 = whole frame, 25 = a quarter)",
+     "typical": "100, or 30-60 to localise"
+    },
+    {
+     "name": "Noise Strength",
+     "does": "Opacity of a separate noise layer added on top of the distortion",
+     "typical": "10-40"
+    },
+    {
+     "name": "Random Seed",
+     "does": "Picks a different random glitch pattern with the same settings",
+     "typical": "any 0-1000; change per shot so repeats don't match"
+    }
+   ],
+   "demo_settings": {
+    "Frame Layout": 1,
+    "Master Amplitude": 100,
+    "Color Distortion": 80,
+    "Geometry Distortion X": 70,
+    "Distortion Complexity": 60,
+    "Distortion Rate": 60,
+    "Noise Strength": 25
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Digital Glitch (Premiere, Immersive Video bin)",
+   "pairs_with": [
+    "VR Chromatic Aberrations",
+    "VR Rotate Sphere",
+    "Venetian Blinds",
+    "Wave Warp",
+    "Noise"
+   ],
+   "scripting": "Designed for 2:1 equirectangular 360 comps; on a flat 1920x1080 comp leave Auto VR Properties 0 and Frame Layout 1 (Monoscopic). Auto VR Properties = 1 reads layout/FOV from the comp's VR settings instead of the sliders. The glitch pattern is STATIC unless Distortion Evolution / Color Evolution / Noise Evolution (unbounded angle values) are keyframed, so a burst needs both an amplitude envelope and evolving phase (see recipe); a still Master Amplitude ramp alone just fades a frozen glitch in and out. Point of Interest ([x, y] px, default comp centre) is where the effect spreads from; POI Scale 100 = whole frame, lower values confine it around the POI; POI Aspect -100 = wider/shorter area, +100 = narrower/taller (per the Mettle SkyBox manual). Distortion Rate is coverage, not speed. Frame Layout labels come from the Immersive Video UI, not from the harvest. Animate Master Amplitude for bursts rather than toggling the effect. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Master Amplitude": [
+     [
+      0,
+      0
+     ],
+     [
+      0.08,
+      100
+     ],
+     [
+      0.35,
+      100
+     ],
+     [
+      0.45,
+      0
+     ]
+    ],
+    "Distortion Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      0.45,
+      1080
+     ]
+    ],
+    "Color Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      0.45,
+      540
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/118.png",
+    "note": "GPU render: heavy data-corruption glitch over the whole frame: displaced blocks, RGB splitting and noise.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Fractal Noise",
+   "match": "Mettle SkyBox Fractal Noise",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Generates cloudy fractal noise mapped onto a sphere, so it tiles seamlessly across the 360 seam and the poles, and blends it over the layer. On flat footage it gives a smoky, cloudy texture overlay.",
+   "look": [
+    "fractal noise",
+    "smoke",
+    "clouds",
+    "fog texture",
+    "organic grain",
+    "seamless"
+   ],
+   "use_for": [
+    "Drifting fog/smoke overlay on a dark documentary establishing shot",
+    "Animated cloudy background plate behind titles or lower thirds",
+    "Seamless looping texture for 360 sky or atmosphere",
+    "Subtle texture layer (low opacity) to give flat graphics an organic feel"
+   ],
+   "avoid": [
+    "Default Opacity 100 with the default blend mode replaces the footage entirely with grey noise",
+    "High Contrast plus low Complexity looks like cheap 2000s screensaver smoke",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Fractal Type",
+     "does": "Noise style: 1 Basic, 2 Turbulent Sharp, 3 Max, 4 Strings",
+     "typical": "1 for soft smoke, 2 for sharper turbulent texture"
+    },
+    {
+     "name": "Contrast",
+     "does": "Contrast of the noise pattern",
+     "typical": "100-200"
+    },
+    {
+     "name": "Brightness",
+     "does": "Brightness offset of the noise",
+     "typical": "-30 to 20"
+    },
+    {
+     "name": "Complexity",
+     "does": "Number of noise octaves (detail)",
+     "typical": "4-8"
+    },
+    {
+     "name": "Scale",
+     "does": "Size of the noise features",
+     "typical": "8-30"
+    },
+    {
+     "name": "Evolution",
+     "does": "Animates the noise shape over time",
+     "typical": "keyframe 0 -> 360-720 over 10 s"
+    },
+    {
+     "name": "Opacity",
+     "does": "Mix of the noise over the source",
+     "typical": "20-60 for overlays, 100 for a full background"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "How the noise composites over the layer (popup, 1-22; default 2 = Normal)",
+     "typical": "2 Normal with Opacity 20-60; 6 Screen or 7 Overlay over footage"
+    }
+   ],
+   "demo_settings": {
+    "Frame Layout": 1,
+    "Contrast": 150,
+    "Complexity": 6,
+    "Scale": 20,
+    "Opacity": 50
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    },
+    "Fractal Type": {
+     "1": "Basic",
+     "2": "Turbulent Sharp",
+     "3": "Max",
+     "4": "Strings"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "(separator)",
+     "4": "Add",
+     "5": "Multiply",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "(separator)",
+     "11": "Color Dodge",
+     "12": "Color Burn",
+     "13": "(separator)",
+     "14": "Darken",
+     "15": "Lighten",
+     "16": "Difference",
+     "17": "Exclusion",
+     "18": "(separator)",
+     "19": "Hue",
+     "20": "Saturation",
+     "21": "Color",
+     "22": "Luminosity"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Fractal Noise (Premiere, Immersive Video bin)",
+   "pairs_with": [
+    "Fractal Noise",
+    "CC Toner",
+    "Gaussian Blur",
+    "VR Glow"
+   ],
+   "scripting": "For flat comps prefer the regular 'Fractal Noise' effect (more controls); use this one when you need seamless horizontal wrap or 360 output. Leave Auto VR Properties 0 and Frame Layout 1 on a flat comp. Blending Mode is a 22-entry popup (1 None, 2 Normal (default), 4 Add, 5 Multiply, 6 Screen, 7 Overlay ...; separators at 3, 10, 13, 18) and Fractal Type is 1 Basic, 2 Turbulent Sharp, 3 Max, 4 Strings, both read from After Effects 26.0. Evolution, Tilt/Pan/Roll and Sub Tilt/Pan/Roll are unbounded angle-style values for animation; Random Seed changes the pattern. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      540
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/119.png",
+    "note": "GPU render: a smoky fractal cloud texture blended over the picture.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Glow",
+   "match": "Mettle SkyBox Glow",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Adds a soft glow to the bright areas of the image (above a luma threshold), computed on the sphere so the glow wraps across the 360 seam. Optional tint colour.",
+   "look": [
+    "glow",
+    "bloom",
+    "dreamy",
+    "highlight bloom",
+    "soft light",
+    "halation"
+   ],
+   "use_for": [
+    "Bloom on stage lights, rally lamps or sunlit windows in documentary b-roll",
+    "Dreamy flashback / memory look on an archival shot",
+    "Glowing neon titles in a 360 or flat motion piece",
+    "Tinted (golden) bloom for a warm patriotic sunrise shot"
+   ],
+   "avoid": [
+    "Low Luma Threshold plus high Glow Brightness blows out faces and white shirts",
+    "On flat footage the frame is treated as a sphere, so glow near the top and bottom edges can smear sideways and wrap across the left/right edges",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Luma Threshold",
+     "does": "Brightness level above which pixels glow (0-1)",
+     "typical": "0.6-0.85"
+    },
+    {
+     "name": "Glow Radius",
+     "does": "Radius of the glow halo in pixels",
+     "typical": "60-200"
+    },
+    {
+     "name": "Glow Brightness",
+     "does": "Intensity of the glow",
+     "typical": "1-3"
+    },
+    {
+     "name": "Glow Saturation",
+     "does": "Colour saturation of the glow",
+     "typical": "1-2"
+    },
+    {
+     "name": "Use Tint Color",
+     "does": "Checkbox: tint the glow with Tint Color",
+     "typical": "0, or 1 for stylised looks"
+    },
+    {
+     "name": "Tint Color",
+     "does": "Glow tint when Use Tint Color is on",
+     "typical": "#FFB060 warm gold"
+    }
+   ],
+   "demo_settings": {
+    "Frame Layout": 1,
+    "Luma Threshold": 0.55,
+    "Glow Radius": 150,
+    "Glow Brightness": 2.5,
+    "Glow Saturation": 1.5
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Glow (Premiere, Immersive Video bin)",
+   "pairs_with": [
+    "Glow",
+    "Deep Glow",
+    "Curves",
+    "VR Fractal Noise"
+   ],
+   "scripting": "Leave Auto VR Properties 0 and Frame Layout 1 on a flat comp; for ordinary flat work the standard 'Glow' effect is usually more predictable. Use Tint Color is a 0/1 checkbox; Tint Color only matters when it is 1. Luma Threshold is 0-1, not 0-100. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Glow Brightness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      3
+     ],
+     [
+      1.2,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/120.png",
+    "note": "GPU render: the glow is there, so strong at the demo's Luma Threshold 0.55 / Glow Brightness 2.5 that the bright background blooms over almost the whole frame (mean luma 165 -> 235), as the card's avoid warns.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Plane to Sphere",
+   "match": "Mettle SkyBox Project 2D",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Projects a flat 2D layer (title, logo, graphic, video) onto an equirectangular 360 frame so it looks undistorted in a VR headset; on a flat comp the layer is bent into a curved, pinched patch surrounded by transparency.",
+   "look": [
+    "equirectangular",
+    "curved projection",
+    "360 title",
+    "sphere mapping",
+    "warped panel"
+   ],
+   "use_for": [
+    "Place lower thirds, titles and logos correctly inside 360 documentary footage",
+    "Insert a flat news clip as a floating screen inside a 360 scene",
+    "Create a curved, bulging panel look for a stylised graphic (flat comp, creative use)"
+   ],
+   "avoid": [
+    "Using it as the final look on a normal 16:9 edit: the result is meant for a 2:1 360 comp and looks broken flat",
+    "Scale (Degrees) near 180 on text: extreme stretching at the edges",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scale (Degrees)",
+     "does": "How many degrees of the sphere the layer covers",
+     "typical": "30-90"
+    },
+    {
+     "name": "Feather",
+     "does": "Soft edge on the projected patch",
+     "typical": "0-20"
+    },
+    {
+     "name": "Projection Pan (Y axis)",
+     "does": "Moves the patch left/right around the sphere (degrees)",
+     "typical": "-180 to 180"
+    },
+    {
+     "name": "Projection Tilt (X axis)",
+     "does": "Moves the patch up/down (degrees)",
+     "typical": "-30 to 30"
+    },
+    {
+     "name": "Projection Roll (Z axis)",
+     "does": "Rotates the patch around the view axis",
+     "typical": "0"
+    },
+    {
+     "name": "Source Roll (Z axis)",
+     "does": "Rotates the source layer before projecting",
+     "typical": "0"
+    },
+    {
+     "name": "Stereo Disparity (Degrees)",
+     "does": "Depth offset for stereoscopic layouts",
+     "typical": "0 for mono"
+    }
+   ],
+   "demo_settings": {
+    "Frame Layout": 1,
+    "Scale (Degrees)": 100,
+    "Feather": 15
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Plane to Sphere (Premiere, Immersive Video bin)",
+   "pairs_with": [
+    "VR Rotate Sphere",
+    "VR Glow",
+    "VR Converter"
+   ],
+   "scripting": "Apply to the 2D layer, which must sit in a 2:1 equirectangular comp (e.g. 3840x1920) for a correct result; the effect output fills the comp frame, so the layer should be comp-sized or precomposed. Set Auto VR Properties 1 when the comp has VR settings, else Frame Layout 1 and FOV 360/180. Rotation values are unbounded degrees. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Projection Pan (Y axis)": [
+     [
+      0,
+      -20
+     ],
+     [
+      6,
+      20
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/121.png",
+    "note": "GPU render: the layer bent into a small curved, pinched patch in the centre with transparency (black) around it.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Rotate Sphere",
+   "match": "Mettle SkyBox Rotate Sphere",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Rotates equirectangular 360 footage around the tilt, pan and roll axes, re-aiming the view or levelling the horizon. On a flat frame pan slides the image sideways with wrap-around, and tilt/roll bend it into curved distortions.",
+   "look": [
+    "360 rotation",
+    "horizon level",
+    "wrap-around pan",
+    "spherical warp"
+   ],
+   "use_for": [
+    "Level a tilted horizon in 360 drone or rally footage",
+    "Set which direction the viewer faces at the start of a 360 shot",
+    "Slow automated pan across a 360 scene for a flat-output explainer",
+    "Seamless horizontal scroll of a panorama background (pan only)"
+   ],
+   "avoid": [
+    "Tilt or Roll on flat 16:9 footage produces ugly bent geometry",
+    "Fast pan animation in a headset causes motion sickness",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Pan (Y axis)",
+     "does": "Rotates around the vertical axis (degrees): left/right re-aim",
+     "typical": "-180 to 180"
+    },
+    {
+     "name": "Tilt (X axis)",
+     "does": "Rotates up/down (degrees)",
+     "typical": "-15 to 15 for levelling"
+    },
+    {
+     "name": "Roll (Z axis)",
+     "does": "Rolls around the view axis (degrees)",
+     "typical": "-10 to 10 for horizon fixes"
+    },
+    {
+     "name": "Invert Rotation",
+     "does": "Checkbox: applies the inverse rotation (stabilisation-style)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Frame Layout": 1,
+    "Pan (Y axis)": 90,
+    "Tilt (X axis)": 15
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "light",
+   "gpu": "required",
+   "equivalent": "VR Rotate Sphere (Premiere, Immersive Video bin)",
+   "pairs_with": [
+    "VR Plane to Sphere",
+    "VR Sphere To Plane",
+    "VR Converter"
+   ],
+   "scripting": "Angles are in degrees and unbounded (no harvested min/max). Invert Rotation is 0/1. For flat comps keep Auto VR Properties 0 and Frame Layout 1. Pan 360 = one full wrap, so a looping pan is [[0,0],[T,360]] with linear keyframes. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Pan (Y axis)": [
+     [
+      0,
+      0
+     ],
+     [
+      8,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/122.png",
+    "note": "GPU render: the picture slides sideways with wrap-around and bends into curved distortions.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Sharpen",
+   "match": "Mettle SkyBox Sharpen",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Sharpens 360 equirectangular footage with seam and pole awareness, so there is no visible edge line at the wrap. On flat footage it behaves like a simple sharpen.",
+   "look": [
+    "sharpen",
+    "crisp",
+    "detail boost",
+    "edge contrast"
+   ],
+   "use_for": [
+    "Recover detail on soft 360 camera stitches",
+    "Crisp up slightly soft archive or phone footage in a 360 piece",
+    "Final detail pass before a VR export"
+   ],
+   "avoid": [
+    "Amounts above about 60 create halos and boost compression noise on news footage",
+    "Sharpening after heavy grain or noise effects exaggerates them",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Sharpen Amount",
+     "does": "Strength of sharpening",
+     "typical": "15-40 for corrective, 60+ only for a demo"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Mono or stereo layout of the 360 frame (popup)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Frame Layout": 1,
+    "Sharpen Amount": 70
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "light",
+   "gpu": "required",
+   "equivalent": "VR Sharpen (Premiere, Immersive Video bin)",
+   "pairs_with": [
+    "VR De-Noise",
+    "Unsharp Mask",
+    "Lumetri Color"
+   ],
+   "scripting": "Default Sharpen Amount is 0, so applying it with no props does nothing visible. For flat edits the standard 'Sharpen' or 'Unsharp Mask' gives more control. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/123.png",
+    "note": "GPU render: crisper edges than the reference (mean edge energy 8.0 -> 13.6), otherwise a plain sharpen.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Sphere To Plane",
+   "match": "Mettle SkyBox Viewer",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Extracts a flat, rectilinear (normal-looking) view from 360 equirectangular footage, like pointing a virtual camera into the sphere. On flat footage it shows a magnified, lens-warped crop of the frame.",
+   "look": [
+    "reframe",
+    "rectilinear view",
+    "virtual camera",
+    "360 extract",
+    "punch-in"
+   ],
+   "use_for": [
+    "Turn 360 rally or event footage into normal 16:9 shots for a news edit",
+    "Animate a virtual camera pan inside 360 footage for a documentary shot",
+    "Pull several angles from one 360 recording"
+   ],
+   "avoid": [
+    "Applying it to flat footage: the reframe is meaningless and softens the image",
+    "Expecting high detail: extracted views from 4K 360 footage are soft compared with native 1080p",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Input Format",
+     "does": "Projection of the incoming 360 frame (cube-map or equirectangular variants; popup 1-3, default 3)",
+     "typical": "default 3 for normal 2:1 equirectangular footage (unverified)"
+    },
+    {
+     "name": "Output Frame Width",
+     "does": "Width in pixels of the extracted flat view (higher = sharper)",
+     "typical": "1920"
+    },
+    {
+     "name": "Output Frame Ratio",
+     "does": "Aspect ratio of the extracted view (popup 1-5, default 5; one option is 'Unchanged')",
+     "typical": "default 5"
+    },
+    {
+     "name": "Projection Tilt (X axis)",
+     "does": "Aims the view up/down (degrees)",
+     "typical": "-30 to 30"
+    },
+    {
+     "name": "Projection Tilt (Y axis)",
+     "does": "Aims the view left/right (pan, degrees) despite its harvested name",
+     "typical": "-180 to 180"
+    },
+    {
+     "name": "Projection Tilt (Z axis)",
+     "does": "Rolls the view (degrees)",
+     "typical": "0"
+    },
+    {
+     "name": "Invert Rotation",
+     "does": "Checkbox: inverts the rotation direction",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Output Frame Width": 1920,
+    "Projection Tilt (Y axis)": 20
+   },
+   "enum_labels": {
+    "Input Format": {
+     "1": "Cube-map",
+     "2": "Sphere-map",
+     "3": "Equirectangular"
+    },
+    "Output Frame Ratio": {
+     "1": "1:1",
+     "2": "4:3",
+     "3": "16:9",
+     "4": "16:10",
+     "5": "Unchanged"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "",
+   "pairs_with": [
+    "VR Rotate Sphere",
+    "VR Converter",
+    "Transform"
+   ],
+   "scripting": "Low confidence. Premiere has no sphere-to-flat extract effect (its VR Projection only re-projects/rotates 360 media), so this is AE-only. The harvested names for the Y and Z rotations both say 'Projection Tilt', so use the exact strings 'Projection Tilt (Y axis)' / 'Projection Tilt (Z axis)'. Input Format chooses the 360 PROJECTION of the source (cube-map vs equirectangular variants), not mono/stereo; 1 Cube-map, 2 Sphere-map, 3 Equirectangular (the default) (read from After Effects 26.0). Output Frame Ratio: 1 1:1, 2 4:3, 3 16:9, 4 16:10, 5 Unchanged (the default, keeps the comp/input ratio) (read from After Effects 26.0). There is no field-of-view slider: user reports say the view follows the comp's active 3D camera, so add a camera layer and change its zoom/focal length to widen or tighten the view (unverified; check a frame). Put the 360 clip in a comp of the desired output size and verify a frame before batch use. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Projection Tilt (Y axis)": [
+     [
+      0,
+      -30
+     ],
+     [
+      6,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/124.png",
+    "note": "GPU render: a strongly magnified crop of the frame with slightly curved lines.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Advanced Spill Suppressor",
+   "match": "ADBE Spill2",
+   "category": "Keying",
+   "status": "needs_input",
+   "summary": "Removes green or blue colour spill (the tinted fringe and cast that a chroma screen throws onto a subject's edges, hair and skin) after keying. Use the Standard method (1) after the key: the Ultra method with Desaturate 100 greyed every hue on ordinary footage and on a green-screen plate alike (the subject too), whatever the Key Color, Tolerance and Spill Range.",
+   "look": [
+    "spill removal",
+    "clean edges",
+    "neutral skin",
+    "desaturated greens"
+   ],
+   "use_for": [
+    "Clean green fringe off an anchor or presenter after Keylight",
+    "Remove blue cast from hair and shoulders in a bluescreen interview",
+    "Neutralise green bounce on a talking-head shot filmed near a green wall"
+   ],
+   "avoid": [
+    "Ultra method with high Tolerance on real-world shots also kills genuine greens (flags, plants, uniforms)",
+    "Using it instead of a proper key: it only fixes colour, it does not create transparency",
+    "Ultra method with Desaturate 100: the whole frame turns black and white whatever the Key Color, Tolerance and Spill Range, on a green-screen plate too (measured live wave 3, the orange subject included) (a beige key at 80 / 90 and a blue key at 50 / 60 gave pixel-identical greyscale test renders)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Method",
+     "does": "1 Standard (auto-detects key colour) or 2 Ultra (uses the Ultra Settings)",
+     "typical": "1 after Keylight; 2 for difficult spill"
+    },
+    {
+     "name": "Suppression",
+     "does": "Overall amount of spill removed",
+     "typical": "70-100"
+    },
+    {
+     "name": "Key Color",
+     "does": "Screen colour to suppress (Ultra only)",
+     "typical": "#00B140 green screen, #0047BB blue screen"
+    },
+    {
+     "name": "Tolerance",
+     "does": "How far from the key colour still counts as spill (Ultra)",
+     "typical": "40-60"
+    },
+    {
+     "name": "Spill Range",
+     "does": "Amount of spill colour range affected (Ultra)",
+     "typical": "40-70"
+    },
+    {
+     "name": "Desaturate",
+     "does": "How much spill pixels are desaturated vs colour-corrected (Ultra)",
+     "typical": "30-60"
+    },
+    {
+     "name": "Spill Color Correction",
+     "does": "How much the spill hue is shifted back to neutral (Ultra)",
+     "typical": "40-60"
+    },
+    {
+     "name": "Luma Correction",
+     "does": "Restores brightness lost when spill is removed (Ultra)",
+     "typical": "0-30"
+    }
+   ],
+   "demo_settings": {
+    "Method": 1,
+    "Suppression": 100
+   },
+   "enum_labels": {
+    "Method": {
+     "1": "Standard",
+     "2": "Ultra"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Ultra Key (Premiere: Spill Suppression group)",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Matte Choker",
+    "Simple Choker"
+   ],
+   "scripting": "Ultra Settings (Key Color, Tolerance, Desaturate, Spill Range, Spill Color Correction, Luma Correction) only take effect when Method = 2. Place it after the keyer in the effect stack. Key Color is '#RRGGBB'. Verified 2026-10-04: two Ultra demos with Desaturate 100 on test plate A (beige key #B4945C at Tolerance 80 / Spill Range 90, then blue key #0047BB at 50 / 60) both rendered the frame fully greyscale (R = G = B everywhere, stripes and faces included) and pixel-identical to each other, with no property warnings, so on footage without a screen the key colour and ranges did not limit the desaturation; a selective result at lower Desaturate is unverified. Live wave 3 on a synthetic green-screen plate: the Ultra demo (Desaturate 100, Key Color blue or the plate's #00B140) again greyed the whole frame, subject included, so the demo is now the Standard method (Suppression 100), the setting the green-screen recipes use after Keylight (not rendered alone yet). Status stays needs_input: it acts on spill after a key.",
+   "recipe": {},
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/set2/S_spill_green_1.04.png",
+    "note": "On the green-screen plate the Ultra demo turned the whole frame grey, the orange-purple subject included, with the blue and with the plate's green Key Color: a global desaturate, not spill removal; demo changed to Method 1 (Standard), not rendered yet.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the footage has no green or blue screen, so the spill removal it exists for was never tested; the card text was rewritten from this render"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/ae/125.png",
+      "note": "Still the whole frame in black and white (R = G = B in every region: stripes, faces, foreground blocks, palm), pixel-identical to the old render even though the key moved from beige at Tolerance 80 / Spill Range 90 to blue #0047BB at 50 / 60, so Key Color and ranges do not limit Desaturate 100 on this footage; status is now needs_input (needs green/blue-screen footage with spill).",
+      "recheck": "after re-render"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "the set2 render contradicted the card (the Ultra demo greys the subject on a green-screen plate too); summary, avoid and demo_settings rewritten"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Simple Wire Removal",
+   "match": "CC Simple Wire Removal",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Paints out a thin straight line between two points (a wire, cable, boom pole, film scratch) by filling it with displaced neighbouring pixels, with pixels from another frame, or by making the band transparent so a clean plate on a lower layer shows through.",
+   "look": [
+    "clean plate",
+    "wire removal",
+    "scratch repair",
+    "retouch"
+   ],
+   "use_for": [
+    "Remove a visible mic or power cable crossing a static interview shot",
+    "Erase a vertical scratch on restored archival film in a history documentary",
+    "Remove a power line from a locked-off drone or skyline shot",
+    "Hide a rig or support wire in a product or title shot"
+   ],
+   "avoid": [
+    "Curved or thick objects: it only handles a straight band, wider bands smear visibly",
+    "Moving wires without keyframing or tracking Point A / Point B"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Point A",
+     "does": "One end of the line to remove ([x, y] px)",
+     "typical": "at the wire's first end"
+    },
+    {
+     "name": "Point B",
+     "does": "Other end of the line ([x, y] px)",
+     "typical": "at the wire's other end"
+    },
+    {
+     "name": "Removal Style",
+     "does": "1 Fade (band goes transparent, reveals the layer below), 2 Frame Offset (same position from another frame), 3 Displace (pulls surrounding pixels in), 4 Displace Horizontal (pulls only sideways)",
+     "typical": "3 for static textures; 2 when the wire moves over a static, locked-off background; 1 with a clean-plate layer underneath"
+    },
+    {
+     "name": "Thickness",
+     "does": "Width of the removal band",
+     "typical": "2-10"
+    },
+    {
+     "name": "Slope",
+     "does": "Edge softness of the band: low = gradual transition, high = hard edge",
+     "typical": "0.3-0.7"
+    },
+    {
+     "name": "Mirror Blend",
+     "does": "Pixel-replacement mix used by the two Displace styles",
+     "typical": "0.2-0.5 (default 0.25 suits most shots)"
+    },
+    {
+     "name": "Frame Offset",
+     "does": "How many frames ahead (+) or behind (-) to pull pixels from, Frame Offset style only",
+     "typical": "-5 to 5"
+    }
+   ],
+   "demo_settings": {
+    "Point A": [
+     700,
+     1000
+    ],
+    "Point B": [
+     1250,
+     80
+    ],
+    "Removal Style": 3,
+    "Thickness": 60,
+    "Slope": 0.5
+   },
+   "enum_labels": {
+    "Removal Style": {
+     "1": "Fade",
+     "2": "Frame Offset",
+     "3": "Displace",
+     "4": "Displace Horizontal"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Paint (Clone Stamp tool)",
+    "Content-Aware Fill panel",
+    "Tracker (Track Motion)",
+    "Add Grain"
+   ],
+   "scripting": "Point A / Point B are layer-space pixels; for moving shots, keyframe them or link them with expressions to tracker points. Removal Style labels are from the CC documentation (default 3 = Displace). Fade only looks right with a clean plate on a layer below; on a single layer it punches a transparent line. Frame Offset only matters for the Frame Offset style and fails if the camera moves, because the background at that position changes between frames. There is no Premiere equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/126.png",
+    "note": "At Thickness 60 the diagonal removal band (bottom-left flowers to top-right stripes) is now about twice as wide and plainly visible at gallery size: the stripes break into an offset seam and the centre detail and flowers smear along a clean diagonal edge, where the old Thickness 30 seam was barely noticeable.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Difference Key",
+   "match": "ADBE Color Difference Key",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Older two-matte keyer: Partial B makes the key colour transparent, Partial A makes transparent the areas that lack a second, different colour, and the two are combined into the final alpha matte. Each matte has its own levels, giving fine control over semi-transparent areas such as smoke, glass or hair on blue or green screens.",
+   "look": [
+    "chroma key",
+    "transparency",
+    "bluescreen key",
+    "matte"
+   ],
+   "use_for": [
+    "Key smoke, glass or motion-blurred edges on well-lit blue screen footage",
+    "Second-opinion key when Keylight struggles with translucent areas",
+    "Pulling a matte from an evenly lit coloured backdrop for an explainer insert"
+   ],
+   "avoid": [
+    "Unevenly lit or compressed (H.264) greenscreen: noisy, chattering edges",
+    "Using it as the first choice: Keylight (1.2) is usually faster to a clean result",
+    "Low-saturation (near-white or grey) key colours: it keys almost nothing (a bluish-white #C8CDE2 key left the matching wall fully opaque in a test render)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Key Color",
+     "does": "Screen colour to remove",
+     "typical": "#0047BB blue screen, #00B140 green screen"
+    },
+    {
+     "name": "View",
+     "does": "Which matte stage is shown (popup, 1-10; default 8 = final output)",
+     "typical": "8"
+    },
+    {
+     "name": "Color Matching Accuracy",
+     "does": "1 Faster or 2 More Accurate",
+     "typical": "2"
+    },
+    {
+     "name": "Matte In Black",
+     "does": "Raise to make more of the background fully transparent",
+     "typical": "0-60"
+    },
+    {
+     "name": "Matte In White",
+     "does": "Lower to make more of the foreground fully opaque",
+     "typical": "180-255"
+    },
+    {
+     "name": "Matte Gamma",
+     "does": "Bends the matte's semi-transparent midtones",
+     "typical": "0.8-1.3"
+    },
+    {
+     "name": "Partial A In Black",
+     "does": "Black point of partial matte A",
+     "typical": "0-40"
+    },
+    {
+     "name": "Partial B In White",
+     "does": "White point of partial matte B",
+     "typical": "200-255"
+    }
+   ],
+   "demo_settings": {
+    "Key Color": "#C8CDE2",
+    "Color Matching Accuracy": 2,
+    "Matte In Black": 100,
+    "Matte In White": 200
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Source",
+     "2": "Matte Partial A Uncorrected",
+     "3": "Matte Partial A Corrected",
+     "4": "Matte Partial B Uncorrected",
+     "5": "Matte Partial B Corrected",
+     "6": "Matte Uncorrected",
+     "7": "Matte Corrected",
+     "8": "Final Output",
+     "9": "(separator)",
+     "10": "[A, B, Matte] Corrected, Final"
+    },
+    "Color Matching Accuracy": {
+     "1": "Faster",
+     "2": "More Accurate"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Ultra Key (Premiere, closest)",
+   "pairs_with": [
+    "Advanced Spill Suppressor",
+    "Key Cleaner",
+    "Matte Choker",
+    "Simple Choker"
+   ],
+   "scripting": "Keyed areas become transparent, so a demo render only shows the result over a contrasting layer or the comp background. Key Color is normally picked with an eyedropper in the UI; set it explicitly as '#RRGGBB' from a sampled screen pixel. The View popup has 10 entries (source, uncorrected/corrected partial A, B and matte, final output, and '[A, B, Matte] Corrected, Final' comparison views) (read from After Effects 26.0): 1 Source, 2 Matte Partial A Uncorrected, 3 Matte Partial A Corrected, 4 Matte Partial B Uncorrected, 5 Matte Partial B Corrected, 6 Matte Uncorrected, 7 Matte Corrected, 8 Final Output (default), 9 a separator, 10 [A, B, Matte] Corrected, Final; render with 8. The 'Preview' header is a UI thumbnail and is not settable. Verified 2026-10-04 on test plate A (gallery frame = clip frame 42, a cool flash frame with a bluish-white wall; 85 of the clip's 99 frames have a tan wall, about #B0935E): a beige key #B4945C (Matte In Black 60 / In White 190) only made warm tones slightly transparent, and the wall colour #C8CDE2 (Matte In Black 100 / In White 200) left the wall fully opaque and only dimmed the navy areas and palm by about 10 levels, so this keyer needs a saturated key colour. The current demo is still weak; the likely fix, not yet rendered, is a saturated blue key such as #1A4FBF, which keyed the navy areas and a blue block in the Keylight and Linear Color Key demos on the same clip.",
+   "recipe": {},
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/ae/127.png",
+    "note": "The near-white wall key #C8CDE2 keys nothing of the wall; only the navy areas and palm leaves dim by about 10 levels (slightly transparent over black) while faces, foreground blocks and stripes are now untouched, so the frame reads as almost unchanged, a different but no stronger result than the old beige key that faintly darkened the warm tones.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Range",
+   "match": "ADBE Color Range",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Makes a range of colours transparent, defined by min/max limits on each channel in Lab, YUV or RGB space. Useful for unevenly lit or multi-coloured backdrops that a single-colour key cannot catch.",
+   "look": [
+    "colour key",
+    "transparency",
+    "range key",
+    "matte"
+   ],
+   "use_for": [
+    "Key out an unevenly lit or multi-shade backdrop (e.g. a blue wall with shadows)",
+    "Drop out a coloured sky behind a building to place a new sky or graphic",
+    "Isolate or remove a brand colour from a graphic plate"
+   ],
+   "avoid": [
+    "Leaving min = max = 127 (the defaults): almost nothing is keyed",
+    "Wide ranges on skin-tone footage: faces get holes"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color Space",
+     "does": "Space the ranges are measured in (1 Lab, 2 YUV, 3 RGB)",
+     "typical": "3 for scripting (easiest to reason about)"
+    },
+    {
+     "name": "Fuzziness",
+     "does": "Softens the boundary of the keyed range",
+     "typical": "20-60"
+    },
+    {
+     "name": "Min (L, Y, R)",
+     "does": "Lower limit of channel 1 (L, Y or R)",
+     "typical": "from sampled pixels"
+    },
+    {
+     "name": "Max (L, Y, R)",
+     "does": "Upper limit of channel 1",
+     "typical": "from sampled pixels"
+    },
+    {
+     "name": "Min (a, U, G)",
+     "does": "Lower limit of channel 2 (a, U or G)",
+     "typical": "from sampled pixels"
+    },
+    {
+     "name": "Max (a, U, G)",
+     "does": "Upper limit of channel 2",
+     "typical": "from sampled pixels"
+    },
+    {
+     "name": "Min (b, V, B)",
+     "does": "Lower limit of channel 3 (b, V or B)",
+     "typical": "e.g. 140 for a blue sky in RGB (with Max R about 130)"
+    },
+    {
+     "name": "Max (b, V, B)",
+     "does": "Upper limit of channel 3",
+     "typical": "255 for blues"
+    }
+   ],
+   "demo_settings": {
+    "Color Space": 3,
+    "Fuzziness": 25,
+    "Min (L, Y, R)": 185,
+    "Max (L, Y, R)": 235,
+    "Min (a, U, G)": 185,
+    "Max (a, U, G)": 240,
+    "Min (b, V, B)": 205,
+    "Max (b, V, B)": 255
+   },
+   "enum_labels": {
+    "Color Space": {
+     "1": "Lab",
+     "2": "YUV",
+     "3": "RGB"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Color Key (Premiere, closest; or Ultra Key)",
+   "pairs_with": [
+    "Key Cleaner",
+    "Advanced Spill Suppressor",
+    "Simple Choker",
+    "Matte Choker"
+   ],
+   "scripting": "The UI eyedroppers (Key Color / Add / Subtract) are not scriptable; set the six Min/Max channel limits (0-255) directly, ideally from pixel values sampled from the footage in the chosen Color Space. Keyed pixels become transparent, so check over a contrasting background. The 'Preview' header is a UI thumbnail, not settable. Verified 2026-10-04: the earlier demo box (RGB 165-200 / 135-170 / 75-115) matched almost no pixels of the gallery frame and only cut thin black outlines into faces, flowers and block edges. The demo box RGB 185-235 / 185-240 / 205-255, sampled from the bluish-white wall, keys about a third of the frame to black (the wall, the white stripes, block tops and bright highlights, with a few specks on skin) while faces, dark clothing, red stripes, block fronts and flowers stay; values are footage-specific, not a general preset (this clip flickers: 85 of its 99 frames have a tan wall, about #B0935E, that this box misses).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/128.png",
+    "note": "Clear range key now: the bluish-white wall, the white stripes, block tops and bright highlights drop to black (about a third of the frame) while faces, dark clothing, red stripes, block fronts and flowers stay, where the old render only cut thin black squiggles into about 4% of the frame.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Difference Matte",
+   "match": "ADBE Difference Matte2",
+   "category": "Keying",
+   "status": "needs_input",
+   "summary": "Makes pixels transparent where the layer matches a reference 'clean plate' layer (the same shot without the subject), leaving only what changed, such as a person who walked in.",
+   "look": [
+    "clean plate key",
+    "difference key",
+    "matte",
+    "subject isolation"
+   ],
+   "use_for": [
+    "Isolate a presenter from a locked-off shot when a clean plate of the empty set exists",
+    "Pull a rough matte of moving objects from static CCTV-style footage",
+    "Remove a static background behind a person for a cut-out explainer graphic"
+   ],
+   "avoid": [
+    "Any camera movement, light change or compression noise between plate and shot breaks the matte",
+    "Subjects wearing colours close to the background get holes"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Difference Layer",
+     "does": "The clean-plate layer to compare against (layer reference)",
+     "typical": "a frame or clip of the empty background"
+    },
+    {
+     "name": "Matching Tolerance",
+     "does": "How different a pixel must be to stay opaque",
+     "typical": "10-30"
+    },
+    {
+     "name": "Matching Softness",
+     "does": "Softens the transition at the tolerance edge",
+     "typical": "5-20"
+    },
+    {
+     "name": "Blur Before Difference",
+     "does": "Blurs both images before comparing, reducing noise chatter",
+     "typical": "2-10"
+    },
+    {
+     "name": "View",
+     "does": "1 Final Output, 2 Source Only, 3 Matte Only",
+     "typical": "1; 3 to inspect the matte"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "1 Center or 2 Stretch to Fit the difference layer",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "View": {
+     "1": "Final Output",
+     "2": "Source Only",
+     "3": "Matte Only"
+    },
+    "If Layer Sizes Differ": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Simple Choker",
+    "Matte Choker",
+    "Key Cleaner",
+    "Roto Brush"
+   ],
+   "scripting": "Difference Layer is a layer-reference property (type 'layer'), which a spec cannot set: the script must set it to the clean-plate layer's index (e.g. prop.setValue(cleanPlateLayer.index)) and usually turn that layer's visibility off. The harvested default is 1; whether that is the layer itself or 'None' is not verified, so always set it explicitly. Shot and clean plate must be locked off and identically framed.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame exists: the card is needs_input (Difference Layer is a layer reference a spec cannot set), so the gallery skipped it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

@@ -1,0 +1,1116 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Radial Fast Blur",
+   "match": "CC Radial Fast Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Fast zoom-style radial blur that streaks the image outward from a centre point, like a crash zoom or light rays bursting from the middle.",
+   "look": [
+    "zoom blur",
+    "crash zoom",
+    "speed",
+    "light burst",
+    "radial streaks"
+   ],
+   "use_for": [
+    "zoom-blur transition between two clips (keyframe Amount up then cut)",
+    "impact punch-in on a reel hook or headline reveal",
+    "trailer title slam with streaking glow",
+    "dreamy flashback burst from a face or object"
+   ],
+   "avoid": [
+    "Amount above ~70 for more than a few frames turns the frame to mush",
+    "Brightest/Darkest zoom modes clip faces into blown or crushed streaks on press footage"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Center",
+     "does": "point the streaks radiate from (comp pixels)",
+     "typical": "[960, 540] or the subject's face/eyes"
+    },
+    {
+     "name": "Amount",
+     "does": "length of the radial streaks (0-100)",
+     "typical": "20-40 subtle, 60-90 for transition peaks"
+    },
+    {
+     "name": "Zoom",
+     "does": "blend mode of the streaks: 1 Standard, 2 Brightest (light-ray glow), 3 Darkest",
+     "typical": "1 for transitions, 2 for light-burst titles"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     540
+    ],
+    "Amount": 70,
+    "Zoom": 1
+   },
+   "enum_labels": {
+    "Zoom": {
+     "1": "Standard",
+     "2": "Brightest",
+     "3": "Darkest"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform (scale punch-in)",
+    "Glow",
+    "Exposure",
+    "CC Light Rays"
+   ],
+   "scripting": "Center is a 2D point in comp pixels. Zoom is a 1-based popup; labels Standard|Brightest|Darkest read from the installed plug-in (RadialFastBlur.aex). Harvested default Amount is 50, so applying it with no props already blurs heavily. Premiere 2026 has no static radial/zoom blur filter: for a crash-zoom feel use Premiere's 'Grow' or 'Shrink' (scale animation with built-in Motion Blur) or Transform scale keyframes with shutter angle.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      80
+     ],
+     [
+      0.35,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/003.png",
+    "note": "Strong zoom blur streaks radiate outward from the frame centre, faces and stripes smeared toward the edges like a crash zoom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Vector Blur",
+   "match": "CC Vector Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Smears pixels along the brightness contours of the layer (or of a chosen vector-map layer), giving a flowing, painterly or liquid streak look rather than a uniform blur.",
+   "look": [
+    "painterly",
+    "liquid smear",
+    "oil paint",
+    "flow",
+    "dreamy",
+    "abstract"
+   ],
+   "use_for": [
+    "painterly or liquid transition into a flashback / archival section",
+    "abstract textured background plate for explainer titles",
+    "dream or memory sequence stylisation in documentaries",
+    "organic smear driven by a Fractal Noise map for trailer texture"
+   ],
+   "avoid": [
+    "faces turn into smudged wax at high Amount, avoid on talking heads",
+    "negative or large Amount values on fine text make it unreadable"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Type",
+     "does": "how the vector field is read: 1 Natural, 2 Constant Length, 3 Perpendicular, 4 Direction Center, 5 Direction Fading",
+     "typical": "1 (Natural) or 3 (Perpendicular) for swirl-like flow"
+    },
+    {
+     "name": "Amount",
+     "does": "smear length in pixels; sign flips the direction",
+     "typical": "10-30 subtle, 50-150 strong"
+    },
+    {
+     "name": "Angle Offset",
+     "does": "rotates the smear direction (degrees)",
+     "typical": "0-90"
+    },
+    {
+     "name": "Ridge Smoothness",
+     "does": "smooths sharp ridges in the vector field",
+     "typical": "5-30"
+    },
+    {
+     "name": "Vector Map",
+     "does": "layer whose values define the flow (none = the layer itself)",
+     "typical": "a precomposed Fractal Noise layer"
+    },
+    {
+     "name": "Property",
+     "does": "which channel of the vector map drives the field: 1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance, 6 Lightness, 7 Hue, 8 Saturation",
+     "typical": "6 Lightness (default) or 5 Luminance"
+    },
+    {
+     "name": "Map Softness",
+     "does": "pre-blurs the vector map so the flow is smoother",
+     "typical": "15-60"
+    }
+   ],
+   "demo_settings": {
+    "Type": 1,
+    "Amount": 50,
+    "Ridge Smoothness": 10,
+    "Map Softness": 15
+   },
+   "enum_labels": {
+    "Type": {
+     "1": "Natural",
+     "2": "Constant Length",
+     "3": "Perpendicular",
+     "4": "Direction Center",
+     "5": "Direction Fading"
+    },
+    "Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness",
+     "7": "Hue",
+     "8": "Saturation"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise (as vector map)",
+    "Turbulent Displace",
+    "Gaussian Blur",
+    "Glow"
+   ],
+   "scripting": "Vector Map is a layer reference and cannot be set from a spec; with it unset the effect uses the layer's own content. Type and Property are 1-based popups; both label lists were read from the installed plug-in (CycoreFXHD/VectorBlur.aex), so they are exact. Harvested default Amount is 0 (no-op): always set Amount. Premiere has no CC effects and no vector/flow blur.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      120
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/004.png",
+    "note": "Pixels smear along the image's own contours into a liquid, painterly look with bright halo outlines tracing the figures, stripes and foreground blocks.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Camera Lens Blur",
+   "match": "ADBE Camera Lens Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Realistic optical defocus that imitates a real lens, with shaped bokeh (iris blades) and blooming highlights; optionally driven by a depth/blur-map layer.",
+   "look": [
+    "defocus",
+    "bokeh",
+    "shallow depth of field",
+    "cinematic",
+    "rack focus",
+    "soft glow highlights"
+   ],
+   "use_for": [
+    "rack-focus reveal: blur the plate then pull focus to the subject",
+    "defocused background behind lower thirds, quotes or title cards",
+    "cinematic trailer bokeh with blooming city lights",
+    "fake shallow depth of field with a gradient or depth map as Blur Map"
+   ],
+   "avoid": [
+    "very heavy at large Blur Radius on 1080p+ comps; preview at lower res",
+    "uniform blur with no Blur Map looks like a smeared photo, not depth of field",
+    "high Gain blows faces and flags into white blobs"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blur Radius",
+     "does": "strength of the defocus in pixels",
+     "typical": "8-20 background soften, 30-60 full defocus"
+    },
+    {
+     "name": "Shape",
+     "does": "iris blade count / bokeh shape: 1 Triangle ... 8 Decagon (default 4 Hexagon)",
+     "typical": "4-6"
+    },
+    {
+     "name": "Roundness",
+     "does": "rounds the iris shape towards a circle",
+     "typical": "30-100 for smooth bokeh"
+    },
+    {
+     "name": "Layer",
+     "does": "Blur Map layer (depth/gradient) that controls where it blurs (layer reference, not settable from a spec)",
+     "typical": "a Gradient Ramp or depth pass layer"
+    },
+    {
+     "name": "Channel",
+     "does": "which channel of the Blur Map is read: 1 Luminance, 2 Red, 3 Green, 4 Blue, 5 Alpha",
+     "typical": "1"
+    },
+    {
+     "name": "Blur Focal Distance",
+     "does": "map value (raw 0-1) that stays in focus",
+     "typical": "0-0.3 for near focus"
+    },
+    {
+     "name": "Gain",
+     "does": "brightens highlights into bokeh balls",
+     "typical": "10-40"
+    },
+    {
+     "name": "Threshold",
+     "does": "brightness (raw 0-1) above which highlights bloom",
+     "typical": "0.6-0.85"
+    },
+    {
+     "name": "Saturation",
+     "does": "keeps colour in the boosted highlights",
+     "typical": "20-60"
+    }
+   ],
+   "demo_settings": {
+    "Blur Radius": 30,
+    "Shape": 4,
+    "Roundness": 50,
+    "Gain": 25,
+    "Threshold": 0.7
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Triangle",
+     "2": "Square",
+     "3": "Pentagon",
+     "4": "Hexagon",
+     "5": "Heptagon",
+     "6": "Octagon",
+     "7": "Nonagon",
+     "8": "Decagon"
+    },
+    "Channel": {
+     "1": "Luminance",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    },
+    "Placement": {
+     "1": "Center Map",
+     "2": "Stretch Map to Fit"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Bokeh Blur",
+   "pairs_with": [
+    "Gradient Ramp (as Blur Map)",
+    "Glow",
+    "Exposure",
+    "Optics Compensation"
+   ],
+   "scripting": "The Blur Map 'Layer' is a layer reference (0 = none) and cannot be set from a spec; without it the blur is uniform. Threshold and Blur Focal Distance are raw 0-1 values (the UI shows 0-255). Shape, Channel and Placement are 1-based popups; all three label lists were read from the installed plug-in (ShapeBlur.aex). Invert Blur Map, Edge Behavior (Repeat Edge Pixels) and Use Linear Working Space are 0/1 checkboxes. Premiere 2026 equivalent is the new 'Bokeh Blur' (Aperture Edges/Roundness, Gain; different props); for tilt-shift / selective focus in Premiere use 'Focus Blur'.",
+   "recipe": {
+    "Blur Radius": [
+     [
+      0,
+      40
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/005.png",
+    "note": "Whole frame is evenly defocused like an out-of-focus lens; this plate has few point highlights so bokeh shapes are not distinct.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Camera-Shake Deblur",
+   "match": "ADBE CameraShakeDeblur",
+   "category": "Blur & Sharpen",
+   "status": "needs_input",
+   "summary": "Repairs motion blur caused by handheld camera shake by rebuilding blurred frames from sharper neighbouring frames; it does nothing visible on steady or still footage.",
+   "look": [
+    "deblur",
+    "repair",
+    "sharper",
+    "cleanup"
+   ],
+   "use_for": [
+    "rescue shaky handheld rally / ground-report footage after Warp Stabilizer",
+    "clean up phone-shot news clips with shake blur",
+    "sharpen smeared frames in archival handheld material before a freeze-frame"
+   ],
+   "avoid": [
+    "no effect on tripod or still footage, so a demo frame may look unchanged",
+    "cannot fix out-of-focus or subject-motion blur, only shake blur",
+    "high Strength on fast pans produces ghosting / doubled edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blur Duration",
+     "does": "popup: window of neighbouring frames searched for sharp detail, 1 = 5 Frames, 2 = 7 Frames, 3 = 9 Frames",
+     "typical": "1 (5 Frames); 2-3 when the shake blur lasts over several frames"
+    },
+    {
+     "name": "Deblur Method",
+     "does": "popup: 1 Standard, 2 High Quality (slower)",
+     "typical": "1 for previews, 2 for the final render"
+    },
+    {
+     "name": "Strength",
+     "does": "how strongly blurred frames are replaced (0-200)",
+     "typical": "100-150"
+    },
+    {
+     "name": "Shake Sensitivity",
+     "does": "how much shake counts as blur to fix (0-100)",
+     "typical": "50-80"
+    }
+   ],
+   "demo_settings": {
+    "Strength": 200,
+    "Shake Sensitivity": 100
+   },
+   "enum_labels": {
+    "Blur Duration": {
+     "1": "5 Frames",
+     "2": "7 Frames",
+     "3": "9 Frames"
+    },
+    "Deblur Method": {
+     "1": "Standard",
+     "2": "High Quality (slower)"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Warp Stabilizer",
+    "Unsharp Mask",
+    "Sharpen"
+   ],
+   "scripting": "Analyses neighbouring frames, so it needs real video (not a still) with handheld shake; on steady footage the result looks the same as the source even at max settings (measured on the locked-off test_a.mp4 at Strength 200 / Shake Sensitivity 100: only faint block-shaped patch swaps from neighbouring frames, mean 4/255, and a slightly softer frame, no visible deblur), so a render test on a tripod shot proves nothing. Popup labels were read from the installed plug-in (Deblur.aex), whose own description says to apply it after stabilizing: put it below Warp Stabilizer in the stack. Premiere has no deblur effect. Exact semantics of Strength / Shake Sensitivity are inferred, not documented. Measured on a synthetic handheld plate (random per-frame shake, directional blur on about a third of the frames; live wave 3) at the demo's maximum settings: block-shaped patches from sharp neighbours replace parts of the blurred frames, raising their sharpness about 4 % (4.47 -> 4.64; sharp frames about 9.5), so most of the blur stays.",
+   "recipe": {},
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/set2/S_deblur_1.04.png",
+    "note": "On a blurred frame of the shaky plate some patches (grid lines in the left bars) come back sharp, but most of the frame stays smeared (sharpness +4 % at Strength 200 / Shake Sensitivity 100, the maximum): the effect acts, too faintly to judge; the synthetic blur direction need not match the shake the plug-in estimates.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/ae/006.png",
+      "note": "No visible deblur: 006.png looks the same as the untouched render (no-op frames such as 051/133/262, all source frame 43 of test_a.mp4). It is not pixel-identical (mean diff 4.3/255, max 68, block-shaped patch swaps, Laplacian sharpness 65 vs 70, i.e. slightly softer), but nothing a viewer would read as the effect. Cause: test_a.mp4 (and test_b.mp4) is a locked-off tripod clip with zero global frame-to-frame shift, only flash-lit exposure jumps, so there is no shake blur to repair. Demo settings are in range (Strength 200 of 0-200, Shake Sensitivity 100 of 0-100) and already maxed; no setting can show it on this source. Status needs_input: it needs a handheld clip with shake blur as the demo source.",
+      "second_opinion": "corrected: verdict and needs_input status stand, but the note's facts were wrong: the demo source is a locked-off video clip, not a still plate, and 006.png is not pixel-identical to the untouched render (mean 4.3/255 block-pattern patch swaps, slightly softer, no visible deblur); also tightened the scripting claim to match the measurement."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Channel Blur",
+   "match": "ADBE Channel Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Blurs the red, green, blue and alpha channels separately, so colours bleed and fringe at different amounts; also softens a layer's alpha edge.",
+   "look": [
+    "colour bleed",
+    "chromatic fringe",
+    "dreamy",
+    "RGB split",
+    "soft halo",
+    "retro"
+   ],
+   "use_for": [
+    "dreamy colour-bleed look for flashbacks or nostalgia beats",
+    "soft RGB fringe for glitch / tech explainer titles",
+    "feather a cut-out or text alpha edge with Alpha Blurriness",
+    "retro VHS-ish colour smear on archival clips"
+   ],
+   "avoid": [
+    "large red blur on skin makes faces look bleeding or sunburnt",
+    "too subtle to read on small phone screens below ~5 px"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Red Blurriness",
+     "does": "blur of the red channel in pixels",
+     "typical": "5-40"
+    },
+    {
+     "name": "Green Blurriness",
+     "does": "blur of the green channel in pixels",
+     "typical": "0-20"
+    },
+    {
+     "name": "Blue Blurriness",
+     "does": "blur of the blue channel in pixels",
+     "typical": "5-40"
+    },
+    {
+     "name": "Alpha Blurriness",
+     "does": "softens the alpha edge (cut-outs, text)",
+     "typical": "2-10"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "1 = repeat edge pixels so frame edges do not go dark",
+     "typical": "1"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "1 Horizontal and Vertical, 2 Horizontal, 3 Vertical",
+     "typical": "1, or 2 for a horizontal smear"
+    }
+   ],
+   "demo_settings": {
+    "Red Blurriness": 40,
+    "Blue Blurriness": 15,
+    "Edge Behavior": 1
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Shift Channels",
+    "Glow",
+    "Noise",
+    "Set Channels"
+   ],
+   "scripting": "All blurriness values are raw pixels. Edge Behavior is a 0/1 checkbox (Repeat Edge Pixels); Blur Dimensions is a 1-based popup. Premiere 2026 has no Channel Blur; the closest look there is 'RGB Split' (offsets channels instead of blurring them).",
+   "recipe": {
+    "Red Blurriness": [
+     [
+      0,
+      60
+     ],
+     [
+      0.4,
+      0
+     ]
+    ],
+    "Blue Blurriness": [
+     [
+      0,
+      30
+     ],
+     [
+      0.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/007.png",
+    "note": "Red channel bleeds far beyond edges with cyan/green fringes on faces, stripes and the tops of the foreground blocks, a clear colour-bleed look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Compound Blur",
+   "match": "ADBE Compound Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Blurs the layer by varying amounts according to the brightness of a control (blur) layer: white areas of the map get the Maximum Blur, black areas stay sharp.",
+   "look": [
+    "variable blur",
+    "selective focus",
+    "tilt-shift",
+    "depth blur",
+    "textured blur"
+   ],
+   "use_for": [
+    "tilt-shift / miniature look with a gradient as the blur layer",
+    "selective focus: keep a speaker sharp while the crowd blurs",
+    "blur transition driven by an animated wipe or noise layer",
+    "fake depth of field for still photos in documentaries"
+   ],
+   "avoid": [
+    "using the footage itself as the blur layer gives uneven, random-looking blur",
+    "large Maximum Blur on a noisy map creates blotchy edges",
+    "frame borders darken (no repeat-edge option); scale the layer up slightly or crop when used full-frame"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blur Layer",
+     "does": "layer whose luminance controls blur amount (white = most blur)",
+     "typical": "a Gradient Ramp or Fractal Noise precomp"
+    },
+    {
+     "name": "Maximum Blur",
+     "does": "blur in pixels where the map is white",
+     "typical": "10-40"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "1 = stretch the map to fit the layer",
+     "typical": "1"
+    },
+    {
+     "name": "Invert Blur",
+     "does": "1 = black areas blur, white stay sharp",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Maximum Blur": 40,
+    "If Layer Sizes Differ": 1,
+    "Invert Blur": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Compound Blur",
+   "pairs_with": [
+    "Gradient Ramp",
+    "Fractal Noise",
+    "Linear Wipe",
+    "Camera Lens Blur"
+   ],
+   "scripting": "Blur Layer is a layer reference (index, default 1) and cannot be set from a spec; in a one-layer comp it points to the layer itself, so the image's own brightness drives the blur (bright areas blur). For controlled results a script must add the map layer and point Blur Layer at it via ExtendScript. The map uses the map layer's source (effects/masks on it are ignored), so precompose a generated map first. 'If Layer Sizes Differ' is a checkbox labelled Stretch Map to Fit. Premiere 2026's 'Compound Blur' is a different (new, Impact-based) effect with the same idea but other props (Blur Layer as a track, Blur Amount 0-100, Depth, Feather, Gain); do not reuse these prop names there.",
+   "recipe": {
+    "Maximum Blur": [
+     [
+      0,
+      60
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/008.png",
+    "note": "Bright background and faces are heavily blurred while the darkest clothing areas keep more detail, and the frame border darkens.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Directional Blur",
+   "match": "ADBE Motion Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Blurs along a single angle, creating motion streaks as if the camera or subject moved quickly in that direction.",
+   "look": [
+    "motion streak",
+    "whip pan",
+    "speed",
+    "kinetic",
+    "smear"
+   ],
+   "use_for": [
+    "whip-pan transition between news clips (keyframe Blur Length up and down)",
+    "speed streaks on a sliding headline or name strap as it enters",
+    "kinetic text slams in reel hooks",
+    "fake motion on a still photo push"
+   ],
+   "avoid": [
+    "Blur Length high for long holds makes footage unreadable",
+    "angle that does not match the actual move looks fake"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Direction",
+     "does": "blur angle in degrees; 0 = vertical streaks, 90 = horizontal streaks",
+     "typical": "90 for horizontal whip pans, 0 for vertical"
+    },
+    {
+     "name": "Blur Length",
+     "does": "streak length in pixels",
+     "typical": "10-40 motion feel, 80-200 transition peak"
+    }
+   ],
+   "demo_settings": {
+    "Direction": 90,
+    "Blur Length": 40
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Directional Blur (Legacy)",
+   "pairs_with": [
+    "Transform",
+    "Motion Tile",
+    "Offset",
+    "CC Radial Fast Blur"
+   ],
+   "scripting": "Direction is an angle in degrees (raw value, no min/max). Match name is 'ADBE Motion Blur' even though the display name is Directional Blur. Harvested defaults are Direction 90 and Blur Length 10, so applying it bare already gives a slight horizontal blur. Use Motion Tile with mirror edges before it in a transition so edges do not show transparency. In Premiere 2026 the identical engine (same match, same props) is 'Directional Blur (Legacy)'; Premiere's new 'Directional Blur' is a different Impact-based effect (Angle, Amount 0-100, Chromatic Aberration).",
+   "recipe": {
+    "Blur Length": [
+     [
+      0,
+      0
+     ],
+     [
+      0.12,
+      150
+     ],
+     [
+      0.25,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/009.png",
+    "note": "Horizontal motion streaks smear vertical edges sideways (thin poles, figures) while horizontal stripes stay readable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fast Box Blur",
+   "match": "ADBE Box Blur2",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Fast general-purpose blur; with 1 iteration it gives a boxy, square-ish blur, with 3 or more it approaches a smooth Gaussian blur.",
+   "look": [
+    "soft",
+    "defocus",
+    "frosted",
+    "background blur"
+   ],
+   "use_for": [
+    "blurred background fill behind 16:9 footage in a 9:16 reel",
+    "soften a plate behind text cards and quotes",
+    "quick blur-in / blur-out transition",
+    "frosted glass panel behind lower thirds (with a mask)"
+   ],
+   "avoid": [
+    "Iterations 1 shows square artefacts on highlights",
+    "without Repeat Edge Pixels the frame edges go dark / transparent"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blur Radius",
+     "does": "blur size in pixels",
+     "typical": "10-30 soften, 40-80 background fill"
+    },
+    {
+     "name": "Iterations",
+     "does": "number of passes; more = smoother Gaussian-like blur",
+     "typical": "3"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "1 Horizontal and Vertical, 2 Horizontal, 3 Vertical",
+     "typical": "1"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "1 = keep frame edges solid",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Blur Radius": 20,
+    "Iterations": 3,
+    "Repeat Edge Pixels": 1
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Fast Blur",
+   "pairs_with": [
+    "Exposure",
+    "Levels",
+    "Glow",
+    "Set Matte"
+   ],
+   "scripting": "Blur Dimensions is a 1-based popup; Repeat Edge Pixels is a 0/1 checkbox. Radius is in raw pixels; harvested default is 0, so always set Blur Radius. It replaced the old Fast Blur (now 'Fast Blur (Legacy)', ADBE Fast Blur, in AE's Obsolete category). Premiere 2026 has no box blur; its 'Fast Blur' is that legacy engine (Blurriness, Blur Dimensions, Repeat Edge Pixels) and is the closest match.",
+   "recipe": {
+    "Blur Radius": [
+     [
+      0,
+      50
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/010.png",
+    "note": "Whole frame is smoothly and heavily blurred with solid edges, as a background-fill blur.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Gaussian Blur",
+   "match": "ADBE Gaussian Blur 2",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Smooth, even, high-quality blur of the whole layer; the standard blur for softening, background fills and blur transitions.",
+   "look": [
+    "soft",
+    "smooth blur",
+    "defocus",
+    "background blur",
+    "dreamy"
+   ],
+   "use_for": [
+    "blurred 9:16 background fill behind a 16:9 clip in reels",
+    "soften a plate behind headlines, quote cards and lower thirds",
+    "blur-to-sharp reveal at the start of a story",
+    "obscure faces / number plates together with a mask"
+   ],
+   "avoid": [
+    "without Repeat Edge Pixels the frame edges fade to transparent / black",
+    "uniform blur reads as 'blurry footage', not lens defocus; use Camera Lens Blur for cinematic depth"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "blur amount in pixels",
+     "typical": "5-15 soften, 30-80 background fill"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "1 Horizontal and Vertical, 2 Horizontal, 3 Vertical",
+     "typical": "1"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "1 = keep frame edges solid",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 30,
+    "Blur Dimensions": 1,
+    "Repeat Edge Pixels": 1
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Gaussian Blur (Legacy)",
+   "pairs_with": [
+    "Transform",
+    "Exposure",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Use match 'ADBE Gaussian Blur 2' (the current GPU version), not 'ADBE Gaussian Blur' (AE's obsolete 'Gaussian Blur (Legacy)'). Harvested default Blurriness is 25, so applying it with no props already blurs; set Blurriness 0 explicitly if you only want to keyframe later. Naming trap in Premiere 2026: the same engine (AE.ADBE Gaussian Blur 2, same props) is listed there as 'Gaussian Blur (Legacy)', while Premiere's new 'Gaussian Blur' is a different Impact-based effect (Amount 0-100, Thickness, Chromatic Aberration).",
+   "recipe": {
+    "Blurriness": [
+     [
+      0,
+      60
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/011.png",
+    "note": "Whole frame is evenly softened with a smooth blur and solid frame edges.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Radial Blur",
+   "match": "ADBE Radial Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Blurs around a centre point either in circles (Spin) or outward (Zoom), giving a rotating or crash-zoom motion feel.",
+   "look": [
+    "zoom blur",
+    "spin blur",
+    "vortex",
+    "speed",
+    "crash zoom"
+   ],
+   "use_for": [
+    "zoom-blur transition into the next clip in reels and trailers",
+    "spin-blur transition for energetic explainer segments",
+    "impact punch on a breaking-news title reveal",
+    "dizzy / disoriented POV moment in documentary recreations"
+   ],
+   "avoid": [
+    "high Amount with Antialiasing Low shows banding",
+    "slow to render at high Amount on 1080p+ (preview at lower res)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "strength (Spin: degrees of rotation blur; Zoom: streak length)",
+     "typical": "10-30 subtle, 50-100 transition peak"
+    },
+    {
+     "name": "Center",
+     "does": "centre of the spin/zoom in comp pixels",
+     "typical": "[960, 540] or the subject"
+    },
+    {
+     "name": "Type",
+     "does": "1 Spin, 2 Zoom",
+     "typical": "2 for crash-zoom transitions"
+    },
+    {
+     "name": "Antialiasing (Best Quality)",
+     "does": "quality at Best render: 1 Low, 2 High",
+     "typical": "2"
+    },
+    {
+     "name": "Random Seed",
+     "does": "varies the sampling noise pattern",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 30,
+    "Center": [
+     960,
+     540
+    ],
+    "Type": 2,
+    "Antialiasing (Best Quality)": 2
+   },
+   "enum_labels": {
+    "Type": {
+     "1": "Spin",
+     "2": "Zoom"
+    },
+    "Antialiasing (Best Quality)": {
+     "1": "Low",
+     "2": "High"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform (scale)",
+    "Glow",
+    "CC Light Rays",
+    "Directional Blur"
+   ],
+   "scripting": "Type and Antialiasing are 1-based popups; labels Spin|Zoom and Low|High read from the installed plug-in (Radial_Blur.aex). Center is a 2D point in comp pixels. Slow at high Amount; CC Radial Fast Blur is the quick zoom-only alternative. Premiere 2026 has no static radial blur filter: use its 'Spin' (rotation with Motion Blur) or 'Grow' / 'Shrink' (scale with Motion Blur) Impact effects, or Transform scale/rotation keyframes with shutter angle.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      80
+     ],
+     [
+      0.35,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/012.png",
+    "note": "Zoom-type radial streaks burst outward from the frame centre, centre fairly readable and edges strongly streaked.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Sharpen",
+   "match": "ADBE Sharpen",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Increases contrast at edges so the image looks crisper; simple one-slider sharpening.",
+   "look": [
+    "crisp",
+    "sharp",
+    "detail",
+    "punchy"
+   ],
+   "use_for": [
+    "crisp up soft upscaled or web-sourced press footage",
+    "restore detail after scaling a still photo for a Ken Burns move",
+    "add bite to AI-generated shots in reels",
+    "light final polish (10-20) on soft talking-head footage"
+   ],
+   "avoid": [
+    "above ~40 it creates white halos and amplifies compression blocks and noise",
+    "sharpening faces exaggerates skin texture and pores"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Sharpen Amount",
+     "does": "edge contrast boost (only property)",
+     "typical": "10-30 subtle, 50+ obvious"
+    }
+   ],
+   "demo_settings": {
+    "Sharpen Amount": 100
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Sharpen",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Lumetri Color",
+    "Remove Grain",
+    "Noise"
+   ],
+   "scripting": "Single raw value; harvested default is 0 (no-op), so always set Sharpen Amount. The demo value 100 is deliberately strong so the render test shows it; use 10-30 in real edits. Place after scaling/transform effects and before grain/noise so the grain is not sharpened. Unsharp Mask gives finer control (radius, threshold). Premiere's 'Sharpen' is the same engine (AE.ADBE Sharpen, same prop name).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/013.png",
+    "note": "Edges are visibly crisper with bright halos around faces and amplified compression blocks, as the card warns at high amounts.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Smart Blur",
+   "match": "ADBE Smart Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Blurs flat areas while keeping strong edges sharp, smoothing skin and noise into a soft, painted look; Edge Only mode outputs just the edges as lines.",
+   "look": [
+    "edge-preserving blur",
+    "skin smoothing",
+    "painterly",
+    "cartoon",
+    "line art",
+    "plastic"
+   ],
+   "use_for": [
+    "quick skin / noise smoothing on low-quality interview or phone footage",
+    "posterised cartoon look for satire segments (with Posterize)",
+    "line-art sketch look via Edge Only mode for explainer flashbacks",
+    "clean a noisy still before animating it"
+   ],
+   "avoid": [
+    "high Radius + Threshold makes faces look waxy / plastic",
+    "slow on 4K; Edge Only output is mostly black and needs blending"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "size of the blur in flat areas",
+     "typical": "3-8 smoothing, 10-20 painterly"
+    },
+    {
+     "name": "Threshold",
+     "does": "how strong an edge must be to stay sharp",
+     "typical": "20-45"
+    },
+    {
+     "name": "Mode",
+     "does": "1 Normal, 2 Edge Only (white lines on black), 3 Overlay Edge (white edges over image)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 15,
+    "Threshold": 40,
+    "Mode": 1
+   },
+   "enum_labels": {
+    "Mode": {
+     "1": "Normal",
+     "2": "Edge Only",
+     "3": "Overlay Edge"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Posterize",
+    "Find Edges",
+    "Cartoon",
+    "Unsharp Mask"
+   ],
+   "scripting": "Mode is a 1-based popup; labels Normal|Edge Only|Overlay Edge read from the installed plug-in (SmartBlur.aex). Radius and Threshold minimum is 0.1 (0 is out of range). For a sketch look use Mode 2 then Invert, or Mode 3 for edges over the image. For natural skin / noise smoothing AE's Bilateral Blur (ADBE Bilateral) usually looks less plastic. Premiere has no Smart Blur.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/014.png",
+    "note": "Skin and flat areas are smoothed while strong edges (stripes, dark clothing outlines) stay fairly crisp, a soft edge-preserving blur.",
+    "rerender": false
+   }
+  }
+ ]
+}

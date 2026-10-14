@@ -1,0 +1,1715 @@
+{
+ "cards": [
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Graphic Equalizer (10 Bands)",
+   "match": "3792d46f-5036-4be6-ab5a-177622246a5d",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Fixed-frequency equalizer with 10 octave-spaced sliders (about 31 Hz to 16 kHz) that boost or cut each band. Fast broad tone shaping without choosing frequencies.",
+   "look": [
+    "broad EQ",
+    "warmer",
+    "brighter",
+    "less boomy",
+    "less muddy",
+    "telephone (extreme cuts)"
+   ],
+   "use_for": [
+    "Cut rumble below ~63 Hz on location VO and interview audio",
+    "Tame 250 Hz mud on phone-recorded or small-room VO",
+    "Dip the 1-4 kHz bands of a music bed so the VO sits on top",
+    "Rough tone match between two interview mics in a documentary"
+   ],
+   "avoid": [
+    "Big boosts (above ~0.6) sound harsh and clip; cut rather than boost",
+    "Too coarse for hum, whistles or single tones: use Parametric Equalizer, Notch Filter or DeHummer",
+    "Never set Reset or Is Processing (internal button and status flag)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "EQ Band 1",
+     "does": "~31 Hz band (sub rumble)",
+     "typical": "0.5 = flat; 0.35-0.45 to cut rumble under VO",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         24.8
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 2",
+     "does": "~63 Hz band (traffic/AC rumble, bass weight)",
+     "typical": "0.4-0.47 on VO; 0.52-0.56 for heavier trailer music"
+    },
+    {
+     "name": "EQ Band 4",
+     "does": "~250 Hz band (boom / mud)",
+     "typical": "0.45-0.48 on boomy VO",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         250.0
+        ]
+       ],
+       "value": 1
+      },
+      {
+       "figure": "band of the deepest cut (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         0,
+         250.0
+        ]
+       ],
+       "value": 0
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 8",
+     "does": "~4 kHz band (presence, intelligibility)",
+     "typical": "0.52-0.55 for clearer VO; 0.45-0.48 on a music bed under VO"
+    },
+    {
+     "name": "EQ Band 10",
+     "does": "~16 kHz band (air / hiss)",
+     "typical": "0.5-0.53 air; 0.4-0.46 to soften hiss",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         16000.0
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    },
+    {
+     "name": "Gain",
+     "does": "Master output gain after EQ",
+     "typical": "0.5 = 0 dB; lower slightly if boosts push peaks"
+    },
+    {
+     "name": "Range",
+     "does": "dB span of every band slider",
+     "typical": "leave default 0.3924 = 48 dB (Audition's documented 1.5-120 dB Range, dB = 1.5 + 118.5*v; the default decodes to exactly 48.0)"
+    },
+    {
+     "name": "EQ Band 7",
+     "does": "~2 kHz band (bite / harshness)",
+     "typical": "0.5 = flat",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         2000.0
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    }
+   ],
+   "demo_settings": {
+    "EQ Band 1": 0.2,
+    "EQ Band 2": 0.2,
+    "EQ Band 3": 0.25,
+    "EQ Band 4": 0.35,
+    "EQ Band 9": 0.3,
+    "EQ Band 10": 0.2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "Highpass",
+    "Parametric Equalizer",
+    "DeNoise",
+    "Dynamics Processing",
+    "Hard Limiter"
+   ],
+   "scripting": "Every value is normalized 0-1 (Effect Controls shows dB). EQ Band n centre ~31.25 Hz x 2^(n-1): 31, 63, 125, 250, 500, 1k, 2k, 4k, 8k, 16k. 0.5 = 0 dB on every band and on Gain (from defaults). The slider span follows Range: the default 0.3924 decodes exactly to 48 dB on Audition's 1.5-120 dB scale, so each band spans about +/-24 dB (measured: +22-24 dB at 1) and 0.01 = ~0.48 dB. Set Range before the bands. Never set Reset (momentary button that flattens all bands) or Is Processing (status flag). Accuracy: leave default (higher = better low-band precision, more CPU). Ignore the unnamed bool row. demo_settings is a cuts-only 'telephone' curve, so it cannot clip. Apply with qeClip.addAudioEffect(qe.project.getAudioEffectByName(name)); the new component is the clip's last component. Measured: bands 1 / 4 / 7 / 10 boost the lowest / 250 Hz / 2 kHz / 16 kHz bands by 22-24 dB at 1, band 4 at 0 cuts 250 Hz by 17 dB: octave bands 31.25 x 2^(n-1) Hz confirmed (band 1 reads at the analysis floor), each about +/-24 dB at the default Range.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Graphic Equalizer (20 Bands)",
+   "match": "0e133ef5-2371-48db-9b72-b4c441460391",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Fixed-frequency equalizer with 20 half-octave sliders from about 31 Hz up. Finer than the 10-band version for broad tone shaping.",
+   "look": [
+    "broad EQ",
+    "tone shaping",
+    "warmer",
+    "brighter",
+    "de-mud",
+    "telephone (extreme cuts)"
+   ],
+   "use_for": [
+    "Clean up rumble and mud on interview or field VO",
+    "Carve a dip in a music bed around 2-4 kHz so VO stays readable",
+    "Shape stock music to feel darker for a documentary or brighter for a reel",
+    "Match tone between archive clips and fresh recordings"
+   ],
+   "avoid": [
+    "Narrow single-tone problems (hum, whine) need a notch, not a graphic band",
+    "Stacking many adjacent boosts adds harsh resonance and clipping",
+    "Never set Reset or Is Processing"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "EQ Band 1",
+     "does": "~31 Hz band (sub rumble)",
+     "typical": "0.5 = flat; 0.35-0.45 cut under VO",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         24.8
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 3",
+     "does": "~63 Hz band (rumble / bass weight)",
+     "typical": "0.4-0.47 on VO"
+    },
+    {
+     "name": "EQ Band 7",
+     "does": "~250 Hz band (mud)",
+     "typical": "0.45-0.48 on boomy VO",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         250.0
+        ]
+       ],
+       "value": 1
+      },
+      {
+       "figure": "band of the deepest cut (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         0,
+         250.0
+        ]
+       ],
+       "value": 0
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 15",
+     "does": "~4 kHz band (presence)",
+     "typical": "0.52-0.55 clearer VO; 0.45-0.48 on music under VO"
+    },
+    {
+     "name": "EQ Band 19",
+     "does": "~16 kHz band (air / hiss)",
+     "typical": "0.4-0.46 to soften hiss"
+    },
+    {
+     "name": "Gain",
+     "does": "Master output gain",
+     "typical": "0.5 = 0 dB"
+    },
+    {
+     "name": "Range",
+     "does": "dB span of the band sliders",
+     "typical": "leave default 0.392 (~48 dB, inferred)"
+    },
+    {
+     "name": "EQ Band 14",
+     "does": "~2.8 kHz band (bite / presence)",
+     "typical": "0.5 = flat",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         3174.8
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 20",
+     "does": "top band (~22 kHz, air)",
+     "typical": "0.5 = flat",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         20158.7
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    }
+   ],
+   "demo_settings": {
+    "EQ Band 1": 0.2,
+    "EQ Band 2": 0.2,
+    "EQ Band 3": 0.2,
+    "EQ Band 4": 0.25,
+    "EQ Band 5": 0.3,
+    "EQ Band 6": 0.35,
+    "EQ Band 18": 0.3,
+    "EQ Band 19": 0.2,
+    "EQ Band 20": 0.2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "Highpass",
+    "Parametric Equalizer",
+    "DeNoise",
+    "Hard Limiter"
+   ],
+   "scripting": "All values normalized 0-1; 0.5 = 0 dB per band and on Gain. Bands are half-octave: centre ~31 Hz x 2^((n-1)/2) (31, 44, 63, 88, 125, 177, 250, 354, 500, 707, 1k, 1.4k, 2k, 2.8k, 4k, 5.7k, 8k, 11k, 16k, 22k); band 7 = 250 Hz measured. Range default 0.3924 = 48 dB (1.5 + 118.5*v), so the bands span about +/-24 dB (boosts of about 22 dB measured at 1) and 0.01 = ~0.48 dB. Never set Reset (flattens all bands) or Is Processing. Leave Accuracy default. Ignore the unnamed bool row. demo_settings is cuts only (telephone curve). Measured: bands 7 / 14 / 20 boost 250 Hz / 2.8-3.2 kHz / the top band by about 22 dB at 1, band 7 at 0 cuts 250 Hz by 10.5 dB: the half-octave series 31.25 x 2^((n-1)/2) Hz fits.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Graphic Equalizer (30 Bands)",
+   "match": "c6ba8ed5-e0d5-4ed9-a209-08adec9b18a9",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Fixed-frequency equalizer with 30 third-octave sliders, the classic live-sound graphic EQ. Fine enough to dip a resonant room tone or mild hum band without a parametric EQ.",
+   "look": [
+    "third-octave EQ",
+    "tone shaping",
+    "room-tone dip",
+    "warmer",
+    "brighter",
+    "telephone (extreme cuts)"
+   ],
+   "use_for": [
+    "Dip a ringing room resonance in press-conference or hall audio",
+    "Soften 50 Hz mains hum (India) a little when DeHummer is not wanted",
+    "Precise music-bed carving under VO for documentaries",
+    "Tone match between two mics or two shoot days"
+   ],
+   "avoid": [
+    "Still not narrow enough to fully remove hum or a whine: use DeHummer / Notch Filter",
+    "Many big moves create a phasey, unnatural sound",
+    "Never set Reset or Is Processing"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "EQ Band 3",
+     "does": "~50 Hz band (mains hum in 50 Hz countries, rumble)",
+     "typical": "0.35-0.42 to soften hum"
+    },
+    {
+     "name": "EQ Band 6",
+     "does": "~100 Hz band (hum harmonic, low boom)",
+     "typical": "0.42-0.47 on VO"
+    },
+    {
+     "name": "EQ Band 10",
+     "does": "~250 Hz band (mud), measured",
+     "typical": "0.45-0.48 on boomy VO",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         250.0
+        ]
+       ],
+       "value": 1
+      },
+      {
+       "figure": "band of the deepest cut (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         0,
+         250.0
+        ]
+       ],
+       "value": 0
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 22",
+     "does": "~4 kHz band (presence)",
+     "typical": "0.52-0.55 for clearer VO"
+    },
+    {
+     "name": "EQ Band 27",
+     "does": "~12.5 kHz band (air / hiss)",
+     "typical": "0.42-0.47 to soften hiss"
+    },
+    {
+     "name": "Gain",
+     "does": "Master output gain",
+     "typical": "0.5 = 0 dB"
+    },
+    {
+     "name": "Range",
+     "does": "dB span of the band sliders",
+     "typical": "leave default 0.392 (~48 dB, inferred)"
+    },
+    {
+     "name": "EQ Band 1",
+     "does": "~31.5 Hz band (sub rumble)",
+     "typical": "0.5 = flat",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         24.8
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 20",
+     "does": "~2.5 kHz band (bite / presence)",
+     "typical": "0.5 = flat",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         2519.8
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    },
+    {
+     "name": "EQ Band 30",
+     "does": "top band (about 25 kHz: only the top of the audible range moves)",
+     "typical": "0.5 = flat",
+     "measured": [
+      {
+       "figure": "band of the largest boost (Hz, third-octave resolution)",
+       "signal": "pink noise",
+       "points": [
+        [
+         1,
+         20158.7
+        ]
+       ],
+       "value": 1
+      }
+     ]
+    }
+   ],
+   "demo_settings": {
+    "EQ Band 1": 0.2,
+    "EQ Band 2": 0.2,
+    "EQ Band 3": 0.2,
+    "EQ Band 4": 0.2,
+    "EQ Band 5": 0.2,
+    "EQ Band 6": 0.25,
+    "EQ Band 7": 0.25,
+    "EQ Band 8": 0.3,
+    "EQ Band 9": 0.35,
+    "EQ Band 28": 0.3,
+    "EQ Band 29": 0.2,
+    "EQ Band 30": 0.2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "DeHummer",
+    "Notch Filter",
+    "Highpass",
+    "Parametric Equalizer",
+    "Hard Limiter"
+   ],
+   "scripting": "All values normalized 0-1; 0.5 = 0 dB per band and on Gain. Bands are third-octave from 31.5 Hz (measured, see the end). Range default 0.3924 = 48 dB (1.5 + 118.5*v), so the bands span about +/-24 dB (boosts of 20-22 dB measured at 1) and 0.01 = ~0.48 dB. Never set Reset or Is Processing; leave Accuracy default; ignore the unnamed bool row. demo_settings is cuts only. Measured: band 10 boosts 250 Hz and band 20 2.5 kHz (by 20-22 dB at 1), band 30 lifts only the top of the spectrum (+10 dB at 20 kHz), band 10 at 0 cuts 250 Hz by 7 dB: the bands run 31.5 x 2^((n-1)/3) Hz (1 = 31.5 Hz, 3 = 50, 6 = 100, 10 = 250, 16 = 1 k, 22 = 4 k, 27 = 12.5 k, 30 about 25 kHz), one band higher than an ISO list starting at 25 Hz.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "GuitarSuite",
+   "match": "c23a8acb-affc-4ff4-9ca6-2b560b340a56",
+   "category": "Special",
+   "status": "current",
+   "summary": "Guitar amp chain (from Audition): compressor, filter, distortion and speaker-cabinet modeler with a dry/wet Mix. Made for guitar, but roughens any sound.",
+   "look": [
+    "distorted",
+    "gritty",
+    "amp crunch",
+    "overdriven",
+    "lo-fi",
+    "boxy speaker"
+   ],
+   "use_for": [
+    "Crunchy amp tone on a guitar music bed for a trailer or sports reel",
+    "Gritty megaphone / rally-loudspeaker voice in a satire reel (with Bandpass)",
+    "Dirty, aggressive impact or riser SFX for trailer hits",
+    "Broken-speaker lo-fi treatment on a quoted clip"
+   ],
+   "avoid": [
+    "On documentary VO or interviews: wrecks intelligibility",
+    "Defaults are already heavily distorted (Dist Amount 0.72, Mix 1): lower Mix or Dist Amount first",
+    "Distortion raises level and harshness: follow with Hard Limiter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Dist Amount",
+     "does": "Distortion drive. Measured on a 1 kHz tone: THD 0.006 % at 0, 94 % at the default 0.722, 105 % at 1; at its defaults the tone rises 7.6 dB.",
+     "typical": "0.1-0.3 for grit you can still read words through; the default 0.722 is already fuzz",
+     "measured": {
+      "figure": "total harmonic distortion (%)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0,
+        0.006
+       ],
+       [
+        0.722,
+        94.445
+       ],
+       [
+        1,
+        105.052
+       ]
+      ],
+      "line": {
+       "slope": 110.211,
+       "intercept": 3.2399,
+       "worst_residual": 11.633
+      }
+     }
+    },
+    {
+     "name": "Mix",
+     "does": "Dry/wet balance of the whole chain",
+     "typical": "1 = fully processed (default); 0.3-0.5 keeps a voice readable"
+    },
+    {
+     "name": "Comp Amount",
+     "does": "Compression before the distortion (sustain, evenness)",
+     "typical": "0.5-0.7 (default 0.70)"
+    },
+    {
+     "name": "Box Model",
+     "does": "Speaker cabinet model, normalized dropdown",
+     "typical": "leave default 0.2857 (2/7: index 2 of 8 options if there are 8; option count not verified)"
+    },
+    {
+     "name": "Dist Type",
+     "does": "Distortion character, normalized dropdown",
+     "typical": "default 0.5 (middle of an odd option count; labels unverified)"
+    },
+    {
+     "name": "Bypass Filter",
+     "does": "Switches the filter stage off (1) or on (0)",
+     "typical": "default 1; set 0 to use Filter Freq / Filter Resonance"
+    },
+    {
+     "name": "Filter Freq",
+     "does": "Filter frequency",
+     "typical": "default 0.049 = 1 kHz if linear 20 Hz-20 kHz (inferred)"
+    },
+    {
+     "name": "Bypass Distortion",
+     "does": "Switches the distortion stage off (1) or on (0)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Bypass Compressor": {
+     "0": "active",
+     "1": "bypassed"
+    },
+    "Bypass Filter": {
+     "0": "active",
+     "1": "bypassed"
+    },
+    "Bypass Distortion": {
+     "0": "active",
+     "1": "bypassed"
+    },
+    "Bypass Box Modeler": {
+     "0": "active",
+     "1": "bypassed"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Bandpass",
+    "Highpass",
+    "Hard Limiter",
+    "Distortion",
+    "Studio Reverb"
+   ],
+   "scripting": "All values normalized 0-1. Dropdowns (Dist Type, Filter Type, Filter, Box Model) are normalized too: option i of n is i/(n-1) (Box Model default 0.2857 = 2/7, consistent with 8 cabinets but also 15; Dist Type 0.5 only tells us the count is odd). Option counts and labels are not verified, so pick by ear or read the panel. Bypass rows are 0/1 switches. Filter Freq looks linear 20-20000 Hz (Hz = 20 + v*19980; the default 0.049049 decodes to exactly 1000 Hz). 'Filter' vs 'Filter Type' meaning is unclear; leave both at default unless verified. No AE equivalent. Ignore the unnamed bool row.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 7.63,
+     "thd_pct": 94.445,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Hard Limiter",
+   "match": "e0b23f05-f1a7-4ef7-9b50-7ec3e3002058",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Brick-wall limiter: keeps audio from going above a set ceiling and can push the input into that ceiling to make it louder. The usual last effect on a mix.",
+   "look": [
+    "loud",
+    "controlled peaks",
+    "no clipping",
+    "dense",
+    "broadcast-safe",
+    "squashed (if overdriven)"
+   ],
+   "use_for": [
+    "Final ceiling so reel and YouTube exports never clip (about -1 dBTP)",
+    "Catch shouts, claps and mic bumps in rally or interview audio",
+    "Add 2-4 dB of loudness to a VO + music mix for social reels",
+    "Safety on trailer impact hits and risers"
+   ],
+   "avoid": [
+    "Heavy Input Boost pumps and flattens music: keep gain reduction to a few dB",
+    "Not a loudness normaliser: measure LUFS separately (Loudness Meter, or export Loudness Normalization)",
+    "Does nothing on quiet material whose peaks never reach the ceiling"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Maximum Amplitude",
+     "does": "Output ceiling. Measured on a -6 dBFS tone: the output peak sat at -76 / -50 / -25 / -6 dBFS for 0.25 / 0.5 / 0.75 / 0.999, i.e. ceiling dBFS = 100 v - 100 (confirmed).",
+     "typical": "0.99 = about -1 dB (scale looks linear -100..0 dB: default 0.999 = -0.1 dB); 0.98 = -2 dB for strict social delivery",
+     "measured": {
+      "figure": "output peak change (dB)",
+      "signal": "1 kHz tone at -6 dBFS",
+      "points": [
+       [
+        0.25,
+        -70.31
+       ],
+       [
+        0.5,
+        -44.03
+       ],
+       [
+        0.75,
+        -18.98
+       ],
+       [
+        0.999,
+        0.0
+       ]
+      ],
+      "line": {
+       "slope": 94.5119,
+       "intercept": -92.3763,
+       "worst_residual": 2.512
+      }
+     }
+    },
+    {
+     "name": "Input Boost",
+     "does": "Gain into the limiter (louder, more limiting). Measured on a -18 dBFS tone: 0.5 = -25 dB, 0.6667 = 0 dB, 0.8333 = +17.9 dB, already at the ceiling (about 150 dB per unit, dB = 150 v - 100, until the limiter holds it).",
+     "typical": "0.6667 = 0 dB (default); 0.7 = +5 dB, 0.733 = +10 dB into the ceiling",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0.5,
+        -25.02
+       ],
+       [
+        0.6667,
+        0.0
+       ],
+       [
+        0.8333,
+        17.9
+       ],
+       [
+        1,
+        17.9
+       ]
+      ],
+      "line": {
+       "slope": 87.9987,
+       "intercept": -63.3041,
+       "worst_residual": 7.875
+      }
+     }
+    },
+    {
+     "name": "Limit True Peak",
+     "does": "Limits inter-sample (true) peaks, not just sample peaks",
+     "typical": "1 for social / broadcast deliverables"
+    },
+    {
+     "name": "Release Time",
+     "does": "How fast gain recovers after a peak",
+     "typical": "default 0.375 (100 ms in Audition-derived scale); leave for VO"
+    },
+    {
+     "name": "Look-Ahead Time",
+     "does": "How early the limiter reacts to an incoming peak",
+     "typical": "default 0.133 (~7 ms); leave"
+    },
+    {
+     "name": "Link Channels",
+     "does": "Same gain reduction on L and R",
+     "typical": "1 (keeps stereo image steady)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Link Channels": {
+     "0": "off",
+     "1": "on"
+    },
+    "Limit True Peak": {
+     "0": "off",
+     "1": "on"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Dynamics Processing",
+    "Multiband Compressor",
+    "Parametric Equalizer",
+    "Loudness Meter",
+    "Amplify"
+   ],
+   "scripting": "All values normalized 0-1; Effect Controls shows dB/ms. Maximum Amplitude is -100..0 dB linear (measured: 0.5 = -50 dBFS); Input Boost is about 150 dB per unit around 0.6667 = 0 dB (measured: 0.5 = -25 dB). 'Decay to Ceiling' is a 0/1 switch of unclear effect: leave at default 1. For a whole-mix limit the usual place is the Mix track in the Audio Track Mixer, which documented ExtendScript does not expose: apply it to a nested sequence's clip instead, or use export Loudness Normalization with a true-peak limit. Ignore the unnamed bool row. No AE equivalent.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Loudness Meter",
+   "match": "43f746b7-b34e-402b-8fb4-479cf3466264",
+   "category": "Special",
+   "status": "current",
+   "summary": "Meters loudness (momentary, short-term and integrated LUFS plus true peak) against a target level. Analysis only: it does not change the sound.",
+   "look": [
+    "metering",
+    "LUFS",
+    "true peak",
+    "no audible change"
+   ],
+   "use_for": [
+    "Check a reel mix lands near -14 LUFS integrated for Instagram / YouTube",
+    "Check broadcast deliverables at -23 / -24 LUFS",
+    "Spot VO passages that sit far below the music bed",
+    "Confirm true peak stays under -1 dBTP before export"
+   ],
+   "avoid": [
+    "It changes nothing: never rely on it to fix levels",
+    "A script cannot read its readings: in the pipeline measure with ffmpeg ebur128 / loudnorm instead",
+    "On a single clip it measures only that clip, not the mix"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Target Level",
+     "does": "Target loudness the meter compares against. Measured: no change to the audio at 0 or 1 (a meter only); the LUFS value of a setting cannot be read from the render.",
+     "typical": "default 0.433, probably -23 LUFS on a -36..-6 scale (then -14 LUFS = 0.733); unverified",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "a VO-like modulated tone",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        1,
+        0.0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Maximum True Peak",
+     "does": "True-peak warning threshold",
+     "typical": "default 0.733, probably -1 dBTP; unverified"
+    },
+    {
+     "name": "Reset on Playback",
+     "does": "Restart the integrated reading each time playback starts",
+     "typical": "1 when checking a whole mix pass"
+    },
+    {
+     "name": "Show Integrated Meter",
+     "does": "Show the integrated (whole program) reading",
+     "typical": "1"
+    },
+    {
+     "name": "Unit",
+     "does": "Display unit (normalized dropdown)",
+     "typical": "leave default 0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Reset on Playback": {
+     "0": "off",
+     "1": "on"
+    },
+    "Show Input Meter": {
+     "0": "hidden",
+     "1": "shown"
+    },
+    "Show Short-Term Meter": {
+     "0": "hidden",
+     "1": "shown"
+    },
+    "Show Integrated Meter": {
+     "0": "hidden",
+     "1": "shown"
+    },
+    "Show Momentary Meter": {
+     "0": "hidden",
+     "1": "shown"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Hard Limiter",
+    "Dynamics Processing",
+    "Amplify",
+    "Multiband Compressor"
+   ],
+   "scripting": "Only useful to a human watching the effect panel; it makes no audible change and exposes no readable measurement to ExtendScript, so an automated pipeline should skip it and measure the rendered file (ffmpeg ebur128 / loudnorm, or export Loudness Normalization). For a whole-mix reading it belongs on the Mix track (Audio Track Mixer), which documented ExtendScript does not expose. Target Level and Maximum True Peak mappings are inferred from defaults only (a render cannot show them: measured, Target Level 0 and 1 leave the audio unchanged). Scale and Unit are normalized dropdowns with unverified labels. Ignore the unnamed bool row.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Mastering",
+   "match": "094e8ed0-1fcc-4bec-ac4a-b358c4ce1f27",
+   "category": "Special",
+   "status": "current",
+   "summary": "All-in-one mastering chain (from Audition): 3-band EQ (low shelf, peak, high shelf), reverb, exciter, stereo widener and loudness maximizer with output gain.",
+   "look": [
+    "polished",
+    "louder",
+    "brighter",
+    "wider",
+    "glossy",
+    "finished music"
+   ],
+   "use_for": [
+    "Quick polish and loudness for a music bed or trailer score",
+    "Brighten a dull stock music track",
+    "Widen a stereo music bed so the centred VO has room",
+    "One-effect final sweetening on a short social reel's music"
+   ],
+   "avoid": [
+    "Defaults are NOT neutral (reverb 0.1, exciter 0.8, maximizer 0.2, EQ moves): set every control deliberately",
+    "Keep Reverb Amount at 0 on VO and interviews (adds a room echo)",
+    "Widener on mono VO does nothing useful and can cause phase problems"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Loudness Maximizer Amount",
+     "does": "Built-in limiter/maximizer drive. Measured on a VO-like signal at -20.7 LUFS dry: 0 = -22.8, 0.5 = -13.5, 1 = -7.1 LUFS integrated.",
+     "typical": "0.2-0.4 for music beds (about -19 to -16 LUFS from a -21 LUFS source)",
+     "measured": {
+      "figure": "integrated loudness (LUFS)",
+      "signal": "a VO-like modulated tone",
+      "points": [
+       [
+        0,
+        -22.8
+       ],
+       [
+        0.5,
+        -13.5
+       ],
+       [
+        1,
+        -7.1
+       ]
+      ],
+      "line": {
+       "slope": 15.7,
+       "intercept": -22.3167,
+       "worst_residual": 0.967
+      }
+     }
+    },
+    {
+     "name": "Reverb Amount",
+     "does": "Amount of added reverb",
+     "typical": "0 for VO; 0.05-0.15 on music"
+    },
+    {
+     "name": "Exciter Amount",
+     "does": "Harmonic exciter (brightness, presence)",
+     "typical": "0-0.3 subtle; default 0.8 is strong"
+    },
+    {
+     "name": "Widener Width",
+     "does": "Stereo width",
+     "typical": "0.5 = unchanged (inferred); 0.6-0.7 wider music"
+    },
+    {
+     "name": "EQ Band 3 Gain",
+     "does": "High-shelf gain",
+     "typical": "0.667 = 0 dB (inferred); default 0.709 is a small boost"
+    },
+    {
+     "name": "EQ Band 2 Freq",
+     "does": "Peaking band frequency",
+     "typical": "looks linear 20-20000 Hz: default 0.0171 = ~360 Hz (de-mud)"
+    },
+    {
+     "name": "Output Gain",
+     "does": "Final output level. Measured: 0.3333 = -12.5 dB, 0.6667 = +2.5 dB, 1 = +17.5 dB: dB = 45 v - 27.5, so 0 dB is 0.611 and the default 0.6667 already adds 2.5 dB.",
+     "typical": "0.611 = 0 dB (measured); lower if the maximizer clips",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0.3333,
+        -12.51
+       ],
+       [
+        0.6667,
+        2.5
+       ],
+       [
+        1,
+        17.5
+       ]
+      ],
+      "line": {
+       "slope": 45.0127,
+       "intercept": -27.5118,
+       "worst_residual": 0.002
+      }
+     }
+    },
+    {
+     "name": "Exciter Mode",
+     "does": "Exciter character, normalized dropdown (Audition: Retro / Tape / Tube)",
+     "typical": "default 1 (last option); labels unverified"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "EQ Band 1 Enable": {
+     "0": "off",
+     "1": "on"
+    },
+    "EQ Band 2 Enable": {
+     "0": "off",
+     "1": "on"
+    },
+    "EQ Band 3 Enable": {
+     "0": "off",
+     "1": "on"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Hard Limiter",
+    "Loudness Meter",
+    "Parametric Equalizer",
+    "Multiband Compressor"
+   ],
+   "scripting": "All values normalized 0-1. EQ Freq rows look linear 20 Hz-20 kHz: Hz = 20 + v*19980 (defaults decode to 30, 361 and 2722 Hz). Band 1 = low shelf, Band 2 = peak, Band 3 = high shelf; Band 1 is disabled by default (EQ Band 1 Enable 0). Output Gain is dB = 45 v - 27.5 (measured: 0 dB at 0.611, the default 0.6667 adds 2.5 dB); EQ gains probably sit at 0 dB around 0.667 (not measured). Exciter Mode is a normalized dropdown: option i of n = i/(n-1). Prefer Parametric Equalizer + Dynamics for VO; use Mastering on music. Ignore the unnamed bool row.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 2.5,
+     "thd_pct": 0.013,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Balance",
+   "match": "Internal Audio Balance",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Shifts a stereo clip's level between the left and right channels. Works only on stereo clips; on a mono clip it cannot be applied.",
+   "look": [
+    "left-right shift",
+    "stereo balance",
+    "off-centre"
+   ],
+   "use_for": [
+    "Fix camera or interview audio that is louder on one channel",
+    "Place a phone-call or radio voice slightly to one side in a two-voice bit",
+    "Nudge a stereo music bed off-centre under a centred VO"
+   ],
+   "avoid": [
+    "Mono clips: the effect does not attach (it failed silently in the harvest)",
+    "For dual-mono interviews where one channel is a second mic, use Fill Left with Right / Fill Right with Left or Modify > Audio Channels instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Balance",
+     "does": "Left / right balance. Measured on a split stereo pair: 0 = full left (right channel silent), 0.5 = centre (unchanged), 1 = full right (left channel silent).",
+     "typical": "0.5 = centre; 0.25 / 0.75 lean left / right",
+     "measured": {
+      "figure": "left channel level (dBFS rms)",
+      "signal": "a split stereo pair (L 440 Hz at -12 dBFS, R 1 kHz at -24 dBFS)",
+      "points": [
+       [
+        0,
+        -15.05
+       ],
+       [
+        0.5,
+        -15.05
+       ],
+       [
+        1,
+        -150.0
+       ]
+      ],
+      "line": {
+       "slope": -134.95,
+       "intercept": 7.4417,
+       "worst_residual": 44.983
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer",
+   "pairs_with": [
+    "Fill Left with Right",
+    "Fill Right with Left",
+    "Channel Volume",
+    "Swap Channels"
+   ],
+   "scripting": "Stereo clips only (on a mono clip it does not attach: the mono harvest read the clip Volume row; the batch now holds the stereo dump, match 'Internal Audio Balance'). One property, 'Balance', normalized: 0 = full left (the right channel is silenced), 0.5 = centre (default, unchanged), 1 = full right (measured on a split stereo pair, live wave 3). It attenuates one side; it does not move one channel's sound into the other (use Channel Mixer or Fill Left/Right for that). Check that the last component's displayName is 'Balance' after adding it.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Bandpass",
+   "match": "Internal Bandpass",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Keeps a band of frequencies around a centre frequency and removes everything above and below it; Q sets how narrow the band is.",
+   "look": [
+    "telephone",
+    "walkie-talkie",
+    "old radio",
+    "thin",
+    "boxy",
+    "megaphone"
+   ],
+   "use_for": [
+    "Phone-call or walkie-talkie voice for a quoted call or leaked audio in a news reel",
+    "Old-radio / archival broadcast feel on historical documentary clips",
+    "Muffled 'other room' or flashback voice in a trailer",
+    "Megaphone rally voice in a satire reel (with GuitarSuite)"
+   ],
+   "avoid": [
+    "On the main VO: sounds cheap and thin",
+    "Very high Q gives a whistling, ringing tone"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Cutoff",
+     "does": "Centre frequency of the kept band (called 'Center' in Adobe docs). Measured: the kept band centre is about 24 000 x v^2 Hz (0.1 = 250 Hz, 0.25 = 1.6 kHz, 0.5 = 6.3 kHz, 0.75 = 12.7 kHz, third-octave readings): v = sqrt(Hz / 24 000).",
+     "typical": "phone voice centre 1-1.5 kHz = 0.20-0.25 (measured: 0.25 = 1.6 kHz)",
+     "measured": {
+      "figure": "band of the largest boost (Hz, third-octave resolution)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.1,
+        250.0
+       ],
+       [
+        0.25,
+        1587.4
+       ],
+       [
+        0.5,
+        6349.6
+       ],
+       [
+        0.75,
+        12699.2
+       ]
+      ],
+      "line": {
+       "slope": 19455.3878,
+       "intercept": -2560.6051,
+       "worst_residual": 865.066
+      }
+     }
+    },
+    {
+     "name": "Q",
+     "does": "Band width: low = wide band, high = narrow band",
+     "typical": "0.2-0.4 for a phone/radio voice (default 0.5)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "High-Low Pass",
+   "pairs_with": [
+    "Highpass",
+    "Lowpass",
+    "GuitarSuite",
+    "Distortion",
+    "Studio Reverb"
+   ],
+   "scripting": "Values normalized 0-1; the Cutoff-to-Hz curve is measured: about 24 000 x v^2 Hz (see Cutoff). Any setting is clearly audible (everything outside the band is removed). In AE, two High-Low Pass instances (one high pass, one low pass) give the same result. The recipe widens the band over 1 s for a 'phone call opens up to full voice' reveal; whether Q 0 sounds fully open is unverified, so cross-fade to an unfiltered copy if it does not. Ignore the unnamed bool row.",
+   "recipe": {
+    "Q": [
+     [
+      0,
+      0.4
+     ],
+     [
+      1.0,
+      0.0
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -7.46,
+     "thd_pct": 0.018,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Simple Notch Filter",
+   "match": "Internal Bandreject",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Removes a narrow band around one frequency and leaves the rest untouched. Used to kill a single steady tone such as hum or a whine.",
+   "look": [
+    "hum removal",
+    "tone removal",
+    "surgical cut",
+    "cleaner"
+   ],
+   "use_for": [
+    "Remove 50 Hz mains hum (India) from location or interview audio",
+    "Cut a constant whine from a projector, AC unit or camera fan",
+    "Remove a single feedback ring in rally or press-conference audio"
+   ],
+   "avoid": [
+    "Hum has harmonics (100, 150, 200 Hz): one notch rarely clears it, use DeHummer (50 Hz) or Notch Filter with several bands",
+    "A wide (low Q) notch thins the voice"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Cutoff",
+     "does": "Frequency to remove (called 'Center' in Adobe docs). Measured: the notch sits at about 24 000 x v^2 Hz (0.1 = 250 Hz, 0.25 = 1.6 kHz, 0.5 = 6.3 kHz, 0.75 = 12.7 kHz), 5.8-9.2 dB deep on pink noise at the default Q: v = sqrt(Hz / 24 000).",
+     "typical": "50 Hz hum = 0.046, 60 Hz = 0.05 (v = sqrt(Hz / 24 000), measured)",
+     "measured": {
+      "figure": "band of the deepest cut (Hz, third-octave resolution)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.1,
+        250.0
+       ],
+       [
+        0.25,
+        1587.4
+       ],
+       [
+        0.5,
+        6349.6
+       ],
+       [
+        0.75,
+        12699.2
+       ]
+      ],
+      "line": {
+       "slope": 19455.3878,
+       "intercept": -2560.6051,
+       "worst_residual": 865.066
+      }
+     }
+    },
+    {
+     "name": "Q",
+     "does": "Notch width: higher = narrower (standard filter convention; direction not verified for this Premiere-internal filter)",
+     "typical": "0.7-1 for a surgical cut (default 0.5); if the voice thins audibly, the direction is reversed"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "DeHummer",
+    "Notch Filter",
+    "Highpass",
+    "DeNoise"
+   ],
+   "scripting": "Values normalized 0-1; the Cutoff-to-Hz curve is measured: about 24 000 x v^2 Hz, the same as Bandpass (see Cutoff). The Q direction is also unread: confirm once by ear (a narrow notch on a VO is nearly inaudible, a wide one thins it). Inaudible on clean audio by design, so no demo settings. For hum, DeHummer with 50 Hz is the safer automatic choice. Ignore the unnamed bool row.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -0.86,
+     "thd_pct": 0.008,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Bass",
+   "match": "Internal Bass",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Boosts or cuts the low frequencies (roughly 200 Hz and below) with a single Boost control.",
+   "look": [
+    "warmer",
+    "fuller",
+    "deeper",
+    "boomy",
+    "thinner (when cut)"
+   ],
+   "use_for": [
+    "Add weight to trailer hits, booms and cinematic music",
+    "Slight warmth on a thin phone-recorded VO",
+    "Cut boom from a music bed so the VO stays clear",
+    "Deep 'announcer' feel on a promo title VO"
+   ],
+   "avoid": [
+    "Big boosts muddy VO and eat headroom: follow with Hard Limiter",
+    "Phone speakers barely reproduce deep bass, so heavy boosts gain little on reels"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Boost",
+     "does": "Low-frequency gain. Measured at 63 Hz on pink noise: 0 = -23.2 dB, 0.25 = -12.3, 0.75 = +12.9, 1 = +26.0 dB (1 kHz moves under 1.6 dB): about 49 dB per unit around 0.5, the +/-24 dB span confirmed.",
+     "typical": "0.5 = 0 dB; -24..+24 dB measured (0.5417 ~ +2 dB, 0.625 ~ +6 dB, 0.4583 ~ -2 dB). VO warmth 0.52-0.55; boom cut on music under VO 0.42-0.46",
+     "measured": {
+      "figure": "gain at 63 Hz (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        -23.15
+       ],
+       [
+        0.25,
+        -12.3
+       ],
+       [
+        0.75,
+        12.89
+       ],
+       [
+        1,
+        26.02
+       ]
+      ],
+      "line": {
+       "slope": 49.412,
+       "intercept": -23.841,
+       "worst_residual": 0.812
+      }
+     }
+    }
+   ],
+   "demo_settings": {
+    "Boost": 0.65
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Bass & Treble",
+   "pairs_with": [
+    "Treble",
+    "Highpass",
+    "Parametric Equalizer",
+    "Hard Limiter"
+   ],
+   "scripting": "Boost is normalized 0-1 with 0.5 = 0 dB (default). The +/-24 dB span is measured (0 = -23 dB, 1 = +26 dB at 63 Hz). demo_settings 0.65 is ~+7 dB: clearly audible on music, may push peaks, so keep a limiter after it. Ignore the unnamed bool row.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.005,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Delay",
+   "match": "Internal Delay",
+   "category": "Delay and Echo",
+   "status": "current",
+   "summary": "Single echo with feedback: replays the sound after a set time, repeating and fading according to Feedback.",
+   "look": [
+    "echo",
+    "repeat",
+    "dramatic tail",
+    "spacious",
+    "slapback"
+   ],
+   "use_for": [
+    "Echo-out on the last word of a trailer or teaser line",
+    "Dramatic repeat on a key quote in a political or news reel",
+    "Slapback on whooshes and impact SFX",
+    "PA / stadium feel on a rally speech snippet"
+   ],
+   "avoid": [
+    "On continuous VO: smears words and hurts intelligibility",
+    "The echo stops at the clip end: extend the clip (or nest with silence after) so the tail is not cut",
+    "Feedback above ~0.7 builds into long runaway repeats"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Delay",
+     "does": "Echo time. Measured: the echo comes 2 x value seconds after the sound (0.1 = 0.2 s, 0.3 = 0.6 s, 0.6 = 1.2 s): 0..1 = 0..2 s confirmed.",
+     "typical": "0..1 = 0..2 s (2 s max per Adobe docs; default 0.5 = 1 s). 0.1-0.25 (0.2-0.5 s) dramatic echo; 0.03-0.06 slapback",
+     "measured": {
+      "figure": "first echo after the click (s)",
+      "signal": "a single click",
+      "points": [
+       [
+        0.1,
+        0.2
+       ],
+       [
+        0.3,
+        0.6
+       ],
+       [
+        0.6,
+        1.2
+       ]
+      ],
+      "line": {
+       "slope": 2.0,
+       "intercept": 0.0,
+       "worst_residual": 0.0
+      }
+     }
+    },
+    {
+     "name": "Feedback",
+     "does": "Amount fed back = number of repeats",
+     "typical": "0.2-0.4"
+    },
+    {
+     "name": "Mix",
+     "does": "Wet echo level vs dry",
+     "typical": "0.2-0.35 on voice; 0.4-0.5 on SFX"
+    }
+   ],
+   "demo_settings": {
+    "Delay": 0.2,
+    "Feedback": 0.35,
+    "Mix": 0.4
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Delay",
+   "pairs_with": [
+    "Studio Reverb",
+    "Highpass",
+    "Bandpass",
+    "Multitap Delay"
+   ],
+   "scripting": "Values normalized 0-1; Delay time mapping (linear 0-2 s) measured: 0.1 = 0.2 s, 0.6 = 1.2 s. For an echo-out, either razor the last word into its own clip and apply Delay there with room after it, or keyframe Mix as in the recipe (seconds from clip start; the 2.0 s point is an example for where the last word lands). Ignore the unnamed bool row.",
+   "recipe": {
+    "Mix": [
+     [
+      0,
+      0
+     ],
+     [
+      1.9,
+      0
+     ],
+     [
+      2.0,
+      0.45
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -0.13,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Multitap Delay",
+   "match": "Internal MultitapDelay",
+   "category": "Delay and Echo",
+   "status": "current",
+   "summary": "Up to four separate echoes, each with its own delay time, feedback and level, mixed with the dry sound. Builds rhythmic or layered echoes.",
+   "look": [
+    "multiple echoes",
+    "rhythmic repeats",
+    "stadium PA",
+    "layered",
+    "spacey"
+   ],
+   "use_for": [
+    "Rally / stadium PA echo on a speech excerpt",
+    "Rhythmic echo synced to the music tempo on a hook word",
+    "Layered echo tails on trailer impacts",
+    "Dream or flashback voice in a documentary"
+   ],
+   "avoid": [
+    "On regular VO: muddy and hard to follow",
+    "Defaults (four taps at 0.5-1.5 s, Mix 0.5) are busy: mute unused taps with Level near 0",
+    "Tails stop at the clip end"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Delay 1",
+     "does": "Tap 1 echo time. Measured: tap 1 lands 2 x value seconds after the sound (0.1 = 0.2 s, 0.3 = 0.6 s, 0.6 = 1.2 s), 6 dB below it at the default Level 1: 0..1 = 0..2 s confirmed.",
+     "typical": "0..1 = 0..2 s like Delay (default 0.25 = 0.5 s, scale inferred)",
+     "measured": {
+      "figure": "first echo after the click (s)",
+      "signal": "a single click",
+      "points": [
+       [
+        0.1,
+        0.2
+       ],
+       [
+        0.3,
+        0.6
+       ],
+       [
+        0.6,
+        1.2
+       ]
+      ],
+      "line": {
+       "slope": 2.0,
+       "intercept": 0.0,
+       "worst_residual": 0.0
+      }
+     }
+    },
+    {
+     "name": "Level 1",
+     "does": "Tap 1 loudness",
+     "typical": "default 0.5; near 0 mutes the tap"
+    },
+    {
+     "name": "Feedback 1",
+     "does": "Repeats of tap 1",
+     "typical": "0-0.3 (default 0)"
+    },
+    {
+     "name": "Delay 2",
+     "does": "Tap 2 echo time",
+     "typical": "2x Delay 1 for a tempo-locked feel"
+    },
+    {
+     "name": "Level 2",
+     "does": "Tap 2 loudness",
+     "typical": "a bit below Level 1, e.g. 0.4"
+    },
+    {
+     "name": "Mix",
+     "does": "Wet echo level vs dry",
+     "typical": "0.2-0.4 on voice"
+    }
+   ],
+   "demo_settings": {
+    "Delay 1": 0.1,
+    "Delay 2": 0.2,
+    "Delay 3": 0.3,
+    "Delay 4": 0.4,
+    "Mix": 0.45
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Delay",
+   "pairs_with": [
+    "Delay",
+    "Studio Reverb",
+    "Highpass",
+    "Bandpass"
+   ],
+   "scripting": "Values normalized 0-1. Delay n time linear 0-2 s like Delay (measured on Delay 1) (defaults 0.25/0.4/0.6/0.75 = 0.5/0.8/1.2/1.5 s); Level n dB scale unknown (0.5 default). For a tempo-locked echo on every beat set the normalized Delay n = n * (60/BPM) / 2 (seconds / 2; e.g. 120 BPM gives 0.25, 0.5, 0.75, 1.0; values above 1 are clamped). Ignore the unnamed bool row.",
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 2.05,
+     "thd_pct": 0.001,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Highpass",
+   "match": "Internal Highpass",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Removes everything below a cutoff frequency and passes the highs. The standard rumble, wind and handling-noise cleanup for voice.",
+   "look": [
+    "cleaner",
+    "less rumble",
+    "tighter low end",
+    "thin (if set high)"
+   ],
+   "use_for": [
+    "Cut traffic, AC and wind rumble under VO and interviews (~80-100 Hz)",
+    "Clear low-end mud from VO so music bass and voice do not fight",
+    "Thin 'radio' voice when set high (with Lowpass)",
+    "Filter-sweep build into a music drop in reels and trailers"
+   ],
+   "avoid": [
+    "Cutoff too high (above ~200 Hz on a male voice) makes VO thin",
+    "Do not put it on music bass or trailer hits unless thinning is the point"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Cutoff",
+     "does": "Frequency below which audio is removed. Measured on pink noise: -3 dB at 92 Hz / 1.9 kHz / 7.3 kHz / 15.1 kHz for 0.05 / 0.25 / 0.5 / 0.75, close to Hz = 26 500 x v^1.9 (within about 6 %): neither linear nor logarithmic.",
+     "typical": "VO rumble cut 80-100 Hz = 0.045-0.05 (measured: 0.05 = 92 Hz); the default 0.25 already cuts below about 1.9 kHz",
+     "measured": {
+      "figure": "-3 dB cut-off (Hz)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.05,
+        91.7
+       ],
+       [
+        0.25,
+        1899.0
+       ],
+       [
+        0.5,
+        7349.1
+       ],
+       [
+        0.75,
+        15141.1
+       ]
+      ],
+      "line": {
+       "slope": 21754.8036,
+       "intercept": -2309.7614,
+       "worst_residual": 1313.721
+      }
+     }
+    }
+   ],
+   "demo_settings": {
+    "Cutoff": 0.5
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "High-Low Pass",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "DeNoise",
+    "Dynamics Processing",
+    "Lowpass"
+   ],
+   "scripting": "Cutoff is normalized 0-1; measured -3 dB points follow Hz = 26 500 x v^1.9 (see Cutoff). demo_settings 0.5 is clearly audible thinning on either curve. The recipe sweeps from thin to full over 2 s (seconds from clip start) for a reveal into a drop. Ignore the unnamed bool row.",
+   "recipe": {
+    "Cutoff": [
+     [
+      0,
+      0.5
+     ],
+     [
+      2.0,
+      0.0
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -15.61,
+     "thd_pct": 0.06,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  }
+ ]
+}

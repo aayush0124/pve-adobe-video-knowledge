@@ -1,0 +1,118 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "frame_rates",
+   "app": "both",
+   "name": "Variable frame rate (VFR) phone and screen recordings",
+   "summary": "Phone cameras and screen recorders often write variable frame rate video (the frame interval changes during the clip). Editors expect constant rates, so VFR shows up as audio drifting out of sync, stutter or wrong durations. Premiere flags it ('Variable Frame Rate Detected' in the Properties panel) and Adobe staff advise transcoding to a constant rate before editing.",
+   "use_for": [
+    "phone interviews and vertical footage",
+    "screen recordings in tutorials and explainers",
+    "diagnosing audio drift that grows through a clip"
+   ],
+   "how": "Detect: ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate,avg_frame_rate -of csv=p=0 in.mp4 (two different rates are a strong hint), or ffmpeg -i in.mp4 -vf vfrdet -an -f null - (reports the VFR share). Conform (working defaults): ffmpeg -i in.mp4 -vf fps=30 -c:v libx264 -crf 18 -preset slow -pix_fmt yuv420p -af aresample=async=1 -c:a aac -ar 48000 -b:a 192k out_cfr.mp4, with fps = the sequence's rate. Edit the constant-rate copy; keep the original for the archive.",
+   "scriptable": "yes",
+   "script_api": "ffmpeg / ffprobe in a pipeline step before import; the bridge's probe() reads only size and duration, so it cannot see VFR: conform first.",
+   "limits": "Premiere's VFR behaviour is from an Adobe-staff FAQ on the community forum (2019), not a help page. CRF 18 and 192 kbps are working defaults. Screen recordings with long static stretches may conform better at their nominal rate (often 30 or 60) than at the sequence rate.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/t5/premiere-pro-discussions/faq-how-to-work-with-variable-frame-rate-vfr-media-in-premiere-pro/td-p/10348229",
+    "https://ffmpeg.org/ffmpeg-filters.html",
+    "https://ffmpeg.org/ffprobe.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "frame_rates",
+   "app": "both",
+   "name": "Mixed frame rates and drop-frame timecode (23.976, 29.97, 59.94 next to 25)",
+   "summary": "Sources that do not match the sequence rate: keep the sequence at the delivery rate, conform clips on purpose (Interpret Footage for slow motion, frame blending or optical flow for real conversions), and know that 29.97 and 59.94 material counts time in drop-frame timecode.",
+   "use_for": [
+    "25 fps deliveries with 30 / 29.97 fps phone or web clips",
+    "50 / 60 fps footage used as slow motion",
+    "reading 29.97 drop-frame timecode in logs and EDLs"
+   ],
+   "how": "Premiere: right-click the clip > Modify > Interpret Footage > Assume this frame rate (50 fps footage as 25 = half-speed slow motion using every frame). To play a different rate in real time, leave it at its own rate and choose Frame Sampling, Frame Blending or Optical Flow (PVE 'Speed/Duration, Rate Stretch and Optical Flow'). Adobe's sequence settings reference says to use 30-fps drop-frame timecode with NTSC assets. Drop-frame drops frame NUMBERS, never frames: as commonly quoted from SMPTE 12, labels ;00 and ;01 are skipped at the start of every minute except minutes 00, 10, 20, 30, 40 and 50 (written HH:MM:SS;FF with a semicolon). After Effects: footage interpretation Conform to Frame Rate (PVE 'Footage interpretation').",
+   "scriptable": "partial",
+   "script_api": "Premiere: ProjectItem.setOverrideFrameRate(fps) (PVE 'Source-clip edits' card); AE: item.mainSource.conformFrameRate = fps; bridge: spec 'fps' snaps every time to its own frame grid, so conform mismatched sources with ffmpeg first when their motion matters.",
+   "limits": "The drop-frame skipping rule was not read from SMPTE ST 12-1 (paywalled) or from an Adobe page here: it is the rule as commonly quoted. 23.976 and 25 have no drop-frame mode. Optical Flow smears fast motion: preview it.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/modify-clip-properties/change-the-frame-rate-of-a-clip.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/change-clip-sequence/sequence-settings-reference.html",
+    "https://ae-scripting.docsforadobe.dev/sources/footagesource/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "media_management",
+   "app": "both",
+   "name": "Relink offline media (Link Media)",
+   "summary": "Bringing back media that moved: Premiere's Link Media dialog (with Locate) on open or from the Project panel, and the scripted route that walks the project, finds offline items and points them at new paths.",
+   "use_for": [
+    "projects moved between machines or drives",
+    "hand-offs where media folders were renamed",
+    "batch relinking from a path map"
+   ],
+   "how": "Premiere: Link Media appears on open (or right-click an offline item > Link Media); select a clip > Locate, and matching files in the same folder follow. After Effects: double-click a missing item, or File > Replace Footage > File.",
+   "scriptable": "yes",
+   "script_api": "Premiere: walk app.project.rootItem.children recursively; for each ProjectItem with isOffline() and canChangeMediaPath(), call changeMediaPath(newPath) (returns 0 on success). After Effects: FootageItem.footageMissing, item.replace(new File(path)) (PVE 'Replace footage / layer source').",
+   "limits": "changeMediaPath's parameter table lists an extra overrideChecks argument that its signature lacks (a doc inconsistency): try the one-argument form first. Relinking to a file of a different duration or frame rate can shift edits.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/file-organization/manually-locate-and-relink-offline-media.html",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://ae-scripting.docsforadobe.dev/item/footageitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "media_management",
+   "app": "both",
+   "name": "Missing fonts (After Effects Resolve Fonts, Adobe Fonts, templates)",
+   "summary": "When a project or template uses fonts the machine lacks: After Effects shows a Resolve Fonts dialog on open, can activate Adobe Fonts, and swaps its default font in for anything it cannot get, which silently changes the design. Scripts should check fonts before rendering.",
+   "use_for": [
+    "opening hand-off projects and templates",
+    "batch rendering on another machine",
+    "Devanagari titles (a substitute font breaks shaping and spacing)"
+   ],
+   "how": "After Effects: the Resolve Fonts dialog on open lists the missing fonts; Adobe Fonts can be activated from it. Before rendering, list the fonts a project uses and compare them with what is installed. Ship a fonts list (and licensed font files where the licence allows) with every hand-off. The bridge's AE builder already warns when a text's font is not installed ('font X not installed, AE used Y').",
+   "scriptable": "partial",
+   "script_api": "After Effects: app.project.usedFonts, app.fonts (look-ups by name / PostScript name), project.replaceFont(from, to) (PVE 'Fonts API' card); read TextDocument.font back after setting it.",
+   "limits": "Adobe says AE replaces fonts it cannot get online with its default font. A Premiere 'Resolve Fonts' dialog is described only in community threads (not found on Adobe's help pages), and Adobe's missing-fonts article names InDesign, Photoshop and Illustrator as the apps with built-in Adobe Fonts resolving.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/add-text/create-and-edit-text-layers/creating-editing-text-layers.html",
+    "https://ae-scripting.docsforadobe.dev/general/project/",
+    "https://ae-scripting.docsforadobe.dev/text/fontsobject/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "media_management",
+   "app": "both",
+   "name": "Collect a project for hand-off (AE Collect Files, Premiere Project Manager)",
+   "summary": "Packing a project with its media so someone else can open it: After Effects File > Dependencies > Collect Files (sources for all / all comps / selected comps / queued comps / none, plus a report) and Premiere's Project Manager (collect or transcode). Fonts are never collected: AE's report only lists them.",
+   "use_for": [
+    "sending projects to another editor or machine",
+    "archiving finished jobs",
+    "moving a project off a shared drive"
+   ],
+   "how": "After Effects: save, then File > Dependencies > Collect Files: Collect Source Files = All, For All Comps, For Selected Comps, For Queued Comps or None (Project Only); options Generate Report Only, Obey Proxy Settings, Reduce Project; the output folder holds the project, the media and a report of the files, effects and fonts. Premiere: File > Project Manager (PVE 'Project Manager' card). Add the fonts list (and licensed fonts) yourself.",
+   "scriptable": "partial",
+   "script_api": "After Effects scripting has no collectFiles method; nearest calls: app.project.reduceProject(items), removeUnusedFootage(), consolidateFootage(); a menu fallback (app.executeCommand(id)) needs the command id read on the installed build. Premiere: app.projectManager (PVE card).",
+   "limits": "A collected project can be large (every source file in full); For Queued Comps keeps only what renders.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/render-and-export/basics-of-rendering-and-exporting/basics-rendering-exporting.html",
+    "https://ae-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

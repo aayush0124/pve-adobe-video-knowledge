@@ -1,0 +1,1435 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Roto Brush (Next-Gen, version 3.0)",
+   "summary": "AI rotoscoping: paint strokes on the subject on one frame and AE propagates a matte through the shot. Creates the 'Roto Brush & Refine Edge' effect (match name ADBE Samurai) whose Version dropdown 3 = Next-Gen (default), 1-2 = older models.",
+   "use_for": [
+    "cut a presenter or politician off the background for text-behind-subject titles",
+    "background replacement / blur behind a speaker",
+    "grade or relight only the subject",
+    "isolate a product for a reveal"
+   ],
+   "how": "Double-click the footage layer to open the Layer panel, pick the Roto Brush tool (Alt+W), paint green foreground strokes (Alt+drag subtracts), then step forward (Page Down or spacebar) to propagate; fix drift with more strokes; click Freeze at the bottom of the Layer panel when done. Refine in Effect Controls: Version, Quality, Feather, Contrast, Shift Edge, Reduce Chatter, Render Refine Edge, Decontaminate Edge Colors, Use Motion Blur. Use the Refine Edge tool (same tool slot) on hair.",
+   "scriptable": "partial",
+   "script_api": "layer.property('ADBE Effect Parade').addProperty('ADBE Samurai') adds the effect and its matte-refine properties are settable (e.g. 'Feather', 'Shift Edge', 'Reduce Chatter', 'Version'), but strokes, propagation and Freeze have no scripting API (unverified that any command ID can do it). Treat as a manual step; a script can only adjust a roto the user already made. Name clash (harvest): 'Feather', 'Contrast', 'Shift Edge' and 'Reduce Chatter' each exist twice. 'Roto Brush Matte' and 'Refine Edge Matte' are header rows, not groups, so a 'Group/Property' path does not separate them and a plain name sets the first (Roto Brush Matte) copy. Reach the Refine Edge copies by match name: '/HBspatialsoftness2' (Feather), '/HBspatialcontrast' (Contrast), '/HBspatialchoke' (Shift Edge), '/rm2reducechatter' (Reduce Chatter, 0-400). 'Version' and 'Quality' are not animatable.",
+   "limits": "Shot needs a clear subject; long shots propagate slowly and drift on occlusions (split the shot). Freeze before rendering or closing the project, otherwise aerender may have to recompute. The harvest lists the effect under '_Obsolete' because it is applied through the tool, not the Effects menu. In AE 26.2+ the Roto Brush tool is replaced by the Object Matte tool (Adobe staff on the community forum: older Roto Brush versions stay selectable from a version selector in the Object Matte effect; helpx calls the Quick Selection tool the classic Roto Brush 'reimagined'). Installed build on this machine is AE 26.0 (aerender reports 26.0x67, checked 2026-10-03), so the Roto Brush tool is what is available here.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/roto-brush-refine-matte.html",
+    "https://www.cgchannel.com/2023/10/adobe-ships-after-effects-24-0/",
+    "https://community.adobe.com/questions-529/the-rotobrush-tool-is-missing-from-my-most-recent-update-v26-2-1-it-is-in-the-prior-version-25-6-5-1559301",
+    "pve/harvest/ae_effects.json",
+    "https://helpx.adobe.com/after-effects/desktop/roto-brush-and-refine-matte/roto-brush/object-matte.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Object Matte tool (AI rotoscoping, AE 26.2+)",
+   "summary": "Click or marquee-select a moving subject (person, animal, vehicle) and AE generates and tracks a matte through the shot. Replaced the Roto Brush tool in 26.2; older Roto Brush versions are chosen from a version selector in the Object Matte effect.",
+   "use_for": [
+    "fast subject isolation for reels (text behind person, background swap)",
+    "privacy masks that follow a person",
+    "separate foreground for parallax or colour work"
+   ],
+   "how": "Open the layer in the Layer panel (not the Footage panel), choose the Object Matte tool (Ctrl+W on Windows, Option+W on macOS) and click, or marquee with the Rectangle/Lasso option, the subject; refine with Quick Selection, Selection Brush and Refine Edge (hair, soft edges); propagate with spacebar / frame stepping / moving the CTI; click Freeze to lock. Adjust the result in Effect Controls (Effects > Object Matte). 26.5 adds disk caching so propagated results survive closing the project. The individual selections and their keyframes sit under the layer's Effects > Object Matte > Selections in the timeline.",
+   "scriptable": "no",
+   "script_api": "none documented (no Object Matte entry in the scripting changelog up to 26.5). Do not plan scripted use.",
+   "limits": "Needs AE 26.2+; Installed build on this machine is AE 26.0 (aerender reports 26.0x67, checked 2026-10-03) - update through Creative Cloud before relying on it. Reported slow above 1080p; occlusions lose the subject (split the shot and reselect); keep the Layer panel at Full resolution; 16 GB+ RAM and a 4-8 GB GPU recommended (third-party guidance). Without the 26.5 disk cache, propagated frames live only in RAM and are lost on close unless frozen.",
+   "status": "current",
+   "sources": [
+    "https://www.cgchannel.com/2026/04/adobe-releases-after-effects-26-2/",
+    "https://helpx.adobe.com/after-effects/desktop/roto-brush-and-refine-matte/roto-brush/object-matte.html",
+    "https://community.adobe.com/announcements-527/new-in-ae-object-matte-ai-powered-rotoscoping-1557065",
+    "https://community.adobe.com/questions-529/the-rotobrush-tool-is-missing-from-my-most-recent-update-v26-2-1-it-is-in-the-prior-version-25-6-5-1559301",
+    "https://www.cgchannel.com/2026/09/adobe-releases-after-effects-26-5-and-new-ai-assistant-in-beta/",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Content-Aware Fill",
+   "summary": "Removes an object from video by filling a transparent hole (mask or alpha) with pixels from surrounding frames, then writes the fill as a rendered image-sequence layer.",
+   "use_for": [
+    "remove a logo, watermark, mic boom, passer-by or sign from b-roll",
+    "clean a plate before adding titles",
+    "remove burnt-in text from archive footage (legal/rights permitting)"
+   ],
+   "how": "Draw a mask around the object on the footage layer and set the mask mode to Subtract (or use any transparent area), track or animate the mask so it covers the object every frame. Window > Content-Aware Fill: set Alpha Expansion, Fill Method (Object / Surface / Edge Blend), Lighting Correction (Subtle / Moderate / Strong), Range (Work Area / Entire Duration); optionally Create Reference Frame (opens Photoshop) for hard shots; click Generate Fill Layer. The fill layer is added above the source.",
+   "scriptable": "no",
+   "script_api": "none - no Content-Aware Fill object or method in the AE scripting API; masks can be created by script (layer.property('ADBE Mask Parade').addProperty('ADBE Mask Atom')) but Generate Fill Layer must be clicked by a person.",
+   "limits": "Slow (renders every frame); best on small objects and steady or slowly moving cameras; large holes on moving cameras smear. The fill is baked: change the timing or mask and you must regenerate. Edge Blend is fastest, Object best for moving objects.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/content-aware-fill.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "3D Camera Tracker",
+   "summary": "Analyses footage (effect ADBE 3D Tracker) to solve the real camera move, then creates an AE 3D camera plus text/solid/null layers locked to the scene.",
+   "use_for": [
+    "pin 3D titles or labels into drone / walking shots",
+    "place map pins or callouts on buildings",
+    "match-move graphics in a cinematic trailer",
+    "make a shadow catcher for a 3D model in live footage"
+   ],
+   "how": "Select the footage layer > Animation > Track Camera (or Effect > Perspective > 3D Camera Tracker). Analysis runs in the background. Hover to see target circles over track points, select 3+ points, right-click > Create Text and Camera / Create Solid and Camera / Create Null and Camera / Create Shadow Catcher, Camera, and Light. Settings: Shot Type, Solve Method (Auto Detect, Typical, Mostly Flat Scene, Tripod Pan), Detailed Analysis, Track Point Size, Target Size.",
+   "scriptable": "partial",
+   "script_api": "addProperty('ADBE 3D Tracker') applies the effect; app.executeCommand(app.findMenuCommandId('Track Camera')) runs the menu command on the selected layer (community reports ID 3983 in older versions - always look it up by name). Track points are opaque custom data (not readable), and Create Camera is UI-only (unverified that any command does it).",
+   "limits": "Needs parallax (translation) for a full solve; pure pans need Solve Method 'Tripod Pan'. Layer must be a plain footage layer: precompose first if it has time stretch/remap or effects before the tracker. Dropdown index meanings for Shot Type (1-4) and Solve Method (1-5) are not verified. Analysis is cached per layer; changing the source re-analyses.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/questions-529/3d-camera-tracking-in-after-effects-cc-with-a-jsx-script-30442",
+    "https://hyperbrew.co/blog/2025-after-effects-command-ids/",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Warp Stabilizer",
+   "summary": "Analyses and smooths or locks camera shake (effect ADBE SubspaceStabilizer; display name 'Warp Stabilizer' in the 26.0 harvest, 'Warp Stabilizer VFX' in older menus).",
+   "use_for": [
+    "steady handheld / phone footage from rallies and ground reports",
+    "lock-off a shot for a still-feel (Result = No Motion)",
+    "stabilise before tracking or adding text"
+   ],
+   "how": "Select layer > Animation > Warp Stabilizer (or apply from Effects > Distort). Analysis starts automatically, then stabilises. Harvested controls: Result (1 Smooth Motion, 2 No Motion), Smoothness (0-1000, default 50), Method (1-4, default 4 = Subspace Warp; 1 Position, 2 Position Scale Rotation, 3 Perspective), Framing (1-4, default 3 = Stabilize, Crop, Auto-scale; 4 = Stabilize, Synthesize Edges), Maximum Scale, Additional Scale, Detailed Analysis, Rolling Shutter Ripple, Crop Less <-> Smooth More. Also harvested: Preserve Scale, Fast Analysis (default on), Objective (1-6, default 1) with a Target Layer (Objective applies or reverses the solved motion onto another layer; index meanings unverified).",
+   "scriptable": "partial",
+   "script_api": "addProperty('ADBE SubspaceStabilizer') adds it and analysis starts when the app is idle; a script cannot block until it finishes (a busy loop starves it). Community pattern: poll with app.scheduleTask('checkFn()', 200, true) and app.cancelTask(id) when done (it checked a property name that changes after analysis; index-based and fragile). Properties are settable by name.",
+   "limits": "Faces and talking heads wobble with Subspace Warp - use Method 2 (Position, Scale, Rotation). Layer must not be time-stretched or remapped (precompose). Apply per shot: split at cuts first (Scene Edit Detection). Rendering before analysis finishes gives an unstabilised frame with a banner. Slow on 4K.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/questions-529/do-something-after-warp-stabilizer-completes-analysis-73082",
+    "https://ae-scripting.docsforadobe.dev/general/application/",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Track Motion / Stabilize Motion (point tracker)",
+   "summary": "Classic 1-4 point tracker in the Tracker panel: tracks features frame by frame and applies the result to a target layer as Transform, corner pin or stabilisation.",
+   "use_for": [
+    "attach a label or blur to a moving object",
+    "corner-pin a screen replacement when Mocha is overkill",
+    "stabilise one point on a shaky shot",
+    "drive other layers through expressions"
+   ],
+   "how": "Select layer > Animation > Track Motion (or Window > Tracker > Track Motion / Stabilize Motion). Pick Track Type (Stabilize, Transform, Parallel Corner Pin, Perspective Corner Pin, Raw), tick Position / Rotation / Scale, place feature + search boxes in the Layer panel, Analyze Forward, then Edit Target and Apply. Data lives under the layer's Motion Trackers group.",
+   "scriptable": "partial",
+   "script_api": "Track data is readable/writable under layer.property('ADBE MTrackers') (tracker > track point > Feature Center / Attach Point keyframes). Expression link: thisComp.layer('Plate').motionTracker('Tracker 1')('Track Point 1').attachPoint (the form the pick-whip writes; motionTracker is not listed in the expression reference). Running the analysis itself: no documented API (unverified).",
+   "limits": "Needs contrasty features that stay in frame; drifts on motion blur and occlusion. For flat surfaces with perspective use Mocha AE.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/",
+    "https://hyperbrew.co/blog/2025-after-effects-command-ids/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Mask tracking and Face Tracking",
+   "summary": "Tracks a mask path through the shot (Position, Rotation, Scale, Skew, Perspective) or tracks a face (outline only, or detailed features that create a Face Track Points effect). AE 26.3 made the Mask Tracker up to 5x faster with timeline controls.",
+   "use_for": [
+    "blur or pixelate faces of minors/victims in news footage",
+    "follow a subject with a vignette or spotlight",
+    "keep a colour correction on a moving object"
+   ],
+   "how": "Draw a mask, select it, Animation > Track Mask (26.3+: track backward/forward buttons also sit on the Mask Path row in the timeline); in the Tracker panel choose Method (Position; Position & Rotation; Position, Scale & Rotation; Position, Scale, Rotation & Skew; Perspective; Face Tracking (Outline Only); Face Tracking (Detailed Features)) (default Position, Scale & Rotation) and track forward. Then duplicate the layer, keep the mask, add Mosaic or Gaussian Blur for a privacy blur.",
+   "scriptable": "partial",
+   "script_api": "Masks are fully scriptable: layer.property('ADBE Mask Parade').addProperty('ADBE Mask Atom'), then property('ADBE Mask Shape').setValue(shape) with a Shape object (vertices, inTangents, outTangents, closed) and maskMode = MaskMode.ADD/SUBTRACT. The tracking analysis itself has no documented API (unverified).",
+   "limits": "Fast motion, profile turns and occlusion break face tracking; check every frame of a privacy blur (a single missed frame is a legal risk). The detailed face tracker output is an effect named 'Face Track Points' in the harvest. The mask tracker only works on footage and precomp layers, not on adjustment, text, solid or shape layers. The faster 26.3 tracker is not in the installed 26.0.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/announcements-527/after-effects-26-3-is-here-1628208",
+    "pve/harvest/ae_effects.json",
+    "https://helpx.adobe.com/after-effects/desktop/animate-in-after-effects/track-mask/rigid-mask-tracking.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Mocha AE (planar tracker)",
+   "summary": "Boris FX planar tracker bundled with AE as the effect 'Mocha AE' (match name mochaAECC, category 'Boris FX Mocha'). Tracks flat surfaces through perspective and occlusion; exports corner pin / transform data or uses Mocha shapes as a matte.",
+   "use_for": [
+    "screen replacement on phones, TVs and billboards",
+    "replace a sign or poster in a street shot",
+    "matte that follows a flat surface",
+    "stabilise on a plane"
+   ],
+   "how": "Apply Mocha AE to the footage layer, click 'Launch Mocha AE', draw an X-spline/B-spline layer on the surface, track forward/backward, align the Surface rectangle to the four corners, save and close. Back in AE: Tracking Data > Create Track Data, Export Option, Layer Export To (target layer), Apply Export; or Matte > Apply Matte with Feather/Dilate. From inside Mocha the Export Tracking Data dialog offers AE Corner Pin, AE Corner Pin with Motion Blur, AE CC Power Pin and AE Transform Data (paste onto the target layer).",
+   "scriptable": "partial",
+   "script_api": "The effect's AE-side controls (e.g. 'Export Option', 'Layer Export To', 'Apply Matte', 'Feather', 'Top Left'..'Bottom Right') are settable by name; the tracking happens in the Mocha UI and its project lives in opaque 'mocha Arb Data' (not scriptable).",
+   "limits": "Needs a mostly planar surface with texture; reflective screens track poorly (track the bezel). Full Mocha Pro features (remove, lens) are not in Mocha AE.",
+   "status": "current",
+   "sources": [
+    "https://borisfx.com/documentation/mocha/2026.5.0/",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Puppet tools (Position, Advanced, Bend, Starch, Overlap pins)",
+   "summary": "Deforms a layer with a mesh controlled by pins; applying a pin adds the Puppet effect (ADBE FreePin3) with Puppet Engine (1 Legacy, 2 Advanced = default) and Mesh Rotation Refinement.",
+   "use_for": [
+    "animate cut-out photos of leaders or characters for satire",
+    "wave a flag, bend an arrow or a map route",
+    "subtle breathing / head-tilt on a still portrait",
+    "animate limbs on illustrated characters"
+   ],
+   "how": "Select layer (needs alpha or a closed mask outline), Puppet Position Pin tool (Ctrl+P), click to add pins; switch the pin type to Advanced (position+rotation+scale) or Bend; Puppet Starch stiffens areas; Puppet Overlap sets which part draws in front. Drag pins at different times to keyframe, or Ctrl-drag to record motion in real time. 25.2+ can create Null controllers for puppet pins (helpx 'New and improved Null creation commands').",
+   "scriptable": "partial",
+   "script_api": "Existing pins are keyframable: effect 'Puppet' > 'ADBE FreePin3 ARAP Group' > 'ADBE FreePin3 Mesh Group' > mesh N > 'ADBE FreePin3 PosPins' > pin N > 'ADBE FreePin3 PosPin Position' (match names present in the 26.0 binaries: the PosPin strings are in AfterFXLib.dll/FRP.dll; siblings 'ADBE FreePin3 PosPin Rotation', '... Scale', '... Type' also exist). Creating new pins by script does not work (pins come out greyed). Workaround: save an .ffx preset with N pins, layer.applyPreset(file), then move the pins.",
+   "limits": "Pin positions are in layer pixels. Large layers make dense meshes (slow). Deformation follows the mesh outline, so complex backgrounds must be cut out first.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/animating-puppet-tools.html",
+    "https://community.adobe.com/questions-529/create-puppet-pin-programmatically-29303",
+    "pve/harvest/ae_effects.json",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/AfterFXLib.dll",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Shape layers (vector graphics)",
+   "summary": "Resolution-independent vector layers made of groups, shapes (Rectangle, Ellipse, Polystar, Path), paint (Fill, Stroke, Gradient Fill, Gradient Stroke) and path operators, all animatable.",
+   "use_for": [
+    "lower-third boxes, underlines, arrows and callouts",
+    "icons and simple infographics",
+    "progress bars, timers, charts",
+    "background shapes for reels"
+   ],
+   "how": "Draw with the shape tools / Pen tool with nothing selected (or Layer > New > Shape Layer); use Add > ... in the timeline or the Properties panel to add shapes, fills, strokes and operators. Order inside a group matters: operators affect the paths above them, paint applies to paths above it.",
+   "scriptable": "yes",
+   "script_api": "comp.layers.addShape(); contents = layer.property('ADBE Root Vectors Group'); grp = contents.addProperty('ADBE Vector Group').property('ADBE Vectors Group'); grp.addProperty('ADBE Vector Shape - Rect' | 'ADBE Vector Shape - Ellipse' | 'ADBE Vector Shape - Star' | 'ADBE Vector Shape - Group'); paint 'ADBE Vector Graphic - Fill' / '- Stroke' / '- G-Fill' / '- G-Stroke'. A free path: new Shape() {vertices, closed} set on 'ADBE Vector Shape'. Adding a property invalidates earlier references in that group - add everything first, then re-fetch (AdobeBridge vfx_build.jsx does this).",
+   "limits": "Gradient colour stops are not reliably settable by script (gradient data is a custom type; unverified). Thousands of repeated shapes get slow; shape layers are 2D unless made 3D (extrusion needs the Cinema 4D renderer or Advanced 3D).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "vfx_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Repeater (shape operator)",
+   "summary": "Makes N transformed copies of the shapes above it in the group: Copies, Offset, Composite (above/below) and a Transform (Anchor, Position, Scale, Rotation, Start/End Opacity) applied cumulatively per copy.",
+   "use_for": [
+    "radial bursts and sunbursts behind a headline",
+    "dot grids, halftone and stripe backgrounds",
+    "loading rings and ticks on a clock/timer",
+    "repeated arrows or chevrons"
+   ],
+   "how": "Shape layer > Add > Repeater (put it under the shape + fill). Rotation per copy = 360 / Copies for a full circle; animate Offset to make copies travel; two repeaters (one for X, one for Y) make a grid.",
+   "scriptable": "yes",
+   "script_api": "group.property('ADBE Vectors Group').addProperty('ADBE Vector Filter - Repeater'); children 'ADBE Vector Repeater Copies', 'ADBE Vector Repeater Offset', 'ADBE Vector Repeater Order' (Composite), 'ADBE Vector Repeater Transform' > 'ADBE Vector Repeater Anchor' / 'ADBE Vector Repeater Position' / 'ADBE Vector Repeater Scale' / 'ADBE Vector Repeater Rotation' / 'ADBE Vector Repeater Opacity 1' (start) / 'ADBE Vector Repeater Opacity 2' (end).",
+   "limits": "Composite dropdown index order (Below/Above) is unverified - read the value after setting. High copy counts multiply render cost.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Trim Paths (shape operator)",
+   "summary": "Shows only a portion of the paths above it: Start %, End %, Offset (degrees) and Trim Multiple Shapes (1 Simultaneously, 2 Individually). The standard way to draw lines on.",
+   "use_for": [
+    "draw-on underlines, circles and arrows",
+    "map route reveals",
+    "progress bars and ring timers",
+    "outline reveal of text converted to shapes"
+   ],
+   "how": "Add > Trim Paths under the path(s) and stroke; keyframe End from 0 to 100 with an ease (or Start for a wipe-off); Offset spins the visible segment around a closed path.",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Vector Filter - Trim'); 'ADBE Vector Trim Start', 'ADBE Vector Trim End', 'ADBE Vector Trim Offset', 'ADBE Vector Trim Type' (1 = Simultaneously, 2 = Individually - as used by AdobeBridge vfx_build.jsx).",
+   "limits": "Fill is trimmed too (looks odd): usually trim stroke-only paths. Path direction decides where the line starts (reverse path direction in the UI if it draws backwards).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "vfx_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Merge Paths (shape operator)",
+   "summary": "Combines the paths above it into one compound path with a boolean Mode: Merge, Add, Subtract, Intersect, Exclude Intersections.",
+   "use_for": [
+    "rings and donuts (circle minus circle)",
+    "knock-out text or icons from a box",
+    "custom badge shapes"
+   ],
+   "how": "Put two or more paths in one group, then Add > Merge Paths below them; choose Mode. Paint (fill/stroke) must sit below the Merge Paths operator.",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Vector Filter - Merge'); mode 'ADBE Vector Merge Type' (UI order Merge, Add, Subtract, Intersect, Exclude Intersections = 1..5; index order unverified).",
+   "limits": "Only merges paths in the same group; animating the merged result can pop if path point counts differ.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Offset Paths (shape operator)",
+   "summary": "Grows or shrinks paths by Amount, with Line Join, Miter Limit, and Copies / Copy Offset to make concentric outlines.",
+   "use_for": [
+    "outline or halo around a shape",
+    "concentric ripple rings",
+    "thicken an icon without a stroke"
+   ],
+   "how": "Add > Offset Paths under the path; animate Amount; raise Copies and animate Copy Offset for ripple echoes.",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Vector Filter - Offset'); 'ADBE Vector Offset Amount', 'ADBE Vector Offset Line Join', 'ADBE Vector Offset Miter Limit', 'ADBE Vector Offset Copies', 'ADBE Vector Offset Copy Offset'.",
+   "limits": "Large negative amounts collapse small shapes; sharp corners spike unless Line Join is Round.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Wiggle Paths, Wiggle Transform and other path operators",
+   "summary": "Procedural path modifiers: Wiggle Paths (jitters vertices), Wiggle Transform (randomises group transforms), Zig Zag, Pucker & Bloat, Round Corners, Twist.",
+   "use_for": [
+    "hand-drawn 'boil' look on doodles and arrows",
+    "electric or nervous lines",
+    "organic blobs behind text",
+    "rounded boxes for captions"
+   ],
+   "how": "Add > Wiggle Paths (Size, Detail, Points Corner/Smooth, Wiggles/Second, Correlation, Temporal Phase, Spatial Phase, Random Seed); Add > Round Corners for rounded rectangles on any path.",
+   "scriptable": "yes",
+   "script_api": "Match names: Wiggle Paths 'ADBE Vector Filter - Roughen' (children 'ADBE Vector Roughen Size', '... Detail', '... Points'), Wiggle Transform 'ADBE Vector Filter - Wiggler', Zig Zag 'ADBE Vector Filter - Zigzag', Pucker & Bloat 'ADBE Vector Filter - PB', Round Corners 'ADBE Vector Filter - RC', Twist 'ADBE Vector Filter - Twist'.",
+   "limits": "Wiggle Paths animates by itself (Wiggles/Second > 0); set it to 0 and animate Temporal Phase for control. Points dropdown index order unverified.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Text animators and the Range Selector",
+   "summary": "Per-character/word/line animation on text layers: an Animator holds properties (position, scale, rotation, opacity, fill, tracking, blur, character offset...) and a Range Selector decides which characters are affected and by how much.",
+   "use_for": [
+    "typewriter and word-by-word caption reveals",
+    "cascading fade-up / slide-up headlines",
+    "tracking-in cinematic titles",
+    "highlight a keyword's colour while the rest stays"
+   ],
+   "how": "Text layer > Animate (timeline) or Animation > Animate Text > choose a property; set the property to the 'from' value, then keyframe Range Selector Start/End/Offset. Advanced: Units (Percentage/Index), Based On (Characters, Characters Excluding Spaces, Words, Lines), Mode, Amount, Shape (Square, Ramp Up, Ramp Down, Triangle, Round, Smooth), Ease High/Low, Randomize Order.",
+   "scriptable": "yes",
+   "script_api": "anim = layer.property('ADBE Text Properties').property('ADBE Text Animators').addProperty('ADBE Text Animator'); props = anim.property('ADBE Text Animator Properties'); props.addProperty('ADBE Text Opacity' | 'ADBE Text Position 3D' | 'ADBE Text Scale 3D' | 'ADBE Text Rotation' | 'ADBE Text Fill Color' | 'ADBE Text Tracking Amount' | 'ADBE Text Blur' | 'ADBE Text Character Offset' ...); sel = anim.property('ADBE Text Selectors').addProperty('ADBE Text Selector'); keyframe 'ADBE Text Percent Start' / 'ADBE Text Percent End' / 'ADBE Text Percent Offset'; advanced group 'ADBE Text Range Advanced' (Based On = 'ADBE Text Range Type2', Shape = 'ADBE Text Range Shape', Randomize Order = 'ADBE Text Randomize Order'). Re-fetch references after each addProperty.",
+   "limits": "For Hindi/Devanagari prefer Based On = 3 (Words) or 4 (Lines): per-character animation can split matras/conjuncts visually (verify on a render). Dropdown indices are read from After Effects 26.0 (live wave 3): Based On 1 Characters, 2 Characters Excluding Spaces, 3 Words, 4 Lines; Shape 1 Square, 2 Ramp Up, 3 Ramp Down, 4 Triangle, 5 Round, 6 Smooth; Mode 1 Add, 2 Subtract, 3 Intersect, 4 Min, 5 Max, 6 Difference; Units 1 Percentage, 2 Index. Many animators on long text are slow. See also: 'Text animator properties: the full set with match names'; 'Text selectors: Range, Wiggly and Expression (match names and Advanced options)'; 'Text More Options: Anchor Point Grouping, Grouping Alignment, Fill & Stroke, Inter-Character Blending'; 'Text on a path (Path Options)'; 'Per-character 3D text (Enable Per-character 3D)'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "https://ae-scripting.docsforadobe.dev/property/propertygroup/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Wiggly Selector and Expression Selector (text)",
+   "summary": "Alternative text selectors: the Wiggly Selector randomly varies how strongly each character is selected over time; the Expression Selector computes the amount per character with an expression (textIndex, textTotal, selectorValue).",
+   "use_for": [
+    "jittery 'glitch' or nervous text",
+    "random flicker-on of letters",
+    "per-character delays computed from index",
+    "wave motion across a word"
+   ],
+   "how": "In an animator: Add > Selector > Wiggly or Expression. Expression Selector Amount example: 'delay = 0.05; t = time - inPoint - textIndex*delay; ease(t, 0, 0.4, 100, 0)' (characters animate in one after another).",
+   "scriptable": "yes",
+   "script_api": "anim.property('ADBE Text Selectors').addProperty('ADBE Text Wiggly Selector') or addProperty('ADBE Text Expressible Selector') (both match names present in the AE 26.0 binary); set the Amount expression via property.expression.",
+   "limits": "Expression selectors evaluate per character per frame - keep them simple on long text.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll",
+    "https://ae-expressions.docsforadobe.dev/objects/property/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Text engine, Indic scripts and text scripting",
+   "summary": "AE's Universal Type Engine (formerly 'South Asian and Middle Eastern', default since 22.1.1) shapes Devanagari, Urdu and other complex scripts; since 24.x most character/paragraph settings and fonts are scriptable through TextDocument and app.fonts.",
+   "use_for": [
+    "Hindi headlines and captions with correct matras and conjuncts",
+    "Urdu/RTL lower thirds",
+    "Hindi digits in counters",
+    "auto-fitting box text for templates"
+   ],
+   "how": "Use a font that covers the script (FontObject.writingScripts lists it). Paragraph direction RTL for Urdu. Box text: Layer > New > Text then drag a box; auto-fit options in the Paragraph/Properties panel.",
+   "scriptable": "yes",
+   "script_api": "td = layer.property('ADBE Text Properties').property('ADBE Text Document').value; td.font = '<PostScript name>'; td.composerEngine (ComposerEngine.UNIVERSAL_TYPE_ENGINE / LATIN_CJK_ENGINE, 24.0; writing anything but UNIVERSAL throws), td.direction = ParagraphDirection.DIRECTION_RIGHT_TO_LEFT (24.0), td.digitSet = DigitSet.DEFAULT_DIGITS | ARABIC_DIGITS | HINDI_DIGITS | FARSI_DIGITS (24.0), td.boxAutoFitPolicy (24.6), td.characterRange(start, end) for per-character styling (24.3); app.fonts.getFontsByPostScriptName(), project.usedFonts / project.replaceFont() (24.5); then setValue(td).",
+   "limits": "Old projects may still use the Latin/CJK engine (upgrade only, not back). Missing fonts silently substitute - check app.fonts.missingOrSubstitutedFonts before rendering. DigitSet.HINDI_DIGITS means Arabic-Indic digits (as used with Arabic/Urdu), not Devanagari numerals: for Devanagari digits type the characters directly in the source text. digitSet reads only the first character but setting it applies to the whole layer.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://ae-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Variable font axis animation (AE 26.0+)",
+   "summary": "Keyframe or drive by expression any axis of a variable font (weight 'wght', width 'wdth', slant 'slnt', italic 'ital', custom axes) through text animators, up to eight axes per layer; 26.3 adds a variable-font filter in the font list.",
+   "use_for": [
+    "weight-pulse on a keyword (thin to black)",
+    "breathing or squash titles for reels",
+    "per-character weight wave with a range selector"
+   ],
+   "how": "Pick a variable font, then Animate > (font axis) on the text layer or use the axis sliders in the Properties panel; keyframe the axis value and shape it with a Range Selector for cascades.",
+   "scriptable": "yes",
+   "script_api": "props = layer.property('Text').property('Animators').addProperty('ADBE Text Animator').property('ADBE Text Animator Properties'); axis = props.addVariableFontAxis('wght'); axis.setValue(700) (PropertyGroup.addVariableFontAxis, 26.0). Check FontObject.hasDesignAxes / designAxesData first. Only callable on the 'ADBE Text Animator Properties' group. When an axis is active the animator also gets 'ADBE Text Variable Font Spacing' (dropdown). Expressions (JS engine, 26.0): text.animator('Animator 1').property.fontAxisWght (pattern fontAxis + capitalised tag).",
+   "limits": "Only variable fonts (most Indic system fonts are not). Axis ranges depend on the font. Needs 26.0+ (installed).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/propertygroup/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://www.cgchannel.com/2026/01/adobe-releases-after-effects-26-0-with-native-substance-support/",
+    "https://community.adobe.com/announcements-527/after-effects-26-3-is-here-1628208",
+    "https://ae-expressions.docsforadobe.dev/text/variable-fonts/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Expressions (engine and scripting)",
+   "summary": "JavaScript snippets on any property that compute its value every frame; the project's engine is JavaScript (default since 16.0) or Legacy ExtendScript.",
+   "use_for": [
+    "procedural motion (wiggle, loops, follow)",
+    "link many layers to one control",
+    "auto-size boxes to text",
+    "data-driven values",
+    "keep graphics responsive inside MOGRTs"
+   ],
+   "how": "Alt/Option-click a property's stopwatch and type the expression; pick-whip to link properties; Project Settings > Expressions sets the engine. Animation > Keyframe Assistant > Convert Expression to Keyframes bakes it.",
+   "scriptable": "yes",
+   "script_api": "prop.canSetExpression, prop.expression = '...', prop.expressionEnabled, prop.expressionError (read after setting); app.project.expressionEngine = 'javascript-1.0' | 'extendscript'; app.project.autoFixExpressions(oldText, newText) after renames.",
+   "limits": "Expressions referencing layers/effects by name break on rename or in other languages; heavy expressions (valueAtTime loops, sourceRectAtTime on long text) slow previews and renders. New 26.0 methods (previousKey/nextKey, dropdown .text) need the JavaScript engine.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/project/",
+    "https://ae-scripting.docsforadobe.dev/property/property/",
+    "https://ae-expressions.docsforadobe.dev/objects/property/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Common expressions library",
+   "summary": "Proven one-liners an edit planner can paste into AE properties.",
+   "use_for": [
+    "camera shake / handheld drift",
+    "looping animations",
+    "delays and follow-through",
+    "auto-sizing lower thirds",
+    "counters",
+    "stepped/stop-motion feel"
+   ],
+   "how": "wiggle(2, 15) on Position = handheld drift (freq per second, amplitude in px); loopOut('cycle'|'pingpong'|'offset'|'continue') after keyframes; value + [time*50, 0] = constant drift; thisComp.layer('Leader').transform.position.valueAtTime(time - 0.1) = follow with delay; linear(time, inPoint, inPoint+0.5, 0, 100) / ease(...) = timed ramps; posterizeTime(8); value = stepped 8 fps look; r = thisComp.layer('Title').sourceRectAtTime(time, false); [r.width + 40, r.height + 20] on a box Size = box hugs text; Math.round(effect('Slider Control')('Slider')) on Source Text = counter; overshoot/bounce: n = nearestKey(time) and decay of velocityAtTime(key.time) (classic inertial bounce); 26.0+: thisProperty.previousKey(time).time / nextKey(time) for time since/until keyframes; effect('Dropdown Menu Control')('Menu').text for the selected item label.",
+   "scriptable": "yes",
+   "script_api": "Set any of these with prop.expression = '...'. Signatures: wiggle(freq, amp, octaves=1, amp_mult=0.5, t=time), loopOut(type='cycle', numKeyframes=0), smooth(width=0.2, samples=5, t=time), valueAtTime(t), velocityAtTime(t), key(i), nearestKey(t), previousKey(t)/nextKey(t) (26.0+, JS engine only).",
+   "limits": "wiggle is random but deterministic per layer (same seed each render); call seedRandom(n) first (timeless=false) to get a different pattern. sourceRectAtTime on text with animators measures the un-animated layout. Number formatting with toLocaleString('en-IN') is unverified in AE's engine - build lakh/crore grouping with plain string code. See also: 'Marker-driven animation (expressions keyed to markers)'; 'Live lines between layers: createPath() and points()'; 'clamp(), linear() and ease() remaps'; 'lookAt() and pointing layers at targets'; 'Space transforms: toComp, fromComp, toWorld, fromWorld'; 'Text style expressions (sourceText.style)'; 'sampleImage() colour pickup'; 'framesToTime() and timeToFrames()'; 'Index-based stagger and seeded randomness'.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/objects/property/",
+    "https://community.adobe.com/announcements-532/expression-scripting-access-for-dropdown-text-and-keyframes-in-after-effects-beta-26-0x40-314514"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Expression controls as rigs (Slider, Checkbox, Color, Point, Angle, Layer, Dropdown)",
+   "summary": "Effects under Expression Controls (ADBE Slider Control, ADBE Checkbox Control, ADBE Color Control, ADBE Point Control, ADBE Point3D Control, ADBE Angle Control, ADBE Layer Control, ADBE Dropdown Control) that hold values other properties read by expression - the standard way to build one-knob rigs and MOGRT parameters.",
+   "use_for": [
+    "one slider drives a whole animation",
+    "colour theme switch for a template",
+    "style picker via Dropdown Menu",
+    "expose controls in Essential Graphics"
+   ],
+   "how": "Effect > Expression Controls > ... on a null or the layer; rename the effect (e.g. 'Count'); pick-whip properties to it. Dropdown Menu Control items are edited with the Edit button.",
+   "scriptable": "yes",
+   "script_api": "e = layer.property('ADBE Effect Parade').addProperty('ADBE Slider Control'); e.name = 'Count'; re-fetch by name after adding more effects (AdobeBridge house_mogrts.jsx). 26.0+: dropdown prop.valueText (current label) and prop.propertyParameters (all labels) in scripting; .text / .items / .textAtTime(t) in JS expressions.",
+   "limits": "Slider Control range is -1,000,000..1,000,000 (harvest) though the visible slider is narrower; Dropdown Menu Control defaults to 3 items (Menu 1..3); values outside a target property's range are clamped by that property. Dropdown items: dropdown.property(1).setPropertyParameters(['A', 'B', '(-', 'C']) (17.0.1; check isDropdownEffect; no empty, duplicate or backslash items; '(-' makes a separator) - returns the new Menu property, re-fetch after. Item strings must be encodable in the system code page: Hindi item labels on an English-locale Windows come out illegible - keep item labels ASCII and map index -> Hindi text in the expression. Separators claim an index; setPropertyParameters throws on failure. Expression .text/.items do not work on Layer Control dropdowns. Drive logic by index, not label (labels change with UI language).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/",
+    "https://community.adobe.com/announcements-532/expression-scripting-access-for-dropdown-text-and-keyframes-in-after-effects-beta-26-0x40-314514",
+    "house_mogrts.jsx",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "both",
+   "name": "Essential Graphics panel and MOGRT export",
+   "summary": "Turns an AE composition into a Motion Graphics Template (.mogrt) with named controls that Premiere editors (and scripts) can change: text, colours, sliders, checkboxes, points, angles, dropdowns, fonts and replaceable media.",
+   "use_for": [
+    "house lower thirds, name supers, breaking-news straps",
+    "counters and stat cards reused across episodes",
+    "end cards and CTA templates for reels"
+   ],
+   "how": "AE: Window > Essential Graphics, set the comp as Primary, name the template, drag properties into the panel (or right-click > Add Property to Essential Graphics), group/rename controls, Export Motion Graphics Template. Premiere: drag the .mogrt from the Essential Graphics browse tab or import it; edit controls in the Properties/Essential Graphics panel.",
+   "scriptable": "yes",
+   "script_api": "AE: comp.motionGraphicsTemplateName = 'HB Counter'; prop.addToMotionGraphicsTemplateAs(comp, 'Label') (16.1; canAddToMotionGraphicsTemplate(comp) to test); comp.exportAsMotionGraphicsTemplate(true, folderPath) (15.0). PR: seq.importMGT(path, timeTicksString, vTrackIndex, aTrackIndex) returns a TrackItem; trackItem.getMGTComponent().properties lists the controls (AdobeBridge pr_build.jsx). Text controls return a JSON string containing 'textEditValue'.",
+   "limits": "Field-tested in AdobeBridge: the project must be saved before export; the path given is a FOLDER and the file is named after the template; the old project object becomes invalid after export (re-read app.project). Older docs list only Checkbox, Color, Slider and Source Text as addable types; newer AE also exposes Point, Angle, Dropdown and Media Replacement. Template effects must exist in Premiere's AE engine (third-party plug-ins break the template). With no folder argument the .mogrt goes to %APPDATA%/Adobe/Common/Motion Graphics Templates; an unsaved project makes AE prompt to save (blocks an unattended run).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/compitem/",
+    "https://ae-scripting.docsforadobe.dev/property/property/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "house_mogrts.jsx",
+    "pr_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Essential Properties (Master Properties) and Media Replacement",
+   "summary": "Properties added to a precomp's Essential Graphics panel show up on every instance of that precomp in a parent comp under 'Essential Properties', so each instance can carry different text/colours/media without duplicating the precomp.",
+   "use_for": [
+    "one lower-third precomp used 20 times with different names",
+    "reusable stat card instances",
+    "swap the photo inside a frame template per instance (Media Replacement)"
+   ],
+   "how": "Inside the precomp: Essential Graphics > add properties (and a replaceable layer for media). In the parent comp: twirl the layer > Essential Properties, edit values per instance; right-click > Push to Master / Reset.",
+   "scriptable": "partial",
+   "script_api": "Instance values live under layer.property('ADBE Layer Overrides') (match name present in the 26.0 binary); setting them by name with setValue is expected to work but is unverified for Source Text. Property.essentialPropertySource (22.0) returns the source property; Media Replacement: prop.canSetAlternateSource / prop.setAlternateSource(avItem) / prop.alternateSource (18.0).",
+   "limits": "Only properties added to the precomp's Essential Graphics are overridable. Expressions inside the precomp see the master value unless they read the override (behaviour unverified).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Responsive Design - Time (protected regions)",
+   "summary": "Marks intro/outro regions of a comp or MOGRT that keep their timing when the comp or template duration is changed - the middle stretches, the animations at the ends do not.",
+   "use_for": [
+    "MOGRT lower thirds whose in/out animations stay fixed when an editor lengthens them in Premiere",
+    "variable-length bumpers"
+   ],
+   "how": "Composition > Responsive Design - Time > Create Intro / Create Outro (from the work area), or add a composition marker and tick Protected Region; nested comps can be set to inherit.",
+   "scriptable": "yes",
+   "script_api": "Composition marker with MarkerValue.protectedRegion = true (16.0): m = new MarkerValue('intro'); m.duration = 0.6; m.protectedRegion = true; comp.markerProperty.setValueAtTime(0, m).",
+   "limits": "Only works when the duration change happens through the template/comp duration; time-remapped layers ignore it. comp.markerProperty is documented (CompItem, 14.0). protectedRegion applies to composition markers only (it also reads true on nested-comp layer markers).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/other/markervalue/",
+    "https://ae-scripting.docsforadobe.dev/item/compitem/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Time remapping, freeze frames, reverse and time stretch",
+   "summary": "Remaps which source frame plays at each comp time (speed ramps, holds, reverse) or uniformly stretches a layer's duration.",
+   "use_for": [
+    "speed ramps on action b-roll",
+    "freeze-frame + zoom 'record scratch' moments",
+    "reverse a clip for a rewind gag",
+    "slow a clip to fit voice-over"
+   ],
+   "how": "Layer > Time > Enable Time Remapping (Ctrl+Alt+T) adds a Time Remap property with keyframes at in/out; add keyframes and drag values (graph editor for ramps). Layer > Time > Freeze Frame (adds a hold keyframe at the CTI), Time-Reverse Layer (Ctrl+Alt+R), Time Stretch (percentage). Extend the layer's out point after slowing down.",
+   "scriptable": "yes",
+   "script_api": "if (layer.canSetTimeRemapEnabled) layer.timeRemapEnabled = true; tr = layer.property('ADBE Time Remapping'); tr.setValueAtTime(compTime, sourceTime); tr.setInterpolationTypeAtKey(i, KeyframeInterpolationType.HOLD) for a freeze; layer.stretch = 200 (percent; negative reverses); layer.outPoint = ... to extend.",
+   "limits": "Enabling remap clamps the layer to the source length (last frame holds beyond it). Slow-downs show duplicated frames unless frame blending / Pixel Motion / Timewarp is used. Audio is retimed without pitch correction.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Frame blending (Frame Mix / Pixel Motion)",
+   "summary": "Interpolates new frames when footage is slowed, stretched or at a different frame rate: Frame Mix cross-dissolves, Pixel Motion uses optical flow.",
+   "use_for": [
+    "smoother slow motion from 25/30 fps news footage",
+    "conform 24 fps clips in 25/30 fps timelines"
+   ],
+   "how": "Turn on the layer's Frame Blending switch (click once = Frame Mix, twice = Pixel Motion) and the comp's Enable Frame Blending button.",
+   "scriptable": "yes",
+   "script_api": "comp.frameBlending = true; layer.frameBlendingType = FrameBlendingType.PIXEL_MOTION | FRAME_MIX | NO_FRAME_BLEND (AVLayer.frameBlending is read-only).",
+   "limits": "Only affects layers whose frames are being retimed; Pixel Motion warps edges and occlusions (hands, crowds). For per-clip control of method, vector detail and smoothing use the Timewarp effect.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://ae-scripting.docsforadobe.dev/item/compitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Slow-motion and synthetic blur effects: Timewarp, Pixel Motion Blur, CC Force Motion Blur",
+   "summary": "Effect-based retiming and motion blur for footage (which the layer motion-blur switch cannot blur because its pixels do not move in AE).",
+   "use_for": [
+    "optical-flow slow motion with control (Timewarp)",
+    "add blur to fast pans/whips in footage (Pixel Motion Blur)",
+    "blur precomp animations that lack motion blur (CC Force Motion Blur)"
+   ],
+   "how": "Timewarp (ADBE Timewarp): Method 1-3 (default 3 = Pixel Motion), Adjust Time By 1 Speed / 2 Source Frame, Speed (default 50), Vector Detail, Enable Motion Blur, Shutter Angle. Pixel Motion Blur (ADBE OFMotionBlur): Shutter Angle (default 180), Shutter Samples, Vector Detail. CC Force Motion Blur samples time on a precomp layer.",
+   "scriptable": "yes",
+   "script_api": "Effects: {'name': 'ADBE Timewarp', 'props': {'Method': 3, 'Speed': 40}}, {'name': 'ADBE OFMotionBlur', 'props': {'Shutter Angle': 270}}, {'name': 'CC Force Motion Blur'} (harvested match names; see the effect cards for full ranges).",
+   "limits": "Timewarp on a nested comp needs the comp to have frames to sample (precompose). Optical-flow artefacts on occlusions.",
+   "status": "current",
+   "sources": [
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Motion blur (layer and composition switches)",
+   "summary": "Renders blur from AE-animated movement (transforms, masks, shapes, text, many effects) using a virtual shutter.",
+   "use_for": [
+    "natural-looking fast slides, whips and zooms of graphics",
+    "kinetic typography that does not strobe"
+   ],
+   "how": "Enable the layer's Motion Blur switch and the comp's Enable Motion Blur button; Composition Settings > Advanced: Shutter Angle (180 = film look, 360 max natural), Shutter Phase, Samples Per Frame, Adaptive Sample Limit.",
+   "scriptable": "yes",
+   "script_api": "layer.motionBlur = true; comp.motionBlur = true; comp.shutterAngle (0-720); comp.shutterPhase (-360..360); comp.motionBlurSamplesPerFrame (2-64); comp.motionBlurAdaptiveSampleLimit (16-256).",
+   "limits": "Does not blur motion inside footage (use Pixel Motion Blur). Multiplies render time. The Advanced 3D renderer did not support motion blur on 3D layers as of 2024 community reports (unverified for 26.x).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/compitem/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://community.adobe.com/questions-529/why-is-there-no-motion-blur-in-after-effects-advanced-3d-or-does-the-new-version-have-it-56047"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "3D layers (Classic 3D)",
+   "summary": "Any 2D layer can be made 3D (Z position, orientation, X/Y/Z rotation, material options) and viewed through cameras and lights; text can be per-character 3D.",
+   "use_for": [
+    "2.5D parallax photo moves for documentaries (cut-out layers at different Z)",
+    "fly-through title sequences",
+    "postcards/cards turning in space",
+    "per-character 3D text reveals"
+   ],
+   "how": "Toggle the 3D Layer switch; move in Z; use the 3D gizmo (25.6 can transform several 3D layers at once), Draft 3D mode and the 3D ground plane while working.",
+   "scriptable": "yes",
+   "script_api": "layer.threeDLayer = true; layer.threeDPerChar = true (text); transform props 'ADBE Position', 'ADBE Orientation', 'ADBE Rotate X'/'ADBE Rotate Y'/'ADBE Rotate Z'; comp.draft3d = true for interactive work.",
+   "limits": "In Classic 3D, effects and blending modes work on 3D layers but there is no real geometry (no bevel/extrude). Collapsed precomps and adjustment layers interact with 3D order in non-obvious ways (render order breaks at 2D layers).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://www.cgchannel.com/2025/11/adobe-adds-new-3d-features-to-after-effects-25-6-and-the-ae-beta/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Cameras (including depth of field)",
+   "summary": "Camera layers give perspective, moves and lens blur to 3D layers; one-node or two-node (point of interest); depth of field works in the Classic 3D renderer on 26.0 (measured), in Advanced 3D only from 26.3.",
+   "use_for": [
+    "documentary photo parallax push-ins",
+    "dolly/orbit moves around 3D titles",
+    "rack focus between foreground and background layers"
+   ],
+   "how": "Layer > New > Camera (pick preset lens); move with the Orbit/Pan/Dolly camera tools; Camera Options: Zoom, Depth of Field, Focus Distance, Aperture, Blur Level; right-click > Camera > Link Focus Distance to Layer.",
+   "scriptable": "yes",
+   "script_api": "cam = comp.layers.addCamera('CAM', [960, 540]); options group 'ADBE Camera Options Group' with 'ADBE Camera Zoom', 'ADBE Camera Depth of Field', 'ADBE Camera Focus Distance', 'ADBE Camera Aperture', 'ADBE Camera Blur Level', 'ADBE Camera Focus Area Width' (match names in the 26.0 binary); changelog lists FocusAreaWidth and NearFarBlurMultiplier camera properties for 26.3.",
+   "limits": "Camera only affects 3D layers. For depth of field set the comp to Classic 3D (slow, but it works on 26.0). Measured on AE 26.0 (live wave 3): depth of field renders under Classic 3D (comp.renderer 'ADBE Advanced 3d', an old internal name): with Aperture 300 and Blur Level 100 a layer 900 px in front of the focus plane lost a third of its sharpness, one 2500 px behind about 5 %, the focused layer none. Under Advanced 3D ('ADBE Calder') 26.0 hides Depth of Field, Focus Distance, Aperture and Blur Level and refuses values from a script, so nothing blurs; Adobe lists Advanced 3D depth of field for 26.3. See also: 'Camera rigs: one-node vs two-node and a null rig for orbit, dolly and truck'; 'Camera depth of field and rack focus'; 'Camera wiggle on the camera, not the layers'; 'Photo parallax with 3D layers and a camera'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://community.adobe.com/announcements-527/after-effects-26-3-is-here-1628208",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Lights, environment light (HDRI) and shadows",
+   "summary": "Light layers (Parallel, Spot, Point, Ambient, Environment) light 3D layers; Environment lights use an HDRI or any 2D layer for image-based lighting in Advanced 3D; 26.0 adds shadow casting for Spot and Parallel lights in Advanced 3D (helpx lists Spot, Parallel and Environment as shadow-casting, several at once).",
+   "use_for": [
+    "light 3D models and parametric meshes realistically",
+    "shadows of a 3D object onto a ground plane / shadow catcher",
+    "moody spotlight on a 3D title"
+   ],
+   "how": "Layer > New > Light, choose type; Light Options: Intensity, Color, Cone Angle/Feather, Falloff, Casts Shadows, Shadow Darkness, Shadow Diffusion; layers need Material Options > Casts Shadows / Accepts Shadows. Environment: set Source to an HDR/EXR or 2D layer.",
+   "scriptable": "yes",
+   "script_api": "light = comp.layers.addLight('KEY', [960, 540]); light.lightType = LightType.SPOT (PARALLEL, POINT, AMBIENT, ENVIRONMENT - ENVIRONMENT added 24.3); light.lightSource = someLayer (24.3 HDR/EXR only; 25.2 any 2D video/still/precomp layer; 3D layers error); options group 'ADBE Light Options Group' ('ADBE Light Intensity', 'ADBE Light Color', 'ADBE Light Cone Angle', 'ADBE Light Shadow Darkness', 'ADBE Light Shadow Diffusion').",
+   "limits": "Environment lights only work in the Advanced 3D renderer. Shadow quality depends on renderer settings and GPU.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/lightlayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://www.cgchannel.com/2023/12/adobe-releases-after-effects-24-1/",
+    "https://www.cgchannel.com/2026/01/adobe-releases-after-effects-26-0-with-native-substance-support/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Advanced 3D renderer",
+   "summary": "GPU composition renderer for real 3D: imported 3D models, parametric meshes, PBR (Adobe Standard Material), Substance materials, environment lighting, shadows, depth of field (26.3), with high-quality antialiasing.",
+   "use_for": [
+    "3D logos/products/props inside AE",
+    "3D primitives and textured shapes for explainers",
+    "realistic lighting of 3D elements composited over footage"
+   ],
+   "how": "Composition Settings > 3D Renderer > Advanced 3D (or the renderer dropdown at the top-right of the Composition panel); Renderer Options for quality/samples.",
+   "scriptable": "yes",
+   "script_api": "comp.renderer = 'ADBE Calder' - the string 'ADBE Calder' plus the UI name 'Advanced 3D' are in Calder.aex of the 26.0 install, and AE 26.0 offers 'ADBE Advanced 3d' (Classic 3D, despite the name), 'ADBE Calder' (Advanced 3D) and 'ADBE Ernst' (Cinema 4D) in comp.renderers (measured): read the list and match the value before setting.",
+   "limits": "Needs a supported GPU ('Advanced 3D is not supported by the current hardware' otherwise). Effects and blending modes are not available on 3D model layers (precompose the result to add effects). Motion blur on 3D layers was unsupported per 2024 reports (unverified for 26.x). Depth of field needs 26.3+: on 26.0 the camera's Depth of Field, Focus Distance, Aperture and Blur Level are hidden under this renderer and refuse values from a script (measured); use Classic 3D for a rack focus there. helpx: discrete GPU with at least 4 GB VRAM on Windows (NVIDIA CUDA 11.8+ Maxwell or newer, or listed AMD/Intel cards). Adding a 3D model to a comp switches it to Advanced 3D automatically.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/advanced-3d-renderer.html",
+    "https://www.cgchannel.com/2023/12/adobe-releases-after-effects-24-1/",
+    "https://community.adobe.com/questions-529/is-it-possible-to-modify-render-engine-with-script-72831",
+    "https://community.adobe.com/questions-529/why-is-there-no-motion-blur-in-after-effects-advanced-3d-or-does-the-new-version-have-it-56047",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/Required/Calder.aex",
+    "https://helpx.adobe.com/after-effects/desktop/work-with-3d-composition/advanced-3d-renderer/advanced-3d-renderer.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Classic 3D and Cinema 4D renderers (Cineware)",
+   "summary": "The other two comp renderers: Classic 3D (fast, 2D layers in 3D space, effects allowed) and Cinema 4D (CPU, adds extrusion and bevels for text and shape layers). Cineware imports .c4d scenes. Cinema 4D (a Lite licence comes with AE) is an optional Creative Cloud add-on, not part of the AE install, and it is NOT installed on this machine.",
+   "use_for": [
+    "extruded 3D text titles (Cinema 4D renderer)",
+    "bring a C4D scene into AE (Cineware)",
+    "fast 2.5D motion graphics (Classic 3D)"
+   ],
+   "how": "Composition Settings > 3D Renderer > Classic 3D / Cinema 4D; with Cinema 4D, 3D text/shape layers get Geometry Options (Extrusion Depth, Bevel). File > New > MAXON CINEMA 4D File, or import .c4d (adds the Cineware effect).",
+   "scriptable": "yes",
+   "script_api": "comp.renderer = 'ADBE Advanced 3d' (Classic 3D) or 'ADBE Ernst' (Cinema 4D) per community answers; read comp.renderers first. Extrusion group 'ADBE Extrsn Options Group' > 'ADBE Extrsn Depth'. Cineware is an effect (harvest: 'Cineware', match 'CINEMA 4D Effect').",
+   "limits": "Checked 2026-10-03: the harvest's Cineware entry errors with 'Cinema 4D 2025 must be installed' and C:/Program Files/Maxon Cinema 4D 2025 holds only a licenses folder, so Cineware and very likely the Cinema 4D renderer are unavailable here - read comp.renderers before choosing 'ADBE Ernst', or install the add-on (Creative Cloud > After Effects > ... > Add-ons). The Cinema 4D renderer is CPU-bound and slow and limits effects on 3D layers. For new 3D work prefer Advanced 3D.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/questions-529/is-it-possible-to-modify-render-engine-with-script-72831",
+    "https://helpx.adobe.com/after-effects/using/c4d.html",
+    "https://ae-scripting.docsforadobe.dev/item/compitem/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll",
+    "pve/harvest/ae_effects.json",
+    "https://helpx.adobe.com/after-effects/desktop/work-with-other-applications/work-with-cinema-4d-and-cineware/c4d.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "3D model import (GLB/glTF, OBJ, FBX)",
+   "summary": "Import 3D models as 3D model layers rendered by Advanced 3D (24.1+); embedded animations from imported models play since 25.0; cameras/lights can be extracted from glTF.",
+   "use_for": [
+    "3D props (podium, ballot box, globe, phone) in explainers",
+    "product/landmark spins",
+    "animated character or object clips from GLB"
+   ],
+   "how": "File > Import a .glb/.gltf/.obj/.fbx (GLB preferred: single file with textures), drag into an Advanced 3D comp; adjust materials, pick embedded animation in the layer's options.",
+   "scriptable": "partial",
+   "script_api": "Import with app.project.importFile(new ImportOptions(new File(path))) and comp.layers.add(item) (creation path for model layers is not documented - unverified); the result is a ThreeDModelLayer (24.4; test with layer instanceof ThreeDModelLayer); model animation options sit under 'ADBE ModelAnimOptionsSGrp' (match name in the 26.0 binary, unverified as a public API).",
+   "limits": "OBJ materials often import wrong; USD not supported. No effects/blend modes directly on model layers. Heavy models slow previews. Adding a model to a comp opens a Model Settings dialog in the UI and switches the comp to Advanced 3D; whether comp.layers.add() raises that dialog from a script is unverified - run it under the dialog watchdog.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/import-3d-model.html",
+    "https://www.cgchannel.com/2023/12/adobe-releases-after-effects-24-1/",
+    "https://www.redsharknews.com/adobe-after-effects-25-features-3d-and-motion-design-upgrades",
+    "https://ae-scripting.docsforadobe.dev/layer/threedmodellayer/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll",
+    "https://helpx.adobe.com/after-effects/desktop/import-files/import-and-add-3d-models/import-3d-model.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Parametric meshes (3D primitives, AE 26.0+)",
+   "summary": "Native 3D primitives drawn in AE - cube, sphere, cylinder, cone, torus, plane - with animatable shape and material properties (roughness, metalness, emissive); 26.2 adds displacement from height data.",
+   "use_for": [
+    "3D pedestals, globes and backdrops without external 3D apps",
+    "textured 3D shapes for explainer scenes",
+    "simple 3D infographics (3D bars from cylinders/cubes)"
+   ],
+   "how": "Use the mesh drawing tool in an Advanced 3D comp, choose the primitive, then edit its parameters and material in the timeline/Properties panel; apply Substance materials for textures.",
+   "scriptable": "partial",
+   "script_api": "Scripting arrived in 26.3: comp.layers.addParametricMesh(name, meshType) returning a ParametricMeshLayer (meshType = ParametricMeshType.SPHERE | PLANE | CYLINDER | CONE | TORUS | CUBE; also read/write layer.parametricMeshType, parametricMeshOptions and ParametricBevelOptions). Gate scripted calls on parseFloat(app.version) >= 26.3. On the installed 26.0 there is no creation API (UI only), though the property 'ADBE Parametric Mesh Type' exists in the binary.",
+   "limits": "Needs Advanced 3D. Displacement needs 26.2+, scripted creation 26.3+ (Installed build on this machine is AE 26.0 (aerender reports 26.0x67, checked 2026-10-03)).",
+   "status": "current",
+   "sources": [
+    "https://www.cgchannel.com/2026/01/adobe-releases-after-effects-26-0-with-native-substance-support/",
+    "https://www.cgchannel.com/2026/04/adobe-releases-after-effects-26-2/",
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll",
+    "https://ae-scripting.docsforadobe.dev/layer/parametricmeshlayer/",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Substance 3D materials (.sbsar, AE 26.0+)",
+   "summary": "Import Substance 3D Designer materials (.sbsar), assign them to 3D models and meshes, and edit their exposed parameters inside AE; 1,300+ free materials in the Substance 3D community library. Beta (26.5): materials on 3D text/shapes and comp layers as material sources.",
+   "use_for": [
+    "realistic metal, stone, fabric or wood on 3D props and titles",
+    "stylised textures for 3D explainers"
+   ],
+   "how": "File > Import the .sbsar, then assign it to a model/mesh's material slot and tweak its parameters (presets group) in the timeline.",
+   "scriptable": "no",
+   "script_api": "none documented (no Substance entries in the scripting changelog); property groups 'ADBE Substance Group' / 'ADBE Substance Presets' exist in the binary but setting them by script is unverified.",
+   "limits": "Advanced 3D only. Professional materials need a Substance 3D subscription. 3D text/shape support is beta in 26.5.",
+   "status": "current",
+   "sources": [
+    "https://www.cgchannel.com/2026/01/adobe-releases-after-effects-26-0-with-native-substance-support/",
+    "https://www.cgchannel.com/2026/09/adobe-releases-after-effects-26-5-and-new-ai-assistant-in-beta/",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/BEE.dll"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "SVG import and Illustrator/SVG paste as shape layers",
+   "summary": "26.0 imports SVG as native editable shape layers (paths, fills, transforms) and converts Illustrator layers with gradients, strokes and transparency; 26.2 adds Import As Composition (editable layers) or Footage (rasterised); 26.3 lets Edit > Paste turn copied Illustrator/SVG content into shape layers.",
+   "use_for": [
+    "party symbols, logos and icons that need Trim Paths draw-ons",
+    "state/district maps from SVG for election graphics",
+    "icon sets for explainers"
+   ],
+   "how": "File > Import > the .svg (choose Composition or Footage in 26.2+); for .ai: import as Composition then Layer > Create > Create Shapes from Vector Layer. 26.3+: copy in Illustrator, Edit > Paste in AE. 26.2+: the default (Footage vs Composition - Retain Layer Sizes) follows Preferences > Import > Drag Multiple File Items As; numbered SVGs can import as an SVG sequence.",
+   "scriptable": "partial",
+   "script_api": "app.project.importFile(new ImportOptions(new File('x.svg'))) imports the file; choosing Composition vs Footage by script (ImportOptions.importAs = ImportAsType.COMP) is unverified for SVG - test io.canImportAs(ImportAsType.COMP) first. Create Shapes from Vector Layer via app.executeCommand(app.findMenuCommandId('Create Shapes from Vector Layer')) on the selected layer (ID not verified).",
+   "limits": "Complex SVG features (filters, masks, embedded images, text) may not convert. Composition/Footage choice needs 26.2+, paste needs 26.3+ (Installed build on this machine is AE 26.0 (aerender reports 26.0x67, checked 2026-10-03)). Paste (26.3) brings paths only, no live text (user report on Adobe's 26.3 announcement). helpx (Sept 2026) names the convert command 'Create Shapes and Text from Vector Layer' (text conversion is beta); on 26.0 it is 'Create Shapes from Vector Layer' - look the command up by the exact local menu text.",
+   "status": "current",
+   "sources": [
+    "https://www.cgchannel.com/2026/01/adobe-releases-after-effects-26-0-with-native-substance-support/",
+    "https://www.newsshooter.com/2026/01/22/whats-new-in-adobe-after-effects-26-0/",
+    "https://www.cgchannel.com/2026/04/adobe-releases-after-effects-26-2/",
+    "https://community.adobe.com/announcements-527/after-effects-26-3-is-here-1628208",
+    "https://helpx.adobe.com/after-effects/desktop/import-files/import-svg-files/import-svg-files.html",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Create Shapes from Text / Masks from Text / Shapes from Vector Layer",
+   "summary": "Converts live text or Illustrator/PDF/EPS layers into shape layers (or masks) so outlines can be stroked, trimmed and deformed.",
+   "use_for": [
+    "outline draw-on of a Hindi or English title with Trim Paths",
+    "morphing or distorting letters",
+    "editable logo shapes from an .ai file"
+   ],
+   "how": "Select the layer > Layer > Create > Create Shapes from Text (or Create Masks from Text / Create Shapes from Vector Layer). The original layer is hidden and a new shape layer added.",
+   "scriptable": "partial",
+   "script_api": "app.executeCommand(app.findMenuCommandId('Create Shapes from Text')) with the text layer selected (menu text must match the UI language; ID unverified). No direct API.",
+   "limits": "Result is no longer editable text. Each glyph becomes its own group; complex scripts (Devanagari) convert by glyph outlines - check matras survive. Newer builds rename the vector command 'Create Shapes and Text from Vector Layer' (see the SVG card).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/",
+    "https://hyperbrew.co/blog/2025-after-effects-command-ids/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Data-driven animation (JSON, CSV, TSV, mgJSON)",
+   "summary": "Import data files as footage and read them in expressions so charts, counters and text update from data.",
+   "use_for": [
+    "election results bars and seat counters",
+    "budget / GDP numbers in explainers",
+    "poll trackers",
+    "batch versions of a template from a spreadsheet"
+   ],
+   "how": "File > Import the .json/.csv/.tsv/.mgjson/.bvh (it appears as a footage item); write expressions that read it. CSV/TSV: footage('results.csv').dataValue([a, b]) (zero-indexed) - the index ORDER is contested: helpx says dataValue([15,1]) returns row 16 of the second column (row first), while the expression reference documents dataValue only for mgJSON paths; pick-whip from the layer's Data group once and copy the order it writes. JSON: footage('data.json').sourceData[0].Seats or eval(footage('data.json').sourceText). mgJSON streams: dataValue(path), dataKeyCount(path), dataKeyTimes(path, t0, t1), dataKeyValues(path, t0, t1).",
+   "scriptable": "yes",
+   "script_api": "Import by script with app.project.importFile(...); set expressions with prop.expression. Replace data later with footageItem.replace(new File(newPath)) so expressions keep working.",
+   "limits": "The expression refers to the item's NAME in the project - renaming breaks it. Check which row index holds the CSV header in your file. Expressions re-read per frame (cache values in a variable). Plain JSON is not shown as data streams in the timeline (read it with sourceData). See also: 'Shape-layer charts from data (technique)'; 'Bar chart grow (shape layers)'; 'Line chart draw-on'; 'Donut chart segments'; 'Pie chart slices pop'; 'Percentage ring with counter'; 'Progress bar fill'; 'Timeline bar with milestones'.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/objects/footage/",
+    "https://helpx.adobe.com/after-effects/desktop/animate-in-after-effects/data-driven-animation/data-driven-animations.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Render Queue and output modules",
+   "summary": "AE's built-in renderer: each queue item has Render Settings (quality, resolution, time span) and Output Modules (format, codec, alpha, audio, file path).",
+   "use_for": [
+    "final export of AE comps (H.264 mp4 or ProRes/alpha .mov)",
+    "alpha-channel overlays for Premiere",
+    "batch renders of many comps"
+   ],
+   "how": "Composition > Add to Render Queue (Ctrl+M); set Render Settings template (e.g. 'Best Settings') and Output Module template; click Render.",
+   "scriptable": "yes",
+   "script_api": "rq = app.project.renderQueue.items.add(comp); rq.applyTemplate('Best Settings'); om = rq.outputModule(1); om.applyTemplate('H.264 - Match Render Settings - 40 Mbps' | 'High Quality with Alpha'); om.file = new File(path); app.project.renderQueue.render() (blocks until done). These template names work in AdobeBridge vfx_build.jsx on 26.0; list the installed ones with om.templates.",
+   "limits": "render() blocks the scripting thread and the UI; prefer aerender for unattended jobs. Template names are locale- and user-specific. Alpha needs a codec with alpha (the 'High Quality with Alpha' .mov template).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/renderqueue/renderqueue/",
+    "vfx_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "aerender (command-line renderer)",
+   "summary": "aerender.exe renders a project's render queue or one comp headlessly; used by AdobeBridge vfx.py.",
+   "use_for": [
+    "unattended renders from a pipeline",
+    "render frame ranges on several machines",
+    "re-render after a scripted build"
+   ],
+   "how": "\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/aerender.exe\" -project X.aep [-comp \"Comp 1\" | -rqindex N] [-RStemplate T] [-renderSettings \"Resolution: Half; Quality: Draft\"] [-OMtemplate T] [-outputSettings \"...\"] [-output path] [-s first] [-e last (inclusive)] [-i increment] [-mem_usage cachePct maxPct] [-mfr ON|OFF maxCpuPct] [-v ERRORS|ERRORS_AND_PROGRESS] [-close DO_NOT_SAVE_CHANGES|SAVE_CHANGES|DO_NOT_CLOSE] [-sound ON|OFF] [-reuse] [-log file] [-continueOnMissingFootage] [-version].",
+   "scriptable": "yes",
+   "script_api": "CLI, not ExtendScript. Without -comp/-rqindex it renders the whole queue as saved and ignores -RStemplate, -OMtemplate, -output, -s, -e, -i. Check the exit code and that each output file is newer than the start time (AdobeBridge vfx.py).",
+   "limits": "Starts a new AE instance unless -reuse is given; -sound only plays a completion sound (it is not audio output). Missing fonts/footage or an un-analysed Warp Stabilizer/3D tracker still render (badly) - preflight first. All flags above are from the 26.0 'aerender -help' text on this machine.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/automated-rendering-network-rendering.html",
+    "file:///C:/Program%20Files/Adobe/Adobe%20After%20Effects%202026/Support%20Files/aerender.exe",
+    "vfx.py"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "both",
+   "name": "Adobe Media Encoder hand-off",
+   "summary": "Sends AE comps (or Premiere sequences) to Adobe Media Encoder for encoding with AME presets (H.264, HEVC, social presets) while AE stays free.",
+   "use_for": [
+    "social-ready H.264/HEVC exports with AME presets",
+    "queue many versions overnight",
+    "watch-folder encodes"
+   ],
+   "how": "AE: Composition > Add to Adobe Media Encoder Queue, or Render Queue > Queue in AME. AME 2026 is installed (26.0.2).",
+   "scriptable": "yes",
+   "script_api": "app.project.renderQueue.queueInAME(render_immediately_in_AME) (14.0+; needs queued items - check app.project.renderQueue.canQueueInAME); Premiere uses app.encoder.encodeSequence(...) (see PR cards).",
+   "limits": "AME renders AE comps through Dynamic Link (slower than aerender for heavy comps); save the project first. Version-matched AME is required. AME applies its most recently used preset to queued items; queueInAME(true) starts encoding at once with no chance to change settings. See also: 'Export encoding choices: VBR 2-pass vs CBR, maximum depth and quality, field order'; 'Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift' and the 'Delivery spec: ...' cards (YouTube upload, vertical Reels/Shorts/TikTok, broadcast masters, mezzanine and archive masters, alpha overlays).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/renderqueue/renderqueue/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Performance: Multi-Frame Rendering, caching and preview",
+   "summary": "Multi-Frame Rendering (22.0) renders several frames in parallel; Speculative Preview pre-renders while idle; the Composition Profiler shows per-layer render time; High Performance Preview Playback (25.2) manages the disk cache; 26.0 stores lossless compressed preview frames for longer previews.",
+   "use_for": [
+    "faster final renders on many-core CPUs",
+    "find the slow layer or effect in a heavy comp",
+    "longer RAM previews of reels"
+   ],
+   "how": "Preferences > Memory & Performance (MFR, CPU %), Preferences > Media & Disk Cache; Composition Profiler: the render-time column/bar in the timeline; Edit > Purge.",
+   "scriptable": "yes",
+   "script_api": "app.setMultiFrameRenderingConfig(true, 90) (mfr_on, max_cpu_perc 1-100, pass 100 when mfr_on is false; 22.0; applies to the next render only and resets to the UI setting when the script ends); aerender -mfr ON 90; app.purge(target) with ONE of PurgeTarget.ALL_CACHES (RAM + disk since 24.3), ALL_MEMORY_CACHES (RAM only, 24.3), IMAGE_CACHES, SNAPSHOT_CACHES, UNDO_CACHES.",
+   "limits": "Some third-party effects are not MFR-safe and force single-frame rendering. MFR raises RAM use - lower max CPU if renders crash.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://helpx.adobe.com/after-effects/using/whats-new/2025-2.html",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Properties panel",
+   "summary": "Contextual panel showing the important controls of the selected layer(s) - transform, text (character, paragraph, fill/stroke, animators, variable font axes) and shape properties - without twirling the timeline; redesigned in 25.0.",
+   "use_for": [
+    "quick manual tweaks to text and shapes",
+    "adding text animators without menus"
+   ],
+   "how": "Window > Properties; select a layer.",
+   "scriptable": "no",
+   "script_api": "none (UI panel). Everything it edits is reachable through the property tree (layer.property(...)).",
+   "limits": "UI only; contents depend on layer type.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/properties-panel.html",
+    "https://www.redsharknews.com/adobe-after-effects-25-features-3d-and-motion-design-upgrades"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Quick Apply and Proportional Scrubbing (AE 26.2+)",
+   "summary": "Quick Apply is a search box that finds and runs any effect, animation preset or menu command; Proportional Scrubbing drags one property's hot-text across several selected layers and distributes the change by selection order (cascades in one drag).",
+   "use_for": [
+    "faster manual finishing",
+    "staggered offsets across many layers by hand"
+   ],
+   "how": "Quick Apply: Edit > Quick Apply, Ctrl+Enter (Windows) / Cmd+Return (macOS), or the lightning-bolt icon in the Timeline panel; type, Enter applies. It can also create a new Solid or Adjustment layer carrying the effect. Proportional scrubbing: select the same property on several layers and drag its value.",
+   "scriptable": "no",
+   "script_api": "none - scripts already have the equivalents: addProperty(matchName), layer.applyPreset(file), app.executeCommand(app.findMenuCommandId(name)); cascades by setting values in a loop.",
+   "limits": "Needs AE 26.2+ (Installed build on this machine is AE 26.0 (aerender reports 26.0x67, checked 2026-10-03)).",
+   "status": "current",
+   "sources": [
+    "https://www.cgchannel.com/2026/04/adobe-releases-after-effects-26-2/",
+    "https://www.provideocoalition.com/after-effect-26-2-april-2026-release/",
+    "https://helpx.adobe.com/after-effects/desktop/animate-in-after-effects/animation-keyframes/quick-apply.html",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Guides and rulers (percentage guides in 26.5)",
+   "summary": "Non-rendering guides in comp/layer views; 26.5 adds percentage-based positions, pinning to bottom/right edges and per-guide colours.",
+   "use_for": [
+    "9:16 reel safe zones (keep text clear of Instagram/YouTube UI)",
+    "consistent title placement across a series",
+    "centre and thirds lines for layout"
+   ],
+   "how": "View > Show Rulers, drag guides from the rulers; 26.5: edit a guide to set percent position, edge pin and colour.",
+   "scriptable": "yes",
+   "script_api": "item.addGuide(orientationType, position) / setGuide(position, index) (16.1, pixels); 26.5+: addGuide(guideOptions) / setGuide(index, guideOptions) with a GuideOptions object (GuideOrientationType, GuidePositionType), getGuideAsObject(). The two setGuide forms take arguments in opposite order (position first vs index first; AE picks by the 2nd argument's type). Compare guides' orientationType/positionType against the enum constants: their integer values changed between versions.",
+   "limits": "Guides never render - use a guide layer or hard rules in the planner for safe zones. Percentage guides need 26.5+. See also: 'Broadcast safe areas (action and title safe)'; 'Premiere Safe Margins and After Effects safe guides (their defaults)'; 'Platform UI safe zones (1080x1920 Reels, Shorts, TikTok)'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "https://www.cgchannel.com/2026/09/adobe-releases-after-effects-26-5-and-new-ai-assistant-in-beta/",
+    "https://ae-scripting.docsforadobe.dev/other/guideoptions/",
+    "https://ae-scripting.docsforadobe.dev/item/item/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "AI Assistant (agentic, beta)",
+   "summary": "Natural-language assistant panel in the After Effects (beta) build: organises and renames project items, reads/writes/fixes expressions, and generates images and video with Adobe Firefly and partner models.",
+   "use_for": [
+    "ad-hoc help writing expressions",
+    "summarising an unfamiliar template's structure"
+   ],
+   "how": "Install After Effects (beta) from Creative Cloud, then the AI Assistant icon in the header bar or Window > Assistant (a dockable panel).",
+   "scriptable": "no",
+   "script_api": "none - not an automation API; AdobeBridge keeps using ExtendScript.",
+   "limits": "Beta only, not in the installed release build (26.0); behaviour and availability may change; generation features presumably spend Firefly generative credits (unverified); review every change it makes.",
+   "status": "beta",
+   "sources": [
+    "https://www.cgchannel.com/2026/09/adobe-releases-after-effects-26-5-and-new-ai-assistant-in-beta/",
+    "https://www.provideocoalition.com/after-effects-portal-september-2026/",
+    "https://helpx.adobe.com/after-effects/desktop/work-with-after-effects-ai-assistant/after-effects-ai-assistant-overview.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Scene Edit Detection",
+   "summary": "Finds the cuts inside a pre-edited clip and adds layer markers, splits the layer at each cut, or splits and precomposes each shot.",
+   "use_for": [
+    "chop news packages / reference reels into shots",
+    "split before per-shot Warp Stabilizer or grading",
+    "measure cut rhythm of a reference"
+   ],
+   "how": "Right-click the layer > Scene Edit Detection > choose Create Markers / Split Layers / Split and Precompose.",
+   "scriptable": "yes",
+   "script_api": "times = layer.doSceneEditDetection(SceneEditDetectionMode.MARKERS | SPLIT | SPLIT_PRECOMP | NONE) (22.3) - returns the cut times; NONE only returns times without changing the layer.",
+   "limits": "Misses dissolves/flash frames and can split on fast pans or strobes; verify detected cuts. The call errors on a non-video layer or a layer with Time Remapping enabled (same as the UI).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Track mattes (any layer, 23.0+)",
+   "summary": "Any layer can be another layer's track matte (Alpha, Alpha Inverted, Luma, Luma Inverted); the matte layer no longer has to sit directly above.",
+   "use_for": [
+    "text reveals and wipes",
+    "footage inside text or a shape",
+    "gradient (luma) fades on one layer"
+   ],
+   "how": "In the timeline Track Matte column pick the matte layer from the dropdown and the matte type; hide the matte layer's video.",
+   "scriptable": "yes",
+   "script_api": "layer.setTrackMatte(matteLayer, TrackMatteType.ALPHA | ALPHA_INVERTED | LUMA | LUMA_INVERTED); layer.removeTrackMatte(); layer.trackMatteLayer (23.0); then matteLayer.enabled = false (AdobeBridge vfx_build.jsx).",
+   "limits": "A matte from a 3D layer or with effects renders after its own effects/transforms; mattes do not follow parenting automatically.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/",
+    "vfx_build.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Precompose (nesting) and Collapse Transformations",
+   "summary": "Groups layers into a nested comp to control effect order, reuse, or treat many layers as one; Collapse Transformations lets a nested comp's vectors/3D stay sharp and interact with the parent.",
+   "use_for": [
+    "apply one effect to a group of layers",
+    "reuse a lower third or logo animation",
+    "keep vector art sharp when scaled up"
+   ],
+   "how": "Select layers > Layer > Pre-compose (Ctrl+Shift+C), choose 'Move all attributes'; toggle the Collapse Transformations switch on the precomp layer.",
+   "scriptable": "yes",
+   "script_api": "newComp = comp.layers.precompose([layerIndices], 'name', true); precompLayer.collapseTransformation = true.",
+   "limits": "Precompose invalidates references to the moved layers (re-fetch). Collapsing changes where effects and blend modes render.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Parenting, null objects and Create Nulls From Paths",
+   "summary": "Parent layers to nulls to move groups together; the bundled Create Nulls From Paths panel links path vertices and nulls (Points Follow Nulls, Nulls Follow Points, Trace Path).",
+   "use_for": [
+    "camera-like rigs for 2D scenes (parent everything to one CAM null)",
+    "map pin that follows a route path",
+    "rig a shape's corners to nulls"
+   ],
+   "how": "Parent pick-whip column; Layer > New > Null Object; Window > Create Nulls From Paths.jsx, select a path, click a button. 25.2+ adds built-in commands that create Null controllers for positional properties (shape gradient points, puppet pins, effect points).",
+   "scriptable": "yes",
+   "script_api": "layer.parent = nullLayer (AE writes an offset so the layer stays visually still); layer.setParentWithJump(nullLayer) keeps the child's transform values unchanged, so the layer may visibly jump; comp.layers.addNull(duration). Create Nulls From Paths is a bundled ScriptUI panel (no API; reproduce with expressions like thisComp.layer('Shape').content('Path 1').path.points()).",
+   "limits": "Parenting does not pass opacity. Scale on a parent scales strokes on children.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "vfx_build.jsx",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Keyframe interpolation, easing and the Graph Editor",
+   "summary": "Controls how values move between keyframes: Linear, Bezier (ease), Hold, auto/continuous bezier, roving spatial keys; the Graph Editor shapes speed and value curves.",
+   "use_for": [
+    "snappy 'news graphic' eases (fast out, soft in)",
+    "smooth camera moves",
+    "hold keys for stepped/instant changes"
+   ],
+   "how": "Select keys > F9 Easy Ease (Shift+F9 ease in, Ctrl+Shift+F9 ease out); Graph Editor (Shift+F3) to drag influence handles; Ctrl+Alt+H toggles hold.",
+   "scriptable": "yes",
+   "script_api": "prop.setValueAtTime(t, v) / setValuesAtTimes([...], [...]); prop.setInterpolationTypeAtKey(i, KeyframeInterpolationType.BEZIER | LINEAR | HOLD, outType); prop.setTemporalEaseAtKey(i, [new KeyframeEase(speed, influence)], [...]) (one ease per dimension; spatial props take one); prop.setRovingAtKey(i, true); prop.setLabelAtKey(i, 0-16; 0 = None) (22.6). AdobeBridge ae_lib.jsx sets eases this way.",
+   "limits": "Influence range is 0.1-100. Wrong-length ease arrays throw. Out-of-range values can kill the script uncatchably (clamp first, as ae_lib.jsx does).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/",
+    "ae_lib.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Animation presets (.ffx)",
+   "summary": "Saved bundles of effects, keyframes and expressions (text animations, transitions, backgrounds) applied in one step from the Effects & Presets panel.",
+   "use_for": [
+    "fast text animate-ins/outs",
+    "reusable house looks",
+    "workaround for things scripts cannot create (e.g. puppet pins)"
+   ],
+   "how": "Effects & Presets panel > Animation Presets > drag onto a layer, or Animation > Apply Animation Preset; save your own with Animation > Save Animation Preset.",
+   "scriptable": "yes",
+   "script_api": "layer.applyPreset(new File(path_to_ffx)) - applies to the comp's currently selected layers, so select only the target layer first (AdobeBridge ae_lib.jsx uses it). See the ae_preset cards for the installed presets.",
+   "limits": "Presets saved in newer versions may not open in older ones; text presets reset some text properties. With no layer selected, applyPreset puts the preset on a NEW solid layer instead.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "ae_lib.jsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Keyframe assistants and motion panels (Convert Audio to Keyframes, Sequence Layers, Motion Sketch, Smoother, Wiggler)",
+   "summary": "Helpers that generate keyframes: Convert Audio to Keyframes (audio amplitude to slider keys), Sequence Layers (staggers layers with optional overlap), Time-Reverse Keyframes, Exponential Scale; panels Motion Sketch (record mouse path), Smoother, Wiggler.",
+   "use_for": [
+    "audio-reactive logo/visualiser pulses on beats or VO",
+    "photo montages laid end to end with crossfades",
+    "hand-drawn motion paths"
+   ],
+   "how": "Animation > Keyframe Assistant > ...; Window > Motion Sketch / Smoother / Wiggler. 25.4+ Quick Offset staggers selected layers or keyframes with a keyboard shortcut (UI only; shortcut not verified).",
+   "scriptable": "partial",
+   "script_api": "Convert Audio to Keyframes: select the audio layer and app.executeCommand(app.findMenuCommandId('Convert Audio to Keyframes')) (creates an 'Audio Amplitude' null with Both/Left/Right Channel sliders; ID unverified). Sequence Layers / Motion Sketch have no API - compute times and call setValuesAtTimes / set layer.startTime in a loop instead.",
+   "limits": "Audio keyframes are per frame (dense); smooth with smooth() or linear() remapping.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/",
+    "https://hyperbrew.co/blog/2025-after-effects-command-ids/",
+    "https://ae-scripting.docsforadobe.dev/property/property/",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Masks and mask feathering",
+   "summary": "Bezier/RotoBezier masks on any layer with modes (Add, Subtract, Intersect, Lighten, Darken, Difference), feather, variable feather (Mask Feather tool), expansion and opacity.",
+   "use_for": [
+    "vignettes and spotlights",
+    "cut-outs for parallax",
+    "reveal wipes",
+    "holes for Content-Aware Fill",
+    "privacy blur regions"
+   ],
+   "how": "Select the layer, draw with the Pen or shape tools; M/MM to show mask properties; Mask Feather tool (G cycles) adds variable feather points.",
+   "scriptable": "yes",
+   "script_api": "m = layer.property('ADBE Mask Parade').addProperty('ADBE Mask Atom'); s = new Shape(); s.vertices = [[x,y],...]; s.closed = true; m.property('ADBE Mask Shape').setValue(s); m.maskMode = MaskMode.SUBTRACT; m.property('ADBE Mask Feather').setValue([40, 40]); 'ADBE Mask Expansion', 'ADBE Mask Opacity'. Variable feather points are documented on Shape: featherSegLocs, featherRelSegLocs, featherRadii, featherInterps, featherTensions, featherTypes, featherRelCornerAngles.",
+   "limits": "Masks are in layer coordinates (not comp) - convert with layer.sourcePointToComp/compPointToSource for moved layers.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://ae-scripting.docsforadobe.dev/other/shape/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Layer styles",
+   "summary": "Photoshop-style layer styles (Drop Shadow, Inner Shadow, Outer Glow, Inner Glow, Bevel and Emboss, Satin, Color Overlay, Gradient Overlay, Stroke) applied per layer without effects.",
+   "use_for": [
+    "quick strokes and shadows on news supers",
+    "outline text for legibility over busy footage"
+   ],
+   "how": "Layer > Layer Styles > choose a style; edit under the layer's Layer Styles group.",
+   "scriptable": "partial",
+   "script_api": "Not an effect: AdobeBridge's {'name', 'props'} effect specs cannot add a layer style. Adding one has no documented API; the community route is app.executeCommand(app.findMenuCommandId('Drop Shadow')) with only that layer selected (menu-text dependent, unverified). Once present, the properties are documented by match name under the layer's 'ADBE Layer Styles' group (display 'Layer Styles'): Drop Shadow 'dropShadow/enabled' (the style itself), 'dropShadow/color', 'dropShadow/opacity', 'dropShadow/localLightingAngle' (Angle), 'dropShadow/useGlobalAngle', 'dropShadow/distance', 'dropShadow/chokeMatte' (Spread), 'dropShadow/blur' (Size); Stroke 'frameFX/color', 'frameFX/size', 'frameFX/opacity', 'frameFX/style' (Position); Color Overlay 'solidFill/color', 'solidFill/opacity'; Outer Glow 'outerGlow/color', 'outerGlow/blur', 'outerGlow/chokeMatte'.",
+   "limits": "Rendered after effects/masks; not available on all layer types; behaviour in Advanced 3D comps unverified. For scripted builds use the Drop Shadow / Stroke effects instead: addProperty for layer styles is widely reported not to work.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/",
+    "https://ae-scripting.docsforadobe.dev/layer/threedmodellayer/",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/layerstyles/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Colour management: OCIO / ACES",
+   "summary": "Project colour engine can be Adobe (ICC) or OCIO color managed (23.2+, ACES 1.2/1.3 configs or custom .ocio); 24.0 added OCIO effects (CDL/Look/Color Space/Display/File Transform); 26.5 upgrades to OCIO 2.5.1 with ACES 2.0 configs.",
+   "use_for": [
+    "mixing camera log footage with CG in ACES",
+    "consistent linear compositing for VFX shots",
+    "applying a show LUT/CDL from a colourist"
+   ],
+   "how": "File > Project Settings > Color: Color Engine (Adobe / OCIO color managed), OCIO Config, working space; per-footage Interpret Footage > Color; OCIO effects in Effect > Color Correction.",
+   "scriptable": "partial",
+   "script_api": "Documented: app.project.workingSpace, workingGamma, linearBlending, linearizeWorkingSpace, bitsPerChannel. The Color Engine / OCIO config switch has no documented scripting attribute (unverified). OCIO effects: 'ADBE OCIO Color Space Transform', 'ADBE OCIO Display Transform', 'ADBE OCIO Look Transform', 'ADBE OCIO CDL Transform', 'ADBE OCIO FILE Transform' (harvest).",
+   "limits": "For social Rec.709 deliverables keep the default engine unless footage is log/ACES. Wrong interpretation gives washed-out or crushed renders - check one frame after any engine change.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/opencolorio-aces-color-management.html",
+    "https://www.cgchannel.com/2023/02/adobe-releases-after-effects-23-2/",
+    "https://www.cgchannel.com/2023/10/adobe-ships-after-effects-24-0/",
+    "https://ae-scripting.docsforadobe.dev/general/project/",
+    "pve/harvest/ae_effects.json",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "both",
+   "name": "Dynamic Link (After Effects comps in Premiere)",
+   "summary": "Live link between Premiere and AE: replace Premiere clips with an AE comp, or import AE comps into Premiere; edits in AE update in Premiere without rendering.",
+   "use_for": [
+    "send a shot from a Premiere edit to AE for VFX/titles and back",
+    "place AE-built graphics on a Premiere timeline"
+   ],
+   "how": "Premiere: select clips > right-click > Replace With After Effects Composition; File > Adobe Dynamic Link > Import After Effects Composition. AE: File > Import Premiere Pro project.",
+   "scriptable": "partial",
+   "script_api": "PR: app.project.importAEComps(aepPath, [compNames], targetBin) / importAllAEComps(aepPath, targetBin). No API for 'Replace With After Effects Composition'.",
+   "limits": "Playback is slow (AE renders frames on demand); render-and-replace or render with aerender and import the file for final. importAEComps has been reported to return true while importing nothing - verify the bin. AE and PR versions must match.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/general/project/",
+    "https://forums.creativeclouddeveloper.com/t/importaecomps-returning-true-but-silently-failing-to-import-compositions-in-premiere/11966"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Markers (composition and layer)",
+   "summary": "Timed markers with comment, duration, label colour, chapter/URL and protected region; readable by expressions and scripts.",
+   "use_for": [
+    "beat/VO sync points that drive animations",
+    "notes for editors",
+    "cut points from Scene Edit Detection",
+    "MOGRT protected regions"
+   ],
+   "how": "Numpad * adds a marker at the CTI on the selected layer (or the comp with nothing selected); double-click to edit.",
+   "scriptable": "yes",
+   "script_api": "layer.property('Marker').setValueAtTime(t, new MarkerValue('beat')); MarkerValue: comment, duration, chapter, url, label (16.0), protectedRegion (16.0). Expressions: marker.numKeys, marker.key(i).time, marker.key('name'), thisProperty.previousKey/nextKey on marker properties (26.0).",
+   "limits": "Marker label colours are numbers 0-16, not names.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/other/markervalue/",
+    "https://ae-expressions.docsforadobe.dev/objects/property/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_tools",
+   "app": "AE",
+   "name": "Paint tools (Brush, Clone Stamp, Eraser)",
+   "scriptable": "partial",
+   "status": "current",
+   "confidence": "medium",
+   "summary": "Non-destructive vector paint strokes drawn in the Layer panel: Brush paints colour, Clone Stamp copies pixels from a source layer/time, Eraser removes; each stroke is a timed, keyframable item under the layer's Paint effect (match name ADBE Paint, harvested under '_Obsolete' because the tools apply it).",
+   "how": "Double-click the layer to open the Layer panel, pick the Brush, Clone Stamp or Eraser tool, set options in the Paint and Brushes panels, then paint. Duration: Constant (to layer end), Single Frame, Custom (N frames) or Write On (animates the stroke's End to replay how it was drawn). Clone Stamp: Alt-click to set the source, then Source layer, Aligned, Lock Source Time / Source Time Shift (clone a fixed frame or a time-offset frame) in the Paint panel. Each stroke (Brush 1, Clone 1, Eraser 1...) has Stroke Options and Transform in the timeline.",
+   "script_api": "Effect 'ADBE Paint' has 'Paint on Transparent' and an indexed 'Strokes' group ('ADBE Paint Group') per the harvest; properties of strokes that already exist (e.g. Stroke Options End for a write-on) can be keyframed through the property tree. Creating strokes by script has no documented API (unverified) - treat painting as a manual step.",
+   "limits": "Strokes are tied to layer time and position: on a moving camera a clone patch slides off its target, so use Content-Aware Fill or a tracked mask instead. Single Frame strokes need one stroke per frame (slow for long shots). Clone source time loops back when it runs past the source layer's end.",
+   "use_for": [
+    "remove a small blemish, bug or sign on a locked-off shot (Clone Stamp)",
+    "hand-drawn circles, ticks and underlines that write on (Brush + Write On)",
+    "signature or handwriting reveals",
+    "touch up a matte with Brush/Eraser on the alpha channel"
+   ],
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/drawing-painting-and-paths/paint-tools-and-paint-strokes/paint-tools-brush-clone-stamp.html",
+    "pve/harvest/ae_effects.json"
+   ]
+  }
+ ]
+}

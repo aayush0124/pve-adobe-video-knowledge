@@ -1,0 +1,1155 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "PS Arbitrary Map",
+   "match": "ADBE PS Arbitrary Map",
+   "category": "Color Correction",
+   "status": "obsolete",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/051.png",
+    "note": "Phase 180 now wraps the tones hard (solarize-like): mid-dark tones (luma 64-127) jump to near-white so the navy areas turn white, highlights (luma 160+) drop to dark so faces and backdrop go grey-black, reds flip to cyan with posterized colour fringes, where the old Phase-0 render was identical to the reference (mean change 127/255 vs 0).",
+    "rerender": false,
+    "second_opinion": "corrected: verdict broken and status obsolete confirmed (051 differs from the Bulge frame 060 by 0.13 mean outside the bulge radius, so no tone change), but 'no demo setting can fix it' is wrong: demo_settings {} is the no-op cause. Phase has no harvested min/max like every AE angle param (CC Color Offset Red Phase, Evolution, Direction), so it is degrees, and AE applies the default linear map when none is loaded; demo set to Phase 180 (half-cycle tone wrap) and queued for re-render, Phase/scripting/avoid notes updated",
+    "recheck": "after re-render"
+   },
+   "summary": "Legacy effect that remaps the layer's brightness/colour through a Photoshop arbitrary map (.amp curve file) loaded in the effect's Options dialog; Phase cycles the map along the tone range. Curves does the same job today.",
+   "look": [
+    "tone remap",
+    "posterize",
+    "solarize",
+    "legacy curves"
+   ],
+   "use_for": [
+    "keeping old projects that already carry a Photoshop .amp map rendering the same",
+    "psychedelic tone-cycling by animating Phase on a loaded map"
+   ],
+   "avoid": [
+    "any new grade: use Curves or Lumetri Color instead",
+    "a script cannot load the .amp file: a freshly applied instance at Phase 0 renders identical to the source; only a non-zero Phase on the default linear map changes it (verified: Phase 180 = harsh solarize-like wrap, gallery frame 051)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Phase",
+     "does": "shifts (cycles) the loaded map along the tone range",
+     "typical": "angle in degrees (unbounded, like all AE angle params): 360 = one full cycle = no change; 180 wraps the tones half-way (solarize-like); animate 0 -> 360 for tone cycling"
+    },
+    {
+     "name": "Apply Phase Map To Alpha",
+     "does": "checkbox: also run the map on the alpha channel",
+     "typical": 0
+    }
+   ],
+   "demo_settings": {
+    "Phase": 180
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Curves (ADBE CurvesCustom); Premiere: Lumetri Color RGB Curves",
+   "pairs_with": [
+    "Curves",
+    "Levels"
+   ],
+   "scripting": "The map itself is not a scriptable property: it lives in the Options dialog (load a Photoshop .amp file). Applied by script it keeps the default linear (identity) map, which leaves the image unchanged (verified: Phase 0 renders identical to the source). Phase cycles that map; it has no harvested min/max, which in AE means an angle param, so it is in degrees (360 = full cycle); a non-zero Phase wraps the tones (verified: Phase 180 sends mid-darks to near-white and highlights to dark, reds to cyan, with posterized edges, gallery frame 051). Both properties are animatable. Treat as obsolete: build tone remaps with Curves. Apply Phase Map To Alpha is a 0/1 checkbox."
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photo Filter",
+   "match": "ADBE PhotoFilterPS",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/052.png",
+    "note": "Clear warm amber cast over the whole frame (R up, B down) with brightness held, as Warming Filter (85) at Density 65 should give.",
+    "rerender": false
+   },
+   "summary": "Simulates a coloured lens filter: casts the image toward a warming, cooling or custom colour at a chosen density while keeping brightness.",
+   "look": [
+    "warm tint",
+    "cool tint",
+    "colour cast",
+    "golden hour",
+    "lens filter",
+    "sepia"
+   ],
+   "use_for": [
+    "warm up flat press/handout footage for a hopeful or nostalgic beat",
+    "cool blue cast for tense or investigative documentary sections",
+    "quick temperature match between clips from different cameras",
+    "light sepia/flashback feel on archival inserts"
+   ],
+   "avoid": [
+    "Density above ~60 reads as a cheap colour wash",
+    "Preserve Luminosity off darkens the shot",
+    "not a fix for badly white-balanced faces; use Lumetri/Curves first"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Filter",
+     "does": "preset filter popup; 1 = Warming Filter (85); a Custom entry uses Color",
+     "typical": "1 Warming Filter (85) for warm; 4 Cooling Filter (80) for blue; 15 Sepia"
+    },
+    {
+     "name": "Color",
+     "does": "custom filter colour, used when Filter is Custom",
+     "typical": "#EC8A00 warm, #0060FF cool"
+    },
+    {
+     "name": "Density",
+     "does": "strength of the filter in percent",
+     "typical": "15-35 subtle, 50-70 stylised"
+    },
+    {
+     "name": "Preserve Luminosity",
+     "does": "checkbox: keep overall brightness after tinting",
+     "typical": 1
+    }
+   ],
+   "demo_settings": {
+    "Filter": 1,
+    "Density": 65,
+    "Preserve Luminosity": 1
+   },
+   "enum_labels": {
+    "Filter": {
+     "1": "Warming Filter (85)",
+     "2": "Warming Filter (LBA)",
+     "3": "Warming Filter (81)",
+     "4": "Cooling Filter (80)",
+     "5": "Cooling Filter (LBB)",
+     "6": "Cooling Filter (82)",
+     "7": "Red",
+     "8": "Orange",
+     "9": "Yellow",
+     "10": "Green",
+     "11": "Cyan",
+     "12": "Blue",
+     "13": "Violet",
+     "14": "Magenta",
+     "15": "Sepia",
+     "16": "Deep Red",
+     "17": "Deep Blue",
+     "18": "Deep Emerald",
+     "19": "Deep Yellow",
+     "20": "Underwater",
+     "21": "(separator)",
+     "22": "Custom"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color (Basic Correction Temperature/Tint or Creative Shadow/Highlight Tint) in Premiere",
+   "pairs_with": [
+    "Curves",
+    "Vibrance",
+    "Lumetri Color",
+    "CC Vignette"
+   ],
+   "scripting": "Filter is a 1-based popup with 22 entries; 1 = Warming Filter (85) (matches the default Color #EC8A00). The rest (read from After Effects 26.0): 2 Warming (LBA), 3 Warming (81), 4 Cooling (80), 5 Cooling (LBB), 6 Cooling (82), 7 Red, 8 Orange, 9 Yellow, 10 Green, 11 Cyan, 12 Blue, 13 Violet, 14 Magenta, 15 Sepia, 16 Deep Red, 17 Deep Blue, 18 Deep Emerald, 19 Deep Yellow, 20 Underwater, 21 a separator, 22 Custom; only index 1 has been rendered. Color only matters with Custom. Preserve Luminosity is a 0/1 checkbox.",
+   "recipe": {
+    "Density": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      45
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Selective Color",
+   "match": "ADBE SelectiveColor",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/053.png",
+    "note": "Strong orange-yellow cast through the Neutrals (walls, clothing, skin, even the white stripes), so the scripted proxy sliders on Colors: 8 did stick in the render.",
+    "rerender": false
+   },
+   "summary": "Photoshop-style selective colour: adds or removes cyan, magenta, yellow and black inside one colour range (reds, yellows, greens, cyans, blues, magentas, whites, neutrals, blacks) without touching the others.",
+   "look": [
+    "targeted colour shift",
+    "teal-orange",
+    "print-style grade",
+    "richer flags",
+    "cast removal"
+   ],
+   "use_for": [
+    "make saffron/red flags and banners richer, or tame over-saturated reds on rally footage",
+    "teal-orange look: cyan into Blues/Neutrals, yellow into Reds",
+    "remove a green/magenta cast from Neutrals on mixed-light press footage",
+    "deeper Blacks for a punchy news look"
+   ],
+   "avoid": [
+    "big moves on Reds/Yellows wreck skin tones",
+    "the top Cyan/Magenta/Yellow/Black sliders are UI proxies (see scripting): they only edit the range picked in 'Colors:', so set that first",
+    "Absolute moves of 40+ on Neutrals tint almost the whole frame, whites and skin included"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Method:",
+     "does": "1 Relative (scales existing ink) or 2 Absolute (adds fixed amount, stronger)",
+     "typical": "1 for subtle, 2 for visible"
+    },
+    {
+     "name": "Colors:",
+     "does": "which colour range the top four sliders edit (1 Reds .. 9 Blacks)",
+     "typical": "1 Reds, 5 Blues, 8 Neutrals"
+    },
+    {
+     "name": "Cyan",
+     "does": "add (+) or remove (-) cyan in the selected range",
+     "typical": "-40..40"
+    },
+    {
+     "name": "Magenta",
+     "does": "add or remove magenta in the selected range",
+     "typical": "-30..30"
+    },
+    {
+     "name": "Yellow",
+     "does": "add or remove yellow in the selected range",
+     "typical": "-40..40"
+    },
+    {
+     "name": "Black",
+     "does": "darken (+) or lighten (-) the selected range",
+     "typical": "-20..30"
+    }
+   ],
+   "demo_settings": {
+    "Method:": 2,
+    "Colors:": 8,
+    "Cyan": -45,
+    "Magenta": 10,
+    "Yellow": 50
+   },
+   "enum_labels": {
+    "Method:": {
+     "1": "Relative",
+     "2": "Absolute"
+    },
+    "Colors:": {
+     "1": "Reds",
+     "2": "Yellows",
+     "3": "Greens",
+     "4": "Cyans",
+     "5": "Blues",
+     "6": "Magentas",
+     "7": "Whites",
+     "8": "Neutrals",
+     "9": "Blacks"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color HSL Secondary / Hue vs Saturation curves in Premiere",
+   "pairs_with": [
+    "Curves",
+    "Hue/Saturation",
+    "Vibrance",
+    "Lumetri Color"
+   ],
+   "scripting": "Names repeat: the first Cyan/Magenta/Yellow/Black (match ADBE SelectiveColor-0003..0006) are non-animatable UI proxies that edit the range picked in 'Colors:' - set 'Colors:' BEFORE them (keep that key first in the props object). A scripted setValue on the proxies does reach the render (gallery check: 'Colors:' 8 then Cyan -45 / Magenta 10 / Yellow 50 with Method 2 gave a strong orange cast). The real, animatable values sit flat under 'Details' (headers are flat rows, so 'Reds/Cyan' resolves to the proxy, not the Reds value). To target a range reliably, address by MATCH NAME (AE property() accepts it): Reds 0009-0012, Yellows 0015-0018, Greens 0021-0024, Cyans 0027-0030, Blues 0033-0036, Magentas 0039-0042, Whites 0045-0048, Neutrals 0051-0054, Blacks 0057-0060, each 'ADBE SelectiveColor-00NN' in C, M, Y, K order. The validator only knows display names (the n-th repeat is 'Cyan#n', e.g. Neutrals Cyan = 'Cyan#9'), and ae_lib dress() does not parse '#n', so the demo uses the proxies on Neutrals (8, present in almost every shot: a strong warm cast) rather than Reds (invisible on footage with no red). Animatability (proxies and 'Colors:' static, Details values animatable) is from the harvest."
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Shadow/Highlight",
+   "match": "ADBE ShadowHighlight",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/054.png",
+    "note": "Highlights are pulled down hard (bright walls and faces drop about 30-50 levels, HDR-ish grey look) while the few dark areas stay put, since this evenly lit shot has almost no deep shadows to lift.",
+    "rerender": false
+   },
+   "summary": "Brightens shadows and/or darkens highlights locally, based on surrounding pixels, without flattening the midtones; recovers backlit faces and blown skies.",
+   "look": [
+    "shadow recovery",
+    "highlight recovery",
+    "flat HDR",
+    "backlit fix",
+    "detail"
+   ],
+   "use_for": [
+    "lift faces in backlit podium or rally shots",
+    "pull back a bright sky or window behind a speaker",
+    "rescue underexposed phone or archival news footage",
+    "HDR-ish detail look on documentary B-roll"
+   ],
+   "avoid": [
+    "Shadow Amount above ~60 gives halos and grey, muddy blacks",
+    "Highlight Amount ~50 on an evenly lit, bright shot pulls faces and walls down too and greys the whole image; keep it 10-30 there",
+    "Auto Amounts on moving shots flickers unless Temporal Smoothing is set",
+    "without some contrast afterwards the image looks washed out"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Auto Amounts",
+     "does": "checkbox: automatic amounts; must be 0 for the manual amounts to apply",
+     "typical": 0
+    },
+    {
+     "name": "Shadow Amount",
+     "does": "how much the shadows are lifted",
+     "typical": "20-50"
+    },
+    {
+     "name": "Highlight Amount",
+     "does": "how much the highlights are pulled down",
+     "typical": "10-40"
+    },
+    {
+     "name": "Shadow Radius",
+     "does": "neighbourhood size used to decide what is shadow (bigger = smoother, more halo)",
+     "typical": "30-60"
+    },
+    {
+     "name": "Midtone Contrast",
+     "does": "adds contrast back into the midtones",
+     "typical": "10-30"
+    },
+    {
+     "name": "Temporal Smoothing (seconds)",
+     "does": "averages auto amounts over time (only with Auto Amounts on)",
+     "typical": "1-2"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mixes the original back in (percent)",
+     "typical": "0-30"
+    }
+   ],
+   "demo_settings": {
+    "Auto Amounts": 0,
+    "Shadow Amount": 70,
+    "Highlight Amount": 50,
+    "Midtone Contrast": 20
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color Basic Correction Shadows/Highlights in Premiere",
+   "pairs_with": [
+    "Curves",
+    "Vibrance",
+    "Lumetri Color",
+    "Unsharp Mask"
+   ],
+   "scripting": "Auto Amounts is a 0/1 checkbox that defaults to 1: Shadow Amount and Highlight Amount are ignored until it is set to 0 (put it first in props). Temporal Smoothing and Scene Detect only matter with Auto Amounts = 1. 'More Options' is a flat header row, so the sub-properties are addressed by plain name."
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Tint",
+   "match": "ADBE Tint",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/055.png",
+    "note": "Frame is a navy-to-cream duotone monochrome (all original colour gone), matching the demo's Map Black/White colours.",
+    "rerender": false
+   },
+   "summary": "Turns the layer monochrome by mapping its darks to one colour and its lights to another (black-and-white by default); Amount to Tint blends with the original colour.",
+   "look": [
+    "black and white",
+    "monochrome",
+    "duotone",
+    "desaturated",
+    "archival"
+   ],
+   "use_for": [
+    "instant black-and-white for flashbacks or archival recreations",
+    "brand-colour duotone background plates behind titles",
+    "desaturate the background clip under a coloured cut-out of the speaker",
+    "partial desaturation (Amount 30-60) for a muted documentary look"
+   ],
+   "avoid": [
+    "two mid-grey map colours give a flat, low-contrast image",
+    "full B&W on colourful rally footage loses the flags' meaning; keep some colour or use it deliberately"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Map Black To",
+     "does": "colour the darkest tones become",
+     "typical": "#000000 for B&W, deep navy #14213D for duotone"
+    },
+    {
+     "name": "Map White To",
+     "does": "colour the brightest tones become",
+     "typical": "#FFFFFF for B&W, warm cream #FFD58A for duotone"
+    },
+    {
+     "name": "Amount to Tint",
+     "does": "percent of the tint applied over the original",
+     "typical": "100 full, 30-60 muted"
+    }
+   ],
+   "demo_settings": {
+    "Map Black To": "#14213D",
+    "Map White To": "#FFD58A",
+    "Amount to Tint": 100
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Tint (Premiere)",
+   "pairs_with": [
+    "Curves",
+    "Noise",
+    "CC Vignette",
+    "Fast Box Blur"
+   ],
+   "scripting": "Colours are '#RRGGBB'. Amount to Tint (0-100) is animatable: keyframe it for a colour-to-B&W transition. GPU support is from memory, not harvested.",
+   "recipe": {
+    "Amount to Tint": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Tritone",
+   "match": "ADBE Tritone",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/056.png",
+    "note": "Frame is a brown sepia toned monochrome with cream highlights and near-black shadows, the classic tritone look.",
+    "rerender": false
+   },
+   "summary": "Maps the image's highlights, midtones and shadows to three chosen colours, giving a toned monochrome (sepia by default).",
+   "look": [
+    "sepia",
+    "tritone",
+    "toned monochrome",
+    "vintage",
+    "split tone"
+   ],
+   "use_for": [
+    "sepia/vintage look for history segments in documentaries",
+    "brand-toned background plates behind text",
+    "stylised flashback in trailers",
+    "Blend With Original 40-70 for a subtle split-tone grade"
+   ],
+   "avoid": [
+    "a bright saturated midtone colour looks cheap",
+    "removes natural skin tones; avoid where faces must look real"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Highlights",
+     "does": "colour for the bright tones",
+     "typical": "#FFF2D9"
+    },
+    {
+     "name": "Midtones",
+     "does": "colour for the midtones (sets the tone of the look)",
+     "typical": "#8C5A32 sepia, #3C5A78 cold steel"
+    },
+    {
+     "name": "Shadows",
+     "does": "colour for the dark tones",
+     "typical": "#1A0F08"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "percent of the original image mixed back",
+     "typical": "0 full effect, 40-70 subtle"
+    }
+   ],
+   "demo_settings": {
+    "Highlights": "#FFF2D9",
+    "Midtones": "#8C5A32",
+    "Shadows": "#1A0F08",
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color Creative tint or Tint (Premiere)",
+   "pairs_with": [
+    "Noise",
+    "CC Vignette",
+    "Curves",
+    "Fractal Noise (film dirt)"
+   ],
+   "scripting": "Colours are '#RRGGBB'. Blend With Original is animatable: keyframe 100 -> 0 to fade into the toned look. GPU support is from memory, not harvested.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Vibrance",
+   "match": "ADBE Vibrance",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/057.png",
+    "note": "Colours are visibly punchier than the untouched render (stripes, foreground-block reds and navy areas richer; mean saturation 0.15 -> 0.26) with faces still natural.",
+    "rerender": false
+   },
+   "summary": "Raises (or lowers) the saturation of the least saturated colours more than already saturated ones, protecting skin tones; Saturation changes all colours equally.",
+   "look": [
+    "punchy colour",
+    "vivid",
+    "natural saturation",
+    "muted"
+   ],
+   "use_for": [
+    "make flat press/handout footage pop without orange faces",
+    "punchier colour for social reels",
+    "muted documentary look with negative Vibrance/Saturation",
+    "even out saturation between sources"
+   ],
+   "avoid": [
+    "Saturation above ~40 clips saffron/red flags and logos",
+    "boosting heavily compressed footage reveals chroma blocking"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Vibrance",
+     "does": "smart saturation that favours dull colours and spares skin",
+     "typical": "15-40 (negative to mute)"
+    },
+    {
+     "name": "Saturation",
+     "does": "uniform saturation for all colours",
+     "typical": "-20..20"
+    }
+   ],
+   "demo_settings": {
+    "Vibrance": 80,
+    "Saturation": 25
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color Creative Vibrance / Saturation (Premiere)",
+   "pairs_with": [
+    "Curves",
+    "Photo Filter",
+    "Lumetri Color",
+    "Unsharp Mask"
+   ],
+   "scripting": "Two plain numbers, -100..100, both animatable. GPU support is from memory, not harvested."
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Video Limiter",
+   "match": "ADBE DigitalVideoLimiter",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/058.png",
+    "note": "Gamut Warning paints large out-of-range areas bright green (walls, faces, stripes, foreground-block tops), so Clip Level 1 is a strict level and the warning colour applies.",
+    "rerender": false
+   },
+   "summary": "Clamps luma and chroma to a broadcast-legal level, optionally compressing values before the clip point; Gamut Warning paints out-of-range pixels in a warning colour.",
+   "look": [
+    "broadcast safe",
+    "legal levels",
+    "clipped highlights",
+    "gamut warning"
+   ],
+   "use_for": [
+    "final broadcast-safe pass on TV news deliveries",
+    "check which graphic colours exceed the legal range (Gamut Warning on)",
+    "tame super-white phone-footage highlights before a TV export"
+   ],
+   "avoid": [
+    "leaving Gamut Warning on at render burns the warning colour into the output",
+    "pointless for web/Instagram delivery and dulls highlights",
+    "placing it before other grading: effects after it push levels out again (keep it last, on a top adjustment layer)",
+    "stacking it with Broadcast Colors: double limiting, pick one"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Clip Level",
+     "does": "popup: the luma/chroma ceiling (1-4)",
+     "typical": "2 (default, standard legal level)"
+    },
+    {
+     "name": "Compression before clipping",
+     "does": "popup: soft-roll values toward the ceiling before hard clipping (1-5)",
+     "typical": "1 (default) or a middle entry for gentler highlights"
+    },
+    {
+     "name": "Gamut Warning",
+     "does": "checkbox: highlight illegal pixels instead of fixing them",
+     "typical": "1 while checking, 0 for delivery"
+    },
+    {
+     "name": "Gamut Warning Color",
+     "does": "colour used to flag illegal pixels",
+     "typical": "#F00ADC (default) or #00FF00"
+    }
+   ],
+   "demo_settings": {
+    "Clip Level": 1,
+    "Compression before clipping": 5,
+    "Gamut Warning": 1,
+    "Gamut Warning Color": "#00FF00"
+   },
+   "enum_labels": {
+    "Clip Level": {
+     "1": "100 IRE (SMPTE range)",
+     "2": "103 IRE",
+     "3": "105 IRE (EBU R103 Preferred)",
+     "4": "109 IRE (SDI limit)"
+    },
+    "Compression before clipping": {
+     "1": "None",
+     "2": "3%",
+     "3": "5%",
+     "4": "10%",
+     "5": "20%"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Video Limiter (Premiere)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Curves",
+    "Levels"
+   ],
+   "scripting": "All four properties are non-animatable (harvested): static values only. Clip Level and Compression before clipping are 1-based popups (read from After Effects 26.0): Clip Level 1 100 IRE (SMPTE range), 2 103 IRE (the default), 3 105 IRE (EBU R103 Preferred), 4 109 IRE (SDI limit); Compression 1 None, 2 3%, 3 5%, 4 10%, 5 20% (Clip Level 1 is the strict level: in the gallery render with Gamut Warning on it flagged walls, faces and stripes). On normal footage the effect is subtle; the demo uses Clip Level 1, the strongest compression and Gamut Warning on so affected highlights are painted green. Always send Gamut Warning 0 for a deliverable."
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bezier Warp",
+   "match": "ADBE BEZMESH",
+   "category": "Distort",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/059.png",
+    "note": "Frame edges are curved (top edge bowed, left edge pulled in) with black exposed around the warped image, a clear Bezier border warp.",
+    "rerender": false
+   },
+   "summary": "Warps the layer by moving the 4 corner vertices and 8 tangent handles of a Bezier border, curving the edges (flag wave, page curl, bowed card).",
+   "look": [
+    "curved edges",
+    "page curl",
+    "flag wave",
+    "warp",
+    "bowed paper"
+   ],
+   "use_for": [
+    "wave a flag or banner graphic",
+    "curve a screenshot or newspaper-clipping card like held paper",
+    "fake screen curvature on a phone/TV-screen insert",
+    "fit a graphic onto a curved surface"
+   ],
+   "avoid": [
+    "extreme tangents fold the image over itself",
+    "on a full-frame layer the edges pull in and expose empty corners; use it on smaller cards or pre-scale",
+    "Quality below ~6 shows faceting"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Top Left Vertex",
+     "does": "top-left corner position",
+     "typical": "near [0, 0]; move inwards a little for perspective"
+    },
+    {
+     "name": "Top Left Tangent",
+     "does": "handle shaping the left third of the top edge",
+     "typical": "[640, -150..150]"
+    },
+    {
+     "name": "Top Right Tangent",
+     "does": "handle shaping the right third of the top edge",
+     "typical": "[1280, -150..150] (opposite sign of the left tangent = S-wave)"
+    },
+    {
+     "name": "Right Top Vertex",
+     "does": "top-right corner position",
+     "typical": "near [1920, 0]"
+    },
+    {
+     "name": "Bottom Right Tangent",
+     "does": "handle shaping the right third of the bottom edge",
+     "typical": "[1280, 930..1230]"
+    },
+    {
+     "name": "Bottom Left Tangent",
+     "does": "handle shaping the left third of the bottom edge",
+     "typical": "[640, 930..1230]"
+    },
+    {
+     "name": "Quality",
+     "does": "mesh subdivision quality",
+     "typical": "8-10"
+    }
+   ],
+   "demo_settings": {
+    "Top Left Vertex": [
+     120,
+     90
+    ],
+    "Top Left Tangent": [
+     640,
+     220
+    ],
+    "Top Right Tangent": [
+     1280,
+     -140
+    ],
+    "Bottom Right Tangent": [
+     1280,
+     940
+    ],
+    "Bottom Left Tangent": [
+     640,
+     1220
+    ],
+    "Quality": 8
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Corner Pin (Premiere; straight edges only, no curves)",
+   "pairs_with": [
+    "CC Page Turn",
+    "Drop Shadow",
+    "Wave Warp",
+    "Corner Pin"
+   ],
+   "scripting": "Points are layer-space pixels; the defaults assume a 1920x1080 layer (vertices at corners, tangents at the thirds), so scale them for other layer sizes. Order runs clockwise: Top Left Vertex, Top Left Tangent, Top Right Tangent, Right Top Vertex, Right Top Tangent, Right Bottom Tangent, Bottom Right Vertex, Bottom Right Tangent, Bottom Left Tangent, Left Bottom Vertex, Left Bottom Tangent, Left Top Tangent. For a looping flag wave keyframe the tangents (or add sine expressions).",
+   "recipe": {
+    "Top Left Tangent": [
+     [
+      0,
+      [
+       640,
+       0
+      ]
+     ],
+     [
+      1,
+      [
+       640,
+       160
+      ]
+     ],
+     [
+      2,
+      [
+       640,
+       0
+      ]
+     ]
+    ],
+    "Top Right Tangent": [
+     [
+      0,
+      [
+       1280,
+       0
+      ]
+     ],
+     [
+      1,
+      [
+       1280,
+       -160
+      ]
+     ],
+     [
+      2,
+      [
+       1280,
+       0
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bulge",
+   "match": "ADBE Bulge",
+   "category": "Distort",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/060.png",
+    "note": "A large fisheye magnification bump fills the frame centre (background at the centre blown up into a round swelling that pushes the stripes and dark areas outward).",
+    "rerender": false
+   },
+   "summary": "Magnifies (positive height) or pinches (negative height) an elliptical area around a centre point, like a fisheye lens bump.",
+   "look": [
+    "fisheye",
+    "magnify",
+    "pinch",
+    "bulge",
+    "comedic distortion"
+   ],
+   "use_for": [
+    "big-head / bulging-eyes gag in satire reels",
+    "magnifying-glass effect on a headline word, signature or document detail",
+    "pinch-punch transition on a beat",
+    "subtle bump on a punch-in for emphasis"
+   ],
+   "avoid": [
+    "on real people in straight news it reads as mockery or manipulation",
+    "small radius with high height tears pixels; use Antialiasing High for the final render"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Horizontal Radius",
+     "does": "width of the bulge area in pixels",
+     "typical": "200-600"
+    },
+    {
+     "name": "Vertical Radius",
+     "does": "height of the bulge area in pixels",
+     "typical": "200-600"
+    },
+    {
+     "name": "Bulge Center",
+     "does": "centre of the bulge (layer pixels)",
+     "typical": "on the face or detail, e.g. [960, 540]"
+    },
+    {
+     "name": "Bulge Height",
+     "does": "strength; negative pinches",
+     "typical": "0.5-2 bulge, -0.5..-1.5 pinch"
+    },
+    {
+     "name": "Taper Radius",
+     "does": "edge fall-off: how steeply the bulge slopes at its rim (0 = default); subtle, exact direction unverified",
+     "typical": "0-120"
+    },
+    {
+     "name": "Antialiasing (Best Qual Only)",
+     "does": "edge smoothing at Best quality",
+     "typical": 2
+    },
+    {
+     "name": "Pinning",
+     "does": "checkbox: keep the layer edges fixed",
+     "typical": 0
+    }
+   ],
+   "demo_settings": {
+    "Horizontal Radius": 450,
+    "Vertical Radius": 450,
+    "Bulge Center": [
+     960,
+     540
+    ],
+    "Bulge Height": 2,
+    "Taper Radius": 80,
+    "Antialiasing (Best Qual Only)": 2
+   },
+   "enum_labels": {
+    "Antialiasing (Best Qual Only)": {
+     "1": "Low",
+     "2": "High"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Spherize (Premiere; round magnify only, no pinch or separate radii)",
+   "pairs_with": [
+    "Optics Compensation",
+    "CC Lens",
+    "Transform",
+    "Motion Tile"
+   ],
+   "scripting": "Bulge Center is in layer-space pixels; track it to a face with a null/expression if the subject moves. Radii are 0-8000 px; Bulge Height -4..4. Pinning is a 0/1 checkbox.",
+   "recipe": {
+    "Bulge Height": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      1.8
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Bend It",
+   "match": "CC Bend It",
+   "category": "Distort",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/061.png",
+    "note": "Bend 20 now reads as a clean rubber-strip flex: a band about 690 px wide centred on the Start-End axis stays upright at the bottom and curves to lean right toward the top, faces/stripes/flowers readable, where the old Bend 80 curled it upside-down into an unreadable fan; the strip leaves ~65% of the frame black on both sides.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   },
+   "summary": "Bends the layer along the line from a Start point to an End point, like flexing a rubber strip; Render Prestart decides what happens to the part before Start.",
+   "look": [
+    "bend",
+    "curve",
+    "rubber",
+    "cartoon wobble"
+   ],
+   "use_for": [
+    "wobble or bend a logo, title or cut-out sticker on a playful reel beat",
+    "sway a cut-out pole, flag-staff or mic stand",
+    "rubber-hose cartoon motion on explainer icons"
+   ],
+   "avoid": [
+    "full-frame footage: only a band around the Start-End axis is drawn (measured on frame 061: ~690 px wide for a 1080 px axis), so everything left and right of it goes black, about 65% of a 1920x1080 frame; use it on a cut-out element, not a full plate",
+    "Start/End must span the element or only part of it bends",
+    "Bend 80 on a full-height axis curls the layer past 90 degrees into an upside-down fan with most of the frame black"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Bend",
+     "does": "bend amount and direction (sign)",
+     "typical": "10-30 (either sign) on a full-height axis; 80 already curls the layer upside-down"
+    },
+    {
+     "name": "Start",
+     "does": "anchor end of the bend axis (layer pixels)",
+     "typical": "bottom of the element, e.g. [960, 1080]"
+    },
+    {
+     "name": "End",
+     "does": "free end of the bend axis (layer pixels)",
+     "typical": "top of the element, e.g. [960, 0]"
+    },
+    {
+     "name": "Render Prestart",
+     "does": "popup: how the area before Start is drawn (1-4)",
+     "typical": "3 (default)"
+    },
+    {
+     "name": "Distort",
+     "does": "popup: distortion mode (1-2)",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Bend": 20,
+    "Start": [
+     960,
+     1080
+    ],
+    "End": [
+     960,
+     0
+    ]
+   },
+   "enum_labels": {
+    "Render Prestart": {
+     "1": "None",
+     "2": "Static",
+     "3": "Bend",
+     "4": "Mirror"
+    },
+    "Distort": {
+     "1": "Legal",
+     "2": "Extended"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "none in Premiere (closest: Wave Warp, Corner Pin)",
+   "pairs_with": [
+    "CC Bender",
+    "Transform",
+    "Drop Shadow"
+   ],
+   "scripting": "Start/End are layer-space pixels (defaults [960, 810] -> [960, 270] on a 1920x1080 layer); put them at the base and tip of the element. Render Prestart (1-4) and Distort (1-2) are popups; Render Prestart: 1 None, 2 Static, 3 Bend (default), 4 Mirror; Distort: 1 Legal, 2 Extended (read from After Effects 26.0). Bend is roughly the total curl angle along the Start-End span at about 1.8 degrees per unit: measured on gallery frame 061, Bend 80 bent a bottom-to-top axis into a ~145 degree arc curling to the right, so 20 is about 36 degrees. Animate Bend with keyframes or a wiggle/sine expression for a wobble. Only a band centred on the Start-End axis is rendered (measured on gallery frame 061: about 690 px wide for the 1080 px [960,1080]->[960,0] axis, with Render Prestart 3 and Distort 1); pixels outside that band are dropped, whether the width scales with axis length or changes with Distort 2 is unverified.",
+   "recipe": {
+    "Bend": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      25
+     ],
+     [
+      0.6,
+      -15
+     ],
+     [
+      0.9,
+      8
+     ],
+     [
+      1.2,
+      0
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Bender",
+   "match": "CC Bender",
+   "category": "Distort",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/062.png",
+    "note": "The layer leans and curves to the right toward the top (Top end swung over, black wedge exposed at the upper left), a clear bend about the Base-Top axis.",
+    "rerender": false
+   },
+   "summary": "Bends the layer around the axis from Base to Top so it leans or curves; Style picks the bend shape.",
+   "look": [
+    "bend",
+    "lean",
+    "sway",
+    "cartoon"
+   ],
+   "use_for": [
+    "make a cut-out character, icon or sticker lean and sway",
+    "cartoon bounce on explainer graphics",
+    "bendy text for comedic beats in satire reels"
+   ],
+   "avoid": [
+    "full-frame footage bends off-frame and exposes empty corners",
+    "Base/Top not covering the element leaves parts unbent"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "bend strength and direction (sign)",
+     "typical": "-60..60"
+    },
+    {
+     "name": "Style",
+     "does": "popup: bend shape",
+     "typical": "1 Bend for smooth lean, 3 Sharp for a kink"
+    },
+    {
+     "name": "Adjust To Distance",
+     "does": "checkbox: scale the bend to the Base-Top distance",
+     "typical": 0
+    },
+    {
+     "name": "Top",
+     "does": "tip of the bend axis (layer pixels)",
+     "typical": "top of the element"
+    },
+    {
+     "name": "Base",
+     "does": "fixed base of the bend axis (layer pixels)",
+     "typical": "bottom of the element"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 80,
+    "Style": 1,
+    "Top": [
+     960,
+     0
+    ],
+    "Base": [
+     960,
+     1080
+    ]
+   },
+   "enum_labels": {
+    "Style": {
+     "1": "Bend",
+     "2": "Marilyn",
+     "3": "Sharp",
+     "4": "Boxer"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "none in Premiere (closest: Wave Warp, Corner Pin)",
+   "pairs_with": [
+    "CC Bend It",
+    "Transform",
+    "Drop Shadow"
+   ],
+   "scripting": "Top/Base are layer-space pixels (defaults [960, 270] / [960, 810] on a 1920x1080 layer). Style: 1 Bend, 2 Marilyn, 3 Sharp, 4 Boxer (read from After Effects 26.0). Adjust To Distance is a 0/1 checkbox. Keyframe Amount or drive it with a sine expression for a sway.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      50
+     ],
+     [
+      0.8,
+      -30
+     ],
+     [
+      1.2,
+      0
+     ]
+    ]
+   }
+  }
+ ]
+}

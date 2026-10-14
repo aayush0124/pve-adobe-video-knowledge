@@ -1,0 +1,1078 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Set Matte",
+   "match": "ADBE Set Matte3",
+   "category": "Channel",
+   "status": "needs_input",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card is needs_input (needs a matte layer reference the spec cannot set), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   },
+   "summary": "Replaces the layer's alpha with a channel (alpha, luminance, a colour channel, etc.) taken from another layer, so that layer acts as a matte. An effect-based track matte: it travels with the layer when precomposed and the matte layer can sit anywhere in the comp (hidden).",
+   "look": [
+    "matte",
+    "cut-out",
+    "text reveal",
+    "luma matte",
+    "shape mask"
+   ],
+   "use_for": [
+    "footage showing only inside big headline text or a map outline",
+    "luma-matte reveals driven by a grayscale wipe or ink-bleed layer",
+    "keeping a matte inside a precomp where track mattes break",
+    "hiding a photo outside a lower-third shape"
+   ],
+   "avoid": [
+    "matte layer left visible on top: turn its visibility off but keep it in the comp",
+    "mismatched layer sizes without stretch give misaligned mattes",
+    "feathered luminance mattes from noisy footage make dirty edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Take Matte From Layer",
+     "does": "the layer that supplies the matte (layer reference)",
+     "typical": "a hidden text/shape/gradient layer in the same comp"
+    },
+    {
+     "name": "Use For Matte",
+     "does": "which channel of that layer becomes this layer's alpha",
+     "typical": "4 (Alpha Channel) for text/shapes, 5 (Luminance) for grayscale wipes"
+    },
+    {
+     "name": "Invert Matte",
+     "does": "flips the matte (show outside instead of inside)",
+     "typical": "0; 1 to punch a hole"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "checkbox: stretch the matte layer to fit this layer",
+     "typical": "1 when matte layer is a different size"
+    },
+    {
+     "name": "Composite Matte with Original",
+     "does": "multiplies the new matte with the layer's existing alpha",
+     "typical": "1"
+    },
+    {
+     "name": "Premultiply Matte Layer",
+     "does": "premultiplies the matte layer (with the comp background) before its channel is read; avoids fringes on soft/antialiased matte edges",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Use For Matte": {
+     "1": "Red Channel",
+     "2": "Green Channel",
+     "3": "Blue Channel",
+     "4": "Alpha Channel",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Off"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Track Matte Key",
+   "pairs_with": [
+    "Linear Wipe",
+    "Gradient Ramp",
+    "Fractal Noise",
+    "Fill",
+    "Fast Box Blur"
+   ],
+   "scripting": "Take Matte From Layer is a layer-reference property: set it with the matte layer's index (layer.index), not a name; the spec system cannot set it, so the script must add the matte layer first and then assign the index. Checkbox values are 0/1. The Use For Matte order above (Red, Green, Blue, Alpha, Luminance, Hue, Lightness, Saturation, Full, Off) is read from After Effects 26.0. The matte layer's transforms (position/scale/rotation) are never used; whether its masks and effects are used depends on the Source / Masks / Effects & Masks popup beside the layer menu, which this spec cannot set (unverified default). Safest: precompose the matte layer (text, shapes, animated wipes) so everything is baked into its source.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Shift Channels",
+   "match": "ADBE Shift Channels",
+   "category": "Channel",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/024.png",
+    "note": "Red/blue swap is obvious: red stripes turn blue, navy areas turn brown, red foreground blocks turn purple.",
+    "rerender": false
+   },
+   "summary": "Rebuilds the red, green, blue and alpha channels from other channels of the same layer (e.g. red from blue). Gives instant false-colour swaps or a channel extracted as greyscale.",
+   "look": [
+    "channel swap",
+    "false colour",
+    "psychedelic",
+    "glitch",
+    "colour inversion",
+    "greyscale channel"
+   ],
+   "use_for": [
+    "glitch/hacked flash frames in tech or cyber-crime explainers",
+    "surreal false-colour swap for music-driven reel beats",
+    "pulling a single channel as greyscale to build a luma matte",
+    "quick colour-swap for stylised 'alternate reality' segments"
+   ],
+   "avoid": [
+    "on faces of real politicians in straight news: reads as mockery",
+    "setting Take Alpha From to a colour/luminance channel makes dark areas transparent: keep it at 1 (Alpha) unless a matte is intended"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Take Red From",
+     "does": "source channel for red output",
+     "typical": "4 (Blue) for a red/blue swap"
+    },
+    {
+     "name": "Take Green From",
+     "does": "source channel for green output",
+     "typical": "3 (Green) unchanged, or 2 (Red)"
+    },
+    {
+     "name": "Take Blue From",
+     "does": "source channel for blue output",
+     "typical": "2 (Red) for a red/blue swap"
+    },
+    {
+     "name": "Take Alpha From",
+     "does": "source channel for alpha",
+     "typical": "1 (Alpha) keep; 5 (Luminance) for a luma-derived alpha"
+    }
+   ],
+   "demo_settings": {
+    "Take Red From": 4,
+    "Take Green From": 3,
+    "Take Blue From": 2,
+    "Take Alpha From": 1
+   },
+   "enum_labels": {
+    "Take Red From": {
+     "1": "Alpha",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full On",
+     "10": "Full Off"
+    },
+    "Take Green From": {
+     "1": "Alpha",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full On",
+     "10": "Full Off"
+    },
+    "Take Blue From": {
+     "1": "Alpha",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full On",
+     "10": "Full Off"
+    },
+    "Take Alpha From": {
+     "1": "Alpha",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full On",
+     "10": "Full Off"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Set Matte",
+    "Hue/Saturation",
+    "Venetian Blinds",
+    "Wave Warp",
+    "Noise"
+   ],
+   "scripting": "All four are popup indices 1-10. Order 1-8 (Alpha, Red, Green, Blue, Luminance, Hue, Lightness, Saturation) matches the harvested defaults (alpha=1, red=2, green=3, blue=4); 9 Full On and 10 Full Off complete the menu, all read from After Effects 26.0. Premiere 2026 has no channel-swap effect (its Channel Mix only scales/inverts channels), so do swaps in AE. Popups are not smoothly animatable: for flicker glitches use hold keyframes on a few frames.",
+   "recipe": {
+    "Take Red From": [
+     [
+      0,
+      2
+     ],
+     [
+      0.04,
+      4
+     ],
+     [
+      0.08,
+      2
+     ]
+    ],
+    "Take Blue From": [
+     [
+      0,
+      4
+     ],
+     [
+      0.04,
+      2
+     ],
+     [
+      0.08,
+      4
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Solid Composite",
+   "match": "ADBE Solid Composite",
+   "category": "Channel",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/025.png",
+    "note": "Whole frame carries a strong flat blue wash at 55% source opacity, image still readable underneath.",
+    "rerender": false
+   },
+   "summary": "Composites a solid colour behind the layer with its own opacity and blending mode. Lowering Source Opacity lets the colour wash through, giving a flat tint, or fills transparent areas with a colour.",
+   "look": [
+    "colour wash",
+    "tint",
+    "duotone-ish",
+    "faded",
+    "flat colour fill"
+   ],
+   "use_for": [
+    "brand-colour wash behind a still so headline text reads on top",
+    "filling transparent edges of a cut-out photo with a flat colour",
+    "dimming and tinting B-roll for a quote card background",
+    "fading a shot toward a colour instead of black"
+   ],
+   "avoid": [
+    "no effect on a fully opaque layer at Source Opacity 100 with Normal mode",
+    "heavy washes flatten faces and look cheap on hero shots"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Source Opacity",
+     "does": "opacity of the original layer over the solid",
+     "typical": "40-70 for a wash; 100 to only fill transparent areas"
+    },
+    {
+     "name": "Color",
+     "does": "colour of the solid underneath",
+     "typical": "brand colour, e.g. #0B1F3A navy or #FF6A00 saffron"
+    },
+    {
+     "name": "Opacity",
+     "does": "opacity of the solid itself",
+     "typical": "100"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "how the solid blends with the source",
+     "typical": "1 (Normal)"
+    }
+   ],
+   "demo_settings": {
+    "Source Opacity": 55,
+    "Color": "#0050FF",
+    "Opacity": 100,
+    "Blending Mode": 1
+   },
+   "enum_labels": {
+    "Blending Mode": {
+     "1": "Normal",
+     "2": "(separator)",
+     "3": "Add",
+     "4": "Multiply",
+     "5": "Screen",
+     "6": "Overlay",
+     "7": "Soft Light",
+     "8": "Hard Light",
+     "9": "(separator)",
+     "10": "Color Dodge",
+     "11": "Color Burn",
+     "12": "(separator)",
+     "13": "Darken",
+     "14": "Lighten",
+     "15": "Difference",
+     "16": "Exclusion",
+     "17": "(separator)",
+     "18": "Hue",
+     "19": "Saturation",
+     "20": "Color",
+     "21": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Tint",
+    "Gaussian Blur",
+    "Black & White",
+    "Drop Shadow"
+   ],
+   "scripting": "Color is set as \"#RRGGBB\" (alpha ignored). Blending Mode is a 1-21 popup with separators at 2, 9, 12 and 17: 1 Normal, 3 Add, 4 Multiply, 5 Screen, 6 Overlay ... (enum_labels, read from After Effects 26.0). Keyframe Source Opacity for a fade-to-colour. Premiere 2026 has no Solid Composite: put a Color Matte on the track below and lower the clip's Opacity instead.",
+   "recipe": {
+    "Source Opacity": [
+     [
+      0,
+      100
+     ],
+     [
+      0.6,
+      45
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cineware",
+   "match": "CINEMA 4D Effect",
+   "category": "Cinema 4D",
+   "status": "unusable",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: card is unusable (Cinema 4D not installed), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   },
+   "summary": "Renders a Cinema 4D (.c4d) scene layer inside After Effects, with camera and multi-pass extraction. On this machine it fails because Cinema 4D 2025 is not installed.",
+   "look": [
+    "3D render",
+    "Cinema 4D scene",
+    "multi-pass"
+   ],
+   "use_for": [
+    "3D logo or object renders inside AE (only after installing Cinema 4D)",
+    "3D map/globe scenes for explainers (only after installing Cinema 4D)"
+   ],
+   "avoid": [
+    "applying it to normal footage: it does nothing without a .c4d layer",
+    "scripted use on this machine: errors at sequence setup"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [],
+   "scripting": "Harvest failed: 'Cinema 4D 2025 must be installed in order to use Cineware by Maxon'. No properties could be read. Do not plan with it; use AE 3D layers, Advanced 3D renderer, or pre-rendered 3D clips instead. Would also need a .c4d file layer (needs_input) even when installed.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Auto Color",
+   "match": "ADBE AutoColor",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/026.png",
+    "note": "Strong auto contrast stretch: deeper blacks in the dark clothing, whiter wall, colours more saturated and neutral.",
+    "rerender": false
+   },
+   "summary": "Automatically balances colour and contrast by analysing shadows, midtones and highlights, removing casts. With Snap Neutral Midtones it pushes near-grey tones to neutral grey.",
+   "look": [
+    "auto white balance",
+    "neutral",
+    "cast removal",
+    "punchier contrast"
+   ],
+   "use_for": [
+    "quick fix for yellow/green cast on phone or CCTV news footage",
+    "normalising mixed archival clips in a documentary montage",
+    "first-pass correction on rally or press-conference B-roll"
+   ],
+   "avoid": [
+    "Temporal Smoothing 0 on moving shots causes frame-to-frame flicker",
+    "high clip values crush flags and dark suits",
+    "can neutralise intended warm/sunset looks"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Temporal Smoothing (seconds)",
+     "does": "averages the analysis over neighbouring frames to stop flicker",
+     "typical": "1-2 for video, 0 for stills"
+    },
+    {
+     "name": "Scene Detect",
+     "does": "restarts smoothing at cuts (only works with smoothing > 0)",
+     "typical": "1 on edited sequences"
+    },
+    {
+     "name": "Black Clip",
+     "does": "percent of darkest pixels clipped to black",
+     "typical": "0.1-1"
+    },
+    {
+     "name": "White Clip",
+     "does": "percent of brightest pixels clipped to white",
+     "typical": "0.1-1"
+    },
+    {
+     "name": "Snap Neutral Midtones",
+     "does": "forces near-neutral midtones to true grey",
+     "typical": "1 to kill casts"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mixes back the uncorrected image (percent)",
+     "typical": "20-50 for a gentler fix"
+    }
+   ],
+   "demo_settings": {
+    "Black Clip": 6,
+    "White Clip": 6,
+    "Snap Neutral Midtones": 1,
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Curves",
+    "Hue/Saturation",
+    "Vibrance",
+    "Lumetri Color"
+   ],
+   "scripting": "Checkboxes (Scene Detect, Snap Neutral Midtones) are 0/1 numbers. Analysis is per frame, so results change with content; set Temporal Smoothing for any moving shot. Clip values are percentages 0-10; the demo's 6% is deliberately strong so the change shows, use 0.1-1 in real work. Premiere 2026 has no Auto Color effect; Lumetri Color's Auto button is a UI action, so a script must set Lumetri values explicitly.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Auto Contrast",
+   "match": "ADBE AutoContrast",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/027.png",
+    "note": "Contrast clearly stretched: dark clothing near black, background near white, colour balance roughly unchanged.",
+    "rerender": false
+   },
+   "summary": "Automatically stretches overall contrast so the darkest pixels go black and the brightest go white, without shifting colour balance.",
+   "look": [
+    "auto contrast",
+    "punchy",
+    "deeper blacks",
+    "brighter whites"
+   ],
+   "use_for": [
+    "reviving flat, hazy archive or TV-grab footage",
+    "giving dull screen recordings or phone clips more punch",
+    "first-pass contrast on mixed B-roll in explainers"
+   ],
+   "avoid": [
+    "flicker on moving shots when Temporal Smoothing is 0",
+    "high clip values crush shadow detail in dark suits and night rallies"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Temporal Smoothing (seconds)",
+     "does": "averages analysis over time to avoid flicker",
+     "typical": "1-2 for video"
+    },
+    {
+     "name": "Scene Detect",
+     "does": "resets smoothing at cuts (needs smoothing > 0)",
+     "typical": "1 on edited sequences"
+    },
+    {
+     "name": "Black Clip",
+     "does": "percent of dark pixels clipped to black",
+     "typical": "0.1-1"
+    },
+    {
+     "name": "White Clip",
+     "does": "percent of bright pixels clipped to white",
+     "typical": "0.1-1"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mix back the original (percent)",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {
+    "Black Clip": 6,
+    "White Clip": 6,
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Auto Color",
+    "Curves",
+    "Vibrance"
+   ],
+   "scripting": "Scene Detect is a 0/1 checkbox. Clip values are percentages 0-10; the demo's 6% is deliberately strong, use 0.1-1 in real work. Set Temporal Smoothing on any moving shot. Premiere 2026 has no Auto Contrast effect: set Lumetri Color Contrast/Whites/Blacks explicitly.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Auto Levels",
+   "match": "ADBE AutoLevels",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/028.png",
+    "note": "Per-channel stretch gives punchy contrast plus a slight warm shift versus the source.",
+    "rerender": false
+   },
+   "summary": "Automatically sets black and white points for each colour channel separately, stretching contrast and often removing (or sometimes adding) colour casts.",
+   "look": [
+    "auto levels",
+    "stretched contrast",
+    "cast removal",
+    "vivid"
+   ],
+   "use_for": [
+    "fast fix for washed-out or tinted archival scans",
+    "normalising screenshots and phone footage before grading",
+    "rescuing underexposed CCTV or dashcam clips in news"
+   ],
+   "avoid": [
+    "per-channel stretch can introduce new colour casts",
+    "flicker on moving footage without Temporal Smoothing",
+    "crushes subtle low-key cinematic grades"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Temporal Smoothing (seconds)",
+     "does": "averages analysis over time to avoid flicker",
+     "typical": "1-2 for video"
+    },
+    {
+     "name": "Scene Detect",
+     "does": "resets smoothing at cuts (needs smoothing > 0)",
+     "typical": "1"
+    },
+    {
+     "name": "Black Clip",
+     "does": "percent of dark pixels clipped per channel",
+     "typical": "0.1-1"
+    },
+    {
+     "name": "White Clip",
+     "does": "percent of bright pixels clipped per channel",
+     "typical": "0.1-1"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mix back the original (percent)",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {
+    "Black Clip": 6,
+    "White Clip": 6,
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Levels",
+    "Curves",
+    "Hue/Saturation"
+   ],
+   "scripting": "Scene Detect is a 0/1 checkbox. Clip values are percentages 0-10; the demo's 6% is deliberately strong, use 0.1-1 in real work. Prefer Auto Contrast when the colour balance must stay as shot. Premiere 2026 has no Auto Levels effect: use Levels or Lumetri Color with explicit values.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Black & White",
+   "match": "ADBE Black&White",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/029.png",
+    "note": "Clean greyscale conversion with light skin and mid-grey red stripes, no tint.",
+    "rerender": false
+   },
+   "summary": "Converts the image to monochrome, with sliders controlling how bright each original hue (reds, yellows, greens, cyans, blues, magentas) becomes in grey. Optional tint for sepia or cyanotype looks.",
+   "look": [
+    "black and white",
+    "monochrome",
+    "sepia",
+    "archival",
+    "noir",
+    "flashback"
+   ],
+   "use_for": [
+    "flashback or 'history' segments in documentaries",
+    "archival feel on old political speeches and press photos",
+    "freeze-frame B&W before a colour hit in trailers",
+    "sepia tint for pre-independence or historical recreations",
+    "desaturated background behind colour graphics"
+   ],
+   "avoid": [
+    "default weights can make skin muddy: raise Reds/Yellows",
+    "tint colours too saturated look fake"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Reds",
+     "does": "brightness of red areas in the grey result",
+     "typical": "40-90 (higher = lighter skin)"
+    },
+    {
+     "name": "Yellows",
+     "does": "brightness of yellow areas",
+     "typical": "60-90"
+    },
+    {
+     "name": "Greens",
+     "does": "brightness of green areas",
+     "typical": "20-60"
+    },
+    {
+     "name": "Blues",
+     "does": "brightness of blue areas (skies, suits)",
+     "typical": "-20 to 40 (lower = darker dramatic skies)"
+    },
+    {
+     "name": "Tint:",
+     "does": "checkbox: apply a colour tint",
+     "typical": "0; 1 for sepia"
+    },
+    {
+     "name": "Tint Color",
+     "does": "tint colour when Tint is on",
+     "typical": "#E1D3B3 (default warm sepia) or #A8B8C8 cool"
+    }
+   ],
+   "demo_settings": {
+    "Reds": 70,
+    "Yellows": 80,
+    "Greens": 40,
+    "Cyans": 60,
+    "Blues": 0,
+    "Magentas": 80,
+    "Tint:": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Black & White",
+   "pairs_with": [
+    "Noise",
+    "Curves",
+    "Leave Color",
+    "CC Vignette",
+    "Add Grain"
+   ],
+   "scripting": "The checkbox property name is literally 'Tint:' with a colon. Tint Color is \"#RRGGBB\". No blend slider: for a colour-to-B&W transition keyframe the effect's Compositing Options/Effect Opacity (0-100) if the spec reaches it, otherwise put the effect on an adjustment layer and keyframe that layer's Opacity. Premiere's Black & White has no controls at all (plain greyscale); for weighted or tinted mono in Premiere use Lumetri Color.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Brightness & Contrast",
+   "match": "ADBE Brightness & Contrast 2",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/030.png",
+    "note": "Image is clearly brighter and lifted with more contrast, highlights near white but not hard-clipped.",
+    "rerender": false
+   },
+   "summary": "Simple global brightness and contrast adjustment. The default (non-legacy) mode behaves like a gentle levels curve that protects highlights and shadows.",
+   "look": [
+    "brighter",
+    "darker",
+    "punchy contrast",
+    "flash",
+    "dimmed background"
+   ],
+   "use_for": [
+    "camera-flash hit on reveal beats in news reels and trailers",
+    "dimming a B-roll plate behind headline text",
+    "quick lift of underexposed press footage",
+    "contrast punch on social reels"
+   ],
+   "avoid": [
+    "Legacy mode clips highlights and blacks quickly",
+    "strong contrast on compressed footage reveals blocking"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Brightness",
+     "does": "overall brightness shift",
+     "typical": "-60 to dim a plate, +10 to +30 lift, +120 flash"
+    },
+    {
+     "name": "Contrast",
+     "does": "overall contrast",
+     "typical": "10-30"
+    },
+    {
+     "name": "Use Legacy (supports HDR)",
+     "does": "checkbox: old linear method, clips but works with HDR/32-bit",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Brightness": 45,
+    "Contrast": 50,
+    "Use Legacy (supports HDR)": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Brightness & Contrast",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Exposure",
+    "Curves",
+    "Glow"
+   ],
+   "scripting": "Checkbox is a 0/1 number. Brightness range -150..150, Contrast -100..100. Measured 2026-10-13 (live wave 2, the layout recipes' blurred backplates): at the same values (Brightness -35 / -45, Contrast -10) Premiere's Brightness & Contrast renders 10-27 levels darker than this effect (9:16 blur-fill mean RGB 126/115/127 here against 104/103/105 in Premiere). The two scales are not the same: do not copy values across apps without a check.",
+   "recipe": {
+    "Brightness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.06,
+      120
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Broadcast Colors",
+   "match": "ADBE Broadcast Colors",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/031.png",
+    "note": "Highlights are clamped: walls, faces and white stripes lose detail into flat hard-edged grey plateaus, so the limit is visible, not subtle.",
+    "rerender": false
+   },
+   "summary": "Limits luminance or saturation so the picture stays within legal broadcast (NTSC/PAL) signal levels, or keys out the unsafe areas to show where they are.",
+   "look": [
+    "broadcast safe",
+    "limited highlights",
+    "toned-down saturation"
+   ],
+   "use_for": [
+    "final safety pass on content delivered to a TV news channel",
+    "taming super-saturated flags and graphics for broadcast",
+    "diagnosing illegal areas by keying them out"
+   ],
+   "avoid": [
+    "unneeded for Instagram/YouTube delivery: dulls highlights for no gain",
+    "IRE well below 100 (e.g. 90) clamps walls, faces and white flag stripes into flat, hard-edged grey blotches"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Broadcast Locale",
+     "does": "TV standard",
+     "typical": "1 (NTSC) or 2 (PAL; India uses PAL)"
+    },
+    {
+     "name": "How to Make Color Safe",
+     "does": "method: reduce luminance, reduce saturation, or key out unsafe/safe areas",
+     "typical": "1 (Reduce Luminance) or 2 (Reduce Saturation)"
+    },
+    {
+     "name": "Maximum Signal Amplitude (IRE)",
+     "does": "signal ceiling",
+     "typical": "100-110"
+    }
+   ],
+   "demo_settings": {
+    "Broadcast Locale": 2,
+    "How to Make Color Safe": 1,
+    "Maximum Signal Amplitude (IRE)": 90
+   },
+   "enum_labels": {
+    "Broadcast Locale": {
+     "1": "NTSC",
+     "2": "PAL"
+    },
+    "How to Make Color Safe": {
+     "1": "Reduce Luminance",
+     "2": "Reduce Saturation",
+     "3": "(separator)",
+     "4": "Key Out Unsafe",
+     "5": "Key Out Safe"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Broadcast Colors",
+   "pairs_with": [
+    "Hue/Saturation",
+    "Levels",
+    "Lumetri Color"
+   ],
+   "scripting": "Premiere 2026 has the same Broadcast Colors effect (same three properties); Video Limiter is Premiere's more modern alternative. How to Make Color Safe is a 1-5 popup; the documented options are Reduce Luminance, Reduce Saturation, Key Out Unsafe, Key Out Safe (After Effects 26.0's menu: 1 Reduce Luminance, 2 Reduce Saturation, 3 a separator, 4 Key Out Unsafe, 5 Key Out Safe). The demo at 90 IRE (Reduce Luminance) visibly clamps highlights into flat, hard-edged plateaus on walls and faces; real broadcast work uses 100-110. Apply last in the chain.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Color Neutralizer",
+   "match": "CS Color Neutralizer",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/032.png",
+    "note": "Split tone as described: shadows go blue/teal (R -20, B +20) and highlights go warm peach (R +23, B -31).",
+    "rerender": false
+   },
+   "summary": "Removes or adds colour casts separately in shadows, midtones and highlights: pick the off-colour as an 'Unbalance' colour to neutralise it, or push red/green/blue per tonal range for split-tone grades.",
+   "look": [
+    "colour balance",
+    "cast removal",
+    "split tone",
+    "teal-orange",
+    "three-way grade"
+   ],
+   "use_for": [
+    "neutralising a green or magenta cast in fluorescent-lit press rooms",
+    "teal shadows / warm highlights cinematic grade for trailers",
+    "matching two interview cameras shot under different light",
+    "cool documentary look by pushing blue into shadows"
+   ],
+   "avoid": [
+    "large offsets on skin go plastic or sickly",
+    "wrong Unbalance colour adds a cast instead of removing it"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Midtones Unbalance",
+     "does": "colour that should become neutral grey in midtones (eyedropper target)",
+     "typical": "sample of the cast, e.g. #8A9070 for a green cast"
+    },
+    {
+     "name": "Shadows Unbalance",
+     "does": "the cast colour seen in the shadows; it is pulled to neutral black",
+     "typical": "default #000000 = no change"
+    },
+    {
+     "name": "Highlights Unbalance",
+     "does": "the cast colour seen in the highlights; it is pulled to neutral white",
+     "typical": "default #FFFFFF = no change"
+    },
+    {
+     "name": "Red - Shadows",
+     "does": "manual red offset in shadows",
+     "typical": "-30 to 0 for teal shadows"
+    },
+    {
+     "name": "Blue - Shadows",
+     "does": "manual blue offset in shadows",
+     "typical": "10-30 for teal shadows"
+    },
+    {
+     "name": "Red - Highlights",
+     "does": "manual red offset in highlights",
+     "typical": "10-30 for warm highlights"
+    },
+    {
+     "name": "Blue - Highlights",
+     "does": "manual blue offset in highlights",
+     "typical": "-30 to -10 for warm highlights"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mix back the original (percent)",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Red - Shadows": -40,
+    "Blue - Shadows": 40,
+    "Red - Highlights": 40,
+    "Blue - Highlights": -40,
+    "Pinning": 0,
+    "Blend w. Original": 0,
+    "View": 1
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Final Result",
+     "2": "Correction B to W",
+     "3": "Correction Stair"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Curves",
+    "Vibrance",
+    "Auto Color",
+    "Lumetri Color"
+   ],
+   "scripting": "Property names are flat ('Red - Shadows', etc.); the Shadows/Midtones/Highlights headers are display groups only. Unbalance colours are \"#RRGGBB\"; defaults (black, 50% grey, white) mean no correction. View is a 1-3 popup: 1 Final Result, 2 Correction B to W, 3 Correction Stair (read from After Effects 26.0). Black Point is limited to 0-49.9 and White Point to 50.1-100. Direction of manual offsets (positive = more of that colour) is confirmed by the gallery render: the demo gave blue shadows and warm highlights.",
+   "recipe": {}
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Color Offset",
+   "match": "CC Color Offset",
+   "category": "Color Correction",
+   "status": "current",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/033.png",
+    "note": "Garish magenta/yellow false-colour psychedelic look across the whole frame.",
+    "rerender": false
+   },
+   "summary": "Rotates the red, green and blue channel values by a phase angle, cycling colours around; overflow handling wraps, solarizes or polarizes values for psychedelic, solarized false-colour looks.",
+   "look": [
+    "psychedelic",
+    "solarize",
+    "false colour",
+    "colour cycling",
+    "acid",
+    "glitch"
+   ],
+   "use_for": [
+    "trippy colour-cycling transitions in music or meme reels",
+    "solarized 'hacked' or 'dream' sequences in AI-education explainers",
+    "one-frame colour flashes on beat drops in trailers"
+   ],
+   "avoid": [
+    "on real politicians in serious news: looks like mockery",
+    "large phases on skin are garish",
+    "full-length use tires viewers; keep to short beats"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Red Phase",
+     "does": "phase rotation of the red channel (degrees, 360 = full cycle)",
+     "typical": "0-360"
+    },
+    {
+     "name": "Green Phase",
+     "does": "phase rotation of the green channel",
+     "typical": "0-360"
+    },
+    {
+     "name": "Blue Phase",
+     "does": "phase rotation of the blue channel",
+     "typical": "0-360"
+    },
+    {
+     "name": "Overflow",
+     "does": "how values pushed past white are folded back: wrap (hard banding), solarize or polarize (smoother)",
+     "typical": "2 (default, believed Solarize); 1 (Wrap) only for deliberately harsh glitch frames"
+    }
+   ],
+   "demo_settings": {
+    "Red Phase": 120,
+    "Green Phase": 0,
+    "Blue Phase": 240,
+    "Overflow": 2
+   },
+   "enum_labels": {
+    "Overflow": {
+     "1": "Wrap",
+     "2": "Solarize",
+     "3": "Polarize"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Shift Channels",
+    "Hue/Saturation",
+    "Glow",
+    "Wave Warp"
+   ],
+   "scripting": "Phase properties have no harvested min/max; they behave as angles in degrees (0-360 is one full cycle, larger values keep cycling). Overflow: 1 Wrap, 2 Solarize (the default), 3 Polarize (read from After Effects 26.0). Animate a phase linearly for colour cycling.",
+   "recipe": {
+    "Red Phase": [
+     [
+      0,
+      0
+     ],
+     [
+      2,
+      360
+     ]
+    ],
+    "Blue Phase": [
+     [
+      0,
+      0
+     ],
+     [
+      2,
+      -360
+     ]
+    ]
+   }
+  }
+ ]
+}

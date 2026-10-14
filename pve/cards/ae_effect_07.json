@@ -1,0 +1,1053 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Exposure",
+   "match": "ADBE Exposure2",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Photographic exposure change in f-stops, worked out in linear light, plus an Offset that shifts the black level and a Gamma Correction for midtones. Can act on the whole image (Master) or on the red, green and blue channels separately.",
+   "look": [
+    "brighter / darker",
+    "overexposed",
+    "flash frame",
+    "blown highlights",
+    "crushed shadows",
+    "white-out"
+   ],
+   "use_for": [
+    "Rescue an under-exposed press photo or interview clip by +0.5 to +1 stop",
+    "White flash-frame hit on a cut or a beat in a trailer or reel (Exposure keyframed up and back down)",
+    "Darken a background plate by -1 stop so lower thirds and captions read on top",
+    "Fade to / from white between documentary chapters",
+    "Quick warm or cool cast with Individual Channels (Red Exposure up, Blue Exposure down)"
+   ],
+   "avoid": [
+    "Values above about +3 stops on a static shot: the frame clips to flat white and loses all detail",
+    "Pushing Offset: it lifts blacks into a milky grey that looks like a bad TV signal",
+    "Using it for contrast: it scales brightness, use Curves or Levels for contrast"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channels:",
+     "does": "Master (one set of controls) or Individual Channels (separate R, G, B controls)",
+     "typical": "1 (Master); 2 only for per-channel colour casts"
+    },
+    {
+     "name": "Exposure",
+     "does": "Master exposure in f-stops (each +1 doubles brightness)",
+     "typical": "-1 to +1.5 for correction; 3 to 5 for a flash hit"
+    },
+    {
+     "name": "Offset",
+     "does": "Adds a constant to every pixel in linear light: mainly lifts (+) or crushes (-) shadows and midtones, highlights barely move",
+     "typical": "-0.03 to 0.03"
+    },
+    {
+     "name": "Gamma Correction",
+     "does": "Midtone gamma; above 1 brightens midtones, below 1 darkens",
+     "typical": "0.8 to 1.2"
+    },
+    {
+     "name": "Red Exposure",
+     "does": "Red channel exposure in stops (only with Channels: = 2)",
+     "typical": "0.1 to 0.4 for a warm cast"
+    },
+    {
+     "name": "Blue Exposure",
+     "does": "Blue channel exposure in stops (only with Channels: = 2)",
+     "typical": "-0.4 to -0.1 for a warm cast, positive for cool"
+    },
+    {
+     "name": "Bypass Linear Light Conversion",
+     "does": "Applies the maths to the raw pixel values instead of converting to linear light first",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Exposure": 1.5
+   },
+   "enum_labels": {
+    "Channels:": {
+     "1": "Master",
+     "2": "Individual Channels"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Lumetri Color",
+    "Glow"
+   ],
+   "scripting": "Exposure is in stops: the harvested range is -100..100 but anything beyond about +/-5 is a solid white or black frame. The Red/Green/Blue Exposure, Offset and Gamma Correction properties only take effect when 'Channels:' = 2 (Individual Channels); set 'Channels:' before writing them. 'Bypass Linear Light Conversion' is a checkbox (0/1).",
+   "recipe": {
+    "Exposure": [
+     [
+      0,
+      0
+     ],
+     [
+      0.08,
+      4
+     ],
+     [
+      0.35,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/044.png",
+    "note": "+1.5 stops brightens the whole frame strongly (mean luma +55), the white wall and white clothing clip to white and shadows lift: a clear overexposed look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Gamma/Pedestal/Gain",
+   "match": "ADBE Gamma/Pedestal/Gain2",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Per-channel video-style colour controls: Gamma bends the midtones, Pedestal adds an offset to the black level, Gain multiplies the brightness of each of the red, green and blue channels. Black Stretch brightens the darkest values for all channels.",
+   "look": [
+    "colour cast",
+    "warm tint",
+    "cool tint",
+    "lifted blacks",
+    "faded archival",
+    "video gain"
+   ],
+   "use_for": [
+    "Quick warm (archival, nostalgia) or cool (night, tension) cast on a documentary clip",
+    "Lift the blacks slightly for a faded archival or flashback look",
+    "Match the colour balance of two cameras or two news feeds in a split-screen",
+    "Cool night / day-for-night shift on B-roll (Red and Green Gain down to about 0.8, Blue Gain about 1.1)"
+   ],
+   "avoid": [
+    "Large Gain on one channel: highlights clip into neon-coloured blotches",
+    "High Pedestal values: blacks turn into a flat grey haze",
+    "Heavy 4K grading: Lumetri Color is faster and gives more control"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Black Stretch",
+     "does": "Remaps the lowest pixel values; higher brightens the shadows of all channels",
+     "typical": "1 (off) to 2"
+    },
+    {
+     "name": "Red Gain",
+     "does": "Multiplies the red channel (1 = unchanged)",
+     "typical": "1.05 to 1.3 for warmth"
+    },
+    {
+     "name": "Blue Gain",
+     "does": "Multiplies the blue channel",
+     "typical": "0.75 to 0.95 for warmth, 1.1 to 1.2 for a cool look"
+    },
+    {
+     "name": "Red Gamma",
+     "does": "Red midtone gamma (1 = unchanged)",
+     "typical": "0.85 to 1.2"
+    },
+    {
+     "name": "Blue Gamma",
+     "does": "Blue midtone gamma",
+     "typical": "0.85 to 1.2"
+    },
+    {
+     "name": "Blue Pedestal",
+     "does": "Offset added to the blue black level",
+     "typical": "0.02 to 0.06 for teal-ish lifted shadows"
+    },
+    {
+     "name": "Red Pedestal",
+     "does": "Offset added to the red black level",
+     "typical": "-0.03 to 0.05"
+    }
+   ],
+   "demo_settings": {
+    "Red Gain": 1.3,
+    "Blue Gain": 0.75,
+    "Red Pedestal": 0.04
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Levels",
+    "Curves",
+    "Hue/Saturation",
+    "Noise"
+   ],
+   "scripting": "Gamma and Gain default to 1 and Pedestal to 0, so the values are in normalised 0-1 pixel units; the harvested +/-32000 range is meaningless in practice. Keep Gamma 0.5-2, Gain 0.5-2, Pedestal -0.2..0.2. Black Stretch range is 1..4 (1 = no stretch). Render-verified: Red Gain 1.3 / Blue Gain 0.75 / Red Pedestal 0.04 gives a strong warm cast, so the 0-1 units hold.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/045.png",
+    "note": "Strong warm orange-magenta cast: red up about 40 and blue down about 38 levels, with red lifted in the shadows from the Red Pedestal.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Hue/Saturation",
+   "match": "ADBE HUE SATURATION",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Rotates hue and changes saturation and lightness of the whole image (or a chosen colour range), and with Colorize tints the whole frame a single hue, like sepia or a brand-colour monotone.",
+   "look": [
+    "desaturated",
+    "black and white",
+    "sepia",
+    "monochrome tint",
+    "colorize",
+    "hue shift",
+    "muted"
+   ],
+   "use_for": [
+    "Desaturate archival or flashback footage to black and white or a muted look",
+    "Colorize a background clip into a single brand colour (saffron, deep blue) behind headline text",
+    "Pull saturation down on a busy press shot so captions and graphics read",
+    "Sepia tint for historical sections of a documentary",
+    "Fast hue-flicker glitch on a reel beat (keyframed Master Hue)"
+   ],
+   "avoid": [
+    "Rotating Master Hue on footage with faces: skin goes green or purple",
+    "Master Lightness to brighten or darken: it flattens contrast, use Levels or Curves",
+    "Colorize Saturation above about 60: garish, cartoonish monotone"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channel Control",
+     "does": "Which colour range the hue/sat/lightness sliders edit (popup)",
+     "typical": "1 (Master)"
+    },
+    {
+     "name": "Master Hue",
+     "does": "Hue rotation in degrees",
+     "typical": "-20 to 20 for subtle shifts; 180 for a complementary-colour glitch (not a true invert)"
+    },
+    {
+     "name": "Master Saturation",
+     "does": "Saturation change; -100 = black and white",
+     "typical": "-100 (B&W), -40 (muted), +15 (punch)"
+    },
+    {
+     "name": "Master Lightness",
+     "does": "Lightens toward white or darkens toward black",
+     "typical": "-20 to 10"
+    },
+    {
+     "name": "Colorize",
+     "does": "Checkbox: tint the whole image with one hue",
+     "typical": "1 for sepia / monotone"
+    },
+    {
+     "name": "Colorize Hue",
+     "does": "Hue of the tint in degrees",
+     "typical": "30-40 sepia/saffron, 200-220 blue"
+    },
+    {
+     "name": "Colorize Saturation",
+     "does": "Strength of the tint colour",
+     "typical": "25 to 50"
+    },
+    {
+     "name": "Colorize Lightness",
+     "does": "Brightness of the tinted image",
+     "typical": "-10 to 10"
+    }
+   ],
+   "demo_settings": {
+    "Colorize": 1,
+    "Colorize Hue": 35,
+    "Colorize Saturation": 40
+   },
+   "enum_labels": {
+    "Channel Control": {
+     "1": "Master",
+     "2": "Reds",
+     "3": "Yellows",
+     "4": "Greens",
+     "5": "Cyans",
+     "6": "Blues",
+     "7": "Magentas"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Color Balance (HLS)",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Add Grain",
+    "Leave Color"
+   ],
+   "scripting": "Master Hue and Colorize Hue are angles in degrees (no harvested min/max). Colorize is a 0/1 checkbox and overrides the Master sliders when on. 'Channel Range' is a custom property and cannot be set. Editing a single colour range by script (Channel Control 2-7 then the sliders) is unverified: the harvest exposes only the Master Hue/Saturation/Lightness properties, so per-range values may not be reachable; use Lumetri Color or Change to Color for targeted colour shifts. Premiere: Color Balance (HLS) covers Master Hue/Saturation/Lightness; for Colorize use Tint or Lumetri Color.",
+   "recipe": {
+    "Master Saturation": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      -100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/046.png",
+    "note": "Colorize turns the whole frame into an orange-brown sepia monotone; stripes, dark clothing and flowers all collapse to one hue.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Leave Color",
+   "match": "ADBE Leave Color",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Desaturates the whole image except pixels close to one chosen colour, giving a selective-colour (colour pop) look such as a red flag on a black-and-white frame.",
+   "look": [
+    "selective colour",
+    "colour pop",
+    "isolated red",
+    "desaturated",
+    "sin city",
+    "dramatic"
+   ],
+   "use_for": [
+    "Keep the party or flag colour (saffron, green, red) while the rest of a rally shot goes grey",
+    "Point the viewer at one object in an explainer (a red file, a marked map region)",
+    "Dramatic trailer or reel beat that drains colour except one accent",
+    "Emphasise a brand-colour prop in a news promo"
+   ],
+   "avoid": [
+    "Picking red or orange on shots with faces: skin tones fall inside the tolerance and stay patchy",
+    "Very low Tolerance on compressed footage: noisy speckled edges",
+    "Leaving Amount to Decolor at its default 0: the effect does nothing"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount to Decolor",
+     "does": "How much of the non-matching colour is removed (100 = full grey)",
+     "typical": "80 to 100"
+    },
+    {
+     "name": "Color To Leave",
+     "does": "The colour kept in full saturation",
+     "typical": "the flag / prop colour, e.g. #C8102E red, #FF9933 saffron"
+    },
+    {
+     "name": "Tolerance",
+     "does": "How far from the chosen colour a pixel can be and still keep its colour",
+     "typical": "20 to 35"
+    },
+    {
+     "name": "Edge Softness",
+     "does": "Softens the boundary between kept and removed colour",
+     "typical": "10 to 25"
+    },
+    {
+     "name": "Match colors",
+     "does": "Compare by RGB values or by hue only (popup)",
+     "typical": "2 (Using Hue) for footage with varying light"
+    }
+   ],
+   "demo_settings": {
+    "Amount to Decolor": 100,
+    "Color To Leave": "#C8102E",
+    "Tolerance": 30,
+    "Edge Softness": 15,
+    "Match colors": 2
+   },
+   "enum_labels": {
+    "Match colors": {
+     "1": "Using RGB",
+     "2": "Using Hue"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Pass",
+   "pairs_with": [
+    "Hue/Saturation",
+    "Curves",
+    "Lumetri Color",
+    "Glow"
+   ],
+   "scripting": "Default Amount to Decolor is 0, so always set it. 'Color To Leave' takes \"#RRGGBB\". Sample the real colour from the frame first: the effect is very sensitive to the exact hue. Match colors popup: 1 = Using RGB, 2 = Using Hue. Premiere 2026 has no Leave Color; its equivalent is Color Pass (Similarity, Reverse, Color).",
+   "recipe": {
+    "Amount to Decolor": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/047.png",
+    "note": "Selective colour: the greens, a blue block and the plants go grey while the red stripes, red foreground blocks and flowers keep their colour.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Levels",
+   "match": "ADBE Easy Levels2",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Classic levels: remaps the input black point, white point and midtone gamma to new output black and white levels, for contrast, brightness and fades. The per-channel histogram edits live in a custom property, so by script only the RGB master controls are reachable.",
+   "look": [
+    "contrast",
+    "punchy",
+    "crushed blacks",
+    "faded",
+    "matte blacks",
+    "brighter"
+   ],
+   "use_for": [
+    "Add contrast to a flat news or interview clip (raise Input Black, lower Input White)",
+    "Faded matte look for documentary flashbacks (raise Output Black)",
+    "Fade from or to black by keyframing Output White",
+    "Even out exposure between photos in a press-photo montage"
+   ],
+   "avoid": [
+    "Input Black above about 0.2: shadows crush to solid black and faces lose detail",
+    "Expecting per-channel colour edits by script: use Levels (Individual Controls)",
+    "Large Gamma moves on 8-bit footage: banding in skies and gradients"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Input Black",
+     "does": "Input level mapped to black (normalised 0-1)",
+     "typical": "0.03 to 0.12"
+    },
+    {
+     "name": "Input White",
+     "does": "Input level mapped to white (normalised 0-1)",
+     "typical": "0.85 to 0.97"
+    },
+    {
+     "name": "Gamma",
+     "does": "Midtone gamma (>1 brightens midtones)",
+     "typical": "0.85 to 1.2"
+    },
+    {
+     "name": "Output Black",
+     "does": "Darkest output level; raising it gives matte / faded blacks",
+     "typical": "0 to 0.08"
+    },
+    {
+     "name": "Output White",
+     "does": "Brightest output level; lowering it dims highlights",
+     "typical": "0.9 to 1"
+    },
+    {
+     "name": "Channel:",
+     "does": "Which channel the histogram shows and edits in the UI",
+     "typical": "1 (RGB)"
+    }
+   ],
+   "demo_settings": {
+    "Input Black": 0.15,
+    "Input White": 0.8,
+    "Gamma": 0.85
+   },
+   "enum_labels": {
+    "Channel:": {
+     "1": "RGB",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    },
+    "Clip To Output Black": {
+     "1": "On",
+     "2": "Off",
+     "3": "Off for 32 bpc Color"
+    },
+    "Clip To Output White": {
+     "1": "On",
+     "2": "Off",
+     "3": "Off for 32 bpc Color"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Levels",
+   "pairs_with": [
+    "Curves",
+    "Exposure",
+    "Hue/Saturation",
+    "Add Grain"
+   ],
+   "scripting": "Values are normalised 0-1 (the UI shows 0-255 in an 8 bpc project; script 1.0 = 255). The Input/Output/Gamma properties edit the RGB master; per-channel values sit inside the custom 'Histogram' property and are not settable, so use 'Levels (Individual Controls)' for per-channel work. 'Clip To Output Black/White' popups (1 On, 2 Off, 3 Off for 32 bpc Color, the default) are left at default.",
+   "recipe": {
+    "Output White": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/048.png",
+    "note": "Punchy contrast: luma spread rises from 48 to 72, blacks crush (dark clothing near black) and the white wall and white stripes clip to white.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Levels (Individual Controls)",
+   "match": "ADBE Pro Levels2",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "The same levels remap as Levels, but every channel (RGB master, Red, Green, Blue, Alpha) has its own exposed Input Black/White, Gamma and Output Black/White, so each can be set and keyframed separately.",
+   "look": [
+    "contrast",
+    "colour balance",
+    "warm",
+    "blue-tinted shadows",
+    "faded",
+    "cross-processed"
+   ],
+   "use_for": [
+    "Warm or cool grade by bending one channel's gamma (Red Gamma up, Blue Gamma down)",
+    "Blue-tinted shadows by lifting Blue Output Black; lift Green Output Black a little too for true teal (Blue alone plus a warm Red Gamma turns dark navy purple)",
+    "Contrast plus colour correction in one effect for interview clips",
+    "Tighten an alpha matte with Alpha Input Black/White on keyed footage"
+   ],
+   "avoid": [
+    "Large per-channel moves: skin tones turn orange or green",
+    "Input Black above about 0.2: crushes shadows",
+    "Forgetting it is normalised: 255-style values clamp to a white frame"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Input Black",
+     "does": "RGB master input black point (0-1)",
+     "typical": "0.03 to 0.1"
+    },
+    {
+     "name": "Input White",
+     "does": "RGB master input white point (0-1)",
+     "typical": "0.88 to 0.97"
+    },
+    {
+     "name": "Gamma",
+     "does": "RGB master midtone gamma",
+     "typical": "0.9 to 1.15"
+    },
+    {
+     "name": "Red Gamma",
+     "does": "Red channel midtone gamma",
+     "typical": "1.05 to 1.25 for warmth"
+    },
+    {
+     "name": "Blue Gamma",
+     "does": "Blue channel midtone gamma",
+     "typical": "0.8 to 0.95 for warmth, 1.1 for cool"
+    },
+    {
+     "name": "Blue Output Black",
+     "does": "Lifts blue in the shadows",
+     "typical": "0.03 to 0.08 for teal shadows"
+    },
+    {
+     "name": "Output Black",
+     "does": "RGB master output black (matte look)",
+     "typical": "0 to 0.06"
+    },
+    {
+     "name": "Alpha Input White",
+     "does": "Alpha level mapped to fully opaque (matte tightening)",
+     "typical": "0.85 to 0.95 on keyed layers"
+    }
+   ],
+   "demo_settings": {
+    "Input Black": 0.06,
+    "Red Gamma": 1.25,
+    "Blue Gamma": 0.8,
+    "Blue Output Black": 0.08
+   },
+   "enum_labels": {
+    "Channel:": {
+     "1": "RGB",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    },
+    "Clip To Output Black": {
+     "1": "On",
+     "2": "Off",
+     "3": "Off for 32 bpc Color"
+    },
+    "Clip To Output White": {
+     "1": "On",
+     "2": "Off",
+     "3": "Off for 32 bpc Color"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Levels",
+   "pairs_with": [
+    "Curves",
+    "Hue/Saturation",
+    "Lumetri Color",
+    "Add Grain"
+   ],
+   "scripting": "All values normalised 0-1. 'Channel:' only chooses which histogram the UI shows; every channel's properties are set directly by name (Red Gamma, Blue Output Black, ...). Clip To Output Black/White popups (1 On, 2 Off, 3 Off for 32 bpc Color, the default) left at default. Preferred over 'Levels' whenever a script needs per-channel control.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/049.png",
+    "note": "Visible warm grade (red up, green and blue down) with slightly deeper blacks; the navy areas shift purple because Blue Output Black lifts only blue, not teal.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Lumetri Color",
+   "match": "ADBE Lumetri",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Adobe's full grading panel inside one effect: white balance, exposure and tone, creative Looks/LUTs, fade and vibrance, curves, colour wheels, HSL secondary keying and a vignette. Gives everything from a clean correction to a stylised film grade.",
+   "look": [
+    "colour grade",
+    "warm",
+    "teal-orange",
+    "faded film",
+    "vignette",
+    "punchy contrast",
+    "cinematic"
+   ],
+   "use_for": [
+    "One-stop correction of interview and B-roll clips (Temperature, Exposure, Contrast, Highlights, Shadows)",
+    "Consistent look across a documentary or explainer by putting it on an adjustment layer",
+    "Cinematic trailer grade: contrast, Faded Film, vignette",
+    "Desaturate background plates or flashbacks with Saturation",
+    "Warm up cold press-conference footage before compositing graphics on it"
+   ],
+   "avoid": [
+    "Values near the harvested extremes (Temperature/Tint +/-300, Contrast +/-150): far past the UI sliders and look broken",
+    "Stacking several Lumetri instances on every layer: slow; grade once on an adjustment layer",
+    "Relying on Look / Input LUT indices: the list depends on the LUTs installed on the machine"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Temperature",
+     "does": "White balance warm (+) / cool (-) (Basic Correction)",
+     "typical": "-30 to 30"
+    },
+    {
+     "name": "Exposure",
+     "does": "Overall exposure in stops (Basic Correction)",
+     "typical": "-1 to 1"
+    },
+    {
+     "name": "Contrast",
+     "does": "Basic Correction contrast",
+     "typical": "10 to 40"
+    },
+    {
+     "name": "Highlights",
+     "does": "Recovers (-) or brightens (+) the bright tones",
+     "typical": "-40 to 0"
+    },
+    {
+     "name": "Shadows",
+     "does": "Opens (+) or deepens (-) the dark tones",
+     "typical": "0 to 30"
+    },
+    {
+     "name": "Saturation",
+     "does": "Basic Correction saturation, 100 = unchanged, 0 = B&W",
+     "typical": "80 to 130"
+    },
+    {
+     "name": "Faded Film",
+     "does": "Lifts and softens the blacks for a faded print look (Creative)",
+     "typical": "10 to 40"
+    },
+    {
+     "name": "Amount",
+     "does": "Vignette amount; negative darkens the edges",
+     "typical": "-1.5 to -0.5"
+    }
+   ],
+   "demo_settings": {
+    "Temperature": 40,
+    "Saturation": 140,
+    "Contrast": 35,
+    "Faded Film": 30,
+    "Amount": -2
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Add Grain",
+    "Glow",
+    "Curves",
+    "Camera Lens Blur"
+   ],
+   "scripting": "Effect properties are flat and many display names repeat (Active x12, Input LUT x2, Intensity x2, Look x2, HDR White x2, Temperature/Tint/Contrast/Sharpen x2, Saturation x3). AE's lookup by name returns the FIRST: Temperature, Tint, Saturation, Exposure, Contrast = Basic Correction; Sharpen, Vibrance, Faded Film = Creative; Amount/Midpoint/Roundness/Feather = Vignette. The later copies (HSL Secondary 'Correction' sliders, Creative Look Intensity) are not reachable by name ('Name#2' passes the validator but ae_lib will not find it); address them by property index if ever needed. Curves, Color Wheels, Split Toning, HSL Sliders, Wheels are custom blobs and cannot be set: for those, apply a saved .ffx preset. Look and Input LUT popups index the installed LUT list (1 = None; order is machine-specific). The first 'Intensity' (0-100, default 50) in Basic Correction is unverified. Practical ranges are narrower than harvested: Temperature/Tint and tone sliders +/-100, Exposure +/-3, Vignette Amount +/-3, Saturation 0-200.",
+   "recipe": {
+    "Saturation": [
+     [
+      0,
+      100
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/050.png",
+    "note": "Warm, saturated, higher-contrast grade with a clear dark vignette (corners about 50 levels darker); the first Temperature and Amount names do hit Basic Correction and Vignette.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "OCIO CDL Transform",
+   "match": "ADBE OCIO CDL Transform",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Applies an ASC CDL grade (slope, offset, power, saturation) read from a .cdl, .cc or .ccc file through OpenColorIO, so a colourist's or DIT's grade can be reproduced exactly. Without a CDL file it does nothing.",
+   "look": [
+    "colour grade",
+    "CDL",
+    "show look",
+    "on-set grade"
+   ],
+   "use_for": [
+    "Apply the on-set / DIT CDL delivered with camera footage so AE comps match the grade",
+    "Reuse a grade exported from DaVinci Resolve or Baselight as a CDL across a documentary series",
+    "Undo a CDL (Inverse transform) before compositing, then re-apply it on top"
+   ],
+   "avoid": [
+    "Using it without the matching CDL file: no visible change",
+    "Applying a CDL meant for log footage to Rec.709 footage: wrong contrast and colour"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "CCCID",
+     "does": "Which correction inside a .ccc collection file to use (popup filled from the file)",
+     "typical": "1"
+    },
+    {
+     "name": "Inverse transform",
+     "does": "Checkbox: applies the inverse of the CDL",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "ASC CDL",
+   "pairs_with": [
+    "OCIO Color Space Transform",
+    "OCIO Display Transform",
+    "Lumetri Color"
+   ],
+   "scripting": "Needs a CDL file chosen with the effect's File button (the 'File' group has no settable property in the harvest). CCCID popup had min = max = 1 when harvested (it is filled from the loaded file). Probably requires the project to use OCIO colour management (Project Settings > Color); unverified. For automation, set it up by hand and save an .ffx preset.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an OCIO config / file chosen by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "second_note": "gallery/ae/index.json has no entry (needs_input cards are skipped by gallery.py), so no frame exists; needs_input is right because the CDL file is picked with a browse button no script can set and CCCID is filled from that file (harvest min = max = 1); card text matches Adobe's description (file browse, CCCID list, Inverse, Information)."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "OCIO Color Space Transform",
+   "match": "ADBE OCIO Color Space Transform",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Converts pixels from one OpenColorIO colour space to another (for example camera log such as S-Log3 or LogC into ACEScg or Rec.709), using the project's OCIO config.",
+   "look": [
+    "log to Rec.709",
+    "colour space conversion",
+    "ACES",
+    "technical transform"
+   ],
+   "use_for": [
+    "Convert log camera footage (S-Log3, V-Log, LogC) into Rec.709 or the working space before grading",
+    "Bring ACES / EXR 3D renders into the working space of the comp",
+    "Mix footage from different cameras in one colour-managed documentary timeline"
+   ],
+   "avoid": [
+    "Using it in a project that is not set up for OCIO: the colour-space menus are empty and nothing changes",
+    "Converting twice (once here and once by footage interpretation): double transform, washed-out or crushed image"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Input Color Space",
+     "does": "Colour space the layer is currently in (popup from the OCIO config)",
+     "typical": "the camera's log space"
+    },
+    {
+     "name": "Output Color Space",
+     "does": "Colour space to convert to (popup from the OCIO config)",
+     "typical": "the working space or Rec.709"
+    },
+    {
+     "name": "Reset Control",
+     "does": "Resets the menus to the config defaults",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Space Transform",
+   "pairs_with": [
+    "OCIO Display Transform",
+    "OCIO CDL Transform",
+    "OCIO Look Transform"
+   ],
+   "scripting": "Both colour-space popups are built from the active OCIO config: in the harvest project they reported min = max = 1 with defaults 80 and 1371908864 (config IDs, not menu indices), so ae_lib's range clamp forces any scripted value to 1 and a script cannot reliably choose a colour space. Set the menus by hand and save an .ffx preset, or interpret the footage's colour space instead. Likely requires OCIO colour management in Project Settings (unverified). Premiere's equivalent is Color Space Transform (source / target colour space menus plus tone mapping).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an OCIO config / file chosen by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "second_note": "no frame exists (not in gallery index); both colour-space popups come from the project's OCIO config and were harvested with min = max = 1, so no scripted demo can pick a conversion; needs_input and empty demo_settings are correct."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "OCIO Display Transform",
+   "match": "ADBE OCIO Display Transform",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Applies an OpenColorIO display / view transform (for example ACES to sRGB or Rec.709 SDR video) to the layer, baking the look of the viewer into the pixels; Inverse brings display-referred images into scene-linear.",
+   "look": [
+    "view transform",
+    "ACES display",
+    "tone mapping",
+    "technical transform"
+   ],
+   "use_for": [
+    "Bake the ACES / OCIO view transform into a render when delivering Rec.709 from a scene-linear comp",
+    "Inverse-transform logos, screenshots or graphics so they keep their colours inside an ACES comp",
+    "Check a scene-linear render on a specific display / view combination"
+   ],
+   "avoid": [
+    "Using it in a non-OCIO project: menus are empty and nothing happens",
+    "Applying it on top of a project that already applies the same view transform on output: double tone-mapping"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Input Color Space",
+     "does": "Colour space of the incoming pixels (OCIO config popup)",
+     "typical": "the scene-linear working space"
+    },
+    {
+     "name": "Display Device",
+     "does": "Target display (OCIO config popup)",
+     "typical": "sRGB or Rec.1886 / Rec.709"
+    },
+    {
+     "name": "View Transform",
+     "does": "View for that display (OCIO config popup)",
+     "typical": "the SDR video view"
+    },
+    {
+     "name": "Inverse transform",
+     "does": "Checkbox: applies the inverse display transform",
+     "typical": "1 for graphics going into a linear comp"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Space Transform",
+   "pairs_with": [
+    "OCIO Color Space Transform",
+    "OCIO Look Transform"
+   ],
+   "scripting": "Input Color Space, Display Device and View Transform popups come from the OCIO config and were harvested with min = max = 1, so scripts cannot choose them (values clamp to 1). Inverse transform and Reset Control are 0/1 checkboxes. Configure by hand and save an .ffx preset. Likely needs OCIO colour management in Project Settings (unverified).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an OCIO config / file chosen by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "second_note": "no frame exists (not in gallery index); Input / Display / View popups are filled from the OCIO config (harvest min = max = 1) and Inverse alone on an unconfigured transform proves nothing, so needs_input is correct; summary and params match Adobe's description."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "OCIO File Transform",
+   "match": "ADBE OCIO FILE Transform",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Applies a LUT or colour-transform file (for example .cube, .3dl, .csp, .clf, .spi3d) through OpenColorIO. Without a chosen file it does nothing.",
+   "look": [
+    "LUT",
+    "film emulation",
+    "log to Rec.709",
+    "creative grade"
+   ],
+   "use_for": [
+    "Apply a camera manufacturer's log-to-Rec.709 LUT to drone or cinema footage",
+    "Apply a show LUT or film-emulation LUT for a trailer or documentary look",
+    "Inverse a LUT to get back to log before compositing"
+   ],
+   "avoid": [
+    "Applying a log LUT to footage that is already Rec.709: harsh contrast and oversaturation",
+    "Expecting it to work without a file: no visible change"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Inverse transform",
+     "does": "Checkbox: applies the inverse of the file transform",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "Lumetri Color",
+    "OCIO Color Space Transform",
+    "Add Grain"
+   ],
+   "scripting": "The LUT file is chosen with the effect's File button; the harvest shows no settable file property (the 'File' group is a header and the remaining properties are unnamed). A script can only toggle 'Inverse transform'. Configure by hand and save an .ffx preset, or use AE's Apply Color LUT / Lumetri Input LUT instead. May require OCIO colour management (unverified).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an OCIO config / file chosen by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "second_note": "no frame exists (not in gallery index); the LUT file is chosen with a browse button and only Inverse transform is settable, so a script cannot produce a visible demo; needs_input is correct."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "OCIO Look Transform",
+   "match": "ADBE OCIO Look Transform",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Applies a named 'look' defined in the OpenColorIO config (a show grade or creative LUT) between an input and an output colour space.",
+   "look": [
+    "show look",
+    "creative grade",
+    "LUT",
+    "ACES look"
+   ],
+   "use_for": [
+    "Apply a series-wide show look defined in the studio's OCIO config to every documentary episode",
+    "Preview a creative grade on CG renders inside an ACES pipeline",
+    "Remove a look (Inverse transform) to get back to the ungraded plate"
+   ],
+   "avoid": [
+    "Using it with an OCIO config that defines no looks: nothing to choose, no change",
+    "Wrong Input / Output colour spaces: the look lands on the wrong encoding and looks broken"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Input Color Space",
+     "does": "Colour space of the incoming pixels (OCIO config popup)",
+     "typical": "the working space"
+    },
+    {
+     "name": "Look",
+     "does": "Which look from the config to apply (popup)",
+     "typical": "the show look"
+    },
+    {
+     "name": "Output Color Space",
+     "does": "Colour space after the look (OCIO config popup)",
+     "typical": "same as input"
+    },
+    {
+     "name": "Inverse transform",
+     "does": "Checkbox: applies the inverse of the look",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color",
+   "pairs_with": [
+    "OCIO Color Space Transform",
+    "OCIO Display Transform"
+   ],
+   "scripting": "Look and colour-space popups come from the OCIO config and were harvested with min = max = 1 (defaults 79 / 1 / 0 are config IDs), so a script cannot choose them (values clamp to 1). Needs an OCIO config that defines looks and probably OCIO colour management in Project Settings (unverified). Configure by hand and save an .ffx preset; Premiere's nearest is a Lumetri Color Creative Look.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an OCIO config / file chosen by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "second_note": "no frame exists (not in gallery index); Look and colour-space popups come from the OCIO config (harvest min = max = 1), so needs_input with empty demo_settings is correct."
+   }
+  }
+ ]
+}

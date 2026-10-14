@@ -1,0 +1,1576 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Percentage Counter Monospaced",
+   "match": null,
+   "category": "Text/Number Counters",
+   "status": "current",
+   "summary": "Turns the text layer into an animated percentage readout that counts from 0% to 100%; every digit sits in a fixed-width slot, so the number does not jitter as it counts.",
+   "look": [
+    "number counter",
+    "percentage",
+    "data reveal",
+    "monospaced digits",
+    "infographic"
+   ],
+   "use_for": [
+    "Stat reveal in an explainer ('turnout rose to 67%')",
+    "Poll or survey result callouts in news reels",
+    "Progress / completion meter next to a bar or ring",
+    "Budget share or growth-rate figures in documentaries"
+   ],
+   "avoid": [
+    "Pad Zeros defaults to 3, so small values read '007%' while counting: set Pad Zeros to 1",
+    "It replaces the layer's Source Text with an expression-driven counter, so typed text is lost (the layer's own font was kept in the test render: check the style after applying)",
+    "Number Format offers only 1,234,567.01 / 1.234.567,01 / 1 234 567,01 grouping: no Indian lakh/crore style (12,34,567)",
+    "Default keys end at 100: change the second Animate Value key for other targets"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Percentage Controls"
+   ],
+   "duration_note": "Animate Value is keyframed 0 -> 100 from comp.time to comp.time + 1.2 s, then holds. The Source Text and selector expressions run for the whole layer.",
+   "scripting": "Needs a text layer (its Source Text is replaced: an expression builds the digit template from the preset's stored text style, and Character Offset animators set each digit). Set comp.time, select only that text layer, then layer.applyPreset(new File(<batch 'file' path>)). Adds the pseudo effect 'Percentage Counter Controls' (match name 'Pseudo/ADBE Percentage Controls') with: Animate Value (keyed 0->100), 10x Value Multiplier (1 = x1; each +1 multiplies by 10), Pad Zeros (3), Digits After Decimal (0), Number Format popup (1 '1,234,567.01' en-US = default, 2 '1.234.567,01' de-DE, 3 '1 234 567,01' fr-FR), Percent Symbol Position (point), Percent Symbol Scale (100), Show Group Separators (off), Group Spacing, Group Separator Offset, Align Group Spacing popup (1 Left, 2 Right, 3 Center = default). Retarget: fx = layer.property('Effects').property('Pseudo/ADBE Percentage Controls'); fx.property('Animate Value').setValueAtKey(2, 67); move keys with setValueAtTime/removeKey to change speed. The instance name is stored with a leading tab ('\\tPercentage Counter Controls'), so look it up by match name, not display name. To restyle: var d = layer.property('Source Text').value; d.font = '<PostScript name>'; layer.property('Source Text').setValue(d). Expressions need the JavaScript engine (project default).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/474b.png",
+    "note": "Counter reads 027% at 0.5 s and 098% at 1.4 s, reaching 100% at about 1.5 s; digits stay in fixed slots with Pad Zeros 3, and the layer kept its Bebas Neue font.",
+    "rerender": false,
+    "second_opinion": "agree: 474a/474b read 027% and 098% in the condensed Bebas Neue of the layer, not Myriad Pro, so the avoid[1] fix is right."
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Timer Countdown Monospaced",
+   "match": null,
+   "category": "Text/Number Counters",
+   "status": "current",
+   "summary": "Turns the text layer into a digital countdown clock (HH : MM : SS by default, with 'Hour Mins Secs' labels on a second line); digits sit in fixed-width slots so they do not jump as they tick. Animate Value is in the largest unit of the format (hours for HH:MM:SS), so the default keys race from 09 : 59 : 59 to 00 : 00 : 00 in 1.6 s.",
+   "look": [
+    "countdown",
+    "digital clock",
+    "timer",
+    "monospaced digits",
+    "ticker"
+   ],
+   "use_for": [
+    "Countdown to a vote, result or launch in news reels",
+    "'Time left' urgency card in social reels",
+    "Clock overlay for a timeline segment (rescue operation, deadline)",
+    "Ticking-clock tension text in trailers"
+   ],
+   "avoid": [
+    "Labels are fixed English words ('Hour Mins Secs'): switch Show Labels off for Hindi copy",
+    "Default keys run Animate Value 10 -> 0 (ten HOURS of clock) in 1.6 s: re-key it for a real-time countdown",
+    "Sets the layer's Source Text (expression plus the preset's Montserrat SemiBold style; substituted if the font is missing)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Timer Controls"
+   ],
+   "duration_note": "Animate Value is keyframed 9.9999 -> 0 (eased) from comp.time to comp.time + 1.6 s, then holds at zero: the clock shows 09 : 59 : 59 counting to 00 : 00 : 00. The clock expressions run for the whole layer.",
+   "scripting": "Needs a text layer (Source Text is replaced by an expression that builds the clock template with the preset's stored Montserrat SemiBold style; Character Offset animators set the digits). Set comp.time, select only that text layer, then layer.applyPreset(new File(<batch 'file' path>)). Adds the pseudo effect 'Timer Countdown Controls' (match name 'Pseudo/ADBE Timer Controls') with: Animate Value (keyed ~10->0), Time Format popup (1 MM:SS, 2 HH:MM:SS = default, 3 DD:HH:MM:SS), Show Labels (on), Label Position Offset (point), Label Size (32), Label Spacing, Separator Character popup (1 Colons = default, 2 Dots, 3 Spaces), Spacing. Unit of Animate Value (read from the digit expressions): its integer part is the FIRST field and the fraction fills the rest, i.e. hours in HH:MM:SS, minutes in MM:SS, days in DD:HH:MM:SS. Real-time N-second countdown: HH:MM:SS -> keys N/3600 at start and 0 at start + N s; MM:SS -> N/60 and 0; set both keys to KeyframeInterpolationType.LINEAR (the preset's keys are eased). fx = layer.property('Effects').property('Pseudo/ADBE Timer Controls') (the instance name is stored with a leading tab, so prefer the match name). Expressions need the JavaScript engine (project default).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/475b.png",
+    "note": "A digital clock with HOUR MINS SECS labels counts down 08:31:52 (0.5 s) to 02:23:56 (1.4 s) in fixed-width digits.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Autumn",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "The whole line falls about 300 px down into place from above, swaying side to side and skewing like a falling leaf, settling after 2.4 s (about 2.9 s in a 25 fps comp) with a fixed 10-degree skew (faux italic).",
+   "look": [
+    "falling leaf",
+    "organic",
+    "gentle drift down",
+    "skew wobble",
+    "soft entrance"
+   ],
+   "use_for": [
+    "Soft title entrance for nature or seasonal documentary segments",
+    "Calm lower-third drift-in for interview pieces",
+    "Chapter title for reflective or nostalgic sections"
+   ],
+   "avoid": [
+    "No fade: the text starts at full opacity 300 px above its spot; in the 960x540 test a centred title was almost entirely off the top edge at the first frame (only its bottom few pixels showed), so mask, fade or plan for it dropping in from off-frame",
+    "Ends skewed 10 degrees (Skew expression is cos(y/20)*10, which is 10 at rest): change it to Math.sin(n/20)*10 to end upright",
+    "Too whimsical for hard news or political attack copy"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animator Position is keyed from 300 px above (negative Y) to 0 between comp.time and comp.time + 2.4 s at 30 fps (about 2.9 s in a 25 fps comp, since the keys keep their frame counts); the sway/skew expressions follow that motion and stop when it lands.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. The side-to-side sway and skew are expressions driven by the Position keyframes (sin/cos of the Y offset). Expressions need the JavaScript engine (project default). ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/476a.png",
+    "note": "The line high above its spot at 0.5 s and still falling, about 60 px above it, at 1.4 s, with an italic skew.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: avoid[0] said a centred title starts 'half off the top edge'; in G476 frame 0 only the bottom ~6 px of the glyphs show (text box top at about -48 px). Fall from above, the 20 px sin sway and the +/-10 degree skew swing (cos(n/20)*10, so it rests at +10) are confirmed from the frames and the preset's expressions; at 1.56 s the line is about 52 px above its rest spot, not 70."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boiling",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Letters bubble up into place in random order while jittering constantly, then from about 1.9 s they swell to 300% and fade out one by one like bursting bubbles; the text is gone by about 3.5 s.",
+   "look": [
+    "bubbling",
+    "jitter",
+    "random order",
+    "pop out",
+    "playful"
+   ],
+   "use_for": [
+    "Quick in-and-out caption in comedic or satire reels",
+    "Science / cooking explainer word pops",
+    "Throwaway reaction word ('Hot!', 'Ouch') in social edits"
+   ],
+   "avoid": [
+    "It is an in AND out: the text ends invisible, so delete the exit keys if the title must stay",
+    "Letters start fully visible 300 px below their spot (no fade-in)",
+    "Constant jitter looks cheap on serious news text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Entrance sweep keyed from comp.time to comp.time + 1.6 s; exit keys run comp.time + 1.87 s to + 3.47 s. The jitter is a Wiggly Selector (10 wiggles/s) that never stops.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. To keep the text on screen, remove the keys of the exit selectors (the range selectors whose Offset runs -100 -> 0 from about + 1.87 s).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/477b.png",
+    "note": "Letters pop in in random order (R V 7 at 0.5 s, most of the line at 1.4 s) with one H jittered well below the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boomerang In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters appear left to right over 2.4 s; each one flips and swings around an off-centre pivot at up to 300% size, like a boomerang, before landing in place.",
+   "look": [
+    "flip-in",
+    "swing",
+    "character cascade",
+    "energetic",
+    "playful"
+   ],
+   "use_for": [
+    "Punchy title entrance in social reels",
+    "Hook word reveal in the first seconds of a reel",
+    "Fun section headers in AI-education explainers"
+   ],
+   "avoid": [
+    "300% flipping glyphs overlap neighbours on long lines: keep to short words",
+    "Too playful for sombre documentary topics",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Reveal Offset keyed 0 -> 100 from comp.time to comp.time + 2.4 s; the flip keys (every ~0.13-0.27 s) also end at + 2.4 s. Characters ahead of the sweep are hidden (opacity 0) until reached.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/478b.png",
+    "note": "Characters arrive left to right (AR at 0.5 s, ARCHI at 1.4 s) with the next one flipped and swinging in mid-air.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Chewing Gum In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters are released in a random sweep from extreme vertical streaks (Scale Y up to -10000%, i.e. flipped and stretched, and displaced up to 2000 px vertically) that snap back to normal like strands of chewing gum, finishing at 1.6 s.",
+   "look": [
+    "stretch",
+    "elastic",
+    "rubbery",
+    "snap-in",
+    "comic"
+   ],
+   "use_for": [
+    "Comedic word entrance in meme or satire reels",
+    "Food or kids explainer titles",
+    "Transition word between gags"
+   ],
+   "avoid": [
+    "The stretch streaks across the whole frame: test on 1080x1920 too",
+    "Does not suit formal news or political explainers",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Range Offset keyed -100 -> 100 from comp.time to comp.time + 1.6 s; a Wiggly Selector (0.5 wiggles/s) varies the stretch while the sweep passes. Clean after about 1.6 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Description inferred from the animator values (Position Y +2000, Scale Y -10000, Ramp Up shape, randomized); verify on a test render.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/479b.png",
+    "note": "At 1.4 s some letters have landed while others are tall vertical streaks and a flipped stretched A above and below the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Climb In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Letters climb upward in eight staggered waves; each wave lifts the characters about 40 px with a half-turn flip, until the line settles near its own position at about 3.2 s. Each wave also wiggles the fill hue.",
+   "look": [
+    "stepped climb",
+    "flip",
+    "staggered",
+    "colour flicker",
+    "playful"
+   ],
+   "use_for": [
+    "Upbeat title for growth or 'rising' themes in explainers",
+    "Reel hook word that climbs into place",
+    "Education segment headers"
+   ],
+   "avoid": [
+    "Starts about 300 px below its final spot with no fade: hide the first frames or mask it",
+    "The hue wiggle only shows on coloured text; on white it does nothing",
+    "Rests about 20 px above the layer's own position",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Eight waves start at comp.time, + 0.27 s, + 0.53 s ... + 1.87 s, each lasting 1.33 s; the last ends at comp.time + 3.2 s. The fill-hue wiggle(30,30) expressions keep running afterwards.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Expressions need the JavaScript engine (project default). ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/480b.png",
+    "note": "Nothing until about 0.8 s, then at 1.4 s a jumbled, half-flipped row of characters climbs up from the bottom edge; the hue wiggle cannot show on white text.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Diagonal Bounce In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters bounce in one by one along a diagonal, flipping between -200% and 200% scale around a far-offset pivot, and land in place by 2.4 s.",
+   "look": [
+    "diagonal bounce",
+    "flip-in",
+    "cascade",
+    "energetic"
+   ],
+   "use_for": [
+    "Energetic reel titles",
+    "Sports or celebration word reveals",
+    "Playful explainer headings"
+   ],
+   "avoid": [
+    "The pivot is offset by a fixed grouping alignment, so large font sizes throw letters far off-frame",
+    "Busy on long sentences",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 2.4 s; characters not yet reached are hidden (opacity 0).",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/481b.png",
+    "note": "Characters arrive left to right (AR, then ARCHI) while the next one flips through mirrored and enlarged shapes on a diagonal below the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dip-Bounce",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A wave travels across text that is already visible: letters dip down, then rebound upward in decaying bounces, and the line is back at rest by about 2.9 s.",
+   "look": [
+    "wave",
+    "bounce",
+    "ripple through text",
+    "emphasis",
+    "playful"
+   ],
+   "use_for": [
+    "Emphasis on a key word already on screen",
+    "Caption accent on a beat hit in reels",
+    "Kinetic typography in explainers"
+   ],
+   "avoid": [
+    "Not an entrance: the text is visible before and after",
+    "Vertical travel (roughly 160 px at default size) can hit lines above or below",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Four range-selector Offsets are keyed from comp.time (staggered 0 / 0.32 / 0.56 / 0.72 s) to comp.time + 2.13 ... 2.85 s; static afterwards.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/482b.png",
+    "note": "Text is untouched at 0.5 s; at 1.4 s the wave has reached the right half, with E thrown up and 9 and 7 dipped below the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Double-Helix",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A smooth selection swings back and forth across the text, flipping characters vertically as it passes, so the line twists like a DNA double helix forever.",
+   "look": [
+    "twist",
+    "helix",
+    "flip wave",
+    "looping",
+    "sci-fi"
+   ],
+   "use_for": [
+    "Science, biotech or DNA explainer titles",
+    "Looping hold caption in AI-education videos",
+    "Hypnotic hold text under VO"
+   ],
+   "avoid": [
+    "Letters are mirrored half the time and hard to read: short words only",
+    "Constant motion distracts under dense information",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: the Offset expression sin(time * Frequency) * 100 runs on comp time for the whole layer, so comp.time does not matter.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Adds a Slider Control named 'Frequency' (default 2; higher = faster twist): layer.property('Effects').property('Frequency').property('Slider').setValue(1). Expressions need the JavaScript engine (project default). The effect's stored name has a leading tab character (expressions use effect(\"\\tFrequency\")), so a plain property('Frequency') lookup may return null: right after applying, take the last item of layer.property('Effects') (it is appended last) or match name.replace(/^\\s+/, '') when looping.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/483b.png",
+    "note": "Normal at 0.5 s; at 1.4 s the right part of the line (E 1947) is flipped upside down as the selection passes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fish Bait",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters bob and twitch continuously: tan() expressions jerk the vertical scale and rotation, with sharp periodic spikes like a fishing float being nibbled.",
+   "look": [
+    "jitter",
+    "twitch",
+    "bobbing",
+    "nervous",
+    "looping"
+   ],
+   "use_for": [
+    "Nervous or suspense word in satire reels",
+    "Comedy reaction text",
+    "Twitchy attention-grabber for a hook word"
+   ],
+   "avoid": [
+    "Math.tan spikes make single frames jump hugely about every 0.3 s, which can look like a render bug",
+    "Not for long reading text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: the expressions use comp time and run for the whole layer.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Expressions need the JavaScript engine (project default). Its Anchor Point expression reads text.animator(\"Animator 1\"), which this preset does not create (its animators are named 'Animator 3' and 'Animator - Skew/Skew-Axis'), and returns a one-value array: expect an expression error on that property; delete that expression if the warning appears. The twitch itself comes from the Scale and Rotation expressions.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/484a.png",
+    "note": "Individual letters (I, V, 4, 7, C) are jerked into slants and squashes in both frames while the line stays readable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flying Formation",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters start as a scattered jumble (offset up to 200 px, sized 0-200%), gather into a roughly readable line at 2.4 s, then scatter again by 4.8 s, like birds in formation; a highly correlated drift of up to 150 px and 30 degrees is never keyed down, so even the assembled line floats and tilts.",
+   "look": [
+    "scatter",
+    "fly-in fly-out",
+    "swarm",
+    "organic motion",
+    "formation"
+   ],
+   "use_for": [
+    "Title that assembles then disperses in a trailer or montage",
+    "Transitional word that forms and leaves in a reel",
+    "'Ideas come together' moment in an explainer"
+   ],
+   "avoid": [
+    "Only readable around 2.4 s: delete or retime the last keys if the title must stay",
+    "Start and end frames are a jumble of letters from 0% to 200% size, not a clean empty frame",
+    "The position/rotation wiggle stays at full strength, so the 'assembled' line is still offset and tilted",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Scale and anchor wiggles: Max/Min Amount keyed 100 -> 3 -> 100 at comp.time, + 2.4 s and + 4.8 s. Spatial Phase keyed 0 -> 1080 over the same 4.8 s on all three wiggly selectors; the position/rotation wiggle amount is not keyed. Frozen (still scattered) after 4.8 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. To end assembled, remove the third Max/Min Amount keys (at + 4.8 s). The resting look at + 2.4 s is inferred from the selector values (the position/rotation wiggly is the animator's only selector, in Intersect mode); verify on a test render.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/485b.png",
+    "note": "Characters are a scattered jumble of mixed sizes and tilts at both 0.5 s and 1.4 s, still gathering toward the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Horsefly In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters buzz in one at a time in random order along an erratic darting path, spinning down from several turns and shrinking from 500% to normal size, landing by 1.6 s.",
+   "look": [
+    "buzzing",
+    "erratic flight",
+    "spin-in",
+    "random order",
+    "playful"
+   ],
+   "use_for": [
+    "Comedic word entrance in reels",
+    "Insect or nature explainer titles",
+    "Attention-grabbing hook text"
+   ],
+   "avoid": [
+    "Hectic motion: keep it to 1-3 words",
+    "Letters are 500% large mid-flight and can cover faces",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 1.6 s (the opacity reveal finishes at about + 1.0 s).",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/486a.png",
+    "note": "Huge (about 500%) spinning characters dart in at 0.5 s; at 1.4 s most have landed (ARC VE 47) with one oversized rotated glyph still flying.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Hummingbird In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters flutter in randomly from 200% size with a fast-spinning skew that flickers like wing beats, fading up and settling into place by 2.4 s.",
+   "look": [
+    "flutter",
+    "skew flicker",
+    "random reveal",
+    "delicate",
+    "fade-in"
+   ],
+   "use_for": [
+    "Light, whimsical title for nature or lifestyle segments",
+    "Soft name reveal in social reels",
+    "Playful explainer sub-headings"
+   ],
+   "avoid": [
+    "The fast skew spin strobes on thin fonts and low-bitrate exports",
+    "Random order keeps the line unreadable until late",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "One range Offset keyed -100 -> 100 from comp.time to comp.time + 2.4 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/487b.png",
+    "note": "Blank at 0.5 s; at 1.4 s half-faded, heavily skewed letters flicker in at random around a partly landed line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Insect Wipe",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A buzzing disturbance sweeps across visible text in 1.2 s: characters inside the moving window shrink toward nothing and jitter on an erratic path, then return to normal behind it.",
+   "look": [
+    "buzz",
+    "wipe",
+    "jitter",
+    "shrink",
+    "transition"
+   ],
+   "use_for": [
+    "Mid-hold 'glitch' pass over a title",
+    "Accent just before swapping a caption",
+    "Comedic disruption of a word"
+   ],
+   "avoid": [
+    "Not a reveal: the text is visible before and after",
+    "Only 1.2 s long, easy to miss under fast cuts",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 1.2 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/488a.png",
+    "note": "At 0.5 s a window of characters (R, C, H, I) is shrunk and scattered below the line while the rest is normal; at 1.4 s only the 7 is still dropped, clean by 1.44 s. Keys hold their 30 fps frame counts, so in this 25 fps comp they ran about 1.2x longer than the card's seconds.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Insects In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters emerge from zero size in random order, each buzzing in along an erratic path like an insect, all landed by 1.2 s.",
+   "look": [
+    "swarm",
+    "buzzing",
+    "pop-in",
+    "random order",
+    "fast"
+   ],
+   "use_for": [
+    "Fast, punchy word reveal in reels",
+    "Nature or insect documentary titles",
+    "High-energy hook text"
+   ],
+   "avoid": [
+    "Text is invisible (scale 0) at the first frame",
+    "Fast and chaotic: not for formal news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 1.2 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/489b.png",
+    "note": "Characters appear at random from small sizes (C V 1 7 at 0.5 s, all but one by 1.4 s, the last landing at about 1.5 s). Keys hold their 30 fps frame counts, so in this 25 fps comp they ran about 1.2x longer than the card's seconds.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Labrador In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "After a long blank lead-in, characters bound in left to right with springy hops, like a playful dog jumping up, growing from zero; in a 25 fps comp the first letter only appeared at about 1.5 s, and the full hop-in runs past 2 s.",
+   "look": [
+    "bouncy",
+    "hop-in",
+    "playful",
+    "springy",
+    "cascade"
+   ],
+   "use_for": [
+    "Light-hearted titles in social reels",
+    "Pet or lifestyle segment headers",
+    "Friendly lower-thirds in AI-education videos"
+   ],
+   "avoid": [
+    "Text is invisible for a long lead-in after comp.time (about 1.4 s in a 25 fps comp): allow for the delay when timing to VO",
+    "Too goofy for political or hard news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Position bounce keys run from comp.time to comp.time + 2.03 s and the reveal sweeps + 0.72 s to + 1.84 s at 30 fps; keys keep their frame counts, so in a 25 fps comp that is about 2.4 s and 0.86-2.2 s, and the first character was only visible at + 1.48 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. To remove the initial gap, set comp.time about 1.5 s before the cue (25 fps comp).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/490b.png",
+    "note": "Blank at 0.5 s and only a speck at 1.4 s; the first big A and tiny R, C only appear at 1.48-1.56 s, so the 1.6 s render ends before the hops can be judged.",
+    "rerender": true,
+    "second_opinion": "corrected: set rerender to true. Agree with weak and with the rewrite: G490 is blank to frame 33, specks appear at 1.36 s and the first readable A at 1.44-1.48 s, so the hops themselves are not in the 1.6 s clip; a render of about 3 s is needed to check them."
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Leapfrog",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A rounded bulge sweeps right to left across visible text three times (snapping back quickly between passes); letters under it inflate to 300%, rise 50 px and spread apart, as if leaping over each other.",
+   "look": [
+    "bulge",
+    "leap",
+    "wave",
+    "emphasis",
+    "bouncy"
+   ],
+   "use_for": [
+    "Emphasis on a key word already on screen",
+    "Playful kinetic type in reels",
+    "Beat-synced accent on a title"
+   ],
+   "avoid": [
+    "Tracking 200 and 300% scale overflow the frame on long lines",
+    "Not an entrance or an exit",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Offset keys run from comp.time + 0.08 s to comp.time + 1.98 s (three passes); static afterwards.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/491a.png",
+    "note": "A and R are inflated to about 300%, raised and spread apart from the normal-size CHIVE 1947 in both frames, with the bulge moving between them.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Loose Line",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters drift loosely around the line: wiggly selectors push them up to 300 px sideways and 150 px vertically, tilt them up to 30 degrees and scale them between 0% and 200% in a continuously looping wave, while a 'Wiggle Correlation' slider (75 -> 100 -> 75, cycling) changes how unified the motion is.",
+   "look": [
+    "drifting",
+    "loose",
+    "floaty",
+    "looping",
+    "scatter"
+   ],
+   "use_for": [
+    "Dreamy or unstable mood text (confusion, memory)",
+    "Looping background word under VO",
+    "Stylised trailer typography"
+   ],
+   "avoid": [
+    "Text is rarely fully readable: pair it with a clean copy",
+    "Endless motion distracts in information-heavy sections",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Loops forever: Spatial Phase keyed 0 -> 1080 over 3.2 s from comp.time with loopOut('continue'); the Wiggle Correlation slider is keyed 75 -> 100 -> 75 over 3.2 s with loopOut('cycle'). Before comp.time the text is frozen but already scattered.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Adds a Slider Control 'Wiggle Correlation' (keyed and looped). Exact visual inferred from animator values; verify on a test render. Expressions need the JavaScript engine (project default). The effect's stored name has a leading tab character (expressions use effect(\"\\tWiggle Correlation\")), so a plain property('Wiggle Correlation') lookup may return null: right after applying, take the last item of layer.property('Effects') (it is appended last) or match name.replace(/^\\s+/, '') when looping.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/492a.png",
+    "note": "At 0.5 s the letters are scattered and tilted across a wide area; at 1.4 s they have drifted together into one overlapping clump.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ocean Tide",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A continuous sine wave rolls through the characters, scaling, dimming, nudging and re-spacing them; at the default Magnitude (100) the spacing swing is so strong that part of the line crushes into an overlapping, unreadable clump while the rest spreads apart and dims, and the clump travels along the line forever.",
+   "look": [
+    "wave",
+    "accordion squeeze",
+    "overlapping letters",
+    "looping",
+    "stylised distortion"
+   ],
+   "use_for": [
+    "Stylised looping title where losing legibility for part of each cycle is acceptable (abstract, chaos or water-themed openers)",
+    "Short single-word loops with the Magnitude slider lowered for a gentler undulation",
+    "Background typographic texture behind a readable headline"
+   ],
+   "avoid": [
+    "At the default Magnitude 100 letters pile on top of each other and the word is unreadable for much of the loop: lower the 'Magnitude' slider for a calm tide",
+    "Constant motion tires the eye on long sentences",
+    "Not for captions or any text that must be read at a glance",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: the Expression Selector amount sin(textIndex/Period + time*Frequency) * Magnitude runs on comp time for the whole layer.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Adds three Slider Controls in this order: 'Frequency' (6), 'Period' (3), 'Magnitude' (100) (names and values read from the file). Lower Frequency = slower wave, higher Period = longer wave, Magnitude scales the selector amount. The names are stored with a leading tab (expressions use effect(\"\\tFrequency\")), so a plain property('Frequency') lookup may fail: the three sliders are the last three items of layer.property('Effects') in that order, e.g. fx(n-2).property('Slider').setValue(3) for Frequency. Expressions need the JavaScript engine (project default). ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/493a.png",
+    "note": "Part of the line crushed into an overlapping clump while the rest spreads and dims; the clump moves between the frames.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: G493 shows the overlapping clump (bigger, brighter, raised) travelling right to left about once per second while the rest spreads, shrinks, dims and drops; matches the preset's values (Scale 80, Opacity 75, Position y 10, Tracking 20 driven by sin(textIndex/3 + time*6) * 100). Lowering Magnitude scales every one of these, so the fix is valid."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Quiver",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters shiver very slightly: a wiggly selector (2 wiggles/s, -100% to 100%) varies each letter's skew by up to 5 degrees while spinning its skew axis (up to 3600 degrees), so the lean flickers in random directions; in a still the text looks almost untouched and the tremble reads only in motion.",
+   "look": [
+    "faint shiver",
+    "nervous",
+    "tremble",
+    "looping",
+    "subtle distortion"
+   ],
+   "use_for": [
+    "Fear, cold or tension words in reels",
+    "Horror or suspense trailer text",
+    "Comedic 'shaking' reaction caption"
+   ],
+   "avoid": [
+    "Too faint to notice on small or distant text: use it on large single words, or raise the animator's Skew value above its 5-degree default (the wiggly amounts are already at the -100% to 100% maximum)",
+    "Can be mistaken for a render glitch",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: the Wiggly Selector (2 wiggles/s) animates for the whole layer, so comp.time does not matter.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/494a.png",
+    "note": "Both frames look almost identical to plain text: only a faint skew of a few letters shows up when zoomed, so the shiver is visible only in motion.",
+    "rerender": false,
+    "second_opinion": "corrected: the summary said skew AND skew axis move only a few degrees, but the preset stores Skew 5 and Skew Axis 3600 (wiggly Min/Max -100/100), so the axis spins while the lean stays within 5 degrees; avoid[0] said to raise the wiggly selector's skew amounts, which are already at the maximum, so it now points at the animator's Skew value. Faint verdict agreed: zoomed G494 frames differ only in slight per-letter lean."
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ripple In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters appear left to right out of heavily skewed, invisible shapes (a ramp sweep over about 1.4 s) while a second, softer skew ripple trails behind until about 2.1 s.",
+   "look": [
+    "ripple",
+    "skew reveal",
+    "wave",
+    "fluid",
+    "sweep"
+   ],
+   "use_for": [
+    "Water or fluid-themed titles",
+    "Elegant title sweep in documentaries",
+    "Caption reveal with a liquid feel in reels"
+   ],
+   "avoid": [
+    "Skew 70 smears letters: thin fonts break up",
+    "Reveals left to right only",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Two Offset sweeps from comp.time: the reveal ends at comp.time + 1.39 s, the ripple at comp.time + 2.13 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/495a.png",
+    "note": "At 0.5 s grey, extremely skewed streaks reveal ARC from the left; at 1.4 s the line is in place with 4 and 7 still skewed and dim.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rubber Floor",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A wave travels across the line: characters inside it squash and stretch vertically between 0% and up to 1000% in rapid alternations (selector strength keyed 50 -> 100 -> 50%), like stepping on a rubber floor, then return to normal by 2.4 s.",
+   "look": [
+    "squash and stretch",
+    "rubbery",
+    "bouncy",
+    "character-based",
+    "emphasis"
+   ],
+   "use_for": [
+    "Comedic emphasis on a punchline word",
+    "Beat-hit accent in reels",
+    "Kinetic type for playful explainers"
+   ],
+   "avoid": [
+    "1000% vertical stretch leaves the frame: keep headroom",
+    "Alternates every ~0.13 s, which can strobe",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 2.4 s (range selector Based On = Characters Excluding Spaces); text is normal before and after.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/496b.png",
+    "note": "ARC is squashed flat at 0.5 s and E 1947 is stretched to several times its height at 1.4 s as the wave passes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rubber",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A wave sweeps across the line, making each character inside it flip and stretch violently between +1000% and -1000% vertical scale in quick alternations, like snapping rubber, returning to normal by 2.4 s.",
+   "look": [
+    "flip stretch",
+    "rubbery",
+    "violent wobble",
+    "character-based",
+    "comic"
+   ],
+   "use_for": [
+    "Comedic punchline emphasis",
+    "Glitchy beat accent in meme reels",
+    "Exaggerated reaction word"
+   ],
+   "avoid": [
+    "Upside-down flips make letters unreadable during the pass",
+    "Fast alternation (every ~0.13 s) can strobe; avoid full-screen text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 2.4 s (range selector Based On = Characters Excluding Spaces); text is normal before and after.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/497a.png",
+    "note": "At 0.5 s H and R are flipped and stretched far below the line; at 1.4 s HIVE is stretched upward, a violent flip-stretch wave.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sea-Sick",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "The whole line sways continuously: characters slide sideways and rock with rotation in a slow, highly correlated wave, plus a second delayed sideways slide (Slide Delay slider), giving a queasy rocking-boat motion.",
+   "look": [
+    "sway",
+    "rocking",
+    "queasy",
+    "looping",
+    "drunk"
+   ],
+   "use_for": [
+    "Satire about unstable policies or U-turns",
+    "Dizzy or confused reaction text in reels",
+    "Comedic travel or hangover content"
+   ],
+   "avoid": [
+    "Rotation up to 120 degrees can push letters off the line: keep it to short words",
+    "Uncomfortable to watch on long holds",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Loops forever: Spatial Phase keyed 0 -> 720 over 2.4 s from comp.time with loopOut('continue'). Before comp.time the text is static.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Adds a Slider Control 'Slide Delay' (default 90) that offsets the second slide. Expressions need the JavaScript engine (project default). The effect's stored name has a leading tab character (expressions use effect(\"\\tSlide Delay\")), so a plain property('Slide Delay') lookup may return null: right after applying, take the last item of layer.property('Effects') (it is appended last) or match name.replace(/^\\s+/, '') when looping.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/498b.png",
+    "note": "The whole line is shoved sideways, slanted and rocked, more strongly at 1.4 s, like a queasy sway.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Shuffle",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A smooth selection slides back and forth across the text, mirroring characters horizontally as it passes, so the letters seem to shuffle like flipping cards forever.",
+   "look": [
+    "flip",
+    "shuffle",
+    "card flip",
+    "looping",
+    "playful"
+   ],
+   "use_for": [
+    "Looping word on a hold card",
+    "Quiz or game segment titles",
+    "Playful reel captions"
+   ],
+   "avoid": [
+    "Mirrored letters are unreadable for a moment",
+    "Endless motion under dense copy",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: the Offset expression sin(time * Frequency) * 100 runs on comp time for the whole layer.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Adds a Slider Control 'Frequency' (default 3; lower = slower). Expressions need the JavaScript engine (project default). The effect's stored name has a leading tab character (expressions use effect(\"\\tFrequency\")), so a plain property('Frequency') lookup may return null: right after applying, take the last item of layer.property('Effects') (it is appended last) or match name.replace(/^\\s+/, '') when looping.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/499b.png",
+    "note": "The a/b frames catch the selection off the text, but the render at 0.08 s and 0.8-1.16 s shows letters (1947, CHIVE) mirrored horizontally as it sweeps back and forth.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Simmer",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Random characters pulse larger in a boiling wobble set by a Magnitude slider while a fast sine flickers their opacity, so the text simmers and flickers continuously.",
+   "look": [
+    "boil",
+    "flicker",
+    "random pulse",
+    "jittery",
+    "looping"
+   ],
+   "use_for": [
+    "Anger or tension word in reels ('outrage')",
+    "Heat or cooking themes",
+    "Glitchy hook text"
+   ],
+   "avoid": [
+    "The opacity flicker strobes quickly: avoid on full-screen text (photosensitivity)",
+    "tan() can spike the scale on single frames",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: expressions run on comp time for the whole layer.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Adds a Slider Control 'Magnitude' (default 10) that sets the boil strength. Expressions need the JavaScript engine (project default). The effect's stored name has a leading tab character (expressions use effect(\"\\tMagnitude\")), so a plain property('Magnitude') lookup may return null: right after applying, take the last item of layer.property('Effects') (it is appended last) or match name.replace(/^\\s+/, '') when looping.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/500b.png",
+    "note": "One random character at a time is enlarged (H at 0.5 s, C at 1.4 s) while the rest of the line is steady; the effect is mild.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 3,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 5 flashes, at most 3 in one second, over the 5% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 5 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slice and Dice In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters snap in fast in random order from thin, tall slivers (zero width, 2000% height) with a jittery shake, all in place by 0.8 s.",
+   "look": [
+    "slice",
+    "snap-in",
+    "fast",
+    "sharp",
+    "random order"
+   ],
+   "use_for": [
+    "Fast hook word reveal in reels",
+    "Action or trailer title hits",
+    "Breaking-news punch text"
+   ],
+   "avoid": [
+    "Tall slivers extend far above and below the line",
+    "Very fast: hold the text afterwards so it can be read",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 0.8 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/501a.png",
+    "note": "At 0.5 s letters snap in at random from thin tall slivers and white bars; at 1.4 s the line is clean, settled by 0.96 s. Keys hold their 30 fps frame counts, so in this 25 fps comp they ran about 1.2x longer than the card's seconds.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sprouts In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters grow up from their base in random order like sprouting plants, swaying and rotating as they rise from zero size over about 4.8 s, ending with a slight uneven tilt.",
+   "look": [
+    "grow",
+    "organic",
+    "sprout",
+    "slow reveal",
+    "nature"
+   ],
+   "use_for": [
+    "Agriculture, environment or growth explainers",
+    "Slow documentary title reveals",
+    "'Growth' metrics headline"
+   ],
+   "avoid": [
+    "Long 4.8 s reveal: retime the keys for fast reels",
+    "Leaves letters slightly rotated (up to about 3 degrees) and offset at rest, so the baseline looks hand-set",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 4.8 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/502b.png",
+    "note": "Tiny specks at 0.5 s; at 1.4 s a few characters (C, 1, 7) have grown up from nothing in random order.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Tag Team",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "A small group of characters (a 20% window) shrinks to almost nothing and chases back and forth through the word while being bounced vertically, as if letters tag each other in and out; keys end at 3.2 s.",
+   "look": [
+    "chase",
+    "gap",
+    "bounce",
+    "playful",
+    "kinetic"
+   ],
+   "use_for": [
+    "Playful emphasis on a word already on screen",
+    "Kinetic type in kids or quiz segments",
+    "Comedic caption business in reels"
+   ],
+   "avoid": [
+    "The last Offset key (40) leaves the 80-100% window selected, so the last ~20% of characters stay shrunk to 5% after 3.2 s: set that key to 60 (or -60) to restore them",
+    "Hard to read while it runs",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 3.2 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Description inferred from animator values (Start 40 / End 60, Offset keyed -10 .. 49, Scale 5%, Position keys); verify on a test render.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/503b.png",
+    "note": "A gap travels through the word: 19 shrunk and lifted at 0.5 s, then 1 and 4 shrunk and lifted at 1.4 s while the rest stays normal.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wheatfield",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters sway continuously like wheat in the wind: a looping wiggly selector waves a skew through the line while tan() expressions add twitchy stretch and rotation.",
+   "look": [
+    "sway",
+    "wind",
+    "organic",
+    "looping",
+    "skew wave"
+   ],
+   "use_for": [
+    "Farmer or agriculture story titles",
+    "Pastoral documentary chapter titles",
+    "Calm looping caption"
+   ],
+   "avoid": [
+    "tan() spikes give regular one-frame jolts about every 0.3 s",
+    "Skew 40 makes thin fonts hard to read",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Loops forever: Spatial Phase keyed 0 -> 720 over 3.23 s from comp.time with loopOut('continue'); the other expressions run on comp time for the whole layer.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Expressions need the JavaScript engine (project default). Its Anchor Point expression reads text.animator(\"Animator 1\"), which this preset does not create (its animator is 'Animator - Skew/Skew-Axis'), and returns a one-value array: expect an expression error on that property (the look comes from the Skew/Scale/Rotation values); delete that expression if the warning appears.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/504a.png",
+    "note": "A skew wave moves through the line: 1947 is slanted at 0.5 s and ARCH at 1.4 s, with small twitches.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wind Current",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters are blown around as a gust travels through the line: wiggly selectors shift them up to 150 px up or down, tilt them up to 30 degrees and scale them between 0% and 200%; after 3.2 s the motion stops and the text stays scattered.",
+   "look": [
+    "wind",
+    "scatter",
+    "drift",
+    "organic",
+    "chaotic"
+   ],
+   "use_for": [
+    "'Blown away' or chaos metaphors",
+    "Background texture text",
+    "Word dissolving into the wind as an exit"
+   ],
+   "avoid": [
+    "The text never returns to a clean line",
+    "Motion freezes after 3.2 s: add loopOut('continue') to Spatial Phase for continuous motion",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Spatial Phase keyed 0 -> 1080 from comp.time to comp.time + 3.2 s (no loop); frozen afterwards.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. Flying Formation is the variant that assembles the text; this one never resolves. End state inferred from the values; verify on a test render.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/505a.png",
+    "note": "The line is bent, tilted and shifted as a gust passes (low and curving up at 0.5 s, tilted up-right at 1.4 s) with uneven letter sizes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wobble In",
+   "match": null,
+   "category": "Text/Organic",
+   "status": "current",
+   "summary": "Characters pop in in random order (opacity reveal by 1.6 s) while wobbling: their width flips between about +200% and -200% and they rock up to 50 degrees, settling by about 2.1 s.",
+   "look": [
+    "wobble",
+    "pop-in",
+    "character-based",
+    "bouncy",
+    "playful"
+   ],
+   "use_for": [
+    "Playful word-by-word title reveal in reels",
+    "Kids or education explainer headings",
+    "Comedic caption entrance"
+   ],
+   "avoid": [
+    "Text is invisible at the first frame (opacity 0, width 0)",
+    "Random order keeps the line unreadable until about 1.6 s",
+    "Too bouncy for serious news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys run from comp.time to comp.time + 2.4 s: the opacity reveal ends at + 1.6 s and the wobble selector passes by + 2.14 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). Your Source Text is kept; the preset adds text animators. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/506b.png",
+    "note": "Characters pop in rotated, mirrored and half-transparent (A C E at 0.5 s, more at 1.4 s) while wobbling into place.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "360 Loop",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Puts the text on a new mask path and whips it around a full loop along that path, with a quick tracking squeeze passing through the letters, before it settles at about 1.9 s. Also replaces the layer's text with '360 loop'.",
+   "look": [
+    "text on path",
+    "loop-the-loop",
+    "spin",
+    "kinetic"
+   ],
+   "use_for": [
+    "Energetic logo or title intro",
+    "Reel hook word that loops in",
+    "Playful explainer heading"
+   ],
+   "avoid": [
+    "Replaces your text and font with the preset's own '360 loop' in Myriad Pro Bold: save and restore the text (see scripting)",
+    "Keys Last Margin, which only acts on right-aligned (or centred/justified) paragraphs: keep the preset's alignment",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Last Margin keys run from comp.time to comp.time + 1.92 s; the bulge passes between + 1.25 s and + 1.52 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The preset ALSO sets Source Text: your text is replaced by '360 loop' in Myriad Pro Bold. Save d = layer.property('Source Text').value before applyPreset, then afterwards set nd = layer.property('Source Text').value; nd.text = d.text; nd.font = d.font; nd.fontSize = d.fontSize; layer.property('Source Text').setValue(nd) (this keeps the preset's paragraph alignment, which its Last Margin keys expect). The mask is drawn in layer space around the text origin, about 730 x 310 px (authored for SD comps, ~40% of a 1920 frame); scale or move it via layer.property('Masks').property(1).property('Mask Path') or scale the layer. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/507b.png",
+    "note": "The text is replaced by 360 loop on a curved path that swings around the loop between the two frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Antelope",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Adds a long animated mask path and runs the text along it from beyond one end to past the other over 2.4 s, with tracking pulses at each bound, so the line leaps across the frame like an antelope. Also replaces the layer's text with 'antelope'.",
+   "look": [
+    "text on path",
+    "leaping",
+    "travel across",
+    "kinetic"
+   ],
+   "use_for": [
+    "Fast fly-through word in reels",
+    "Wildlife or sports explainer titles",
+    "Transition text that crosses the frame"
+   ],
+   "avoid": [
+    "Replaces your text and font with the preset's own 'antelope' in Myriad Pro Bold: save and restore the text (see scripting)",
+    "The text ends far past the path end (it exits), so it does not hold on screen",
+    "The path is ~9,800 px long and slides left, so only part of it is ever in frame"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "First Margin keyed from comp.time to comp.time + 2.4 s; Mask Path keyed at comp.time, + 0.29 s and + 2.4 s; tracking pulses from + 0.43 s to + 2.3 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The preset ALSO sets Source Text: your text is replaced by 'antelope' in Myriad Pro Bold. Save d = layer.property('Source Text').value before applyPreset, then afterwards set nd = layer.property('Source Text').value; nd.text = d.text; nd.font = d.font; nd.fontSize = d.fontSize; layer.property('Source Text').setValue(nd) (this keeps the preset's paragraph alignment, which its First Margin keys expect). The mask is drawn in layer space around the text origin, about 9,800 x 280 px long; the keyed path slides about 6,000 px left while the text runs along it; scale or move it via layer.property('Masks').property(1).property('Mask Path') or scale the layer. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/508b.png",
+    "note": "The text is replaced by antelope on a curved path that travels from lower left (0.5 s) up toward the centre (1.4 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ants",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Replaces the text with 'ants ants ants ...', puts it on a new mask path and slowly crawls it along for 4 s; part of the line is shrunk to 30% and spread out with a small fast jitter (3 px, 5 wiggles/s), like a column of marching ants.",
+   "look": [
+    "text on path",
+    "crawl",
+    "jitter",
+    "tiny letters",
+    "marching"
+   ],
+   "use_for": [
+    "Slow creeping caption for nature or insect segments",
+    "Comedic 'small print' gag",
+    "Background moving text"
+   ],
+   "avoid": [
+    "Replaces your text and font with the preset's own 'ants ants ants ...' in Myriad Pro Bold: save and restore the text (see scripting)",
+    "Shrunk letters are hard to read at 1080p",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "First Margin and range Offset keyed from comp.time to comp.time + 4.0 s; the jitter (5 wiggles/s) never stops.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The preset ALSO sets Source Text: your text is replaced by 'ants ants ants ... (the word repeated 27 times)' in Myriad Pro Bold. Save d = layer.property('Source Text').value before applyPreset, then afterwards set nd = layer.property('Source Text').value; nd.text = d.text; nd.font = d.font; nd.fontSize = d.fontSize; layer.property('Source Text').setValue(nd) (this keeps the preset's paragraph alignment, which its First Margin keys expect). The mask is drawn in layer space around the text origin, about 720 x 350 px (authored for SD comps); scale or move it via layer.property('Masks').property(1).property('Mask Path') or scale the layer. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/509a.png",
+    "note": "A row of ants ants ants runs across the top on a path while tiny scattered ants letters crawl along a looping path below.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Balance",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Replaces the text with 'Balance' on a small mask path; the per-word Grouping Alignment is keyed left and right (0 -> -40 -> 80 -> -80 -> 40 -> 0%) over about 3.9 s, so the word teeters back and forth on the curve as if balancing on a beam, then settles.",
+   "look": [
+    "text on path",
+    "teeter",
+    "seesaw",
+    "balance",
+    "gentle motion"
+   ],
+   "use_for": [
+    "'Balance' or trade-off concepts in explainers (budget, policy)",
+    "Playful title hold",
+    "Kids or education segments"
+   ],
+   "avoid": [
+    "Replaces your text and font with the preset's own 'Balance' in Myriad Pro Condensed: save and restore the text (see scripting)",
+    "Built for one word on a short 276 px arc: long lines run off the path"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Grouping-alignment keys run from comp.time to comp.time + 3.92 s and end at the start value.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The preset ALSO sets Source Text: your text is replaced by 'Balance' in Myriad Pro Condensed. Save d = layer.property('Source Text').value before applyPreset, then afterwards set nd = layer.property('Source Text').value; nd.text = d.text; nd.font = d.font; nd.fontSize = d.fontSize; layer.property('Source Text').setValue(nd) (this keeps the preset's paragraph alignment, which its Grouping Alignment keys expect). The mask is drawn in layer space around the text origin, about 276 x 138 px (small in 1920x1080); scale or move it via layer.property('Masks').property(1).property('Mask Path') or scale the layer. Keyed property (read from the file): Text > More Options > Grouping Alignment, with Anchor Point Grouping = Word; the teeter look itself is inferred, verify on a test render.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/510a.png",
+    "note": "Balance sits tilted on its path at 0.5 s and level at 1.4 s, teetering as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Balloon",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Replaces the text with 'balloon' on a mask path; letters inflate from nothing in three puffs by about 1.9 s, then from about 2.1 s a randomized lift sends them floating off like a released balloon (ends around 3.7 s).",
+   "look": [
+    "text on path",
+    "inflate",
+    "float away",
+    "playful"
+   ],
+   "use_for": [
+    "Celebration or party titles",
+    "Kids content",
+    "Comedic 'hot air' satire about promises"
+   ],
+   "avoid": [
+    "Replaces your text and font with the preset's own 'balloon' in Myriad Pro Bold: save and restore the text (see scripting)",
+    "Text leaves by the end: remove the exit keys to keep it",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Inflate keys from comp.time to comp.time + 1.87 s; float-off keys from + 2.14 s to + 3.74 s.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The preset ALSO sets Source Text: your text is replaced by 'balloon' in Myriad Pro Bold. Save d = layer.property('Source Text').value before applyPreset, then afterwards set nd = layer.property('Source Text').value; nd.text = d.text; nd.font = d.font; nd.fontSize = d.fontSize; layer.property('Source Text').setValue(nd) (this keeps the preset's paragraph alignment, which its First Margin (-296) expects). The mask is drawn in layer space around the text origin, about 1,020 x 900 px; scale or move it via layer.property('Masks').property(1).property('Mask Path') or scale the layer. Exit behaviour inferred from the animator values; verify on a test render.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/511b.png",
+    "note": "Tiny balloon letters at 0.5 s have inflated to full size by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bouncing",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Replaces the text with 'bouncing', adds a mask path and moves the text along it with an eased First Margin animation (0 -> 2720 px), so the word bounces across the frame over 2.4 s.",
+   "look": [
+    "text on path",
+    "bounce",
+    "travel",
+    "playful"
+   ],
+   "use_for": [
+    "Playful word that bounces across in reels",
+    "Sports or kids titles",
+    "Transitional text crossing the frame"
+   ],
+   "avoid": [
+    "Replaces your text and font with the preset's own 'bouncing' in Myriad Pro Bold: save and restore the text (see scripting)",
+    "The text may end beyond the path end and off-frame"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "First Margin keyed from comp.time to comp.time + 2.4 s (three keys).",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The preset ALSO sets Source Text: your text is replaced by 'bouncing' in Myriad Pro Bold. Save d = layer.property('Source Text').value before applyPreset, then afterwards set nd = layer.property('Source Text').value; nd.text = d.text; nd.font = d.font; nd.fontSize = d.fontSize; layer.property('Source Text').setValue(nd) (this keeps the preset's paragraph alignment, which its First Margin keys expect). The mask is drawn in layer space around the text origin, about 800 x 250 px (authored for SD comps); scale or move it via layer.property('Masks').property(1).property('Mask Path') or scale the layer. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/512b.png",
+    "note": "The text is replaced by bouncing; centred at 0.5 s, it has travelled along a curved path to the bottom-right corner by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bubble Pop Out",
+   "match": null,
+   "category": "Text/Paths",
+   "status": "current",
+   "summary": "Puts the text on a mask path whose shape grows over about 1 s; then letters spin and jump randomly and pop out (vanish) in random order by about 1.9 s. Exit animation: the text ends invisible.",
+   "look": [
+    "text on path",
+    "pop out",
+    "bubble",
+    "exit",
+    "random"
+   ],
+   "use_for": [
+    "Playful caption exit in reels",
+    "Kids or science (bubbles) segments",
+    "Comedic disappearance of a word"
+   ],
+   "avoid": [
+    "Exit only: the text is gone after about 1.9 s",
+    "Mask path is sized for a small legacy comp",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Mask Path keyed from comp.time to + 0.96 s; scatter and pop keys run + 1.06 s to + 1.87 s. Set comp.time about 1.9 s before the text should be gone.",
+   "scripting": "Needs a text layer. Set comp.time to the start second, open the comp (comp.openInViewer()), select only the target text layer, then layer.applyPreset(new File(<batch 'file' path>)). It adds a mask to the layer and sets Text > Path Options > Path to it (plus animators). The mask was drawn in the preset's original (small, legacy) comp, so in 1920x1080 reposition/scale it via layer.property('Masks').property(1).property('Mask Path') or move/scale the layer. Left-aligned paragraph text is assumed by the margin keys. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/513b.png",
+    "note": "ARCHIVE 1947 sits on a small arc at 0.5 s; by 1.4 s the arc has grown and the letters spread and tilt, about to pop out.",
+    "rerender": false
+   }
+  }
+ ]
+}

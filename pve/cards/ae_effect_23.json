@@ -1,0 +1,1072 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Threshold",
+   "match": "ADBE Threshold2",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Turns the image into pure black and white: every pixel brighter than the Level becomes white, every darker pixel becomes black.",
+   "look": [
+    "high contrast",
+    "black and white",
+    "stencil",
+    "photocopy",
+    "xerox",
+    "graphic poster"
+   ],
+   "use_for": [
+    "stencil / protest-poster treatment of a leader photo on a satire or explainer card",
+    "xerox / leaked-document look on archive paper inserts",
+    "build a hard luma matte from footage or a gradient (use as track matte)",
+    "graphic wipe: Threshold over a gradient and animate Level"
+   ],
+   "avoid": [
+    "noisy or compressed footage gives crawling speckle and aliased edges; blur slightly first",
+    "faces lose all detail and can look unflattering on real people",
+    "Level is a normalised 0-1 value here, not the 0-255 shown in the UI"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Level",
+     "does": "brightness cut-off between black and white; harvest default 0.5 means the raw value is normalised (0.5 = UI 128)",
+     "typical": "0.35-0.65; lower = more white"
+    }
+   ],
+   "demo_settings": {
+    "Level": 0.5
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Tint",
+    "Fill",
+    "Colorama",
+    "Gradient Ramp"
+   ],
+   "scripting": "Single property. The harvested range -30000..30000 is a hard limit, not the useful range; the default 0.5 shows the scripted value is on a 0-1 scale (1 = white) even though the Effect Controls UI shows 0-255 with 128 default. Scale is inferred from the default, so confidence medium: if a render comes out all white or all black, read the value back and compare with the UI. Output is opaque black/white; recolour with Tint or Fill, or use the layer as a luma track matte. Premiere 2026 has no Threshold effect (not in the harvest); approximate it with Black & White followed by Posterize at Level 2, or Black & White then Levels with input black and white pulled close together.",
+   "recipe": {
+    "Level": [
+     [
+      0,
+      0.9
+     ],
+     [
+      0.6,
+      0.5
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/201.png",
+    "note": "Pure black/white stencil of test plate A: bright wall and white stripes go white, dark clothing, hair and block shadows go black.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Numbers",
+   "match": "ADBE Numbers2",
+   "category": "Text",
+   "status": "unusable",
+   "summary": "Generates numeric text on the layer (random numbers, plain numbers, timecode, date/time or hex), with font and style picked in a modal options dialog.",
+   "look": [
+    "numbers",
+    "digital readout",
+    "random digits",
+    "counter"
+   ],
+   "use_for": [
+    "random scrolling digits for a data / hacker look (do it with a text layer instead)",
+    "date or clock readouts in old templates"
+   ],
+   "avoid": [
+    "do not apply from scripts: the harvest could not read its properties, so nothing can be set from a spec",
+    "font, style and direction are set only in a modal options dialog that no script can drive"
+   ],
+   "confidence": "medium",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [],
+   "scripting": "It is a current AE effect (Effect > Text > Numbers), but the harvest failed with 'TypeError: null is not an object' and returned no properties, so no property names are known and nothing can be set from a spec; status is 'unusable' for the pipeline, not because AE dropped it. For count-up figures (crore / lakh / percent counters in explainers) use a text layer whose Source Text expression reads a Slider Control, e.g. Math.round(effect(\"Slider Control\")(\"Slider\")), and keyframe the slider. For clocks or burn-ins use the Timecode effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is unusable (modal options dialog), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Timecode",
+   "match": "ADBE Timecode",
+   "category": "Text",
+   "status": "current",
+   "summary": "Burns a timecode or frame-number readout (from the layer's source, the comp, or a custom counter) onto the layer, optionally on a black box.",
+   "look": [
+    "timecode burn-in",
+    "review copy",
+    "camcorder",
+    "CCTV",
+    "found footage",
+    "frame counter"
+   ],
+   "use_for": [
+    "burn-in on review / approval exports sent to a client or channel head",
+    "CCTV, bodycam or evidence-footage look in documentary reconstructions",
+    "source-timecode reference on rough cuts sent for transcription or translation",
+    "frame counter in 'how this edit was made' breakdown reels"
+   ],
+   "avoid": [
+    "left on the final master by mistake; keep it on a separate top layer that is easy to switch off",
+    "the default Text Position (192, 108) sits in the top-left corner; always set it",
+    "a plain white-on-black box reads as a technical overlay, not a design element"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Display Format",
+     "does": "readout style (1-based popup)",
+     "typical": "1 (SMPTE timecode) or 2 (frame numbers)"
+    },
+    {
+     "name": "Time Source",
+     "does": "where the time comes from: layer source, comp time, or a custom counter",
+     "typical": "2 (Composition) for review burn-ins, 1 (Layer Source) for source timecode"
+    },
+    {
+     "name": "Time Units",
+     "does": "frame rate of the custom counter (used with Time Source = Custom)",
+     "typical": "25 or 30"
+    },
+    {
+     "name": "Starting Frame",
+     "does": "start offset of the custom counter in frames",
+     "typical": "0"
+    },
+    {
+     "name": "Text Position",
+     "does": "position of the readout in layer pixels (believed to be its centre; default sits near the top-left)",
+     "typical": "[960, 990] bottom centre, or [1700, 80] for a CCTV corner"
+    },
+    {
+     "name": "Text Size",
+     "does": "text height in pixels (8-128)",
+     "typical": "40-64"
+    },
+    {
+     "name": "Show Box",
+     "does": "1 = draw the backing box, 0 = text only",
+     "typical": "1 for review copies, 0 for CCTV styling"
+    },
+    {
+     "name": "Opacity",
+     "does": "opacity of the text and box in %",
+     "typical": "70-100"
+    }
+   ],
+   "demo_settings": {
+    "Display Format": 1,
+    "Time Source": 2,
+    "Text Position": [
+     960,
+     990
+    ],
+    "Text Size": 64,
+    "Text Color": "#FFFFFF",
+    "Show Box": 1,
+    "Box Color": "#000000",
+    "Opacity": 85,
+    "Composite On Original": 1
+   },
+   "enum_labels": {
+    "Display Format": {
+     "1": "SMPTE HH:MM:SS:FFF",
+     "2": "Frame numbers",
+     "3": "Feet + Frames (35mm)",
+     "4": "Feet + Frames (16mm)"
+    },
+    "Time Source": {
+     "1": "Layer Source",
+     "2": "Composition",
+     "3": "Custom"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Timecode",
+   "pairs_with": [
+    "Noise",
+    "Tint",
+    "Posterize Time",
+    "Venetian Blinds",
+    "Drop Shadow"
+   ],
+   "scripting": "Text Position is in layer pixels; set it explicitly for 1920x1080. Time Units, Drop Frame and Starting Frame only matter when Time Source = 3 (Custom). Drop Frame, Show Box and Composite On Original are 0/1 checkboxes. Composite On Original = 0 replaces the layer image with only the readout. Display Format (1 SMPTE HH:MM:SS:FFF, 2 Frame numbers, 3 Feet + Frames (35mm), 4 Feet + Frames (16mm)) and Time Source (1 Layer Source, 2 Composition, 3 Custom) are read from After Effects 26.0. For a burn-in over the whole edit, put it on the top layer (or a solid) with Time Source = Composition.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/202.png",
+    "note": "White SMPTE readout 00:00:00:05 on a black box burned in at bottom centre over the untouched image.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Force Motion Blur",
+   "match": "CC Force Motion Blur",
+   "category": "Time",
+   "status": "current",
+   "summary": "Forces real motion blur onto a layer by rendering it at several sub-frame times and averaging them. It works on precomps, animated effects and text animators that the normal motion-blur switch misses.",
+   "look": [
+    "motion blur",
+    "speed smear",
+    "smooth motion",
+    "kinetic"
+   ],
+   "use_for": [
+    "motion blur on a precomp of fast-moving titles or graphics without enabling blur inside it",
+    "blur on animated effects (Fractal Noise, CC particles, wipes) that ignore the motion-blur switch",
+    "smoother whip pans and punch-zoom transitions built inside a precomp",
+    "speed feel on kinetic typography in explainers and reels"
+   ],
+   "avoid": [
+    "does nothing on stills; on plain footage it only averages neighbouring whole frames (no sub-frame interpolation), so it reads as frame-mix ghosting, not true motion blur",
+    "render time multiplies with Motion Blur Samples; 32+ gets slow",
+    "stacking it on top of layer motion blur inside the precomp double-blurs"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Motion Blur Samples",
+     "does": "number of sub-frame renders averaged per frame",
+     "typical": "8-16; 24-32 for very fast whips"
+    },
+    {
+     "name": "Override Shutter Settings",
+     "does": "1 = use this effect's Shutter Angle/Phase instead of the comp's motion-blur settings",
+     "typical": "1"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "length of the blur (180 = natural film blur)",
+     "typical": "180-360; 720 for a heavy smear"
+    },
+    {
+     "name": "Shutter Phase",
+     "does": "where the shutter opens relative to the frame; minus half the angle centres the blur",
+     "typical": "-90 at 180 degrees, 0 for trailing blur"
+    },
+    {
+     "name": "Native Motion Blur",
+     "does": "popup controlling AE's own layer motion blur alongside the effect",
+     "typical": "keep the default 2"
+    }
+   ],
+   "demo_settings": {
+    "Motion Blur Samples": 16,
+    "Override Shutter Settings": 1,
+    "Shutter Angle": 3600,
+    "Shutter Phase": -360
+   },
+   "enum_labels": {
+    "Native Motion Blur": {
+     "1": "On",
+     "2": "Off"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Pixel Motion Blur",
+   "pairs_with": [
+    "Transform",
+    "Fractal Noise",
+    "Echo",
+    "Directional Blur"
+   ],
+   "scripting": "Visible only where the layer's content changes over time: apply it to a precomp layer that contains keyframed motion or animated effects. On a still it changes nothing; on footage it only blends whole neighbouring frames (faint softening on a locked-off shot, multi-exposure ghosting across cuts), so real motion blur needs an animated precomp. Override Shutter Settings is a 0/1 checkbox. Native Motion Blur: 1 On, 2 Off (the default) (read from After Effects 26.0); keep 2. Premiere has no forced motion-blur effect. For animation inside a nested sequence the nearest is Pixel Motion Blur on the nest (optical flow); for a move made with Premiere's Transform effect, use Transform's own Shutter Angle, which blurs only that effect's motion.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/203.png",
+    "note": "Now a clear directional speed smear with multi-exposure ghosting on the foreground blocks, stripes and figures (mean change vs the reference 38/255, up from 13 in the old near-identical frame), because Shutter Angle 3600 blends ten neighbouring footage frames instead of three.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Wide Time",
+   "match": "CC Wide Time",
+   "category": "Time",
+   "status": "current",
+   "summary": "Averages a number of frames before and after the current one into each frame, so moving subjects leave ghostly, long-exposure-style smears.",
+   "look": [
+    "ghost trails",
+    "long exposure",
+    "time smear",
+    "dreamy",
+    "motion echo"
+   ],
+   "use_for": [
+    "dreamy memory or flashback passages in documentaries",
+    "long-exposure light trails on night traffic, crowds or rally processions",
+    "smear accents on fast motion in trailers and hype reels",
+    "soften choppy low-frame-rate archive clips by blending neighbouring frames"
+   ],
+   "avoid": [
+    "invisible on stills and locked-off static shots",
+    "large step counts turn faces and speech into mush",
+    "every step is another full source-frame render, so 8+8 steps is heavy"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Forward Steps",
+     "does": "number of following frames blended in",
+     "typical": "0-4"
+    },
+    {
+     "name": "Backward Steps",
+     "does": "number of previous frames blended in; backward-only gives a trailing smear",
+     "typical": "3-10"
+    },
+    {
+     "name": "Native Motion Blur",
+     "does": "popup controlling AE's own layer motion blur alongside the effect",
+     "typical": "keep the default 2"
+    }
+   ],
+   "demo_settings": {
+    "Forward Steps": 0,
+    "Backward Steps": 8
+   },
+   "enum_labels": {
+    "Native Motion Blur": {
+     "1": "On",
+     "2": "Off"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Echo",
+   "pairs_with": [
+    "Echo",
+    "Glow",
+    "Posterize Time",
+    "Exposure"
+   ],
+   "scripting": "Steps are counted in frames at the layer's frame rate; each output frame renders 1 + Forward + Backward source frames. Shows only on moving footage or animated precomps, nothing on a still demo frame. Native Motion Blur: 1 On, 2 Off (the default) (read from After Effects 26.0); keep 2. Closest Premiere effect is Echo (Time category).",
+   "recipe": {
+    "Backward Steps": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      10
+     ],
+     [
+      1.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/204.png",
+    "note": "Soft, warm ghost smear: the 8 previous frames (different cuts of the clip) are averaged, doubling the faces and stripes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Echo",
+   "match": "ADBE Echo",
+   "category": "Time",
+   "status": "current",
+   "summary": "Composites copies of the layer from earlier (or later) frames onto the current frame, so moving subjects leave ghost trails or strobe-style echoes.",
+   "look": [
+    "ghost trails",
+    "echo",
+    "strobe",
+    "motion trail",
+    "psychedelic",
+    "music video"
+   ],
+   "use_for": [
+    "hype trails on a moving leader, dancer, crowd wave or logo in trailers and reels",
+    "strobe echoes on beat hits in music-driven reels",
+    "trails behind animated text or shapes (precompose them first)",
+    "light-trail smears on night footage"
+   ],
+   "avoid": [
+    "Add with many echoes at full Starting Intensity blows out to white",
+    "Composite In Back / In Front are meant for layers with transparency (cut-outs, text); on opaque full-frame footage one image covers the others, so the trails do not show",
+    "the layer's own transform animation is not echoed; precompose the animated layer first"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Echo Time (seconds)",
+     "does": "time between echoes; negative = earlier frames (trail behind), positive = later frames",
+     "typical": "-0.04 to -0.2"
+    },
+    {
+     "name": "Number Of Echoes",
+     "does": "how many copies are combined",
+     "typical": "3-8"
+    },
+    {
+     "name": "Starting Intensity",
+     "does": "opacity of the first image in the sequence (0-1)",
+     "typical": "0.3-0.6 with Add, 1 with Composite modes"
+    },
+    {
+     "name": "Decay",
+     "does": "ratio by which each following echo fades (0-1 useful range)",
+     "typical": "0.5-0.85"
+    },
+    {
+     "name": "Echo Operator",
+     "does": "how echoes combine (1-based popup)",
+     "typical": "1 Add for glowy trails, 7 Blend for soft ghosting, 5 Composite In Back on cut-out layers"
+    }
+   ],
+   "demo_settings": {
+    "Echo Time (seconds)": -0.08,
+    "Number Of Echoes": 5,
+    "Starting Intensity": 0.4,
+    "Decay": 0.6,
+    "Echo Operator": 1
+   },
+   "enum_labels": {
+    "Echo Operator": {
+     "1": "Add",
+     "2": "Maximum",
+     "3": "Minimum",
+     "4": "Screen",
+     "5": "Composite In Back",
+     "6": "Composite In Front",
+     "7": "Blend"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Echo",
+   "pairs_with": [
+    "Glow",
+    "CC Wide Time",
+    "Posterize Time",
+    "Exposure",
+    "Fill"
+   ],
+   "scripting": "Echo Time is in seconds, not frames (one frame = 0.04 at 25 fps, 0.0333 at 30 fps). Echo is a time effect that works from the layer's source frames: masks, transform keyframes and effects applied before it on the same layer are not carried into the echoes, so precompose the layer and put Echo on the precomp. Decay's harvested max is 100, but the useful range is 0-1. With Add, keep Starting Intensity x (1 + Decay + Decay^2 ...) near 1 to avoid blow-out. Echo Operator labels follow the AE docs order (7 items, matches the harvested max). Shows only on moving content, not on a still demo frame.",
+   "recipe": {
+    "Number Of Echoes": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      6
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/205.png",
+    "note": "Visible ghost trails: earlier frames are added over the current one, doubling figures and stripes with a warm wash.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pixel Motion Blur",
+   "match": "ADBE OFMotionBlur",
+   "category": "Time",
+   "status": "current",
+   "summary": "Adds natural motion blur to moving footage: it tracks pixel motion between frames with optical flow and smears along the motion vectors.",
+   "look": [
+    "motion blur",
+    "cinematic shutter",
+    "smooth motion",
+    "speed smear"
+   ],
+   "use_for": [
+    "put filmic blur back on crisp phone, drone or 50/60 fps high-shutter footage",
+    "smooth sped-up or speed-ramped clips so they don't strobe",
+    "soften judder on fast pans and whip pans",
+    "blur on timelapse of traffic, crowds or rallies"
+   ],
+   "avoid": [
+    "optical-flow artefacts (warping, tearing) around hands, edges and overlapping subjects",
+    "hard cuts or flash frames inside the shutter produce translucent warped ghosts of the neighbouring shot",
+    "on-screen text or graphics inside the footage smear oddly",
+    "invisible on stills; slow to render"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Shutter Control",
+     "does": "1 = Manual (use Shutter Angle below; the default), 2 = Automatic (use the comp's motion-blur shutter) (read from After Effects 26.0)",
+     "typical": "1 (Manual) to set the length with Shutter Angle; 2 (Automatic) follows the comp"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "blur length when Manual (180 = natural)",
+     "typical": "180-360; 720 for a strong smear"
+    },
+    {
+     "name": "Shutter Samples",
+     "does": "samples along the vector; higher = smoother blur, slower",
+     "typical": "8-16"
+    },
+    {
+     "name": "Vector Detail",
+     "does": "density of motion vectors; higher = more precise and slower",
+     "typical": "20 default; 30-50 for detailed motion"
+    }
+   ],
+   "demo_settings": {
+    "Shutter Control": 2,
+    "Shutter Angle": 720,
+    "Shutter Samples": 16,
+    "Vector Detail": 20
+   },
+   "enum_labels": {
+    "Shutter Control": {
+     "1": "Manual",
+     "2": "Automatic"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Pixel Motion Blur",
+   "pairs_with": [
+    "Timewarp",
+    "Unsharp Mask",
+    "Lumetri Color",
+    "Noise"
+   ],
+   "scripting": "Analyses consecutive source frames of the layer, so it blurs motion inside footage or precomps, not the layer's own transform animation (use the layer motion-blur switch or CC Force Motion Blur for that). Shutter Angle only applies when Shutter Control = 1 (Manual, the default); 2 (Automatic) follows the comp's Advanced motion-blur settings (labels (read from After Effects 26.0)). The gallery demo ran with 2, so its Shutter Angle 720 did not apply: the rendered smear is the comp's own shutter. No visible change on a still demo frame. Premiere 2026 has the same Pixel Motion Blur effect (Time category); its popups there are 0-based in the harvest.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/206.png",
+    "note": "Optical-flow smear is visible but reads as translucent warped ghosts (a second figure and stripe fragment top right) because the test clip cuts between camera angles every few frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Posterize Time",
+   "match": "ADBE Posterize Time",
+   "category": "Time",
+   "status": "current",
+   "summary": "Locks the layer to a lower frame rate, so motion becomes choppy and stuttered like stop-motion or low-fps animation.",
+   "look": [
+    "stop-motion",
+    "choppy",
+    "stutter",
+    "low fps",
+    "anime",
+    "hand-made"
+   ],
+   "use_for": [
+    "stop-motion / hand-made feel on explainer animations (8-12 fps)",
+    "stutter accent on a beat drop or impact in reels and trailers",
+    "low-fps CCTV or old-webcam look for 'leaked footage' inserts",
+    "run wiggle expressions or animated effects at a held 'on twos' rate"
+   ],
+   "avoid": [
+    "invisible on stills",
+    "on talking heads and lip-synced speech it reads as dropped frames, not a style",
+    "very low rates (<6) on long shots feel broken rather than stylised"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Frame Rate",
+     "does": "frame rate the layer is held to",
+     "typical": "8-12 stop-motion, 12-15 CCTV/webcam, 24 to cine-ify 50/60 fps footage"
+    }
+   ],
+   "demo_settings": {
+    "Frame Rate": 2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Posterize Time",
+   "pairs_with": [
+    "Timecode",
+    "Noise",
+    "Echo",
+    "Turbulent Displace",
+    "Wiggle expression"
+   ],
+   "scripting": "Shows only on moving content, not a still demo frame. Works on an adjustment layer to stutter everything below it, which is the usual way to make a whole comp run 'on twos'. Rates above the comp frame rate change nothing. Keyframing Frame Rate interpolates linearly; for a clean switch between normal and stuttered motion, use two short keyframes close together. To step a single animated property instead of the whole layer, use the posterizeTime(fps) expression (e.g. posterizeTime(8); wiggle(3, 40)) rather than the effect.",
+   "recipe": {
+    "Frame Rate": [
+     [
+      0,
+      25
+     ],
+     [
+      0.04,
+      8
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/207.png",
+    "note": "The layer now holds source frame 37 at 2 fps (measured, 6 frames earlier and across the cut, so a visibly different wider, warmer shot) where the old render held frame 41 and looked the same as the reference; a still can show only the hold, not the stutter.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Time Difference",
+   "match": "ADBE Difference",
+   "category": "Time",
+   "status": "current",
+   "summary": "Shows the colour difference between the layer and a target layer (by default itself) offset in time, so only change and motion stand out. Static areas go flat grey, or black with Absolute Difference.",
+   "look": [
+    "motion detection",
+    "glowing outlines",
+    "difference matte",
+    "surveillance",
+    "abstract",
+    "ghostly"
+   ],
+   "use_for": [
+    "motion-detection / surveillance look on crowd or CCTV footage",
+    "QC: compare a re-render with the approved version (Target = other layer, Absolute Difference on, black = identical)",
+    "glowing motion-outline visuals for music reels and trailers",
+    "rough difference matte of a moving subject on a locked-off shot"
+   ],
+   "avoid": [
+    "handheld or moving camera makes the whole frame light up",
+    "a hard cut inside the time offset lights up the entire frame; keep the offset shorter than the shot or trim around cuts",
+    "noisy or compressed footage sparkles; denoise or blur first",
+    "the Target layer cannot be set from a spec"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Time Offset (sec)",
+     "does": "how far in time the target is offset from the current frame",
+     "typical": "-0.04 to -0.2 for motion outlines; 0 when comparing two different layers"
+    },
+    {
+     "name": "Contrast",
+     "does": "boosts the difference image",
+     "typical": "50 default; 100-300 to make outlines pop"
+    },
+    {
+     "name": "Absolute Difference",
+     "does": "1 = absolute difference (identical = black), 0 = signed difference around mid-grey",
+     "typical": "1"
+    },
+    {
+     "name": "Alpha Channel",
+     "does": "how the output alpha is built (1-based popup)",
+     "typical": "keep 1"
+    }
+   ],
+   "demo_settings": {
+    "Time Offset (sec)": -0.04,
+    "Contrast": 200,
+    "Absolute Difference": 1
+   },
+   "enum_labels": {
+    "Alpha Channel": {
+     "1": "Original",
+     "2": "Target",
+     "3": "Blend",
+     "4": "Max",
+     "5": "Full On",
+     "6": "(separator)",
+     "7": "Lightness of Result",
+     "8": "Max of Result",
+     "9": "(separator)",
+     "10": "Alpha Difference",
+     "11": "Alpha Difference Only"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Tint",
+    "Colorama",
+    "Levels",
+    "Gaussian Blur"
+   ],
+   "scripting": "Target is a layer parameter (harvested without a type) and cannot be set from a spec. The harvested default 1 was the effect's own layer, so out of the box it compares the layer with itself at Time Offset. To compare two clips, a script must set Target to the other layer's index (or 0 = None) via ExtendScript setValue. On a static demo frame with Absolute Difference = 1 the whole frame goes black; the look only appears on moving footage. Alpha Channel has 11 harvested slots while the AE docs list 9 options (Original, Target, Blend, Max, Full On, Lightness of Result, Max of Result, Alpha Difference, Alpha Difference Only), so separators may shift indices; labels are not given. Premiere has no effect equivalent; the Difference blend mode compares two stacked clips.",
+   "recipe": {
+    "Contrast": [
+     [
+      0,
+      50
+     ],
+     [
+      0.5,
+      250
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/208.png",
+    "note": "Now neon motion outlines on a mostly black frame (49% of pixels near black vs 0% before) instead of the old all-over cyan/white flash, since the -0.04 s offset stays inside one shot; the camera zoom and compression blocks still make edges light up across the whole frame, as the avoid list says.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Time Displacement",
+   "match": "ADBE Time Displacement",
+   "category": "Time",
+   "status": "current",
+   "summary": "Shifts each pixel in time according to the brightness of a map layer (by default the layer itself), so different parts of the frame show different moments. The result is a slit-scan / rolling time-warp smear.",
+   "look": [
+    "slit-scan",
+    "time smear",
+    "warped motion",
+    "surreal",
+    "liquid",
+    "rolling shutter"
+   ],
+   "use_for": [
+    "surreal slit-scan moments in trailers and music reels",
+    "dreamlike memory sequences in documentaries",
+    "with a gradient map: top of frame plays earlier than bottom (wavy crowds, flags, dancers)",
+    "texture on fast-motion transitions"
+   ],
+   "avoid": [
+    "invisible on stills and static shots",
+    "the controllable look needs a gradient map layer, which cannot be set from a spec",
+    "long Max Displacement Time eats memory and render time"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Max Displacement Time [sec]",
+     "does": "largest time shift applied to the brightest or darkest map pixels",
+     "typical": "0.2-1"
+    },
+    {
+     "name": "Time Resolution [fps]",
+     "does": "how many distinct time slices are sampled per second; lower = visible banding steps",
+     "typical": "25-60"
+    },
+    {
+     "name": "If Layer Sizes Differ",
+     "does": "1 = stretch the map to fit the layer, 0 = centre it",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Max Displacement Time [sec]": 0.5,
+    "Time Resolution [fps]": 30,
+    "If Layer Sizes Differ": 1
+   },
+   "enum_labels": {},
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Gradient Ramp",
+    "Fractal Noise",
+    "Echo",
+    "Directional Blur"
+   ],
+   "scripting": "Time Displacement Layer is a layer parameter (type layer) and cannot be set from a spec. The harvested default 1 was the effect's own layer, so by default the clip's own luminance drives the offset. For the classic look, a script must create a hidden precomp holding a Gradient Ramp (or animated Fractal Noise) and set this parameter to its index via ExtendScript. Map layers are read from their source, without their own effects or masks, so precompose the map. Mid-grey is roughly no shift, extremes reach about ±Max Displacement Time; which end goes forward is unverified. No visible change on a still demo frame.",
+   "recipe": {
+    "Max Displacement Time [sec]": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      0.6
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/209.png",
+    "note": "Strong liquid slit-scan warp: regions of the frame come from different moments, giving melted, posterised smears around the figures and stripes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Timewarp",
+   "match": "ADBE Timewarp",
+   "category": "Time",
+   "status": "current",
+   "summary": "Retimes the layer (slow motion, speed-up or keyframed source-frame mapping), with optional optical-flow frame interpolation (Pixel Motion) and motion blur for smooth slow-mo.",
+   "look": [
+    "slow motion",
+    "optical flow",
+    "speed ramp",
+    "smooth retime",
+    "motion blur"
+   ],
+   "use_for": [
+    "smooth slow motion on a key moment (handshake, crowd wave, a wicket or goal)",
+    "speed ramps on trailer and reel hits (keyframe Speed)",
+    "very slow drift (Speed 10-20) on an archive or B-roll clip under narration",
+    "motion blur on sped-up footage (Enable Motion Blur)"
+   ],
+   "avoid": [
+    "Pixel Motion warps and tears at occlusions, hands, fast cross-motion, text and graphics; switch to Frame Mix there",
+    "Speed is measured from the layer source start (layer time 0), not the trimmed in-point: a clip trimmed to start at 1.5 s at 25% shows source 0.425 s; precompose the trimmed clip or use Source Frame",
+    "it does not lengthen the layer, so a slowed clip shows only its first part unless the comp/layer is extended",
+    "very heavy render; avoid on long clips"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Method",
+     "does": "frame interpolation: 1 Whole Frames (duplicated frames), 2 Frame Mix (cross-blend), 3 Pixel Motion (optical flow)",
+     "typical": "3; 2 when Pixel Motion artefacts"
+    },
+    {
+     "name": "Adjust Time By",
+     "does": "1 = Speed percentage, 2 = keyframed Source Frame",
+     "typical": "1 for constant speed, 2 for exact ramps"
+    },
+    {
+     "name": "Speed",
+     "does": "playback speed in % (Adjust Time By = 1)",
+     "typical": "20-50 slow-mo, 200-400 speed-up"
+    },
+    {
+     "name": "Source Frame",
+     "does": "source frame shown at the current time (Adjust Time By = 2); keyframe it",
+     "typical": "keyframed frame numbers"
+    },
+    {
+     "name": "Vector Detail",
+     "does": "density of optical-flow vectors (Pixel Motion)",
+     "typical": "20-40"
+    },
+    {
+     "name": "Filtering",
+     "does": "1 Normal, 2 Extreme (sharper interpolated frames, much slower)",
+     "typical": "1 for drafts, 2 for final"
+    },
+    {
+     "name": "Enable Motion Blur",
+     "does": "1 = add motion blur to the retimed result",
+     "typical": "1 for speed-ups"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "motion-blur length when blur is enabled and manual",
+     "typical": "180-360"
+    }
+   ],
+   "demo_settings": {
+    "Method": 3,
+    "Adjust Time By": 1,
+    "Speed": 25
+   },
+   "enum_labels": {
+    "Method": {
+     "1": "Whole Frames",
+     "2": "Frame Mix",
+     "3": "Pixel Motion"
+    },
+    "Adjust Time By": {
+     "1": "Speed",
+     "2": "Source Frame"
+    },
+    "Filtering": {
+     "1": "Normal",
+     "2": "Extreme"
+    },
+    "Shutter Control": {
+     "1": "Manual",
+     "2": "Automatic"
+    },
+    "Matte Channel": {
+     "1": "Luminance",
+     "2": "Inverted Luminance",
+     "3": "Alpha",
+     "4": "Inverted Alpha"
+    },
+    "Show": {
+     "1": "Normal",
+     "2": "Matte",
+     "3": "Foreground",
+     "4": "Background"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Timewarp",
+   "pairs_with": [
+    "Pixel Motion Blur",
+    "CC Force Motion Blur",
+    "Echo",
+    "Unsharp Mask"
+   ],
+   "scripting": "Set Method and Adjust Time By before keyframing Speed or Source Frame. In Speed mode the retime starts at the layer in-point and the layer length is unchanged: for slow-mo put the clip in a precomp at least (source length / Speed%) long, or the layer ends before the source is used up. Source Frame is in source frames, not seconds; for ramps use Adjust Time By = 2 with e.g. [[0, 0], [2, 50]]. Matte Layer and Warp Layer are layer parameters (default 0 = None), not settable from a spec. Shutter Control (1 Manual, 2 Automatic, the default), Matte Channel (1 Luminance, 2 Inverted Luminance, 3 Alpha (default), 4 Inverted Alpha) and Show (1 Normal, 2 Matte, 3 Foreground, 4 Background) are read from After Effects 26.0; leave them at their defaults. Nothing changes on a still demo frame. Premiere 2026 also has a Timewarp effect (same controls, popups 0-based in its harvest); for plain speed changes there, clip Speed/Duration or Time Remapping with Optical Flow interpolation is simpler.",
+   "recipe": {
+    "Speed": [
+     [
+      0,
+      100
+     ],
+     [
+      0.4,
+      20
+     ],
+     [
+      1.6,
+      20
+     ],
+     [
+      2.0,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/210.png",
+    "note": "Retime is visible: the frame shows source 0.425 s (a different cut of the clip), i.e. 25% of layer time 1.7 s, because Speed is measured from the source start rather than the trimmed in-point.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Block Dissolve",
+   "match": "ADBE Block Dissolve",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Transition effect that makes the layer vanish in random rectangular blocks as Transition Completion goes from 0 to 100%, revealing whatever is underneath.",
+   "look": [
+    "pixel blocks",
+    "digital dissolve",
+    "mosaic",
+    "glitch transition",
+    "retro computer"
+   ],
+   "use_for": [
+    "digital / data-style transition between news shots or graphics",
+    "reveal or remove lower-thirds, cards and photos in a blocky tech style",
+    "'disintegrating' document or photo for redaction / censorship themes",
+    "AI and tech explainer transitions"
+   ],
+   "avoid": [
+    "the default 1x1 blocks look like compression noise, not a design choice",
+    "with nothing below, the layer dissolves to black/transparent",
+    "no seed control: the random block pattern is the same every time"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = layer fully visible, 100 = fully gone",
+     "typical": "keyframe 0 to 100 over 0.4-1 s"
+    },
+    {
+     "name": "Block Width",
+     "does": "block width in pixels",
+     "typical": "20-80"
+    },
+    {
+     "name": "Block Height",
+     "does": "block height in pixels (match Block Width for squares)",
+     "typical": "20-80"
+    },
+    {
+     "name": "Feather",
+     "does": "softens block edges in pixels",
+     "typical": "0 for crisp, 5-20 for soft"
+    },
+    {
+     "name": "Soft Edges (Best Quality)",
+     "does": "1 = antialiased block edges",
+     "typical": "1 for final, 0 for hard pixel look"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 50,
+    "Block Width": 60,
+    "Block Height": 60,
+    "Feather": 0,
+    "Soft Edges (Best Quality)": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Block Dissolve",
+   "pairs_with": [
+    "Linear Wipe",
+    "Mosaic",
+    "Glow",
+    "Fill"
+   ],
+   "scripting": "Works by making the layer transparent, so put it on the outgoing (upper) layer with the incoming shot below, or on a card over footage. Block sizes are in layer pixels. Soft Edges (Best Quality) is a 0/1 checkbox. The demo at 50% shows half the frame as transparent holes (black if nothing is below).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/211.png",
+    "note": "About half the frame knocked out in random 60 px rectangular blocks, showing black (empty comp) beneath.",
+    "rerender": false
+   }
+  }
+ ]
+}

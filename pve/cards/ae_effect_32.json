@@ -1,0 +1,775 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Jiggle On Beat",
+   "match": "ADBE DE Jiggle On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: a panel of sliders (Amplitude, Frequency, Decay, Audio Threshold) plus a layer picker for an audio-keyframe layer, meant to drive a decaying jiggle that fires when the music crosses a threshold. On its own it renders nothing; the motion only exists if an expression on Position/Scale/Rotation reads these controls.",
+   "look": [
+    "beat-synced shake",
+    "damped bounce",
+    "music-driven motion",
+    "jiggle"
+   ],
+   "use_for": [
+    "Bump a logo, sticker or lower-third on every music beat in a social reel",
+    "Shake a trailer title card on bass hits",
+    "Kick a highlighted number or icon on each beat of an explainer music bed"
+   ],
+   "avoid": [
+    "Applying it by match name and expecting motion: it is only a control panel",
+    "Calm documentary interviews: beat-shake reads as cheap there",
+    "Low Audio Threshold on dense music: it fires constantly and looks like noise"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Size of the jiggle (pixels or degrees, depending on what the expression multiplies)",
+     "typical": "10-40"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second of the jiggle",
+     "typical": "3-8"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each jiggle dies away (exponential rate)",
+     "typical": "3-8"
+    },
+    {
+     "name": "Audio Keyframe Layer",
+     "does": "Layer made by Animation > Keyframe Assistant > Convert Audio to Keyframes (its 'Both Channels' slider is the beat signal)",
+     "typical": "the 'Audio Amplitude' null"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "Amplitude value on that layer that counts as a beat",
+     "typical": "10-30 (check the Both Channels slider range of the track first)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Convert Audio to Keyframes (keyframe assistant)",
+    "Slider Control",
+    "Transform",
+    "Directional Blur"
+   ],
+   "scripting": "Hidden pseudo effect defined in Support Files/PresetEffects.xml; not in the Effects panel and used by no preset or script shipped with AE 2026 (checked). addProperty('ADBE DE Jiggle On Beat') only adds the controls. 'Audio Keyframe Layer' is a layer param: the spec cannot set it, use ExtendScript prop.setValue(audioLayer.index). Make the audio layer first: select the music layer and run app.executeCommand(app.findMenuCommandId('Convert Audio to Keyframes')); it adds an 'Audio Amplitude' null with Left/Right/Both Channels sliders. Then put an expression on Position, e.g.: var fx=effect('Jiggle On Beat'); var a=fx('Amplitude'),f=fx('Frequency'),d=fx('Decay'),th=fx('Audio Threshold'); var s=fx('Audio Keyframe Layer').effect('Both Channels')('Slider'); var t0=-1; for(var i=s.numKeys;i>1;i--){if(s.key(i).time<=time&&s.key(i).value>=th&&s.key(i-1).value<th){t0=s.key(i).time;break;}} if(t0<0){value}else{var tt=time-t0; value+[a*Math.sin(2*Math.PI*f*tt)/Math.exp(d*tt),0]}. The key loop is per frame, fine for short reels. Expression is ours, not Adobe's (no shipped preset to copy), so tune by eye.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Jiggle Random",
+   "match": "ADBE DE Jiggle Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: sliders for a decaying jiggle that should fire at random intervals between Min Delay and Max Delay seconds. It renders nothing by itself; an expression must read the sliders to move the layer.",
+   "look": [
+    "random twitch",
+    "damped jiggle",
+    "nervous motion",
+    "attention nudge"
+   ],
+   "use_for": [
+    "Make a 'subscribe' or 'new' badge twitch every few seconds in a reel",
+    "Give a cartoon icon or mascot in an explainer a random idle wobble",
+    "Nudge a static CTA end-card element so it keeps catching the eye"
+   ],
+   "avoid": [
+    "Expecting motion after applying it: it is only a control panel",
+    "Short Min/Max Delay with high Amplitude: reads as a glitchy, unstable layer",
+    "Serious news graphics and lower-thirds"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Size of each jiggle",
+     "typical": "10-30"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "4-8"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each jiggle dies (exponential rate)",
+     "typical": "3-6"
+    },
+    {
+     "name": "Min Delay",
+     "does": "Shortest gap between jiggles, seconds",
+     "typical": "1-2"
+    },
+    {
+     "name": "Max Delay",
+     "does": "Longest gap between jiggles, seconds",
+     "typical": "3-5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Transform",
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo effect from Support Files/PresetEffects.xml; no shipped AE 2026 preset uses it. Adding it only adds sliders. Example Rotation expression (ours): var fx=effect('Jiggle Random'); var a=fx('Amplitude'),f=fx('Frequency'),d=fx('Decay'),mn=fx('Min Delay'),mx=fx('Max Delay'); var t=0,prev=0,i=0; while(t<=time&&i<1000){prev=t; seedRandom(i,true); t+=random(mn,mx); i++;} var tt=time-prev; value+a*Math.sin(2*Math.PI*f*tt)/Math.exp(d*tt). For Position add [x,0] instead of a scalar. Keep Min Delay <= Max Delay.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Light Leaks - layer markers",
+   "match": "ADBE CM LightLeaksMarkers",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Light Leaks - layer markers' (Presets/Image - Special Effects). The full preset adds Calculations (used only as a value holder, no second layer) and Solid Composite with a white solid in Add mode; an expression raises the solid's Opacity to 50% centred on each layer marker, so the layer gets a short additive white flash (flash-frame) at every marker. Flash Width (msec) sets the total flash length. Despite the name it is a flat white flash, not a coloured organic light leak. Added alone it does nothing.",
+   "look": [
+    "white flash",
+    "flash frame",
+    "overexposed burst",
+    "beat flash"
+   ],
+   "use_for": [
+    "Flash accents on music beats in a reel: put the preset on an adjustment layer and drop its markers on the beats",
+    "Flash-frame punctuation between trailer shots (marker on each cut)",
+    "Highlight a reveal moment (headline, result, quote) in a news or explainer edit"
+   ],
+   "avoid": [
+    "Adding the pseudo effect alone: no flash appears",
+    "No layer markers: the expression falls back to no flash at all",
+    "Wanting a warm coloured light leak: this adds flat white; use Premiere's Light Leaks effect or a light-leak overlay clip in Screen/Add",
+    "Text or shape layers: Solid Composite fills the whole layer rectangle, so the flash shows as a white box",
+    "Markers every few frames with short widths: rapid white strobing (photosensitivity risk); also tiring across a whole documentary"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Flash Width (msec)",
+     "does": "Total duration of each flash around the marker in milliseconds (expression uses width/2000 s each side)",
+     "typical": "150-500"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Flash (Premiere transition: white flash between two clips)",
+   "pairs_with": [
+    "Calculations",
+    "Solid Composite",
+    "Exposure",
+    "Glow"
+   ],
+   "scripting": "Do not addProperty this match name; apply the preset. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Special Effects/Light Leaks - layer markers.ffx')). Then add layer markers (layer.property('Marker').setValueAtTime(t, new MarkerValue(''))) at each flash time and set 'Flash Width (msec)'. Read from the .ffx: Calculations 'Second Layer Opacity' = try{easeOut(Math.abs(time - marker.nearestKey(time).time), FlashWidth/2000, 0, 100, 0)}catch(e){0}; Solid Composite: Color white, Blending Mode Add, Source Opacity 100, Opacity = that value / 2 (peak 50% white). The easeOut time range is written reversed (tMin > tMax); intended result is a peak at the marker easing out by FlashWidth/2 each side, but the edge shape is not render-verified. Use it on full-frame footage or an adjustment layer (markers on that layer). For a full white-out flash, keyframe a white solid instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Light Leaks - random",
+   "match": "ADBE CM LightLeaksRandom",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Light Leaks - random' (Presets/Image - Special Effects). The preset adds Calculations (value holder) and Solid Composite with a white solid in Add mode whose Opacity follows a noise() expression, so the layer brightens toward white in random, smoothly varying bursts (up to 50% white added). Chance of Flashing sets how much of the time it is lit, Flash Nervousness how fast it changes. At the default Chance 100 it never fully switches off (a constant shimmering wash); lower it to get separate flashes. Added alone it does nothing.",
+   "look": [
+    "random white flicker",
+    "film flash",
+    "overexposure shimmer",
+    "vintage projector"
+   ],
+   "use_for": [
+    "Random flicker on archival or vintage-style footage in a documentary",
+    "Nervous flashing energy under a trailer montage",
+    "Retro / film look on a nostalgia segment of a reel"
+   ],
+   "avoid": [
+    "Adding the pseudo effect alone: nothing happens",
+    "Chance near 100 with high Nervousness: constant strobe, photosensitivity risk",
+    "Expecting coloured light leaks: it adds flat white (Premiere's Light Leaks effect or an overlay clip gives colour)",
+    "Under readable captions or data graphics"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Chance of Flashing",
+     "does": "How much of the time the flash is on: noise is compared with (50 - value)/50, so 50 = lit only when noise > 0 (separate bursts), 100 (default) = always partly lit, 0 = never",
+     "typical": "30-60"
+    },
+    {
+     "name": "Flash Nervousness",
+     "does": "Speed of the noise driving the flashes (noise rate = value/20 per second; default 50 = 2.5); higher = quicker, choppier flicker",
+     "typical": "30-150"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Light Leaks (Premiere effect; coloured animated leaks rather than a white flicker)",
+   "pairs_with": [
+    "Calculations",
+    "Solid Composite",
+    "Noise",
+    "Add Grain"
+   ],
+   "scripting": "Apply the preset, not the match name. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Special Effects/Light Leaks - random.ffx')). Read from the .ffx: Calculations 'Second Layer Opacity' = easeIn(noise(time*FlashNervousness/20), (50-Chance)/50, 1, 0, 100); Solid Composite: Color white, Blending Mode Add, Opacity = that value / 2. Flashes are deterministic (noise of time), so re-renders match. Solid Composite fills the layer rectangle: use full-frame footage or an adjustment layer.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mask Fade Controls",
+   "match": "ADBE CM TransFadeMask",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel used by the Legacy mask-transition presets (Presets/Legacy: 'Boxes - concentric', 'Boxes - random 1/2/3', 'Ovals - concentric', 'Ovals - random 1/2', each in NTSC and PAL). The preset adds 5 fixed masks and Transition Completion drives their Mask Opacity in sequence (mask 1 fades in over 0-10, mask 2 over 20-30, mask 3 40-50, mask 4 60-70, mask 5 eases in over 80-100), so the layer appears box by box or oval by oval (concentric = centre outward, random = scattered shapes). The masks do not grow or move. Feather drives the mask feather. Added alone it does nothing.",
+   "look": [
+    "box wipe",
+    "oval reveal",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro box or oval reveal of a photo in a nostalgia explainer",
+    "Quick shape-based transition between two archive stills",
+    "Pattern reveal of a split-screen panel"
+   ],
+   "avoid": [
+    "HD/vertical frames: the masks are SD-sized (largest 768x576 in PAL, 648x486 in NTSC), so on a 1920x1080 or 1080x1920 layer even 100% reveals only that box and the rest stays hidden unless the mask paths are scaled up",
+    "Modern news packages: looks dated; prefer Linear Wipe, Venetian Blinds or Card Wipe",
+    "Adding the pseudo effect alone"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "Progress 0-100: 0 = all masks at 0% opacity (layer hidden), 100 = every mask on (layer shown inside the masks); each mask fades in over its own 10-20 point band",
+     "typical": "keyframe 0 to 100 over 0.5-1 s (100 to 0 for an out)"
+    },
+    {
+     "name": "Feather",
+     "does": "Mask feather in pixels (written to both x and y)",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Iris Box / Iris Round transitions (closest, not an effect)",
+   "pairs_with": [
+    "Linear Wipe",
+    "Iris Wipe Master Controls",
+    "Fade Master Control"
+   ],
+   "scripting": "Apply a Legacy preset, e.g. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Boxes - concentric PAL.ffx')). Read from the .ffx: Mask Opacity of masks 1-4 = linear(effect('Mask Fade Controls')(1), band start, band end, 0, 75) with bands 0-10, 20-30, 40-50, 60-70; mask 5 = easeOut(completion, 80, 100, 0, 100); Mask Feather = [Feather, Feather]. Then keyframe Transition Completion. Mask geometry is SD (bounding boxes up to 768x576); where it lands on an HD layer was not render-verified, so check and scale the masks. For HD work prefer Linear Wipe, Venetian Blinds or Card Wipe.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mood Lighting - amorphous",
+   "match": "ADBE CM MoodLightAmorph",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Mood Lighting - amorphous' (Presets/Image - Creative). The preset adds Fractal Noise (Basic, Soft Linear noise, Contrast 225, Brightness -25) blended in Overlay mode, whose Scale, Evolution and Opacity are driven by these sliders, laying soft drifting cloud-like patches of light and shadow over the layer. Added alone it does nothing.",
+   "look": [
+    "drifting light",
+    "cloud shadows",
+    "atmospheric",
+    "soft mottled light",
+    "moody"
+   ],
+   "use_for": [
+    "Give a still photo or archive image slow living light in a documentary",
+    "Atmospheric moving light behind a title card in a trailer",
+    "Subtle mood under a dramatic quote in a political explainer"
+   ],
+   "avoid": [
+    "High Intensity: muddy, dirty-looking frame",
+    "Over faces in interviews: blotchy skin",
+    "Adding the pseudo effect alone"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Evolution Speed",
+     "does": "Fractal Noise Evolution = time x value (degrees per second); negative reverses",
+     "typical": "60-250"
+    },
+    {
+     "name": "Cloud Size",
+     "does": "Fractal Noise Scale = layer width x value / 50 (default 75 = 2880 on a 1920-wide layer); bigger = larger, softer patches. Scale caps at 10000, so above ~260 on a 1920 layer nothing changes",
+     "typical": "40-150"
+    },
+    {
+     "name": "Intensity",
+     "does": "Fractal Noise Opacity (its Overlay blend over the footage), percent",
+     "typical": "25-60"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise",
+    "Lumetri Color",
+    "Glow",
+    "CC Light Rays"
+   ],
+   "scripting": "Apply the preset. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Creative/Mood Lighting - amorphous.ffx')). Read from the .ffx: Scale = thisLayer.width*(Cloud Size/50), Evolution = time*Evolution Speed, Opacity = Intensity; Fractal Type Basic, Noise Type Soft Linear, Contrast 225, Brightness -25, Blending Mode Overlay. Render cost is the Fractal Noise. Premiere has no Fractal Noise; use a light/shadow overlay clip in Soft Light or Overlay there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mood Lighting - digital",
+   "match": "ADBE CM MoodLightDigital",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Mood Lighting - digital' (Presets/Image - Creative). The preset adds Fractal Noise (Threads type, Block noise, Contrast 170) blended in Overlay mode, whose Scale, Evolution and Opacity follow these sliders, giving a shifting blocky digital pattern of light and dark over the layer. Added alone it does nothing.",
+   "look": [
+    "digital blocks",
+    "techno light",
+    "pixel pattern",
+    "data aesthetic",
+    "shifting tiles"
+   ],
+   "use_for": [
+    "Tech / AI segment backgrounds in an AI-education explainer",
+    "Digital texture over b-roll for a cyber or data story in a news reel",
+    "Animated blocky light behind a title in a trailer"
+   ],
+   "avoid": [
+    "High Intensity over live-action faces: looks like a compression error",
+    "Small Block Size on busy footage: noisy, illegible frame",
+    "Adding the pseudo effect alone"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Evolution Speed",
+     "does": "Fractal Noise evolution in degrees per second",
+     "typical": "50-200"
+    },
+    {
+     "name": "Block Size",
+     "does": "Size of the blocks (Fractal Noise Scale = layer width x value / 500)",
+     "typical": "100-500"
+    },
+    {
+     "name": "Intensity",
+     "does": "Opacity of the Fractal Noise, percent",
+     "typical": "30-75"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise",
+    "Mosaic",
+    "Glow",
+    "Tint"
+   ],
+   "scripting": "Apply the preset. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Creative/Mood Lighting - digital.ffx')). Read from the .ffx: Scale = thisLayer.width*(Block Size/500), Evolution = time*Evolution Speed, Opacity = Intensity; Fractal Type Threads, Noise Type Block, Contrast 170, Blending Mode Overlay. Scale depends on layer width, so a 1080-wide vertical layer gets smaller blocks than a 1920-wide one at the same value.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mood Lighting - streaks",
+   "match": "ADBE CM MoodLightStreaks",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Mood Lighting - streaks' (Presets/Image - Creative). The preset adds Fractal Noise (Threads type, Soft Linear noise, Brightness 33) blended in Soft Light and stretched to 4x the layer height, so the layer gets soft vertical bands of light that shimmer and morph as Evolution animates (the bands change in place; they do not travel across the frame). Streak Width sets band width, Intensity the opacity. Added alone it does nothing.",
+   "look": [
+    "vertical light bands",
+    "shimmering streaks",
+    "atmospheric",
+    "cinematic",
+    "stretched noise"
+   ],
+   "use_for": [
+    "Shimmering light bands over a title card or end slate in a trailer",
+    "Add gentle life to a still portrait or archive photo in a documentary",
+    "Energy texture behind headline text in a news reel"
+   ],
+   "avoid": [
+    "High Intensity: streaks wash out the image",
+    "Over text the viewer must read",
+    "Adding the pseudo effect alone"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Evolution Speed",
+     "does": "Fractal Noise Evolution = time x value (degrees per second); how fast the bands morph",
+     "typical": "100-300"
+    },
+    {
+     "name": "Streak Width",
+     "does": "Fractal Noise Scale Width = layer width x value / 400 (Scale Height is fixed at 4x layer height); bigger = wider bands",
+     "typical": "50-300"
+    },
+    {
+     "name": "Intensity",
+     "does": "Fractal Noise Opacity (its Soft Light blend over the footage), percent",
+     "typical": "30-75"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise",
+    "Glow",
+    "CC Light Sweep",
+    "Directional Blur"
+   ],
+   "scripting": "Apply the preset. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Creative/Mood Lighting - streaks.ffx')). Read from the .ffx: Scale Width = thisLayer.width*(Streak Width/400), Scale Height = thisLayer.height*4, Uniform Scaling off, Rotation 0 (vertical bands), Evolution = time*Evolution Speed, Opacity = Intensity; Fractal Type Threads, Noise Type Soft Linear, Brightness 33, Blending Mode Soft Light. For diagonal streaks change the Fractal Noise Transform > Rotation after applying.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Opacity Flash - layer markers",
+   "match": "ADBE CM OpacityFlashMarkers",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Opacity Flash - layer markers' (Presets/Behaviors). The preset adds Solid Composite (solid Opacity 0, so no colour is added) whose Source Opacity expression shows the layer only around each layer marker: it peaks at 100% on the marker and is gone Flash Width/2 before and after, so the layer blinks on at every marker. Added alone it does nothing.",
+   "look": [
+    "flash on",
+    "strobe on beat",
+    "blink",
+    "pop-in"
+   ],
+   "use_for": [
+    "Flash words or graphics on music beats in a reel (markers on the beats)",
+    "Blink a 'BREAKING' tag or alert icon in a news graphic",
+    "Flash quick photo frames in a trailer montage"
+   ],
+   "avoid": [
+    "No markers on the layer: the expression falls back to 100, so the layer just stays visible",
+    "Very short widths on large bright layers: strobing, epilepsy risk",
+    "Adding the pseudo effect alone"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Flash Width (msec)",
+     "does": "Total duration of each flash around the marker in ms (width/2000 s each side)",
+     "typical": "200-600"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Solid Composite",
+    "Glow",
+    "Transform"
+   ],
+   "scripting": "Apply the preset. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Opacity Flash - layer markers.ffx')), then add layer markers at flash times. Read from the .ffx: Solid Composite Source Opacity = try{easeOut(Math.abs(time - marker.nearestKey(time).time), FlashWidth/2000, 0, 100, 0)}catch(e){100}; solid Opacity 0, Blending Mode Add. The easeOut time range is written reversed (tMin > tMax); intended result is 100 at the marker easing to 0, edge shape not render-verified. Works on text and shape layers (only their own pixels flash). Premiere: keyframe Opacity instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Opacity Flash - random",
+   "match": "ADBE CM OpacityFlashRandom",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden control panel of the AE preset 'Opacity Flash - random' (Presets/Behaviors). The preset adds Solid Composite (solid Opacity 0) whose Source Opacity follows linear(noise(...)), so the layer fades in and out at random, smoothly rather than as hard cuts; at high Nervousness it reads as flicker. The sliders set how much of the time it is visible and how fast it changes. Added alone it does nothing.",
+   "look": [
+    "random flicker",
+    "blink",
+    "unstable signal",
+    "neon flicker"
+   ],
+   "use_for": [
+    "Flickering neon-sign or failing-screen text in a reel",
+    "Unstable 'signal lost' graphic in a news or tech explainer",
+    "Nervous flickering title in a horror or thriller trailer"
+   ],
+   "avoid": [
+    "Captions or text the viewer must read",
+    "High Chance with high Nervousness on big bright layers: strobe",
+    "Adding the pseudo effect alone"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Chance of Flashing",
+     "does": "How much of the time the layer is visible: noise is compared with (50 - value)/50, so 50 (default) = visible only when noise > 0, 100 = always partly visible, 0 = never",
+     "typical": "30-70"
+    },
+    {
+     "name": "Flash Nervousness",
+     "does": "Speed of the noise (noise rate = value/20 per second); higher = faster flicker",
+     "typical": "30-200"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Solid Composite",
+    "Glow",
+    "Wave Warp",
+    "Noise"
+   ],
+   "scripting": "Apply the preset. Select only the target layer first: applyPreset acts on the selected layers of that layer's comp (with none selected it makes a new solid). layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Opacity Flash - random.ffx')). Read from the .ffx: Solid Composite Source Opacity = linear(noise(time*FlashNervousness/20), (50-Chance)/50, 1, 0, 100); solid Opacity 0. noise() rarely reaches 1, so peaks are often below 100%. Deterministic per layer, so renders repeat.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Opacity Pulse",
+   "match": "ADBE DE Opacity Pulse",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: sliders (Min/Max Opacity, Attack, Decay, Delay, Cycle Time) meant to drive an opacity pulse that rises to Max and falls back to Min, optionally repeating. It renders nothing by itself; an expression on Opacity must read the sliders.",
+   "look": [
+    "pulse",
+    "breathing opacity",
+    "blink",
+    "heartbeat"
+   ],
+   "use_for": [
+    "Pulse a 'LIVE' dot or recording light in a news graphic",
+    "Breathing glow on a CTA or subscribe button in a reel end card",
+    "Rhythmic pulse on a highlighted map region in an explainer"
+   ],
+   "avoid": [
+    "Expecting a pulse after applying it: it is only a control panel",
+    "Fast cycles on large layers: strobing"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Min Opacity",
+     "does": "Opacity at rest, percent",
+     "typical": "0-30"
+    },
+    {
+     "name": "Max Opacity",
+     "does": "Opacity at the peak, percent",
+     "typical": "80-100"
+    },
+    {
+     "name": "Attack",
+     "does": "Rise speed (rate; higher = faster rise) - meaning inferred, no Adobe preset uses it",
+     "typical": "5-15"
+    },
+    {
+     "name": "Decay",
+     "does": "Fall-off speed after the peak (rate)",
+     "typical": "3-8"
+    },
+    {
+     "name": "Delay",
+     "does": "Seconds before the first pulse",
+     "typical": "0-1"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "Seconds between repeats; 0 = single pulse",
+     "typical": "0.8-2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Glow",
+    "Fill"
+   ],
+   "scripting": "Hidden pseudo effect from Support Files/PresetEffects.xml; no preset or script shipped with AE 2026 uses it, so slider semantics are inferred (low confidence). Example Opacity expression (ours): var fx=effect('Opacity Pulse'); var lo=fx('Min Opacity'),hi=fx('Max Opacity'),at=Math.max(fx('Attack'),0.01),dc=fx('Decay'),dl=fx('Delay'),cy=fx('Cycle Time'); var t=time-inPoint-dl; if(cy>0&&t>0)t=t%cy; var k=0; if(t>=0){var r=1/at; k=(t<r)?t/r:Math.exp(-dc*(t-r));} lo+(hi-lo)*k. Simpler and more predictable for a planner: keyframe Opacity or use loopOut('cycle').",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Opacity Pulse At Marker",
+   "match": "ADBE DE Opacity Pulse At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Min/Max Opacity, Attack and Decay sliders meant to fire one opacity pulse at each layer marker. It renders nothing by itself; an expression on Opacity must read the sliders and the layer's markers.",
+   "look": [
+    "pulse on cue",
+    "blink",
+    "flash on marker",
+    "beat pulse"
+   ],
+   "use_for": [
+    "Pulse a highlighted word or number exactly on the voice-over cue in an explainer",
+    "Blink map pins or icons as they are mentioned in a news report",
+    "Beat-placed pulses on graphics in a reel (markers on beats)"
+   ],
+   "avoid": [
+    "No markers on the layer: nothing pulses",
+    "Expecting motion after applying it alone"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Min Opacity",
+     "does": "Opacity between pulses, percent",
+     "typical": "0-30"
+    },
+    {
+     "name": "Max Opacity",
+     "does": "Opacity at each pulse peak, percent",
+     "typical": "80-100"
+    },
+    {
+     "name": "Attack",
+     "does": "Rise speed into the pulse (rate) - inferred",
+     "typical": "8-15"
+    },
+    {
+     "name": "Decay",
+     "does": "Fall-off speed after the pulse (rate)",
+     "typical": "3-8"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Glow",
+    "Opacity Flash - layer markers"
+   ],
+   "scripting": "Hidden pseudo effect; no AE 2026 preset uses it (semantics inferred). Add layer markers at the cue times, then an Opacity expression (ours): var fx=effect('Opacity Pulse At Marker'); var lo=fx('Min Opacity'),hi=fx('Max Opacity'),at=Math.max(fx('Attack'),0.01),dc=fx('Decay'); var k=0; if(marker.numKeys>0){var m=marker.nearestKey(time); if(m.time>time&&m.index>1)m=marker.key(m.index-1); var t=time-m.time; if(t>=0){var r=1/at; k=(t<r)?t/r:Math.exp(-dc*(t-r));}} lo+(hi-lo)*k. For a ready-made marker flash use the preset 'Behaviors/Opacity Flash - layer markers.ffx' instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-panel pseudo effect / preset controls that render nothing alone), so it was not rendered and has no gallery frame.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

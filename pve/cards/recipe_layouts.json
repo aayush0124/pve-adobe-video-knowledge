@@ -1,0 +1,1112 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "layouts",
+   "name": "Blur fill: 16:9 into 9:16",
+   "summary": "Blur fill for vertical video: a landscape shot sits full-width in a 9:16 frame over a scaled-up, blurred, darkened copy of itself (the blur fill) instead of black bars.",
+   "use_for": [
+    "blur fill for horizontal footage in Reels / Shorts / TikTok",
+    "interview or news clips reused vertically",
+    "keeping the whole 16:9 frame when Auto Reframe would crop a second speaker"
+   ],
+   "avoid": [
+    "when the subject can simply be reframed (crop it: more picture, fewer distractions)",
+    "busy, high-contrast sources (the blurred copy competes; darken more)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 31.6406,
+      "Scale Width": 31.6406
+     }
+    },
+    {
+     "name": "Drop Shadow",
+     "pr_props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 31.6406,
+      "Scale Width": 31.6406
+     }
+    },
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "spec": {
+    "name": "blur_fill_916",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "clip_a.mp4",
+      "dur": 6,
+      "track": 1,
+      "effects": [
+       {
+        "name": "ADBE Gaussian Blur 2",
+        "pr_name": "Gaussian Blur (Legacy)",
+        "props": {
+         "Blurriness": 25,
+         "Repeat Edge Pixels": 1
+        },
+        "pr_props": {
+         "Blurriness": 25,
+         "Repeat Edge Pixels": true
+        }
+       },
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 110,
+         "Scale Width": 110
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 110,
+         "Scale Width": 110
+        }
+       },
+       {
+        "name": "ADBE Brightness & Contrast 2",
+        "pr_name": "Brightness & Contrast",
+        "props": {
+         "Brightness": -35,
+         "Contrast": -10
+        },
+        "pr_props": {
+         "Brightness": -35,
+         "Contrast": -10
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_a.mp4",
+      "dur": 6,
+      "track": 2,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 31.6406,
+         "Scale Width": 31.6406
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 31.6406,
+         "Scale Width": 31.6406
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "look": [
+    "blur fill",
+    "blurred background copy",
+    "no black bars",
+    "16:9 in 9:16"
+   ],
+   "keyframes_note": "Every bridge clip is cover-fitted first (Motion / layer Scale), then the Transform effect resizes it inside its own frame: scale % = contain-fit / cover-fit. After Effects Position is in the SOURCE's pixels: (frame point - frame centre) / cover scale + source centre, which is simply frame point / cover scale when the source has the frame's aspect; Premiere's is a frame fraction. A 16:9 source in 1080x1920 cover-fits at 177.8% (1920 px tall); contain-fit is 56.25%, so the foreground copy's Transform scale is 31.64%. The background copy: Gaussian Blur (the same engine in both apps: AE ADBE Gaussian Blur 2 = Premiere 'Gaussian Blur (Legacy)'), blurred BEFORE a 110% Transform so the soft edge band is pushed out of frame, then Brightness -35. The blur is in source pixels and the layer is then scaled 177.8%, so 25 reads as about 44 px. Both copies have the same in point and start so they stay in sync; the copy on track 1 carries the clip's audio too (mute one: the bridge places both). Measured 2026-10-13: Premiere's Brightness & Contrast renders this backplate 10-27 levels darker than After Effects' at the same values (9:16 fill mean RGB Premiere 104/103/105, After Effects 126/115/127); match the two backplates by eye, not by copying the values.",
+   "built_from": [
+    "Gaussian Blur",
+    "Gaussian Blur (Legacy)",
+    "Transform",
+    "Brightness & Contrast",
+    "Drop Shadow",
+    "Multi-box layout geometry (margins, gaps, scale)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/001_main_pr_b.png",
+    "note": "The 16:9 clip sits full width in the middle of the 9:16 frame over a blurred, darkened, scaled-up copy of itself, with a soft shadow.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipe_specs/001_main_ae_b.png",
+     "note": "Same layout as Premiere (the box geometry lines up), but the blurred fill is lighter: mean RGB 126/115/127 against Premiere's 104/103/105 (mean |luma| difference 17.0-17.5).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "layouts",
+   "name": "Blur fill: portrait or 4:3 into 16:9 (pillarbox fill)",
+   "summary": "Blur fill for portrait and 4:3 sources: the photo or archive clip sits at full height in a 16:9 frame and a blurred, darkened copy of it fills the side bars (pillarbox blur fill).",
+   "use_for": [
+    "phone-shot vertical video in a landscape documentary",
+    "4:3 archive footage in a 16:9 edit",
+    "portrait press photos"
+   ],
+   "avoid": [
+    "a 4:3 archive look where honest black pillarbox bars are the point"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 45.0,
+      "Scale Width": 45.0
+     }
+    },
+    {
+     "name": "Drop Shadow",
+     "pr_props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 45.0,
+      "Scale Width": 45.0
+     }
+    },
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "spec": {
+    "name": "blur_fill_169",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "still.png",
+      "dur": 5,
+      "track": 1,
+      "effects": [
+       {
+        "name": "ADBE Gaussian Blur 2",
+        "pr_name": "Gaussian Blur (Legacy)",
+        "props": {
+         "Blurriness": 25,
+         "Repeat Edge Pixels": 1
+        },
+        "pr_props": {
+         "Blurriness": 25,
+         "Repeat Edge Pixels": true
+        }
+       },
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 110,
+         "Scale Width": 110
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 110,
+         "Scale Width": 110
+        }
+       },
+       {
+        "name": "ADBE Brightness & Contrast 2",
+        "pr_name": "Brightness & Contrast",
+        "props": {
+         "Brightness": -35,
+         "Contrast": -10
+        },
+        "pr_props": {
+         "Brightness": -35,
+         "Contrast": -10
+        }
+       }
+      ]
+     },
+     {
+      "src": "still.png",
+      "dur": 5,
+      "track": 2,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 45.0,
+         "Scale Width": 45.0
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 45.0,
+         "Scale Width": 45.0
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "look": [
+    "blur fill",
+    "pillarbox fill",
+    "blurred side bars",
+    "4:3 or portrait in 16:9"
+   ],
+   "keyframes_note": "Every bridge clip is cover-fitted first (Motion / layer Scale), then the Transform effect resizes it inside its own frame: scale % = contain-fit / cover-fit. After Effects Position is in the SOURCE's pixels: (frame point - frame centre) / cover scale + source centre, which is simply frame point / cover scale when the source has the frame's aspect; Premiere's is a frame fraction. example/still.png is 1080x1350: cover-fit 177.8%, contain-fit 80%, so the foreground Transform scale is 45%. For a 4:3 (1440x1080) source the numbers are cover 133.3%, contain 100%, scale 75%; for 9:16 phone video (1080x1920) cover 177.8%, contain 56.25%, scale 31.64%. Measured 2026-10-13: Premiere's Brightness & Contrast renders this backplate 10-27 levels darker than After Effects' at the same values (9:16 fill mean RGB Premiere 104/103/105, After Effects 126/115/127); match the two backplates by eye, not by copying the values.",
+   "built_from": [
+    "Gaussian Blur",
+    "Gaussian Blur (Legacy)",
+    "Transform",
+    "Brightness & Contrast",
+    "Drop Shadow"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/002_main_pr_b.png",
+    "note": "The portrait still sits at full height in the centre of the 16:9 frame and a blurred, darkened copy fills both side bars.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipe_specs/002_main_ae_b.png",
+     "note": "Same layout as Premiere; the side-bar fill is lighter than Premiere's (mean |luma| difference 8.3).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "layouts",
+   "name": "Two-way (double box) split",
+   "summary": "Two 16:9 boxes side by side over a dark blurred backplate, the news 'two-way' for an anchor and a correspondent or two sides of a debate.",
+   "use_for": [
+    "live-style two-ways and interviews",
+    "side-by-side comparisons (then vs now)",
+    "debates"
+   ],
+   "avoid": [
+    "9:16 deliveries (stack the boxes vertically instead)",
+    "putting names inside the boxes over faces"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 45,
+      "Scale Width": 45,
+      "Position": [
+       0.2625,
+       0.463
+      ]
+     }
+    },
+    {
+     "name": "Drop Shadow",
+     "pr_props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 45,
+      "Scale Width": 45,
+      "Position": [
+       504,
+       500
+      ]
+     }
+    },
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "spec": {
+    "name": "two_way",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "still.png",
+      "dur": 6,
+      "track": 1,
+      "effects": [
+       {
+        "name": "ADBE Gaussian Blur 2",
+        "pr_name": "Gaussian Blur (Legacy)",
+        "props": {
+         "Blurriness": 40,
+         "Repeat Edge Pixels": 1
+        },
+        "pr_props": {
+         "Blurriness": 40,
+         "Repeat Edge Pixels": true
+        }
+       },
+       {
+        "name": "ADBE Brightness & Contrast 2",
+        "pr_name": "Brightness & Contrast",
+        "props": {
+         "Brightness": -45,
+         "Contrast": -10
+        },
+        "pr_props": {
+         "Brightness": -45,
+         "Contrast": -10
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_a.mp4",
+      "dur": 6,
+      "track": 2,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 45,
+         "Scale Width": 45,
+         "Position": [
+          504,
+          500
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 45,
+         "Scale Width": 45,
+         "Position": [
+          0.2625,
+          0.463
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_b.mp4",
+      "dur": 6,
+      "track": 3,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 45,
+         "Scale Width": 45,
+         "Position": [
+          944,
+          333.33
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 45,
+         "Scale Width": 45,
+         "Position": [
+          0.7375,
+          0.463
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "keyframes_note": "Every bridge clip is cover-fitted first (Motion / layer Scale), then the Transform effect resizes it inside its own frame: scale % = contain-fit / cover-fit. After Effects Position is in the SOURCE's pixels: (frame point - frame centre) / cover scale + source centre, which is simply frame point / cover scale when the source has the frame's aspect; Premiere's is a frame fraction. Geometry (working defaults, not a broadcast standard): 72 px outer margins (inside the 3.5% action-safe band), 48 px gap, so each box is 864x486 = 45% of the frame; box centres at x 504 and 1416, y 500 (lifted 40 px to leave room for name straps below). Sources: clip_a (1920x1080, cover 100%: AE position = frame px) and clip_b (1280x720, cover 150%: AE position = frame px / 1.5 = [944, 333.33]). Bridge 'texts' are always centred horizontally, so per-box name straps need mgts or AE titles. Measured 2026-10-13: Premiere's Brightness & Contrast renders this backplate 10-27 levels darker than After Effects' at the same values (9:16 blur-fill mean RGB Premiere 104/103/105, After Effects 126/115/127); match the two backplates by eye, not by copying the values.",
+   "built_from": [
+    "Transform",
+    "Drop Shadow",
+    "Multi-box layout geometry (margins, gaps, scale)",
+    "Broadcast safe areas (action and title safe)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/004_main_pr_b.png",
+    "note": "Two 16:9 boxes side by side with soft shadows over a dark blurred backplate, lifted above centre as the geometry says.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipe_specs/004_main_ae_b.png",
+     "note": "Boxes in the same place as Premiere's; the backplate is lighter (mean |luma| difference 12.9-13.0).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "layouts",
+   "name": "Three-up row",
+   "summary": "Three 16:9 boxes in a row over a dark backplate: three voices, three places or three examples at once.",
+   "use_for": [
+    "vox-pop or reaction montages",
+    "three examples of the same thing",
+    "a 'meanwhile in...' beat"
+   ],
+   "avoid": [
+    "holding it long: each box is under a third of the frame, so detail is lost"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 29.5833,
+      "Scale Width": 29.5833,
+      "Position": [
+       0.1854,
+       0.5
+      ]
+     }
+    },
+    {
+     "name": "Drop Shadow",
+     "pr_props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 29.5833,
+      "Scale Width": 29.5833,
+      "Position": [
+       356,
+       540
+      ]
+     }
+    },
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "spec": {
+    "name": "three_up",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "still.png",
+      "dur": 4,
+      "track": 1,
+      "effects": [
+       {
+        "name": "ADBE Gaussian Blur 2",
+        "pr_name": "Gaussian Blur (Legacy)",
+        "props": {
+         "Blurriness": 40,
+         "Repeat Edge Pixels": 1
+        },
+        "pr_props": {
+         "Blurriness": 40,
+         "Repeat Edge Pixels": true
+        }
+       },
+       {
+        "name": "ADBE Brightness & Contrast 2",
+        "pr_name": "Brightness & Contrast",
+        "props": {
+         "Brightness": -45,
+         "Contrast": -10
+        },
+        "pr_props": {
+         "Brightness": -45,
+         "Contrast": -10
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_a.mp4",
+      "dur": 4,
+      "track": 2,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 29.5833,
+         "Scale Width": 29.5833,
+         "Position": [
+          356,
+          540
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 29.5833,
+         "Scale Width": 29.5833,
+         "Position": [
+          0.1854,
+          0.5
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_b.mp4",
+      "dur": 4,
+      "track": 3,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 29.5833,
+         "Scale Width": 29.5833,
+         "Position": [
+          640,
+          360
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 29.5833,
+         "Scale Width": 29.5833,
+         "Position": [
+          0.5,
+          0.5
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_a.mp4",
+      "in": 2,
+      "dur": 4,
+      "track": 4,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 29.5833,
+         "Scale Width": 29.5833,
+         "Position": [
+          1564,
+          540
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 29.5833,
+         "Scale Width": 29.5833,
+         "Position": [
+          0.8146,
+          0.5
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "keyframes_note": "Every bridge clip is cover-fitted first (Motion / layer Scale), then the Transform effect resizes it inside its own frame: scale % = contain-fit / cover-fit. After Effects Position is in the SOURCE's pixels: (frame point - frame centre) / cover scale + source centre, which is simply frame point / cover scale when the source has the frame's aspect; Premiere's is a frame fraction. 72 px margins, 36 px gaps: box width (1920 - 144 - 72) / 3 = 568 px = 29.58% scale, centres at x 356, 960, 1564 (fractions 0.1854, 0.5, 0.8146). The third box reuses clip_a from 2 s ('in': 2), which leaves 4 s, so every box runs 4 s. Measured 2026-10-13: Premiere's Brightness & Contrast renders this backplate 10-27 levels darker than After Effects' at the same values (9:16 blur-fill mean RGB Premiere 104/103/105, After Effects 126/115/127); match the two backplates by eye, not by copying the values.",
+   "built_from": [
+    "Transform",
+    "Drop Shadow",
+    "Multi-box layout geometry (margins, gaps, scale)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/005_main_pr_b.png",
+    "note": "Three 16:9 boxes in a row with even margins and gaps over a dark backplate.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipe_specs/005_main_ae_b.png",
+     "note": "Boxes in the same place as Premiere's; the backplate is lighter (mean |luma| difference 15.6).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "layouts",
+   "name": "Presenter plus screenshot picture-in-picture",
+   "summary": "A document or screenshot fills the left of the frame at full height while the presenter sits in a lower-right box, both with soft shadows over a blurred fill.",
+   "use_for": [
+    "explainers that walk through a document, tweet or web page",
+    "screen-recorded tutorials with a host"
+   ],
+   "avoid": [
+    "covering the part of the document the VO is talking about with the presenter box"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Uniform Scale": true,
+      "Scale Height": 40,
+      "Scale Width": 40,
+      "Position": [
+       0.7688,
+       0.7444
+      ]
+     }
+    },
+    {
+     "name": "Drop Shadow",
+     "pr_props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 40,
+      "Scale Width": 40,
+      "Position": [
+       1476,
+       804
+      ]
+     }
+    },
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Shadow Color": "#000000",
+      "Opacity": 140,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 36
+     }
+    }
+   ],
+   "spec": {
+    "name": "presenter_pip",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "still.png",
+      "dur": 6,
+      "track": 1,
+      "effects": [
+       {
+        "name": "ADBE Gaussian Blur 2",
+        "pr_name": "Gaussian Blur (Legacy)",
+        "props": {
+         "Blurriness": 25,
+         "Repeat Edge Pixels": 1
+        },
+        "pr_props": {
+         "Blurriness": 25,
+         "Repeat Edge Pixels": true
+        }
+       },
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 110,
+         "Scale Width": 110
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 110,
+         "Scale Width": 110
+        }
+       },
+       {
+        "name": "ADBE Brightness & Contrast 2",
+        "pr_name": "Brightness & Contrast",
+        "props": {
+         "Brightness": -35,
+         "Contrast": -10
+        },
+        "pr_props": {
+         "Brightness": -35,
+         "Contrast": -10
+        }
+       }
+      ]
+     },
+     {
+      "src": "still.png",
+      "dur": 6,
+      "track": 2,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 39.6,
+         "Scale Width": 39.6,
+         "Position": [
+          337.5,
+          675
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 39.6,
+         "Scale Width": 39.6,
+         "Position": [
+          0.3125,
+          0.5
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     },
+     {
+      "src": "clip_a.mp4",
+      "dur": 6,
+      "track": 3,
+      "start": 0,
+      "effects": [
+       {
+        "name": "ADBE Geometry2",
+        "pr_name": "Transform",
+        "props": {
+         "Uniform Scale": 1,
+         "Scale Height": 40,
+         "Scale Width": 40,
+         "Position": [
+          1476,
+          804
+         ]
+        },
+        "pr_props": {
+         "Uniform Scale": true,
+         "Scale Height": 40,
+         "Scale Width": 40,
+         "Position": [
+          0.7688,
+          0.7444
+         ]
+        }
+       },
+       {
+        "name": "ADBE Drop Shadow",
+        "pr_name": "Drop Shadow",
+        "props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        },
+        "pr_props": {
+         "Shadow Color": "#000000",
+         "Opacity": 140,
+         "Direction": 135,
+         "Distance": 14,
+         "Softness": 36
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "keyframes_note": "Every bridge clip is cover-fitted first (Motion / layer Scale), then the Transform effect resizes it inside its own frame: scale % = contain-fit / cover-fit. After Effects Position is in the SOURCE's pixels: (frame point - frame centre) / cover scale + source centre, which is simply frame point / cover scale when the source has the frame's aspect; Premiere's is a frame fraction. Document: still.png contained at 88% of the frame height (scale 39.6%, 760x950 px) centred at frame point (600, 540): After Effects source px [337.5, 675]; Premiere [0.3125, 0.5]. Here the two readings of Premiere's fractions (of the clip's frame or of the sequence's) agree, because x lies on the axis the cover-fitted still fills exactly and y is centred. Presenter: clip_a at 40% (768x432) with 60 px margins, centre [1476, 804]. Measured 2026-10-13: Premiere's Brightness & Contrast renders this backplate 10-27 levels darker than After Effects' at the same values (9:16 blur-fill mean RGB Premiere 104/103/105, After Effects 126/115/127); match the two backplates by eye, not by copying the values.",
+   "built_from": [
+    "Transform",
+    "Drop Shadow",
+    "Gaussian Blur (Legacy)",
+    "Multi-box layout geometry (margins, gaps, scale)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/006_main_pr_b.png",
+    "note": "The document still fills the left at 88% of the frame height (as the keyframes note sets it) and the presenter box sits lower right, both with soft shadows over the blurred fill.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipe_specs/006_main_ae_b.png",
+     "note": "Same layout as Premiere; the blurred fill is lighter (mean |luma| difference 7.3).",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

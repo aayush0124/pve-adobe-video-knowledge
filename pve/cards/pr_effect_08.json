@@ -1,0 +1,1400 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Transform",
+   "match": "AE.ADBE Geometry",
+   "category": "Distort",
+   "status": "current",
+   "summary": "A second, keyframeable copy of position, anchor, scale, skew, rotation and opacity that renders inside the effect stack, with real per-clip motion blur via its own shutter angle.",
+   "look": [
+    "punch-in zoom",
+    "motion blur",
+    "whip move",
+    "reframe",
+    "skew",
+    "kinetic",
+    "whip",
+    "slide"
+   ],
+   "use_for": [
+    "Punch-in zooms on talking-head or press-conference shots with real motion blur for reels",
+    "Whip-pan style slides of a photo or b-roll between beats in explainers",
+    "Reframe or scale a clip BEFORE Drop Shadow / Crop so the shadow follows the moved image",
+    "Fast slide-in of a news screenshot or headline card with motion blur",
+    "Punch-in zooms on a speaker or headline with motion blur in reels and news explainers",
+    "Whip-pan / slide transitions between clips with directional blur",
+    "Ken Burns moves on photos and documents in documentaries",
+    "Shake or bounce hits on beats in trailers and hype reels",
+    "Re-framing a clip after other effects in the stack (Motion always applies last)"
+   ],
+   "avoid": [
+    "Leaving 'Use Composition’s Shutter Angle' on: the clip gets no motion blur, which defeats the main reason to use this over Motion",
+    "Scaling far above 100 on low-resolution press photos: visibly soft and pixelated",
+    "Doubling up with Motion keyframes on the same clip: the two transforms stack and become hard to reason about",
+    "Animating without unchecking 'Use Composition’s Shutter Angle': no motion blur, so moves look cheap and steppy",
+    "Scaling far above 100% on 1080p sources: soft image"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Where the anchor point sits, as fractions of the clip's own frame (not the sequence's)",
+     "typical": "[0.5, 0.5] centre; keyframe for slides"
+    },
+    {
+     "name": "Anchor Point",
+     "does": "Pivot for scale and rotation",
+     "typical": "[0.5, 0.5]; move to a face for a punch-in on it"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Locks width to height so Scale Height drives both",
+     "typical": "true for normal zooms"
+    },
+    {
+     "name": "Scale Height",
+     "does": "Vertical scale in % (the single scale value when Uniform Scale is on)",
+     "typical": "100-130 for punch-ins"
+    },
+    {
+     "name": "Scale Width",
+     "does": "Horizontal scale in % (ignored when Uniform Scale is on)",
+     "typical": "100; -100 mirrors horizontally"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotation in degrees",
+     "typical": "-5..5 for tilted energy, 0 normally"
+    },
+    {
+     "name": "Use Composition’s Shutter Angle",
+     "does": "When true, uses the sequence shutter (no blur); set false to use Shutter Angle",
+     "typical": "false"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "Motion-blur amount for animated transforms, in degrees",
+     "typical": "180 natural, 270-360 for whip moves"
+    },
+    {
+     "name": "Skew",
+     "does": "Slant the image (-70..70)",
+     "typical": "5-15 for stylised slide transitions"
+    }
+   ],
+   "demo_settings": {
+    "Uniform Scale": true,
+    "Scale Height": 125,
+    "Scale Width": 125,
+    "Rotation": 8,
+    "Position": [
+     0.55,
+     0.5
+    ]
+   },
+   "enum_labels": {
+    "Sampling": {
+     "0": "Bilinear",
+     "1": "Bicubic"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Transform (AE current match ADBE Geometry2; ADBE Geometry is obsolete in AE but is the live Transform in Premiere)",
+   "pairs_with": [
+    "Directional Blur",
+    "Drop Shadow",
+    "Crop",
+    "Gaussian Blur",
+    "Lumetri Color"
+   ],
+   "scripting": "Position/Anchor Point are [x, y] fractions of the clip's own frame (see below); scales are percent; Rotation and Skew Axis are degrees. The shutter property name contains a typographic apostrophe (U+2019): 'Use Composition’s Shutter Angle' - match it exactly. Motion blur only appears while the transform is animating and only when that bool is false and Shutter Angle > 0, so the recipe below also needs static pr_props {'Use Composition’s Shutter Angle': false} (and Uniform Scale true or both scales keyframed, as given). Standard effects render before the fixed Motion/Opacity effects, so Transform placed above Drop Shadow moves the image before the shadow is drawn. Harvested default Uniform Scale is false, so set both Scale Height and Scale Width (or set Uniform Scale true). Sampling 0/1 = Bilinear/Bicubic per AE (medium confidence on the index order). Premiere's effect list holds two entries named 'Transform' (the harvest resolved both to AE.ADBE Geometry, so they are one card); applying by name gets Distort > Transform, confirmed by the Skew and Shutter Angle rows. Position and Anchor Point are fractions of the CLIP's own frame, not the sequence's: x = fraction * source width, y = fraction * source height, the anchor (source centre by default) placed at that source point, before Motion's scale. Measured 2026-10-13 ('Ken Burns pan and zoom on a still'): on a 1080x1350 still cover-fitted into a 1920x1080 sequence, [0.5, 0.4444] put the source centre at source px (539.7, 600.0), the same as After Effects' Transform Position [540, 600] in layer pixels (539.7, 599.9), and keys to [0.5, 0.5556] reached (539.8, 748.8) in both apps; a sequence-frame reading would have been (960, 480). Convert AE layer px to Premiere: [x / source width, y / source height].",
+   "recipe": {
+    "Scale Height": [
+     [
+      0,
+      100
+     ],
+     [
+      0.25,
+      118
+     ]
+    ],
+    "Scale Width": [
+     [
+      0,
+      100
+     ],
+     [
+      0.25,
+      118
+     ]
+    ],
+    "Shutter Angle": [
+     [
+      0,
+      270
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/073.png",
+    "note": "Frame is punched in and turned: a feature-match fit against the reference gives scale 1.25 and 8.0 degrees clockwise rotation with a rightward shift, exactly the demo reframe.",
+    "rerender": false
+   },
+   "merged": "2026-10-13: the duplicate card in pr_effect_07.json was merged here; use_for / avoid (and look, pairs_with, sources) are the union, and that card is kept whole in merged_from",
+   "merged_from": [
+    {
+     "kind": "pr_effect",
+     "app": "PR",
+     "name": "Transform",
+     "match": "AE.ADBE Geometry",
+     "category": "Distort",
+     "status": "current",
+     "summary": "Moves, scales, rotates, skews and fades the clip like the built-in Motion controls, but as an effect in the stack and with real motion blur via Shutter Angle. The standard tool for punch-in zooms and whip moves with blur.",
+     "look": [
+      "punch-in zoom",
+      "motion blur",
+      "whip",
+      "slide",
+      "skew",
+      "kinetic"
+     ],
+     "use_for": [
+      "Punch-in zooms on a speaker or headline with motion blur in reels and news explainers",
+      "Whip-pan / slide transitions between clips with directional blur",
+      "Ken Burns moves on photos and documents in documentaries",
+      "Shake or bounce hits on beats in trailers and hype reels",
+      "Re-framing a clip after other effects in the stack (Motion always applies last)"
+     ],
+     "avoid": [
+      "Animating without unchecking 'Use Composition’s Shutter Angle': no motion blur, so moves look cheap and steppy",
+      "Scaling far above 100% on 1080p sources: soft image"
+     ],
+     "confidence": "high",
+     "params": [
+      {
+       "name": "Position",
+       "does": "Clip position (frame fractions)",
+       "typical": "[0.5, 0.5]; animate x 0.5 -> 1.5 (exit right) or -0.5 -> 0.5 (enter from left) for whip slides"
+      },
+      {
+       "name": "Scale Height",
+       "does": "Vertical scale % (acts as the single Scale when Uniform Scale is on)",
+       "typical": "100 -> 115-130 for a punch-in"
+      },
+      {
+       "name": "Scale Width",
+       "does": "Horizontal scale % (used when Uniform Scale is off)",
+       "typical": "same as Scale Height"
+      },
+      {
+       "name": "Uniform Scale",
+       "does": "Use Scale Height for both axes",
+       "typical": "true when only Scale Height is keyframed"
+      },
+      {
+       "name": "Rotation",
+       "does": "Rotation in degrees",
+       "typical": "0; +/-2-5 for a hit"
+      },
+      {
+       "name": "Skew",
+       "does": "Slant the image (-70..70)",
+       "typical": "5-15 for stylised slide transitions"
+      },
+      {
+       "name": "Use Composition’s Shutter Angle",
+       "does": "When on, uses the sequence shutter (no blur in Premiere); turn off to use Shutter Angle",
+       "typical": "false for motion blur"
+      },
+      {
+       "name": "Shutter Angle",
+       "does": "Motion-blur amount for animated moves",
+       "typical": "180 natural; 270-360 for whip pans"
+      }
+     ],
+     "demo_settings": {
+      "Scale Height": 130,
+      "Scale Width": 130,
+      "Rotation": 8,
+      "Skew": 10
+     },
+     "enum_labels": {
+      "Sampling": {
+       "0": "Bilinear",
+       "1": "Bicubic"
+      }
+     },
+     "cost": "light",
+     "gpu": "yes",
+     "equivalent": "Transform",
+     "pairs_with": [
+      "Gaussian Blur",
+      "Directional Blur",
+      "Lumetri Color",
+      "Crop"
+     ],
+     "scripting": "Harvested default has Uniform Scale = false, so set Scale Height and Scale Width together (or set Uniform Scale true and drive Scale Height). The shutter checkbox name contains a curly apostrophe: 'Use Composition’s Shutter Angle' (U+2019); a straight quote will not match. For motion blur set it false and Shutter Angle 180-360; blur appears only while a property is animating. Position and Anchor Point are frame fractions. Sampling 1 (Bicubic) is sharper for big scale-ups; the 0/1 label order is assumed from After Effects (Bilinear, Bicubic). Premiere's effect list holds two entries named 'Transform' (the harvest resolved both to AE.ADBE Geometry); applying by name gets this Distort > Transform, which can be confirmed by the Skew and Shutter Angle rows being present. The recipe is a 0.25 s punch-in with real motion blur.",
+     "recipe": {
+      "Use Composition’s Shutter Angle": false,
+      "Shutter Angle": 180,
+      "Scale Height": [
+       [
+        0,
+        100
+       ],
+       [
+        0.25,
+        120
+       ]
+      ],
+      "Scale Width": [
+       [
+        0,
+        100
+       ],
+       [
+        0.25,
+        120
+       ]
+      ]
+     },
+     "verified": {
+      "verdict": "pass",
+      "frame": "pve/gallery/pr/072.png",
+      "note": "Frame punched in to 130%, rotated about 8 degrees and skewed, with black wedges exposed at the top-right and bottom-left corners.",
+      "rerender": false
+     },
+     "file": "pr_effect_07.json"
+    }
+   ]
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Turbulent Displace",
+   "match": "AE.ADBE Turbulent Displace",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Warps the image with fractal noise so it ripples, bulges or twists like heat haze, water or a waving flag; animating Evolution makes the warp move.",
+   "look": [
+    "heat haze",
+    "liquid warp",
+    "wavy",
+    "dreamlike",
+    "organic distortion",
+    "flag wave"
+   ],
+   "use_for": [
+    "Flashback / memory sequences in documentaries with a gentle animated warp",
+    "Make a still flag or banner photo appear to wave in an explainer",
+    "Heat-haze over desert, road or summer rally footage",
+    "Liquid warp transition: keyframe Amount up into a cut and down after it"
+   ],
+   "avoid": [
+    "High Amount with low Size on faces: features smear and look grotesque",
+    "Pinning set to none: frame edges pull in and show black borders",
+    "Static Evolution: a frozen warp looks like a broken render, not motion"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Displacement",
+     "does": "Warp type dropdown (Turbulent, Bulge, Twist, smoother and directional variants)",
+     "typical": "0 (Turbulent)"
+    },
+    {
+     "name": "Amount",
+     "does": "Strength of the displacement",
+     "typical": "10-30 subtle haze, 60-150 strong warp"
+    },
+    {
+     "name": "Size",
+     "does": "Scale of the noise pattern (bigger = broader waves)",
+     "typical": "60-200"
+    },
+    {
+     "name": "Complexity",
+     "does": "Detail of the noise (more octaves)",
+     "typical": "1-3"
+    },
+    {
+     "name": "Evolution",
+     "does": "Noise phase in degrees; keyframe to animate",
+     "typical": "keyframe 0 to 360-720 over the clip"
+    },
+    {
+     "name": "Offset (Turbulence)",
+     "does": "Shifts the noise pattern; keyframe for drifting/flowing",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Pinning",
+     "does": "Which edges stay fixed so borders do not pull in",
+     "typical": "keep default 2 (Pin All)"
+    },
+    {
+     "name": "Cycle Evolution",
+     "does": "Makes Evolution loop every 'Cycle (in Revolutions)' turns for seamless loops",
+     "typical": "true for looping backgrounds"
+    }
+   ],
+   "demo_settings": {
+    "Displacement": 0,
+    "Amount": 80,
+    "Size": 150,
+    "Complexity": 2,
+    "Evolution": 90
+   },
+   "enum_labels": {
+    "Displacement": {
+     "0": "Turbulent",
+     "1": "Bulge",
+     "2": "Twist",
+     "3": "(separator)",
+     "4": "Turbulent Smoother",
+     "5": "Bulge Smoother",
+     "6": "Twist Smoother",
+     "7": "(separator)",
+     "8": "Vertical Displacement",
+     "9": "Horizontal Displacement",
+     "10": "Cross Displacement"
+    },
+    "Pinning": {
+     "2": "Pin All (default; label assumed from AE)"
+    },
+    "Antialiasing for Best Quality": {
+     "0": "Low",
+     "1": "High"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Turbulent Displace",
+   "pairs_with": [
+    "Transform",
+    "Gaussian Blur",
+    "Lumetri Color",
+    "Cross Dissolve"
+   ],
+   "scripting": "Dropdown indices: Displacement range is 0..10 = AE's 9 modes plus 2 separator slots (3 and 7); 0-2 are safe, 4-6 and 8-10 follow AE's menu order (medium confidence, never set 3 or 7). Pinning range 0..16 also contains separators and its labels are not harvested: keep default 2 (Pin All per AE default), which stops the frame edges pulling in. Evolution is degrees. The batch has two rows named 'Random Seed': the number (seed) and a bool 'Random Seed#2' that is the Evolution Options group marker - set only 'Random Seed'. 'Evolution Options' is also a group header bool. 'Antialiasing for Best Quality' 0/1 = Low/High (AE order). Resize Layer does nothing useful in Premiere (clip bounds are the frame). Demo Amount 80 at Size 150 is a clearly visible wobble that keeps the frame readable; above ~120 faces smear.",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      5,
+      720
+     ]
+    ],
+    "Amount": [
+     [
+      0,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/074.png",
+    "note": "Whole frame is warped into liquid, wavy ripples (stripes, foreground blocks and figures bend like heat haze or a waving flag), matching the card.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Twirl",
+   "match": "AE.ADBE Twirl",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Spins the pixels around a centre point, strongest at the centre and fading to nothing at the twirl radius, like a whirlpool.",
+   "look": [
+    "whirlpool",
+    "spiral",
+    "dizzy",
+    "hypnotic",
+    "retro transition"
+   ],
+   "use_for": [
+    "Comic 'head spinning' moment in political satire reels",
+    "Spiral transition: keyframe Angle up on the outgoing clip and down on the incoming one",
+    "Dream or hypnosis beat in a story-driven explainer"
+   ],
+   "avoid": [
+    "Using it as a serious documentary transition: reads as cheap 90s video toaster",
+    "Large Angle with a small radius on faces: ugly smear around the centre"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Angle",
+     "does": "Amount of twist in degrees (sign sets direction)",
+     "typical": "90-360 for an effect, 720+ for transitions"
+    },
+    {
+     "name": "Twirl Radius",
+     "does": "Size of the twirled area as % of the frame",
+     "typical": "30-60"
+    },
+    {
+     "name": "Twirl Center",
+     "does": "Centre of the spiral",
+     "typical": "[0.5, 0.5] or on a face"
+    }
+   ],
+   "demo_settings": {
+    "Angle": 220,
+    "Twirl Radius": 45,
+    "Twirl Center": [
+     0.5,
+     0.5
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Twirl",
+   "pairs_with": [
+    "Cross Dissolve",
+    "Transform",
+    "Gaussian Blur"
+   ],
+   "scripting": "Angle in degrees, Twirl Radius in percent (0-100), Twirl Center as frame fractions. For a twirl transition put matching keyframes on both clips around the cut and add a short Cross Dissolve.",
+   "recipe": {
+    "Angle": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      540
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/075.png",
+    "note": "Frame is spun into a strong whirlpool spiral around the centre, easing off toward the corners, with black empty areas pulled in from outside the layer.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Ultra Key",
+   "match": "AE.ADBE Ultra Key",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Premiere's main chroma keyer: picks a screen colour (usually green or blue) and makes it transparent, with matte cleanup, spill suppression and colour correction of the foreground.",
+   "look": [
+    "green screen",
+    "chroma key",
+    "cutout",
+    "composite",
+    "presenter over background"
+   ],
+   "use_for": [
+    "Put a green-screen presenter over news graphics or b-roll for an AI-education explainer",
+    "Key stock green-screen overlays (smoke, explosions, subscribe buttons, phone mockups)",
+    "Remove a solid colour background from a supplied logo or graphic animation",
+    "Anchor-style political explainer with the host over a map or headline wall"
+   ],
+   "avoid": [
+    "Applying it to ordinary footage: it punches holes wherever the key colour appears (green in flags, clothing, foliage)",
+    "Leaving Key Color at the harvested default (black): it keys the wrong pixels (or nothing) until it is set to the actual screen colour",
+    "Keying low-bitrate social/WhatsApp green-screen clips with Aggressive + high Choke: blocky, chattering edges; garbage-matte and use Default first",
+    "Over-raising Choke/Soften: hair and edges turn mushy; use Spill Suppression instead of crushing the matte"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Key Color",
+     "does": "The screen colour to remove",
+     "typical": "sample the screen, e.g. #00B140 green or #0047BB blue"
+    },
+    {
+     "name": "Setting",
+     "does": "Preset strength: Default, Relaxed, Aggressive, Custom",
+     "typical": "0 (Default) or 2 (Aggressive) for uneven screens"
+    },
+    {
+     "name": "Output",
+     "does": "Composite, Alpha Channel (matte view) or Color Channel",
+     "typical": "1 to check the matte, 0 for final"
+    },
+    {
+     "name": "Transparency",
+     "does": "How transparent the keyed area becomes",
+     "typical": "40-60"
+    },
+    {
+     "name": "Tolerance",
+     "does": "How far from the key colour still counts as screen",
+     "typical": "40-70"
+    },
+    {
+     "name": "Pedestal",
+     "does": "Removes low-level noise from the matte",
+     "typical": "10-30"
+    },
+    {
+     "name": "Choke",
+     "does": "Shrinks the matte edge inward",
+     "typical": "0-15"
+    },
+    {
+     "name": "Spill",
+     "does": "Strength of green/blue spill removal on the subject",
+     "typical": "40-70"
+    }
+   ],
+   "demo_settings": {
+    "Output": 0,
+    "Setting": 2,
+    "Key Color": "#B09A5F"
+   },
+   "enum_labels": {
+    "Output": {
+     "0": "Composite",
+     "1": "Alpha Channel",
+     "2": "Color Channel"
+    },
+    "Setting": {
+     "0": "Default",
+     "1": "Relaxed",
+     "2": "Aggressive",
+     "3": "Custom"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Keylight (1.2)",
+   "pairs_with": [
+    "Eight-Point Garbage Matte",
+    "Crop",
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Track Matte Key",
+    "Drop Shadow"
+   ],
+   "scripting": "Key Color is a colour property; the harvested default decodes to black, so always set it (sample the real screen; #00B140 / #0047BB are only nominal chroma green / blue). Setting changes the Matte Generation values; editing any of those switches Setting to Custom (3), so set Setting first, then fine-tune. Rows named '' and the bools 'Matte Generation', 'Matte Cleanup', 'Spill Suppression', 'Color Correction' are group headers - do not set them. Whether setting Setting from a script re-fills the Matte Generation sliders the way the UI menu does is not verified: when it matters, also set Transparency/Highlight/Shadow/Tolerance/Pedestal explicitly. Demo keys test plate A's tan wall in Composite output (keyed areas render black on an empty track below). The test footage has a warm cast that puts skin within a few chroma steps of the wall, so the key colour is the wall nudged toward yellow (#B09A5F, not the raw wall sample #B0935E) to spare skin; even so the faces render at about half brightness (partly keyed) in the demo frame; an off-frame colour such as green keys nothing. Put the background on the track below; use a mask or Crop as a garbage matte for screen edges.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/076.png",
+    "note": "The tan wall is keyed out to black (transparent over the empty track, 37% of the frame) in Composite output, a clear chroma cutout; the warm-cast faces and stripes come out partly transparent (about half brightness) as this footage is not a screen shot.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Unsharp Mask",
+   "match": "AE.ADBE Unsharp Mask",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Sharpens by boosting contrast along edges, with a radius for how wide the edge boost is and a threshold so flat areas and noise are left alone.",
+   "look": [
+    "crisp",
+    "sharpened",
+    "detail boost",
+    "edge contrast",
+    "halo when overdone"
+   ],
+   "use_for": [
+    "Crisp up soft upscaled archival or AI-generated clips in documentaries",
+    "Sharpen press photos and screenshots used as b-roll in news reels",
+    "Restore bite after a punch-in done with the Transform effect placed above it in the stack"
+   ],
+   "avoid": [
+    "High Amount with large Radius: bright halos around edges and crunchy skin",
+    "Sharpening heavily compressed WhatsApp/social footage: it amplifies blocks and noise",
+    "Negative Amount as a blur substitute: use Gaussian Blur instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "Strength of the sharpening (negative softens)",
+     "typical": "40-100 for documentary footage"
+    },
+    {
+     "name": "Radius",
+     "does": "Width in pixels of the edge contrast boost",
+     "typical": "0.8-2 on 1080p"
+    },
+    {
+     "name": "Threshold",
+     "does": "Minimum edge contrast before sharpening applies (0-1, normalised)",
+     "typical": "0.02-0.06 to spare noise and skin"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 300,
+    "Radius": 6,
+    "Threshold": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Unsharp Mask",
+   "pairs_with": [
+    "Lumetri Color",
+    "Transform",
+    "Sharpen",
+    "VR De-Noise"
+   ],
+   "scripting": "Harvested default Amount is 0, so the effect does nothing until Amount is set. Threshold is normalised 0-1 (same as AE's current 'ADBE Unsharp Mask2'; only the legacy AE effect used 0-255 levels, so divide old values by 255). 'Color Mode' is a bool with no documented meaning in this harvest; leave it at false. Apply after scaling effects (below Transform in the stack) so the sharpening works at output resolution. The fixed Motion effect always renders AFTER every standard effect, so a punch-in done with Motion Scale enlarges the halos too; for a sharpened punch-in scale with Transform above Unsharp Mask, or sharpen on an adjustment layer.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/077.png",
+    "note": "Edges are clearly crisper with visible halos (high-frequency energy 2.7x the reference) while the image stays intact, the sharpened look described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Chromatic Aberrations",
+   "match": "AE.Mettle SkyBox Chromatic Aberrations",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Projection-aware RGB split for 360/VR footage: the red, green and blue channels are pushed apart, increasing with distance from a point of interest.",
+   "look": [
+    "RGB split",
+    "colour fringing",
+    "lens imperfection",
+    "glitchy edges",
+    "retro lens"
+   ],
+   "use_for": [
+    "Stylised lens fringing on 360 footage for VR or YouTube 360 uploads",
+    "Lens-style edge fringing on a flat reel shot for a tech/AI channel look, with the centre (Point of Interest) kept clean",
+    "Quick RGB-split hit on a beat when keyframed"
+   ],
+   "avoid": [
+    "On flat 16:9 footage the effect still assumes an equirectangular frame, so fringing bends near top/bottom and wraps across the left/right edges; for flat glitch/RGB-split looks prefer Premiere 26's RGB Split effect",
+    "Large aberration on news footage: looks like a broken camera, hurts credibility"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Aberration (Red)",
+     "does": "Offset of the red channel",
+     "typical": "-10..-40"
+    },
+    {
+     "name": "Aberration (Blue)",
+     "does": "Offset of the blue channel",
+     "typical": "10..40"
+    },
+    {
+     "name": "Aberration (Green)",
+     "does": "Offset of the green channel",
+     "typical": "0"
+    },
+    {
+     "name": "Point of Interest",
+     "does": "Where the image stays clean; fringing grows away from it",
+     "typical": "[0.5, 0.5]"
+    },
+    {
+     "name": "Falloff Distance",
+     "does": "How far from the point of interest the fringing ramps in",
+     "typical": "20-60"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Monoscopic / stereo over-under / stereo side-by-side",
+     "typical": "0 for mono or flat footage"
+    }
+   ],
+   "demo_settings": {
+    "Aberration (Red)": -50,
+    "Aberration (Blue)": 50,
+    "Falloff Distance": 20,
+    "Point of Interest": [
+     0.5,
+     0.5
+    ]
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "VR Chromatic Aberrations (AE Immersive Video); flat-footage alternative in Premiere 26: RGB Split",
+   "pairs_with": [
+    "VR Digital Glitch",
+    "VR Glow",
+    "Transform",
+    "RGB Split"
+   ],
+   "scripting": "Mettle SkyBox effect (Immersive Video folder). The unnamed rows map to the AE version: the first '' bool (default true) is 'Auto VR Properties' and the last '' bool is 'Falloff Invert'; neither is addressable by name. While Auto VR Properties is on (the default) Frame Layout and the Field of View sliders are probably taken from the sequence's VR settings and the sliders are ignored (unverified), so do not rely on setting them. The exact unit of the Aberration values and the direction of Falloff Distance are not verified - demo values are deliberately strong (default is only -10/+10); check a frame before using subtle values.",
+   "recipe": {
+    "Aberration (Red)": [
+     [
+      0,
+      0
+     ],
+     [
+      0.08,
+      -60
+     ],
+     [
+      0.3,
+      0
+     ]
+    ],
+    "Aberration (Blue)": [
+     [
+      0,
+      0
+     ],
+     [
+      0.08,
+      60
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/078.png",
+    "note": "Strong red/green/blue fringing splits around every edge (stripes, faces, flowers), a clear RGB-split look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Color Gradients",
+   "match": "AE.Mettle SkyBox Color Gradients",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Paints a soft multi-point colour gradient (up to 8 coloured points) over the frame, seamless for 360 footage, blended onto the clip with its own opacity and blending mode.",
+   "look": [
+    "colour wash",
+    "multi-colour gradient",
+    "duotone tint",
+    "neon glow wash",
+    "pastel"
+   ],
+   "use_for": [
+    "Colour wash or duotone tint over b-roll for stylised reels",
+    "Animated gradient background for title and quote cards (apply to a colour matte)",
+    "Brand-coloured tint over 360 footage without a visible seam"
+   ],
+   "avoid": [
+    "Leaving Opacity at 100 with the default blending mode: the gradient can cover the shot completely",
+    "Rainbow defaults (8 saturated points) on serious news footage: looks like a kids' filter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Points Number",
+     "does": "How many of the 8 colour points are used",
+     "typical": "2-4"
+    },
+    {
+     "name": "Color 1",
+     "does": "Colour of point 1 (Color 2..8 likewise)",
+     "typical": "brand colours, e.g. #FF6A00"
+    },
+    {
+     "name": "Point 1",
+     "does": "Position of point 1 (Point 2..8 likewise)",
+     "typical": "spread across the frame, e.g. [0.15, 0.3]"
+    },
+    {
+     "name": "Gradient Power",
+     "does": "How far each point's colour spreads",
+     "typical": "40-70"
+    },
+    {
+     "name": "Gradient Blend",
+     "does": "Softness of the transition between points",
+     "typical": "10-40"
+    },
+    {
+     "name": "Opacity",
+     "does": "Mix of the gradient over the clip",
+     "typical": "20-50 as a tint"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "How the gradient combines with the clip (0-21)",
+     "typical": "keep default 1 unless verified"
+    }
+   ],
+   "demo_settings": {
+    "Points Number": 3,
+    "Color 1": "#FF6A00",
+    "Color 2": "#7A00FF",
+    "Color 3": "#00C2FF",
+    "Point 1": [
+     0.15,
+     0.3
+    ],
+    "Point 2": [
+     0.5,
+     0.7
+    ],
+    "Point 3": [
+     0.85,
+     0.3
+    ],
+    "Gradient Power": 60,
+    "Opacity": 50
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "VR Color Gradients (AE Immersive Video); flat-footage alternative in Premiere: 4-Color Gradient",
+   "pairs_with": [
+    "Lumetri Color",
+    "VR Fractal Noise",
+    "VR Glow",
+    "4-Color Gradient"
+   ],
+   "scripting": "Points are frame fractions; harvested defaults are a 4x2 grid at y 0.33/0.66. Default colours decode to red, cyan, green, yellow, blue, magenta, black, white for points 1-8. Blending Mode is a 0-21 dropdown whose labels are not verified (default 1, probably Normal as in AE's Fractal Noise-style menus): keep it and control strength with Opacity. Ignore unnamed rows (the first '' bool, default true, is 'Auto VR Properties'; the rest are group ends) and the 'Points' header bool. Only the first Points Number points are used. On flat footage it works as a plain gradient wash.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/079.png",
+    "note": "Soft orange wash on the left, purple in the middle and cyan on the right blended over the photo at half opacity, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR De-Noise",
+   "match": "AE.Mettle SkyBox Denoise",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Projection-aware noise reduction for 360/VR footage that smooths grain and sensor noise without a visible seam at the frame edges; in this Premiere install it is also the only general-purpose video denoiser in the effect list, so it gets used on flat footage too.",
+   "look": [
+    "clean",
+    "smooth",
+    "noise-free",
+    "soft",
+    "plastic when overdone"
+   ],
+   "use_for": [
+    "Clean low-light 360 footage before grading",
+    "Reduce grain on noisy night-rally or indoor event clips before sharpening",
+    "Smooth noisy AI-upscaled clips in a documentary"
+   ],
+   "avoid": [
+    "High Noise Level on faces: waxy, plastic skin",
+    "Heavy settings on detailed footage (hair, fabric, small on-screen text): fine detail is smoothed away with the noise",
+    "Expecting dedicated-denoiser quality (Neat Video and similar): it is a simple strength control, so test a frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise Level",
+     "does": "Strength of noise reduction (0-1)",
+     "typical": "0.1-0.3 for documentary footage"
+    },
+    {
+     "name": "Noise Type",
+     "does": "Noise model dropdown (two options, labels unverified)",
+     "typical": "0"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Monoscopic / stereo over-under / stereo side-by-side",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Noise Level": 0.8,
+    "Noise Type": 0
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "VR De-Noise (AE); for flat footage Remove Grain",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Lumetri Color",
+    "VR Blur"
+   ],
+   "scripting": "Only Noise Type and Noise Level do anything visible; ignore the unnamed bool (it is 'Auto VR Properties', default true, not addressable by name). Noise Type 0/1 labels are not harvested. Demo uses 0.8 so the smoothing is obvious on a clean still shot; on clean footage the change is subtle at low values. Slows playback: render previews.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/080.png",
+    "note": "Image is visibly smoothed (fine detail down about 40% versus the reference) with slightly smeared frame edges, the clean/soft look described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Digital Glitch",
+   "match": "AE.Mettle SkyBox Digital Glitch",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Procedural digital glitch: colour channel corruption, blocky geometric displacement and noise, concentrated around a point of interest and seamless for 360 footage.",
+   "look": [
+    "digital glitch",
+    "data corruption",
+    "RGB tear",
+    "cyber",
+    "signal error",
+    "blocky displacement"
+   ],
+   "use_for": [
+    "Glitch-hit transition on a beat in reels (keyframe Master Amplitude up and down across the cut)",
+    "'Breaking news' or 'system error' sting in political satire",
+    "Tech/AI channel intros and hacker-themed explainer moments",
+    "Glitch reveal of a logo or headline card"
+   ],
+   "avoid": [
+    "Leaving it on for a whole clip at full amplitude: exhausting and unreadable",
+    "Using on serious documentary footage: reads as gimmick",
+    "Forgetting to animate: with default settings it is on at full strength for the entire clip"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Master Amplitude",
+     "does": "Overall glitch strength",
+     "typical": "keyframe 0 -> 100 -> 0 over 0.2-0.5 s"
+    },
+    {
+     "name": "Color Distortion",
+     "does": "Amount of colour channel corruption",
+     "typical": "40-80"
+    },
+    {
+     "name": "Geometry Distortion X",
+     "does": "Horizontal block displacement",
+     "typical": "30-80"
+    },
+    {
+     "name": "Geometry Distortion Y",
+     "does": "Vertical block displacement",
+     "typical": "0-40"
+    },
+    {
+     "name": "Distortion Rate",
+     "does": "How fast the glitch pattern changes over time",
+     "typical": "50-80"
+    },
+    {
+     "name": "Distortion Complexity",
+     "does": "Detail/number of glitch blocks",
+     "typical": "30-60"
+    },
+    {
+     "name": "Noise Strength",
+     "does": "Adds digital noise on top",
+     "typical": "0-40"
+    },
+    {
+     "name": "POI Scale",
+     "does": "Size of the glitched area around Point of Interest (100 appears to cover the whole frame; unverified)",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {
+    "Master Amplitude": 70,
+    "Color Distortion": 60,
+    "Geometry Distortion X": 50,
+    "Geometry Distortion Y": 10,
+    "Distortion Rate": 60,
+    "Noise Strength": 20
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "VR Digital Glitch (AE Immersive Video); Premiere 26 flat-footage alternatives: RGB Split effect, or the Glitch / VHS Damage transitions on a cut",
+   "pairs_with": [
+    "VR Chromatic Aberrations",
+    "RGB Split",
+    "Transform",
+    "Noise",
+    "Lumetri Color"
+   ],
+   "scripting": "Defaults already glitch hard (Master Amplitude 100, Color 50, Geometry X 50), so keyframe Master Amplitude to confine it; the demo backs everything off so the frame stays readable. For a one-shot glitch between two clips the built-in Glitch transition is simpler than keyframing this. Whether the glitch animates on its own via Distortion Rate or needs Distortion Evolution / Color Evolution keyframes is not verified - keyframing Distortion Evolution is the safe way to guarantee movement. Ignore unnamed rows (the first '' bool, default true, is 'Auto VR Properties') and header bools (Distortion, Transform, Sub Settings, Noise). Point of Interest / POI Scale / POI Aspect appear to localise the glitch; exact behaviour unverified. Translate X/Y/Z range only 0-10.",
+   "recipe": {
+    "Master Amplitude": [
+     [
+      0,
+      0
+     ],
+     [
+      0.06,
+      100
+     ],
+     [
+      0.35,
+      0
+     ]
+    ],
+    "Distortion Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      0.35,
+      720
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/081.png",
+    "note": "Blocky pixel tearing, scattered displaced chunks and RGB fringing break up the subjects, a clear digital-corruption glitch.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Fractal Noise",
+   "match": "AE.Mettle SkyBox Fractal Noise",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Generates seamless spherical fractal noise (clouds, smoke, turbulence) over the clip, with its own opacity and blending mode; Evolution animates it.",
+   "look": [
+    "smoke",
+    "fog",
+    "clouds",
+    "organic texture",
+    "moody haze"
+   ],
+   "use_for": [
+    "Drifting smoke or fog layer over trailer shots and title cards",
+    "Animated texture background for quote cards in documentaries (on a colour matte)",
+    "Subtle moving haze over a static press photo to add life"
+   ],
+   "avoid": [
+    "Opacity 100 with the default blend: the noise replaces the picture entirely",
+    "Static (un-keyframed) Evolution: looks like a frozen dirty lens"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Fractal Type",
+     "does": "Noise style dropdown (4 options, labels unverified)",
+     "typical": "0"
+    },
+    {
+     "name": "Contrast",
+     "does": "Contrast of the noise",
+     "typical": "100-200"
+    },
+    {
+     "name": "Brightness",
+     "does": "Brightness offset of the noise",
+     "typical": "-30..20"
+    },
+    {
+     "name": "Complexity",
+     "does": "Detail octaves",
+     "typical": "4-8"
+    },
+    {
+     "name": "Scale",
+     "does": "Size of the noise features",
+     "typical": "4-20"
+    },
+    {
+     "name": "Evolution",
+     "does": "Animates the noise shape (degrees)",
+     "typical": "keyframe 0 -> 360 over 10 s"
+    },
+    {
+     "name": "Opacity",
+     "does": "Mix over the clip",
+     "typical": "15-40 for haze"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "How the noise combines with the clip (0-21)",
+     "typical": "keep default 1 unless verified"
+    }
+   ],
+   "demo_settings": {
+    "Contrast": 160,
+    "Scale": 6,
+    "Complexity": 6,
+    "Opacity": 40
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "Fractal Noise",
+   "pairs_with": [
+    "VR Color Gradients",
+    "VR Glow",
+    "Lumetri Color",
+    "Gaussian Blur"
+   ],
+   "scripting": "Premiere has no flat Fractal Noise effect, so this is the only built-in procedural cloud/smoke generator; on flat footage it works but wraps seamlessly left-right. Fractal Type 0..3 and Blending Mode 0..21 labels are not verified (Blending Mode default 1, probably Normal; keep it and use Opacity). Ignore unnamed rows (the first '' bool, default true, is 'Auto VR Properties') and header bools (Transform, Sub Settings). Tilt/Pan/Roll rotate the noise sphere (degrees) and can also be keyframed for drift. For a full-frame texture card, apply to a colour matte at Opacity 100.",
+   "recipe": {
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      360
+     ]
+    ],
+    "Pan (Y axis)": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/082.png",
+    "note": "Grey smoky fractal clouds are overlaid across the whole frame at partial opacity, a moody fog/haze look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Blur",
+   "match": "AE.Mettle SkyBox Blur",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Projection-aware blur for 360/VR footage that blurs evenly across the sphere and across the left/right seam.",
+   "look": [
+    "soft blur",
+    "defocus",
+    "dreamy",
+    "background blur"
+   ],
+   "use_for": [
+    "Blur 360 footage for a title or menu backdrop without a seam line",
+    "Defocused background under text in a 360 explainer",
+    "Blur-in / blur-out transitions on immersive clips"
+   ],
+   "avoid": [
+    "On flat 16:9 footage: left and right edges blur into each other and the top/bottom blur gets stretched; use Gaussian Blur instead",
+    "Very high Blurriness on long clips: slow to play back"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "Blur amount",
+     "typical": "10-40 soft, 80-200 heavy backdrop"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Monoscopic / stereo over-under / stereo side-by-side",
+     "typical": "0"
+    },
+    {
+     "name": "Horizontal Field of View",
+     "does": "Horizontal coverage of the frame in degrees",
+     "typical": "360 for full 360 footage"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 60
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "VR Blur (AE); for flat footage Gaussian Blur",
+   "pairs_with": [
+    "VR Glow",
+    "Lumetri Color",
+    "VR De-Noise"
+   ],
+   "scripting": "Only Blurriness matters for normal use; ignore the unnamed bool (it is 'Auto VR Properties', default true, not addressable by name). Prefer Gaussian Blur on flat footage because of the seam wrap. Keyframe Blurriness for blur transitions.",
+   "recipe": {
+    "Blurriness": [
+     [
+      0,
+      80
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/083.png",
+    "note": "Entire frame is heavily and evenly blurred (detail down about 75%) so faces and stripes lose all detail.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Glow",
+   "match": "AE.Mettle SkyBox Glow",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Adds a soft bloom around the brightest parts of the image (above a luma threshold), with radius, brightness, saturation and an optional tint; seamless for 360 footage and often used as a glow on flat footage too.",
+   "look": [
+    "bloom",
+    "glow",
+    "dreamy highlights",
+    "cinematic haze",
+    "neon"
+   ],
+   "use_for": [
+    "Cinematic highlight bloom on trailer shots and night rally lights",
+    "Dreamy glow for flashback or tribute segments in documentaries",
+    "Glow on bright text, logos or neon graphics in tech-channel reels"
+   ],
+   "avoid": [
+    "Low Luma Threshold: the whole frame washes out and loses contrast",
+    "On flat footage, glow from bright areas at one edge can wrap to the opposite edge",
+    "Strong glow on faces in news footage: looks like a beauty filter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Luma Threshold",
+     "does": "Brightness above which pixels glow (0-1)",
+     "typical": "0.7-0.9"
+    },
+    {
+     "name": "Glow Radius",
+     "does": "How far the glow spreads",
+     "typical": "50-200"
+    },
+    {
+     "name": "Glow Brightness",
+     "does": "Intensity of the glow",
+     "typical": "1-3"
+    },
+    {
+     "name": "Glow Saturation",
+     "does": "Colour saturation of the glow",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Tint Color",
+     "does": "Colours the glow, but only when the 'Use Tint Color' checkbox is on (that checkbox is the unnamed bool just before it, default off, not settable by name)",
+     "typical": "leave; tint the glow with Lumetri or use Wonder Glow for a coloured glow"
+    }
+   ],
+   "demo_settings": {
+    "Luma Threshold": 0.65,
+    "Glow Radius": 120,
+    "Glow Brightness": 2,
+    "Glow Saturation": 1.2
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "VR Glow (AE Immersive Video) / Glow; Premiere 26 flat-footage alternatives: Wonder Glow, Edge Glow",
+   "pairs_with": [
+    "Lumetri Color",
+    "VR Blur",
+    "VR Color Gradients",
+    "Wonder Glow"
+   ],
+   "scripting": "Unnamed rows map to the AE version: the first '' bool (default true) is 'Auto VR Properties' and the '' bool before Tint Color is 'Use Tint Color' (default false), so Tint Color (default white) has no effect unless that checkbox is turned on by hand - neither bool is addressable by name. Luma Threshold 0.9 by default means only near-white pixels glow, so a typical shot shows little until it is lowered to ~0.6-0.8; below ~0.5 with Brightness > 2 the frame washes out. Keyframe Glow Brightness for a flash/bloom hit. For flat reels Wonder Glow / Edge Glow have no seam wrap and more shaping controls.",
+   "recipe": {
+    "Glow Brightness": [
+     [
+      0,
+      1
+     ],
+     [
+      0.1,
+      5
+     ],
+     [
+      0.6,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/084.png",
+    "note": "Bright wall areas and the lamps bloom with a warm soft glow while the darker clothing stays intact.",
+    "rerender": false
+   }
+  }
+ ]
+}

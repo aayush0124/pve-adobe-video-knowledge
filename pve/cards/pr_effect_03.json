@@ -1,0 +1,1045 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Emboss",
+   "match": "AE.ADBE Color Emboss",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Embosses the edges of the image like a raised metal or paper relief while keeping the original colours. A stylised texture effect, not a correction.",
+   "look": [
+    "embossed",
+    "relief",
+    "raised edges",
+    "textured",
+    "graphic",
+    "retro print"
+   ],
+   "use_for": [
+    "stylised still/photo treatment for a flashback or 'archive' montage beat",
+    "textured background plate behind titles in an explainer (with Blend With Original)",
+    "one-frame graphic hit on a beat in a social reel"
+   ],
+   "avoid": [
+    "faces in documentaries: high Relief makes skin look crusty and cheap",
+    "using it as a sharpen substitute; it adds halos, use Unsharp Mask instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Direction",
+     "does": "light direction of the relief, degrees",
+     "typical": "45 (top-left light) or 135"
+    },
+    {
+     "name": "Relief",
+     "does": "apparent height / edge thickness in pixels",
+     "typical": "2-6 (1 is barely visible)"
+    },
+    {
+     "name": "Contrast",
+     "does": "strength of the emboss contrast",
+     "typical": "100-300"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "percent of the untouched image mixed back in",
+     "typical": "0 for full look, 40-70 for a subtle texture"
+    }
+   ],
+   "demo_settings": {
+    "Direction": 45,
+    "Relief": 6,
+    "Contrast": 300,
+    "Blend With Original": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Emboss",
+   "pairs_with": [
+    "Lumetri Color",
+    "Noise",
+    "Tint"
+   ],
+   "scripting": "Direction is an angle in degrees (UI shows 0x+45.0). Relief harvested range 0..1000 but useful 1-10; Contrast 0..32767 but useful 50-500. Blend With Original is 0..100 percent.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/021.png",
+    "note": "Strong raised-relief emboss on every edge (faces, stripes, foreground blocks, wall mouldings) while the original warm colours are kept.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Balance (HLS)",
+   "match": "AE.ADBE Color Balance (HLS)",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Shifts the hue of the whole image and adjusts overall lightness and saturation (Hue / Lightness / Saturation). A quick global colour twist or desaturation.",
+   "look": [
+    "hue shift",
+    "desaturated",
+    "oversaturated",
+    "colour wash",
+    "surreal colour"
+   ],
+   "use_for": [
+    "desaturate to black-and-white (Saturation -100) for flashback / archive sections of a documentary",
+    "animated saturation drain on a 'dark turn' beat in a political explainer",
+    "surreal hue shift for a dream or glitch beat in a reel",
+    "quick saturation boost on dull phone footage"
+   ],
+   "avoid": [
+    "large Hue shifts on people: skin turns green/blue",
+    "Lightness: it flattens contrast and lifts blacks; use Lumetri Exposure instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Hue",
+     "does": "rotates all hues, degrees",
+     "typical": "-30..30 for a tint, 90-180 for surreal"
+    },
+    {
+     "name": "Lightness",
+     "does": "global lighten/darken, -100..100",
+     "typical": "-20..20"
+    },
+    {
+     "name": "Saturation",
+     "does": "global saturation, -100 (greyscale)..100",
+     "typical": "-100 for B&W, 10-30 to boost"
+    }
+   ],
+   "demo_settings": {
+    "Hue": 90,
+    "Saturation": 30
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Balance (HLS) (AE has the same effect); Hue/Saturation is the fuller AE tool",
+   "pairs_with": [
+    "Lumetri Color",
+    "Noise",
+    "Tint"
+   ],
+   "scripting": "Hue is an angle in degrees (harvested range is the raw angle limit, use -180..180). Lightness and Saturation are clamped -100..100. Folder may be Color Correction or Obsolete depending on build; apply by name either way. Lumetri Color is the modern choice for real grading.",
+   "recipe": {
+    "Saturation": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      -100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/022.png",
+    "note": "Hue +90 turned the whole image into a saturated green wash (beige wall, skin and red stripes all green), a clear global hue twist.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Key",
+   "match": "AE.ADBE Color Key",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Makes every pixel close to one chosen colour transparent, with tolerance, edge thin and edge feather controls. A simple hard-edged key for flat-colour backgrounds.",
+   "look": [
+    "cutout",
+    "transparent holes",
+    "hard key",
+    "flat-colour removal"
+   ],
+   "use_for": [
+    "drop the flat white/black background of a logo or graphic so it sits over B-roll",
+    "remove a solid-colour background from a screen recording or chart export",
+    "stylised colour cut-out where footage on the track below shows through"
+   ],
+   "avoid": [
+    "real green/blue screen footage with uneven light or hair: use Ultra Key",
+    "high Color Tolerance on live action: keys skin, suits and shadows too"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Key Color",
+     "does": "colour to make transparent",
+     "typical": "the background colour, e.g. #00B140 for green, #FFFFFF for white"
+    },
+    {
+     "name": "Color Tolerance",
+     "does": "how far from the key colour is still removed, 0..255",
+     "typical": "20-60"
+    },
+    {
+     "name": "Edge Thin",
+     "does": "chokes (+) or spreads (-) the matte edge, pixels",
+     "typical": "1-2"
+    },
+    {
+     "name": "Edge Feather",
+     "does": "softens the matte edge, pixels",
+     "typical": "1-4"
+    }
+   ],
+   "demo_settings": {
+    "Key Color": "#B99A64",
+    "Color Tolerance": 50,
+    "Edge Thin": 0,
+    "Edge Feather": 2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Key (AE files the same effect under Obsolete); Keylight (1.2) or Linear Color Key for real screens",
+   "pairs_with": [
+    "Ultra Key",
+    "Alpha Adjust",
+    "Crop",
+    "Drop Shadow"
+   ],
+   "scripting": "Keyed areas become transparent: with nothing on the track below they render as the black sequence background. Put the keyed clip on a higher track than the fill. Tolerance is on a 0..255 scale (not percent); the harvested default Key Color is pure blue. The demo keys the beige wall (#B99A64) of the PVE test clip so holes clearly appear; a white key barely touches that footage. Still listed under Keying in Premiere (only AE moved it to Obsolete).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/023.png",
+    "note": "Every beige wall and skin-toned area near #B99A64 was keyed to transparency (black), leaving ragged hard-edged holes around the figures and stripes.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "4-Color Gradient",
+   "match": "AE.ADBE 4ColorGradient",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Generates a smooth four-colour gradient from four placeable colour points and blends it over the clip (or replaces it at full opacity).",
+   "look": [
+    "colour gradient",
+    "pastel wash",
+    "mesh gradient",
+    "colourful background",
+    "modern backdrop"
+   ],
+   "use_for": [
+    "animated colourful backdrop for title cards / lower-third panels (applied to a colour matte)",
+    "brand-colour wash over B-roll behind explainer text: gradient on a colour matte on the track above, matte Opacity 20-40% or its Opacity blend mode set to Overlay / Soft Light",
+    "moody colour grade wash on trailer shots (same matte-above route)",
+    "background for quote cards in social reels"
+   ],
+   "avoid": [
+    "applying it straight to footage at default settings: Blending Mode 0 (believed None) replaces the picture completely",
+    "low Blend with saturated colours: visible banding and hard seams"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Point 1",
+     "does": "position of Color 1 (frame fractions)",
+     "typical": "[0.1, 0.1]"
+    },
+    {
+     "name": "Color 1",
+     "does": "first gradient colour",
+     "typical": "brand colour, e.g. #FF9933"
+    },
+    {
+     "name": "Point 4",
+     "does": "position of Color 4",
+     "typical": "[0.9, 0.9]"
+    },
+    {
+     "name": "Color 4",
+     "does": "fourth gradient colour",
+     "typical": "#1B2A6B"
+    },
+    {
+     "name": "Blend",
+     "does": "smoothness of the colour transitions",
+     "typical": "100-400"
+    },
+    {
+     "name": "Jitter",
+     "does": "noise added to reduce banding",
+     "typical": "0-10"
+    },
+    {
+     "name": "Opacity",
+     "does": "strength of the gradient, percent (with Blending Mode 0 the clip is believed not to show through, so lower it only with another mode)",
+     "typical": "100 on a colour matte"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "how the gradient combines with the clip (22-item dropdown 0..21; 0 = default, believed None = gradient only)",
+     "typical": "0 on a matte; 1 (believed Normal) to lay it over the clip"
+    }
+   ],
+   "demo_settings": {
+    "Color 1": "#FFD400",
+    "Color 2": "#00C8FF",
+    "Color 3": "#FF2D95",
+    "Color 4": "#2B3BFF",
+    "Opacity": 60,
+    "Blending Mode": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "4-Color Gradient",
+   "pairs_with": [
+    "Noise",
+    "Gaussian Blur",
+    "Ramp",
+    "Lumetri Color"
+   ],
+   "scripting": "Ignore the bool rows 'Positions & Colors' and 'Color 4#2' (group markers, not settable). Points are [x, y] frame fractions; Color 1..4 are #RRGGBB (defaults yellow, cyan, magenta, blue). Blending Mode is a 0-based 22-item dropdown; labels are NOT verified. The AE harvest of the same effect (1-based) is believed to start None, Normal, Add, Multiply, Screen, Overlay, Soft Light ... so 0 = None (gradient replaces the clip, Opacity fades it toward transparency/black) and 1 = Normal (gradient over the clip at Opacity). The demo uses 1 at Opacity 60 so the footage stays visible under the wash. The reliable route for a wash over footage is a colour matte with this effect on the track above, blended with the matte clip's own Opacity / Blend Mode.",
+   "recipe": {
+    "Point 1": [
+     [
+      0,
+      [
+       0.1,
+       0.1
+      ]
+     ],
+     [
+      6,
+      [
+       0.45,
+       0.3
+      ]
+     ]
+    ],
+    "Point 4": [
+     [
+      0,
+      [
+       0.9,
+       0.9
+      ]
+     ],
+     [
+      6,
+      [
+       0.6,
+       0.65
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/024.png",
+    "note": "A yellow/cyan/pink/blue four-corner gradient is blended at 60% over the shot, tinting each corner a different colour while the image stays readable.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Corner Pin",
+   "match": "AE.ADBE Corner Pin",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Moves the four corners of the clip independently, distorting it into any quadrilateral for perspective placement.",
+   "look": [
+    "perspective",
+    "tilted card",
+    "screen replacement",
+    "skewed",
+    "3D-ish plane"
+   ],
+   "use_for": [
+    "place a screenshot, tweet or news clip onto a TV / phone / billboard in a shot",
+    "fake 3D tilt of a document or newspaper cut-out in an explainer",
+    "perspective-angled picture-in-picture card in a news reel",
+    "trailer-style slanted panels"
+   ],
+   "avoid": [
+    "moving shots without tracking data: the pinned plane slides",
+    "extreme pins: texture smears and edges alias"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Upper Left",
+     "does": "top-left corner position (frame fractions)",
+     "typical": "[0, 0] default"
+    },
+    {
+     "name": "Upper Right",
+     "does": "top-right corner position",
+     "typical": "[1, 0] default"
+    },
+    {
+     "name": "Lower Left",
+     "does": "bottom-left corner position",
+     "typical": "[0, 1] default"
+    },
+    {
+     "name": "Lower Right",
+     "does": "bottom-right corner position",
+     "typical": "[1, 1] default"
+    }
+   ],
+   "demo_settings": {
+    "Upper Left": [
+     0.12,
+     0.08
+    ],
+    "Upper Right": [
+     0.92,
+     0.18
+    ],
+    "Lower Left": [
+     0.06,
+     0.94
+    ],
+    "Lower Right": [
+     0.86,
+     0.82
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Corner Pin",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Crop",
+    "Edge Feather"
+   ],
+   "scripting": "Points are [x, y] fractions of the frame (0..1, may go outside for overshoot). Uncovered area is transparent (black if nothing below). For screen replacement put the insert on V2 above the plate and set the four corners to the screen corners measured as fractions of 1920x1080.",
+   "recipe": {
+    "Upper Right": [
+     [
+      0,
+      [
+       1,
+       0
+      ]
+     ],
+     [
+      0.6,
+      [
+       0.9,
+       0.12
+      ]
+     ]
+    ],
+    "Lower Right": [
+     [
+      0,
+      [
+       1,
+       1
+      ]
+     ],
+     [
+      0.6,
+      [
+       0.9,
+       0.88
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/025.png",
+    "note": "The clip is distorted into a tilted quadrilateral on black with corners at the demo fractions (UL 0.12,0.08 to LR 0.86,0.82).",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Crop",
+   "match": "AE.ADBE AECrop",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Trims the clip from the left, top, right and bottom by a percentage, optionally scaling the result up (Zoom) and feathering the cropped edge.",
+   "look": [
+    "letterbox",
+    "cropped frame",
+    "split screen",
+    "soft-edged box",
+    "reveal wipe"
+   ],
+   "use_for": [
+    "cinematic letterbox bars (Top/Bottom about 12.8 for 2.39:1 on 16:9)",
+    "split-screen / side-by-side comparisons of two leaders or two statements",
+    "remove burned-in logos or black edges from archive footage",
+    "animated reveal wipe of a graphic or quote card"
+   ],
+   "avoid": [
+    "Zoom on low-res footage: it upscales and softens",
+    "letterboxing with Crop on a vertical reel export: bars eat precious frame",
+    "rounded-corner PiP cards: use Rounded Crop (feather + roundness) instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Left",
+     "does": "percent cropped from the left",
+     "typical": "0-50"
+    },
+    {
+     "name": "Top",
+     "does": "percent cropped from the top",
+     "typical": "12.8 for 2.39:1 letterbox"
+    },
+    {
+     "name": "Right",
+     "does": "percent cropped from the right",
+     "typical": "50 for a half-frame split"
+    },
+    {
+     "name": "Bottom",
+     "does": "percent cropped from the bottom",
+     "typical": "12.8 for 2.39:1 letterbox"
+    },
+    {
+     "name": "Zoom",
+     "does": "scale the remaining area to fill the frame",
+     "typical": "false"
+    },
+    {
+     "name": "Edge Feather",
+     "does": "soft edge on the crop border, pixels",
+     "typical": "0 for hard bars, 20-60 for soft boxes"
+    }
+   ],
+   "demo_settings": {
+    "Left": 12,
+    "Top": 10,
+    "Right": 12,
+    "Bottom": 10,
+    "Edge Feather": 40
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "rectangle layer mask (AE has no Crop effect)",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "Edge Feather",
+    "Corner Pin"
+   ],
+   "scripting": "Left/Top/Right/Bottom are 0..100 percent of the clip, measured from each edge. Cropped area is transparent, so lower tracks show through. Edge Feather is in pixels. For split screens crop each clip then move it with Motion Position.",
+   "recipe": {
+    "Right": [
+     [
+      0,
+      100
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/026.png",
+    "note": "The frame is cropped about 12% left/right and 10% top/bottom to black with a soft feathered edge, giving a soft-edged inset box.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Video Limiter",
+   "match": "AE.ADBE DigitalVideoLimiter",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Limits luma and chroma to a chosen level so the output stays broadcast-safe, optionally compressing the top range before clipping and flagging out-of-gamut pixels.",
+   "look": [
+    "broadcast safe",
+    "clipped highlights",
+    "softened whites",
+    "legal levels"
+   ],
+   "use_for": [
+    "final legal-levels pass on an adjustment layer before TV / news channel delivery",
+    "tame super-white highlights from phone and drone footage",
+    "avoid QC rejection on broadcast documentaries"
+   ],
+   "avoid": [
+    "placing it before Lumetri: grading after it can push levels out again; keep it last",
+    "stacking it with Broadcast Colors: double limiting, pick one (Video Limiter is the modern route)",
+    "low Clip Level on social-only content: needlessly dulls highlights"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Clip Level",
+     "does": "maximum output level (dropdown 0..3, default 1)",
+     "typical": "1 (default, normally the 100% legal setting)"
+    },
+    {
+     "name": "Compression before clipping",
+     "does": "soft-knee range below the clip level (dropdown 0..4)",
+     "typical": "1-2 for gentle roll-off"
+    },
+    {
+     "name": "Gamut Warning Color",
+     "does": "colour used to mark illegal pixels when the (unnamed, unaddressable) Gamut Warning checkbox is on; default is magenta #F00ADC",
+     "typical": "#F00ADC default, or any colour absent from the footage"
+    }
+   ],
+   "demo_settings": {
+    "Clip Level": 0,
+    "Compression before clipping": 4
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Video Limiter (AE has the same effect, ADBE DigitalVideoLimiter)",
+   "pairs_with": [
+    "Lumetri Color"
+   ],
+   "scripting": "Both dropdowns are 0-based and their labels are not verified: Compression before clipping is believed to be None/3%/5%/10%/20% (0 = None, default); Clip Level is a 4-step list of output levels with index 1 as default (believed the 100% legal level). The Gamut Warning checkbox is harvested with an empty name and cannot be addressed by name. In AE all four properties are non-animatable, so set static values only. Effect on normal footage is subtle; the demo uses the lowest Clip Level and the strongest compression so highlights visibly flatten. Apply to a top-track adjustment layer and keep it last in the chain.",
+   "recipe": {},
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/pr/027.png",
+    "note": "Looks identical to the reference; pixels show only highlights pulled down (max 255 to 244, 7% of pixels changed, mean diff 1.2) and the demo is already at the strongest options (Clip Level 0, Compression 4) while the gamut-warning checkbox has an empty name and cannot be set.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Directional Blur (Legacy)",
+   "match": "AE.ADBE Motion Blur",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Blurs the image along one direction to suggest fast motion. Superseded by the newer Directional Blur effect.",
+   "look": [
+    "motion streak",
+    "speed blur",
+    "whip",
+    "smear"
+   ],
+   "use_for": [
+    "maintaining older projects that already use it (same engine as AE's Directional Blur)",
+    "speed streak on a whip-pan cut or a sliding photo/title when the exact legacy look must match an old edit"
+   ],
+   "avoid": [
+    "new projects: use the GPU Directional Blur replacement",
+    "large Blur Length on faces: they become unrecognisable"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Direction",
+     "does": "blur angle in degrees (90 = horizontal)",
+     "typical": "90 for horizontal whips, 0 for vertical"
+    },
+    {
+     "name": "Blur Length",
+     "does": "length of the streak",
+     "typical": "20-80"
+    }
+   ],
+   "demo_settings": {
+    "Direction": 90,
+    "Blur Length": 40
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Directional Blur",
+   "pairs_with": [
+    "Transform",
+    "Offset"
+   ],
+   "scripting": "Apply the new GPU 'Directional Blur' by name instead; its properties are different (Angle, Amount, Chromatic Aberration, Edge Behavior), not Direction/Blur Length. If this legacy one is used: Direction is degrees (90 = horizontal streak, 0 = vertical), Blur Length 0..1000 (useful 0-100). Folder believed to be Obsolete in Premiere 2026, matching Gaussian Blur (Legacy).",
+   "recipe": {
+    "Blur Length": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      80
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/028.png",
+    "note": "Frame was rendered despite the obsolete status and shows a strong horizontal motion smear (Direction 90, length 40) that wipes out faces and stripes.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Drop Shadow",
+   "match": "AE.ADBE Drop Shadow",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Adds a coloured, offset, optionally soft shadow behind the clip's alpha edges. Only shows where the clip has transparency or is scaled down.",
+   "look": [
+    "shadow",
+    "depth",
+    "lifted card",
+    "separation",
+    "soft shadow"
+   ],
+   "use_for": [
+    "lift a scaled-down picture-in-picture or screenshot card off the background in explainers",
+    "separate a PNG cut-out of a leader or logo from busy B-roll",
+    "readability shadow under text/graphics clips in news reels"
+   ],
+   "avoid": [
+    "full-frame opaque footage: the shadow is completely hidden behind the clip",
+    "hard (Softness 0) black shadows with large Distance look dated"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Shadow Color",
+     "does": "shadow colour",
+     "typical": "#000000"
+    },
+    {
+     "name": "Opacity",
+     "does": "shadow opacity on a 0..255 scale (127.5 = 50%)",
+     "typical": "100-180"
+    },
+    {
+     "name": "Direction",
+     "does": "direction the shadow falls, degrees (135 = down-right)",
+     "typical": "135"
+    },
+    {
+     "name": "Distance",
+     "does": "offset in pixels",
+     "typical": "8-25"
+    },
+    {
+     "name": "Softness",
+     "does": "blur of the shadow, pixels",
+     "typical": "20-60"
+    },
+    {
+     "name": "Shadow Only",
+     "does": "output only the shadow",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Shadow Color": "#F5C400",
+    "Opacity": 230,
+    "Distance": 80,
+    "Softness": 60,
+    "Shadow Only": true
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Drop Shadow",
+   "pairs_with": [
+    "Rounded Crop",
+    "Crop",
+    "Transform",
+    "Corner Pin"
+   ],
+   "scripting": "Opacity is raw 0..255 (not percent; 127.5 = 50%). Visible only around transparent edges: scale the clip down (Motion Scale) or use alpha media first. The demo uses Shadow Only with a bright colour because on a full-frame clip the normal shadow cannot be seen; that output replaces the picture, so it is a diagnostic only, never a look. 'Long Shadow' is a different, newer effect (long flat-design shadow).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/029.png",
+    "note": "With Shadow Only on, the full-frame clip is replaced by its soft yellow shadow offset down-right, leaving a black band along the top and left edges, so colour, offset and softness all read.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Echo",
+   "match": "AE.ADBE Echo",
+   "category": "Time",
+   "status": "current",
+   "summary": "Composites copies of the clip from earlier (or later) frames on top of the current frame, creating motion trails and ghosting.",
+   "look": [
+    "motion trails",
+    "ghosting",
+    "dreamy",
+    "psychedelic",
+    "time smear",
+    "strobe echo"
+   ],
+   "use_for": [
+    "dream / flashback ghost trails in a documentary reconstruction",
+    "music-reel trails on dancing, hand gestures or crowd motion",
+    "unsettling ghosting on a trailer tension beat",
+    "time-passing ghost crowd on locked-off city footage"
+   ],
+   "avoid": [
+    "talking heads: double faces look like a mistake",
+    "Add operator with many echoes: the frame blows out to white"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Echo Time (seconds)",
+     "does": "time offset between echoes; negative = earlier frames (trails)",
+     "typical": "-0.033 to -0.2"
+    },
+    {
+     "name": "Number Of Echoes",
+     "does": "how many copies are combined",
+     "typical": "3-8"
+    },
+    {
+     "name": "Starting Intensity",
+     "does": "opacity of the first frame in the chain, 0..1",
+     "typical": "0.5-1"
+    },
+    {
+     "name": "Decay",
+     "does": "how fast each later echo fades (meaningful 0..1)",
+     "typical": "0.5-0.85"
+    },
+    {
+     "name": "Echo Operator",
+     "does": "how echoes combine (dropdown 0..6)",
+     "typical": "3 Screen or 6 Blend"
+    }
+   ],
+   "demo_settings": {
+    "Echo Time (seconds)": -0.15,
+    "Number Of Echoes": 5,
+    "Starting Intensity": 0.6,
+    "Decay": 0.75,
+    "Echo Operator": 3
+   },
+   "enum_labels": {
+    "Echo Operator": {
+     "0": "Add",
+     "1": "Maximum",
+     "2": "Minimum",
+     "3": "Screen",
+     "4": "Composite In Back",
+     "5": "Composite In Front",
+     "6": "Blend"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Echo",
+   "pairs_with": [
+    "Posterize Time",
+    "Lumetri Color",
+    "Strobe Light"
+   ],
+   "scripting": "Echo works on the clip's source frames: Motion/Transform animation and effects applied before it are not echoed, so nest the clip (or animated graphic) first. Only visible where there is motion (the demo uses a 0.15 s spacing because the test clip moves slowly). Echo Time is seconds (one frame = 0.04 at 25 fps). Decay harvested range 0..100 but values above 1 make no sense; keep 0..1. 'Echo Glow' is an unrelated new glow effect.",
+   "recipe": {
+    "Number Of Echoes": [
+     [
+      0,
+      1
+     ],
+     [
+      0.5,
+      6
+     ],
+     [
+      1.5,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/030.png",
+    "note": "Ghosted copies of the moving figures trail across the frame and the Screen operator brightens the whole image, a clear motion-trail look.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Edge Feather",
+   "match": "AE.ADBE Edge Feather",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Feathers all four edges of the clip into transparency, giving a soft rectangular vignette-like border.",
+   "look": [
+    "soft edges",
+    "vignette",
+    "dreamy border",
+    "faded frame"
+   ],
+   "use_for": [
+    "soften the edges of a picture-in-picture or archive photo over a background",
+    "dreamy faded border for flashback / memory sequences",
+    "blend stacked photo layers in a documentary collage"
+   ],
+   "avoid": [
+    "as a vignette on full-frame clips with nothing below: reads as a cheap black border; use Vignette or Lumetri's vignette",
+    "when rounded corners are wanted: use Rounded Crop instead (it also has Feather)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "feather width from each edge",
+     "typical": "10-40 for PiP, 60+ for heavy vignette"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 60
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Mask Feather on a rectangle mask",
+   "pairs_with": [
+    "Crop",
+    "Drop Shadow",
+    "Transform",
+    "Rounded Crop"
+   ],
+   "scripting": "Amount 0..100 (default 4). Feathered edges are transparent, so lower tracks show through; over nothing they fade to black.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/031.png",
+    "note": "All four edges fade into dark transparency in a soft rectangular border while the centre stays untouched.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Fast Blur",
+   "match": "AE.ADBE Fast Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Quick box-style blur of the clip, horizontally, vertically or both. Used by the built-in 'Fast Blur In/Out' presets.",
+   "look": [
+    "soft focus",
+    "blurred",
+    "defocused",
+    "background blur",
+    "frosted"
+   ],
+   "use_for": [
+    "blur a duplicate background layer behind a vertical clip in a 9:16 reel",
+    "blur-in / blur-out title and scene openings",
+    "soften a busy B-roll plate behind explainer text",
+    "obscure faces, number plates or sensitive documents (with a mask)"
+   ],
+   "avoid": [
+    "small blur values on footage: looks like a focus mistake",
+    "Repeat Edge Pixels off on full-frame: dark halo creeps in from the edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "blur amount",
+     "typical": "20-60 background, 100+ heavy"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "0 both, 1 horizontal, 2 vertical",
+     "typical": "0"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "keeps edges from fading to black",
+     "typical": "true"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 40,
+    "Blur Dimensions": 0,
+    "Repeat Edge Pixels": true
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "0": "Horizontal and Vertical",
+     "1": "Horizontal",
+     "2": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Fast Box Blur (AE; AE's Fast Blur (Legacy) is this same engine)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Crop",
+    "Mask",
+    "Transform"
+   ],
+   "scripting": "Blurriness range 0..30000, useful 0-200. Blur Dimensions is a 0-based dropdown (labels in enum_labels). Not marked Legacy in Premiere 2026. The new GPU 'Gaussian Blur' is a different effect with different property names (Amount, Angle, Thickness, Chromatic Aberration, Edge Behavior); for the old Blurriness-style Gaussian use 'Gaussian Blur (Legacy)'.",
+   "recipe": {
+    "Blurriness": [
+     [
+      0,
+      80
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/032.png",
+    "note": "The whole image is evenly defocused in both directions (faces and stripes unreadable) with clean, non-darkened edges.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

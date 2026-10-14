@@ -1,0 +1,1253 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Blobbylize",
+   "match": "CC Blobbylize",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Turns a channel of a blob layer (by default the layer itself, default channel Lightness) into soft, lit, liquid-metal or plastic-looking blobs with specular highlights. Cut Away removes low values so shapes melt into droplets.",
+   "look": [
+    "liquid metal",
+    "blobby",
+    "embossed",
+    "glossy",
+    "melting",
+    "chrome"
+   ],
+   "use_for": [
+    "liquid/melting logo or title reveals",
+    "chrome-blob stylised transitions in AI-explainer reels",
+    "organic morphing backgrounds behind text",
+    "abstract trailer interstitials"
+   ],
+   "avoid": [
+    "on a full-frame opaque photo with the Alpha property it only rounds the frame edges and re-lights the image, so it reads as a muddy emboss",
+    "high Softness on 4K layers is slow",
+    "left on the default Lightness channel over people it turns faces into glossy plastic blobs; never on serious news faces",
+    "Cut Away is a threshold on the softened channel: on bright footage (test_a Lightness barely dips below ~40%) Cut Away under ~50 removes nothing, so it only reads as a washed-out glossy soften; very high Softness (150+) averages the map toward mid-grey and flattens the relief. On footage use Cut Away ~55-65 with Softness 40-80, and keep Light Intensity ~100 or bright frames blow out"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blob Layer",
+     "does": "layer whose channel defines the blob shapes (defaults to the layer itself)",
+     "typical": "the text/logo or a fractal-noise precomp"
+    },
+    {
+     "name": "Property",
+     "does": "which channel of the blob layer drives the blobs (dropdown)",
+     "typical": "4 (Alpha) for text/logos; 6 (Lightness, default) or 5 (Luminance) for footage"
+    },
+    {
+     "name": "Softness",
+     "does": "how rounded and merged the blobs are",
+     "typical": "20-80"
+    },
+    {
+     "name": "Cut Away",
+     "does": "threshold that removes low values, splitting shapes into droplets",
+     "typical": "10-50 on alpha text/logos; 55-65 on footage Lightness"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "strength of the effect light",
+     "typical": "100-200"
+    },
+    {
+     "name": "Specular",
+     "does": "strength of glossy highlights",
+     "typical": "60-100"
+    },
+    {
+     "name": "Roughness",
+     "does": "size of highlights; low = sharp chrome",
+     "typical": "0.01-0.08"
+    },
+    {
+     "name": "Metal",
+     "does": "how much highlights take the layer colour (metallic) versus white (plastic)",
+     "typical": "0 plastic, 100 metal"
+    }
+   ],
+   "demo_settings": {
+    "Property": 6,
+    "Softness": 50,
+    "Cut Away": 60,
+    "Light Intensity": 100,
+    "Ambient": 50,
+    "Diffuse": 50,
+    "Specular": 90,
+    "Roughness": 0.04
+   },
+   "enum_labels": {
+    "Using": {
+     "1": "Effect Light",
+     "2": "AE Lights"
+    },
+    "Light Type": {
+     "1": "Distant Light",
+     "2": "Point Light"
+    },
+    "Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise",
+    "CC Glass",
+    "Fast Box Blur",
+    "Simple Choker",
+    "Glow"
+   ],
+   "scripting": "Blob Layer is a layer-reference param: cannot be set from a spec, defaults to the layer itself (set it by hand or via ExtendScript layer index). Property: 1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance, 6 Lightness (default) (labels read from the CycoreFX HD 1.9.1 plugin binary). Using=2 (AE Lights) needs a light layer in the comp. Light Position is in layer pixels.",
+   "recipe": {
+    "Softness": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      80
+     ]
+    ],
+    "Cut Away": [
+     [
+      0,
+      60
+     ],
+     [
+      1.0,
+      10
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/063.png",
+    "note": "Now reads unmistakably as Blobbylize: Cut Away 60 drops the dark clothing and foreground blocks out to black and the bright areas (stripes, a small round motif, block tops, backdrop, faces) melt into lit chrome blobs and droplets with sharp speculars, where the old render was only a brightened soften with no blobs or holes.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: agree weak (063 is a brightened soften, 45% of pixels >235 vs 5% in ref, no holes), but the 200/40 rewrite is still a no-op: source Lightness 5th pct is 0.37 and after Softness ~200 nothing is below 0.46, so Cut Away 40 cuts nothing and the extra Softness flattens the relief. Set Softness 50, Cut Away 60 (~35% of frame, the dark clothing/foreground blocks, drops out leaving lit blobs), Light Intensity 160->100, Ambient/Diffuse 60->50 to stop the blow-out; rewrote the avoid note and Cut Away typical to match"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Flo Motion",
+   "match": "CC Flo Motion",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Pulls (positive Amount) or pushes (negative Amount) the image toward two knot points, creating liquid pinch and stretch distortion that can wrap around with tiled edges.",
+   "look": [
+    "liquid warp",
+    "pinch",
+    "vortex pull",
+    "psychedelic",
+    "stretch"
+   ],
+   "use_for": [
+    "suck-into-a-point transition between shots",
+    "dreamy/trippy warp on a beat hit in reels",
+    "fake black-hole or portal pull in trailer titles",
+    "comic distortion of a meme still"
+   ],
+   "avoid": [
+    "large Amounts smear faces into mush, keep it brief on news footage",
+    "Tile Edges on visibly repeats the frame at the borders",
+    "even Amount 300 at Falloff 1 twists the whole 1080p frame into a tiled kaleidoscope spiral; use roughly 50-150 for a readable local pull"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Knot 1",
+     "does": "centre of the first pull/push point (comp pixels)",
+     "typical": "on the subject or frame centre"
+    },
+    {
+     "name": "Amount 1",
+     "does": "pull strength at knot 1 (negative pushes out)",
+     "typical": "-400 to 400"
+    },
+    {
+     "name": "Knot 2",
+     "does": "centre of the second point",
+     "typical": "opposite side of frame"
+    },
+    {
+     "name": "Amount 2",
+     "does": "pull strength at knot 2",
+     "typical": "0 or opposite sign to Amount 1"
+    },
+    {
+     "name": "Falloff",
+     "does": "how quickly the distortion fades away from the knots",
+     "typical": "0.5-3"
+    },
+    {
+     "name": "Tile Edges",
+     "does": "checkbox: wrap pixels from the opposite edge instead of leaving gaps",
+     "typical": "1 for full-frame, 0 for elements"
+    },
+    {
+     "name": "Antialiasing",
+     "does": "quality of the resampling",
+     "typical": "2-3"
+    }
+   ],
+   "demo_settings": {
+    "Knot 1": [
+     700,
+     450
+    ],
+    "Amount 1": 300,
+    "Knot 2": [
+     1300,
+     650
+    ],
+    "Amount 2": -250,
+    "Falloff": 1
+   },
+   "enum_labels": {
+    "Antialiasing": {
+     "1": "Low",
+     "2": "Medium",
+     "3": "High"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Directional Blur",
+    "CC Radial Fast Blur",
+    "Twirl",
+    "Optics Compensation"
+   ],
+   "scripting": "Knot positions are layer-space pixels; harvested defaults sit at the 1/4 and 3/4 points of the layer. Finer Controls and Tile Edges are checkboxes (0/1). Antialiasing: 1 Low, 2 Medium, 3 High (labels read from the CycoreFX HD 1.9.1 plugin binary). Which sign pulls vs pushes is not verified; flip the sign if the warp goes the wrong way.",
+   "recipe": {
+    "Amount 1": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      500
+     ],
+     [
+      1.0,
+      1200
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/064.png",
+    "note": "Two strong vortex spirals form at both knots, pulling shrunken tiled copies of the frame (stripes, figures) into each centre; reads as a psychedelic liquid pull.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Griddler",
+   "match": "CC Griddler",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Cuts the image into a grid of square tiles and scales/rotates each tile around its own centre, giving a broken-screen / shrunk-tiles mosaic; at 100/100 scale and 0 rotation the image looks untouched.",
+   "look": [
+    "grid",
+    "tiles",
+    "shattered screen",
+    "mosaic",
+    "digital break-up"
+   ],
+   "use_for": [
+    "glitchy tile break-up on a beat or transition in reels",
+    "video-wall / broken-monitor look behind a headline",
+    "stylised reveal where tiles resolve into the full image"
+   ],
+   "avoid": [
+    "tiny Tile Size on talking heads makes faces unreadable",
+    "static use looks like a cheap filter; animate it"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Tile Size",
+     "does": "size of each grid tile (percent of layer)",
+     "typical": "5-25"
+    },
+    {
+     "name": "Horizontal Scale",
+     "does": "horizontal scale of the image inside each tile",
+     "typical": "50-150"
+    },
+    {
+     "name": "Vertical Scale",
+     "does": "vertical scale of the image inside each tile",
+     "typical": "50-150"
+    },
+    {
+     "name": "Rotation",
+     "does": "rotation of the image inside each tile (degrees)",
+     "typical": "0-30"
+    },
+    {
+     "name": "Cut Tiles",
+     "does": "checkbox: crop content at tile edges for a clean grid",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Tile Size": 12,
+    "Horizontal Scale": 75,
+    "Vertical Scale": 75,
+    "Rotation": 12,
+    "Cut Tiles": 1
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "CC Tiler",
+    "Mosaic",
+    "Venetian Blinds",
+    "Glow"
+   ],
+   "scripting": "Tile Size is roughly percent of layer height (render check: 12 gave ~130 px tile pitch on 1920x1080). Cut Tiles is a checkbox (0/1). Rotation has no harvested limits. To resolve into the clean image, end on Horizontal/Vertical Scale 100 and Rotation 0 (Tile Size alone never restores it).",
+   "recipe": {
+    "Horizontal Scale": [
+     [
+      0,
+      40
+     ],
+     [
+      0.6,
+      100
+     ]
+    ],
+    "Vertical Scale": [
+     [
+      0,
+      40
+     ],
+     [
+      0.6,
+      100
+     ]
+    ],
+    "Rotation": [
+     [
+      0,
+      30
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/065.png",
+    "note": "Frame is broken into a grid of shrunken, ~12 degree rotated square tiles separated by black gaps, a clear broken-screen mosaic.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Lens",
+   "match": "CC Lens",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Bends the image through a lens that follows the layer's aspect (an oval on 16:9): positive Convergence bulges like a fisheye/magnifying glass, negative pinches; the area outside the lens drops out.",
+   "look": [
+    "fisheye",
+    "bulge",
+    "magnifying glass",
+    "sphere",
+    "tiny planet"
+   ],
+   "use_for": [
+    "magnifying-glass zoom on a document detail in explainers",
+    "fisheye punch-in on a meme or reaction shot",
+    "crystal-ball / globe insert for titles",
+    "bulge transition on a beat"
+   ],
+   "avoid": [
+    "outside the lens circle goes transparent, so a small Size leaves a black frame unless something is underneath",
+    "faces in the bulge look comic; avoid on serious news"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Center",
+     "does": "centre of the lens (comp pixels)",
+     "typical": "on the detail to magnify"
+    },
+    {
+     "name": "Size",
+     "does": "lens radius relative to the layer",
+     "typical": "40-100"
+    },
+    {
+     "name": "Convergence",
+     "does": "bulge (positive) or pinch (negative) strength",
+     "typical": "30-100 bulge, -50 to -150 pinch"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     540
+    ],
+    "Size": 80,
+    "Convergence": 60
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Spherize",
+   "pairs_with": [
+    "CC Sphere",
+    "Optics Compensation",
+    "Drop Shadow",
+    "Stroke"
+   ],
+   "scripting": "Center is in layer pixels. Size is a percentage-like value (0-500); at default 50 much of the frame is outside the lens. Put it on a duplicate/precomp above the clean plate if the outside area must stay visible.",
+   "recipe": {
+    "Convergence": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      80
+     ]
+    ],
+    "Size": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/066.png",
+    "note": "Strong fisheye bulge inside a frame-filling oval lens, with the corners outside the lens transparent (black).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Page Turn",
+   "match": "CC Page Turn",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Curls the layer like a turning book page from a corner, with a lit fold, a back side (paper colour or another layer) and transparency where the page has lifted away.",
+   "look": [
+    "page curl",
+    "book",
+    "paper",
+    "storybook",
+    "newspaper flip"
+   ],
+   "use_for": [
+    "page-flip transition between newspaper clippings or archive documents",
+    "storybook chapter turns in documentaries",
+    "flip from one headline card to the next in news explainers"
+   ],
+   "avoid": [
+    "dated wedding-video feel if overused",
+    "flat lighting on the fold looks fake; keep Fold Radius moderate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Controls",
+     "does": "which corner the page lifts from, or Classic UI (dropdown)",
+     "typical": "6 Bottom Right Corner (default); 3-5 other corners; 1 Classic UI; never 2 (separator)"
+    },
+    {
+     "name": "Fold Position",
+     "does": "in corner modes, where the lifted corner is dragged to; animate it across the frame to turn the page",
+     "typical": "from a corner to beyond the opposite corner"
+    },
+    {
+     "name": "Fold Direction",
+     "does": "fold angle in degrees; drives the fold in Classic UI (corner modes are believed to derive it from the dragged corner)",
+     "typical": "-30 to -70"
+    },
+    {
+     "name": "Fold Radius",
+     "does": "tightness of the curl",
+     "typical": "50-200"
+    },
+    {
+     "name": "Render",
+     "does": "which sides render (dropdown)",
+     "typical": "1 = both sides"
+    },
+    {
+     "name": "Back Opacity",
+     "does": "opacity of the Back Page layer on the back of the curl; lower lets Paper Color show through",
+     "typical": "0-30 for a plain paper back, 85-100 to show the back layer"
+    },
+    {
+     "name": "Paper Color",
+     "does": "colour of the paper on the back of the curl (shows where Back Opacity is below 100)",
+     "typical": "#E8E4D8"
+    }
+   ],
+   "demo_settings": {
+    "Fold Position": [
+     1350,
+     700
+    ],
+    "Fold Radius": 120,
+    "Back Opacity": 90,
+    "Paper Color": "#E8E4D8"
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Page Turn / Page Peel (Premiere transitions)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Radial Shadow",
+    "Bevel Alpha"
+   ],
+   "scripting": "Back Page is a layer-reference param (defaults to the layer itself, seen mirrored on the back); cannot be set from a spec. Controls: 1 Classic UI, 2 separator (invalid), 3 Top Left, 4 Top Right, 5 Bottom Left, 6 Bottom Right Corner (default). Render: 1 Front & Back Page, 2 Back Page, 3 Front Page (labels read from the CycoreFX HD 1.9.1 plugin binary). Fold Position has no clamp, so off-frame values like [-600, -400] finish the turn from the bottom-right corner. Needs a layer underneath to show the revealed area.",
+   "recipe": {
+    "Fold Position": [
+     [
+      0,
+      [
+       1920,
+       1080
+      ]
+     ],
+     [
+      1.2,
+      [
+       -600,
+       -400
+      ]
+     ]
+    ]
+   },
+   "enum_labels": {
+    "Controls": {
+     "1": "Classic UI",
+     "2": "(separator)",
+     "3": "Top Left Corner",
+     "4": "Top Right Corner",
+     "5": "Bottom Left Corner",
+     "6": "Bottom Right Corner"
+    },
+    "Render": {
+     "1": "Front & Back Page",
+     "2": "Back Page",
+     "3": "Front Page"
+    }
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/067.png",
+    "note": "Bottom-right corner curls up like a page, showing the mirrored layer on the back of the fold and black where the page lifted away.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Power Pin",
+   "match": "CC Power Pin",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Corner-pins the layer by its four corners with true perspective correction and optional edge expansion, so flat footage or graphics sit on a screen, sign or wall in the shot.",
+   "look": [
+    "corner pin",
+    "perspective",
+    "screen replacement",
+    "billboard"
+   ],
+   "use_for": [
+    "putting a clip or headline onto a TV, phone or laptop screen",
+    "placing a logo/poster on a wall or billboard in a press shot",
+    "3D-ish tilted cards for explainer graphics",
+    "faux-perspective floor or wall graphics"
+   ],
+   "avoid": [
+    "without tracking data the pinned layer floats on handheld footage",
+    "Perspective off (0) maps the texture without perspective, so a tilted screen insert looks bent across its diagonal"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Top Left",
+     "does": "top-left corner position (layer pixels)",
+     "typical": "tracked corner"
+    },
+    {
+     "name": "Top Right",
+     "does": "top-right corner position",
+     "typical": "tracked corner"
+    },
+    {
+     "name": "Bottom Left",
+     "does": "bottom-left corner position",
+     "typical": "tracked corner"
+    },
+    {
+     "name": "Bottom Right",
+     "does": "bottom-right corner position",
+     "typical": "tracked corner"
+    },
+    {
+     "name": "Perspective",
+     "does": "checkbox: perspective-correct texture mapping",
+     "typical": "1"
+    },
+    {
+     "name": "Unstretch",
+     "does": "checkbox: compensates texture stretching when the pinned shape differs strongly from the source (exact behaviour unverified)",
+     "typical": "0 or 1 to taste"
+    },
+    {
+     "name": "Top",
+     "does": "expands the pinned area beyond the top edge (percent); Left/Right/Bottom work the same",
+     "typical": "0-20 to hide edge gaps"
+    }
+   ],
+   "demo_settings": {
+    "Top Left": [
+     240,
+     140
+    ],
+    "Top Right": [
+     1650,
+     60
+    ],
+    "Bottom Left": [
+     300,
+     980
+    ],
+    "Bottom Right": [
+     1700,
+     1040
+    ],
+    "Perspective": 1
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Corner Pin",
+   "pairs_with": [
+    "Mocha AE",
+    "Track Motion / tracker",
+    "Drop Shadow",
+    "Fast Box Blur"
+   ],
+   "scripting": "Corners are layer-space pixels; for a layer smaller than the comp, convert comp points to layer space first. Expansion props sit under the Expansion (%) header and are addressed by their harvested bare names Top/Left/Right/Bottom. Perspective and Unstretch are checkboxes (0/1). Mocha/tracker data can be pasted into the four corners.",
+   "recipe": {
+    "Top Right": [
+     [
+      0,
+      [
+       1920,
+       0
+      ]
+     ],
+     [
+      0.6,
+      [
+       1650,
+       60
+      ]
+     ]
+    ],
+    "Bottom Right": [
+     [
+      0,
+      [
+       1920,
+       1080
+      ]
+     ],
+     [
+      0.6,
+      [
+       1700,
+       1040
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/068.png",
+    "note": "Whole frame is corner-pinned into a tilted perspective quad with black around it, exactly as the four corner values describe.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Ripple Pulse",
+   "match": "CC Ripple Pulse",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Sends circular ripple rings out from a centre point; the ring profile is the history of Pulse Level over Time Span, so nothing appears unless Pulse Level is keyframed or driven by audio.",
+   "look": [
+    "ripple",
+    "shockwave",
+    "water drop",
+    "pulse",
+    "audio-reactive"
+   ],
+   "use_for": [
+    "beat-synced ripple pulses on a reel (Pulse Level driven by audio amplitude)",
+    "shockwave on a bass hit or title slam in trailers",
+    "water-drop transition into a new shot"
+   ],
+   "avoid": [
+    "a constant Pulse Level renders no ripple at all (the plugin's own help: Pulse Level must be animated)",
+    "huge Amplitude tears faces and text apart"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Center",
+     "does": "origin of the ripples (comp pixels)",
+     "typical": "frame centre or impact point"
+    },
+    {
+     "name": "Pulse Level (Animate)",
+     "does": "the driving value; ripples are emitted as it changes",
+     "typical": "keyframe 0 -> 500-1000 -> 0, or link to audio"
+    },
+    {
+     "name": "Time Span (sec)",
+     "does": "how long each pulse travels/lives",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Amplitude",
+     "does": "displacement strength of the ripples",
+     "typical": "100-400"
+    },
+    {
+     "name": "Render Bump Map (RGBA)",
+     "does": "checkbox: output the ripple height map instead of distorting",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Convert Audio to Keyframes",
+    "CC Radial Blur",
+    "Glow",
+    "Shake / Wiggle expression"
+   ],
+   "scripting": "Status needs_input: static values are a no-op, so it has no static demo. Keyframe Pulse Level (see recipe) with Amplitude 200-400 and Time Span 1-2 s, or expression-link Pulse Level to an Audio Amplitude slider for beat sync. Render Bump Map is a checkbox (0/1). Ring strength scaling vs Amplitude is not verified; start low.",
+   "recipe": {
+    "Pulse Level (Animate)": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      800
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Slant",
+   "match": "CC Slant",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Skews (shears) the layer sideways like italic type, optionally stretching it, setting its height and floor line, and filling it with a flat colour.",
+   "look": [
+    "skew",
+    "italic",
+    "shear",
+    "speed lean",
+    "dynamic"
+   ],
+   "use_for": [
+    "dynamic italic slant on title cards and lower thirds",
+    "speed-lean whoosh on text entering a reel",
+    "slanted colour bars/shapes for news graphics",
+    "flat colour silhouette shadows with Set Color"
+   ],
+   "avoid": [
+    "slanting live-action footage looks cheap and reveals edges",
+    "large Slant values push content out of frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Slant",
+     "does": "amount of horizontal shear",
+     "typical": "10-50"
+    },
+    {
+     "name": "Stretching",
+     "does": "checkbox: stretch the layer as it slants",
+     "typical": "1"
+    },
+    {
+     "name": "Height",
+     "does": "vertical scale of the slanted result (percent)",
+     "typical": "60-100"
+    },
+    {
+     "name": "Floor",
+     "does": "baseline point the slant pivots on (comp pixels)",
+     "typical": "bottom centre of the element"
+    },
+    {
+     "name": "Set Color",
+     "does": "checkbox: fill the layer with Color",
+     "typical": "0, or 1 for a shadow"
+    },
+    {
+     "name": "Color",
+     "does": "fill colour when Set Color is on",
+     "typical": "#000000"
+    }
+   ],
+   "demo_settings": {
+    "Slant": 40,
+    "Stretching": 1,
+    "Height": 90,
+    "Floor": [
+     960,
+     1080
+    ]
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform (Skew)",
+   "pairs_with": [
+    "Directional Blur",
+    "Drop Shadow",
+    "Transform"
+   ],
+   "scripting": "Floor is in layer pixels. Stretching and Set Color are checkboxes (0/1). Slant units are an internal amount, not degrees.",
+   "recipe": {
+    "Slant": [
+     [
+      0,
+      60
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/069.png",
+    "note": "Layer is sheared into a right-leaning parallelogram, slightly reduced in height, with black wedges at the left and top.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Smear",
+   "match": "CC Smear",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Drags the pixels around a From point toward a To point, like smudging wet paint or a liquify push.",
+   "look": [
+    "smudge",
+    "liquify",
+    "stretch",
+    "cartoon distortion",
+    "drag"
+   ],
+   "use_for": [
+    "comic face/feature stretch in satire reels",
+    "smudge-wipe transition dragging the frame off",
+    "liquid pull on a logo for a reveal"
+   ],
+   "avoid": [
+    "using it on politicians' faces in news (not satire) reads as manipulation",
+    "big Radius with a long reach warps the whole frame into mush"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "From",
+     "does": "point where the smear starts (comp pixels)",
+     "typical": "on the feature to drag"
+    },
+    {
+     "name": "To",
+     "does": "point the pixels are pulled to",
+     "typical": "200-500 px from From"
+    },
+    {
+     "name": "Reach",
+     "does": "how far along the From-To path the smear carries (percent)",
+     "typical": "50-150"
+    },
+    {
+     "name": "Radius",
+     "does": "size of the smeared area",
+     "typical": "100-400"
+    },
+    {
+     "name": "Tip Type",
+     "does": "shape profile of the smear tip (dropdown)",
+     "typical": "1 Classic (default); try 2 Round or 3 Bell for softer ends"
+    }
+   ],
+   "demo_settings": {
+    "From": [
+     960,
+     540
+    ],
+    "To": [
+     1350,
+     420
+    ],
+    "Reach": 100,
+    "Radius": 260
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "CC Flo Motion",
+    "Liquify",
+    "Directional Blur"
+   ],
+   "scripting": "From/To are layer pixels. Tip Type: 1 Classic, 2 Round, 3 Bell, 4 Wizard (labels read from the CycoreFX HD 1.9.1 plugin binary). Stack several CC Smear instances for multiple strokes.",
+   "recipe": {
+    "To": [
+     [
+      0,
+      [
+       960,
+       540
+      ]
+     ],
+     [
+      0.5,
+      [
+       1400,
+       450
+      ]
+     ]
+    ]
+   },
+   "enum_labels": {
+    "Tip Type": {
+     "1": "Classic",
+     "2": "Round",
+     "3": "Bell",
+     "4": "Wizard"
+    }
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/070.png",
+    "note": "Pixels around frame centre are dragged up-right into a smudged swoosh that stretches the stripes and the nearest face like wet paint.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Split",
+   "match": "CC Split",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Tears the image open along the line between Point A and Point B, pushing the two sides apart into a lens-shaped transparent gap.",
+   "look": [
+    "split",
+    "tear",
+    "crack open",
+    "reveal"
+   ],
+   "use_for": [
+    "crack-open reveal of the next shot or a headline underneath",
+    "transition where the frame splits open on a hit",
+    "'split' visual metaphor for party splits or divided opinions"
+   ],
+   "avoid": [
+    "the gap is transparent, so it shows black unless a layer sits below"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Point A",
+     "does": "one end of the split line (comp pixels)",
+     "typical": "left edge or a quarter in"
+    },
+    {
+     "name": "Point B",
+     "does": "other end of the split line",
+     "typical": "right edge or three quarters in"
+    },
+    {
+     "name": "Split",
+     "does": "how wide the gap opens",
+     "typical": "0 -> 150-250 animated"
+    }
+   ],
+   "demo_settings": {
+    "Point A": [
+     300,
+     540
+    ],
+    "Point B": [
+     1620,
+     540
+    ],
+    "Split": 150
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Split (Premiere transition)",
+   "pairs_with": [
+    "CC Split 2",
+    "Drop Shadow",
+    "Bevel Alpha"
+   ],
+   "scripting": "Points are layer pixels. Split tops out at 250; if the gap does not clear the frame, also move Point A/B apart or scale the layer for a full exit.",
+   "recipe": {
+    "Split": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      250
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/071.png",
+    "note": "Frame is torn open along the horizontal A-B line into a large lens-shaped black gap pushing the top and bottom apart.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Split 2",
+   "match": "CC Split 2",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Like CC Split, but the two sides of the tear open by separate amounts, so the gap can be lopsided.",
+   "look": [
+    "split",
+    "tear",
+    "asymmetric",
+    "crack open",
+    "reveal"
+   ],
+   "use_for": [
+    "uneven tear-open reveal of the next shot",
+    "glitchy split hits on beats with different amounts per side",
+    "torn-poster style title reveals"
+   ],
+   "avoid": [
+    "transparent gap shows black without a layer underneath"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Point A",
+     "does": "one end of the split line (comp pixels)",
+     "typical": "left side"
+    },
+    {
+     "name": "Point B",
+     "does": "other end of the split line",
+     "typical": "right side"
+    },
+    {
+     "name": "Split 1",
+     "does": "opening on the first side of the line",
+     "typical": "0-250"
+    },
+    {
+     "name": "Split 2",
+     "does": "opening on the second side of the line",
+     "typical": "0-250, different from Split 1"
+    }
+   ],
+   "demo_settings": {
+    "Point A": [
+     300,
+     540
+    ],
+    "Point B": [
+     1620,
+     540
+    ],
+    "Split 1": 160,
+    "Split 2": 50
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Split (Premiere transition)",
+   "pairs_with": [
+    "CC Split",
+    "Drop Shadow"
+   ],
+   "scripting": "Points are layer pixels. Verified render with A left of B: Split 1 opened the lower side (right-hand side walking from A to B) and Split 2 the upper side; swap the points to flip.",
+   "recipe": {
+    "Split 1": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      220
+     ]
+    ],
+    "Split 2": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/072.png",
+    "note": "Lopsided lens-shaped black tear: the lower side bows far open (Split 1 160) while the upper side opens much less (Split 2 50).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Tiler",
+   "match": "CC Tiler",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Shrinks the image and repeats it in a grid that fills the frame, like a wall of identical screens; can blend back with the original.",
+   "look": [
+    "grid",
+    "video wall",
+    "repeat",
+    "tiled",
+    "multi-screen"
+   ],
+   "use_for": [
+    "video-wall look for news montages or 'everyone is talking about it' beats",
+    "beat-hit tile-out in reels",
+    "patterned background from a logo or photo",
+    "zoom-out reveal from one frame to many"
+   ],
+   "avoid": [
+    "tiny tiles of live action become unreadable noise",
+    "identical tiles look cheap for long holds; keep it short"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Scale",
+     "does": "size of each tile (1 = 100 percent, one tile)",
+     "typical": "0.2-0.5 (5x5 to 2x2)"
+    },
+    {
+     "name": "Center",
+     "does": "anchor of the tile grid (comp pixels)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mix back toward the untiled image (0-1)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Scale": 0.33,
+    "Center": [
+     960,
+     540
+    ],
+    "Blend w. Original": 0
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Replicate",
+   "pairs_with": [
+    "Motion Tile",
+    "CC Griddler",
+    "Transform"
+   ],
+   "scripting": "Scale and Blend are raw 0-1 fractions in scripts (the UI shows percent). Center is layer pixels.",
+   "recipe": {
+    "Scale": [
+     [
+      0,
+      1
+     ],
+     [
+      0.4,
+      0.33
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/073.png",
+    "note": "Frame shrinks to a third and repeats as a clean 3x3 video-wall grid of identical copies.",
+    "rerender": false
+   }
+  }
+ ]
+}

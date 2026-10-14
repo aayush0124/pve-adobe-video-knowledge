@@ -1,0 +1,87 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "av_sync",
+   "app": "both",
+   "name": "Scripted sync fallback: offset by audio cross-correlation",
+   "summary": "When Premiere's Merge Clips / Synchronize cannot be scripted, find each clip's offset outside the app: decode both audio tracks to mono PCM with ffmpeg, cross-correlate them (numpy FFT), take the lag of the peak as the offset, then place the second clip at that offset in the spec or timeline. Works for dual-system sound and for lining up multicam angles to a reference.",
+   "use_for": [
+    "lining up a separate recorder track with camera audio",
+    "syncing several camera angles before a multicam edit",
+    "batch sync of interview days by script"
+   ],
+   "how": "1 Decode: ffmpeg -v error -i cam.mp4 -vn -ac 1 -ar 8000 -f s16le cam.raw (same for the recorder); 8 kHz is plenty for a coarse lag (working default). 2 Correlate (numpy): a, b = arrays (float, mean removed); n = next power of 2 >= len(a) + len(b); c = irfft(rfft(a, n) * conj(rfft(b, n)), n); lag = argmax(c), wrapped to negative when > n / 2; offset_s = lag / 8000 (positive = the recorder event happens later in cam: place recorder start = cam start + offset). 3 Confidence: peak / second-highest peak away from it > about 3 (working default); otherwise use a clap or timecode. 4 Refine: repeat at 48 kHz on a 10 s window around the coarse lag for sub-frame accuracy. 5 Drift: measure the offset near the start and near the end; a change of more than one frame means the clocks drift (long recordings): re-sync in segments or time-stretch the recorder track. 6 Place: in a bridge spec, the recorder becomes an audio entry with start = clip start + offset (or in = -offset when it started first) and the camera clip's own audio is muted later in the edit.",
+   "scriptable": "yes",
+   "script_api": "Pure Python + ffmpeg + numpy (numpy is already used by sfx_synth.py); placement through the bridge spec (audio[].start / in) or Premiere ExtendScript insertClip / overwriteClip at the computed time.",
+   "limits": "Cross-correlation needs the same sound in both tracks (a lav and a camera mic both hearing the speaker); music beds or wind can produce false peaks: check the confidence ratio. Audio placed by the bridge snaps to the frame grid (1/30 s = 33 ms), so the residual offset can be up to half a frame: fine for lip sync, not for phase-coherent mixing of two mics.",
+   "status": "current",
+   "sources": [
+    "https://numpy.org/doc/stable/reference/routines.fft.html",
+    "https://ffmpeg.org/ffmpeg.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "av_sync",
+   "app": "PR",
+   "name": "Merge Clips (dual-system sound)",
+   "summary": "Joins a camera clip and separately recorded audio into one merged clip in the Project panel, aligned by In points, Out points, Timecode or numbered Clip Markers, optionally dropping the camera's own audio.",
+   "use_for": [
+    "interviews recorded on a separate recorder",
+    "camera scratch audio replaced by a lav or boom track"
+   ],
+   "how": "Select the video clip and the audio clip(s) in the Project panel > right-click > Merge Clips > Synchronize Point: In Point, Out Point, Timecode or Clip Marker (only when every clip has numbered markers); tick 'Remove Audio from AV Clip' to drop the camera audio. Adobe's Merge Clips page lists no waveform option: to sync by sound, put both on a timeline and use Clip > Synchronize with an audio track, the multicam sequence's Audio option, or the scripted cross-correlation fallback.",
+   "scriptable": "no",
+   "script_api": "No Merge Clips call was found in the ExtendScript DOM (UXP not checked); scripted route = 'Scripted sync fallback: offset by audio cross-correlation' + placing the recorder audio at that offset.",
+   "limits": "Clap or timecode sync needs a mark both devices recorded. Older guides mention an Audio option in Merge Clips; the current Adobe page does not.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/basic-audio-editing/merge-clips-in-the-project-panel.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/basic-audio-editing/use-the-timecode-from-an-audio-primary-clip-to-create-a-merged-clip.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "av_sync",
+   "app": "PR",
+   "name": "Synchronize clips in the timeline (Clip > Synchronize)",
+   "summary": "Aligns selected clips on different tracks to each other by Clip Start, Clip End, Timecode, Clip Marker or an audio track chosen as the reference: the timeline way to line up a second camera or a recorder by waveform.",
+   "use_for": [
+    "lining up a second angle under the main shot",
+    "syncing a recorder track already in the timeline"
+   ],
+   "how": "Put the clips on separate tracks roughly in place, select them, Clip > Synchronize, choose the sync point (Clip Start, Clip End, Timecode, Clip Marker) or the 'Audio track channel' option to name the audio track used as the reference, OK; then mute or delete the camera audio you do not use.",
+   "scriptable": "no",
+   "script_api": "No ExtendScript call; scripted equivalent: compute the offset (cross-correlation card) and move the clip.",
+   "limits": "Sync by audio needs the same sound on both tracks; long recordings with clock drift need re-syncing in parts.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/basic-audio-editing/synchronize-clips-in-the-timeline-panel.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "av_sync",
+   "app": "PR",
+   "name": "Multi-camera source sequence: syncing the angles",
+   "summary": "Premiere syncs the angles while building a multi-camera source sequence: by In Points, Out Points, Timecode (with sound and aux timecode variants), Clip Marker, or Audio (a chosen audio track).",
+   "use_for": [
+    "concerts, panels and interviews shot on two or more cameras",
+    "video podcasts with several angles"
+   ],
+   "how": "Select the angle clips (and the master audio) in the Project panel > right-click > Create Multi-Camera Source Sequence > Synchronize Point: In Points, Out Points, Timecode, Clip Marker or Audio; pick the audio settings and camera names; then cut in a multicam-enabled sequence (PVE 'Multi-camera editing').",
+   "scriptable": "no",
+   "script_api": "No ExtendScript call creates a multicam source sequence (PVE Multi-camera card); scripted fallback: sync the angles by cross-correlation and stack them on tracks (one angle per track, cut by trimming).",
+   "limits": "Audio sync fails when an angle has no usable audio: sync it by timecode or a visible clap.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/set-up-multi-camera-sequences-for-editing/create-a-multi-camera-source-sequence.html"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

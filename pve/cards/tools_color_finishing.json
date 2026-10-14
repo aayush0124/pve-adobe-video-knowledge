@@ -1,0 +1,1163 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Lumetri Color (Premiere): effect, panel and scripting map",
+   "summary": "Premiere's all-in-one grading effect (Effects > Video Effects > Color Correction > Lumetri Color, match 'AE.ADBE Lumetri', 130 harvested parameters) with six sections: Basic Correction, Creative, Curves, Color Wheels & Match, HSL Secondary, Vignette. The Lumetri Color panel (Window > Lumetri Color, Color workspace) edits the selected clip's instance; each section can be stacked as several Lumetri instances.",
+   "use_for": [
+    "Shot correction (white balance, exposure) of mixed news/press footage",
+    "Documentary look on an adjustment layer or per clip",
+    "Creative LUT / film look with intensity control",
+    "Secondary fixes (skin, sky) and vignettes"
+   ],
+   "how": "UI: select clip > Lumetri Color panel; sliders write into the Lumetri Color effect in Effect Controls. Spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Exposure\": 0.3, \"Contrast\": 15, \"Highlights\": -20, \"Shadows\": 12, \"Saturation\": 105, \"Vibrance\": 10, \"Amount\": -1.0}}. Premiere repeats names: 'Saturation' = Basic, 'Saturation#2' = Creative, 'Saturation#3' = HSL Secondary correction; 'Temperature', 'Tint', 'Contrast' = Basic and '#2' = HSL correction; 'Sharpen' = Creative, 'Sharpen#2' = HSL correction; 'Intensity' = Basic (Auto Color intensity), 'Intensity#2' = Creative Look intensity; 'HDR White' = Basic, 'HDR White#2' = Color Wheels. Dropdowns are 0-based: 'Look' 0..68 and 'Input LUT' 0..11, 0 = None. 'Look' and 'Input LUT' each occur TWICE in the harvest (PR 'Look'/'Look#2', 'Input LUT'/'Input LUT#2'; AE 'ADBE Lumetri-0025'/'-0128' and '-0005'/'-0127'): a plain-name spec writes the FIRST copy, and which copy drives the visible look is untested, so confirm any index on a rendered frame. Section switches 'Active', 'Active#2'... are booleans: leave true.",
+   "scriptable": "partial",
+   "script_api": "AdobeBridge pr_build.jsx: qe track item .addVideoEffect(qe.project.getVideoEffectByName('Lumetri Color')), then TrackItem.components[i].properties[k].setValue(...) by displayName with '#n' for repeats (ExtendScript ComponentParam). UXP alternative (v25.6+): VideoFilterFactory.createComponent('AE.ADBE Lumetri') + ComponentParam.createSetValueAction (unverified for Lumetri).",
+   "limits": "Settable from a spec: Basic tone/colour sliders, Creative sliders, HSL correction sliders, Vignette, HDR sliders, booleans. NOT settable (opaque string blobs in the harvest): RGB and hue/sat curves, colour wheels, Creative shadow/highlight tint wheels, HSL key ranges, custom LUT files (LUTAsset/LookAsset), Auto Color analytics. Harvested ranges exceed the UI sliders (Temperature/Tint +-300, tone +-150, Exposure +-7, Vignette Amount +-5): stay near natural values. In Premiere 27.0 (upcoming, not installed: this machine has 26.0.2) the Lumetri panel is retired; the Lumetri Color effect stays (Effects panel > Color Correction) and is edited in the Properties panel; the new Color Management panel takes over log/raw-to-SDR/HDR conversion and the Rec.709 vs Wide Gamut pipeline choice (Adobe, 'Upcoming changes to Lumetri Color', Sep 2026).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-mode-fundamentals/lumetri-color.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri Basic Correction: white balance and tone",
+   "summary": "First section of Lumetri Color: Input LUT, Auto + Intensity, White Balance eyedropper, Temperature, Tint, Saturation (Color group) and Exposure, Contrast, Highlights, Shadows, Whites, Blacks (Light group). It is the primary correction that makes shots neutral and matched before any look.",
+   "use_for": [
+    "Neutralise a blue/orange cast on press-conference or rally footage",
+    "Lift an under-exposed interview without crushing the face",
+    "Recover blown windows/sky with Highlights and Whites",
+    "Set black and white points so cuts match"
+   ],
+   "how": "Temperature: left cooler, right warmer; Tint: left green, right magenta; Exposure moves the whole image; Contrast mainly midtones; Highlights/Shadows recover bright/dark areas while minimising clipping; Whites/Blacks set the clipping points; Saturation 100 = unchanged. Work order: white balance, exposure, then Whites/Blacks against the waveform, then Highlights/Shadows, then Contrast. PR spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Temperature\": -10, \"Tint\": 3, \"Exposure\": 0.3, \"Contrast\": 10, \"Highlights\": -20, \"Shadows\": 15, \"Whites\": 5, \"Blacks\": -5, \"Saturation\": 102}}. AE spec: {\"name\": \"ADBE Lumetri\", \"props\": {same keys}} (all are the first occurrence of their name in AE, i.e. Basic Correction).",
+   "scriptable": "yes",
+   "script_api": "PR: ComponentParam.setValue by name (Temperature, Tint, Saturation, Exposure, Contrast, Highlights, Shadows, Whites, Blacks; HDR Specular only in HDR mode). AE: effect.property('Exposure').setValue(v) etc. via ae_lib dress(). Harvest ranges: Temperature/Tint -300..300, Saturation 0..300 (default 100), Exposure -7..7, the five tone sliders -150..150.",
+   "limits": "The White Balance eyedropper (a colour parameter) and the Auto button are UI actions: writing the 'White Balance' colour from a script is not known to recompute Temperature/Tint (unverified), so set Temperature/Tint directly. Natural results stay within Exposure +-2, tone sliders +-60, Temperature/Tint +-40. Input LUT is a 0-based (PR) / 1-based (AE) popup over the installed list; see the scripted LUT selection card.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Lumetri Auto Color (Auto button + Intensity)",
+   "summary": "Sensei-based one-click correction in Basic Correction: Auto analyses temperature, tint, exposure, contrast, highlights, shadows, whites, blacks and saturation and writes those sliders; the Intensity slider at the top of Basic Correction scales how strongly the auto result is applied.",
+   "use_for": [
+    "Fast first pass on dozens of mismatched news clips before manual trims",
+    "Starting point for phone footage with bad exposure"
+   ],
+   "how": "Lumetri Color panel > Basic Correction > Auto; then drag Intensity. The resulting slider values are ordinary parameters and can be read back from the clip with the bridge's per-clip \"dump\": true.",
+   "scriptable": "no",
+   "script_api": "none (button). The harvested first 'Intensity' (0..100, default 50) is this Auto Color intensity slider; 'SemanticAutoTone Progress' and 'Auto Tone Analytics Data' are internal state. Writing 'Intensity' without an Auto analysis has no known effect.",
+   "limits": "Cannot be triggered from ExtendScript or UXP (no documented call). Auto results vary per frame position; on graphics-heavy or very dark frames it can overcorrect. Do not script 'Intensity' (first) expecting a visible change; the Creative Look intensity is 'Intensity#2'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/use-auto-color.html",
+    "https://www.cined.com/adobe-premiere-pro-adds-auto-tone-for-the-lumetri-color-panel/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri Creative section: Looks, Faded Film, Vibrance, split tint",
+   "summary": "Creative section: Look (creative LUT dropdown + Browse), Intensity of the look, then Adjustments: Faded Film, Sharpen, Vibrance, Saturation, Shadow Tint and Highlight Tint wheels, Tint Balance.",
+   "use_for": [
+    "Apply a film-print or stylised LUT at partial strength",
+    "Matte/faded documentary feel with Faded Film",
+    "Safer saturation boost with Vibrance (protects skin)",
+    "Split-tone shadows/highlights (UI only)"
+   ],
+   "how": "Look applies a creative LUT; Intensity scales it (0..200, 100 = as authored). Faded Film lifts/softens blacks for a vintage look (0..150). Vibrance raises low-saturation colours more than saturated ones and protects skin tones. Shadow/Highlight Tint wheels tint the tonal ranges; Tint Balance shifts the balance between them (Adobe's wording: balances excess magenta or green). PR spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <index>, \"Intensity#2\": 60, \"Faded Film\": 12, \"Vibrance\": 15, \"Sharpen\": 8, \"Saturation#2\": 95}}. AE spec: {\"name\": \"ADBE Lumetri\", \"props\": {\"Faded Film\": 12, \"Vibrance\": 15, \"Sharpen\": 8}} (Look intensity and Creative Saturation need match names 'ADBE Lumetri-0026' / 'ADBE Lumetri-0031').",
+   "scriptable": "partial",
+   "script_api": "PR: 'Look' (0..68, 0 = None), 'Intensity#2', 'Faded Film', 'Sharpen', 'Vibrance', 'Saturation#2', 'Tint Balance'. AE: 'Look' (1..69, 1 = None), 'Faded Film', 'Sharpen', 'Vibrance', 'Tint Balance' by name; the rest by match name. After Effects resolves a plain name to the FIRST property with that name (ae_lib dress() uses effect.property(name)): Temperature/Tint/Saturation/Exposure/Contrast = Basic Correction, Sharpen/Vibrance/Faded Film = Creative, Amount/Midpoint/Roundness/Feather = Vignette. Later copies only by match name: Creative Saturation 'ADBE Lumetri-0031', Look Intensity 'ADBE Lumetri-0026', HSL correction Temperature '-0086', Tint '-0087', Contrast '-0088', Sharpen '-0089', Saturation '-0090'. AE's property() accepts match names, but this route is untested in the pipeline and pve check_spec currently reports match-name keys as unknown properties (pre-flight false positive).",
+   "limits": "Shadow/Highlight Tint wheels are the custom 'Split Toning' blob (AE) / unnamed string (PR): not settable, use a saved preset or the split-tone card's settable alternatives. Look indices are machine-specific (installed LUT list, labels not harvested). The unlabelled 'Color Space' popup (PR 0..32 default 26, AE 1..33 default 27) is undocumented: leave it. Faded Film above ~25 looks washed out after social-platform compression. 'Look' and 'Input LUT' each occur TWICE in the harvest (PR 'Look'/'Look#2', 'Input LUT'/'Input LUT#2'; AE 'ADBE Lumetri-0025'/'-0128' and '-0005'/'-0127'): a plain-name spec writes the FIRST copy, and which copy drives the visible look is untested, so confirm any index on a rendered frame.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri Curves: RGB curves and hue/saturation curves",
+   "summary": "Curves section: RGB Curves (master luma curve plus red, green, blue) and five Hue Saturation Curves: Hue vs Sat, Hue vs Hue, Hue vs Luma, Luma vs Sat, Sat vs Sat, each with an eyedropper selector.",
+   "use_for": [
+    "S-curve contrast with protected highlights",
+    "Pull a single hue (e.g. saffron flags, green signboards) in or out (Hue vs Sat)",
+    "Shift skin hue back toward the skin line (Hue vs Hue)",
+    "Desaturate shadows/highlights to clean noisy or clipped colour (Luma vs Sat)"
+   ],
+   "how": "Lumetri Color panel > Curves. Click on the curve to add points; on the hue curves use the eyedropper to drop three points around the picked hue, then drag the middle one. 'Active' toggles enable each curve.",
+   "scriptable": "no",
+   "script_api": "none for curve shapes: 'RGB Curve', 'Hue vs Sat', 'Hue vs Hue', 'Hue vs Luma', 'Luma vs Sat', 'Sat vs Sat' are custom/string blobs. Settable but low value: the 'Hue (vs Sat) Selector' etc. colour params and the 'Active' booleans, 'HDR Range' (100..10000). Route: AE = save an .ffx with the curve and apply with Layer.applyPreset(File) (bridge \"presets\"); PR = bake the curve into a .cube (Export .cube) and apply it as a Look.",
+   "limits": "Curves cannot be authored or animated from a spec in either app. Hue-curve edits on compressed 8-bit phone/WhatsApp footage band and break up quickly: keep moves small.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere-pro/using/adjust-color-rgb-hsl-curves.html",
+    "https://helpx.adobe.com/ca/premiere/desktop/correct-color/add-color-effects/correct-color-using-hue-and-saturation-curves.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri Color Wheels & Match (Comparison View, Apply Match)",
+   "summary": "Three wheels (Shadows, Midtones, Highlights) each with a brightness slider for lift/gamma/gain-style balancing. In Premiere the section adds Comparison View and Apply Match, a Sensei colour match that copies light and colour from a reference frame onto the current clip as editable wheel/slider values, with Face Detection to prioritise skin.",
+   "use_for": [
+    "Match a second camera or archive clip to the hero interview",
+    "Lift/gamma/gain balance after Basic Correction",
+    "Split-tone looks (teal shadows, warm highlights) in the UI"
+   ],
+   "how": "Premiere: Lumetri panel > Color Wheels & Match > Comparison View (Program Monitor shows reference and current side by side or split), pick the reference frame, Apply Match; keep Face Detection on when both frames contain faces, off otherwise. Fine-tune the wheels afterwards. AE's Lumetri has the wheels (section 'Color Wheels') without Comparison View/Apply Match (medium confidence).",
+   "scriptable": "no",
+   "script_api": "none for wheels or matching: the wheels are the custom 'Wheels' blob. Settable: 'Face Detection' (PR bool / AE 0..1), 'HDR White#2' (PR) / match 'ADBE Lumetri-0066' (AE). Apply Match is UI-only.",
+   "limits": "Wheel values cannot be written from ExtendScript or UXP. Colour Match is a starting point; it fails on frames with very different content or lighting. For scripted tonal colour shifts use AE Color Balance or Premiere ASC CDL (see the split-tone card). Apply Match writes the Color Wheels (and Saturation if needed) and can reset other altered parameters of an existing Lumetri effect on the clip (Adobe): apply it on a fresh Lumetri instance.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/match-color-between-shots.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri HSL Secondary: key one colour and correct it",
+   "summary": "Isolates a colour range by Hue/Saturation/Lightness (Key: Set color, Add color, Remove color eyedroppers and H/S/L range sliders), cleans the matte (Refine: Denoise, Blur) and corrects only that range (Correction: wheel, Temperature, Tint, Contrast, Sharpen, Saturation). Show Mask / Invert Mask help judge the key.",
+   "use_for": [
+    "Make a party-colour flag, saree or sky pop without touching skin",
+    "Calm an over-red face or neon sign",
+    "Desaturate everything except one colour (key + Invert Mask + Saturation 0)"
+   ],
+   "how": "Lumetri panel > HSL Secondary: Set color eyedropper on the target, +/- eyedroppers to grow/shrink, drag H/S/L range handles, tick 'Color/Gray' or Show Mask to check, raise Denoise/Blur until edges are clean, then correct. Correction sliders PR: 'Temperature#2', 'Tint#2', 'Contrast#2', 'Sharpen#2', 'Saturation#3'; Refine: 'Denoise' 0..100, 'Blur' 0..1000 (the number one); mask: 'Show Mask', 'Invert Mask'. AE: 'Denoise', 'Blur', 'Show Mask', 'Invert Mask' by name, correction sliders by match name 'ADBE Lumetri-0086'..'-0090'.",
+   "scriptable": "partial",
+   "script_api": "Correction/Refine/mask params are numbers/booleans (settable). The key itself is not reliably scriptable: 'Set color'/'Add color'/'Remove color' are colour params, but the H/S/L ranges live in the custom 'HSL Sliders' blob, so writing a colour from a script is not known to rebuild the key (unverified). Build the key in the UI and save it as a preset (.ffx in AE).",
+   "limits": "Keys chatter on compressed, noisy or motion-blurred footage; use Denoise/Blur and keep corrections moderate. Always leave 'Show Mask' false for delivery.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/correct-color-using-hsl-secondary-controls.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri Vignette",
+   "summary": "Centred edge darkening/brightening built into Lumetri: Amount (negative darkens, positive lightens), Midpoint (how far in it reaches), Roundness (rectangular to round), Feather (edge softness).",
+   "use_for": [
+    "Subtle focus on interview subjects",
+    "Cinematic trailer framing",
+    "Hide soft or vignetted edges of archive scans"
+   ],
+   "how": "Lumetri panel > Vignette. PR spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Amount\": -1.2, \"Midpoint\": 40, \"Roundness\": 10, \"Feather\": 70}}. AE spec: {\"name\": \"ADBE Lumetri\", \"props\": {\"Amount\": -1.2, \"Midpoint\": 40, \"Roundness\": 10, \"Feather\": 70}}. Ranges: Amount -5..5, Midpoint 0..100 (50), Roundness -100..100 (0), Feather 0..100 (50). Natural use: Amount -0.5..-1.5, Feather 60..80.",
+   "scriptable": "yes",
+   "script_api": "PR 'Amount', 'Midpoint', 'Roundness', 'Feather' (unique names in Lumetri); AE same names (first and only occurrence). Keyframes [[s, v], ...] work for a vignette push-in.",
+   "limits": "Always centred on the clip frame and applied before Motion scaling, so on a scaled/repositioned clip it follows the clip, not the sequence frame (use an adjustment layer, or Premiere's 'Vignette' effect with a Center point, or in AE 'CC Vignette' (match 'CS Vignette': 'Amount' -1000..1000, 'Angle of View', 'Center' [x, y] px, 'Pin Highlights') or a mask for an off-centre vignette). Strong values on 9:16 reels darken captions zones.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-video-effects/commonly-used-effects/create-vignettes-using-lumetri-color.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri HDR mode (High Dynamic Range checkbox)",
+   "summary": "Lumetri's HDR switch enables HDR-specific controls for grading in HDR working spaces: HDR White (100..1000 nits reference in Basic and in Color Wheels), HDR Specular (-150..150, controls specular highlights) and HDR Range (100..10000) for the curves.",
+   "use_for": [
+    "Grading Rec.2100 PQ/HLG sequences for HDR YouTube delivery",
+    "Taming specular highlights in HDR phone footage kept in HDR"
+   ],
+   "how": "Premiere: Lumetri Color effect/panel > High Dynamic Range checkbox (exact panel location in 26.x unverified); AE: same checkbox on the effect. PR spec: {\"name\": \"Lumetri Color\", \"pr_props\": {\"High Dynamic Range\": true, \"HDR White\": 300, \"HDR Specular\": -20}}; AE: {\"name\": \"ADBE Lumetri\", \"props\": {\"High Dynamic Range\": 1, \"HDR White\": 300, \"HDR Specular\": -20}}.",
+   "scriptable": "yes",
+   "script_api": "PR booleans/numbers 'High Dynamic Range', 'HDR White', 'HDR Specular', 'HDR Range', 'HDR White#2'; AE 'High Dynamic Range' is a 0/1 number (match 'ADBE Lumetri-0062').",
+   "limits": "Meaningless in an SDR Rec.709 sequence/8-bpc comp; values are only judged correctly on an HDR monitor with HDR scopes. Exact semantics of HDR White vs the sequence's graphics white are not documented in the sources found (medium confidence).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "Lumetri Color in After Effects (flat parameter list)",
+   "summary": "The same Lumetri engine as an AE effect (match 'ADBE Lumetri', category Color Correction) plus a Lumetri Color panel and Lumetri Scopes in the Color workspace. In AE the parameters are a flat list (no groups) with repeated display names, which changes how scripts address them.",
+   "use_for": [
+    "Grade composited shots and VFX plates inside AE",
+    "Grade an adjustment layer over a whole explainer comp",
+    "Curves/wheels/HSL grades delivered as .ffx presets"
+   ],
+   "how": "Window > Workspace > Color (Lumetri Color panel + Lumetri Scopes) or Effect > Color Correction > Lumetri Color. Spec: {\"name\": \"ADBE Lumetri\", \"props\": {\"Temperature\": 15, \"Exposure\": 0.2, \"Contrast\": 20, \"Faded Film\": 10, \"Vibrance\": 10, \"Amount\": -1}}. Checkboxes are 0/1 numbers; popups 1-based (Look/Input LUT 1 = None). After Effects resolves a plain name to the FIRST property with that name (ae_lib dress() uses effect.property(name)): Temperature/Tint/Saturation/Exposure/Contrast = Basic Correction, Sharpen/Vibrance/Faded Film = Creative, Amount/Midpoint/Roundness/Feather = Vignette. Later copies only by match name: Creative Saturation 'ADBE Lumetri-0031', Look Intensity 'ADBE Lumetri-0026', HSL correction Temperature '-0086', Tint '-0087', Contrast '-0088', Sharpen '-0089', Saturation '-0090'. AE's property() accepts match names, but this route is untested in the pipeline and pve check_spec currently reports match-name keys as unknown properties (pre-flight false positive).",
+   "scriptable": "partial",
+   "script_api": "ae_lib.jsx dress(): layer.property('ADBE Effect Parade').addProperty('ADBE Lumetri'), then e.property(nameOrMatchName).setValue/setValueAtTime (values clamped to min/max because an out-of-range value kills the script). For curves/wheels/HSL/split tone: Layer.applyPreset(new File(path.ffx)).",
+   "limits": "Custom blobs (Blob, RGB Curve, hue curves, Wheels, Split Toning, HSL Sliders, Embedded LUTs, LUTAsset, LookAsset) cannot be set. Duplicate names beyond the first are unreachable by plain name. A Lumetri grade is not guaranteed to render identically to Premiere's because the two apps' working colour spaces/bit depths differ; compare frames.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/color-basics/color-basics.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Lumetri presets (.prfpset) and AE grade presets (.ffx)",
+   "summary": "Saved effect settings. Premiere ships Lumetri Presets (Effects panel > Presets > Lumetri Presets: Cinematic, Filmstocks, Monochrome, SpeedLooks (Cameras/..., Universal), Technical (Legal/Full range 8/10/12-bit)) and lets you save any Lumetri instance (Effect Controls > right-click > Save Preset). AE saves effect stacks as animation presets (.ffx).",
+   "use_for": [
+    "Carry a hand-built curves/wheels/HSL grade into an automated build (AE)",
+    "House look for a series (one preset per show)",
+    "Quick film-stock or monochrome starting points"
+   ],
+   "how": "PR: drag a preset onto clips or an adjustment layer. AE: Animation > Save Animation Preset with the effect selected, apply with Animation > Apply Animation Preset; in specs list it under \"presets\": [{\"file\": \"...ffx\", \"at\": 0}].",
+   "scriptable": "partial",
+   "script_api": "AE: Layer.applyPreset(File) (documented; used by ae_lib preset()). Premiere: no documented ExtendScript or UXP call applies an effect preset by name; rebuild it from pr_props (see the pr_preset cards).",
+   "limits": "Premiere preset Look/Input LUT values are stored as slots of the legacy dropdowns and must be verified on v26. Presets that reference LUT files break if the file moves; keep LUTs in the Common LUTs folders. AdobeBridge applies clip presets in AE only.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Technical vs creative LUTs (order of operations)",
+   "summary": "A technical LUT converts an encoding to a display standard (camera log/gamut to Rec.709, legal/full range conversions) and goes FIRST; a creative LUT is a look applied to already-normal Rec.709 images and goes AFTER correction, usually at reduced intensity.",
+   "use_for": [
+    "ARRI/Sony/Canon log stock footage arriving flat and grey (technical)",
+    "Film-print or stylised look on corrected footage (creative)",
+    "Range fixes on screen recordings (technical SMPTEToFull/FullToSMPTE)"
+   ],
+   "how": "Order: (1) colour management or Input LUT (Lumetri Basic Correction > Input LUT, or clip Modify > Color > Input LUT, or AE Apply Color LUT at the top of the stack); (2) Basic Correction; (3) creative Look + Intensity; (4) curves/secondaries; (5) vignette, grain, limiter. Bundled sets (this install): Lumetri/LUTs/Technical (e.g. ALEXA_Default_LogC2Rec709, ARRI_Universal_HD, Phantom_Rec709_Gamma), Lumetri/LUTs/Creative (film emulations '... (by Adobe)'), Lumetri/LUTs/Legacy (range and log/lin utilities), Lumetri/Looks/Legacy (SpeedLooks .look).",
+   "scriptable": "partial",
+   "script_api": "Lumetri 'Input LUT' (PR 0..11, 0 = None / AE 1..12) and 'Look' (PR 0..68 / AE 1..69) indices; Premiere clip-level Input LUT: UXP FootageInterpretation.setInputLUTID / ClipProjectItem.createSetInputLUTIDAction(GUID string) (v25.6+), ExtendScript ProjectItem.getInputLUTID() (read only). AE Apply Color LUT: preset only.",
+   "limits": "Never stack a technical log LUT on a clip Premiere already colour-manages from log (double conversion, oversaturated and crushed). LUTs clip out-of-range values; Premiere's colour management tone-maps instead, so prefer it for log. A LUT built for log on Rec.709 input blows out. See the per-LUT cards (kind 'lut') for measured behaviour of each bundled LUT.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/install-custom-look-up-table-files.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/manage-source-media-colors-in-program-monitor.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Custom LUT folders (Creative / Technical)",
+   "summary": "Premiere lists .cube files placed in the Common LUTs folders: LUTs\\Creative appear in Lumetri Creative > Look, LUTs\\Technical in Basic Correction > Input LUT, and LUTs\\Input in the clip-level Modify > Color > Input LUT and Lumetri Settings > Source Clip > Input LUT (Premiere 24.0+). The per-user location also holds an Output folder. Folders are scanned at launch.",
+   "use_for": [
+    "Install a channel's house look so it is selectable by index",
+    "Install camera-manufacturer conversion LUTs",
+    "Make a baked curves/wheels grade (.cube) reachable from a script"
+   ],
+   "how": "Windows, current user: C:\\Users\\<user>\\AppData\\Roaming\\Adobe\\Common\\LUTs\\ (%APPDATA%\\Adobe\\Common\\LUTs) with subfolders Creative, Technical, Input (create the ones you need). All users: C:\\Program Files\\Adobe\\Common\\LUTs\\ (needs admin). macOS: ~/Library/Application Support/Adobe/Common/LUTs (user) or /Library/Application Support/Adobe/Common/LUTs (all users). Copy the .cube files, restart the app. Do not put LUTs in the application folder (lost on update, missing in Media Encoder and on other machines). After install, find the new index by setting the 'Look'/'Input LUT' index on a probe clip and checking a rendered frame. This machine has no Common LUTs folder yet (checked 2026-10-03).",
+   "scriptable": "partial",
+   "script_api": "File copy is plain filesystem work (Python/shutil). The dropdown index of a new LUT depends on sort order of all installed LUTs: not stable across machines.",
+   "limits": "Requires an app restart to appear. Whether AE's Lumetri reads the same Common folders is likely but unverified. Shared projects referencing LUTs by browse path go offline on other machines.",
+   "status": "current",
+   "sources": [
+    "https://community.adobe.com/t5/premiere-pro-discussions/faq-premiere-pro-lumetri-color-custom-lut-directory-and-location/td-p/4785911",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/install-custom-look-up-table-files.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Export a grade as a LUT (.cube / .look)",
+   "summary": "The Lumetri Color panel menu can export the current Lumetri instance's colour transform as a .cube file (Adobe's current page documents only Export .cube; Export .look appeared in older versions, check the menu), turning a hand-made curves/wheels/HSL grade into a reusable LUT.",
+   "use_for": [
+    "Bake a curves/wheels grade so automation can apply it as a Look",
+    "Share a show look with other editors or DaVinci Resolve",
+    "Freeze a client-approved grade"
+   ],
+   "how": "Premiere: Lumetri Color panel > panel menu (top-right) > Export .cube > Save. Install it into the Creative folder to reuse as a Look. AE's Lumetri panel menu is believed to offer the same (unverified).",
+   "scriptable": "no",
+   "script_api": "none (panel menu). The exported file can then be used via Look index (PR) or Apply Color LUT .ffx (AE).",
+   "limits": "A LUT captures only per-pixel colour maths: Vignette, Sharpen, HSL Denoise/Blur and other spatial or position-dependent operations are not in the LUT. Wide/HDR ranges may clip in a 0-1 .cube. The Lumetri Color panel retires in Premiere 27.0; where Export .cube lives after that is not documented yet.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/save-or-export-look-up-tables.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "Apply Color LUT (After Effects)",
+   "summary": "AE effect (Utility > Apply Color LUT, match 'ADBE Apply Color LUT2') that applies a LUT file: .cube (incl. overrange IRIDAS), .3dl (incl. float/3DMESH, SCRATCH), cineSpace .csp and IRIDAS .look.",
+   "use_for": [
+    "Technical log-to-709 conversion on stock footage in AE",
+    "Creative LUT on an adjustment layer with Opacity as strength"
+   ],
+   "how": "Effect > Utility > Apply Color LUT, choose the file in the dialog. Put technical LUTs first in the stack; for a creative LUT use an adjustment layer and reduce layer Opacity to mix. Works in 8/16/32 bpc; reads 3D LUTs whose three axes have the same length, up to 64 points per axis; 'Choose LUT' in the effect controls swaps the file.",
+   "scriptable": "partial",
+   "script_api": "Adding the effect by match name from a script leaves '<LUT not set>' (the file is picked only in a dialog; no settable property). Route: load the LUT once by hand, save as .ffx, apply with Layer.applyPreset(File). OCIO File Transform is the OCIO-engine alternative (works in any project, no OCIO engine needed; also UI-configured).",
+   "limits": "Spec-only use is impossible. LUT strength has no slider: use adjustment-layer opacity. 8/16-bpc projects clip values outside 0-1.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/utility-effects.html",
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/utility-effects.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Bundled film-emulation LUTs and film shaders",
+   "summary": "This install ships Adobe-made film emulations in Lumetri/LUTs/Creative: negative + print combinations such as 'Fuji ETERNA 250D Kodak 2395 (by Adobe)', 'Kodak 5218 Kodak 2383 (by Adobe)', 'Fuji F125 Kodak 2393 (by Adobe)' and Monochrome variants, plus legacy SpeedLooks (.look) and Lumetri/Film shaders (Technicolor 2/3-strip, BleachBypass .irtp) that the dropdowns do not expose.",
+   "use_for": [
+    "Cinematic trailer or documentary film-print feel",
+    "Monochrome film look for archive/flashback sections",
+    "Consistent print-style contrast across mixed sources"
+   ],
+   "how": "Correct shots first (Basic Correction), then Creative > Look = the film LUT at Intensity 40-70; add grain and a light Faded Film if needed. The kind 'lut' cards hold measured behaviour per file (e.g. 2395 prints are matte with lifted blacks, 2383/3510 prints are contrastier).",
+   "scriptable": "partial",
+   "script_api": "'Look' index (PR 0-based / AE 1-based); labels not harvested, so verify the index once per machine. AE: Apply Color LUT via .ffx preset. .irtp shaders: no scripting route.",
+   "limits": "Print LUTs assume Rec.709-normalised input; on log footage use a technical conversion first. Full intensity on phone/news footage crushes shadows and shifts skin.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/install-custom-look-up-table-files.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Scripted LUT selection (index route)",
+   "summary": "How an automated build chooses a LUT: Lumetri 'Look' and 'Input LUT' are integer popups over the installed LUT list, so a script can only pick by index, and indices depend on what is installed.",
+   "use_for": [
+    "Apply a house creative look to every clip in a generated sequence",
+    "Apply a technical LUT to a batch of log clips"
+   ],
+   "how": "Procedure: (1) install the LUT (Common LUTs folder); (2) on a probe build set {\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": N, \"Intensity#2\": 60}} for a few N and render a frame (or read the label in the UI) to map index to LUT; (3) record the mapping per machine; (4) re-check after installing/removing any LUT. AE: popup 1 = None, so AE index = PR index + 1 is plausible but unverified.",
+   "scriptable": "partial",
+   "script_api": "Lumetri 'Look'/'Input LUT' via ComponentParam.setValue (PR) / property.setValue (AE). Premiere clip Input LUT by GUID: UXP ClipProjectItem.createSetInputLUTIDAction(stringLUTID) and FootageInterpretation.setInputLUTID (v25.6+); ExtendScript only reads it (ProjectItem.getInputLUTID(), getEmbeddedLUTID()). How to obtain a LUT GUID is not documented: the only known source is reading it back (getInputLUTID) from a clip whose Input LUT was set by hand from the Common LUTs Input folder, then reusing it (unverified).",
+   "limits": "Labels were not harvested; never hard-code an index from another machine. 'LUTAsset'/'LookAsset' (browsed custom files) are blobs and cannot be set. 'Look' and 'Input LUT' each occur TWICE in the harvest (PR 'Look'/'Look#2', 'Input LUT'/'Input LUT#2'; AE 'ADBE Lumetri-0025'/'-0128' and '-0005'/'-0127'): a plain-name spec writes the FIRST copy, and which copy drives the visible look is untested, so confirm any index on a rendered frame.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/clipprojectitem",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/footageinterpretation",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Premiere colour management (project / sequence / clip)",
+   "summary": "Since the Premiere 25 colour-management overhaul (beta Sept 2024, released 2025) every clip is converted from its media colour space into the sequence's working colour space, effects run there, and the sequence is converted to an output colour space for monitoring and export. Log and raw media are auto-detected and tone-mapped; three Wide Gamut presets give a wide working space (Adobe's pages do not name it; reports of an ACES-based space are unverified). Disable Color Management (or per clip Preserve RGB) gives the old manual LUT workflow.",
+   "use_for": [
+    "Drop log/raw stock footage into a Rec.709 sequence and get a normal image without LUTs",
+    "Mix iPhone HLG, drone log and Rec.709 news clips in one timeline",
+    "Make SDR and HDR deliverables from one grade"
+   ],
+   "how": "Configured per SEQUENCE (not project): Sequence > Sequence Settings > Color tab (also the New Sequence dialog's Color tab and the Lumetri panel's Settings tab in 25/26; in 27.0 the Color Management panel). Project level holds auto-detect and colour-space-aware-effects switches; clip level holds overrides (Modify > Color). Pick the working space before grading: changing it later changes how effects look.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: Sequence.getSettings()/setSettings() with SequenceSettings.workingColorSpace and workingColorSpaceList (used in Adobe's PProPanel sample changeSequenceColorSpace, not in the community reference's field list); getSettings() also returns the documented autoToneMapEnabled (the legacy auto tone-map switch; whether it drives v26 input tone mapping is unverified); ProjectItem.getColorSpace(), getOriginalColorSpace(), setOverrideColorSpace(name). UXP (25.6+): Project.getColorSettings() -> ProjectColorSettings.getGraphicsWhiteLuminance(); no UXP working-space setter found.",
+   "limits": "Presets, output colour space, tone mapping and gamut compression switches have no documented script API (unverified). Transcoded log (e.g. RED to ProRes) is not auto-detected and needs a manual override. Whether the legacy workingColorSpace list maps to the new presets on v26 is unverified.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/about-color-management.html",
+    "https://blog.adobe.com/en/publish/2024/09/10/adobe-introduces-major-color-management-updates-adobe-premiere-pro-beta",
+    "https://larryjordan.com/articles/the-new-color-workflow-in-adobe-premiere-pro-2025/",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configuring-sequence-color-management.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Sequence colour presets: Direct Rec.709, Direct HDR, Wide Gamut",
+   "summary": "Sequence 'Color setup' presets (Adobe, Jan 2026): Direct 709 (SDR) (default; Adobe also labels it Direct Rec. 709 (SDR) / Broadcast 709 (SDR): Rec.709 working and output, SDR passes through, log/raw tone-mapped and gamut-compressed on input); Direct HDR (HLG) and Direct PQ (HDR) (Rec.2020 HLG / PQ working and output); Wide Gamut (Tone Mapped) (keeps maximum log/raw/HDR data, output tone mapping, can slightly darken already-graded SDR media); Wide Gamut (Minimal Tone Mapping) (tone-maps only the upper highlights, better for mixed graded SDR); Wide Gamut (No Tone Mapping) (straight conversion, clips above Output Peak Luminance); Disable Color Management (manual LUT workflow). Advanced controls: Working/Output Color Space, input and output Tone Mapping, Gamut Compression, Graphics White.",
+   "use_for": [
+    "Default for all Instagram/YouTube SDR reels and explainers: Direct Rec. 709 (SDR)",
+    "HDR YouTube upload of phone HLG footage: Direct HDR (HLG)",
+    "Heavy grading of log/raw drama or trailer footage: Wide Gamut (Tone Mapped)"
+   ],
+   "how": "Sequence > Sequence Settings > Color tab > Color setup (or the New Sequence dialog's Color tab, or Lumetri panel > Settings > Sequence Controls in 25/26). Choosing a preset resets Output Color Space to that preset's default; change it afterwards to make another deliverable from the same grade (e.g. duplicate an HDR sequence and set its output to Rec.709). For SDR news/social work keep Direct 709 (SDR). Graphics White: the project default is 100 nits for SDR programs (Adobe); sequences can override it; 203 nits is the usual HDR (BT.2408) reference.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: var s = seq.getSettings(); s.workingColorSpace = s.workingColorSpaceList[i]; seq.setSettings(s) (Adobe PProPanel sample, changeSequenceColorSpace). getSettings() also returns the documented boolean autoToneMapEnabled (legacy switch; mapping to the v26 tone-mapping controls unverified). Preset choice, output space, tone-mapping algorithm, gamut compression, graphics white: no documented API (unverified). UXP SequenceSettings (25.6) exposes only composite-in-linear, max bit depth and max render quality for colour.",
+   "limits": "Wide-gamut and ACES settings are described by reviewers as harder to grade with Lumetri; Direct Rec. 709 is the safe default for automated builds. New sequences take their colour settings from the sequence preset; build a preset with the right colour settings instead of scripting them.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configuring-sequence-color-management.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configure-sequence-output-color-space.html",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Project colour settings: auto-detect log/raw, colour-space-aware effects",
+   "summary": "Project-level switches: 'Color Manage Auto Detected Log and Raw Media' (renamed from Auto Detect Log Video Color Space; auto-converts recognised log/raw into the working space), 'Enable Color Space Aware Effects' (effects compute correctly in any working space; when off, every effect assumes Rec.709 as in older versions; it is switched off for projects imported from older versions) and 'Default graphics white' (100 nits for SDR programs; sequences can override). Colour-space-aware effects (Adobe list): Lumetri, Black and White, Tint, Extract, Color Pass, Color Replace, Track Matte Key, Cross Dissolve, Film Dissolve, Dip to Black.",
+   "use_for": [
+    "Stop Premiere auto-converting a log clip you want to treat with a technical LUT",
+    "Keep effect behaviour identical between SDR projects"
+   ],
+   "how": "File > Project Settings > Color (also the Lumetri Color panel's Settings tab in 25/26). Leave auto-detect on. In a Direct 709 (SDR) sequence colour-space-aware effects change nothing (the working space is Rec.709 either way); turn the switch on before grading in a Wide Gamut or HDR working space, and never flip it after grading starts.",
+   "scriptable": "partial",
+   "script_api": "UXP: Project.getColorSettings() -> ProjectColorSettings.getGraphicsWhiteLuminance(), getSupportedGraphicsWhiteLuminances() (read only, 25.6). Toggling auto-detect or colour-space-aware effects: no API found.",
+   "limits": "Colour-space-aware effects can render differently in different working spaces; do not switch it mid-project.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/projectcolorsettings"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Clip colour override and Input LUT (Modify > Color)",
+   "summary": "Per-clip colour interpretation: use the media's detected colour space, override it with another (camera log/gamut pairs such as ARRI LogC3/Wide Gamut3, Rec.709, Rec.2100 HLG/PQ...), apply an Input LUT, or tick Preserve RGB (no input-to-working conversion, for manual LUT grading). Adobe's Override Media Color Space list includes ACEScct, Apple Log, ARRI LogC3/LogC4, Canon Log/Log2/Log3, DJI D-Log, Fuji F-Log, Leica L-Log, Panasonic V-Log, RED Log3G10, Sony S-Log/S-Log2/S-Log3, P3-D65 HLG/PQ, Rec.601/709/2020/2100 and sRGB.",
+   "use_for": [
+    "Transcoded log clips that arrive mislabelled as Rec.709",
+    "WhatsApp/phone clips flagged HLG that look washed or too bright",
+    "Apply a camera LUT once at source so every timeline instance gets it"
+   ],
+   "how": "Project panel: right-click clip > Modify > Color (Interpret Footage colour settings), or the source-clip colour settings in the Lumetri Settings tab / Color Management panel. Applies to every use of that master clip.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: projectItem.getColorSpace() / getOriginalColorSpace() -> {name, transferCharacteristic, primaries, matrixEquation}; projectItem.setOverrideColorSpace(name) (used in Adobe's PProPanel sample, absent from the community reference); ProjectItem.getOverrideColorSpaceList lists names (documented: sRGB, BT.601 (NTSC), BT.601 (PAL), BT.709, BT.709 (Scene), BT.2020, BT.2020 (Scene), BT.2100 PQ, BT.2100 PQ (Scene), BT.2100 HLG, BT.2100 HLG (Scene), DCDM XYZ). UXP: FootageInterpretation.setInputLUTID, ClipProjectItem.createSetInputLUTIDAction (25.6).",
+   "limits": "Whether v26's override list includes camera log spaces via ExtendScript is unverified: read the list first. Overrides affect all instances of the master clip.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/manage-source-media-colors-in-program-monitor.html",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/footageinterpretation",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/about-color-management.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Premiere colour scripting surface (ExtendScript + UXP)",
+   "summary": "What a script can actually reach for colour in Premiere 26: effect parameters (Lumetri and colour effects), sequence working colour space, clip colour space read/override, input LUT IDs, linear compositing and max bit depth. ExtendScript is not affected by the CEP-to-UXP transition (Adobe, Sept 2026).",
+   "use_for": [
+    "Decide whether a colour step can be automated or must be a preset/manual step",
+    "Pre-flight a build's colour settings"
+   ],
+   "how": "ExtendScript (AdobeBridge uses it): QE addVideoEffect + ComponentParam.setValue/addKey; Sequence.getSettings()/setSettings() (documented fields compositeLinearColor, maximumBitDepth, maximumRenderQuality, autoToneMapEnabled; workingColorSpace/workingColorSpaceList only in Adobe's PProPanel sample); ProjectItem.isAdjustmentLayer() (read); ProjectItem.getColorSpace(), getOriginalColorSpace(), setOverrideColorSpace(), getEmbeddedLUTID(), getInputLUTID(); Sequence.exportAsMediaDirect(path, .epr, range). UXP (25.6+): Project.getColorSettings(); SequenceSettings.get/setCompositeInLinearColor, get/setMaximumBitDepth, get/setMaxRenderQuality; ClipProjectItem.getInputLUTID/getEmbeddedLUTID/createSetInputLUTIDAction; FootageInterpretation.getInputLUTID/setInputLUTID; VideoFilterFactory.createComponent(matchName).",
+   "scriptable": "partial",
+   "script_api": "see how; anything else (colour presets, output colour space, tone mapping, Auto Color, Color Match, curves, wheels, effect presets, Lumetri panel export) is 'none' or unverified.",
+   "limits": "UXP calls are promise/action based and run inside a UXP plugin, not from AdobeBridge's ExtendScript relay. Adobe's timeline: Premiere stops accepting new CEP submissions Dec 2027 and disables CEP by default Dec 2028; ExtendScript itself is not part of that transition. After Effects: public-beta UXP plugins by November 2026; AE stops new CEP submissions and disables CEP by default in December 2028 (same Adobe post). Some UXP calls are newer than this machine's 26.0.2 (e.g. Project.createSequenceWithPresetPath 26.3, SequenceSettings.setVideoFrameRate 26.2).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/sequencesettings",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/clipprojectitem",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/project",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/videofilterfactory",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Colour conversion effects: Color Space Transform, SDR Conform, Cineon Converter",
+   "summary": "Effect-level conversions for when interpretation can't be changed (nests, graphics, mixed sources): Color Space Transform (match AE.ADBE Color Space Transform: source 'SCS' and target 'TCS' colour-space popups 0..31, 'Tone Map Method' 0..3, 'Gain', 'Desaturation', 'Knee', 'GC Methods' 0..2 gamut compression), SDR Conform (HDR to SDR: Brightness 1..100 default 10, Contrast, Soft Knee) and Cineon Converter (log film scans).",
+   "use_for": [
+    "Convert one HDR phone clip for an SDR timeline when Modify > Color is not an option",
+    "Normalise Cineon/DPX film scans in documentaries"
+   ],
+   "how": "Effects > Video Effects (Color Correction/Utility; folder unverified). Put conversion effects FIRST in the stack, then Lumetri. PR spec: {\"name\": \"SDR Conform\", \"pr_props\": {\"Brightness\": 20, \"Soft Knee\": 80}}.",
+   "scriptable": "partial",
+   "script_api": "Numbers settable by name; SCS/TCS index-to-space mapping not harvested (read labels in the UI first); 'SCS Arb Data'/'TCS Arb Data' are internal strings.",
+   "limits": "Prefer clip colour management (tone-mapped, documented) over these effects. Colour Space Transform labels and tone-map semantics are inferred from parameter names (low confidence).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Render at Maximum Bit Depth, Max Render Quality, Composite in Linear Color",
+   "summary": "Sequence/export quality switches: Maximum Bit Depth renders effects in 32-bit float (fewer banding artefacts in skies, gradients, vignettes and heavy grades, required for 10-bit HDR export); Maximum Render Quality improves scaling; Composite in Linear Color changes how opacity/blend modes mix.",
+   "use_for": [
+    "Banding on vignettes, gradients and graded skies",
+    "10-bit HEVC/ProRes HDR masters",
+    "Heavily scaled archival stills"
+   ],
+   "how": "Sequence > Sequence Settings: Maximum Bit Depth / Maximum Render Quality (Video Previews section) and Composite in Linear Color (Video Previews in older versions; its location in the 25/26 Color tab is unverified); Export settings repeat 'Render at Maximum Depth' and 'Use Maximum Render Quality'.",
+   "scriptable": "partial",
+   "script_api": "UXP SequenceSettings.setMaximumBitDepth(bool), setMaxRenderQuality(bool), setCompositeInLinearColor(bool) (25.6). ExtendScript: the same three booleans are documented fields of Sequence.getSettings() (maximumBitDepth, maximumRenderQuality, compositeLinearColor), written back with setSettings(); untested in AdobeBridge on v26; the export .epr controls the render flags for exportAsMediaDirect.",
+   "limits": "Slower renders. Linear compositing makes dissolves and blend-mode overlays (grain, light leaks) look different from AE in gamma mode: decide once per show.",
+   "status": "current",
+   "sources": [
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/sequencesettings",
+    "https://postperspective.com/working-in-hdr-editing-and-finishing-in-adobe-premiere/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "After Effects colour management (Adobe/ICC engine)",
+   "summary": "Project Settings > Color: Color Engine 'Adobe color managed' (default) uses ICC profiles: choose a Working Space (e.g. HDTV Rec. 709), Bit Depth (8/16/32 bpc), Linearize Working Space, Blend Colors Using 1.0 Gamma, Compensate for Scene-referred Profiles. Footage converts from its profile into the working space; output modules convert to an output profile.",
+   "use_for": [
+    "Match AE renders to Premiere's Rec.709 timelines",
+    "Physically correct blending/blur/glow (linear)",
+    "32-bpc work for HDR or overbright glows"
+   ],
+   "how": "File > Project Settings > Color. For Rec.709 social/explainer work: Working Space HDTV (Rec. 709) or None, 8 or 16 bpc. Use 'None' working space to keep RGB untouched when everything is Rec.709.",
+   "scriptable": "yes",
+   "script_api": "app.project.workingSpace = '<profile description>' ('' = None; list via app.project.listColorProfiles()); app.project.bitsPerChannel = 8|16|32; app.project.linearBlending (bool); app.project.linearizeWorkingSpace (bool, AE 16.0+); app.project.compensateForSceneReferredProfiles (bool, 16.0+); app.project.workingGamma = 2.2|2.4.",
+   "limits": "Choosing the colour engine (Adobe vs OCIO color managed) has no documented script attribute (checked the ae-scripting Project page, Oct 2026); use a project template. Linear blending changes the look of existing comps. Per-layer ICC conversion: the Color Profile Converter effect ('ADBE ProfileToProfile'; profile popups are machine-specific indices), never on top of project colour management for the same layer.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/color-management.html",
+    "https://ae-scripting.docsforadobe.dev/general/project/",
+    "https://rxlab.guide/colors/ae.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "OCIO / ACES colour management in After Effects",
+   "summary": "Color Engine 'OCIO color managed' runs OpenColorIO transforms with a config file, a Working Color Space and a Display Color Space/view, enabling ACES workflows. This install (AE 26.0) bundles configs 'ACES 1.2', 'ACES 1.3 CG v1.0' and 'ACES 1.3 Studio v1.0' (Support Files/OpenColorIO-Configs); AE 26.5 upgraded to OCIO 2.5.1 with ACES 2.0 CG v4.0 / Studio v4.0 configs (not on this machine).",
+   "use_for": [
+    "VFX plates and CG renders delivered in ACEScg/EXR",
+    "Camera-log footage handled with filmic display transforms",
+    "Matching a colourist's ACES pipeline"
+   ],
+   "how": "File > Project Settings > Color > Color Engine: OCIO color managed > OCIO Config dropdown (bundled configs or 'Custom OCIO Config' to load your own) > Working Color Space (e.g. ACEScg) > Display Color Space. Media: Interpret Footage > Main > Color > Override Media Color Space. The Display Color Space can also be switched from a menu at the bottom of the Composition panel (OCIO projects only). Output: Output Module > Color > Output Color Space. Reading a config from the OCIO environment variable at startup is reported but not in Adobe's page (unverified).",
+   "scriptable": "partial",
+   "script_api": "app.project.ocioConfigurationFile = 'ACES 1.2' reported working by users (community, undocumented); setting the engine, a custom config path, working/display spaces: no documented API. Workaround: project templates with the settings saved, or the OCIO environment variable.",
+   "limits": "Effects not designed for scene-linear data (many 8-bit-era effects) misbehave in ACEScg; Premiere has no OCIO engine, so round-trips need a display-referred render. ACES 2.0 needs AE 26.5+.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/opencolorio-and-aces-color-management/opencolorio-aces-color-management.html",
+    "https://community.adobe.com/questions-529/set-up-custom-ocio-config-programmatically-52581",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "OCIO transform effects (CDL, Color Space, Display, File, Look)",
+   "summary": "AE colour-correction effects that run OpenColorIO per layer: OCIO File Transform (applies a LUT or CDL file), OCIO Color Space Transform (input/output space menus), OCIO Display Transform (input space, display device, view transform, inverse), OCIO Look Transform (config looks), OCIO CDL Transform (.ccc/.cc/.cdl file with a CCCID list). Adobe: they do NOT require the project to use the OCIO engine.",
+   "use_for": [
+    "Convert one plate between spaces inside an OCIO project",
+    "Apply a colourist's CDL or a show LUT through OCIO"
+   ],
+   "how": "Effect > Color Correction > OCIO .... Menus are filled from the OCIO configuration chosen in Project Settings. Adobe's recipe for a LUT/CDL built for another space: OCIO Color Space Transform (working -> LUT space), OCIO File Transform (the LUT/CDL), OCIO Color Space Transform back to the working space.",
+   "scriptable": "no",
+   "script_api": "none usable: the harvested popups have min = max = 1 (config-dependent IDs), so ae_lib's clamp forces any scripted value to 1; file pickers are dialogs. Save configured instances as .ffx and apply with Layer.applyPreset.",
+   "limits": "Menu lists depend on the active OCIO config, so a saved .ffx may point at a different space on another machine or after the config changes (the effect's Information field reports this). A bug report notes OCIO Color Space Transform not saving the selection in 25.3.2.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/opencolorio-and-aces-color-management/opencolorio-aces-color-management.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "Footage interpretation, output-module colour and display simulation (AE)",
+   "summary": "Per-footage colour (Interpret Footage > Color: assign/override the media colour space, or Preserve RGB to skip conversion), per-output colour (Output Module Settings > Color: output profile/colour space), and viewer tools (View > Use Display Color Management; View > Simulate Output to preview an output space).",
+   "use_for": [
+    "Stop AE shifting a Rec.709 clip that is mis-tagged",
+    "Render an sRGB PNG vs a Rec.709 video from one comp",
+    "Check how a render will look in Rec.709 before rendering"
+   ],
+   "how": "Project panel > select footage > File > Interpret Footage > Main > Color tab. Render Queue > Output Module > Color tab. Viewer: View > Simulate Output.",
+   "scriptable": "partial",
+   "script_api": "Footage colour profile: no FootageSource attribute in the ae-scripting reference (checked Oct 2026). Output: OutputModule.applyTemplate(name) with a template saved with the colour settings (documented); OutputModule.getSettings()/setSettings() exist but the colour key name is unverified: inspect getSettings(GetSettingsFormat.STRING_SETTABLE) first. setSettings() invalidates the OutputModule object (documented bug): fetch the output module again after each call. In OCIO projects the 'Show all' checkbox in Interpret Footage and Output Module Color tabs lists every config space.",
+   "limits": "Preserve RGB keeps numbers, not appearance. Simulate Output is preview-only.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/color-management.html",
+    "https://ae-scripting.docsforadobe.dev/renderqueue/outputmodule/",
+    "https://ae-scripting.docsforadobe.dev/sources/footagesource/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "Bit depth (8/16/32 bpc) and linear blending",
+   "summary": "AE project colour depth: 8 bpc (fast, bands), 16 bpc (smooth gradients), 32 bpc float (values above 1.0 for HDR, overbright glows, linear light). Linear blending makes blend modes, motion blur and opacity behave like light.",
+   "use_for": [
+    "Remove banding in vignettes, glows and graded skies (16 bpc)",
+    "HDR or realistic light wraps/glows (32 bpc + linear)",
+    "Keep fast previews for simple explainer comps (8 bpc)"
+   ],
+   "how": "File > Project Settings > Color > Bit Depth; or Alt/Option-click the bpc indicator in the Project panel. Render 16/32-bpc work to a 10/16-bit codec or banding returns.",
+   "scriptable": "yes",
+   "script_api": "app.project.bitsPerChannel = 16; app.project.linearBlending = true; app.project.linearizeWorkingSpace = true.",
+   "limits": "Some effects are 8-bpc only (yellow warning icon) and clip the float pipeline. 32 bpc is slower and changes how existing blend modes look.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/project/",
+    "https://helpx.adobe.com/after-effects/using/color-management.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "HDR workflow and export in Premiere",
+   "summary": "HDR in Premiere = an HDR working/output colour space (Rec.2100 HLG or PQ via Direct HDR (HLG) / Direct PQ (HDR) or an HDR output space), HDR-aware Lumetri (HDR checkbox), HDR scopes (0-10000 nits scale) and an HDR-capable export (10-bit HEVC/H.265 Main10 or ProRes) with HDR metadata.",
+   "use_for": [
+    "HDR YouTube versions of cinematic pieces",
+    "Keeping iPhone HLG footage in HDR",
+    "HLG broadcast deliveries"
+   ],
+   "how": "Set the sequence preset/output colour space to HLG or PQ; enable Extended Dynamic Range Monitoring on an HDR display; switch Lumetri Scopes to HDR; export HEVC 10-bit with Render at Maximum Bit Depth and the HDR options (older docs: 'Rec. 2020 Primaries', 'High Dynamic Range', 'Include HDR10 Metadata' need max bit depth + High10/Main10). Clip, sequence and export colour spaces must agree.",
+   "scriptable": "partial",
+   "script_api": "Sequence working space via ExtendScript getSettings/setSettings (unverified mapping in v26); export via Sequence.exportAsMediaDirect(path, presetPath.epr, app.encoder.ENCODE_ENTIRE) with an HDR .epr preset made in the UI.",
+   "limits": "Exact export checkbox names in 26.x are unverified (taken from pre-25 HDR guides). Without an HDR display and HDR scopes the grade cannot be judged; for social reels deliver SDR.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configure-sequence-output-color-space.html",
+    "https://postperspective.com/working-in-hdr-editing-and-finishing-in-adobe-premiere/",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "HDR in After Effects (32 bpc, compander, highlight compression, Rec.2100 output)",
+   "summary": "AE handles HDR in 32-bpc projects with an HDR working space; tools: HDR Compander (compress to 0-1 for 8/16-bpc effects and expand back), HDR Highlight Compression (rolls off values above 1.0), Rec.2100 PQ/HLG output colour space in the Output Module. AE reads CICP colour metadata (PNG, MOV, ICC profiles) on import and writes it on export (e.g. PNG Sequence with Output Color Space Rec.2100 PQ), plus optional HDR10 metadata in PNG Format Options (Adobe page, Mar 2026; the version that introduced it is not stated, so test on this 26.0 install).",
+   "use_for": [
+    "Composite over HDR phone footage without clipping",
+    "Bring overbright 32-bpc glows back into range for SDR delivery"
+   ],
+   "how": "32 bpc + working space; wrap 8/16-bpc-only effects between two HDR Compander instances (Mode: Compress then Expand); end the stack with HDR Highlight Compression for SDR output. Spec: {\"name\": \"ADBE HDR ToneMap\", \"props\": {\"Amount\": 100}}; {\"name\": \"ADBE Compander\", \"props\": {\"Mode:\": 1, \"Gain\": 2}}.",
+   "scriptable": "partial",
+   "script_api": "Effects settable by match name ('ADBE HDR ToneMap' Amount 0..100; 'ADBE Compander' 'Mode:' 1..2, Gain 0.01..100, Gamma 0.1..10). Project bit depth via app.project.bitsPerChannel. Output colour space: output-module template.",
+   "limits": "HDR Highlight Compression only acts on values above 1.0 (no change on SDR frames). Compander Mode 1 = Compress Range (Adobe's first step), 2 = Expand; Gain = the highest white value in the image. Undetected CICP variants need Interpret Footage > Main > Color > override media space.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/hdr-import-and-export/hdr-import-and-export.html",
+    "https://helpx.adobe.com/after-effects/using/color-management.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Log / HDR source to SDR Rec.709 (tone-mapping strategy)",
+   "summary": "Choosing how flat log, raw or HDR (HLG/PQ phone) clips become normal SDR: (a) Premiere colour management with Input Tone Mapping (default, best), (b) a technical LUT (fast, can clip), (c) per-clip conversion effects (SDR Conform, Color Space Transform), (d) in AE: interpret footage + working space, HDR Highlight Compression.",
+   "use_for": [
+    "Stock log B-roll in a Rec.709 explainer",
+    "iPhone HLG clips that look washed or over-bright in SDR edits",
+    "Drone D-Log footage in news packages"
+   ],
+   "how": "Premiere: sequence preset Direct Rec. 709 (SDR) with auto-detect on; if a clip is not detected (transcode) use Modify > Color > Override Media Color Space; only if the camera vendor's look is required use its technical LUT with colour management disabled for that clip. Then grade normally. AE: set the footage colour space, keep a Rec.709 working space, end with HDR Highlight Compression if values exceed 1.0.",
+   "scriptable": "partial",
+   "script_api": "ProjectItem.setOverrideColorSpace (ExtendScript, PProPanel sample); Input LUT by index or UXP createSetInputLUTIDAction; conversion effects by name.",
+   "limits": "Never apply both automatic conversion and a log LUT. Tone-mapped results still need Basic Correction. Phone HLG clips forwarded through messengers often lose their HDR flags and then need no conversion at all: check the waveform first.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/manage-source-media-colors-in-program-monitor.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configuring-sequence-color-management.html",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/",
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/hdr-import-and-export/hdr-import-and-export.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Lumetri Scopes (Premiere)",
+   "summary": "Built-in, resizable video scopes: Vectorscope YUV and Vectorscope HLS, Histogram, Parade (RGB, YUV, RGB-White, YUV-White) and Waveform (RGB, Luma, YC, YC no Chroma), with a bit-depth/scale menu (8-bit, 10-bit, float, or HDR with a 0-10000 nits scale) and a colour-space setting.",
+   "use_for": [
+    "Check legal 0-100 IRE luma and broadcast chroma",
+    "Balance RGB parade for neutral white balance",
+    "Put skin on the vectorscope skin-tone line",
+    "Match two shots objectively"
+   ],
+   "how": "Window > Lumetri Scopes (Color workspace); right-click the scope to choose scopes and type; scale menu bottom-right. Workflow: waveform for black/white points, parade for casts, vectorscope for saturation and skin line.",
+   "scriptable": "no",
+   "script_api": "none (panel). Automated checks should measure rendered frames outside the app (e.g. ffmpeg signalstats / waveform) instead.",
+   "limits": "Scopes read the Program Monitor output in the selected colour space; with HDR output switch the scale to HDR. Adobe's current scopes page (Aug 2026) lists Vectorscope YUV, Histogram, Parade (RGB/YUV/RGB-White/YUV-White) and Waveform (RGB/Luma/YC/YC No Chroma; Luma shows -20..120 IRE); the HLS vectorscope and the 8-bit/10-bit/float/HDR scale menu come from older docs: check them in 26.0.2.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "AE",
+   "name": "Lumetri Scopes and Info panel in After Effects",
+   "summary": "AE's Lumetri Scopes panel offers vectorscopes, histograms, parade and waveform designed for broadcast work, measuring in Rec. 601, Rec. 709 and Rec. 2020; the Info panel reads pixel values under the cursor.",
+   "use_for": [
+    "Check levels of graphics and composites before handing to Premiere",
+    "Match a CG element's blacks to the plate"
+   ],
+   "how": "Window > Workspace > Color (opens Lumetri Color panel + Lumetri Scopes); Window > Info for pixel readouts.",
+   "scriptable": "no",
+   "script_api": "none. Measure rendered frames externally for automated QC.",
+   "limits": "Scopes follow the comp viewer and its colour management settings.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/color-basics/color-basics.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Broadcast-safe / legal levels finishing",
+   "summary": "Final safety stage for broadcast (and clean web) masters: keep luma within legal Rec.709 range (0-100 IRE = 16-235 8-bit / 64-940 10-bit) and chroma within the vectorscope's 75% targets. Tools: Video Limiter (Premiere and AE) and Broadcast Colors.",
+   "use_for": [
+    "TV news packages and channel deliveries",
+    "Political ads for broadcast clearance",
+    "Clamp stray superwhites from graphics and phone footage"
+   ],
+   "how": "Grade first while watching scopes, then add the limiter as the LAST effect (on a top adjustment layer or each clip). PR: {\"name\": \"Video Limiter\"} (defaults; labels of 'Clip Level' 0..3 default 1 and 'Compression before clipping' 0..4 are unverified). AE: {\"name\": \"ADBE DigitalVideoLimiter\", \"props\": {\"Gamut Warning\": 0}}. Broadcast Colors: 'Maximum Signal Amplitude (IRE)' 90..120, default 110; set 100 for strict legal.",
+   "scriptable": "partial",
+   "script_api": "Effects by name; all values numeric popups/numbers. AE Video Limiter properties are non-animatable (static values only). 'Gamut Warning' must be 0/false for delivery (Premiere's gamut-warning checkbox has an empty name and cannot be addressed).",
+   "limits": "Clamping discards highlight detail: fix levels in the grade first, use the limiter only as a safety net. Popup labels unverified; check a rendered frame. Web platforms do not require legal range but expect correctly flagged video.",
+   "status": "current",
+   "sources": [
+    "https://larryjordan.com/articles/broadcast-safe-keep-video-levels-legal/",
+    "https://aspect.inc/blog/post-production/guide-to-broadcast-safe-levels-and-sdr-legalization",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Full vs legal range fix (grey blacks / crushed blacks)",
+   "summary": "Fix range mismatches common in screen recordings, OBS captures, forwarded phone clips and archive transfers: legal-range video read as full looks washed (grey blacks, dull whites); full-range video read as legal clips shadows and highlights.",
+   "use_for": [
+    "Washed-out screen recordings in AI-education explainers",
+    "Grey-black WhatsApp/news clips next to clean camera footage",
+    "Archive tape transfers with lifted blacks"
+   ],
+   "how": "Check the waveform: blacks resting near 16/255 (about 6%) and whites near 235 = legal read as full. Expand: PR {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}; AE {\"name\": \"ADBE Easy Levels2\", \"props\": {\"Input Black\": 0.0627, \"Input White\": 0.9216}} (AE Levels is normalised 0..1). Compress full to legal: PR '(RGB) Black Output Level' 16 / '(RGB) White Output Level' 235. Alternatives: the bundled SMPTEToFull8 / FullToSMPTE8 LUTs (see lut cards), Premiere's Lumetri Presets > Technical 'Legal to Full Range, 8-bit' / 'Full to Legal Range, 8-bit' (10/12-bit variants too), and AE's animation preset 'Levels - computer to video' (Image - Utilities).",
+   "scriptable": "yes",
+   "script_api": "Levels parameters by name (PR 0..255 integers; AE normalised floats).",
+   "limits": "On correctly decoded footage the expansion clips shadows and highlights: apply only after measuring. Prefer fixing the clip's interpretation if the app offers it. See also: 'Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift' (a look that is washed out only in QuickTime, Safari or phone apps is display gamma, not range).",
+   "status": "current",
+   "sources": [
+    "https://larryjordan.com/articles/broadcast-safe-keep-video-levels-legal/",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Film grain (Add Grain, Match Grain, Noise, grain overlays)",
+   "summary": "Grain hides compression banding, unifies mixed sources and sells a film look. AE: Add Grain (film-stock presets, detailed Tweaking/Color/Application controls), Match Grain (copies grain from a source layer), Remove Grain. Premiere 26 has no Add Grain: use Noise at low amounts, or a scanned grain clip on an upper track in Overlay/Soft Light.",
+   "use_for": [
+    "Unify archive and modern footage in documentaries",
+    "Cinematic trailer texture",
+    "Hide banding in graded skies and vignettes"
+   ],
+   "how": "AE spec: {\"name\": \"VISINF Grain Implant\", \"props\": {\"Viewing Mode\": 3, \"Intensity\": 0.6, \"Size\": 1.2, \"Softness\": 1}} (Viewing Mode 3 = Final Output; default 1 = Preview renders grain only inside a 200x200 box). PR spec: {\"name\": \"Noise\", \"pr_props\": {\"Amount of Noise\": 4, \"Use Color Noise\": false}} on an adjustment layer or each clip. Grain goes after the grade and before the limiter.",
+   "scriptable": "yes",
+   "script_api": "AE Add Grain: 'Viewing Mode' 1..3, 'Preset' 1..15 (film stocks, labels unverified), 'Intensity' 0..100, 'Size' 0..10, 'Softness' 0..10, 'Monochromatic' 0/1, 'Blending Mode' 1..5. Match Grain needs a 'Noise Source Layer' (layer reference: not spec-settable). PR Noise: 'Amount of Noise' 0..100, booleans 'Use Color Noise', 'Clip Result Values'.",
+   "limits": "Grain multiplies bitrate on Instagram/YouTube; keep it subtle (Add Grain Intensity <= 1, PR Noise <= 6). AE Add Grain is slow at 4K. Premiere Noise is digital noise, not film grain (no size/softness control).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/noise-grain-effects.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Film-emulation look recipe",
+   "summary": "A film look is built from: correction to neutral, a print-emulation LUT at partial intensity (contrast curve and colour crossover), slightly lifted/matte blacks, warm highlight roll-off, grain, and gentle vignette; optional letterbox for cinema framing.",
+   "use_for": [
+    "Cinematic trailers and intros",
+    "Reflective documentary chapters",
+    "Brand films for the AI channel"
+   ],
+   "how": "PR: [{\"name\": \"Lumetri Color\", \"pr_props\": {\"Look\": <film LUT index>, \"Intensity#2\": 55, \"Faded Film\": 10, \"Highlights\": -15, \"Saturation#2\": 92, \"Amount\": -0.8, \"Feather\": 75}}, {\"name\": \"Noise\", \"pr_props\": {\"Amount of Noise\": 4, \"Use Color Noise\": false}}]. AE: [{\"name\": \"ADBE Lumetri\", \"props\": {\"Faded Film\": 10, \"Highlights\": -15, \"Amount\": -0.8, \"Feather\": 75}}, film LUT via Apply Color LUT .ffx, {\"name\": \"VISINF Grain Implant\", \"props\": {\"Viewing Mode\": 3, \"Intensity\": 0.6}}]. Premiere Color Mode (beta) adds film-emulation Styles.",
+   "scriptable": "partial",
+   "script_api": "All listed params settable; the LUT choice is index-based (PR) or preset-based (AE).",
+   "limits": "Halation, gate weave and print density curves have no built-in single control. Over-faded blacks look cheap after platform compression.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html",
+    "https://helpx.adobe.com/after-effects/using/noise-grain-effects.html",
+    "https://www.provideocoalition.com/burning-questions-about-adobe-premiere-betas-new-dedicated-color-mode/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Black-and-white and tinted archival looks",
+   "summary": "Monochrome or tinted treatment for archive sections, flashbacks and memorial segments: desaturate, rebuild contrast (B&W stocks were contrasty), optional sepia/duotone tint, grain.",
+   "use_for": [
+    "Archive/history chapters in political documentaries",
+    "Flashback or 'then vs now' segments",
+    "Respectful tribute/obituary pieces"
+   ],
+   "how": "PR: [{\"name\": \"Lumetri Color\", \"pr_props\": {\"Saturation\": 0, \"Contrast\": 25, \"Whites\": 10, \"Blacks\": -10}}, {\"name\": \"Tint\", \"pr_props\": {\"Map Black To\": \"#1A120A\", \"Map White To\": \"#F2E6D0\", \"Amount to Tint\": 40}}]. AE: [{\"name\": \"ADBE Black&White\", \"props\": {\"Reds\": 50, \"Yellows\": 70}}, {\"name\": \"ADBE Tint\", \"props\": {\"Map Black To\": \"#1A120A\", \"Map White To\": \"#F2E6D0\", \"Amount to Tint\": 40}}]. Monochrome film LUTs ('Monochrome Kodak 5218 Kodak 2395 (by Adobe)') are an alternative.",
+   "scriptable": "yes",
+   "script_api": "PR Tint 'Map Black To' is harvested as a number with an impossible range but accepts \"#RRGGBB\" in the bridge (pve may flag it; verify on a frame). AE Black & White channel sliders -200..300 control how each hue maps to grey.",
+   "limits": "Converting colour footage to B&W can misrepresent archival material if presented as original: label treated footage in news contexts. Saturation 0 in Lumetri is a plain luma mix; AE Black & White gives control per hue.",
+   "status": "current",
+   "sources": [
+    "https://peachykeencolour.com.au/colour-grading-archive-film-documentary/",
+    "https://noamkroll.com/how-to-color-grade-a-perfectly-cinematic-black-and-white-look/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Teal-and-orange / split-tone with scriptable effects",
+   "summary": "Complementary split tone: cool (teal) shadows, warm (orange) highlights and skin. Lumetri's wheels and split-tone tints do it in the UI but are not scriptable; settable alternatives are AE Color Balance and Premiere ASC CDL.",
+   "use_for": [
+    "Cinematic trailers and hype intros",
+    "Making faces pop off backgrounds in explainers"
+   ],
+   "how": "AE: {\"name\": \"ADBE Color Balance 2\", \"props\": {\"Shadow Red Balance\": -12, \"Shadow Blue Balance\": 15, \"Highlight Red Balance\": 12, \"Highlight Blue Balance\": -12, \"Preserve Luminosity\": 1}} (each -100..100). PR: {\"name\": \"ASC CDL\", \"pr_props\": {\"Red Slope\": 1.05, \"Red Offset\": -0.02, \"Blue Slope\": 0.95, \"Blue Offset\": 0.025, \"Saturation\": 1.0}} (out = (in x slope + offset) ^ power; offset mostly moves shadows, slope mostly highlights). UI route: Lumetri Color Wheels (shadows toward teal, highlights toward orange) or Creative Shadow/Highlight Tint, saved as preset.",
+   "scriptable": "yes",
+   "script_api": "AE Color Balance nine sliders + Preserve Luminosity 0/1; PR ASC CDL Slope/Power 0..10 (neutral 1), Offset -10..10 (neutral 0), Saturation 0..10 (neutral 1).",
+   "limits": "Push skin too far and Indian skin tones go orange/green; check the vectorscope skin line. CDL offset values are small fractions (0.01-0.05); larger values tint everything.",
+   "status": "current",
+   "sources": [
+    "https://pixflow.net/blog/teal-and-orange-color-grading/",
+    "https://coloristfactory.com/2021/04/11/teal-orange-premiere/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Premiere Color Mode (beta) and the Lumetri panel retirement (27.0)",
+   "summary": "A dedicated colour environment shown in the Premiere 26.2 public beta (April 2026) and slated for Premiere 27.0: Color Monitor, Clip Grid, Color Controls with Adjustments, Styles (film emulations, presets) and Modules, Color Shift (Sat/Hue/Lum Shift on auto-detected hues), clip/group/sequence grading, new scopes and a Color Management panel; runs in 32-bit float. In 27.0 the Lumetri panel is retired; the Lumetri Color effect remains and existing Lumetri grades open unchanged.",
+   "use_for": [
+    "Future editor-friendly grading once 27.0 is installed",
+    "Group/sequence-level looks without adjustment layers"
+   ],
+   "how": "Premiere (beta) > Color mode. Not present in the installed Premiere 26.0.2 release.",
+   "scriptable": "no",
+   "script_api": "none known: no scripting API for Color Mode grades was found; grades appear as a new colour effect in Effect Controls (unverified parameter names).",
+   "limits": "Beta; Adobe says it will change. Reviewers note no lift/gamma/gain wheels and no nodes in the beta. Automations should keep using the Lumetri Color effect, which stays supported. Adobe (Aug 2026): still beta and not for client work; HSL keying for masked isolations and more Style modules still to come; a Wide Gamut sequence gains an 'Apply Inverse Tone Mapping and Gamut Compression' checkbox; a beta project opened in 26.x shows offline colour-effect filters on graded clips (quit without saving); Adobe advises against mixing Lumetri Color effects and Color mode in new projects.",
+   "status": "beta",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-mode-fundamentals/color-mode-basics.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-mode-fundamentals/lumetri-color.html",
+    "https://www.provideocoalition.com/burning-questions-about-adobe-premiere-betas-new-dedicated-color-mode/",
+    "https://cuttothepoint.com/blog/premiere-pro-26-2-color-mode/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Where to put the grade: per clip, adjustment layer, master clip",
+   "summary": "Three placements: per-clip effects (shot correction), an adjustment layer over a range (shared look: LUT, grain, vignette, limiter), and Premiere master-clip effects (applied in the Source Monitor/Project panel to every instance of a source clip).",
+   "use_for": [
+    "Correct each interview angle once (master clip) and reuse it across the edit",
+    "One look for a whole documentary chapter (adjustment layer)",
+    "Shot-by-shot fixes for news B-roll (per clip)"
+   ],
+   "how": "Premiere: File > New > Adjustment Layer, place above clips; master clip: load clip in the Source Monitor and drop Lumetri there. AE: Layer > New > Adjustment Layer. Order: per-clip correction below, shared look above, limiter topmost.",
+   "scriptable": "partial",
+   "script_api": "AdobeBridge specs put effects on clips (\"effects\" per clip): there is no adjustment-layer item in the spec, so repeat the shared look on each clip or build the look in AE. AE: layer.adjustmentLayer = true on a solid (documented AVLayer attribute). Premiere: no documented ExtendScript call creates adjustment layers or master-clip effects (unverified).",
+   "limits": "Vignettes and grain on per-clip instances follow each clip's own frame (scaled clips get scaled vignettes). Master-clip effects are easy to forget and apply everywhere.",
+   "status": "current",
+   "sources": [
+    "https://www.adobe.com/tr/learn/premiere-pro/web/apply-effects-master-clips",
+    "https://www.miracamp.com/learn/premiere-pro/apply-color-grading-to-multiple-clips",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Shot matching and flicker tools",
+   "summary": "Making consecutive shots match: Premiere Color Match (Sensei, UI), manual matching with scopes; AE Auto Color / Auto Levels / Auto Contrast (automatic per-frame balancing), Color Stabilizer (match_name 'ADBE Deflicker': removes brightness/colour flicker against a reference frame).",
+   "use_for": [
+    "Interview A/B cameras with different white balance",
+    "Flickering archive film or timelapse",
+    "Press-pool clips from different broadcasters in one sequence"
+   ],
+   "how": "Match by scopes: equalise black and white points on the waveform, then neutral greys on the parade, then skin on the vectorscope. AE Color Stabilizer: apply, set 'Stabilize' (1..3: Brightness/Levels/Curves, default 2) and the sample points on stable areas.",
+   "scriptable": "partial",
+   "script_api": "Color Match: none (UI). AE Auto Color/Levels/Contrast: parameters settable by match name. Color Stabilizer ('ADBE Deflicker'): 'Stabilize' 1..3, sample points 'Black Point', 'Mid Point', 'White Point' as [x, y] comp pixels (defaults [384,540], [960,540], [1536,540]) and 'Sample Size' 1..50 are settable; the reference frame is set in the UI (no harvested property).",
+   "limits": "Auto effects re-evaluate every frame and can pump on moving shots. Colour Match ignores intent (night scenes get brightened).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/match-color-between-shots.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "ASC CDL interchange",
+   "summary": "ASC Color Decision List = per-channel Slope, Offset, Power plus Saturation, the industry exchange format for primary grades. Premiere has a numeric ASC CDL effect; AE applies .cc/.cdl files via OCIO CDL Transform.",
+   "use_for": [
+    "Reproduce a colourist's or DIT's primary grade numerically",
+    "Scriptable primary colour balance in Premiere"
+   ],
+   "how": "PR: Effects > ASC CDL, type the 10 values (R/G/B Slope, Offset, Power, Saturation). AE: OCIO CDL Transform or OCIO File Transform with the file (UI), or approximate with Levels (Individual Controls)/Color Balance.",
+   "scriptable": "yes",
+   "script_api": "PR {\"name\": \"ASC CDL\", \"pr_props\": {\"Red Slope\": 1.0, \"Red Offset\": 0.0, \"Red Power\": 1.0, ..., \"Saturation\": 1.0}}. AE OCIO CDL Transform: file only (not scriptable).",
+   "limits": "CDL is a primary only (no secondaries). Values assume the colour space the CDL was authored in.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html",
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/opencolorio-and-aces-color-management/opencolorio-aces-color-management.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Finishing: sharpening and noise reduction",
+   "summary": "Final-stage detail control: light sharpening after scaling for web delivery (Lumetri Creative Sharpen, Unsharp Mask) and noise reduction before grading heavy noise (AE Remove Grain; Premiere's only harvested denoiser is VR De-Noise (match 'AE.Mettle SkyBox Denoise', built for 360 footage; on flat footage untested); Lumetri HSL Denoise only smooths the key).",
+   "use_for": [
+    "Crisp up 720p/phone archive upscaled to 1080",
+    "Clean noisy night rally footage before lifting shadows"
+   ],
+   "how": "PR: {\"name\": \"Unsharp Mask\", \"pr_props\": {\"Amount\": 60, \"Radius\": 1.0, \"Threshold\": 0.02}} after any scaling; or Lumetri 'Sharpen' 10..20. AE: {\"name\": \"ADBE Unsharp Mask2\", \"props\": {\"Amount\": 60, \"Radius\": 1, \"Threshold\": 0.02}}; denoise {\"name\": \"VISINF Grain Removal\", \"props\": {\"Viewing Mode\": 4, \"Noise Reduction\": 1}} (Viewing Mode 4 = Final Output).",
+   "scriptable": "yes",
+   "script_api": "Parameters by name; Unsharp Mask Threshold normalised 0..1 in both apps; Remove Grain repeats 'Amount' (Amount = Temporal Filtering, Amount#2 = Unsharp, Amount#3 = Blend; '#n' works only in Premiere-style addressing). PR VR De-Noise: 'Noise Type' 0..1, 'Noise Level' 0..1 (default 0.2), 'Frame Layout' 0..2 and field-of-view numbers meant for VR; check a frame before relying on it.",
+   "limits": "Oversharpening creates halos that compression amplifies; denoise before grade, sharpen after. AE Remove Grain is slow.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/noise-grain-effects.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Cinematic letterbox (2.39:1 bars)",
+   "summary": "Black bars that crop a 16:9 frame to scope (2.39:1) for trailer/cinematic sections: on 1920x1080 the visible height is 803 px, i.e. 138 px (12.8%) bars top and bottom.",
+   "use_for": [
+    "Cinematic trailer and intro sections",
+    "Signalling a 'film' segment inside an explainer"
+   ],
+   "how": "PR: {\"name\": \"Crop\", \"pr_props\": {\"Top\": 12.8, \"Bottom\": 12.8}} on each clip (cropped area is transparent so the black background shows); keep captions inside the picture area. AE: two black solids or a shape layer on top, or a mask on an adjustment layer.",
+   "scriptable": "yes",
+   "script_api": "PR Crop 'Left','Top','Right','Bottom' 0..100 percent, 'Edge Feather' px, 'Zoom' bool.",
+   "limits": "Not for 9:16 reels (wastes vertical space). Crop is per clip (no adjustment-layer item in AdobeBridge), and punch-in zooms scale the crop with the clip unless the crop sits after Motion (it does not: Motion renders last).",
+   "status": "current",
+   "sources": [
+    "https://en.wikipedia.org/wiki/Letterboxing_(filming)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Recipe: documentary archival footage",
+   "summary": "Make archive (tape, film scans, old news, low-res web clips) sit well next to modern interviews: fix range and exposure, remove casts, decide between 'clean and seamless' or a deliberate archive look (B&W/sepia/period saturation), unify with grain, keep original aspect ratio.",
+   "use_for": [
+    "Political history chapters",
+    "Archive news inserts",
+    "Old photos and film in explainers"
+   ],
+   "how": "1) Range/levels first (Levels 16/235 fix only if measured). 2) Lumetri per clip: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Exposure\": 0.2, \"Contrast\": 15, \"Whites\": 8, \"Blacks\": -8, \"Saturation\": 85, \"Faded Film\": 8, \"Sharpen\": 5}} (AE: same names on \"ADBE Lumetri\", without Saturation#2). 3) Deliberate archive look: Saturation 0 + Tint at 30-40% (see B&W card). 4) Grain to unify: PR Noise 'Amount of Noise' 3-5 or AE Add Grain Viewing Mode 3, Intensity 0.5-0.8. 5) Flicker: AE Color Stabilizer; noise: AE Remove Grain (Viewing Mode 4). 6) Pillarbox 4:3 material instead of stretching; subtle vignette Amount -0.6.",
+   "scriptable": "partial",
+   "script_api": "All numeric steps are spec-settable; flicker reference and curves are UI/preset steps.",
+   "limits": "Do not over-sharpen low-res sources. Avoid colourising/altering archive in news context without labelling. Archive is usually Rec.601/legal range: check levels per clip, not per batch.",
+   "status": "current",
+   "sources": [
+    "https://peachykeencolour.com.au/colour-grading-archive-film-documentary/",
+    "https://noamkroll.com/how-to-color-grade-a-perfectly-cinematic-black-and-white-look/",
+    "https://helpx.adobe.com/after-effects/using/noise-grain-effects.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Recipe: news and political explainer (clean, honest, legal)",
+   "summary": "Natural, consistent, credible look: neutral white balance, faithful skin, moderate contrast, no stylised looks on evidence footage, legal levels for broadcast.",
+   "use_for": [
+    "Daily news reels",
+    "Political explainers with press-conference footage",
+    "TV packages"
+   ],
+   "how": "Per clip: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Temperature\": <fix cast>, \"Tint\": <fix>, \"Exposure\": 0.1, \"Contrast\": 8, \"Highlights\": -15, \"Shadows\": 8, \"Saturation\": 102, \"Vibrance\": 8, \"Sharpen\": 6}}; match all speakers on the vectorscope skin line; graphics/lower thirds stay on brand colours (no grade on graphics). Finish: {\"name\": \"Video Limiter\"} last for broadcast; for social keep blacks above ~2% so phone screens show detail.",
+   "scriptable": "yes",
+   "script_api": "Lumetri Basic/Creative params by name (PR) / first-match names on \"ADBE Lumetri\" (AE).",
+   "limits": "No creative LUTs, heavy vignettes or teal-orange on factual footage (reads as manipulation). Saturation above ~120 turns Indian skin orange and clips after YouTube/Instagram encoding.",
+   "status": "current",
+   "sources": [
+    "https://larryjordan.com/articles/broadcast-safe-keep-video-levels-legal/",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/available-lumetri-scopes.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Recipe: cinematic trailer grade",
+   "summary": "High-impact trailer look: deep but not crushed blacks, controlled highlights, complementary split tone, reduced overall saturation with protected skin, vignette, grain, optional 2.39:1 letterbox and flash frames.",
+   "use_for": [
+    "Channel trailers and season promos",
+    "Documentary trailers",
+    "Hype intros for political explainers"
+   ],
+   "how": "Base: {\"name\": \"Lumetri Color\", \"pr_props\": {\"Contrast\": 25, \"Highlights\": -25, \"Shadows\": -5, \"Whites\": 10, \"Blacks\": -15, \"Saturation\": 90, \"Vibrance\": 10, \"Faded Film\": 5, \"Amount\": -1.5, \"Feather\": 70}}; split tone: PR ASC CDL / AE Color Balance values from the teal-orange card; optional film LUT at 'Intensity#2' 40-60; grain (AE Add Grain Viewing Mode 3, Intensity 0.6, Size 1.2 / PR Noise 4); letterbox Crop Top/Bottom 12.8. AE version: same Lumetri names on \"ADBE Lumetri\" + \"ADBE Color Balance 2\" + \"VISINF Grain Implant\".",
+   "scriptable": "partial",
+   "script_api": "All values spec-settable except wheels/curves (use presets or the CDL/Color Balance substitutes).",
+   "limits": "Crushing blacks (Blacks below about -40) and heavy grain fall apart after social compression. Render at maximum bit depth / 16 bpc to avoid banding in dark gradients and vignettes.",
+   "status": "current",
+   "sources": [
+    "https://pixflow.net/blog/teal-and-orange-color-grading/",
+    "https://coloristfactory.com/2021/04/11/teal-orange-premiere/",
+    "https://helpx.adobe.com/after-effects/using/noise-grain-effects.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Recipe: social reel punch (mobile-first)",
+   "summary": "Phone-screen-friendly grade for Instagram/YouTube Shorts: clean whites, open shadows, extra vibrance rather than saturation, light sharpening, no heavy fade, grain or vignette that compression will smear.",
+   "use_for": [
+    "AI-education reels",
+    "Talking-head shorts",
+    "Trend reels with mixed phone footage"
+   ],
+   "how": "{\"name\": \"Lumetri Color\", \"pr_props\": {\"Exposure\": 0.15, \"Contrast\": 15, \"Highlights\": -20, \"Shadows\": 15, \"Whites\": 8, \"Blacks\": -5, \"Vibrance\": 20, \"Saturation\": 105, \"Sharpen\": 12}}; AE same names on \"ADBE Lumetri\". Check faces on the vectorscope; keep caption areas free of vignette.",
+   "scriptable": "yes",
+   "script_api": "Lumetri params by name.",
+   "limits": "Faded Film above ~15 and grain above PR Noise 5 look muddy after re-encoding; Saturation above ~120 clips reds.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/color-correction-fundamentals/basic-color-correction-options.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/add-color-effects/apply-lumetri-looks.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "both",
+   "name": "Recipe: log or HLG phone/drone footage to a Rec.709 edit",
+   "summary": "Normalising footage that arrives flat (log) or too bright/washed (HLG/HDR) into an SDR Rec.709 sequence before creative grading.",
+   "use_for": [
+    "Stock log B-roll",
+    "iPhone HLG Dolby Vision clips",
+    "Drone D-Log/V-Log shots"
+   ],
+   "how": "Premiere: Direct Rec. 709 (SDR) sequence with 'Color Manage Auto Detected Log and Raw Media' on; check each clip (Modify > Color shows the detected space); undetected log: Override Media Color Space to the camera's log/gamut; then Basic Correction (Exposure/Whites/Blacks) and look. Fallback: technical LUT with colour management off for that clip. AE: interpret the footage's colour space, Rec.709 working space, add {\"name\": \"ADBE HDR ToneMap\", \"props\": {\"Amount\": 100}} last in 32 bpc if highlights exceed 1.0.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript ProjectItem.getColorSpace() to detect, setOverrideColorSpace(name) to fix (PProPanel sample); Lumetri by name for the trim.",
+   "limits": "Never double-convert (auto colour management + log LUT). Forwarded/re-encoded phone clips often lose HDR flags; measure before converting.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/manage-source-media-colors-in-program-monitor.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configuring-sequence-color-management.html",
+    "https://digitalfilms.wordpress.com/2025/05/02/premiere-pro-2025-color-management/",
+    "https://helpx.adobe.com/after-effects/desktop/adjust-colors/hdr-import-and-export/hdr-import-and-export.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "color_finishing",
+   "app": "PR",
+   "name": "Tone mapping and gamut compression options (Premiere colour management)",
+   "summary": "How Premiere squeezes log/raw/HDR into a smaller range: Tone Mapping algorithms Hue Preservation (default; Highlight Saturation 0.5 and Knee), By Channel (smooth, slightly darker, desaturates bright saturated highlights) and Max RGB (smooth, slightly darker, keeps more highlight saturation); Gamut Compression Luminance Preserving (default) or Saturation Preserving. Each can run on input (per clip, before effects) or on output (whole sequence, after effects).",
+   "use_for": [
+    "Log or HDR phone/drone clips whose highlights look clipped or oddly coloured after conversion to Rec.709",
+    "Choosing input vs output tone mapping for a Wide Gamut grade"
+   ],
+   "how": "Sequence > Sequence Settings > Color tab > Advanced (or Lumetri panel > Settings > Sequence Controls > Advanced in 25/26 for a live preview in the Program Monitor). Input tone mapping happens before effects, so clipped highlight detail cannot be recovered by the grade; output tone mapping applies one algorithm to the whole sequence after all grading. Start with Hue Preservation; switch to By Channel if bright saturated highlights skew. SDR clips are unaffected by gamut compression.",
+   "scriptable": "no",
+   "script_api": "No documented ExtendScript or UXP call sets the algorithm, knee, highlight saturation or gamut compression; ExtendScript Sequence.getSettings() exposes only the legacy boolean autoToneMapEnabled (mapping to these controls unverified). Use a sequence preset saved with the right colour settings.",
+   "limits": "Algorithm choice is per clip on input but single for the sequence on output. In 27.0 these controls move to the Color Management panel.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/color-management-options.html",
+    "https://helpx.adobe.com/premiere/desktop/correct-color/set-up-color-management/configuring-sequence-color-management.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/sequence/"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

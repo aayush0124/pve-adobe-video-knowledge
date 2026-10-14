@@ -1,0 +1,1535 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Cylinder",
+   "match": "CC Cylinder",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Wraps the layer around a pseudo-3D cylinder with its own light and shading, so a flat image becomes a rotating drum or column. The layer's width runs around the cylinder's circumference.",
+   "look": [
+    "3D wrap",
+    "cylinder",
+    "rotating drum",
+    "shaded",
+    "pseudo-3D"
+   ],
+   "use_for": [
+    "turn a flat headline strip or newspaper scan into a rotating drum for an explainer intro",
+    "spinning 'wheel of options' or rotating banner for a political comparison",
+    "wrap a ticker / text strip around a column for a stylised title card",
+    "quick product-style 3D turn of a flat graphic without a 3D renderer"
+   ],
+   "avoid": [
+    "live-action faces (heavy distortion on the curve looks cheap)",
+    "low-res sources: the front of the cylinder magnifies the image",
+    "expecting it to interact with AE cameras or lights (it uses its own internal light only)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius (%)",
+     "does": "Cylinder radius relative to the layer size",
+     "typical": "60-120 (100 default)"
+    },
+    {
+     "name": "Rotation Y",
+     "does": "Spin around the vertical axis (degrees); the main animation control",
+     "typical": "0-360, keyframe for a spin"
+    },
+    {
+     "name": "Rotation X",
+     "does": "Tilt the cylinder towards/away from camera (degrees)",
+     "typical": "10-25 for a heroic angle"
+    },
+    {
+     "name": "Position Z",
+     "does": "Push the cylinder towards or away from the viewer",
+     "typical": "0 to 300 (believed: positive pushes it away/smaller; sign not verified)"
+    },
+    {
+     "name": "Render",
+     "does": "Which surface is drawn",
+     "typical": "1 (Full); 2 Outside only; 3 Inside only"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "Strength of the internal light",
+     "typical": "80-150"
+    },
+    {
+     "name": "Light Direction",
+     "does": "Angle the light comes from (degrees)",
+     "typical": "-45 (default) to -90"
+    },
+    {
+     "name": "Specular",
+     "does": "Shiny highlight strength",
+     "typical": "20-60"
+    }
+   ],
+   "demo_settings": {
+    "Radius (%)": 100,
+    "Rotation X": 15,
+    "Rotation Y": 35,
+    "Render": 1,
+    "Light Intensity": 130,
+    "Specular": 60
+   },
+   "enum_labels": {
+    "Rotation Order": {
+     "1": "XYZ",
+     "2": "XZY",
+     "3": "YXZ",
+     "4": "YZX",
+     "5": "ZXY",
+     "6": "ZYX"
+    },
+    "Render": {
+     "1": "Full",
+     "2": "Outside",
+     "3": "Inside"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "CC Light Sweep",
+    "Motion Tile"
+   ],
+   "scripting": "Rotations are 1d angle properties in degrees (no min/max, 360 = one full turn). Rotation Order: 1 XYZ, 2 XZY, 3 YXZ (default), 4 YZX, 5 ZXY, 6 ZYX (read from After Effects 26.0). Light Color is a colour property; Light Height is -100..100. The effect ignores comp cameras and lights. For a seamless wrap the layer content should tile horizontally (pre-apply Motion Tile or use a wide strip).",
+   "recipe": {
+    "Rotation Y": [
+     [
+      0,
+      0
+     ],
+     [
+      4,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/156.png",
+    "note": "Image wrapped onto a narrow shaded vertical column with dark falloff at both sides and black around it, clearly a rotated cylinder.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Environment",
+   "match": "CC Environment",
+   "category": "Perspective",
+   "status": "needs_input",
+   "summary": "Maps an environment image (spherical / light-probe / vertical-cross panorama) chosen from another layer onto the layer as a backdrop that turns with the active 3D camera, like a cheap sky dome.",
+   "look": [
+    "environment map",
+    "360 backdrop",
+    "sky dome",
+    "panorama",
+    "camera-reactive"
+   ],
+   "use_for": [
+    "camera-reactive panoramic background behind 3D text in a trailer title",
+    "fake 360 skyline / sky behind 3D layers in an explainer set",
+    "reflection-style backdrop when moving a 3D camera around titles"
+   ],
+   "avoid": [
+    "using without a 3D camera (it then just shows a static slice of the map)",
+    "low-res panoramas: the visible slice is a small crop and looks soft",
+    "expecting it to work as a reflection on other layers (it only renders the backdrop on its own layer)"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Environment",
+     "does": "Layer that holds the panorama/environment image",
+     "typical": "an equirectangular or probe image layer (hide its visibility)"
+    },
+    {
+     "name": "Mapping",
+     "does": "How the environment image is interpreted",
+     "typical": "1 Spherical for equirectangular panoramas"
+    },
+    {
+     "name": "Horizontal Pan",
+     "does": "Rotates the environment horizontally",
+     "typical": "0-360"
+    },
+    {
+     "name": "Filter Environment",
+     "does": "Smooths/filters the sampled map (checkbox)",
+     "typical": "1 to reduce aliasing"
+    },
+    {
+     "name": "Lens Distortion",
+     "does": "Wide-angle style distortion of the mapped view",
+     "typical": "0-100"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Mapping": {
+     "1": "Spherical",
+     "2": "Probe",
+     "3": "Vertical Cross"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Camera",
+    "CC Sphere",
+    "Gaussian Blur"
+   ],
+   "scripting": "Environment is a layer-reference property: the script must set it to a layer index/ref of the panorama layer (cannot be set from a static spec). Apply on a full-comp solid; it needs an active 3D camera to react to. Mapping: 1 Spherical (default), 2 Probe, 3 Vertical Cross (read from After Effects 26.0). Without these inputs the effect shows nothing useful, hence status needs_input.",
+   "recipe": {
+    "Horizontal Pan": [
+     [
+      0,
+      0
+     ],
+     [
+      8,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Status needs_input (needs an environment layer and a 3D camera), so no frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Sphere",
+   "match": "CC Sphere",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Wraps the layer onto a shaded pseudo-3D sphere, turning a flat image into a ball or globe with its own light, specular highlight and optional reflection map.",
+   "look": [
+    "globe",
+    "sphere wrap",
+    "3D ball",
+    "spinning planet",
+    "shaded"
+   ],
+   "use_for": [
+    "spinning globe from a flat equirectangular world map for geopolitics / foreign-policy explainers",
+    "planet or moon shot for a space-news segment (ISRO missions)",
+    "turn a flag into a rotating ball for a reel transition",
+    "orb / sphere logo reveal in a trailer"
+   ],
+   "avoid": [
+    "maps not in 2:1 equirectangular projection (continents look stretched and the seam shows)",
+    "using it on a press photo of people (faces wrap grotesquely)",
+    "large radius on low-res sources (blurry front)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "Sphere radius in pixels",
+     "typical": "300-500 for a centred globe in 1080p"
+    },
+    {
+     "name": "Rotation Y",
+     "does": "Spin around vertical axis (degrees); the globe-spin control",
+     "typical": "keyframe 0 -> 360 over 8-12 s"
+    },
+    {
+     "name": "Rotation X",
+     "does": "Tilt toward/away (degrees)",
+     "typical": "10-25 so the globe looks tilted"
+    },
+    {
+     "name": "Offset",
+     "does": "Sphere centre on screen (px)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Render",
+     "does": "Which hemisphere surface is drawn",
+     "typical": "1 Full; 2 Outside; 3 Inside"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "Internal light strength",
+     "typical": "90-140"
+    },
+    {
+     "name": "Light Direction",
+     "does": "Angle of the internal light (degrees)",
+     "typical": "-85 default, -45 for a side-lit globe"
+    },
+    {
+     "name": "Specular",
+     "does": "Shine highlight",
+     "typical": "5-30"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 450,
+    "Rotation X": 15,
+    "Rotation Y": 40,
+    "Offset": [
+     960,
+     540
+    ],
+    "Render": 1,
+    "Light Intensity": 120,
+    "Specular": 20
+   },
+   "enum_labels": {
+    "Rotation Order": {
+     "1": "XYZ",
+     "2": "XZY",
+     "3": "YXZ",
+     "4": "YZX",
+     "5": "ZXY",
+     "6": "ZYX"
+    },
+    "Render": {
+     "1": "Full",
+     "2": "Outside",
+     "3": "Inside"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Spherize (distortion only, no true wrap)",
+   "pairs_with": [
+    "Glow",
+    "Drop Shadow",
+    "CC Environment",
+    "Fractal Noise (cloud layer)"
+   ],
+   "scripting": "Rotations are degrees with no min/max. Reflection Map is a layer-reference property (set by script, not by static spec) and only shows when Reflective > 0. Rotation Order: 1 XYZ (default), 2 XZY, 3 YXZ, 4 YZX, 5 ZXY, 6 ZYX (read from After Effects 26.0). Internal Shadows / Transparency Falloff are 0/1 checkboxes. For a globe, give the layer a 2:1 map (e.g. 2048x1024 precomp) so the wrap is undistorted.",
+   "recipe": {
+    "Rotation Y": [
+     [
+      0,
+      0
+     ],
+     [
+      10,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/157.png",
+    "note": "Photo wrapped onto a lit, tilted globe in the centre of a black frame with shading and a specular rim.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Spotlight",
+   "match": "CC Spotlight",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Simulates a theatrical spotlight cone falling on the layer: a lit ellipse with soft edges while the rest of the frame drops into darkness; an optional gel layer can tint/pattern the light.",
+   "look": [
+    "spotlight",
+    "theatrical",
+    "dark surround",
+    "pool of light",
+    "dramatic",
+    "reveal"
+   ],
+   "use_for": [
+    "highlight one leader in a group press photo while darkening the rest",
+    "spotlight reveal of a name, quote or document line in an explainer",
+    "moving 'searchlight' sweep across a crowd shot for a trailer",
+    "interrogation / exposé mood on a still for a news story"
+   ],
+   "avoid": [
+    "tiny Cone Angle with hard edges (looks like a cheap circle mask)",
+    "leaving the surround fully black on news footage that needs context",
+    "pure white light on warm footage: tint the Color slightly"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "From",
+     "does": "Position of the light source (px)",
+     "typical": "upper corner, e.g. [1500, 120]"
+    },
+    {
+     "name": "To",
+     "does": "Where the beam is aimed (px)",
+     "typical": "the subject's face/body"
+    },
+    {
+     "name": "Cone Angle",
+     "does": "Width of the beam (degrees)",
+     "typical": "15-35"
+    },
+    {
+     "name": "Edge Softness",
+     "does": "Feather of the beam edge (0-1)",
+     "typical": "0.3-0.6"
+    },
+    {
+     "name": "Intensity",
+     "does": "Brightness of the lit area",
+     "typical": "80-130"
+    },
+    {
+     "name": "Height",
+     "does": "Height of the light above the layer; low = long stretched ellipse",
+     "typical": "40-80"
+    },
+    {
+     "name": "Color",
+     "does": "Light colour",
+     "typical": "#FFE6B8 warm, #CFE3FF cool"
+    },
+    {
+     "name": "Render",
+     "does": "How light, gel and source are combined",
+     "typical": "4 (default: source lit by the spot, surround dark)"
+    }
+   ],
+   "demo_settings": {
+    "From": [
+     1500,
+     120
+    ],
+    "To": [
+     900,
+     560
+    ],
+    "Height": 60,
+    "Cone Angle": 28,
+    "Edge Softness": 0.4,
+    "Color": "#FFE6B8",
+    "Intensity": 110,
+    "Render": 4
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lighting Effects (Spotlight light type)",
+   "pairs_with": [
+    "Exposure",
+    "Glow",
+    "Gaussian Blur",
+    "Vignette (Lumetri)"
+   ],
+   "scripting": "From/To are 2d spatial points in layer pixels. Render (read from After Effects 26.0): 1 Light Only, 2 Light Add, 3 Light Add+, 4 Light Shadow (default), 5 a separator, 6 Gel Only, 7 Gel Add, 8 Gel Add+, 9 Gel Shadow (the Gel modes need a Gel Layer). Gel Layer is a layer-reference property (script must set it; ignored in static specs). Edge Softness is 0-1, not percent. Animate To (or From) for a sweeping searchlight.",
+   "recipe": {
+    "To": [
+     [
+      0,
+      [
+       400,
+       560
+      ]
+     ],
+     [
+      1.5,
+      [
+       900,
+       560
+      ]
+     ]
+    ],
+    "Cone Angle": [
+     [
+      0,
+      10
+     ],
+     [
+      1.5,
+      28
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/158.png",
+    "note": "Soft warm elliptical pool of light on the left/centre of the photo with the right side and surround dropped to black.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Render": {
+     "1": "Light Only",
+     "2": "Light Add",
+     "3": "Light Add+",
+     "4": "Light Shadow",
+     "5": "(separator)",
+     "6": "Gel Only",
+     "7": "Gel Add",
+     "8": "Gel Add+",
+     "9": "Gel Shadow"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Drop Shadow",
+   "match": "ADBE Drop Shadow",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Adds a shadow behind the layer's alpha shape, offset by direction and distance and softened by blur, so text, logos and cut-outs lift off the background.",
+   "look": [
+    "drop shadow",
+    "depth",
+    "lifted",
+    "legible text",
+    "soft shadow"
+   ],
+   "use_for": [
+    "make lower-thirds, captions and Hindi titles readable over busy news footage",
+    "lift cut-out leader photos / PNGs off a background in explainers",
+    "give logos and stickers depth in reels",
+    "add depth to picture-in-picture or scaled-down video windows"
+   ],
+   "avoid": [
+    "hard, dark, long shadows (Distance large, Softness 0) look dated and cheap",
+    "applying to a full-frame opaque layer: the shadow falls outside the frame and is invisible",
+    "inconsistent directions across elements in the same shot"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Opacity",
+     "does": "Shadow opacity in RAW 0-255 units (127.5 = 50%)",
+     "typical": "128-204 (50-80%)"
+    },
+    {
+     "name": "Distance",
+     "does": "Offset of the shadow (px)",
+     "typical": "4-15 for text, 20-40 for cut-outs"
+    },
+    {
+     "name": "Softness",
+     "does": "Blur of the shadow (px)",
+     "typical": "10-40"
+    },
+    {
+     "name": "Direction",
+     "does": "Angle the shadow falls toward (degrees)",
+     "typical": "135 (down-right)"
+    },
+    {
+     "name": "Shadow Color",
+     "does": "Colour of the shadow",
+     "typical": "#000000 or a dark tint of the background"
+    },
+    {
+     "name": "Shadow Only",
+     "does": "Checkbox: render only the shadow, hide the layer",
+     "typical": "0 in real use (1 only to isolate/preview the shadow)"
+    }
+   ],
+   "demo_settings": {
+    "Shadow Color": "#FF9933",
+    "Opacity": 255,
+    "Direction": 135,
+    "Distance": 80,
+    "Softness": 60,
+    "Shadow Only": 1
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Drop Shadow",
+   "pairs_with": [
+    "Stroke",
+    "Fill",
+    "Linear Wipe",
+    "Transform"
+   ],
+   "scripting": "DEMO ONLY: demo_settings use Shadow Only = 1 and a saffron colour because the gallery footage is full-frame and opaque, where a normal shadow sits hidden behind the layer; expect a saffron frame with a soft dark band along the top and left edges (the silhouette offset down-right). For real use keep Shadow Only = 0, Shadow Color #000000, Opacity ~180, Distance 4-40, Softness 10-40. Opacity is raw 0-255 (NOT percent; 127.5 = 50%). Direction is a degree angle with no limits (135 = down-right). The shadow is drawn from the layer's alpha, so it only shows on text, shapes, cut-outs or a scaled-down layer. The shadow is clipped at the layer bounds: on tightly cropped layers apply it to a precomp or larger layer.",
+   "recipe": {
+    "Distance": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      20
+     ]
+    ],
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      180
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/159.png",
+    "note": "Saffron Shadow-Only frame with a soft black band on the top and left edges, offset ~57 px per axis as expected for Distance 80 at 135 degrees.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Radial Shadow",
+   "match": "ADBE Radial Shadow",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Casts a shadow from a point light source rather than a fixed direction, so the shadow stretches and changes angle depending on where the light sits; Glass Edge mode tints the shadow with the layer's colours.",
+   "look": [
+    "cast shadow",
+    "point light",
+    "projected",
+    "stretched shadow",
+    "depth"
+   ],
+   "use_for": [
+    "projected shadow of a cut-out leader or logo onto a wall-like background",
+    "animated light moving past a title so its shadow swings (trailer title)",
+    "coloured 'stained-glass' shadow of a flag or logo using Glass Edge",
+    "depth for cut-out collage scenes in explainers"
+   ],
+   "avoid": [
+    "full-frame opaque layers: the shadow is off-frame and invisible",
+    "forgetting Resize Layer, so long shadows get clipped at the layer edge",
+    "mixing with Drop Shadow directions that disagree"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Light Source",
+     "does": "Position of the point light (px)",
+     "typical": "above/left of the subject, e.g. [400, 150]"
+    },
+    {
+     "name": "Projection Distance",
+     "does": "How far the shadow is thrown from the layer",
+     "typical": "10-40"
+    },
+    {
+     "name": "Softness",
+     "does": "Blur of the shadow",
+     "typical": "10-30"
+    },
+    {
+     "name": "Opacity",
+     "does": "Shadow opacity, raw 0-1 (0.5 = 50%)",
+     "typical": "0.5-0.8"
+    },
+    {
+     "name": "Render",
+     "does": "Shadow type",
+     "typical": "1 Regular; 2 Glass Edge for coloured shadows"
+    },
+    {
+     "name": "Color Influence",
+     "does": "How much layer colour bleeds into a Glass Edge shadow",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Resize Layer",
+     "does": "Checkbox: let the shadow extend beyond the layer bounds",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Shadow Color": "#FF9933",
+    "Opacity": 1,
+    "Light Source": [
+     -600,
+     -400
+    ],
+    "Projection Distance": 50,
+    "Softness": 30,
+    "Render": 1,
+    "Shadow Only": 1,
+    "Resize Layer": 1
+   },
+   "enum_labels": {
+    "Render": {
+     "1": "Regular",
+     "2": "Glass Edge"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Drop Shadow",
+   "pairs_with": [
+    "Drop Shadow",
+    "CC Spotlight",
+    "Transform"
+   ],
+   "scripting": "DEMO ONLY: demo_settings use Shadow Only = 1, a saffron colour and an off-frame light at the top-left because the gallery footage is full-frame and opaque, where a normal shadow is hidden behind the layer; the verified render shows the silhouette scaled about 2x away from the light, so the saffron shape starts near [600, 400] and the top/left third of the frame is black. For real use keep Shadow Only = 0, Shadow Color #000000, Opacity 0.5-0.8, Light Source above/beside the subject. Opacity here is raw 0-1 (unlike Drop Shadow's 0-255). Light Source is a 2d spatial point in layer pixels and may sit off-frame; its harvested default [480, 270] is not centre, so always set it. Shadow Only and Resize Layer are 0/1 checkboxes. It only shows on layers with alpha (text, logos, cut-outs) or a scaled-down layer. Measured: Light Source [-600, -400] with Projection Distance 50 scaled the silhouette about 2x about the light (layer corner [0, 0] landed at ~[600, 400]), so keep Projection Distance near 5-20 for a believable cast shadow.",
+   "recipe": {
+    "Light Source": [
+     [
+      0,
+      [
+       200,
+       150
+      ]
+     ],
+     [
+      3,
+      [
+       1700,
+       150
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/160.png",
+    "note": "Saffron Shadow-Only silhouette projected far down-right away from the off-frame light (corner landed at ~[600, 400] in 1920x1080), leaving the top/left black; scripting note corrected to the measured size.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Ball Action",
+   "match": "CC Ball Action",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Rebuilds the layer as a grid of shaded 3D balls coloured from the image, which can be scattered, twisted and rotated in pseudo-3D for disintegrate / reassemble effects.",
+   "look": [
+    "dot grid",
+    "LED board",
+    "beads",
+    "disintegrate",
+    "pixel balls",
+    "techy"
+   ],
+   "use_for": [
+    "image breaking apart into balls as a transition between story segments",
+    "LED-scoreboard / dot-matrix look for election-result or stats graphics",
+    "logo or title assembling from scattered dots in a reel intro",
+    "stylised 'data-ised' version of a photo for AI / tech explainers"
+   ],
+   "avoid": [
+    "small Grid Spacing on full HD (thousands of balls: slow and reads as noise)",
+    "keeping it on faces for long: identity is lost",
+    "heavy Scatter with no motion blur looks like a 2005 screensaver"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Grid Spacing",
+     "does": "Distance between balls (px); sets the resolution of the effect",
+     "typical": "12-30 for 1080p"
+    },
+    {
+     "name": "Ball Size",
+     "does": "Ball diameter relative to grid spacing (%)",
+     "typical": "80-120"
+    },
+    {
+     "name": "Scatter",
+     "does": "Random displacement of balls",
+     "typical": "0 at rest, 200-600 for a break-apart"
+    },
+    {
+     "name": "Twist Angle",
+     "does": "Twist of the grid around the rotation axis (degrees)",
+     "typical": "0-180 animated"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotates the ball grid around the chosen axis (degrees)",
+     "typical": "0-90 animated"
+    },
+    {
+     "name": "Shading",
+     "does": "Darkness of the ball shading (-100..100)",
+     "typical": "-75 default"
+    },
+    {
+     "name": "Displace",
+     "does": "Displaces balls in depth by an image property",
+     "typical": "0-200"
+    }
+   ],
+   "demo_settings": {
+    "Grid Spacing": 18,
+    "Ball Size": 110,
+    "Shading": -75,
+    "Scatter": 120,
+    "Twist Angle": 90
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Motion Blur (CC Force Motion Blur)",
+    "Shatter"
+   ],
+   "scripting": "Popups (read from After Effects 26.0): Coloring 1 Crisp, 2 Medium (default), 3 Smooth; Displace Property 1 Red ... 4 Brightness (default) ... 9 Spherize; Twist Property 1 X Axis (default) ... 13 Fast Top; Rotation Axis 1 X (default) ... 9 XY15Z (enum_labels); only the defaults have been rendered. Twist Angle, Rotation and Scatter Motion are degree/angle-like 1d values with no harvested limits. Grid Spacing 0 is invalid in practice; keep >= 8 on 1080p for render speed. The harvested property set differs from older docs (no 'Instability State'), use only these names.",
+   "recipe": {
+    "Scatter": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      500
+     ]
+    ],
+    "Twist Angle": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      180
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/161.png",
+    "note": "Photo rebuilt as scattered shaded 3D balls coloured from the image (white, pink, blue, grey) over black; subject no longer readable.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Coloring": {
+     "1": "Crisp",
+     "2": "Medium",
+     "3": "Smooth"
+    },
+    "Displace Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Brightness",
+     "5": "Saturation",
+     "6": "RGB",
+     "7": "Radius",
+     "8": "Diamond",
+     "9": "Spherize"
+    },
+    "Twist Property": {
+     "1": "X Axis",
+     "2": "Y Axis",
+     "3": "Center X",
+     "4": "Center Y",
+     "5": "Radius",
+     "6": "Random",
+     "7": "Red",
+     "8": "Green",
+     "9": "Blue",
+     "10": "Brightness",
+     "11": "Diamond",
+     "12": "Rectangular",
+     "13": "Fast Top"
+    },
+    "Rotation Axis": {
+     "1": "X",
+     "2": "Y",
+     "3": "Z",
+     "4": "XY",
+     "5": "XZ",
+     "6": "YZ",
+     "7": "XYZ",
+     "8": "X15Z",
+     "9": "XY15Z"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Bubbles",
+   "match": "CC Bubbles",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Replaces the layer with a stream of shiny, wobbling bubbles that rise up the frame, each bubble textured with the colours of the source image.",
+   "look": [
+    "bubbles",
+    "playful",
+    "floating",
+    "soapy",
+    "kids"
+   ],
+   "use_for": [
+    "playful bubble overlay for light-hearted reel or meme content",
+    "underwater / fizzy background for a title card",
+    "decorative particles over a colourful gradient on AI-education intros"
+   ],
+   "avoid": [
+    "news / political content: reads childish and cheap",
+    "applying directly to the main footage: the original image disappears (use a duplicate or a gradient solid)",
+    "huge Bubble Size with Metal reflection: looks like CGI from 2003"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Bubble Amount",
+     "does": "Number of bubbles",
+     "typical": "150-600"
+    },
+    {
+     "name": "Bubble Speed",
+     "does": "Rise speed (negative = falling)",
+     "typical": "1-3"
+    },
+    {
+     "name": "Bubble Size",
+     "does": "Bubble size",
+     "typical": "4-15"
+    },
+    {
+     "name": "Wobble Amplitude",
+     "does": "Sideways wobble distance",
+     "typical": "10-50"
+    },
+    {
+     "name": "Wobble Frequency",
+     "does": "Wobble speed",
+     "typical": "1-3"
+    },
+    {
+     "name": "Reflection Type",
+     "does": "Surface look of bubbles",
+     "typical": "1 Liquid; 2 Metal"
+    },
+    {
+     "name": "Shading Type",
+     "does": "Shading inside each bubble",
+     "typical": "4 Fade Inwards (default)"
+    }
+   ],
+   "demo_settings": {
+    "Bubble Amount": 500,
+    "Bubble Speed": 2,
+    "Wobble Amplitude": 40,
+    "Wobble Frequency": 2,
+    "Bubble Size": 14,
+    "Reflection Type": 1,
+    "Shading Type": 4
+   },
+   "enum_labels": {
+    "Reflection Type": {
+     "1": "Liquid",
+     "2": "Metal"
+    },
+    "Shading Type": {
+     "1": "None",
+     "2": "Lighten",
+     "3": "Darken",
+     "4": "Fade Inwards",
+     "5": "Fade Outwards"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Gaussian Blur",
+    "4-Color Gradient (as colour source)"
+   ],
+   "scripting": "The effect replaces the layer pixels with bubbles; put it on a duplicate of the footage or a coloured solid and composite with Screen/Add. It is time-based: bubbles enter over time, so sample demo frames 1-2 s in, not at frame 0. Reflection Type (1 Liquid, 2 Metal) and Shading Type (1 None, 2 Lighten, 3 Darken, 4 Fade Inwards, 5 Fade Outwards) are read from After Effects 26.0.",
+   "recipe": {
+    "Bubble Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      400
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/162.png",
+    "note": "Layer replaced by overlapping translucent bubbles over black, each tinted with the photo's colours.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Drizzle",
+   "match": "CC Drizzle",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Simulates raindrops hitting a liquid surface: expanding, lit concentric ripples that displace and shade the layer as if it were a puddle.",
+   "look": [
+    "rain ripples",
+    "puddle",
+    "water surface",
+    "reflective",
+    "melancholic"
+   ],
+   "use_for": [
+    "rainy-day mood on a still or B-roll for monsoon / flood news",
+    "ripple distortion over a title or archive photo for a reflective documentary beat",
+    "water-surface transition into a memory / flashback",
+    "background texture for emotional quote cards"
+   ],
+   "avoid": [
+    "high Displacement on faces (warps them badly)",
+    "expecting falling rain streaks: it only makes ripples (pair with CC Rainfall)",
+    "judging it at frame 0: no drops exist yet"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Drip Rate",
+     "does": "Drops per second",
+     "typical": "3-15"
+    },
+    {
+     "name": "Longevity (sec)",
+     "does": "How long each ripple lives",
+     "typical": "1-3"
+    },
+    {
+     "name": "Displacement",
+     "does": "Strength of the refraction displacement",
+     "typical": "20-80"
+    },
+    {
+     "name": "Ripple Height",
+     "does": "Height of the ripple relief (shading)",
+     "typical": "80-160"
+    },
+    {
+     "name": "Spreading",
+     "does": "How far ripples expand",
+     "typical": "100-250"
+    },
+    {
+     "name": "Rippling",
+     "does": "Number of ring cycles per ripple (angle units)",
+     "typical": "360-720"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "Brightness of the ripple lighting",
+     "typical": "80-130"
+    },
+    {
+     "name": "Specular",
+     "does": "Shiny highlights on ripple crests",
+     "typical": "50-100"
+    }
+   ],
+   "demo_settings": {
+    "Drip Rate": 12,
+    "Longevity (sec)": 2,
+    "Displacement": 60,
+    "Ripple Height": 150,
+    "Spreading": 200,
+    "Light Intensity": 120
+   },
+   "enum_labels": {
+    "Using": {
+     "1": "Effect Light",
+     "2": "AE Lights"
+    },
+    "Light Type": {
+     "1": "Distant Light",
+     "2": "Point Light"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "CC Rainfall",
+    "Lumetri Color (cool desaturated grade)",
+    "Gaussian Blur"
+   ],
+   "scripting": "Time-based simulation: drops appear after time 0, so check frames 1-2 s in. Light Position is a 2d point used only when Light Type = 2 (Point); its harvested default [480, 270] is not centre. Using = 2 makes it read comp lights instead of its own. Rippling and Light Direction are angle values with no limits. Using (1 Effect Light, 2 AE Lights) and Light Type (1 Distant Light, 2 Point Light) are read from After Effects 26.0. Verified render: Drip Rate 12 with Spreading 200 fills a 1080p frame with overlapping ripples (frosted-glass look, subject barely readable); use 2-5 for distinct rings.",
+   "recipe": {
+    "Drip Rate": [
+     [
+      0,
+      2
+     ],
+     [
+      3,
+      12
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/163.png",
+    "note": "Whole photo covered in dense overlapping concentric ripples that refract and shade it like a rippled water surface; very strong at these settings.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Hair",
+   "match": "CC Hair",
+   "category": "Simulation",
+   "status": "needs_input",
+   "summary": "Grows lit 2D hair / fur strands from every pixel of the layer, coloured from a fixed colour or inherited from the image, with length, weight, density and an optional map layer controlling growth. Needs a layer with alpha (text, logo, shape or cut-out) or a Map Layer to read as fur: on a full-frame opaque photo the strands inherit the photo's colours and only smear it into a washed-out painterly blur with jagged fringes along edges.",
+   "look": [
+    "fur",
+    "hairy",
+    "fuzzy",
+    "grass",
+    "fringed edges",
+    "stylised"
+   ],
+   "use_for": [
+    "furry / fuzzy title or logo for a comedic reel",
+    "grass-like texture on text for an agriculture or farmers' explainer title",
+    "stylised 'hairy' meme gag on an object"
+   ],
+   "avoid": [
+    "full-frame opaque photos or footage: hair grows from every pixel and blends into the image, so the frame looks smeared and painterly with spiky fringes, not furry (verified at Length 60 and Length 150)",
+    "fixed Color (Color Inheritance 0) at high Density on a full frame: buries the image under a solid mat of strands",
+    "faces and serious news or documentary content: reads as grotesque",
+    "very high Density on 4K: slow renders"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Length",
+     "does": "Hair length (px)",
+     "typical": "20-80"
+    },
+    {
+     "name": "Density",
+     "does": "Number of hairs",
+     "typical": "200-1000"
+    },
+    {
+     "name": "Thickness",
+     "does": "Strand thickness",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Weight",
+     "does": "Gravity pull on strands (negative = upward)",
+     "typical": "-1 for grass, 1 for drooping fur"
+    },
+    {
+     "name": "Color Inheritance",
+     "does": "0 = use Color, 1 = take colour from the layer",
+     "typical": "0.6-1"
+    },
+    {
+     "name": "Color",
+     "does": "Base hair colour",
+     "typical": "#513916 (default brown) or a brand colour"
+    },
+    {
+     "name": "Opacity",
+     "does": "Hair opacity (0-1)",
+     "typical": "0.6-1"
+    },
+    {
+     "name": "Add Noise",
+     "does": "Random variation of strands",
+     "typical": "0.02-0.2"
+    }
+   ],
+   "demo_settings": {
+    "Length": 150,
+    "Thickness": 3,
+    "Weight": 1,
+    "Density": 400,
+    "Add Noise": 0.1,
+    "Color Inheritance": 0.7,
+    "Opacity": 1
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Wiggle Transform",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Map Layer is a layer-reference property (script must set it; ignored in static specs) and only matters when Map Strength is non-zero; Map Property: 1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance (default), 6 Lightness, 7 Hue, 8 Saturation (read from After Effects 26.0). Constant Mass is a 0/1 checkbox. Works best on text/shape layers with alpha; on a full-frame photo it covers everything uniformly.",
+   "recipe": {
+    "Length": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/ae/164.png",
+    "note": "Still no fur: Length 150 / Thickness 3 / Density 400 at Colour Inheritance 0.7 turns the photo into a washed-out painterly smear with jagged fringes on figures, stripes and block edges and no distinct strands, where the old render added a fine white speckle grain instead; the hair blends into the full-frame photo, so card set to needs_input (layer with alpha or a Map Layer).",
+    "rerender": false,
+    "second_opinion": "corrected: weak verdict is right (strands read as grain at 640px), but the rewrite multiplied hair area about 12x over the old Length 60 / Thickness 1.2 / Density 800 frame that already covered the whole photo, so at Opacity 1 it would bury the photo under a solid brown mat; kept Length 150 / Thickness 3 / Color Inheritance 0.7 / Opacity 1 so strands are visible, lowered Density 1500 -> 400 so they stay distinct",
+    "recheck": "after re-render"
+   },
+   "enum_labels": {
+    "Map Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness",
+     "7": "Hue",
+     "8": "Saturation"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Mr. Mercury",
+   "match": "CC Mr. Mercury",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Turns the layer into a stream of liquid-metal blobs that are emitted from a producer point, merge like mercury and fall under gravity, each blob textured by the source image and lit with specular shine.",
+   "look": [
+    "liquid metal",
+    "mercury",
+    "blobs",
+    "melting",
+    "chrome",
+    "gooey"
+   ],
+   "use_for": [
+    "melting / liquid transition out of a shot in a trailer",
+    "chrome-liquid logo reveal for a tech or AI reel",
+    "surreal 'reality dissolving' moment in a satirical explainer"
+   ],
+   "avoid": [
+    "default tiny radius: produces a dribble of dots that reads as an error",
+    "long holds: the look ages fast",
+    "using it on the main footage without a duplicate (the original image vanishes)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius X",
+     "does": "Width of the emission area (px)",
+     "typical": "50-300"
+    },
+    {
+     "name": "Radius Y",
+     "does": "Height of the emission area (px)",
+     "typical": "50-300"
+    },
+    {
+     "name": "Producer",
+     "does": "Emission centre (px)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Birth Rate",
+     "does": "Blobs emitted per time",
+     "typical": "1-5"
+    },
+    {
+     "name": "Velocity",
+     "does": "Initial speed",
+     "typical": "1-4"
+    },
+    {
+     "name": "Gravity",
+     "does": "Downward pull",
+     "typical": "0.3-1.5"
+    },
+    {
+     "name": "Blob Birth Size",
+     "does": "Blob size at birth",
+     "typical": "0.2-0.6"
+    },
+    {
+     "name": "Blob Death Size",
+     "does": "Blob size at death",
+     "typical": "0.5-1.5"
+    }
+   ],
+   "demo_settings": {
+    "Radius X": 120,
+    "Radius Y": 120,
+    "Producer": [
+     960,
+     540
+    ],
+    "Velocity": 2,
+    "Birth Rate": 3,
+    "Longevity (sec)": 3,
+    "Gravity": 0.5,
+    "Blob Birth Size": 0.4,
+    "Blob Death Size": 1
+   },
+   "enum_labels": {
+    "Animation": {
+     "1": "Explosive",
+     "2": "Fractal Explosive",
+     "3": "Twirl",
+     "4": "Twirly",
+     "5": "Vortex",
+     "6": "Fire",
+     "7": "(separator)",
+     "8": "Direction",
+     "9": "Direction Normalized",
+     "10": "Bi-Directional",
+     "11": "Bi-Directional Normalized",
+     "12": "(separator)",
+     "13": "Jet",
+     "14": "Jet Sideways"
+    },
+    "Influence Map": {
+     "1": "Blob out",
+     "2": "Blob in",
+     "3": "Blob in & out",
+     "4": "Blob out sharp",
+     "5": "Constant Blobs"
+    },
+    "Using": {
+     "1": "Effect Light",
+     "2": "AE Lights"
+    },
+    "Light Type": {
+     "1": "Distant Light",
+     "2": "Point Light"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "CC Glass",
+    "Fast Box Blur"
+   ],
+   "scripting": "Time-based particle sim: nothing is visible at frame 0, sample 1-2 s in. Animation (1 Explosive (default), 2 Fractal Explosive, 3 Twirl, 4 Twirly, 5 Vortex, 6 Fire, 8 Direction, 9 Direction Normalized, 10 Bi-Directional, 11 Bi-Directional Normalized, 13 Jet, 14 Jet Sideways; 7 and 12 are separators) and Influence Map (1 Blob out, 2 Blob in, 3 Blob in & out (default), 4 Blob out sharp, 5 Constant Blobs) are read from After Effects 26.0; only the defaults have been rendered. Direction and Light Direction are angles without limits. Light Position is used only with Light Type = 2 (Point). Composite the effected duplicate over the original footage if the original must stay visible.",
+   "recipe": {
+    "Birth Rate": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      4
+     ],
+     [
+      2,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/165.png",
+    "note": "Photo turned into merging chrome liquid blobs over black, each textured with the image (stripes, a small round motif) with specular shine.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Particle Systems II",
+   "match": "CC Particle Systems II",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Built-in 2D particle generator: emits lines, stars or spheres from a producer with velocity, gravity and resistance, shifting from a birth colour to a death colour. It replaces the layer's pixels (the source image disappears), so it is applied on a solid and composited with Screen/Add.",
+   "look": [
+    "particles",
+    "sparks",
+    "fireworks",
+    "embers",
+    "burst",
+    "line streaks"
+   ],
+   "use_for": [
+    "spark / ember bursts behind a title hit in a trailer or reel",
+    "celebration fireworks over an election-win or sports graphic",
+    "light particle burst on a beat drop or logo reveal",
+    "subtle dust / embers layered over a documentary title card"
+   ],
+   "avoid": [
+    "default yellow-to-red line particles: instantly read as stock AE",
+    "applying it to the footage itself: the image vanishes and only particles on black remain",
+    "high Birth Rate with high Velocity: the frame fills with a mat of lines that reads as straw, not sparks",
+    "judging it at frame 0: particles build up over time"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Birth Rate",
+     "does": "Emission rate",
+     "typical": "5-50"
+    },
+    {
+     "name": "Longevity (sec)",
+     "does": "Particle lifetime",
+     "typical": "1-3"
+    },
+    {
+     "name": "Position",
+     "does": "Producer position (px)",
+     "typical": "[960, 540] or the title's centre"
+    },
+    {
+     "name": "Velocity",
+     "does": "Initial speed",
+     "typical": "1-5"
+    },
+    {
+     "name": "Gravity",
+     "does": "Downward pull (negative rises)",
+     "typical": "0.2-1; -0.3 for rising embers"
+    },
+    {
+     "name": "Birth Size",
+     "does": "Particle size at birth",
+     "typical": "0.2-0.6"
+    },
+    {
+     "name": "Death Size",
+     "does": "Particle size at death",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Birth Color",
+     "does": "Colour at birth",
+     "typical": "#FFD24A gold"
+    }
+   ],
+   "demo_settings": {
+    "Birth Rate": 2,
+    "Longevity (sec)": 1.5,
+    "Position": [
+     960,
+     540
+    ],
+    "Radius X": 20,
+    "Radius Y": 20,
+    "Velocity": 1.5,
+    "Gravity": 0.3,
+    "Birth Size": 0.4,
+    "Death Size": 1.2,
+    "Max Opacity": 1,
+    "Birth Color": "#FFD24A",
+    "Death Color": "#E8401C",
+    "Transfer Mode": 1
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "CC Force Motion Blur",
+    "Echo",
+    "CC Light Burst 2.5"
+   ],
+   "scripting": "Time-based: no particles at frame 0, sample 1-2 s in. Popups (read from After Effects 26.0): Animation 1-11 (1 Explosive (default), 2 Fractal Explosive, 3 Twirl, 4 Twirly, 5 Vortex, 6 Fire, 8 Direction, 9 Direction Normalized, 11 Jet Sideways; 7 and 10 are separators), Particle Type 1-21 (1 Line (default) ... 21 Lens Bubble), Opacity Map 1-6 (3 Fade Out default), Color Map 1-4 (1 Birth to Death), Transfer Mode 1 Composite (default), 2 Screen, 3 Add, 4 Black Matte (verified render with 1: the source image still vanished and particles drew over black). Usually applied on a black solid set to Screen/Add blend mode. Direction is an angle without limits; Random Seed changes the pattern. For true 3D particles use CC Particle World. Verified render: Birth Rate 30 + Velocity 3 + Longevity 2 covered the whole 1080p frame in gold line streaks.",
+   "recipe": {
+    "Birth Rate": [
+     [
+      0,
+      60
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/166.png",
+    "note": "Now reads as a proper spark burst: gold line streaks radiate from a dense centre and thin out toward the frame edges over black, where the old render was an edge-to-edge gold mat of lines; the photo still vanishes, as the summary and avoid already state.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   },
+   "enum_labels": {
+    "Animation": {
+     "1": "Explosive",
+     "2": "Fractal Explosive",
+     "3": "Twirl",
+     "4": "Twirly",
+     "5": "Vortex",
+     "6": "Fire",
+     "7": "(separator)",
+     "8": "Direction",
+     "9": "Direction Normalized",
+     "10": "(separator)",
+     "11": "Jet Sideways"
+    },
+    "Particle Type": {
+     "1": "Line",
+     "2": "Star",
+     "3": "(separator)",
+     "4": "Shaded Sphere",
+     "5": "Faded Sphere",
+     "6": "Shaded&Faded Sphere",
+     "7": "Bubble",
+     "8": "(separator)",
+     "9": "Motion Polygon",
+     "10": "TriPolygon",
+     "11": "QuadPolygon",
+     "12": "Cube",
+     "13": "TetraHedron",
+     "14": "Textured TriPolygon",
+     "15": "Textured QuadPolygon",
+     "16": "(separator)",
+     "17": "Lens Convex",
+     "18": "Lens Concave",
+     "19": "Lens Fade",
+     "20": "Lens Darken Fade",
+     "21": "Lens Bubble"
+    },
+    "Opacity Map": {
+     "1": "Constant",
+     "2": "Fade Out Sharp",
+     "3": "Fade Out",
+     "4": "Fade In",
+     "5": "Fade In and Out",
+     "6": "Oscillate"
+    },
+    "Color Map": {
+     "1": "Birth to Death",
+     "2": "Origin to Death",
+     "3": "Birth to Origin",
+     "4": "Origin Constant"
+    },
+    "Transfer Mode": {
+     "1": "Composite",
+     "2": "Screen",
+     "3": "Add",
+     "4": "Black Matte"
+    }
+   }
+  }
+ ]
+}

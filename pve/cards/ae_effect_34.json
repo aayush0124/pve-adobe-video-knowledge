@@ -1,0 +1,832 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pendulum Random",
+   "match": "ADBE DE Pendulum Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: sliders for a pendulum swing (rotation that oscillates and dies away) that re-triggers at random intervals. Nothing changes on screen until an expression on Rotation reads it.",
+   "look": [
+    "swing",
+    "pendulum",
+    "rotation wobble",
+    "random retrigger",
+    "hanging sign"
+   ],
+   "use_for": [
+    "Make a hanging lower-third tag or price tag swing now and then",
+    "Idle sway on a hanging icon or sticker in an explainer",
+    "Playful random wobble on a cut-out character head in a satire reel"
+   ],
+   "avoid": [
+    "Applied alone it does nothing; a script that only adds the effect reports success with no visible change",
+    "Large Amplitude on text reads as cheap and hurts legibility"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak swing angle in degrees",
+     "typical": "10-25"
+    },
+    {
+     "name": "Frequency",
+     "does": "Swings per second",
+     "typical": "1.5-3"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each swing dies out",
+     "typical": "1-3"
+    },
+    {
+     "name": "Min Delay",
+     "does": "Shortest gap in seconds before the next random swing",
+     "typical": "0.75-1.5"
+    },
+    {
+     "name": "Max Delay",
+     "does": "Longest gap in seconds",
+     "typical": "1.5-4"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pendulum Random'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Rotation: var c=effect(\"Pendulum Random\"),A=c(\"Amplitude\"),f=c(\"Frequency\"),k=c(\"Decay\"),lo=c(\"Min Delay\").value,hi=c(\"Max Delay\").value;seedRandom(index,true);var t0=0,t1=random(lo,hi);while(t1<=time){t0=t1;t1+=random(lo,hi);}var t=time-t0;value+A*Math.sin(2*Math.PI*f*t)*Math.exp(-k*t); Move the Anchor Point to the hanging point (top centre) first or the layer spins around its middle. No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Percentage Controls",
+   "match": "Pseudo/ADBE Percentage Controls",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel for AE's 'Percentage Counter Monospaced' text preset: an animatable number plus formatting options that the preset's Source Text expression turns into a counting percentage such as 0% to 72%. On its own it shows nothing.",
+   "look": [
+    "number counter",
+    "percentage",
+    "stat roll-up",
+    "data callout",
+    "infographic"
+   ],
+   "use_for": [
+    "Animated poll or vote-share figure counting up in a political explainer",
+    "GDP, inflation or growth-rate callouts in news reels",
+    "Progress or completion percentage in an AI-education explainer"
+   ],
+   "avoid": [
+    "Adding the effect alone does nothing: the counter only works through the shipped preset",
+    "Pad Zeros defaults to 3, so 72 shows as 072%: set it to 1 (or the final digit count)",
+    "Count-ups longer than ~3 s feel slow in reels"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Animate Value",
+     "does": "The number shown; keyframe it to count",
+     "typical": "0 to the final figure over 1-2 s"
+    },
+    {
+     "name": "10x Value Multiplier",
+     "does": "Power-of-ten multiplier: shown number = Animate Value x 10^(value-1); 1 = as typed",
+     "typical": "1"
+    },
+    {
+     "name": "Digits After Decimal",
+     "does": "Decimal places shown",
+     "typical": "0 for whole %, 1 for 7.2%"
+    },
+    {
+     "name": "Pad Zeros",
+     "does": "Minimum number of integer digits (pads with leading zeros): default 3 turns 72 into 072%",
+     "typical": "1 for no padding, or the digit count of the final figure"
+    },
+    {
+     "name": "Number Format",
+     "does": "Thousands/decimal separator style (popup)",
+     "typical": "1"
+    },
+    {
+     "name": "Percent Symbol Position",
+     "does": "Pixel offset of the % sign",
+     "typical": "[0, 0]"
+    },
+    {
+     "name": "Percent Symbol Scale",
+     "does": "Size of the % sign relative to the digits",
+     "typical": "60-100"
+    },
+    {
+     "name": "Show Group Separators",
+     "does": "Show thousands separators (checkbox 0/1)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Number Format": {
+     "1": "1,234,567.01",
+     "2": "1.234.567,01",
+     "3": "1 234 567,01"
+    },
+    "Align Group Spacing": {
+     "1": "Left",
+     "2": "Right",
+     "3": "Center"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow",
+    "Fill"
+   ],
+   "scripting": "Hidden pseudo effect (PresetEffects.xml). Do not add it by match name: apply the preset file 'Support Files/Presets/Text/Number Counters/Percentage Counter Monospaced.ffx' to a TEXT layer with layer.applyPreset(File(path)); it adds this effect (instance renamed 'Percentage Counter Controls') plus a Source Text expression (Intl.NumberFormat) and text animators (CharacterOffset, RepositionNonNumbers, AddGroupedSpacing, RepositionCenterOffset, RepositionPercentSymbol) that read the controls BY INDEX, so never rename, reorder or delete its properties. Address it by match name ('Pseudo/ADBE Percentage Controls'), not by display name, then keyframe 'Animate Value' (UI slider stops at 100 but values to +/-1,000,000 can be set; the digits use its absolute value). Read from the preset's expressions: Pad Zeros = minimum integer digits; 10x Value Multiplier shifts the shown number by powers of ten (leave at 1); Number Format 1/2/3 = en-US / de-DE / fr-FR grouping; Show Group Separators toggles grouping. Use a monospaced or tabular-figure font so digits do not jitter. No Premiere equivalent (use a mogrt built in AE).",
+   "recipe": {
+    "Animate Value": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      72
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pulse",
+   "match": "ADBE DE Pulse",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: sliders for a scale 'pop' that jumps and settles back, optionally repeating every Cycle Time seconds. Nothing changes on screen until an expression on Scale reads it.",
+   "look": [
+    "scale pop",
+    "pulse",
+    "heartbeat",
+    "attention bump",
+    "beat"
+   ],
+   "use_for": [
+    "Pop a key word, logo or icon on its first frame",
+    "Repeating heartbeat pulse on a 'LIVE' or 'BREAKING' badge",
+    "Attention bump on a subscribe/CTA button in reels"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Large Amplitude upscales footage past 100% (soft pixels); negative Amplitude shrinks it and exposes the layer edges",
+    "Constant pulsing on body text is tiring to read"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak extra scale in percent",
+     "typical": "15-40"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast the pop settles",
+     "typical": "4-8"
+    },
+    {
+     "name": "Delay",
+     "does": "Seconds after the layer's in-point before the pop",
+     "typical": "0-0.5"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "Repeat period in seconds; 0 = once",
+     "typical": "0 or 1-2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow",
+    "Radial Blur"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pulse'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Scale: var c=effect(\"Pulse\"),A=c(\"Amplitude\"),k=c(\"Decay\"),cy=c(\"Cycle Time\");var t=time-inPoint-c(\"Delay\");if(cy>0&&t>0)t=t%cy;var s=t<0?0:A*Math.exp(-k*t);value+[s,s]; Simpler shipped alternative: apply the preset 'Scale Bounce - layer markers.ffx' (Presets/Behaviors) and put one layer marker at the pop (its bump eases up before and down after the marker). No Premiere equivalent (keyframe Motion > Scale).",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pulse At Marker",
+   "match": "ADBE DE Pulse At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: sliders for a scale pop that fires at each layer marker and settles back. Nothing changes on screen until an expression on Scale reads it.",
+   "look": [
+    "scale pop",
+    "marker-driven",
+    "beat sync",
+    "emphasis hit"
+   ],
+   "use_for": [
+    "Pop a graphic on each narration emphasis by dropping layer markers",
+    "Beat-synced pops on icons or stickers in reels (markers on the beats)",
+    "Hit each bullet point as the voice-over names it"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "No layer markers means no pop",
+    "Markers too close together stack pops into jitter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak extra scale in percent at each marker",
+     "typical": "15-40"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each pop settles",
+     "typical": "4-8"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pulse At Marker'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Scale: var c=effect(\"Pulse At Marker\"),s=0;if(marker.numKeys>0){var n=marker.nearestKey(time).index;if(marker.key(n).time>time)n--;if(n>0){var t=time-marker.key(n).time;s=c(\"Amplitude\")*Math.exp(-c(\"Decay\")*t);}}value+[s,s]; The script must also add layer markers: layer.property('Marker').setValueAtTime(t, new MarkerValue('')). Simpler shipped alternative: apply the preset 'Scale Bounce - layer markers.ffx' (Presets/Behaviors) instead (symmetric bump centred on each marker, not a decaying pop). No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pulse On Beat",
+   "match": "ADBE DE Pulse On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: sliders plus an audio-layer picker for a scale pop that fires whenever an audio amplitude track crosses a threshold. Nothing changes on screen until an expression on Scale reads it.",
+   "look": [
+    "audio reactive",
+    "beat pop",
+    "music sync",
+    "scale pulse"
+   ],
+   "use_for": [
+    "Logo or title that thumps on the kick drum of a trailer score",
+    "Reel stickers or emojis popping to the music beat",
+    "Audio-reactive badge on a podcast or news-clip visualiser"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Needs a 'Convert Audio to Keyframes' layer; dialogue-heavy audio triggers constantly",
+    "Threshold too low gives continuous jitter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak extra scale in percent per beat",
+     "typical": "10-30"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each pop settles",
+     "typical": "6-10"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "Amplitude level that counts as a beat (units of the Audio Amplitude slider)",
+     "typical": "a little under the kick peaks, often 10-25"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pulse On Beat'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Scale: var c=effect(\"Pulse On Beat\"),A=c(\"Amplitude\"),k=c(\"Decay\"),th=c(\"Audio Threshold\"),s=c(\"Audio Keyframe Layer\").effect(\"Both Channels\")(\"Slider\"),f=thisComp.frameDuration,p=0;for(var i=0;i<120;i++){var tt=time-i*f;if(s.valueAtTime(tt)>=th&&s.valueAtTime(tt-f)<th){p=A*Math.exp(-k*i*f);break;}}value+[p,p]; 'Audio Keyframe Layer' is a layer-type property: it cannot be set from a spec; set it with effect.property('Audio Keyframe Layer').setValue(audioAmplitudeLayer.index). Create that layer first: select the audio layer and run app.executeCommand(app.findMenuCommandId('Convert Audio to Keyframes')) (makes an 'Audio Amplitude' null with Left/Right/Both Channels sliders). No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pulse Random",
+   "match": "ADBE DE Pulse Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: sliders for a scale pop that re-fires at random intervals between Min Delay and Max Delay. Nothing changes on screen until an expression on Scale reads it.",
+   "look": [
+    "random pop",
+    "twinkle",
+    "idle animation",
+    "scale pulse"
+   ],
+   "use_for": [
+    "Idle 'alive' pops on icons in an explainer grid so they fire out of sync",
+    "Random twinkle on map pins or data points",
+    "Background sticker pops in a reel"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Duplicated layers pop in unison unless the expression seeds by layer index"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak extra scale in percent",
+     "typical": "10-30"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each pop settles (minimum 4)",
+     "typical": "4-8"
+    },
+    {
+     "name": "Min Delay",
+     "does": "Shortest gap in seconds between pops",
+     "typical": "0.5-1"
+    },
+    {
+     "name": "Max Delay",
+     "does": "Longest gap in seconds",
+     "typical": "1-3"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pulse Random'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Scale: var c=effect(\"Pulse Random\"),lo=c(\"Min Delay\").value,hi=c(\"Max Delay\").value;seedRandom(index,true);var t0=0,t1=random(lo,hi);while(t1<=time){t0=t1;t1+=random(lo,hi);}var s=c(\"Amplitude\")*Math.exp(-c(\"Decay\")*(time-t0));value+[s,s]; Decay's harvested minimum is 4 (not 0). Simpler shipped alternative: apply the preset 'Scale Bounce - random.ffx' (Presets/Behaviors) instead (noise-driven random scale jumps, not decaying pops). No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Radial Wipe Master Controls",
+   "match": "ADBE CM TransRadial",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect from AE's legacy transition presets: a Transition Completion slider, Feather and two direction checkboxes meant to drive a Radial Wipe through expressions. On its own it shows nothing.",
+   "look": [
+    "clock wipe",
+    "radial reveal",
+    "sweep",
+    "pie reveal"
+   ],
+   "use_for": [
+    "One master slider driving several Radial Wipe layers at once (pie-chart or clock-style reveal)",
+    "Clock-sweep reveal of a map or photo in a documentary",
+    "Countdown-style sweep on a timer graphic"
+   ],
+   "avoid": [
+    "Applied alone it does nothing; for a one-off wipe use the real Radial Wipe effect",
+    "The checkbox meanings ('...the other corner', 'counterclockwise') are inferred from their names"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "Percent of the layer wiped away",
+     "typical": "100 to 0 to reveal, 0 to 100 to hide"
+    },
+    {
+     "name": "Feather",
+     "does": "Edge softness in pixels for the driven wipe",
+     "typical": "0-40"
+    },
+    {
+     "name": "counterclockwise",
+     "does": "Checkbox 0/1: sweep direction",
+     "typical": "0"
+    },
+    {
+     "name": "...the other corner",
+     "does": "Checkbox 0/1: start from the opposite corner",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Clock Wipe",
+   "pairs_with": [
+    "Radial Wipe",
+    "Linear Wipe",
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo effect (PresetEffects.xml, one of the 'ADBE CM' transition master controls); no AE 2026 preset uses it. To use: add the real Radial Wipe (match 'ADBE Radial Wipe') to the same layer and link its properties with expressions, e.g. on Radial Wipe/Transition Completion: effect(\"Radial Wipe Master Controls\")(\"Transition Completion\"); on Feather: effect(\"Radial Wipe Master Controls\")(\"Feather\"); on the Wipe popup: effect(\"Radial Wipe Master Controls\")(\"counterclockwise\")==1?2:1. Usually simpler to apply 'ADBE Radial Wipe' directly and keyframe it. Premiere 2026 has no Radial Wipe video effect; nearest is the Clock Wipe video transition (the 'Radial Wipe' transition sweeps from a corner). The '...the other corner' checkbox suggests these controls were built for a corner-anchored, Premiere-style radial wipe (inferred).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      100
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Fill Color",
+   "match": "ADBE DE Random Fill Color",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: a base colour plus hue/saturation/lightness variation and timing sliders for a fill colour that drifts randomly over time. Nothing changes on screen until an expression on a Fill colour reads it.",
+   "look": [
+    "colour cycling",
+    "random colours",
+    "disco",
+    "playful",
+    "shifting tint"
+   ],
+   "use_for": [
+    "Colour-shifting background shapes or text boxes behind an explainer title",
+    "Party or celebration graphics in a reel",
+    "Varied colours across duplicated icons without hand-picking each"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Large hue variation breaks brand palettes (party saffron/green, channel colours)",
+    "Short Transition Time looks like flicker"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Base Color",
+     "does": "Centre colour the randomness varies around",
+     "typical": "brand colour"
+    },
+    {
+     "name": "Max Hue Variation",
+     "does": "Max hue shift in degrees",
+     "typical": "10-40"
+    },
+    {
+     "name": "Max Lightness Variation",
+     "does": "Max lightness shift in percent",
+     "typical": "0-20"
+    },
+    {
+     "name": "Max Saturation Variation",
+     "does": "Max saturation shift in percent",
+     "typical": "0-20"
+    },
+    {
+     "name": "Transition Time",
+     "does": "Seconds per colour change",
+     "typical": "1-3"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Tint"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Random Fill Color'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): add a Fill effect ('ADBE Fill') and on Fill/Color: var c=effect(\"Random Fill Color\"),T=c(\"Transition Time\"),b=rgbToHsl(c(\"Base Color\")),n=Math.floor(time/T);function col(k){seedRandom(index*977+k,true);var h=b[0]+random(-1,1)*c(\"Max Hue Variation\")/360;return hslToRgb([(h%1+1)%1,clamp(b[1]+random(-1,1)*c(\"Max Saturation Variation\")/100,0,1),clamp(b[2]+random(-1,1)*c(\"Max Lightness Variation\")/100,0,1),1]);}ease(time-n*T,0,T,col(n),col(n+1)); (Transition Time Variation and the Random Start checkboxes are ignored by this expression.) Simpler shipped alternative: apply the preset 'Random Colors.ffx' (Presets/Behaviors) instead. No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Motion",
+   "match": "ADBE DE Random Motion",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: timing and horizontal/vertical range sliders for a layer that drifts to random positions. Nothing changes on screen until an expression on Position reads it.",
+   "look": [
+    "random drift",
+    "float",
+    "wander",
+    "organic motion"
+   ],
+   "use_for": [
+    "Gentle floating of icons, particles or bokeh shapes behind an explainer title",
+    "Wandering background dust or spots on a documentary title card",
+    "Restless floating stickers in a reel"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Large ranges on text make it unreadable"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Travel Time",
+     "does": "Seconds per random move",
+     "typical": "1-4"
+    },
+    {
+     "name": "Horizontal Range",
+     "does": "Horizontal travel in pixels",
+     "typical": "50-300"
+    },
+    {
+     "name": "Vertical Range",
+     "does": "Vertical travel in pixels",
+     "typical": "30-220"
+    },
+    {
+     "name": "Travel Time Variation",
+     "does": "Random spread of travel time",
+     "typical": "0.5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Gaussian Blur"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Random Motion'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Position (smooth-noise approximation): var c=effect(\"Random Motion\"),w=wiggle(1/c(\"Travel Time\"),1);value+[(w[0]-value[0])*c(\"Horizontal Range\")/2,(w[1]-value[1])*c(\"Vertical Range\")/2]; (Variation and Random Start checkboxes are ignored.) Simpler shipped alternative: apply the preset 'Wiggle - position.ffx' (Presets/Behaviors) instead. No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Motion 1D",
+   "match": "ADBE DE Random Motion 1D",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: like Random Motion but along one axis (horizontal, or vertical when Vertical Motion is on). Nothing changes on screen until an expression on Position reads it.",
+   "look": [
+    "random drift",
+    "bob",
+    "float",
+    "one-axis motion"
+   ],
+   "use_for": [
+    "Vertical bobbing of a floating icon or balloon graphic",
+    "Horizontal drift of clouds or background shapes",
+    "Subtle bob on a lower-third plate in a reel"
+   ],
+   "avoid": [
+    "Applied alone it does nothing"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Range",
+     "does": "Travel distance in pixels",
+     "typical": "20-200"
+    },
+    {
+     "name": "Travel Time",
+     "does": "Seconds per random move",
+     "typical": "1-4"
+    },
+    {
+     "name": "Vertical Motion",
+     "does": "Checkbox 0/1: move vertically instead of horizontally",
+     "typical": "1 for bobbing"
+    },
+    {
+     "name": "Travel Time Variation",
+     "does": "Random spread of travel time",
+     "typical": "0.5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Random Motion 1D'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Position: var c=effect(\"Random Motion 1D\"),o=(wiggle(1/c(\"Travel Time\"),1)[0]-value[0])*c(\"Range\")/2;value+(c(\"Vertical Motion\")==1?[0,o]:[o,0]); Simpler shipped alternative: apply the preset 'Wiggle - position.ffx' (Presets/Behaviors) instead (it wiggles both axes; Separate Dimensions and wiggle only X or Y for one axis). No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Opacity",
+   "match": "ADBE DE Random Opacity",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: min/max opacity and timing sliders for a layer whose opacity drifts randomly between the two. Nothing changes on screen until an expression on Opacity reads it.",
+   "look": [
+    "flicker",
+    "random fade",
+    "twinkle",
+    "breathing light"
+   ],
+   "use_for": [
+    "Flickering neon or candle-light overlay in a trailer",
+    "Twinkling stars, sparkles or map lights",
+    "Unstable-signal or old-TV flicker on a graphic"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Low Min Opacity on titles makes them vanish mid-read"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Min Opacity",
+     "does": "Lowest opacity in percent",
+     "typical": "30-60"
+    },
+    {
+     "name": "Max Opacity",
+     "does": "Highest opacity in percent",
+     "typical": "100"
+    },
+    {
+     "name": "Travel Time",
+     "does": "Seconds per change; lower = more flicker",
+     "typical": "0.1-2"
+    },
+    {
+     "name": "Travel Time Variation",
+     "does": "Random spread of travel time",
+     "typical": "0.5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Noise"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Random Opacity'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Opacity: var c=effect(\"Random Opacity\"),n=wiggle(1/c(\"Travel Time\"),1)-value;linear(n,-1,1,c(\"Min Opacity\"),c(\"Max Opacity\")); Simpler shipped alternative: apply the preset 'Opacity Flash - random.ffx' (Presets/Behaviors) instead. No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Random Rotation",
+   "match": "ADBE DE Random Rotation",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control-only pseudo effect: min/max rotation and timing sliders for a layer that turns to random angles. Nothing changes on screen until an expression on Rotation reads it.",
+   "look": [
+    "random spin",
+    "tumble",
+    "wobble",
+    "playful"
+   ],
+   "use_for": [
+    "Tumbling icons or confetti shapes in a celebration reel",
+    "Slight random tilt on stickers or cut-outs for a handmade look",
+    "Spinning background elements in an explainer transition"
+   ],
+   "avoid": [
+    "Applied alone it does nothing",
+    "Default range (-360 to 360) is a full tumble; use +/-5 to 15 for a subtle tilt",
+    "Rotating text hurts readability"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Min Rotation",
+     "does": "Lowest angle in degrees",
+     "typical": "-15 subtle, -360 tumble"
+    },
+    {
+     "name": "Max Rotation",
+     "does": "Highest angle in degrees",
+     "typical": "15 subtle, 360 tumble"
+    },
+    {
+     "name": "Travel Time",
+     "does": "Seconds per random turn",
+     "typical": "1-3"
+    },
+    {
+     "name": "Travel Time Variation",
+     "does": "Random spread of travel time",
+     "typical": "0.5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Motion Tile"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset shipped with AE 2026 references it. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Random Rotation'), then put an expression on the target property that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine): on Transform/Rotation: var c=effect(\"Random Rotation\"),n=wiggle(1/c(\"Travel Time\"),1)-value;value+linear(n,-1,1,c(\"Min Rotation\"),c(\"Max Rotation\")); Simpler shipped alternative: apply the preset 'Wiggle - rotation.ffx' (Presets/Behaviors) instead. No Premiere equivalent.",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (control-only pseudo effect with no visible output of its own), so no gallery frame was rendered and none is in the index.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

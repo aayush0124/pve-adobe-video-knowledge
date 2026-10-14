@@ -1,0 +1,1165 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Distortion",
+   "match": "ADBE Aud Distortion",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Amp-style audio distortion (drive, gain, wet/dry mix, output volume) plus a Bitcrusher that lowers bit depth and sample rate for crunchy lo-fi / 8-bit sound.",
+   "look": [
+    "distorted audio",
+    "overdrive",
+    "bitcrush",
+    "lo-fi",
+    "8-bit",
+    "megaphone"
+   ],
+   "use_for": [
+    "megaphone / loudspeaker voice on a short satirical quote or rally clip",
+    "crunchy lo-fi hit under a glitch transition",
+    "'hacked signal' / corrupted audio under a glitch title",
+    "gritty bass hit or riser in a trailer"
+   ],
+   "avoid": [
+    "High Drive + Gain clips hard and gets painfully loud: keep Volume low and check the meter",
+    "On a whole narration track it destroys intelligibility; use on short accents only"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Type",
+     "does": "distortion / amp character (1-based popup: 1 Soft Clip, 2 Hard Clip, 3 Saturation 1, 4 Saturation 2, 5 Tube, 6 Fuzz)",
+     "typical": "1 (default); audition 2-6"
+    },
+    {
+     "name": "Drive",
+     "does": "amount of saturation",
+     "typical": "20-50 grit, 80-100 fuzz"
+    },
+    {
+     "name": "Gain",
+     "does": "signal level pushed into the distortion stage",
+     "typical": "25-100"
+    },
+    {
+     "name": "Mix",
+     "does": "wet/dry blend in %",
+     "typical": "100 full effect, 30-60 parallel grit"
+    },
+    {
+     "name": "Volume",
+     "does": "output level after distortion (default 11)",
+     "typical": "8-15; lower it as Drive rises"
+    },
+    {
+     "name": "Resolution (bit)",
+     "does": "Bitcrusher bit depth; 24 = bypassed",
+     "typical": "8-12 retro, 4-6 harsh"
+    },
+    {
+     "name": "Downsample (x)",
+     "does": "Bitcrusher sample-rate reduction factor; 1 = bypassed",
+     "typical": "4-16 for aliased lo-fi"
+    }
+   ],
+   "demo_settings": {
+    "Type": 1,
+    "Drive": 60,
+    "Mix": 100,
+    "Volume": 10,
+    "Resolution (bit)": 8
+   },
+   "enum_labels": {
+    "Type": {
+     "1": "Soft Clip",
+     "2": "Hard Clip",
+     "3": "Saturation 1",
+     "4": "Saturation 2",
+     "5": "Tube",
+     "6": "Fuzz"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Distortion",
+   "pairs_with": [
+    "High-Low Pass",
+    "Parametric EQ",
+    "Reverb"
+   ],
+   "scripting": "Audio effect: only applies to layers that carry audio and changes nothing visible, so status is needs_input (the visual gallery skips it); the effect itself is current. Property names are flat: 'Amp' and 'Bitcrusher' are header rows, not path groups, so use 'Drive', 'Resolution (bit)' etc. Type is a 1-based popup: 1 Soft Clip (default), 2 Hard Clip, 3 Saturation 1, 4 Saturation 2, 5 Tube, 6 Fuzz (read from After Effects 26.0). The Amp stage is ACTIVE at defaults (Drive 25, Mix 100), so the effect colours the sound as soon as it is applied; the Bitcrusher stage is neutral at Resolution 24 + Downsample 1. Newer AE audio effect missing from older Adobe docs: behaviour is inferred from property names (low confidence), verify by ear and on the audio meter.",
+   "recipe": {
+    "Downsample (x)": [
+     [
+      0,
+      1
+     ],
+     [
+      0.2,
+      16
+     ],
+     [
+      0.4,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Flange & Chorus",
+   "match": "ADBE Aud_Flange",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Mixes delayed, pitch-modulated copies of the audio with the original: short delays give a swooshing jet-like flange, longer delays with several voices give a thick chorus.",
+   "look": [
+    "flanger",
+    "chorus",
+    "jet whoosh",
+    "sci-fi voice",
+    "swirl",
+    "doubled"
+   ],
+   "use_for": [
+    "sci-fi / robot / 'AI voice' treatment on a short line",
+    "swirly whoosh on a transition SFX",
+    "thicken a thin music sting or riser",
+    "dream / flashback treatment on a music bed"
+   ],
+   "avoid": [
+    "On narration it sounds underwater and robotic; keep to SFX, music or deliberate character voices",
+    "Dry Out + Wet Out can each go to 400%: high values clip"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Voice Separation Time (ms)",
+     "does": "delay between voices: short = flange, long = chorus",
+     "typical": "2-6 flange, 20-35 chorus"
+    },
+    {
+     "name": "Voices",
+     "does": "number of processed copies",
+     "typical": "1 flange, 2-4 chorus"
+    },
+    {
+     "name": "Modulation Rate",
+     "does": "LFO speed of the sweep in Hz",
+     "typical": "0.2-1"
+    },
+    {
+     "name": "Modulation Depth",
+     "does": "how far the delay sweeps (%)",
+     "typical": "40-80"
+    },
+    {
+     "name": "Stereo Voices",
+     "does": "0/1: spread alternate voices left/right",
+     "typical": "1 for a wide chorus"
+    },
+    {
+     "name": "Dry Out",
+     "does": "original signal level (%)",
+     "typical": "50-100"
+    },
+    {
+     "name": "Wet Out",
+     "does": "processed signal level (%)",
+     "typical": "30-70"
+    }
+   ],
+   "demo_settings": {
+    "Voice Separation Time (ms)": 4,
+    "Voices": 1,
+    "Modulation Rate": 0.5,
+    "Modulation Depth": 70,
+    "Dry Out": 70,
+    "Wet Out": 70
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Chorus/Flanger",
+   "pairs_with": [
+    "Reverb",
+    "High-Low Pass",
+    "Modulator"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input only so the visual gallery skips it). Invert Phase and Stereo Voices are 0/1 numbers. Defaults (3 ms, 1 voice) are a flange; switch to chorus by raising Voice Separation Time to ~25 and Voices to 3.",
+   "recipe": {
+    "Wet Out": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      80
+     ],
+     [
+      1.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Gate",
+   "match": "ADBE Aud Gate",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Noise gate: silences the audio whenever its level falls below a threshold, with attack, hold and release times controlling how smoothly it opens and closes.",
+   "look": [
+    "noise gate",
+    "clean pauses",
+    "tight",
+    "punchy",
+    "de-noise"
+   ],
+   "use_for": [
+    "mute fan / room hiss in the pauses between narration phrases",
+    "cut mic bleed between answers in an interview",
+    "chop reverb tails off hits and drums for punchy social edits",
+    "clean silence under a voice before adding music"
+   ],
+   "avoid": [
+    "Threshold too high chops the starts and ends of words",
+    "Short Release on noisy audio causes audible chattering/pumping",
+    "It does not remove noise under the speech itself"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold (dB)",
+     "does": "level below which the gate closes; default -60 is effectively always open",
+     "typical": "-45 to -30 for voice"
+    },
+    {
+     "name": "Attack (ms)",
+     "does": "how fast the gate opens when sound returns",
+     "typical": "1-10"
+    },
+    {
+     "name": "Hold (ms)",
+     "does": "how long it stays open after the level drops",
+     "typical": "50-200"
+    },
+    {
+     "name": "Release (ms)",
+     "does": "fade-out time as it closes",
+     "typical": "100-300"
+    }
+   ],
+   "demo_settings": {
+    "Threshold (dB)": -35,
+    "Attack (ms)": 5,
+    "Hold (ms)": 100,
+    "Release (ms)": 200
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Dynamics",
+   "pairs_with": [
+    "Parametric EQ",
+    "High-Low Pass"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). With the default Threshold of -60 dB it does almost nothing; always set Threshold. Newer AE audio effect missing from older Adobe docs; semantics inferred from standard noise-gate controls. Premiere's closest is the AutoGate section of its 'Dynamics' audio effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "High-Low Pass",
+   "match": "ADBE Aud HiLo",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Single filter that removes frequencies below (High Pass) or above (Low Pass) a cutoff: makes audio thin and telephone-like or muffled and distant.",
+   "look": [
+    "muffled",
+    "telephone voice",
+    "radio voice",
+    "underwater",
+    "rumble cleanup",
+    "filter sweep"
+   ],
+   "use_for": [
+    "muffled 'heard through a wall' / flashback audio that opens up on a cut (Low Pass sweep)",
+    "phone-call or radio voice for a quoted statement (High Pass ~400 Hz)",
+    "remove wind / traffic rumble from field audio (High Pass 80-120 Hz)",
+    "roll off a music bed's highs (Low Pass 3000-5000 Hz) so narration sits on top"
+   ],
+   "avoid": [
+    "One instance is one filter: a true telephone band needs two instances (High Pass + Low Pass)",
+    "Low Pass under ~300 Hz makes speech unintelligible"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Filter Options",
+     "does": "1 = High Pass, 2 = Low Pass",
+     "typical": "2 for muffle, 1 for cleanup / telephone"
+    },
+    {
+     "name": "Cutoff Frequency",
+     "does": "cutoff in Hz",
+     "typical": "Low Pass 400-800 muffled; High Pass 80-120 cleanup, 300-500 telephone"
+    },
+    {
+     "name": "Dry Out",
+     "does": "unfiltered signal level (%)",
+     "typical": "0"
+    },
+    {
+     "name": "Wet Out",
+     "does": "filtered signal level (%)",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {
+    "Filter Options": 2,
+    "Cutoff Frequency": 600,
+    "Dry Out": 0,
+    "Wet Out": 100
+   },
+   "enum_labels": {
+    "Filter Options": {
+     "1": "High Pass",
+     "2": "Low Pass"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Lowpass",
+   "pairs_with": [
+    "Parametric EQ",
+    "Distortion",
+    "Reverb"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). The default Filter Options is 1 = High Pass, so always set Filter Options explicitly (2 for a muffle / Low Pass sweep) before keyframing Cutoff Frequency. Premiere splits this into separate 'Lowpass' and 'Highpass' effects.",
+   "recipe": {
+    "Filter Options": 2,
+    "Cutoff Frequency": [
+     [
+      0,
+      500
+     ],
+     [
+      1.2,
+      20000
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Modulator",
+   "match": "ADBE Aud Modulator",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Adds vibrato (pitch wobble) and tremolo (volume wobble) by modulating the audio with a sine or triangle LFO; high rates give a ring-mod robot tone.",
+   "look": [
+    "vibrato",
+    "tremolo",
+    "wobble",
+    "robot voice",
+    "warbly tape",
+    "siren"
+   ],
+   "use_for": [
+    "robot / alien / 'AI' character voice (high Modulation Rate)",
+    "warbly old-tape wobble on music under archival footage",
+    "dreamy tremolo on a flashback music bed",
+    "alarm / siren wobble on a tone"
+   ],
+   "avoid": [
+    "High Modulation Depth on dialogue sounds seasick and cheap",
+    "Tremolo rate that fights the music tempo sounds wrong"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Modulation Type",
+     "does": "LFO waveform: smooth sine or sharper triangle",
+     "typical": "1"
+    },
+    {
+     "name": "Modulation Rate",
+     "does": "LFO speed in Hz",
+     "typical": "4-8 tremolo/vibrato, 30-100 robotic"
+    },
+    {
+     "name": "Modulation Depth",
+     "does": "pitch modulation amount (vibrato, %)",
+     "typical": "1-5"
+    },
+    {
+     "name": "Amplitude Modulation",
+     "does": "volume modulation amount (tremolo, %)",
+     "typical": "30-80"
+    }
+   ],
+   "demo_settings": {
+    "Modulation Type": 1,
+    "Modulation Rate": 6,
+    "Modulation Depth": 3,
+    "Amplitude Modulation": 70
+   },
+   "enum_labels": {
+    "Modulation Type": {
+     "1": "Sine",
+     "2": "Triangle"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Flange & Chorus",
+    "Distortion",
+    "High-Low Pass"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). Defaults already wobble the sound (10 Hz, Amplitude Modulation 50). Modulation Type: 1 Sine, 2 Triangle (read from After Effects 26.0). No direct Premiere equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Parametric EQ",
+   "match": "ADBE Param EQ",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Three-band parametric equalizer: boosts or cuts a chosen frequency band per band (centre frequency, bandwidth, boost/cut) to shape the tone of voice or music.",
+   "look": [
+    "EQ",
+    "voice clarity",
+    "presence",
+    "de-rumble",
+    "telephone band",
+    "tone shaping"
+   ],
+   "use_for": [
+    "clean narration: cut rumble ~100 Hz and boost presence 3-5 kHz",
+    "carve space in the music bed at 2-4 kHz under VO",
+    "tame harsh sibilance around 6-8 kHz",
+    "narrow-band telephone / walkie-talkie voice"
+   ],
+   "avoid": [
+    "Big boosts clip and sound honky; prefer cuts",
+    "Defaults are not neutral per the harvest (band 1 on with Boost/Cut 50 at 1 kHz; bands 2-3 also default to 50): always set Boost/Cut explicitly and leave bands 2-3 off unless their gain is set too"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Frequency",
+     "does": "band 1 centre frequency (Hz)",
+     "typical": "80-150 for rumble cut"
+    },
+    {
+     "name": "Bandwidth",
+     "does": "band 1 width (narrow = surgical)",
+     "typical": "10-40"
+    },
+    {
+     "name": "Boost/Cut",
+     "does": "band 1 gain; negative cuts, positive boosts",
+     "typical": "-12 to +6"
+    },
+    {
+     "name": "Band 2 Enabled",
+     "does": "turns band 2 on (off by default; its default gain is 50 at 5 kHz, so enable it only when Boost/Cut#2 is set too)",
+     "typical": "0 unless band 2 is set"
+    },
+    {
+     "name": "Frequency#2",
+     "does": "band 2 centre frequency (Hz); not reachable by name through the AE spec today, see scripting",
+     "typical": "3000-5000 presence"
+    },
+    {
+     "name": "Boost/Cut#2",
+     "does": "band 2 gain; not reachable by name through the AE spec today, see scripting",
+     "typical": "+3 to +8"
+    },
+    {
+     "name": "Band 3 Enabled",
+     "does": "turns band 3 on (off by default; default gain 50 at 10 kHz)",
+     "typical": "0 unless band 3 is set"
+    },
+    {
+     "name": "Frequency#3",
+     "does": "band 3 centre frequency (Hz); not reachable by name through the AE spec today, see scripting",
+     "typical": "6000-8000 de-ess cut"
+    }
+   ],
+   "demo_settings": {
+    "Band 1 Enabled": 1,
+    "Frequency": 1000,
+    "Bandwidth": 30,
+    "Boost/Cut": 12
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric Equalizer",
+   "pairs_with": [
+    "High-Low Pass",
+    "Gate",
+    "Reverb"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). Band properties repeat their names (bands 1-3 each have 'Frequency', 'Bandwidth', 'Boost/Cut'); 'Frequency Response' is a custom graph header, not a group. AdobeBridge's AE setter (ae_lib.jsx dress()) looks properties up by name only and does NOT resolve '#N': plain 'Frequency' / 'Bandwidth' / 'Boost/Cut' reach band 1, while 'Frequency#2' etc. are skipped with a warning. From a spec, use band 1 only (or stack several Parametric EQ instances, one band each); bands 2-3 need a script that addresses them by property index. Boost/Cut units were not harvested (range -100..100, default 50, which looks far from neutral): treat values as roughly dB, start small (+/-6 to 12) and verify by ear.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Reverb",
+   "match": "ADBE Aud Reverb",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Simulates a room or hall by adding diffuse reflections and a decaying tail to the audio, from a small room to a long cathedral echo.",
+   "look": [
+    "reverb",
+    "echo",
+    "hall",
+    "cathedral",
+    "dreamy",
+    "spacious"
+   ],
+   "use_for": [
+    "'voice of history' / flashback quote with a hall tail",
+    "reverb throw on the last word or hit before a cut to black in a trailer",
+    "match a dry VO to a big rally / hall shot",
+    "make a whoosh or stinger feel bigger"
+   ],
+   "avoid": [
+    "On full narration it muddies intelligibility; keep Wet low",
+    "The tail stops at the layer's out point and an audio footage layer cannot run past its source: precompose it (or enable time remapping) and extend the layer so the tail can ring out",
+    "High Wet with high Reverb Time sounds amateur"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Reverb Time (ms)",
+     "does": "average delay between the original sound and its reflections; longer = bigger space",
+     "typical": "50-150 room, 300-800 large hall"
+    },
+    {
+     "name": "Diffusion",
+     "does": "density/smoothness of reflections (%)",
+     "typical": "60-90"
+    },
+    {
+     "name": "Decay",
+     "does": "how long the tail takes to die away (%)",
+     "typical": "20-60"
+    },
+    {
+     "name": "Brightness",
+     "does": "high-frequency content of the reflections (%)",
+     "typical": "10-40"
+    },
+    {
+     "name": "Dry Out",
+     "does": "original signal level (%)",
+     "typical": "80-100"
+    },
+    {
+     "name": "Wet Out",
+     "does": "reverb level (%)",
+     "typical": "10-40 natural, 60-120 effect"
+    }
+   ],
+   "demo_settings": {
+    "Reverb Time (ms)": 300,
+    "Diffusion": 80,
+    "Decay": 60,
+    "Brightness": 30,
+    "Dry Out": 80,
+    "Wet Out": 50
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Studio Reverb",
+   "pairs_with": [
+    "High-Low Pass",
+    "Parametric EQ",
+    "Flange & Chorus"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). For a reverb throw, keyframe Wet Out up and Dry Out down together; put the audio in a precomp longer than the clip (or time-remap and extend it) so the tail is not cut at the source's last frame.",
+   "recipe": {
+    "Wet Out": [
+     [
+      0,
+      10
+     ],
+     [
+      0.8,
+      120
+     ]
+    ],
+    "Dry Out": [
+     [
+      0,
+      90
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Stereo Mixer",
+   "match": "ADBE Aud Stereo Mixer",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Sets the volume and pan position of the left and right channels independently, for balancing, mono fixes and left-right pans.",
+   "look": [
+    "pan",
+    "stereo balance",
+    "mono fix",
+    "left-right sweep",
+    "width"
+   ],
+   "use_for": [
+    "fix a one-sided interview mic: Left Pan 0 and Right Pan 0 to centre it",
+    "pan a whoosh left-to-right to follow on-screen motion",
+    "narrow a wide music bed under narration",
+    "rebalance a louder channel"
+   ],
+   "avoid": [
+    "Invert Phase on a source that is later summed to mono can cancel it on phone speakers",
+    "Hard pans on dialogue feel wrong on headphones"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Left Level",
+     "does": "left channel volume (%), 100 = unity",
+     "typical": "80-120"
+    },
+    {
+     "name": "Right Level",
+     "does": "right channel volume (%), 100 = unity",
+     "typical": "80-120"
+    },
+    {
+     "name": "Left Pan",
+     "does": "where the left channel sits, -100 left to 100 right",
+     "typical": "-100 normal, 0 centred"
+    },
+    {
+     "name": "Right Pan",
+     "does": "where the right channel sits, -100 left to 100 right",
+     "typical": "100 normal, 0 centred"
+    },
+    {
+     "name": "Invert Phase",
+     "does": "0/1 polarity flip",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Left Pan": -100,
+    "Right Pan": -100
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Balance",
+   "pairs_with": [
+    "Parametric EQ",
+    "Reverb"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). To pan the whole sound, keyframe Left Pan and Right Pan together. Invert Phase is a 0/1 number.",
+   "recipe": {
+    "Left Pan": [
+     [
+      0,
+      -100
+     ],
+     [
+      1.5,
+      100
+     ]
+    ],
+    "Right Pan": [
+     [
+      0,
+      -100
+     ],
+     [
+      1.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Tone",
+   "match": "ADBE Aud Tone",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Synthesizes simple tones (up to five frequencies mixed as a chord) on the layer's audio: beeps, bleeps, hums and alarms.",
+   "look": [
+    "beep",
+    "censor bleep",
+    "sine tone",
+    "hum",
+    "alarm",
+    "synth"
+   ],
+   "use_for": [
+    "censor bleep over a cut profanity in a political or news clip",
+    "countdown / timer beeps in an explainer",
+    "flatline, alarm or sci-fi hum sound design in a trailer",
+    "UI blips on on-screen text pops"
+   ],
+   "avoid": [
+    "Defaults play a 5-note chord (A, B, C#, D, E), not a single beep: zero Frequency 2-5",
+    "Level near 100 is harsh and loud; keep 15-30",
+    "Hard on/off without a short ramp can click"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Waveform options",
+     "does": "tone waveform (1-based popup: 1 Sine (default), 2 Triangle, 3 Saw, 4 Square, 5 White Noise)",
+     "typical": "1"
+    },
+    {
+     "name": "Frequency 1",
+     "does": "first tone in Hz",
+     "typical": "1000 for a censor bleep"
+    },
+    {
+     "name": "Frequency 2",
+     "does": "second tone in Hz; 0 to silence",
+     "typical": "0"
+    },
+    {
+     "name": "Frequency 3",
+     "does": "third tone in Hz; 0 to silence",
+     "typical": "0"
+    },
+    {
+     "name": "Frequency 4",
+     "does": "fourth tone in Hz; 0 to silence",
+     "typical": "0"
+    },
+    {
+     "name": "Frequency 5",
+     "does": "fifth tone in Hz; 0 to silence",
+     "typical": "0"
+    },
+    {
+     "name": "Level",
+     "does": "output level (%)",
+     "typical": "15-30"
+    }
+   ],
+   "demo_settings": {
+    "Frequency 1": 1000,
+    "Frequency 2": 0,
+    "Frequency 3": 0,
+    "Frequency 4": 0,
+    "Frequency 5": 0,
+    "Level": 25
+   },
+   "enum_labels": {
+    "Waveform options": {
+     "1": "Sine",
+     "2": "Triangle",
+     "3": "Saw",
+     "4": "Square",
+     "5": "White Noise"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Stereo Mixer",
+    "High-Low Pass"
+   ],
+   "scripting": "Generates audio, so it needs an audio-capable layer (AE greys audio effects out on layers without audio; a short silent audio clip is the safe host) and shows nothing visible (status needs_input). Put bleeps on their own layer: the tone may replace or mask the host's audio (unverified). For a single pure tone set Frequency 2-5 to 0. Waveform options: 1 Sine, 2 Triangle, 3 Saw, 4 Square, 5 White Noise (read from After Effects 26.0). Premiere has no Tone effect: use a bleep SFX file or New Item > Bars and Tone.",
+   "recipe": {
+    "Level": [
+     [
+      0,
+      0
+     ],
+     [
+      0.02,
+      25
+     ],
+     [
+      0.5,
+      25
+     ],
+     [
+      0.52,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Audio effect with status needs_input: it changes nothing visible, so the AE gallery has no frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bilateral Blur",
+   "match": "ADBE Bilateral",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Edge-preserving blur: smooths areas of similar colour while keeping strong edges sharp, giving smoother skin, cleaner noise or a flat painterly look.",
+   "look": [
+    "edge-preserving blur",
+    "skin smoothing",
+    "painterly",
+    "watercolor",
+    "noise reduction",
+    "flat cartoon"
+   ],
+   "use_for": [
+    "soften skin on talking-head close-ups (low Radius, masked to the face)",
+    "clean blocky or noisy compressed archival / phone footage before grading",
+    "painterly 'memory' look on documentary stills",
+    "flatten background detail behind text while keeping silhouettes"
+   ],
+   "avoid": [
+    "Render time grows fast with Radius: keep under ~30 at 1080p (range goes to 30000)",
+    "High Threshold on faces gives waxy, plastic skin"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "reach of the blur in pixels",
+     "typical": "3-10 skin/noise, 15-30 painterly"
+    },
+    {
+     "name": "Threshold",
+     "does": "how different neighbouring pixels may be and still blur together; higher = more smoothing across edges",
+     "typical": "5-20 subtle, 40-80 posterized painting"
+    },
+    {
+     "name": "Colorize",
+     "does": "0/1: 1 keeps the colour result (default)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 25,
+    "Threshold": 60,
+    "Colorize": 1
+   },
+   "enum_labels": {},
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Posterize",
+    "Find Edges",
+    "Lumetri Color"
+   ],
+   "scripting": "Colorize is a 0/1 checkbox; Adobe documents unchecked as producing a grayscale-like result (unverified), so keep 1. Radius is in layer pixels, so scale it with resolution. No direct Premiere equivalent (no edge-preserving blur there).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/000.png",
+    "note": "Faces, stripes and background are smoothed into flat painterly areas while foreground-block, stripe and figure edges stay fairly crisp, as the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Cross Blur",
+   "match": "CS CrossBlur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Blurs the image separately horizontally and vertically and combines the two passes with a chosen transfer mode, giving soft directional or cross-shaped streaky blur.",
+   "look": [
+    "cross blur",
+    "horizontal streak",
+    "dreamy",
+    "soft focus",
+    "light streak",
+    "bloom"
+   ],
+   "use_for": [
+    "horizontal smear transition between shots (Radius X up then down across the cut)",
+    "soft dreamy background behind lower-thirds and titles",
+    "horizontal light streaks on night rally lights for a trailer look (needs an additive Transfer Mode, check it in the app)",
+    "streaky motion smear on a whip-pan or fast push cut"
+   ],
+   "avoid": [
+    "Equal Radius X and Y looks like a cheap box blur; use Gaussian Blur or Camera Lens Blur for plain defocus",
+    "With Repeat Edge Pixels off the frame edges darken or go transparent"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius X",
+     "does": "horizontal blur length in pixels",
+     "typical": "20-80, up to 200 in transitions"
+    },
+    {
+     "name": "Radius Y",
+     "does": "vertical blur length in pixels",
+     "typical": "0-40"
+    },
+    {
+     "name": "Transfer Mode",
+     "does": "how the horizontal and vertical passes combine (1-based popup of 6, default 1)",
+     "typical": "1"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "0/1: extend edge pixels so borders do not darken",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Radius X": 60,
+    "Radius Y": 25,
+    "Transfer Mode": 1,
+    "Repeat Edge Pixels": 1
+   },
+   "enum_labels": {
+    "Transfer Mode": {
+     "1": "Blend",
+     "2": "Add",
+     "3": "Screen",
+     "4": "Multiply",
+     "5": "Lighten",
+     "6": "Darken"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Directional Blur",
+   "pairs_with": [
+    "Glow",
+    "Gaussian Blur",
+    "Curves"
+   ],
+   "scripting": "Transfer Mode is a 1-based popup: 1 Blend, 2 Add, 3 Screen, 4 Multiply, 5 Lighten, 6 Darken (read from After Effects 26.0). Repeat Edge Pixels is a 0/1 number.",
+   "recipe": {
+    "Radius X": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      150
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/001.png",
+    "note": "Soft blur with a clearly stronger horizontal smear (vertical stripes and faces streak sideways) than vertical, matching Radius X 60 / Y 25.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Radial Blur",
+   "match": "CC Radial Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Radial blur around a centre point. Type picks the style: 1 Straight Zoom, 2 Fading Zoom and 3 Centered Zoom streak toward or away from the centre, 5 Rotate, 6 Scratch (the default, frame-verified: a rotational spin smear) and 7 Rotate Fading turn around it.",
+   "look": [
+    "spin blur",
+    "radial blur",
+    "rotational blur",
+    "vortex",
+    "zoom blur",
+    "impact"
+   ],
+   "use_for": [
+    "spin / whip-rotate transition: Type 6, Amount 0 to 40 and back across a cut (at 40 the frame is fully smeared)",
+    "short vortex / dizzy hit on a shocking claim or reveal (Type 6, Amount 5-15, 4-12 frames)",
+    "zoom-punch transition or rush toward a title card: Type 1 (Straight Zoom) or 2 (Fading Zoom) with Amount keyed 0 -> 40 -> 0 (the zoom Types are known by name, not yet render-checked)"
+   ],
+   "avoid": [
+    "Type 6 at Amount 40 already destroys the image completely: use 5-15 for a readable spin",
+    "Corners darken or go transparent because the spin samples outside the layer: scale the layer up or use a full-frame plate",
+    "Held for long it looks dated and cheap: keep it to 4-12 frames",
+    "Low Quality at high Amount shows stepped ghost copies"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Type",
+     "does": "blur style (1-based popup): 1 Straight Zoom, 2 Fading Zoom, 3 Centered Zoom, 4 a separator, 5 Rotate, 6 Scratch (default; renders as a rotational spin, frame-verified), 7 Rotate Fading",
+     "typical": "6 (Scratch) for the spin smear; 1 or 2 for a zoom punch"
+    },
+    {
+     "name": "Amount",
+     "does": "blur strength; the sign flips the direction (spin direction, or in/out on zoom types)",
+     "typical": "5-15 readable spin, 30-60 full smear at a transition peak"
+    },
+    {
+     "name": "Quality",
+     "does": "sample count: higher is smoother and slower",
+     "typical": "50 draft, 80-100 final"
+    },
+    {
+     "name": "Center",
+     "does": "origin of the zoom/spin in layer pixels",
+     "typical": "[960, 540] or on the subject"
+    }
+   ],
+   "demo_settings": {
+    "Type": 6,
+    "Amount": 40,
+    "Quality": 80,
+    "Center": [
+     960,
+     540
+    ]
+   },
+   "enum_labels": {
+    "Type": {
+     "1": "Straight Zoom",
+     "2": "Fading Zoom",
+     "3": "Centered Zoom",
+     "4": "(separator)",
+     "5": "Rotate",
+     "6": "Scratch",
+     "7": "Rotate Fading"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Zoom Blur (Premiere transition, not an effect)",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur",
+    "Exposure",
+    "Glow"
+   ],
+   "scripting": "Center is a point in layer pixels ([960, 540] = centre of a 1920x1080 layer). Frame-verified: Type 6 (Scratch, the harvested default) renders a ROTATIONAL spin blur, not a zoom, and Amount 40 on it smears the whole frame into concentric rings with dark corners. The Type menu (read from After Effects 26.0): 1 Straight Zoom, 2 Fading Zoom, 3 Centered Zoom, 4 a separator (never set it), 5 Rotate, 6 Scratch, 7 Rotate Fading; only Type 6 has been rendered, so the zoom looks are known by their names, not yet by a frame. Amount 0 (the harvested default) means no blur, so keyframe it for transitions. Premiere 2026 has no radial-blur EFFECT; its 'Zoom Blur' and 'Radial Blur' transitions (and 'Cross Zoom') are the closest stand-ins on a cut.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      60
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/002.png",
+    "note": "Type 6 at Amount 40 turns the frame into concentric spin rings around the centre with dark corners; the picture is unrecognisable, as the corrected text says.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: summary said every other Type is a zoom; the menu also holds rotate-fading / scratch variants with unverified order, so it now says the others include zoom types. Spin verdict, demo_settings and the rest of the rewrite agree with frame 002."
+     }
+    ]
+   }
+  }
+ ]
+}

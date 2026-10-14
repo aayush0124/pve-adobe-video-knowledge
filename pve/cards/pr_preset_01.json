@@ -1,0 +1,3157 @@
+{
+ "cards": [
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Bevel Edges Thick",
+   "match": null,
+   "category": "Presets/Bevel Edges",
+   "bin": "Presets/Bevel Edges",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Gives the clip's rectangular frame a lit, raised 3D bevel (thick: Edge Thickness 0.15 of the layer, white light from -45 degrees, intensity 0.3), like a chunky tile or button.",
+   "look": [
+    "bevelled frame",
+    "raised tile",
+    "3D button",
+    "picture frame",
+    "retro",
+    "chunky"
+   ],
+   "use_for": [
+    "button-style plate behind a number or stat in an explainer",
+    "retro TV-screen or game-tile look for a satire reel inset",
+    "tile grid of leaders in a political split screen"
+   ],
+   "avoid": [
+    "Thick bevels look like a 90s screensaver; rarely right for serious news",
+    "Not available in Premiere 2026 (Bevel Edges is not in its video-effect list)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Bevel Edges": "Bevel Edges"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "Edge Thickness": 0.15,
+    "Light Angle": -45,
+    "Light Color": "#FFFFFF",
+    "Light Intensity": 0.3
+   },
+   "equivalent": "After Effects Bevel Edges (ADBE Bevel Edges) with the same settings; in Premiere fake a framed inset with Stroke + Drop Shadow",
+   "recipe": [
+    {
+     "app": "AE",
+     "name": "ADBE Bevel Edges",
+     "props": {
+      "Edge Thickness": 0.15,
+      "Light Angle": -45,
+      "Light Color": "#FFFFFF",
+      "Light Intensity": 0.3
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and Bevel Edges (AE.ADBE Bevel Edges) is not in Premiere 2026's harvested video-effect list, so build the look in After Effects instead: {\"app\": \"AE\", \"name\": \"ADBE Bevel Edges\", \"props\": {\"Edge Thickness\": 0.15, \"Light Angle\": -45, \"Light Color\": \"#FFFFFF\", \"Light Intensity\": 0.3}}. Stored preset values: Edge Thickness 0.15, Light Angle -45 (StartKeyframe value; the file's CurrentValue field reads 0), Light Color white (64-bit 0xFF00FF00FF00FF00), Light Intensity 0.3; all inside AE's harvested ranges."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Bevel Edges Thin",
+   "match": null,
+   "category": "Presets/Bevel Edges",
+   "bin": "Presets/Bevel Edges",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Gives the clip's rectangular frame a lit, raised 3D bevel (thin: Edge Thickness 0.05 of the layer, white light from -45 degrees, intensity 0.3), like a slim raised picture frame.",
+   "look": [
+    "bevelled frame",
+    "raised tile",
+    "3D button",
+    "picture frame",
+    "retro",
+    "subtle edge"
+   ],
+   "use_for": [
+    "framed archival photo or document inset in a documentary",
+    "subtle raised edge on picture-in-picture boxes in a news layout",
+    "tile look for a split-screen grid"
+   ],
+   "avoid": [
+    "Bevels the clip's rectangle, not its alpha shape: wrong for text or cut-outs (use Bevel Alpha in AE)",
+    "Not available in Premiere 2026 (Bevel Edges is not in its video-effect list)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Bevel Edges": "Bevel Edges"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "Edge Thickness": 0.05,
+    "Light Angle": -45,
+    "Light Color": "#FFFFFF",
+    "Light Intensity": 0.3
+   },
+   "equivalent": "After Effects Bevel Edges (ADBE Bevel Edges) with the same settings; in Premiere fake a framed inset with Stroke + Drop Shadow",
+   "recipe": [
+    {
+     "app": "AE",
+     "name": "ADBE Bevel Edges",
+     "props": {
+      "Edge Thickness": 0.05,
+      "Light Angle": -45,
+      "Light Color": "#FFFFFF",
+      "Light Intensity": 0.3
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and Bevel Edges (AE.ADBE Bevel Edges) is not in Premiere 2026's harvested video-effect list, so build the look in After Effects instead: {\"app\": \"AE\", \"name\": \"ADBE Bevel Edges\", \"props\": {\"Edge Thickness\": 0.05, \"Light Angle\": -45, \"Light Color\": \"#FFFFFF\", \"Light Intensity\": 0.3}}. Stored preset values: Edge Thickness 0.05, Light Angle -45 (StartKeyframe value; the file's CurrentValue field reads 0), Light Color white (64-bit 0xFF00FF00FF00FF00), Light Intensity 0.3; all inside AE's harvested ranges."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fast Blur In",
+   "match": null,
+   "category": "Presets/Blurs",
+   "bin": "Presets/Blurs",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts heavily blurred (Fast Blur Blurriness 127) and sharpens to clear over its first second.",
+   "look": [
+    "blur-in",
+    "defocus to focus",
+    "soft reveal",
+    "dreamy",
+    "focus pull"
+   ],
+   "use_for": [
+    "blur-to-sharp opening of a documentary scene or chapter",
+    "soft reveal of a press photo or headline before a Ken Burns move",
+    "reel hook: compress the keyframes to ~0.3 s so a blurred frame snaps into focus on the beat"
+   ],
+   "avoid": [
+    "The preset leaves Repeat Edge Pixels off, so frame edges go dark/transparent while blurred; switch it on",
+    "Blurriness is in pixels: 127 is total mush at 720p but only heavy at 4K; scale it to the resolution",
+    "Fast Blur is a legacy-style effect; Premiere 2026's new Gaussian Blur (Amount 0-100, not pixels) is the modern alternative if you need its extra controls"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Fast Blur": "Fast Blur"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": [
+       [
+        0,
+        127
+       ],
+       [
+        1,
+        0
+       ]
+      ],
+      "Blur Dimensions": 0,
+      "Repeat Edge Pixels": true
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild: add Fast Blur (AE.ADBE Fast Blur) and set {\"Blurriness\": [[0, 127], [1, 0]], \"Blur Dimensions\": 0, \"Repeat Edge Pixels\": true}. Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Stored values: Blurriness keyframes 127 -> 0 one second apart, Blur Dimensions 0 (Horizontal and Vertical), and an unnamed checkbox = false that maps to Repeat Edge Pixels; the recipe turns Repeat Edge Pixels on to avoid dark edges (set it false to match the preset exactly)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Fast Blur Out",
+   "match": null,
+   "category": "Presets/Blurs",
+   "bin": "Presets/Blurs",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip stays sharp until its last second, then blurs out to heavy softness (Fast Blur Blurriness 0 to 127).",
+   "look": [
+    "blur-out",
+    "focus to defocus",
+    "soft exit",
+    "dreamy",
+    "fade to blur"
+   ],
+   "use_for": [
+    "soft exit of a scene before a title or chapter card",
+    "blur a shot out under the quote or lower third that follows",
+    "dreamy end of a flashback or memory beat in a documentary"
+   ],
+   "avoid": [
+    "The preset leaves Repeat Edge Pixels off, so frame edges go dark/transparent while blurred; switch it on",
+    "Blurriness is in pixels: 127 is total mush at 720p but only heavy at 4K; scale it to the resolution",
+    "Fast Blur is a legacy-style effect; Premiere 2026's new Gaussian Blur (Amount 0-100, not pixels) is the modern alternative if you need its extra controls"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Fast Blur": "Fast Blur"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        127
+       ]
+      ],
+      "Blur Dimensions": 0,
+      "Repeat Edge Pixels": true
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild: add Fast Blur (AE.ADBE Fast Blur) and set {\"Blurriness\": [[-1, 0], [0, 127]], \"Blur Dimensions\": 0, \"Repeat Edge Pixels\": true}. Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Stored values: Blurriness keyframes 0 -> 127 one second apart, Blur Dimensions 0 (Horizontal and Vertical), and an unnamed checkbox = false that maps to Repeat Edge Pixels; the recipe turns Repeat Edge Pixels on to avoid dark edges (set it false to match the preset exactly)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Static 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area): the clip is scaled to 25% and parked in the lower-left quarter of the frame, roughly centred in it (box spans x 287-767, y 677-947 px at 1920x1080: ~285 px in from the side, ~135 px from the bottom), with the track below showing around it.",
+   "look": [
+    "picture-in-picture",
+    "25% inset",
+    "lower-left corner",
+    "news box",
+    "split layout"
+   ],
+   "use_for": [
+    "reporter / anchor box over full-frame B-roll in a news explainer",
+    "show the original source clip in the corner while the narrator comments on it (reaction / commentary reels)",
+    "two-up comparison: pair with the opposite corner preset for then-vs-now or leader-vs-leader",
+    "small screen-recording inset in AI-tool explainers"
+   ],
+   "avoid": [
+    "Not a tight corner box: it sits well in from the edges. For a news-style corner box with ~48 px margins use Position [0.15, 0.83] instead",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke",
+    "In a 9:16 reel sequence a 16:9 clip at Scale 25 is a tiny 480x270 box (under half the frame width); use Scale 40-50 there; the lower boxes also reach into the caption/UI band at the bottom of the reel"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "none",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.752083
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.752083], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.752083] (527, 812 px at 1920x1080), Scale 25 (a 1920x1080 clip becomes 480x270, 1/16 of the frame area), Anchor Point centre. Static preset (no keyframes). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL Scale Down from Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts full-frame and shrinks to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-left corner, revealing the track underneath; the shrink spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "shrink to corner",
+    "zoom out",
+    "inset reveal",
+    "news throw"
+   ],
+   "use_for": [
+    "news 'throw': the full-screen anchor shrinks to the corner as the story footage takes over",
+    "documentary: shrink an archival clip into the corner to introduce context footage beneath",
+    "explainer: a full-screen screen recording collapses into a corner box while the narrator returns"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip shrinks painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.752083
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        100
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.5, 0.5]], [1, [0.274305, 0.752083]]], \"Scale\": [[0, 100], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.5, 0.5] -> [0.274305, 0.752083] (527, 812 px at 1920x1080) and Scale 100 -> 25 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL Scale In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture grows from nothing (Scale 0) to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-left corner, then holds.",
+   "look": [
+    "picture-in-picture",
+    "pop-in",
+    "scale up",
+    "corner inset",
+    "zoom from point"
+   ],
+   "use_for": [
+    "pop a source or evidence clip into the corner as the voice-over mentions it",
+    "bring in a reaction-cam box in a social reel",
+    "introduce a second speaker box in a debate or interview explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.752083
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.752083], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 at fixed Position [0.274305, 0.752083] (527, 812 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL Scale Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-left corner that shrinks to nothing (Scale 0) over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "pop-out",
+    "shrink away",
+    "corner inset",
+    "exit"
+   ],
+   "use_for": [
+    "clean exit for a corner source/evidence box at the end of its clip",
+    "end a reaction-cam inset before the next beat of a reel",
+    "pair with the matching Scale In for a complete in-hold-out corner box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.752083
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.752083], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 at fixed Position [0.274305, 0.752083] (527, 812 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL Scale Up to Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts as a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-left corner and grows to fill the frame; the growth spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "expand to full frame",
+    "zoom in",
+    "inset takeover",
+    "reveal"
+   ],
+   "use_for": [
+    "hand-off from a corner anchor box to the full-screen story",
+    "reveal a teased source clip full-screen after it sat in the corner",
+    "trailer beat: a corner monitor expands into the next scene"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip grows painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.274305,
+         0.752083
+        ]
+       ],
+       [
+        1,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        25
+       ],
+       [
+        1,
+        100
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.274305, 0.752083]], [1, [0.5, 0.5]]], \"Scale\": [[0, 25], [1, 100]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.752083] (527, 812 px at 1920x1080) -> [0.5, 0.5] and Scale 25 -> 100 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL Spin In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture spins two full turns (720 degrees) while growing from nothing to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-left corner.",
+   "look": [
+    "picture-in-picture",
+    "spin in",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "pop-in"
+   ],
+   "use_for": [
+    "deliberately retro or kitschy beat in a political satire reel (90s TV parody)",
+    "comic 'breaking news' parody insert",
+    "playful meme or reaction inset in a social reel"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.752083
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.752083], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": [[0, 0], [1, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 and Rotation 0 -> 720 at fixed Position [0.274305, 0.752083] (527, 812 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL Spin Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LL",
+   "bin": "Presets/PiPs/25% PiPs/25% LL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-left corner that spins two full turns (720 degrees) while shrinking to nothing over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "spin out",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "exit"
+   ],
+   "use_for": [
+    "comic exit for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "pair with the matching Spin In for a kitsch in-hold-out box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.752083
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.752083], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": [[-1, 0], [0, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 and Rotation 0 -> 720 at fixed Position [0.274305, 0.752083] (527, 812 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Static 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area): the clip is scaled to 25% and parked in the lower-right quarter of the frame, roughly centred in it (box spans x 1160-1640, y 677-947 px at 1920x1080: ~285 px in from the side, ~135 px from the bottom), with the track below showing around it.",
+   "look": [
+    "picture-in-picture",
+    "25% inset",
+    "lower-right corner",
+    "news box",
+    "split layout"
+   ],
+   "use_for": [
+    "reporter / anchor box over full-frame B-roll in a news explainer",
+    "show the original source clip in the corner while the narrator comments on it (reaction / commentary reels)",
+    "two-up comparison: pair with the opposite corner preset for then-vs-now or leader-vs-leader",
+    "small screen-recording inset in AI-tool explainers"
+   ],
+   "avoid": [
+    "Not a tight corner box: it sits well in from the edges. For a news-style corner box with ~48 px margins use Position [0.85, 0.83] instead",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke",
+    "In a 9:16 reel sequence a 16:9 clip at Scale 25 is a tiny 480x270 box (under half the frame width); use Scale 40-50 there; the lower boxes also reach into the caption/UI band at the bottom of the reel"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "none",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.752083
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.752083], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.729167, 0.752083] (1400, 812 px at 1920x1080), Scale 25 (a 1920x1080 clip becomes 480x270, 1/16 of the frame area), Anchor Point centre. Static preset (no keyframes). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR Scale Down from Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts full-frame and shrinks to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-right corner, revealing the track underneath; the shrink spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "shrink to corner",
+    "zoom out",
+    "inset reveal",
+    "news throw"
+   ],
+   "use_for": [
+    "news 'throw': the full-screen anchor shrinks to the corner as the story footage takes over",
+    "documentary: shrink an archival clip into the corner to introduce context footage beneath",
+    "explainer: a full-screen screen recording collapses into a corner box while the narrator returns"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip shrinks painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        1,
+        [
+         0.729167,
+         0.752083
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        100
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.5, 0.5]], [1, [0.729167, 0.752083]]], \"Scale\": [[0, 100], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.5, 0.5] -> [0.729167, 0.752083] (1400, 812 px at 1920x1080) and Scale 100 -> 25 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR Scale In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture grows from nothing (Scale 0) to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-right corner, then holds.",
+   "look": [
+    "picture-in-picture",
+    "pop-in",
+    "scale up",
+    "corner inset",
+    "zoom from point"
+   ],
+   "use_for": [
+    "pop a source or evidence clip into the corner as the voice-over mentions it",
+    "bring in a reaction-cam box in a social reel",
+    "introduce a second speaker box in a debate or interview explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.752083
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.752083], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 at fixed Position [0.729167, 0.752083] (1400, 812 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR Scale Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-right corner that shrinks to nothing (Scale 0) over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "pop-out",
+    "shrink away",
+    "corner inset",
+    "exit"
+   ],
+   "use_for": [
+    "clean exit for a corner source/evidence box at the end of its clip",
+    "end a reaction-cam inset before the next beat of a reel",
+    "pair with the matching Scale In for a complete in-hold-out corner box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.752083
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.752083], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 at fixed Position [0.729167, 0.752083] (1400, 812 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR Scale Up to Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts as a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-right corner and grows to fill the frame; the growth spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "expand to full frame",
+    "zoom in",
+    "inset takeover",
+    "reveal"
+   ],
+   "use_for": [
+    "hand-off from a corner anchor box to the full-screen story",
+    "reveal a teased source clip full-screen after it sat in the corner",
+    "trailer beat: a corner monitor expands into the next scene"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip grows painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.729167,
+         0.752083
+        ]
+       ],
+       [
+        1,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        25
+       ],
+       [
+        1,
+        100
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.729167, 0.752083]], [1, [0.5, 0.5]]], \"Scale\": [[0, 25], [1, 100]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.729167, 0.752083] (1400, 812 px at 1920x1080) -> [0.5, 0.5] and Scale 25 -> 100 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR Spin In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture spins two full turns (720 degrees) while growing from nothing to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-right corner.",
+   "look": [
+    "picture-in-picture",
+    "spin in",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "pop-in"
+   ],
+   "use_for": [
+    "deliberately retro or kitschy beat in a political satire reel (90s TV parody)",
+    "comic 'breaking news' parody insert",
+    "playful meme or reaction inset in a social reel"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.752083
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.752083], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": [[0, 0], [1, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 and Rotation 0 -> 720 at fixed Position [0.729167, 0.752083] (1400, 812 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR Spin Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% LR",
+   "bin": "Presets/PiPs/25% PiPs/25% LR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the lower-right corner that spins two full turns (720 degrees) while shrinking to nothing over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "spin out",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "exit"
+   ],
+   "use_for": [
+    "comic exit for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "pair with the matching Spin In for a kitsch in-hold-out box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.752083
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.752083], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": [[-1, 0], [0, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 and Rotation 0 -> 720 at fixed Position [0.729167, 0.752083] (1400, 812 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LL to LR",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% Motion",
+   "bin": "Presets/PiPs/25% PiPs/25% Motion",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that travels from the lower-left corner to the lower-right corner of the frame; the move is spread across the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "moving inset",
+    "slide across",
+    "corner to corner",
+    "25% inset"
+   ],
+   "use_for": [
+    "move a source/evidence inset out of the way when a lower third or the subject appears on the left side",
+    "slow drift of a reaction or anchor box across a long B-roll shot in a news explainer",
+    "hand the inset from one speaker's side to the other's in a two-sided debate explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.274305,
+         0.752083
+        ]
+       ],
+       [
+        1,
+        [
+         0.729167,
+         0.752083
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.274305, 0.752083]], [1, [0.729167, 0.752083]]], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.752083] (527, 812 px at 1920x1080) -> [0.729167, 0.752083] (1400, 812 px at 1920x1080), Scale 25 throughout. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% LR to LL",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% Motion",
+   "bin": "Presets/PiPs/25% PiPs/25% Motion",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that travels from the lower-right corner to the lower-left corner of the frame; the move is spread across the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "moving inset",
+    "slide across",
+    "corner to corner",
+    "25% inset"
+   ],
+   "use_for": [
+    "move a source/evidence inset out of the way when a lower third or the subject appears on the right side",
+    "slow drift of a reaction or anchor box across a long B-roll shot in a news explainer",
+    "hand the inset from one speaker's side to the other's in a two-sided debate explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.729167,
+         0.752083
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.752083
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.729167, 0.752083]], [1, [0.274305, 0.752083]]], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.729167, 0.752083] (1400, 812 px at 1920x1080) -> [0.274305, 0.752083] (527, 812 px at 1920x1080), Scale 25 throughout. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL to UR",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% Motion",
+   "bin": "Presets/PiPs/25% PiPs/25% Motion",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that travels from the upper-left corner to the upper-right corner of the frame; the move is spread across the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "moving inset",
+    "slide across",
+    "corner to corner",
+    "25% inset"
+   ],
+   "use_for": [
+    "move a source/evidence inset out of the way when a title, logo bug or the subject's face appears on the upper left",
+    "slow drift of a reaction or anchor box across a long B-roll shot in a news explainer",
+    "hand the inset from one speaker's side to the other's in a two-sided debate explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.274305,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.729167,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.274305, 0.254167]], [1, [0.729167, 0.254167]]], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.254167] (527, 275 px at 1920x1080) -> [0.729167, 0.254167] (1400, 275 px at 1920x1080), Scale 25 throughout. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR to UL",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% Motion",
+   "bin": "Presets/PiPs/25% PiPs/25% Motion",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that travels from the upper-right corner to the upper-left corner of the frame; the move is spread across the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "moving inset",
+    "slide across",
+    "corner to corner",
+    "25% inset"
+   ],
+   "use_for": [
+    "move a source/evidence inset out of the way when a title, logo bug or the subject's face appears on the upper right",
+    "slow drift of a reaction or anchor box across a long B-roll shot in a news explainer",
+    "hand the inset from one speaker's side to the other's in a two-sided debate explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.729167,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.729167, 0.254167]], [1, [0.274305, 0.254167]]], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.729167, 0.254167] (1400, 275 px at 1920x1080) -> [0.274305, 0.254167] (527, 275 px at 1920x1080), Scale 25 throughout. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Static 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area): the clip is scaled to 25% and parked in the upper-left quarter of the frame, roughly centred in it (box spans x 287-767, y 140-410 px at 1920x1080: ~285 px in from the side, ~135 px from the top), with the track below showing around it.",
+   "look": [
+    "picture-in-picture",
+    "25% inset",
+    "upper-left corner",
+    "news box",
+    "split layout"
+   ],
+   "use_for": [
+    "reporter / anchor box over full-frame B-roll in a news explainer",
+    "show the original source clip in the corner while the narrator comments on it (reaction / commentary reels)",
+    "two-up comparison: pair with the opposite corner preset for then-vs-now or leader-vs-leader",
+    "small screen-recording inset in AI-tool explainers"
+   ],
+   "avoid": [
+    "Not a tight corner box: it sits well in from the edges. For a news-style corner box with ~48 px margins use Position [0.15, 0.17] instead",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke",
+    "In a 9:16 reel sequence a 16:9 clip at Scale 25 is a tiny 480x270 box (under half the frame width); use Scale 40-50 there"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "none",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.254167
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.254167], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.254167] (527, 275 px at 1920x1080), Scale 25 (a 1920x1080 clip becomes 480x270, 1/16 of the frame area), Anchor Point centre. Static preset (no keyframes). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Scale Down from Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts full-frame and shrinks to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-left corner, revealing the track underneath; the shrink spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "shrink to corner",
+    "zoom out",
+    "inset reveal",
+    "news throw"
+   ],
+   "use_for": [
+    "news 'throw': the full-screen anchor shrinks to the corner as the story footage takes over",
+    "documentary: shrink an archival clip into the corner to introduce context footage beneath",
+    "explainer: a full-screen screen recording collapses into a corner box while the narrator returns"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip shrinks painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        100
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.5, 0.5]], [1, [0.274305, 0.254167]]], \"Scale\": [[0, 100], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.5, 0.5] -> [0.274305, 0.254167] (527, 275 px at 1920x1080) and Scale 100 -> 25 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Scale In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture grows from nothing (Scale 0) to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-left corner, then holds.",
+   "look": [
+    "picture-in-picture",
+    "pop-in",
+    "scale up",
+    "corner inset",
+    "zoom from point"
+   ],
+   "use_for": [
+    "pop a source or evidence clip into the corner as the voice-over mentions it",
+    "bring in a reaction-cam box in a social reel",
+    "introduce a second speaker box in a debate or interview explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.254167
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.254167], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 at fixed Position [0.274305, 0.254167] (527, 275 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Scale Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-left corner that shrinks to nothing (Scale 0) over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "pop-out",
+    "shrink away",
+    "corner inset",
+    "exit"
+   ],
+   "use_for": [
+    "clean exit for a corner source/evidence box at the end of its clip",
+    "end a reaction-cam inset before the next beat of a reel",
+    "pair with the matching Scale In for a complete in-hold-out corner box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.254167
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.254167], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 at fixed Position [0.274305, 0.254167] (527, 275 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Scale Up to Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts as a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-left corner and grows to fill the frame; the growth spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "expand to full frame",
+    "zoom in",
+    "inset takeover",
+    "reveal"
+   ],
+   "use_for": [
+    "hand-off from a corner anchor box to the full-screen story",
+    "reveal a teased source clip full-screen after it sat in the corner",
+    "trailer beat: a corner monitor expands into the next scene"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip grows painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.274305,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        25
+       ],
+       [
+        1,
+        100
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.274305, 0.254167]], [1, [0.5, 0.5]]], \"Scale\": [[0, 25], [1, 100]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.254167] (527, 275 px at 1920x1080) -> [0.5, 0.5] and Scale 25 -> 100 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Slide In Left",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that slides in from off-screen left and stops in the upper-left corner during the clip's first second.",
+   "look": [
+    "picture-in-picture",
+    "slide in",
+    "push on",
+    "corner inset",
+    "news box"
+   ],
+   "use_for": [
+    "slide a source clip or document into the corner as the voice-over cites it",
+    "news-style 'incoming report' box over the main story",
+    "bring in a speaker box from the side they sit on in a two-person explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         -0.152778,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [-0.152778, 0.254167]], [1, [0.274305, 0.254167]]], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [-0.152778, 0.254167] (fully off-screen left) -> [0.274305, 0.254167] (527, 275 px at 1920x1080), Scale 25 throughout. Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Slide In Right",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that slides in from off-screen right and stops in the upper-left corner during the clip's first second.",
+   "look": [
+    "picture-in-picture",
+    "slide in",
+    "push on",
+    "corner inset",
+    "news box"
+   ],
+   "use_for": [
+    "slide a source clip or document into the corner as the voice-over cites it",
+    "news-style 'incoming report' box over the main story",
+    "bring in a speaker box from the side they sit on in a two-person explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         1.1493,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [1.1493, 0.254167]], [1, [0.274305, 0.254167]]], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [1.1493, 0.254167] (fully off-screen right) -> [0.274305, 0.254167] (527, 275 px at 1920x1080), Scale 25 throughout. Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Spin In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture spins two full turns (720 degrees) while growing from nothing to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-left corner.",
+   "look": [
+    "picture-in-picture",
+    "spin in",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "pop-in"
+   ],
+   "use_for": [
+    "deliberately retro or kitschy beat in a political satire reel (90s TV parody)",
+    "comic 'breaking news' parody insert",
+    "playful meme or reaction inset in a social reel"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.254167
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.254167], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": [[0, 0], [1, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 and Rotation 0 -> 720 at fixed Position [0.274305, 0.254167] (527, 275 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Spin In Left",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that cartwheels in from off-screen left (two full turns, 720 degrees) and lands in the upper-left corner during the clip's first second.",
+   "look": [
+    "picture-in-picture",
+    "spinning slide",
+    "cartwheel",
+    "retro TV",
+    "kitsch"
+   ],
+   "use_for": [
+    "deliberately kitschy entrance for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "comic 'here comes the evidence' gag in a social explainer"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         -0.152778,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [-0.152778, 0.254167]], [1, [0.274305, 0.254167]]], \"Scale\": 25, \"Rotation\": [[0, 0], [1, 720]], \"Anchor Point\": [0.5, 0.5]}. Position [-0.152778, 0.254167] (off-screen left) -> [0.274305, 0.254167] (527, 275 px at 1920x1080) with Rotation 0 -> 720, Scale 25 throughout. Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Spin In Right",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that cartwheels in from off-screen right (two full turns, 720 degrees) and lands in the upper-left corner during the clip's first second.",
+   "look": [
+    "picture-in-picture",
+    "spinning slide",
+    "cartwheel",
+    "retro TV",
+    "kitsch"
+   ],
+   "use_for": [
+    "deliberately kitschy entrance for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "comic 'here comes the evidence' gag in a social explainer"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         1.1493,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [1.1493, 0.254167]], [1, [0.274305, 0.254167]]], \"Scale\": 25, \"Rotation\": [[0, 0], [1, 720]], \"Anchor Point\": [0.5, 0.5]}. Position [1.1493, 0.254167] (off-screen right) -> [0.274305, 0.254167] (527, 275 px at 1920x1080) with Rotation 0 -> 720, Scale 25 throughout. Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Spin Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-left corner that spins two full turns (720 degrees) while shrinking to nothing over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "spin out",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "exit"
+   ],
+   "use_for": [
+    "comic exit for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "pair with the matching Spin In for a kitsch in-hold-out box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.274305,
+       0.254167
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.274305, 0.254167], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": [[-1, 0], [0, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 and Rotation 0 -> 720 at fixed Position [0.274305, 0.254167] (527, 275 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Spin Out Left",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that leaves the upper-left corner and cartwheels off-screen left (two full turns, 720 degrees) during the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "spinning exit",
+    "cartwheel",
+    "retro TV",
+    "kitsch"
+   ],
+   "use_for": [
+    "comic exit for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "pair with a Spin In preset for a kitsch in-hold-out box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        -1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ],
+       [
+        0,
+        [
+         -0.152778,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[-1, [0.274305, 0.254167]], [0, [-0.152778, 0.254167]]], \"Scale\": 25, \"Rotation\": [[-1, 0], [0, 720]], \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.254167] (527, 275 px at 1920x1080) -> [-0.152778, 0.254167] (off-screen left) with Rotation 0 -> 720, Scale 25 throughout. Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UL Spin Out Right",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UL",
+   "bin": "Presets/PiPs/25% PiPs/25% UL",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) that leaves the upper-left corner and cartwheels off-screen right (two full turns, 720 degrees) during the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "spinning exit",
+    "cartwheel",
+    "retro TV",
+    "kitsch"
+   ],
+   "use_for": [
+    "comic exit for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "pair with a Spin In preset for a kitsch in-hold-out box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        -1,
+        [
+         0.274305,
+         0.254167
+        ]
+       ],
+       [
+        0,
+        [
+         1.1493,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": 25,
+      "Rotation": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[-1, [0.274305, 0.254167]], [0, [1.1493, 0.254167]]], \"Scale\": 25, \"Rotation\": [[-1, 0], [0, 720]], \"Anchor Point\": [0.5, 0.5]}. Position [0.274305, 0.254167] (527, 275 px at 1920x1080) -> [1.1493, 0.254167] (off-screen right) with Rotation 0 -> 720, Scale 25 throughout. Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Static 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area): the clip is scaled to 25% and parked in the upper-right quarter of the frame, roughly centred in it (box spans x 1160-1640, y 140-410 px at 1920x1080: ~285 px in from the side, ~135 px from the top), with the track below showing around it.",
+   "look": [
+    "picture-in-picture",
+    "25% inset",
+    "upper-right corner",
+    "news box",
+    "split layout"
+   ],
+   "use_for": [
+    "reporter / anchor box over full-frame B-roll in a news explainer",
+    "show the original source clip in the corner while the narrator comments on it (reaction / commentary reels)",
+    "two-up comparison: pair with the opposite corner preset for then-vs-now or leader-vs-leader",
+    "small screen-recording inset in AI-tool explainers"
+   ],
+   "avoid": [
+    "Not a tight corner box: it sits well in from the edges. For a news-style corner box with ~48 px margins use Position [0.85, 0.17] instead",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke",
+    "In a 9:16 reel sequence a 16:9 clip at Scale 25 is a tiny 480x270 box (under half the frame width); use Scale 40-50 there"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "none",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.254167
+      ],
+      "Scale": 25,
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.254167], \"Scale\": 25, \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.729167, 0.254167] (1400, 275 px at 1920x1080), Scale 25 (a 1920x1080 clip becomes 480x270, 1/16 of the frame area), Anchor Point centre. Static preset (no keyframes). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR Scale Down from Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts full-frame and shrinks to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-right corner, revealing the track underneath; the shrink spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "shrink to corner",
+    "zoom out",
+    "inset reveal",
+    "news throw"
+   ],
+   "use_for": [
+    "news 'throw': the full-screen anchor shrinks to the corner as the story footage takes over",
+    "documentary: shrink an archival clip into the corner to introduce context footage beneath",
+    "explainer: a full-screen screen recording collapses into a corner box while the narrator returns"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip shrinks painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        1,
+        [
+         0.729167,
+         0.254167
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        100
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.5, 0.5]], [1, [0.729167, 0.254167]]], \"Scale\": [[0, 100], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.5, 0.5] -> [0.729167, 0.254167] (1400, 275 px at 1920x1080) and Scale 100 -> 25 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR Scale In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture grows from nothing (Scale 0) to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-right corner, then holds.",
+   "look": [
+    "picture-in-picture",
+    "pop-in",
+    "scale up",
+    "corner inset",
+    "zoom from point"
+   ],
+   "use_for": [
+    "pop a source or evidence clip into the corner as the voice-over mentions it",
+    "bring in a reaction-cam box in a social reel",
+    "introduce a second speaker box in a debate or interview explainer"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.254167
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.254167], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 at fixed Position [0.729167, 0.254167] (1400, 275 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR Scale Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-right corner that shrinks to nothing (Scale 0) over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "pop-out",
+    "shrink away",
+    "corner inset",
+    "exit"
+   ],
+   "use_for": [
+    "clean exit for a corner source/evidence box at the end of its clip",
+    "end a reaction-cam inset before the next beat of a reel",
+    "pair with the matching Scale In for a complete in-hold-out corner box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)",
+    "A bare inset with no border or shadow blends into busy B-roll and reads amateur; add Drop Shadow or Stroke"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.254167
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.254167], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 at fixed Position [0.729167, 0.254167] (1400, 275 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR Scale Up to Full",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "The clip starts as a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-right corner and grows to fill the frame; the growth spans the whole clip.",
+   "look": [
+    "picture-in-picture",
+    "expand to full frame",
+    "zoom in",
+    "inset takeover",
+    "reveal"
+   ],
+   "use_for": [
+    "hand-off from a corner anchor box to the full-screen story",
+    "reveal a teased source clip full-screen after it sat in the corner",
+    "trailer beat: a corner monitor expands into the next scene"
+   ],
+   "avoid": [
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Because the keyframes stretch to the clip length, a long clip grows painfully slowly; compress the move to 0.5-1 s",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "scale_to_clip",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       [
+        0,
+        [
+         0.729167,
+         0.254167
+        ]
+       ],
+       [
+        1,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ],
+      "Scale": [
+       [
+        0,
+        25
+       ],
+       [
+        1,
+        100
+       ]
+      ],
+      "Rotation": 0,
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [[0, [0.729167, 0.254167]], [1, [0.5, 0.5]]], \"Scale\": [[0, 25], [1, 100]], \"Rotation\": 0, \"Anchor Point\": [0.5, 0.5]}. Position [0.729167, 0.254167] (1400, 275 px at 1920x1080) -> [0.5, 0.5] and Scale 25 -> 100 together. Preset type 'Scale' (stored Type 0): its 1 s of keyframes stretch over the whole clip, so the move takes the clip's full length. Recipe times are for a 1 s clip; multiply them by the clip duration to match the preset exactly, or keep 1 s for a snappier move (type mapping inferred from the file, medium confidence). Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR Spin In",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "Over the clip's first second the picture spins two full turns (720 degrees) while growing from nothing to a 25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-right corner.",
+   "look": [
+    "picture-in-picture",
+    "spin in",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "pop-in"
+   ],
+   "use_for": [
+    "deliberately retro or kitschy beat in a political satire reel (90s TV parody)",
+    "comic 'breaking news' parody insert",
+    "playful meme or reaction inset in a social reel"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "in_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.254167
+      ],
+      "Scale": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        25
+       ]
+      ],
+      "Rotation": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.254167], \"Scale\": [[0, 0], [1, 25]], \"Rotation\": [[0, 0], [1, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 0 -> 25 and Rotation 0 -> 720 at fixed Position [0.729167, 0.254167] (1400, 275 px at 1920x1080). Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "PiP 25% UR Spin Out",
+   "match": null,
+   "category": "Presets/PiPs/25% PiPs/25% UR",
+   "bin": "Presets/PiPs/25% PiPs/25% UR",
+   "file": "Factory Presets.prfpset",
+   "status": "current",
+   "summary": "25%-scale picture-in-picture (480x270 at 1080p: a quarter of the width, 1/16 of the frame area) in the upper-right corner that spins two full turns (720 degrees) while shrinking to nothing over the clip's last second.",
+   "look": [
+    "picture-in-picture",
+    "spin out",
+    "twirl",
+    "retro TV",
+    "kitsch",
+    "exit"
+   ],
+   "use_for": [
+    "comic exit for a meme or reaction inset in a satire reel",
+    "retro 90s-TV parody beat",
+    "pair with the matching Spin In for a kitsch in-hold-out box (merge both keyframe lists on the one Motion component)"
+   ],
+   "avoid": [
+    "Two full spins read as 90s wedding-video kitsch; wrong for serious news or documentary",
+    "Moves look mechanical (no ease, no motion blur); add easing, or rebuild the move on the Transform effect with \"Use Composition’s Shutter Angle\" off and Shutter Angle ~180 for motion blur",
+    "Scale 25 is relative to the SOURCE size: a 4K clip in a 1080p sequence at Scale 25 is half-frame, not quarter. Fit the clip to the frame first (scale = 25 x fit scale)"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Motion": "Motion"
+   },
+   "keyframe_anchor": "out_point",
+   "recipe": [
+    {
+     "name": "Motion",
+     "pr_props": {
+      "Position": [
+       0.729167,
+       0.254167
+      ],
+      "Scale": [
+       [
+        -1,
+        25
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      "Rotation": [
+       [
+        -1,
+        0
+       ],
+       [
+        0,
+        720
+       ]
+      ],
+      "Anchor Point": [
+       0.5,
+       0.5
+      ]
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Rebuild it on the clip's built-in Motion component (every clip already has one; set its properties, do not add a second Motion): {\"Position\": [0.729167, 0.254167], \"Scale\": [[-1, 25], [0, 0]], \"Rotation\": [[-1, 0], [0, 720]], \"Anchor Point\": [0.5, 0.5]}. Scale 25 -> 0 and Rotation 0 -> 720 at fixed Position [0.729167, 0.254167] (1400, 275 px at 1920x1080). Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Values read from Factory Presets.prfpset. Assumes the clip fills the frame at Scale 100; otherwise multiply the Scale values by the clip's fit scale."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Solarize In",
+   "match": null,
+   "category": "Presets/Solarizes",
+   "bin": "Presets/Solarizes",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Legacy preset: keyframes the old Solarize effect's Threshold from 100 to 0 over the clip's first second (stored 254 -> 0 on a 0-255 scale). Going by the In/Out naming of the other factory presets (Fast Blur In runs strong -> clean), the clip most likely starts fully solarized (part-negative) and resolves to the normal image; not verified. The Solarize effect no longer exists in Premiere 2026.",
+   "look": [
+    "solarized",
+    "partial negative",
+    "inverted highlights",
+    "psychedelic",
+    "retro film"
+   ],
+   "use_for": [
+    "trippy entrance into a dream, flashback or hallucination beat",
+    "stylised hit at the start of a music or nightlife reel",
+    "satire beat where reality 'flips'"
+   ],
+   "avoid": [
+    "Not available in Premiere 2026: there is no Solarize video effect any more (only a Solarize transition)",
+    "Harsh on skin tones and on serious news or documentary content"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "PR.ADBE Solarize": "Solarize"
+   },
+   "keyframe_anchor": "in_point",
+   "preset_settings": {
+    "Threshold": [
+     [
+      0,
+      254
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   "equivalent": "Premiere 2026's Solarize video transition (one of the new Film Impact-based transitions) on the incoming cut; in After Effects, Curves (ADBE CurvesCustom) with an inverted-V curve, keyframed (the curve itself cannot be set from a spec)",
+   "recipe": [],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Solarize) is not in Premiere 2026's harvested video-effect list (Solarize exists only as a video transition), so the preset cannot be reproduced. Preset type 'Anchor to In Point' (stored Type 1): keyframes sit in the clip's first second; recipe times are seconds from the clip start. Which end of the Threshold range is 'fully solarized' is inferred from the preset naming, not verified (low confidence). For the look, place the Solarize transition on the incoming cut instead."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Solarize Out",
+   "match": null,
+   "category": "Presets/Solarizes",
+   "bin": "Presets/Solarizes",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Legacy preset: keyframes the old Solarize effect's Threshold from 0 to 100 over the clip's last second (stored 0 -> 254 on a 0-255 scale). Going by the In/Out naming of the other factory presets (Fast Blur In runs strong -> clean), the clip most likely starts normal and ends fully solarized (part-negative); not verified. The Solarize effect no longer exists in Premiere 2026.",
+   "look": [
+    "solarized",
+    "partial negative",
+    "inverted highlights",
+    "psychedelic",
+    "retro film"
+   ],
+   "use_for": [
+    "trippy exit out of a dream or flashback beat",
+    "stylised out at the end of a music or nightlife reel",
+    "satire beat where reality 'flips' before the cut"
+   ],
+   "avoid": [
+    "Not available in Premiere 2026: there is no Solarize video effect any more (only a Solarize transition)",
+    "Harsh on skin tones and on serious news or documentary content"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "PR.ADBE Solarize": "Solarize"
+   },
+   "keyframe_anchor": "out_point",
+   "preset_settings": {
+    "Threshold": [
+     [
+      -1,
+      0
+     ],
+     [
+      0,
+      254
+     ]
+    ]
+   },
+   "equivalent": "Premiere 2026's Solarize video transition (one of the new Film Impact-based transitions) on the outgoing cut; in After Effects, Curves (ADBE CurvesCustom) with an inverted-V curve, keyframed (the curve itself cannot be set from a spec)",
+   "recipe": [],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Solarize) is not in Premiere 2026's harvested video-effect list (Solarize exists only as a video transition), so the preset cannot be reproduced. Preset type 'Anchor to Out Point' (stored Type 2): keyframes sit in the clip's last second; recipe times are seconds relative to the clip END (-1 = one second before the out point), so add the clip duration before applying. Which end of the Threshold range is 'fully solarized' is inferred from the preset naming, not verified (low confidence). For the look, place the Solarize transition on the outgoing cut instead."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Blur",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Very light 3x3 blur (cross-shaped kernel 0 1 0 / 1 2 1 / 0 1 0, divided by 6): softens edges by roughly one pixel.",
+   "look": [
+    "slight softening",
+    "soft edges",
+    "smoothing",
+    "subtle blur"
+   ],
+   "use_for": [
+    "take the edge off over-sharpened phone or WhatsApp footage in news reels",
+    "slightly soften a screen recording or graphic before scaling it",
+    "soften jaggy edges on low-resolution press photos"
+   ],
+   "avoid": [
+    "On HD/4K footage a 3x3 kernel touches only about one pixel, so the blur is barely visible",
+    "Not available in Premiere 2026 (the Convolution Kernel effect is gone)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "M11": 0,
+    "M12": 1,
+    "M13": 0,
+    "M21": 1,
+    "M22": 2,
+    "M23": 1,
+    "M31": 0,
+    "M32": 1,
+    "M33": 0,
+    "Offset": 0,
+    "Scale": 6,
+    "Process Alpha": true
+   },
+   "equivalent": "Fast Blur (Blurriness about 1-2) or the new Gaussian Blur at a low Amount",
+   "recipe": [
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": 1.5,
+      "Blur Dimensions": 0,
+      "Repeat Edge Pixels": true
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Convolution Kernel New) is not in Premiere 2026's harvested video-effect list, so the preset cannot be reproduced as-is. Stored settings (Factory Presets.prfpset): {\"M11\": 0, \"M12\": 1, \"M13\": 0, \"M21\": 1, \"M22\": 2, \"M23\": 1, \"M31\": 0, \"M32\": 1, \"M33\": 0, \"Offset\": 0, \"Scale\": 6, \"Process Alpha\": true} (each pixel = sum of weight x neighbour / Scale + Offset). Closest current rebuild: [{\"name\": \"Fast Blur\", \"pr_props\": {\"Blurriness\": 1.5, \"Blur Dimensions\": 0, \"Repeat Edge Pixels\": true}}] (an approximation, not a pixel match). After Effects has no Convolution Kernel effect either."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Blur More",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Stronger 3x3 box blur (all weights 4, centre 5, divided by 37): an even, slightly heavier softening than Convolution Kernel Blur, still only a pixel or two wide.",
+   "look": [
+    "soft",
+    "box blur",
+    "smoothing",
+    "slight defocus"
+   ],
+   "use_for": [
+    "soften harsh digital edges on screenshots and graphics",
+    "slight defocus on a background plate under explainer text",
+    "reduce speckle before a Posterize or Find Edges stylisation"
+   ],
+   "avoid": [
+    "Still only a 3x3 kernel: at 1080p and above it looks like a tiny focus miss, not a deliberate blur",
+    "Not available in Premiere 2026 (the Convolution Kernel effect is gone)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "M11": 4,
+    "M12": 4,
+    "M13": 4,
+    "M21": 4,
+    "M22": 5,
+    "M23": 4,
+    "M31": 4,
+    "M32": 4,
+    "M33": 4,
+    "Offset": 0,
+    "Scale": 37,
+    "Process Alpha": true
+   },
+   "equivalent": "Fast Blur (Blurriness about 2-3)",
+   "recipe": [
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": 3,
+      "Blur Dimensions": 0,
+      "Repeat Edge Pixels": true
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Convolution Kernel New) is not in Premiere 2026's harvested video-effect list, so the preset cannot be reproduced as-is. Stored settings (Factory Presets.prfpset): {\"M11\": 4, \"M12\": 4, \"M13\": 4, \"M21\": 4, \"M22\": 5, \"M23\": 4, \"M31\": 4, \"M32\": 4, \"M33\": 4, \"Offset\": 0, \"Scale\": 37, \"Process Alpha\": true} (each pixel = sum of weight x neighbour / Scale + Offset). Closest current rebuild: [{\"name\": \"Fast Blur\", \"pr_props\": {\"Blurriness\": 3, \"Blur Dimensions\": 0, \"Repeat Edge Pixels\": true}}] (an approximation, not a pixel match). After Effects has no Convolution Kernel effect either."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Emboss",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Diagonal emboss (top-left weight 2, bottom-right -2, Offset 128): flat areas turn mid-grey and edges become light/dark ridges along the top-left/bottom-right diagonal, like a stamped metal relief with slight colour fringes (which side reads as lit depends on how Premiere applied the kernel; not verified).",
+   "look": [
+    "emboss",
+    "grey relief",
+    "stamped metal",
+    "engraved",
+    "bas-relief"
+   ],
+   "use_for": [
+    "stamped / engraved texture on a logo or title plate",
+    "gritty 'engraved' treatment of an archival still in a trailer",
+    "textured background plate behind explainer text (mixed back with the original)"
+   ],
+   "avoid": [
+    "Turns faces and footage into flat grey mush; keep it to graphics or blend it back",
+    "Not available in Premiere 2026 (the Convolution Kernel effect is gone)"
+   ],
+   "confidence": "low",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "M11": 2,
+    "M12": 0,
+    "M13": 0,
+    "M21": 0,
+    "M22": 0,
+    "M23": 0,
+    "M31": 0,
+    "M32": 0,
+    "M33": -2,
+    "Offset": 128,
+    "Scale": 1,
+    "Process Alpha": true
+   },
+   "equivalent": "Color Emboss (keeps colour; add Black & White after it for the grey relief) in Premiere; Emboss (ADBE Emboss) in After Effects",
+   "recipe": [
+    {
+     "name": "Color Emboss",
+     "pr_props": {
+      "Direction": 135,
+      "Relief": 2,
+      "Contrast": 200,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Convolution Kernel New) is not in Premiere 2026's harvested video-effect list, so the preset cannot be reproduced as-is. Stored settings (Factory Presets.prfpset): {\"M11\": 2, \"M12\": 0, \"M13\": 0, \"M21\": 0, \"M22\": 0, \"M23\": 0, \"M31\": 0, \"M32\": 0, \"M33\": -2, \"Offset\": 128, \"Scale\": 1, \"Process Alpha\": true} (each pixel = sum of weight x neighbour / Scale + Offset). Closest current rebuild: [{\"name\": \"Color Emboss\", \"pr_props\": {\"Direction\": 135, \"Relief\": 2, \"Contrast\": 200, \"Blend With Original\": 0}}, {\"name\": \"Black & White\", \"pr_props\": {}}] (an approximation, not a pixel match). After Effects has no Convolution Kernel effect either."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Find Edges",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Laplacian edge detector (all neighbours 1, centre -8, Offset 0): flat areas go black and only the edges remain as thin bright lines, an outline / X-ray look.",
+   "look": [
+    "edge detect",
+    "outline",
+    "neon lines",
+    "x-ray",
+    "line art",
+    "dark"
+   ],
+   "use_for": [
+    "neon-outline transition beat in an AI/tech explainer (add a glow)",
+    "outline matte for a stylised photo reveal in a documentary",
+    "graphic 'scanner' look on a screenshot in a news reel"
+   ],
+   "avoid": [
+    "Noisy or compressed footage turns into a field of speckle",
+    "Most of the frame goes black, so it is unreadable held for long",
+    "Not available in Premiere 2026 (the Convolution Kernel effect is gone)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "M11": 1,
+    "M12": 1,
+    "M13": 1,
+    "M21": 1,
+    "M22": -8,
+    "M23": 1,
+    "M31": 1,
+    "M32": 1,
+    "M33": 1,
+    "Offset": 0,
+    "Scale": 1,
+    "Process Alpha": false
+   },
+   "equivalent": "Find Edges effect with Invert on (bright edges on black)",
+   "recipe": [
+    {
+     "name": "Find Edges",
+     "pr_props": {
+      "Invert": true,
+      "Blend With Original": 0
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Convolution Kernel New) is not in Premiere 2026's harvested video-effect list, so the preset cannot be reproduced as-is. Stored settings (Factory Presets.prfpset): {\"M11\": 1, \"M12\": 1, \"M13\": 1, \"M21\": 1, \"M22\": -8, \"M23\": 1, \"M31\": 1, \"M32\": 1, \"M33\": 1, \"Offset\": 0, \"Scale\": 1, \"Process Alpha\": false} (each pixel = sum of weight x neighbour / Scale + Offset). Closest current rebuild: [{\"name\": \"Find Edges\", \"pr_props\": {\"Invert\": true, \"Blend With Original\": 0}}] (an approximation, not a pixel match). After Effects has no Convolution Kernel effect either."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Gaussian Blur",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Small Gaussian-weighted 3x3 blur (1 2 1 / 2 5 2 / 1 2 1, divided by 17): a smooth, very slight softening of about one pixel.",
+   "look": [
+    "slight softening",
+    "smooth",
+    "gaussian",
+    "subtle blur"
+   ],
+   "use_for": [
+    "smooth slight noise or aliasing on archival and upscaled footage",
+    "soften over-sharpened AI-generated shots",
+    "pre-blur before Posterize to avoid speckled colour bands"
+   ],
+   "avoid": [
+    "Barely visible at HD/4K: a 3x3 kernel is one pixel wide",
+    "Not available in Premiere 2026 (the Convolution Kernel effect is gone)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "M11": 1,
+    "M12": 2,
+    "M13": 1,
+    "M21": 2,
+    "M22": 5,
+    "M23": 2,
+    "M31": 1,
+    "M32": 2,
+    "M33": 1,
+    "Offset": 0,
+    "Scale": 17,
+    "Process Alpha": true
+   },
+   "equivalent": "Fast Blur (Blurriness about 2) or the new Gaussian Blur at a low Amount",
+   "recipe": [
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": 2,
+      "Blur Dimensions": 0,
+      "Repeat Edge Pixels": true
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Convolution Kernel New) is not in Premiere 2026's harvested video-effect list, so the preset cannot be reproduced as-is. Stored settings (Factory Presets.prfpset): {\"M11\": 1, \"M12\": 2, \"M13\": 1, \"M21\": 2, \"M22\": 5, \"M23\": 2, \"M31\": 1, \"M32\": 2, \"M33\": 1, \"Offset\": 0, \"Scale\": 17, \"Process Alpha\": true} (each pixel = sum of weight x neighbour / Scale + Offset). Closest current rebuild: [{\"name\": \"Fast Blur\", \"pr_props\": {\"Blurriness\": 2, \"Blur Dimensions\": 0, \"Repeat Edge Pixels\": true}}] (an approximation, not a pixel match). After Effects has no Convolution Kernel effect either."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Convolution Kernel Gaussian Sharpen",
+   "match": null,
+   "category": "Presets/Convolution Kernel",
+   "bin": "Presets/Convolution Kernel",
+   "file": "Factory Presets.prfpset",
+   "status": "unusable",
+   "summary": "Very strong 3x3 sharpen (centre 13, Gaussian-weighted negative surround summing to -12, divided by 1): mathematically about a 1600% unsharp mask at ~1 px radius, so edges get hard halos and fine texture, noise and compression blocks jump out.",
+   "look": [
+    "sharpened",
+    "crisp",
+    "hard edges",
+    "edge halo",
+    "gritty"
+   ],
+   "use_for": [
+    "deliberately crunchy, over-sharpened stylisation in a trailer or satire beat",
+    "gritty high-detail treatment of a still or graphic held full-screen",
+    "aggressive detail pop on clean, low-noise footage for a short stylised hit"
+   ],
+   "avoid": [
+    "Far too strong for restoration: for soft archival or upscaled documentary clips use a gentle Unsharp Mask (Amount 50-100, Radius 1-2) instead",
+    "Amplifies noise and compression blocks on web-sourced news clips",
+    "Halos on faces and on-screen text",
+    "Not available in Premiere 2026 (the Convolution Kernel effect is gone)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "PR.ADBE Convolution Kernel New": "Convolution Kernel"
+   },
+   "keyframe_anchor": "none",
+   "preset_settings": {
+    "M11": -1,
+    "M12": -2,
+    "M13": -1,
+    "M21": -2,
+    "M22": 13,
+    "M23": -2,
+    "M31": -1,
+    "M32": -2,
+    "M33": -1,
+    "Offset": 0,
+    "Scale": 1,
+    "Process Alpha": true
+   },
+   "equivalent": "Unsharp Mask at its maximum (Amount 500, Radius ~1) is the closest and still milder than the kernel; Sharpen (Sharpen Amount) also works",
+   "recipe": [
+    {
+     "name": "Unsharp Mask",
+     "pr_props": {
+      "Amount": 500,
+      "Radius": 1,
+      "Threshold": 0
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name, and the effect this preset needs (PR.ADBE Convolution Kernel New) is not in Premiere 2026's harvested video-effect list, so the preset cannot be reproduced as-is. Stored settings (Factory Presets.prfpset): {\"M11\": -1, \"M12\": -2, \"M13\": -1, \"M21\": -2, \"M22\": 13, \"M23\": -2, \"M31\": -1, \"M32\": -2, \"M33\": -1, \"Offset\": 0, \"Scale\": 1, \"Process Alpha\": true} (each pixel = sum of weight x neighbour / Scale + Offset). Closest current rebuild: [{\"name\": \"Unsharp Mask\", \"pr_props\": {\"Amount\": 500, \"Radius\": 1, \"Threshold\": 0}}] (an approximation, not a pixel match). After Effects has no Convolution Kernel effect either."
+  }
+ ]
+}

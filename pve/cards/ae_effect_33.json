@@ -1,0 +1,893 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Opacity Pulse On Beat",
+   "match": "ADBE DE Opacity Pulse On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Min/Max Opacity, Attack, Decay and Audio Threshold sliders plus an audio-layer picker, meant to drive an opacity flash each time the music's amplitude crosses the threshold. It renders nothing by itself; an expression on Opacity must read it.",
+   "look": [
+    "beat flash",
+    "strobe",
+    "pulse",
+    "audio-reactive",
+    "blink"
+   ],
+   "use_for": [
+    "Flash a logo or hashtag on every bass hit in a reel",
+    "Beat-synced light-leak or glow layer in a trailer music bed",
+    "Pulse a 'BREAKING' tag in time with a news sting"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Busy music with a low threshold: flickers constantly and looks like a fault",
+    "Full-frame footage at Min 0: strobing footage is hard to watch and can be a photosensitivity risk"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Min Opacity",
+     "does": "Opacity (%) at the low point of each pulse",
+     "typical": "20-50 for a blink that never fully vanishes, 0 for a hard on/off"
+    },
+    {
+     "name": "Max Opacity",
+     "does": "Opacity (%) at the peak of each pulse",
+     "typical": "100"
+    },
+    {
+     "name": "Attack",
+     "does": "Rise speed of each pulse (inferred; our expression rises in 1/Attack seconds, so higher = snappier)",
+     "typical": "10-25 for a hard flash, 3-5 for a soft swell"
+    },
+    {
+     "name": "Decay",
+     "does": "Fall-off rate back to Min Opacity (our expression: exp(-Decay*t), higher = shorter tail)",
+     "typical": "3-8"
+    },
+    {
+     "name": "Audio Keyframe Layer",
+     "does": "Layer holding the converted audio amplitude keyframes",
+     "typical": "the 'Audio Amplitude' layer"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "Amplitude level that counts as a beat",
+     "typical": "15-40; raise until only the kicks trigger"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Exposure",
+    "Fill",
+    "Opacity Pulse Random"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Opacity Pulse On Beat'), set the sliders, then put an expression on Transform/Opacity that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Opacity Pulse On Beat\"),lo=c(\"Min Opacity\"),hi=c(\"Max Opacity\"),at=Math.max(c(\"Attack\"),0.01),dc=c(\"Decay\"),th=c(\"Audio Threshold\");var s=c(\"Audio Keyframe Layer\").effect(\"Both Channels\")(\"Slider\"),fd=thisComp.frameDuration,t0=-1;for(var i=0;i<150;i++){var tt=time-i*fd;if(tt<0)break;if(s.valueAtTime(tt)>=th&&s.valueAtTime(tt-fd)<th){t0=tt;break;}}var k=0;if(t0>=0){var t=time-t0,r=1/at;k=t<r?t/r:Math.exp(-dc*(t-r));}lo+(hi-lo)*k 'Audio Keyframe Layer' is a layer param: the props spec cannot set it; in ExtendScript use fx.property('Audio Keyframe Layer').setValue(audioLayer.index). The audio layer must be the 'Audio Amplitude' layer made by Animation > Keyframe Assistant > Convert Audio to Keyframes (its 'Both Channels' Slider is what the expression reads). Simpler shipped route: put layer markers on the beats and apply Presets/Behaviors/'Opacity Flash - layer markers.ffx'. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Opacity Pulse Random",
+   "match": "ADBE DE Opacity Pulse Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Min/Max Opacity, Attack, Decay and Min/Max Delay sliders, meant to drive opacity flashes at random intervals (an irregular flicker). It renders nothing by itself; an expression on Opacity must read it.",
+   "look": [
+    "flicker",
+    "random blink",
+    "faulty neon",
+    "signal drop",
+    "old TV"
+   ],
+   "use_for": [
+    "Broken neon / tube-light flicker on a title in a satire reel",
+    "Random flicker on a 'REC' or 'LIVE' badge",
+    "Unstable-signal feel on a CCTV or archive overlay"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Very short delays on full-frame footage: reads as a render glitch",
+    "An expression without seedRandom(seed, true): random() then changes every frame, so the Min/Max Delay spacing collapses into per-frame noise"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Min Opacity",
+     "does": "Opacity (%) at the low point of each pulse",
+     "typical": "20-50 for a blink that never fully vanishes, 0 for a hard on/off"
+    },
+    {
+     "name": "Max Opacity",
+     "does": "Opacity (%) at the peak of each pulse",
+     "typical": "100"
+    },
+    {
+     "name": "Attack",
+     "does": "Rise speed of each pulse (inferred; our expression rises in 1/Attack seconds, so higher = snappier)",
+     "typical": "10-25 for a hard flash, 3-5 for a soft swell"
+    },
+    {
+     "name": "Decay",
+     "does": "Fall-off rate back to Min Opacity (our expression: exp(-Decay*t), higher = shorter tail)",
+     "typical": "3-8"
+    },
+    {
+     "name": "Min Delay",
+     "does": "Shortest gap between pulses (seconds in our expression; keep Min Delay <= Max Delay)",
+     "typical": "0.1-0.3 for nervous flicker"
+    },
+    {
+     "name": "Max Delay",
+     "does": "Longest gap between pulses (seconds in our expression; keep Min Delay <= Max Delay)",
+     "typical": "0.5-2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Noise",
+    "Opacity Pulse On Beat",
+    "Turbulent Displace"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Opacity Pulse Random'), set the sliders, then put an expression on Transform/Opacity that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Opacity Pulse Random\"),lo=c(\"Min Opacity\"),hi=c(\"Max Opacity\"),at=Math.max(c(\"Attack\"),0.01),dc=c(\"Decay\"),mn=c(\"Min Delay\"),mx=c(\"Max Delay\");seedRandom(index,true);var t0=inPoint,t1=t0+random(mn,mx),n=0;while(t1<=time&&n<10000){t0=t1;t1+=random(mn,mx);n++;}var k=0;if(n>0){var t=time-t0,r=1/at;k=t<r?t/r:Math.exp(-dc*(t-r));}lo+(hi-lo)*k (seeded, so the flicker is identical on every render). Simpler shipped alternatives: Presets/Behaviors/'Opacity Flash - random.ffx' or 'Random On-Off.ffx', or Presets/Adobe Express/Looping/'Flicker Loop.ffx'. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Orbit",
+   "match": "ADBE DE Orbit",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Radius, Frequency and Starting Phase controls plus a 'Layer To Orbit' picker, meant to move a layer in a flat circle around another layer. It renders nothing by itself; an expression on Position must read it.",
+   "look": [
+    "orbit",
+    "circular motion",
+    "satellite",
+    "loop",
+    "spin"
+   ],
+   "use_for": [
+    "Icons or party symbols circling a central portrait in an explainer",
+    "A small 'NEW' badge orbiting a product or app logo",
+    "Looping orbiting dots for a loader or transition card"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Large radius on a 1080x1920 reel: the layer leaves the frame",
+    "Many orbiting items with the same phase: they stack on top of each other"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "Distance from the centre layer's anchor point in pixels",
+     "typical": "150-400"
+    },
+    {
+     "name": "Frequency",
+     "does": "Revolutions per second (our expression); negative reverses direction",
+     "typical": "0.1-0.5 for calm, 1+ for fast"
+    },
+    {
+     "name": "Starting Phase",
+     "does": "Angle control: start angle on the circle in degrees",
+     "typical": "spread items by 360/N"
+    },
+    {
+     "name": "Layer To Orbit",
+     "does": "Layer used as the centre of the orbit",
+     "typical": "the logo / portrait layer"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow",
+    "Orbit 3D"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Orbit'), set the sliders, then put an expression on Transform/Position of the orbiting (unparented) layer that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Orbit\"),L=c(\"Layer To Orbit\"),r=c(\"Radius\"),a=degreesToRadians(c(\"Starting Phase\")+360*c(\"Frequency\")*(time-inPoint));var p=L.toComp(L.anchorPoint);[p[0]+r*Math.cos(a),p[1]+r*Math.sin(a)] 'Layer To Orbit' is a layer param: the props spec cannot set it; in ExtendScript use fx.property('Layer To Orbit').setValue(centreLayer.index). Cheaper alternative with no expression: parent the layer to a null at the centre and keyframe or loop the null's Rotation. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Orbit 3D",
+   "match": "ADBE DE Orbit 3D",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Radius, Frequency, Starting Phase, X/Z Tilt and Elevation controls plus a 'Layer To Orbit' picker, meant to move a 3D layer around another layer on a tilted ring so it passes in front of and behind it. It renders nothing by itself; an expression on Position must read it.",
+   "look": [
+    "3D orbit",
+    "tilted ring",
+    "satellite",
+    "depth",
+    "loop"
+   ],
+   "use_for": [
+    "Logos or data tags orbiting a globe in a geopolitics explainer",
+    "Planet-ring style orbit of icons around a leader cut-out",
+    "Trailer title card with elements circling in depth"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "2D layer or no camera: the depth is lost and it reads as a flat side-to-side slide",
+    "Large Elevation or Radius in a 1080x1920 reel: the layer leaves the frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "Distance from the centre layer in pixels",
+     "typical": "200-500"
+    },
+    {
+     "name": "Frequency",
+     "does": "Revolutions per second (our expression); negative reverses",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Starting Phase",
+     "does": "Angle control: start angle on the ring in degrees",
+     "typical": "360/N per item"
+    },
+    {
+     "name": "Layer To Orbit",
+     "does": "Layer used as the orbit centre",
+     "typical": "the globe / hero layer"
+    },
+    {
+     "name": "Z Tilt",
+     "does": "Angle control: slants the ring around the Z axis (degrees)",
+     "typical": "0-20"
+    },
+    {
+     "name": "X Tilt",
+     "does": "Angle control: tips the ring toward the camera (our expression: 0 = flat horizontal ring seen edge-on)",
+     "typical": "15-30 to read as an ellipse seen from slightly above"
+    },
+    {
+     "name": "Elevation",
+     "does": "Raises the ring above the centre layer in pixels (our expression: positive = up)",
+     "typical": "-200 to 200"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow",
+    "Orbit"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Orbit 3D'), set the sliders, then put an expression on Transform/Position of the orbiting 3D layer that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Orbit 3D\"),L=c(\"Layer To Orbit\"),r=c(\"Radius\"),a=degreesToRadians(c(\"Starting Phase\")+360*c(\"Frequency\")*(time-inPoint)),xt=degreesToRadians(c(\"X Tilt\")),zt=degreesToRadians(c(\"Z Tilt\"));var x=r*Math.cos(a),z=r*Math.sin(a),y1=-z*Math.sin(xt),z1=z*Math.cos(xt);var x2=x*Math.cos(zt)-y1*Math.sin(zt),y2=x*Math.sin(zt)+y1*Math.cos(zt);var p=L.toWorld(L.anchorPoint);[p[0]+x2,p[1]+y2-c(\"Elevation\"),p[2]+z1] Make the layer 3D first (layer.threeDLayer = true) and add a camera to see the depth. 'Layer To Orbit' is a layer param: set it in ExtendScript with fx.property('Layer To Orbit').setValue(centreLayer.index). No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Oscillate",
+   "match": "ADBE DE Oscillate",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency, Decay, Direction, Delay and Cycle Time controls, meant to drive a damped back-and-forth shake along one axis, optionally repeating. It renders nothing by itself; an expression on Position must read it.",
+   "look": [
+    "spring",
+    "wobble",
+    "shake",
+    "bounce",
+    "elastic"
+   ],
+   "use_for": [
+    "Spring-in wobble when a lower third or price tag lands",
+    "Repeating attention nudge on a 'Swipe up' or subscribe button",
+    "Small horizontal 'no' shake on a FALSE / FAKE stamp in a fact-check"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Large amplitude on text: unreadable while moving",
+    "Using it as camera shake on full-frame footage: exposes the frame edge, scale up first"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak offset of the shake in pixels (inferred; negative flips the first swing)",
+     "typical": "15-40 for a punch hit, 60-150 for a big wobble"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "3-8"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = settles faster",
+     "typical": "3-8"
+    },
+    {
+     "name": "Direction",
+     "does": "Angle control: axis of the shake in degrees (our expression: 0 = horizontal, 90 = vertical)",
+     "typical": "0 for side-to-side, 90 for up-down"
+    },
+    {
+     "name": "Delay",
+     "does": "Wait after the layer's in point before the shake starts (seconds in our expression)",
+     "typical": "0-1"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "Restart the shake every N seconds; 0 = once (our expression)",
+     "typical": "0 or 2-4"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Directional Blur",
+    "Drop Shadow",
+    "Transform"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Oscillate'), set the sliders, then put an expression on Transform/Position that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Oscillate\"),A=c(\"Amplitude\"),f=c(\"Frequency\"),d=c(\"Decay\"),dir=degreesToRadians(c(\"Direction\")),cy=c(\"Cycle Time\");var t=time-inPoint-c(\"Delay\");if(cy>0&&t>0)t=t%cy;var o=t<0?0:A*Math.sin(2*Math.PI*f*t)*Math.exp(-d*t);var v=value;v[0]+=o*Math.cos(dir);v[1]+=o*Math.sin(dir);v (works on 2D and 3D Position). No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Oscillate At Marker",
+   "match": "ADBE DE Oscillate At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency, Decay and Direction controls, meant to fire a damped shake at each of the layer's markers. It renders nothing by itself; an expression on Position must read it and the markers.",
+   "look": [
+    "marker-triggered",
+    "spring",
+    "shake",
+    "hit",
+    "wobble"
+   ],
+   "use_for": [
+    "Shake a headline card on each VO stress word marked by the editor",
+    "Wobble a counter or stat when each number changes",
+    "Hit accents on a meme reel at hand-picked beats"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Markers closer together than the decay time: shakes pile up and look jittery"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak offset of the shake in pixels (inferred; negative flips the first swing)",
+     "typical": "15-40 for a punch hit, 60-150 for a big wobble"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "3-8"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = settles faster",
+     "typical": "3-8"
+    },
+    {
+     "name": "Direction",
+     "does": "Angle control: axis of the shake in degrees (our expression: 0 = horizontal, 90 = vertical)",
+     "typical": "0 for side-to-side, 90 for up-down"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Directional Blur",
+    "Drop Shadow",
+    "Oscillate On Beat"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Oscillate At Marker'), set the sliders, then put an expression on Transform/Position that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Oscillate At Marker\"),A=c(\"Amplitude\"),f=c(\"Frequency\"),d=c(\"Decay\"),dir=degreesToRadians(c(\"Direction\")),o=0;if(marker.numKeys>0){var n=marker.nearestKey(time).index;if(marker.key(n).time>time)n--;if(n>0){var t=time-marker.key(n).time;o=A*Math.sin(2*Math.PI*f*t)*Math.exp(-d*t);}}var v=value;v[0]+=o*Math.cos(dir);v[1]+=o*Math.sin(dir);v Add layer markers at the hit points: layer.property('Marker').setValueAtTime(t, new MarkerValue('')). No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Oscillate On Beat",
+   "match": "ADBE DE Oscillate On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency, Decay, Direction and Audio Threshold controls plus an audio-layer picker, meant to fire a damped shake whenever the music's amplitude crosses the threshold. It renders nothing by itself; an expression on Position must read it.",
+   "look": [
+    "beat shake",
+    "audio-reactive",
+    "bass hit",
+    "bounce",
+    "reel energy"
+   ],
+   "use_for": [
+    "Bump a logo or caption on every kick in a music-driven reel",
+    "Bass-hit shake on trailer title cards",
+    "Energy on a meme template synced to the track"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Low threshold on dense music: constant jitter",
+    "Applied to body captions: hard to read on a phone"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak offset of the shake in pixels (inferred; negative flips the first swing)",
+     "typical": "15-40 for a punch hit, 60-150 for a big wobble"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "3-8"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = settles faster",
+     "typical": "3-8"
+    },
+    {
+     "name": "Direction",
+     "does": "Angle control: axis of the shake in degrees (our expression: 0 = horizontal, 90 = vertical)",
+     "typical": "0 for side-to-side, 90 for up-down"
+    },
+    {
+     "name": "Audio Keyframe Layer",
+     "does": "Layer with converted audio amplitude keyframes",
+     "typical": "the 'Audio Amplitude' layer"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "Amplitude level that counts as a beat",
+     "typical": "15-40"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Directional Blur",
+    "Glow",
+    "Opacity Pulse On Beat"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Oscillate On Beat'), set the sliders, then put an expression on Transform/Position that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Oscillate On Beat\"),A=c(\"Amplitude\"),f=c(\"Frequency\"),d=c(\"Decay\"),dir=degreesToRadians(c(\"Direction\")),th=c(\"Audio Threshold\");var s=c(\"Audio Keyframe Layer\").effect(\"Both Channels\")(\"Slider\"),fd=thisComp.frameDuration,t0=-1;for(var i=0;i<150;i++){var tt=time-i*fd;if(tt<0)break;if(s.valueAtTime(tt)>=th&&s.valueAtTime(tt-fd)<th){t0=tt;break;}}var o=t0<0?0:A*Math.sin(2*Math.PI*f*(time-t0))*Math.exp(-d*(time-t0));var v=value;v[0]+=o*Math.cos(dir);v[1]+=o*Math.sin(dir);v 'Audio Keyframe Layer' is a layer param: the props spec cannot set it; in ExtendScript use fx.property('Audio Keyframe Layer').setValue(audioLayer.index). The audio layer must be the 'Audio Amplitude' layer made by Animation > Keyframe Assistant > Convert Audio to Keyframes (its 'Both Channels' Slider is what the expression reads). No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Oscillate Random",
+   "match": "ADBE DE Oscillate Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency, Decay, Direction, Random Direction and Min/Max Delay controls, meant to fire damped shakes at random intervals, optionally each in a random direction. It renders nothing by itself; an expression on Position must read it.",
+   "look": [
+    "random shake",
+    "jitter",
+    "nervous",
+    "glitch motion",
+    "tremor"
+   ],
+   "use_for": [
+    "Nervous jitter on a 'scam' or 'warning' graphic in a fact-check",
+    "Irregular tremor on a satire caricature or meme cut-out",
+    "Unstable handheld feel on an overlay element"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Short delays plus large amplitude: looks like a bug, not a style",
+    "An expression without seedRandom(seed, true): random() then changes every frame, so the Min/Max Delay spacing collapses into per-frame noise"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak offset of the shake in pixels (inferred; negative flips the first swing)",
+     "typical": "15-40 for a punch hit, 60-150 for a big wobble"
+    },
+    {
+     "name": "Frequency",
+     "does": "Oscillations per second",
+     "typical": "3-8"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = settles faster",
+     "typical": "3-8"
+    },
+    {
+     "name": "Direction",
+     "does": "Angle control: axis of the shake in degrees (our expression: 0 = horizontal, 90 = vertical)",
+     "typical": "0 for side-to-side, 90 for up-down"
+    },
+    {
+     "name": "Random Direction",
+     "does": "Checkbox (0/1): 1 = each shake picks a random axis, 0 = always uses Direction",
+     "typical": "1"
+    },
+    {
+     "name": "Min Delay",
+     "does": "Shortest gap between shakes (seconds in our expression; keep Min Delay <= Max Delay)",
+     "typical": "0.3-1"
+    },
+    {
+     "name": "Max Delay",
+     "does": "Longest gap between shakes (seconds in our expression; keep Min Delay <= Max Delay)",
+     "typical": "1-3"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Directional Blur",
+    "Opacity Pulse Random",
+    "Turbulent Displace"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Oscillate Random'), set the sliders, then put an expression on Transform/Position that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Oscillate Random\"),A=c(\"Amplitude\"),f=c(\"Frequency\"),d=c(\"Decay\"),mn=c(\"Min Delay\"),mx=c(\"Max Delay\");seedRandom(index,true);var t0=inPoint,t1=t0+random(mn,mx),n=0;while(t1<=time&&n<10000){t0=t1;t1+=random(mn,mx);n++;}var dir=c(\"Random Direction\")==1?random(0,2*Math.PI):degreesToRadians(c(\"Direction\"));var o=n==0?0:A*Math.sin(2*Math.PI*f*(time-t0))*Math.exp(-d*(time-t0));var v=value;v[0]+=o*Math.cos(dir);v[1]+=o*Math.sin(dir);v (seeded, so the result is identical on every render). Shipped look-alike without the decay: Presets/Adobe Express/Looping/'Jitter Loop.ffx'. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pattern Template",
+   "match": "Pseudo/ADBE Pattern Template",
+   "category": "",
+   "status": "hidden",
+   "summary": "A pseudo-effect that only holds controls (Color, Pattern Size, Repeat Width/Height as % of comp, Animation Speed) for an Adobe pattern template's expressions. It draws nothing on its own, and no preset shipped with AE 2026 uses it.",
+   "look": [
+    "pattern",
+    "repeat tile",
+    "background texture",
+    "motion pattern",
+    "control"
+   ],
+   "use_for": [
+    "Recolour / resize a pattern background in an Adobe or Stock template that already carries this effect and reads it with expressions",
+    "A ready-made control panel for our own pattern rig, e.g. Motion Tile plus expressions that read Pattern Size and Animation Speed"
+   ],
+   "avoid": [
+    "Applying it to a plain layer and expecting a pattern: it renders nothing",
+    "Planning around it for a new edit: no shipped preset uses it; build the pattern with Grid / Checkerboard / Motion Tile instead"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Color",
+     "does": "Pattern colour read by the template's expressions",
+     "typical": "brand colour, e.g. #F47A20"
+    },
+    {
+     "name": "Pattern Size",
+     "does": "Scale of one pattern unit (%)",
+     "typical": "50-150"
+    },
+    {
+     "name": "Repeat Width (% of Comp)",
+     "does": "How wide the tiled area is relative to the comp",
+     "typical": "100-200"
+    },
+    {
+     "name": "Repeat Height (% of Comp)",
+     "does": "How tall the tiled area is relative to the comp",
+     "typical": "100-200"
+    },
+    {
+     "name": "Animation Speed",
+     "does": "Drift speed the template's expression applies; 0 = static (units unknown)",
+     "typical": "0-20"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Motion Tile",
+    "Fill",
+    "Grid",
+    "Checkerboard"
+   ],
+   "scripting": "Pseudo-effect defined in Support Files/PresetEffects.xml (match 'Pseudo/ADBE Pattern Template'): an expression-control holder, not a renderer, and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets, verified 2026-10-03). Only useful on a layer whose expressions already reference effect('Pattern Template'). Colour is set as \"#RRGGBB\". Pattern Size and Repeat Width/Height display as percentages; the UI slider runs 0-100 but the valid range is +-1,000,000, so the harvested min/max are not a useful guide. Confidence low: the template that uses it was not identified. No Premiere equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pendulum",
+   "match": "ADBE DE Pendulum",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency, Decay, Delay and Cycle Time controls, meant to swing a layer's rotation around its anchor point like a pendulum that comes to rest, optionally repeating. It renders nothing by itself; an expression on Rotation must read it.",
+   "look": [
+    "swing",
+    "pendulum",
+    "hanging sign",
+    "rotation",
+    "playful"
+   ],
+   "use_for": [
+    "Hanging 'SALE' / 'BREAKING' sign that swings in on a reel",
+    "Swinging price tag or badge in an explainer",
+    "Repeating swing to draw the eye to a CTA"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Anchor point left at the centre: it spins in place instead of hanging",
+    "Big amplitude on long text: reads as clumsy"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak swing in degrees added to Rotation around the anchor point (inferred)",
+     "typical": "10-25 for a hanging sign, 45 for a big swing"
+    },
+    {
+     "name": "Frequency",
+     "does": "Swings per second",
+     "typical": "1-2"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = comes to rest sooner",
+     "typical": "1-3"
+    },
+    {
+     "name": "Delay",
+     "does": "Wait after the layer's in point before the swing starts (seconds in our expression)",
+     "typical": "0-1"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "Restart the swing every N seconds; 0 = once (our expression)",
+     "typical": "0 or 3-5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Bevel Alpha"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pendulum'), set the sliders, then put an expression on Transform/Rotation that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Pendulum\"),cy=c(\"Cycle Time\"),t=time-inPoint-c(\"Delay\");if(cy>0&&t>0)t=t%cy;t<0?value:value+c(\"Amplitude\")*Math.sin(2*Math.PI*c(\"Frequency\")*t)*Math.exp(-c(\"Decay\")*t) Set the layer's Anchor Point to the hinge (top centre for a hanging sign) and move Position to match before applying. Note: Presets/Text/Miscellaneous/'Pendulum In.ffx' is a per-character TEXT animator, not this. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pendulum At Marker",
+   "match": "ADBE DE Pendulum At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency and Decay controls, meant to start a damped pendulum swing at each of the layer's markers. It renders nothing by itself; an expression on Rotation must read it and the markers.",
+   "look": [
+    "swing",
+    "marker-triggered",
+    "hit",
+    "rotation",
+    "playful"
+   ],
+   "use_for": [
+    "Swing a tag or label on each VO beat marked by the editor",
+    "Knock a sign into a swing when another element 'hits' it"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Markers closer than the decay time: swings restart and jerk"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak swing in degrees added to Rotation around the anchor point (inferred)",
+     "typical": "10-25 for a hanging sign, 45 for a big swing"
+    },
+    {
+     "name": "Frequency",
+     "does": "Swings per second",
+     "typical": "1-2"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = comes to rest sooner",
+     "typical": "1-3"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Pendulum On Beat"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pendulum At Marker'), set the sliders, then put an expression on Transform/Rotation that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Pendulum At Marker\"),o=0;if(marker.numKeys>0){var n=marker.nearestKey(time).index;if(marker.key(n).time>time)n--;if(n>0){var t=time-marker.key(n).time;o=c(\"Amplitude\")*Math.sin(2*Math.PI*c(\"Frequency\")*t)*Math.exp(-c(\"Decay\")*t);}}value+o Add layer markers at the hit points: layer.property('Marker').setValueAtTime(t, new MarkerValue('')). Set Anchor Point to the hinge first. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Pendulum On Beat",
+   "match": "ADBE DE Pendulum On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Hidden pseudo effect: Amplitude, Frequency, Decay and Audio Threshold controls plus an audio-layer picker, meant to kick a layer into a damped pendulum swing whenever the music's amplitude crosses the threshold. It renders nothing by itself; an expression on Rotation must read it.",
+   "look": [
+    "swing",
+    "audio-reactive",
+    "beat",
+    "rotation",
+    "bounce"
+   ],
+   "use_for": [
+    "Swing a hanging logo or tag on bass hits in a reel",
+    "Beat-synced swing of a meme sticker"
+   ],
+   "avoid": [
+    "Adding it alone and expecting motion: it is only a control panel, nothing moves until the expression is written",
+    "Low threshold on busy music: the layer never settles"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Peak swing in degrees added to Rotation around the anchor point (inferred)",
+     "typical": "10-25 for a hanging sign, 45 for a big swing"
+    },
+    {
+     "name": "Frequency",
+     "does": "Swings per second",
+     "typical": "1-2"
+    },
+    {
+     "name": "Decay",
+     "does": "Damping rate (our expression: exp(-Decay*t)); higher = comes to rest sooner",
+     "typical": "1-3"
+    },
+    {
+     "name": "Audio Keyframe Layer",
+     "does": "Layer with converted audio amplitude keyframes",
+     "typical": "the 'Audio Amplitude' layer"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "Amplitude level that counts as a beat",
+     "typical": "15-40"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Oscillate On Beat"
+   ],
+   "scripting": "Hidden pseudo effect (expression-control container defined in Support Files/PresetEffects.xml, verified 2026-10-03): it renders NOTHING by itself and no preset or script shipped with AE 2026 references it (grep of Support Files/Presets), so there is no 'matching preset' to apply. Add it with layer.property('ADBE Effect Parade').addProperty('ADBE DE Pendulum On Beat'), set the sliders, then put an expression on Transform/Rotation that reads it. Adobe's original companion expression is not shipped, so use ours (untested, JavaScript expression engine; slider meanings are inferred from the names and defined by this expression): var c=effect(\"Pendulum On Beat\"),th=c(\"Audio Threshold\"),s=c(\"Audio Keyframe Layer\").effect(\"Both Channels\")(\"Slider\"),fd=thisComp.frameDuration,t0=-1;for(var i=0;i<150;i++){var tt=time-i*fd;if(tt<0)break;if(s.valueAtTime(tt)>=th&&s.valueAtTime(tt-fd)<th){t0=tt;break;}}var t=time-t0;t0<0?value:value+c(\"Amplitude\")*Math.sin(2*Math.PI*c(\"Frequency\")*t)*Math.exp(-c(\"Decay\")*t) 'Audio Keyframe Layer' is a layer param: the props spec cannot set it; in ExtendScript use fx.property('Audio Keyframe Layer').setValue(audioLayer.index). The audio layer must be the 'Audio Amplitude' layer made by Animation > Keyframe Assistant > Convert Audio to Keyframes (its 'Both Channels' Slider is what the expression reads). Set Anchor Point to the hinge first. No Premiere equivalent: keyframe the property there.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (expression-control pseudo effect that renders nothing), so no frame exists in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

@@ -1,0 +1,643 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Push (Legacy)",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Clip B slides in from one edge and shoves clip A out of the opposite edge, both frames moving together at constant speed with no blur. Default direction (seen in the gallery render): B enters from the left and A exits right. This is the pre-2026 Push kept for old projects; the new Film Impact 'Push' replaces it.",
+   "look": [
+    "side push",
+    "both frames move",
+    "hard seam",
+    "linear speed",
+    "no motion blur",
+    "clean"
+   ],
+   "use_for": [
+    "move between two locations or speakers in an explainer",
+    "step to the next item in a listicle or news-roundup reel",
+    "carousel-style card change in a social reel",
+    "chronology beats (left-to-right reads as forward in time)"
+   ],
+   "avoid": [
+    "at 1 s or longer it looks like a 2000s slideshow; keep it short",
+    "no motion blur, so a fast push strobes; use the new 'Push' instead",
+    "do not mix push directions at random within one piece"
+   ],
+   "confidence": "high",
+   "family": "slide/push",
+   "feel": "functional, clean, slightly dated",
+   "duration_typical": "0.3-0.6",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: 'Push' (new GPU transition with easing and motion blur; exact name 'Push', a separate list entry). AE: keyframe Position of both layers by one frame width (A from 0 to +W, B from -W to 0 for the default left-to-right) with Easy Ease and motion blur on.",
+   "scripting": "Applied by name with no error, 1.0 s centred on the 130 s cut (landed 129.52-130.52 s); the gallery render shows a clean left-to-right push. Centred needs about 0.5 s of handles on both clips. Single-sided on an upper track it pushes in over the clip below; on V1 it pushes against black. Direction is a transition setting in Effect Controls, not a spec prop; the default (West to East) is what you get.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/032b.png",
+    "note": "B enters from the left and A is pushed out right, both images moving together with a hard vertical seam and no blur (half and half at the cut).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Random Blocks",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "Clip B appears in small rectangular blocks that pop in at random positions until they cover clip A.",
+   "look": [
+    "random rectangles",
+    "pixel-block pop",
+    "digital",
+    "retro",
+    "stepped",
+    "busy"
+   ],
+   "use_for": [
+    "'data loading' or digitisation reveal in a tech or AI explainer",
+    "deliberately retro joke beat in a satire reel",
+    "reveal a document or screenshot as if it is being decoded",
+    "hack or leak story beat paired with a glitch SFX"
+   ],
+   "avoid": [
+    "reads as a cheap 90s video toaster in serious documentary or news",
+    "over about 1 s it drags",
+    "hard block edges alias on detailed footage"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "cheap 2000s digital, playful",
+   "duration_typical": "0.4-0.8",
+   "sfx": "glitch",
+   "single_sided_ok": true,
+   "equivalent": "AE: Block Dissolve on the outgoing layer, keyframe Transition Completion 0 to 100% (set Block Width/Height, Feather 0, Soft Edges off), or CC Grid Wipe for a more ordered version.",
+   "scripting": "Block size (width/height count) is a Custom setting in Effect Controls, not a spec prop; the default gives small rectangles (gallery render confirms B popping in as random blocks). Applied by name with no error, 1.0 s centred on the 134 s cut (133.52-134.52 s); centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/033b.png",
+    "note": "Rectangular blocks of B pop in at random positions over A, about half covered at the cut and nearly all B by 0.3 s after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Random Invert",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "Random blocks of clip A flip to a colour negative until the whole frame is inverted, then clip B replaces the negative block by block. An old Dissolve-folder transition kept for old projects.",
+   "look": [
+    "negative flash",
+    "inverted colours",
+    "random blocks",
+    "strobe",
+    "harsh",
+    "digital"
+   ],
+   "use_for": [
+    "one-off 'shock' or 'system error' beat in a satire reel",
+    "negative or x-ray flash into a reveal",
+    "glitch accent on a hacking or leak story"
+   ],
+   "avoid": [
+    "inverted faces look ugly; never on a leader's close-up",
+    "strobing negatives can bother photosensitive viewers; keep it short and rare",
+    "looks dated in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "family": "glitch/damage",
+   "feel": "harsh, jarring, dated digital",
+   "duration_typical": "0.3-0.6",
+   "sfx": "glitch",
+   "single_sided_ok": false,
+   "equivalent": "PR replacement: 'Glitch' or 'Solarize' (new GPU transitions). AE: on the outgoing layer add Invert, then Block Dissolve animated 0 to 100% with the incoming clip below; or a 2-3 frame Invert flash on hold keyframes at the cut.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015 but still applies by name: harvest placed it with no error, 1.0 s centred on the 138 s cut (137.52-138.52 s); the gallery render shows A going negative in blocks, then B arriving in blocks. Invert source/destination and block size are Custom settings, not spec props. Single-sided it would only invert one clip against black, so use it centred.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/034b.png",
+    "note": "Random blocks of A turn negative, the whole frame is a colour negative at the cut, then B shows through with leftover negative blocks.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Random Wipe",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "Clip B is revealed by small blocks that fill in at random along a moving front, giving a ragged pixel wipe. Default direction (gallery render): top to bottom.",
+   "look": [
+    "blocky sweep",
+    "ragged edge",
+    "pixel wipe",
+    "directional",
+    "digital",
+    "retro"
+   ],
+   "use_for": [
+    "retro 'download' style reveal of a graphic or chart",
+    "playful alternative to a straight wipe in an AI-education reel",
+    "transition into a low-res screen recording or archival clip",
+    "map or data panel reveal in an explainer"
+   ],
+   "avoid": [
+    "looks like a 2000s DVD menu in serious documentary",
+    "hard block edges shimmer on fine detail at small sizes"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "retro digital, playful, slightly cheap",
+   "duration_typical": "0.5-1.0",
+   "sfx": "glitch",
+   "single_sided_ok": true,
+   "equivalent": "AE: Gradient Wipe on the outgoing layer using a gradient layer built from a Ramp combined with blocky noise (Fractal Noise then Mosaic), keyframe Transition Completion; or Block Dissolve and Linear Wipe together.",
+   "scripting": "Direction is set in Effect Controls, not a spec prop; the default sweeps top to bottom. Applied by name with no error, 1.0 s centred on the 142 s cut (141.52-142.52 s); centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/035b.png",
+    "note": "B fills in from the top with a ragged block-stepped front, covering the top half at the cut and all but a bottom strip after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Roll Away",
+   "match": null,
+   "category": "Page Peel",
+   "status": "obsolete",
+   "summary": "Clip A rolls up like a scroll from its left edge toward the right: the rolled part is a narrow squashed strip that travels across and off the right edge, uncovering clip B behind it.",
+   "look": [
+    "scroll roll",
+    "squashed strip",
+    "travelling edge",
+    "flat",
+    "kitsch",
+    "wedding video"
+   ],
+   "use_for": [
+    "mock 'old newspaper or scroll' gag in a satire reel",
+    "deliberately kitsch retro beat",
+    "turning past an old document page in an archival segment"
+   ],
+   "avoid": [
+    "reads as a cheap 2000s wedding DVD in any serious edit",
+    "the rolled strip is just a squashed slice of clip A with no real 3D shading, so it looks flat and soft"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "kitsch, cheap 2000s",
+   "duration_typical": "0.8-1.2",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: 'Page Peel' (new GPU transition). AE: CC Page Turn on the outgoing layer with a large Fold Radius and Fold Position animated across the frame.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; still applies by name: harvest placed it with no error, 1.0 s centred on the 146 s cut (145.52-146.52 s); gallery render shows the left-to-right roll. Centred needs handles on both clips. Roll direction is a Custom setting, not a spec prop.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/036b.png",
+    "note": "A narrow squashed strip of A travels left to right across the frame, uncovering B on its left while the rest of A stays flat on its right.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Slash Slide",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Diagonal strips of clip B fly in at staggered speeds and slide over clip A until they join into the full frame.",
+   "look": [
+    "diagonal strips",
+    "staggered bars",
+    "angled slash",
+    "busy",
+    "2000s TV promo"
+   ],
+   "use_for": [
+    "energetic rally or sports montage beat when kept very short",
+    "retro TV-promo parody in a satire reel",
+    "opening a 'versus' comparison"
+   ],
+   "avoid": [
+    "at normal speed it looks like a cheap 2000s TV promo",
+    "strip edges are hard and aliased"
+   ],
+   "confidence": "medium",
+   "family": "slide/push",
+   "feel": "busy, dated, energetic",
+   "duration_typical": "0.4-0.7",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: 'Slice' (new GPU transition, cleaner diagonal cut). AE: CC Line Sweep or Venetian Blinds at about 45 degrees on the outgoing layer, or several masked diagonal strips of the incoming layer with staggered Position keyframes.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 150 s cut (149.52-150.52 s); gallery render shows diagonal strips of B cascading in over A. Strip count and direction are Custom settings, not spec props.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/037b.png",
+    "note": "Staggered diagonal strips of B slide over A, few at first, interleaved at the cut, nearly joined by 0.3 s after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Slide (Legacy)",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Clip B slides in from an edge and covers clip A, which stays still underneath. Default direction (gallery render): B enters from the left. This is the pre-2026 Slide kept for old projects.",
+   "look": [
+    "slide over",
+    "hard edge",
+    "linear speed",
+    "no blur",
+    "presentational"
+   ],
+   "use_for": [
+    "bring a full-frame card or graphic in over footage",
+    "next-item step in a listicle reel",
+    "single-sided on an upper track: slide a document or tweet screenshot in over B-roll"
+   ],
+   "avoid": [
+    "constant speed with no blur looks like PowerPoint; keep it short or use eased keyframes",
+    "wrong tone for emotional documentary moments"
+   ],
+   "confidence": "high",
+   "family": "slide/push",
+   "feel": "clean, presentational, PowerPoint-ish",
+   "duration_typical": "0.3-0.6",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR: no new GPU transition named 'Slide' appears in the 2026 list; use the new 'Push', or animate Position on a Transform effect with easing for a modern slide. AE: keyframe Position of the incoming layer from off-frame to centre with Easy Ease and motion blur.",
+   "scripting": "Applied by name with no error, 1.0 s centred on the 154 s cut (153.52-154.52 s); centred needs handles on both clips. Direction (8 options) is set in Effect Controls, not a spec prop; the default (from the left) is used.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/038b.png",
+    "note": "B (shifted, so it is moving) slides in from the left over A, which stays still underneath; hard vertical edge, half-way at the cut.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Sliding Bands",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Thin vertical bands of clip B open up in clip A and widen until they join into the full frame, like vertical blinds opening. The opening is staggered from left to right: the left side is already solid B while the bands on the right are still thin.",
+   "look": [
+    "vertical bands",
+    "slats",
+    "blinds",
+    "stepped reveal",
+    "mechanical",
+    "retro"
+   ],
+   "use_for": [
+    "retro TV-graphics parody",
+    "reveal a striped or text-heavy graphic",
+    "quick move into a split-screen or comparison"
+   ],
+   "avoid": [
+    "looks dated outside a parody",
+    "busy bands fight with on-screen text"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "dated, mechanical",
+   "duration_typical": "0.5-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR: closest new GPU transitions are 'Stripe' (flat bands) or 'Louver' (3D slats). AE: Venetian Blinds on the outgoing layer (Direction 90 degrees for vertical bands) animating Transition Completion 0 to 100%.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 158 s cut (157.52-158.52 s). Gallery render shows the default: many thin vertical bands of B widening. Band count/direction are Custom settings, not spec props.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/039b.png",
+    "note": "Thin vertical bands of B open and widen into A, but staggered left to right: only the left third has bands at -0.3 s and only thin A slats remain on the right at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Sliding Boxes",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Vertical bars made of clip B slide across the screen one after another until clip B fills the frame.",
+   "look": [
+    "vertical bars",
+    "staggered slide",
+    "boxes",
+    "mechanical",
+    "retro"
+   ],
+   "use_for": [
+    "retro game-show or TV-promo parody",
+    "reveal a bar-chart style graphic",
+    "fast step between two list items"
+   ],
+   "avoid": [
+    "dated and busy in serious news or documentary",
+    "bars cut through faces and on-screen text"
+   ],
+   "confidence": "medium",
+   "family": "slide/push",
+   "feel": "mechanical, cheap 2000s",
+   "duration_typical": "0.5-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: 'Louver' or 'Slice' (new GPU transitions). AE: masked vertical strips of the incoming layer with staggered Position keyframes (Sequence Layers or offset keys), or Card Wipe with 1 row and several columns.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 162 s cut (161.52-162.52 s); gallery render shows vertical bars of B interleaving with A. Bar count is a Custom setting, not a spec prop.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/040b.png",
+    "note": "Vertical bars of B about one-eighth frame wide enter in sequence, alternating with A bars at the cut, until B covers the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Spin",
+   "match": null,
+   "category": "3D Motion",
+   "status": "obsolete",
+   "summary": "Clip B grows from a thin vertical strip in the centre to full width over clip A, like a card turning on a vertical axis but drawn flat (a horizontal scale, no perspective). Clip A stays still behind.",
+   "look": [
+    "card turn",
+    "centre strip opens",
+    "flat",
+    "no perspective",
+    "cheesy"
+   ],
+   "use_for": [
+    "'flip side' or 'other side of the story' gag in a satire reel",
+    "flip between a claim and a fact-check card",
+    "playful product or tool reveal in an AI-education reel"
+   ],
+   "avoid": [
+    "no perspective or motion blur, so it reads as cheap 2000s",
+    "a long spin feels slow; keep it under a second"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "playful, cheap 2000s",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR: the closest new GPU transition is 'Flip Motion' (real 3D flip with perspective and motion blur). Not '3D Spin' or 'Spin Motion': those twirl the image in the frame plane. AE: on the incoming layer keyframe Scale X 0 to 100% with the anchor at the centre (exact match), or make it 3D and keyframe Y Rotation 90 to 0 degrees with Easy Ease and motion blur for a nicer version.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 166 s cut (165.52-166.52 s); gallery render shows B opening out from a centre strip. Centred needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/041b.png",
+    "note": "B grows from a narrow centred strip to nearly full width over still A, horizontally squeezed with no perspective.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Spin Away",
+   "match": null,
+   "category": "3D Motion",
+   "status": "obsolete",
+   "summary": "Like Spin, clip B turns into view from a thin strip in the centre on a vertical axis, but drawn with perspective: the panel is a trapezoid (one edge taller than the other) while it turns, then lands full frame over clip A.",
+   "look": [
+    "perspective turn",
+    "trapezoid panel",
+    "3D card",
+    "swing in",
+    "dated"
+   ],
+   "use_for": [
+    "satirical 'twist' beat in a political reel",
+    "turn from one leader's quote card to another's",
+    "retro comedy transition"
+   ],
+   "avoid": [
+    "looks like a 2000s wedding DVD in serious edits",
+    "perspective distortion is ugly on faces and text mid-spin"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "kitsch, dated",
+   "duration_typical": "0.6-1.0",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR: the closest new GPU transition is 'Flip Motion' (3D flip with motion blur); '3D Spin' twirls into depth instead. AE: 3D incoming layer with Y Rotation keyframed 90 to 0 degrees, anchor at centre, a camera for perspective, motion blur on.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 170 s cut (169.52-170.52 s). Gallery render: same centre-strip opening as Spin but with a perspective-skewed panel; that skew is the only visible difference.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/042b.png",
+    "note": "B opens from a centred strip as a trapezoid panel (left edge shorter than right) over A and widens toward full frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Spiral Boxes",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "A band of boxes travels round the frame edge and spirals in toward the centre, replacing clip A with clip B box by box.",
+   "look": [
+    "spiral",
+    "box grid",
+    "inward path",
+    "mechanical",
+    "retro",
+    "game-show"
+   ],
+   "use_for": [
+    "retro game-show or quiz parody in a satire reel",
+    "'closing in' reveal of a central subject",
+    "kids-style AI-education explainer beat"
+   ],
+   "avoid": [
+    "too slow and busy for news or documentary",
+    "the last boxes land on the centre, often right on a face"
+   ],
+   "confidence": "medium",
+   "family": "wipe",
+   "feel": "cheap 90s game-show, mechanical",
+   "duration_typical": "0.8-1.5",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: no single effect; Gradient Wipe with a hand-built spiral-order gradient layer (grid of grey squares stepping in value), or CC Grid Wipe for a simpler grid reveal.",
+   "scripting": "Box counts (horizontal/vertical) are Custom settings in Effect Controls, not spec props; defaults are used. Applied by name with no error, 1.0 s centred on the 174 s cut (173.52-174.52 s); gallery render shows B filling in round the edges and closing on the centre, and it reads at 1 s.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/043b.png",
+    "note": "B fills in around the frame edge (top, right, then bottom) leaving a shrinking central rectangle of A, a small strip by 0.3 s after.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Stretch",
+   "match": null,
+   "category": "Stretch",
+   "status": "obsolete",
+   "summary": "Clip B starts squeezed thin against the left edge and stretches across the frame, covering clip A, which stays put. This is the old Stretch-folder version, not the new GPU 'Stretch'.",
+   "look": [
+    "horizontal stretch",
+    "squash",
+    "elastic",
+    "edge reveal",
+    "dated"
+   ],
+   "use_for": [
+    "comic 'stretching the truth' gag in a satire reel",
+    "retro cartoon-style transition",
+    "stretch a graphic card into frame"
+   ],
+   "avoid": [
+    "distorts faces and text during the move",
+    "looks dated next to modern motion-blurred transitions"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "elastic, cheap 2000s",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR: the new GPU 'Stretch' has the same name and cannot be reached by name (see scripting); 'Stretch Wipe' is the scriptable modern alternative. AE: keyframe Scale X of the incoming layer 0 to 100% with the anchor point on its left edge, or CC Scale Wipe.",
+   "scripting": "Name clash: Premiere 2026 lists two transitions named 'Stretch' (list index 44 = this old one, index 144 = the new GPU one). getVideoTransitionByName('Stretch') returns THIS old one: the gallery renders for index 44 and 144 are the same frames (pixel diff only compression noise). So a spec asking for 'Stretch' always gets this squeeze-from-the-left look. Harvest placed it with no error, 1.0 s centred on the 178 s cut (177.52-178.52 s).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/044b.png",
+    "note": "B, squeezed thin against the left edge, stretches rightward over a static A (about half width at the cut).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Stretch In",
+   "match": null,
+   "category": "Stretch",
+   "status": "obsolete",
+   "summary": "Clip B appears over clip A stretched very wide, then un-stretches to its normal shape while fading in.",
+   "look": [
+    "wide stretch",
+    "un-squash",
+    "fade in",
+    "elastic",
+    "retro"
+   ],
+   "use_for": [
+    "'snap into focus' reveal of a quote card",
+    "comic emphasis entry in a meme reel",
+    "retro cartoon-style transition"
+   ],
+   "avoid": [
+    "stretched faces look grotesque mid-move",
+    "dated outside a deliberate retro or comic tone"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "elastic, comic, dated",
+   "duration_typical": "0.4-0.7",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR: no modern by-name match (the new GPU 'Stretch' shares its name with the old one and is unreachable by name); 'Stretch Wipe' is the nearest scriptable modern elastic transition. AE: on the incoming layer keyframe Scale X from about 300% to 100% together with Opacity 0 to 100%, Easy Ease out.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 182 s cut (181.52-182.52 s). Gallery render confirms B fading in hugely stretched sideways (streaky) and settling to normal.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/045b.png",
+    "note": "B fades in hugely stretched horizontally (smeared streaks at the cut) and is still somewhat wide 0.3 s after as it settles.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Stretch Over",
+   "match": null,
+   "category": "Stretch",
+   "status": "obsolete",
+   "summary": "Clip B appears as a thin full-width horizontal band across the middle, squashed vertically, and stretches up and down over clip A until it fills the frame.",
+   "look": [
+    "horizontal band",
+    "vertical stretch",
+    "opening from centre",
+    "squashed image",
+    "retro"
+   ],
+   "use_for": [
+    "'opening up' reveal of a big statement card",
+    "comic stretch beat in a meme or satire reel",
+    "retro TV-promo parody"
+   ],
+   "avoid": [
+    "distorts faces and text while it moves",
+    "dated in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "family": "stylized",
+   "feel": "elastic, dated",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR: no modern by-name match ('Stretch Wipe' is the nearest scriptable elastic transition). AE: on the incoming layer keyframe Scale Y 0 to 100% with the anchor point at the centre (Scale X stays 100%).",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 186 s cut (185.52-186.52 s). Gallery render shows the centre band opening vertically.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/046b.png",
+    "note": "B is a vertically squashed full-width band across the middle that grows taller (70 px, 170 px, 290 px of 360) over A.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Swap",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "summary": "Clips A and B trade places like shuffled cards: A slides out to one side and behind while B slides out the other way and comes to the front.",
+   "look": [
+    "card shuffle",
+    "swap",
+    "overlap",
+    "layered",
+    "side-to-side",
+    "cheesy"
+   ],
+   "use_for": [
+    "'this vs that' or before-and-after comparison beat",
+    "flip between two leaders' statements in a satire reel",
+    "shuffle through photos in a listicle reel"
+   ],
+   "avoid": [
+    "looks like a 2000s slideshow template if held long",
+    "needs two full clips; meaningless against black",
+    "at the midpoint the two images part by a thin gap that shows whatever is underneath (the gallery render showed a garbage-coloured strip); keep a solid or footage layer on the track below"
+   ],
+   "confidence": "medium",
+   "family": "slide/push",
+   "feel": "playful, cheap 2000s",
+   "duration_typical": "0.5-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": false,
+   "equivalent": "AE: two layers with Position keyframes moving out to opposite sides and back, swapping stacking order at the midpoint (or 3D layers with Z Position pushed back on A), motion blur on.",
+   "scripting": "Believed hidden from the Effects panel since CC 2015; applied by name with no error, 1.0 s centred on the 190 s cut (189.52-190.52 s); gallery render shows A sliding aside while B comes out from behind and takes the front. Use centred only; needs handles on both clips.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/047b.png",
+    "note": "A slides left and B slides right from behind it, side by side at the cut, then both slide back with B in front; a thin gap between them showed a teal/pink garbage strip at the cut.",
+    "rerender": false
+   }
+  }
+ ]
+}

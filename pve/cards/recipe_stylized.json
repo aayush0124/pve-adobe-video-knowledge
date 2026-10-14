@@ -1,0 +1,2236 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Pop-art poster",
+   "summary": "Flat screen-print colour bands with punchy saturation: the clip is softened first so Posterize gives large clean shapes instead of noisy speckle.",
+   "use_for": [
+    "satire or explainer title card built on a leader's portrait or freeze-frame",
+    "stylised freeze-frame on a punchline",
+    "meme / pop-culture segment in a reel",
+    "quote-card background"
+   ],
+   "avoid": [
+    "news evidence footage: the look changes what the viewer sees",
+    "noisy, compressed or low-light clips: bands crawl and flicker frame to frame",
+    "Level 2-3 on close-up skin: blotchy unless that is the joke",
+    "long moving shots: use it on freeze-frames or stills",
+    "expecting halftone dots: neither app has a Color Halftone effect installed"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 4
+     }
+    },
+    {
+     "name": "Posterize",
+     "pr_props": {
+      "Level": 4
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 150,
+      "Contrast": 30
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Smart Blur",
+     "props": {
+      "Radius": 4,
+      "Threshold": 30,
+      "Mode": 1
+     }
+    },
+    {
+     "name": "ADBE Posterize",
+     "props": {
+      "Level": 4
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 150,
+      "Contrast": 30
+     }
+    }
+   ],
+   "sfx": [
+    "hit",
+    "shutter"
+   ],
+   "keyframes_note": "Static look; works best on a freeze-frame. To snap into the poster on a hit, keyframe Posterize Level [[0, 32], [0.5, 4]] (it steps, it does not fade) with 'hit' at 0. Blur Amount 4 (Premiere Gaussian Blur, 0-100 scale) / Smart Blur Radius 4 only cleans noise; raise to 8 for bigger, simpler shapes.",
+   "built_from": [
+    "Gaussian Blur",
+    "Posterize",
+    "Lumetri Color",
+    "Smart Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/062b.png",
+    "note": "Whole frame is flattened into large clean posterized colour bands with punchy saturation (mean saturation 136 -> 195), a clear screen-print poster look.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/082b.png",
+     "note": "The frame is flattened into large clean posterized colour bands (orange, olive, maroon, black) with punchy saturation, a clear screen-print poster look; vs Premiere: matches Premiere closely, AE bands slightly crisper with a little more fine speckle.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Comic ink (cel shade)",
+   "summary": "Comic-book treatment: flat shading bands, ink outlines and boosted colour. After Effects does it natively with Cartoon; Premiere's Posterize + Find Edges version renders as washed pastel bands with thin magenta/green contour lines, a soft screen-print look rather than dark ink.",
+   "use_for": [
+    "satire reels and political cartoons in motion",
+    "comic-panel chapter openers",
+    "stylised flashback or 'imagine this' segment",
+    "youth/meme explainers"
+   ],
+   "avoid": [
+    "fast motion and handheld shots: outlines boil frame to frame",
+    "real people in serious news: reads as mockery",
+    "AE Cartoon on long 4K clips: heavy render",
+    "low-contrast footage: few outlines appear"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 5
+     }
+    },
+    {
+     "name": "Posterize",
+     "pr_props": {
+      "Level": 5
+     }
+    },
+    {
+     "name": "Find Edges",
+     "pr_props": {
+      "Invert": false,
+      "Blend With Original": 0.65
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 40,
+      "Saturation": 160,
+      "Blacks": -30
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Cartoonify",
+     "props": {
+      "Render": 3,
+      "Detail Radius": 12,
+      "Detail Threshold": 20,
+      "Shading Steps": 5,
+      "Shading Smoothness": 35,
+      "Threshold": 1.6,
+      "Width": 2.5,
+      "Opacity": 100
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 140,
+      "Contrast": 20
+     }
+    }
+   ],
+   "sfx": [
+    "swoosh_tr",
+    "hit"
+   ],
+   "keyframes_note": "Premiere: Find Edges Blend With Original is a 0..1 fraction (0.65 = 65% picture, 35% ink); the 35% white edge field washes the picture out and Find Edges draws coloured (not black) lines, so the Lumetri pass only brings saturation back to about the source level (gallery render: darkest 10% of pixels still mid red, no dark outlines). Ink-in move: Blend With Original [[0, 1], [0.6, 0.65]]. After Effects: cel-shade-in with Shading Steps [[0, 30], [0.6, 5]]; Render 3 = Fill & Edges, Render 2 = Edges only (line art).",
+   "built_from": [
+    "Gaussian Blur",
+    "Posterize",
+    "Find Edges",
+    "Lumetri Color",
+    "Cartoon"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/063b.png",
+    "note": "Flat posterized colour bands with thin magenta/green contours and no dark ink outlines, lighter overall than the reference.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the summary from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/083b.png",
+     "note": "Cartoon renders flat warm ochre and brown shading bands with dark ink outlines on every contour and boosted colour, a clear comic cel-shade; vs Premiere: AE draws true dark ink lines over deeper warm bands, while Premiere gives washed pastel bands with thin coloured contours.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Courtroom pencil sketch",
+   "summary": "Grey pencil lines on warm paper with a faint trace of the photo's shading, like a courtroom or reconstruction sketch.",
+   "use_for": [
+    "reconstructing an event that has no footage",
+    "courtroom / hearing / inquiry segments",
+    "'what witnesses describe' passages",
+    "storyboard or planning look",
+    "flashback"
+   ],
+   "avoid": [
+    "low-contrast or foggy shots: almost no edges, the frame goes blank",
+    "noisy night footage: speckle turns into scribble",
+    "presenting the sketch as real footage",
+    "busy textures (foliage, crowds): line clutter; add more blur first"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    },
+    {
+     "name": "Find Edges",
+     "pr_props": {
+      "Invert": false,
+      "Blend With Original": 0.15
+     }
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": 10,
+      "Contrast": 25
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 4,
+      "Use Color Noise": false
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#F2EDE3",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {}
+    },
+    {
+     "name": "ADBE Find Edges",
+     "props": {
+      "Invert": 0,
+      "Blend With Original": 0.15
+     }
+    },
+    {
+     "name": "ADBE Easy Levels2",
+     "props": {
+      "Input Black": 0.2,
+      "Input White": 0.92
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 3,
+      "Noise Type": 0,
+      "Clipping": 1
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#2A2A2A",
+      "Map White To": "#F2EDE3",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "transition": {
+    "name": "Cross Dissolve",
+    "dur": 0.6
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "Photo-to-sketch: keyframe Find Edges Blend With Original [[0, 1], [1.0, 0.15]] (both apps, 0..1 fraction) so the grey photo dissolves into lines. Black & White first keeps the lines neutral grey; Tint maps the white field to paper (Map Black To stays black in Premiere, set to #2A2A2A graphite in AE).",
+   "built_from": [
+    "Black & White",
+    "Find Edges",
+    "Brightness & Contrast",
+    "Noise",
+    "Tint",
+    "Levels"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/064b.png",
+    "note": "Dark grey pencil-like edge lines on a warm off-white paper field with only a faint trace of shading, a clear sketch look.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/084b.png",
+     "note": "Soft grey pencil-like edge lines on a warm off-white paper field with a faint grainy trace of the shading, a clear sketch look; vs Premiere: AE lines are softer and greyer with more shading texture than Premiere's crisper dark lines.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Duotone brand",
+   "summary": "Two-colour graphic treatment: shadows mapped to a deep brand colour and highlights to an accent colour, after a contrast push.",
+   "use_for": [
+    "section openers in party / brand colours",
+    "stock b-roll sitting under big titles",
+    "unifying mixed-source clips in a reel",
+    "chapter backgrounds in explainers"
+   ],
+   "avoid": [
+    "evidence footage",
+    "two colours of similar brightness: the picture flattens (keep the dark colour dark and the light colour light)",
+    "faces mapped to green/blue: sickly skin",
+    "already low-contrast footage without the contrast push"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Contrast": 25
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map Black To": "#14213D",
+      "Map White To": "#FF9933",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Contrast": 25
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#14213D",
+      "Map White To": "#FF9933",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "sfx": [
+    "whoosh"
+   ],
+   "keyframes_note": "Colour-to-duotone: Amount to Tint [[0, 0], [0.6, 100]]. Premiere caveat: Tint's 'Map Black To' was harvested as a broken number property; the bridge sets '#RRGGBB' through setColorValue and the recipe gallery render confirms it (shadows measured slate navy ~RGB 37,40,57, highlights orange ~201,126,57). After Effects Tint navy/cream duotone is render-verified. AE alternative: CC Toner with Tones 1 (Duotone).",
+   "built_from": [
+    "Brightness & Contrast",
+    "Tint",
+    "CC Toner"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/065b.png",
+    "note": "Two-colour image with slate-navy shadows (~RGB 37,40,57) and orange highlights (~201,126,57), a clear brand duotone.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/085b.png",
+     "note": "Two-colour image with navy-purple shadows (~RGB 55,50,57) and orange highlights (~187,119,56) after a contrast push, a clear brand duotone; vs Premiere: near-identical to Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Newsprint photo",
+   "summary": "Old newspaper reproduction: greyscale with grey-ink blacks and dull paper whites, gritty sharpening and paper grain, tinted to newsprint cream.",
+   "use_for": [
+    "archive press photos and newspaper clippings in documentaries",
+    "headline / 'what the papers said' segments",
+    "historical political coverage",
+    "quote cards built on a press photo"
+   ],
+   "avoid": [
+    "a true halftone dot screen: no halftone effect is installed in either app (use a dot overlay graphic)",
+    "modern colour evidence footage",
+    "small burned-in text: sharpening and noise make it unreadable"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    },
+    {
+     "name": "Levels",
+     "pr_props": {
+      "(RGB) Black Input Level": 30,
+      "(RGB) White Input Level": 215,
+      "(RGB) Black Output Level": 35,
+      "(RGB) White Output Level": 230
+     }
+    },
+    {
+     "name": "Sharpen",
+     "pr_props": {
+      "Sharpen Amount": 60
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 8,
+      "Use Color Noise": false
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#EAE3D2",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {}
+    },
+    {
+     "name": "ADBE Easy Levels2",
+     "props": {
+      "Input Black": 0.12,
+      "Input White": 0.85,
+      "Output Black": 0.12,
+      "Output White": 0.9
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 80,
+      "Radius": 2,
+      "Threshold": 0
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 8,
+      "Noise Type": 0,
+      "Clipping": 1
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#1E1C1A",
+      "Map White To": "#EAE3D2",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "transition": {
+    "name": "Page Turn",
+    "dur": 0.8
+   },
+   "sfx": [
+    "shutter"
+   ],
+   "keyframes_note": "Static grade; pair with a slow push-in on the still (Motion/Transform scale 100 -> 108 over the shot). Premiere Levels are 8-bit 0..255; AE Levels are 0..1. Output levels keep blacks grey-ink and whites off-white, which is what makes it read as print rather than plain B&W.",
+   "built_from": [
+    "Black & White",
+    "Levels",
+    "Sharpen",
+    "Unsharp Mask",
+    "Noise",
+    "Tint",
+    "Page Turn"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/066b.png",
+    "note": "Greyscale with lifted grey-ink blacks (~45) and dull cream-tinted whites (~183,179,167), reads as an old printed news photo.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/086b.png",
+     "note": "Greyscale with lifted grey-ink blacks (~60) and dull cream-tinted whites (~176,172,159), fine grain and gritty sharpening, reads as an old printed news photo; vs Premiere: AE blacks are a little more lifted than Premiere's, otherwise the same.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Photocopy stencil",
+   "summary": "Hard two-tone threshold like a photocopied protest poster or spray stencil: ink black on paper white with copier speckle.",
+   "use_for": [
+    "slogan and protest-poster aesthetics",
+    "stencil portraits for satire",
+    "street-art style section titles",
+    "background plate behind large text"
+   ],
+   "avoid": [
+    "dark or low-contrast footage: everything goes black",
+    "flatly lit faces: features vanish",
+    "long clips with moving light: the threshold boils",
+    "evidence footage"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Extract",
+     "pr_props": {
+      "Black Input Level": 110,
+      "White Input Level": 255,
+      "Softness": 10,
+      "Invert": false
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 12,
+      "Use Color Noise": false
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#F2EFE6",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {}
+    },
+    {
+     "name": "ADBE Easy Levels2",
+     "props": {
+      "Input Black": 0.42,
+      "Input White": 0.5
+     }
+    },
+    {
+     "name": "ADBE PS Median",
+     "props": {
+      "Radius": 2
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 10,
+      "Noise Type": 0,
+      "Clipping": 1
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#151515",
+      "Map White To": "#F2EFE6",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "sfx": [
+    "shutter",
+    "hit"
+   ],
+   "keyframes_note": "Static; cut to it on a beat. Premiere Extract makes pixels between Black and White Input Level white, so White Input Level 255 turns it into a plain threshold at Black Input Level (raise it toward 140 for more black, lower toward 80 for more paper). After Effects has no Threshold in the verified set, so Levels with Input Black/White 0.42/0.5 does the same; Median Radius 2 cleans single-pixel speckle. For a party-colour stencil change Map White To (and in AE Map Black To) to the brand colours.",
+   "built_from": [
+    "Extract",
+    "Noise",
+    "Tint",
+    "Black & White",
+    "Levels",
+    "Median"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/067b.png",
+    "note": "Hard two-tone threshold of pure black ink on off-white paper with copier speckle, a clear stencil/photocopy poster.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/087b.png",
+     "note": "Hard two-tone threshold of near-black ink on off-white paper with a few grey ramps in smooth areas, a clear stencil/photocopy poster; vs Premiere: matches Premiere closely.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Paper cut-out collage",
+   "summary": "Cut-out paper look for a subject with transparency: posterized flat colour, a ragged white paper rim, a soft drop shadow and stop-motion frame rate.",
+   "use_for": [
+    "collage explainers (leaders, objects, maps cut out over a paper background)",
+    "stop-motion style reel graphics",
+    "scrapbook timelines",
+    "children's / education explainers"
+   ],
+   "avoid": [
+    "full-frame opaque clips: Roughen Edges and Drop Shadow only act on alpha edges (only the frame border changes)",
+    "small cut-outs with a large Border: the rim eats the detail",
+    "stepped motion done with Motion keyframes on the same clip in Premiere: Motion renders after effects and stays smooth"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Posterize",
+     "pr_props": {
+      "Level": 6
+     }
+    },
+    {
+     "name": "Roughen Edges",
+     "pr_props": {
+      "Edge Type": 1,
+      "Edge Color": "#FFFFFF",
+      "Border": 40,
+      "Edge Sharpness": 2,
+      "Scale": 80,
+      "Complexity": 3
+     }
+    },
+    {
+     "name": "Drop Shadow",
+     "pr_props": {
+      "Shadow Color": "#000000",
+      "Opacity": 150,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 18,
+      "Shadow Only": false
+     }
+    },
+    {
+     "name": "Posterize Time",
+     "pr_props": {
+      "Frame Rate": 8
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Posterize",
+     "props": {
+      "Level": 6
+     }
+    },
+    {
+     "name": "ADBE Roughen Edges",
+     "props": {
+      "Edge Type": 2,
+      "Edge Color": "#F2E8D5",
+      "Border": 40,
+      "Edge Sharpness": 2,
+      "Scale": 80,
+      "Complexity": 3
+     }
+    },
+    {
+     "name": "ADBE Drop Shadow",
+     "props": {
+      "Shadow Color": "#000000",
+      "Opacity": 150,
+      "Direction": 135,
+      "Distance": 14,
+      "Softness": 18,
+      "Shadow Only": 0
+     }
+    },
+    {
+     "name": "ADBE Posterize Time",
+     "props": {
+      "Frame Rate": 8
+     }
+    }
+   ],
+   "sfx": [
+    "swoosh_tr",
+    "tick"
+   ],
+   "keyframes_note": "Input must have alpha (PNG cut-out, keyed or rotoscoped subject, graphic) on an upper track over a paper-texture plate. Edge Type 1 in Premiere (0-based) and 2 in AE (1-based) are both 'Roughen Color', which paints the rim in Edge Color. Border 14 drew only a 1-2 px white rim at 1920x1080 (gallery render), so Border is 40 for a rim that reads. Drop Shadow Opacity is raw 0..255 (150 = 59%). Stop-motion move: Premiere, nest the cut-out and put Posterize Time on the nest; After Effects, step the layer transform with the vfx layer expr {\"position\": \"posterizeTime(8); value\"}. A 'boiling' paper edge: Evolution [[0, 0], [4, 720]].",
+   "built_from": [
+    "Posterize",
+    "Roughen Edges",
+    "Drop Shadow",
+    "Posterize Time"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/068b.png",
+    "note": "Border 40 now draws a clearly visible ragged white paper rim (about 5-8 px at 1080p, v1 was a 1-2 px hairline) on the torn frame edge, over flat posterized colour, and motion steps every 3rd frame (8 fps); the drop shadow cannot show on this alpha-less full-frame clip.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: Premiere Border 40 agreed; AE Roughen Edges Border 14 -> 40 too (same plugin, the note says 14 draws only a hairline rim)",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/088b.png",
+     "note": "Flat posterized colour with a ragged white paper rim torn along the frame edge over a black surround; the drop shadow cannot show on this alpha-less full-frame clip and 8 fps steps are not visible in two stills; vs Premiere: same look as Premiere, AE rim slightly thinner.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Blueprint",
+   "summary": "Technical-drawing look: the image becomes pale edge lines on blueprint navy, with a measuring grid in After Effects.",
+   "use_for": [
+    "infrastructure and project explainers (bridges, metro, dams, buildings)",
+    "'how it works' segments for vehicles, weapons systems, machines",
+    "plan-versus-reality comparisons",
+    "product teardown or engineering reels"
+   ],
+   "avoid": [
+    "busy textured footage (foliage, crowds): edge noise everywhere; add Gaussian Blur Amount 3-5 first",
+    "faces and emotional moments",
+    "low-contrast footage: too few lines"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    },
+    {
+     "name": "Find Edges",
+     "pr_props": {
+      "Invert": true,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map Black To": "#0B2A5B",
+      "Map White To": "#DCEBFF",
+      "Amount to Tint": 100
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 3,
+      "Use Color Noise": false
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {}
+    },
+    {
+     "name": "ADBE Find Edges",
+     "props": {
+      "Invert": 1,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#0B2A5B",
+      "Map White To": "#DCEBFF",
+      "Amount to Tint": 100
+     }
+    },
+    {
+     "name": "ADBE Grid",
+     "props": {
+      "Size From": 3,
+      "Width": 120,
+      "Height": 120,
+      "Border": 2,
+      "Color": "#9CC3FF",
+      "Opacity": 30,
+      "Blending Mode": 2
+     }
+    }
+   ],
+   "transition": {
+    "name": "Wipe",
+    "dur": 0.5
+   },
+   "sfx": [
+    "blip",
+    "tick"
+   ],
+   "keyframes_note": "Find Edges Invert true gives bright lines on black, which Tint maps to light-blue-on-navy. Build-on: Find Edges Blend With Original [[0, 1], [0.8, 0]] (photo dissolves into lines), AE Grid Opacity [[0, 0], [0.5, 30]]. Premiere has no Grid effect: put a grid graphic on the track above, or use the AE version. Premiere's Map Black To is set as '#RRGGBB' through the bridge and renders (gallery: background navy ~RGB 13,41,87).",
+   "built_from": [
+    "Black & White",
+    "Find Edges",
+    "Tint",
+    "Noise",
+    "Grid",
+    "Wipe"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/069b.png",
+    "note": "Pale blue-white edge lines on a solid blueprint-navy field, a clear technical-drawing look.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/089b.png",
+     "note": "Pale blue-white edge lines on a solid blueprint-navy field with a faint light-blue measuring grid over it, a clear technical-drawing look; vs Premiere: same lines as Premiere, AE adds the faint grid Premiere has no effect for.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Thermal false colour",
+   "summary": "Fake thermal-camera look: brightness mapped from deep purple shadows to hot mustard-yellow highlights, soft and slightly grainy like a low-resolution sensor; After Effects' Tritone adds a red-orange middle stop that Premiere's two-colour Tint cannot.",
+   "use_for": [
+    "stylised surveillance, search-and-rescue or military explainer b-roll",
+    "'seen from a drone at night' sections",
+    "tension beats in trailers"
+   ],
+   "avoid": [
+    "implying real heat data: it maps brightness, not temperature (bright sky and white walls glow 'hot', dark clothes look 'cold'); label it representational in news",
+    "real thermal footage",
+    "Premiere expecting a 3-colour ramp: Tint only gives two colours"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map Black To": "#1C0047",
+      "Map White To": "#FFD23A",
+      "Amount to Tint": 100
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 200,
+      "Contrast": 30
+     }
+    },
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 6
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 4,
+      "Use Color Noise": false
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Tritone",
+     "props": {
+      "Highlights": "#FFF4B0",
+      "Midtones": "#E23D1E",
+      "Shadows": "#1C0047",
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 150,
+      "Contrast": 25
+     }
+    },
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 4,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 4,
+      "Noise Type": 0,
+      "Clipping": 1
+     }
+    }
+   ],
+   "transition": {
+    "name": "Solarize",
+    "dur": 0.6
+   },
+   "sfx": [
+    "amb_drone",
+    "blip"
+   ],
+   "keyframes_note": "Static look. After Effects (Tritone, render-verified) gives the 3-stop ironbow-style ramp; this is the version to prefer. Premiere is a two-colour approximation and uses Tint's Map Black To, which renders (gallery: shadows ~RGB 70,11,68 purple, highlights ~188,153,30 mustard, no red-orange in between). Optional sensor banding: add Posterize Level 12 after the colour step. Alternative AE preset: 'Colorize - infrared' (red Exclusion false colour).",
+   "built_from": [
+    "Tint",
+    "Tritone",
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Noise",
+    "Solarize"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/070b.png",
+    "note": "Soft two-colour map from deep purple shadows to mustard-yellow highlights; no red-orange middle band.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the summary from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/090b.png",
+     "note": "Soft false-colour map from deep purple-black shadows through a dominant red-orange middle to pale yellow on the brightest highlights, a hot ironbow-style thermal look; vs Premiere: AE shows the red-orange middle band Premiere lacks and reads redder overall, Premiere is purple-to-mustard.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Night vision",
+   "summary": "Green image-intensifier look: green-tinted luminance, lifted blooming highlights, heavy grain, slight softness and a dark goggle vignette.",
+   "use_for": [
+    "night raids, border patrol and covert-operation reconstructions",
+    "'what the soldier saw' POV",
+    "thriller / tension beats in trailers",
+    "haunted or mystery reels"
+   ],
+   "avoid": [
+    "underexposed footage: grain turns to mush, lift exposure first",
+    "real night-vision footage (already green: do not double it)",
+    "daytime scenes with sky in frame"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 4
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 30,
+      "Use Color Noise": false
+     }
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": 20,
+      "Contrast": 30
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#8CFF6A",
+      "Amount to Tint": 100
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 100,
+      "Scale": 75,
+      "Feather": 40,
+      "Color": "#000000",
+      "Roundness": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 2,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 30,
+      "Noise Type": 0,
+      "Clipping": 1
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Brightness": 20,
+      "Contrast": 30
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#000800",
+      "Map White To": "#8CFF6A",
+      "Amount to Tint": 100
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 150,
+      "Angle of View": 60
+     }
+    }
+   ],
+   "transition": {
+    "name": "Flicker",
+    "dur": 0.4
+   },
+   "sfx": [
+    "blip",
+    "heartbeat"
+   ],
+   "keyframes_note": "Noise goes before Tint so the grain is green, not grey, and after Gaussian Blur so the blur does not wipe the grain out (it did in the first gallery render). Vignette Scale 75 / Feather 40 is the strength that reads as a goggle edge; Scale 90 / Feather 60 barely darkened the corners. Power-on at the clip start: Brightness [[0, 100], [0.15, 20]] with 'blip' at 0, or come in through the Flicker transition. Premiere leaves Map Black To at black (only the verified Map White To is set). AE alternative: the 'Night Vision' preset (Solid Composite luminosity green). After Effects: CC Vignette Amount 150 / Angle of View 60 renders only a soft corner falloff, not the hard round goggle edge of Premiere's Vignette 75/40; push Amount toward 200 and above (where it crushes the edges to black) for a goggle look.",
+   "built_from": [
+    "Noise",
+    "Brightness & Contrast",
+    "Tint",
+    "Gaussian Blur",
+    "Vignette",
+    "CC Vignette",
+    "Flicker",
+    "Night Vision"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/071b.png",
+    "note": "Grain now survives (blur moved before Noise, visible green speckle at full res) and Vignette 75/40 gives a hard black round goggle edge instead of barely darkened corners, over the green-tinted, lifted, slightly soft image.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: Premiere fix agreed (Vignette 75/40 is the Vignette card verified look); AE stack had Gaussian Blur 2 after Noise, moved it first so the note's blur-before-grain rule holds in AE too",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/091b.png",
+     "note": "Green-tinted, slightly soft picture with visible green grain and lifted mids, with only a soft corner falloff (corners at about 40% of top-centre brightness) rather than a hard goggle edge; vs Premiere: Premiere shows a hard black round goggle mask, AE only darkens the corners softly.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "CCTV security camera",
+   "summary": "Surveillance-camera look: washed, nearly colourless, contrasty picture at a choppy 12 fps, soft with video noise, slight barrel lens and a corner timecode with no box.",
+   "use_for": [
+    "crime or incident reconstructions",
+    "'caught on camera' segments",
+    "surveillance-state explainers",
+    "satire of a politician 'being watched'",
+    "thriller trailers"
+   ],
+   "avoid": [
+    "real CCTV evidence (never restyle authentic footage)",
+    "reconstructions without a 'RECONSTRUCTION' label: the look reads as genuine",
+    "a timecode that implies a real date/time: keep it a running counter",
+    "fast action: 12 fps judder hides what happens"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 30,
+      "Contrast": 25,
+      "Temperature": -10,
+      "Highlights": -20
+     }
+    },
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 4
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 15,
+      "Use Color Noise": false
+     }
+    },
+    {
+     "name": "Posterize Time",
+     "pr_props": {
+      "Frame Rate": 12
+     }
+    },
+    {
+     "name": "Lens Distortion",
+     "pr_props": {
+      "Curvature": 12,
+      "Fill Color": "#000000"
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 50,
+      "Feather": 60,
+      "Color": "#000000"
+     }
+    },
+    {
+     "name": "Timecode",
+     "pr_props": {
+      "Position": [
+       0.83,
+       0.07
+      ],
+      "Size": 40,
+      "Opacity": 0,
+      "Format": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE HUE SATURATION",
+     "props": {
+      "Master Saturation": -70
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Contrast": 25
+     }
+    },
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 2,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 20,
+      "Noise Type": 0,
+      "Clipping": 1
+     }
+    },
+    {
+     "name": "ADBE Posterize Time",
+     "props": {
+      "Frame Rate": 12
+     }
+    },
+    {
+     "name": "ADBE Optics Compensation",
+     "props": {
+      "Field Of View (FOV)": 30
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 60,
+      "Angle of View": 50
+     }
+    },
+    {
+     "name": "ADBE Timecode",
+     "props": {
+      "Display Format": 1,
+      "Time Source": 2,
+      "Text Position": [
+       1600,
+       80
+      ],
+      "Text Size": 40,
+      "Text Color": "#FFFFFF",
+      "Show Box": 0,
+      "Composite On Original": 1
+     }
+    }
+   ],
+   "transition": {
+    "name": "Glitch",
+    "dur": 0.3
+   },
+   "sfx": [
+    "tick",
+    "glitch"
+   ],
+   "keyframes_note": "Static look; Timecode last so it is not blurred or bent. Premiere Timecode Opacity is the background box (0 = bare digits); Position is a frame fraction; Lens Distortion's Fill Color must be set or the uncovered corners render white. Posterize Time only works on the clip itself (not an adjustment layer) in Premiere. Signal dropout on a beat: Noise Amount [[t, 10], [t+0.04, 60], [t+0.12, 10]] with 'glitch'. Add a 'CAM 04  REC' text graphic top-left (Timecode Label Text indices are unverified).",
+   "built_from": [
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Noise",
+    "Posterize Time",
+    "Lens Distortion",
+    "Vignette",
+    "Timecode",
+    "Hue/Saturation",
+    "Brightness & Contrast",
+    "Optics Compensation",
+    "CC Vignette",
+    "Glitch"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/072b.png",
+    "note": "Desaturated soft picture with barrel distortion, black corners and bare timecode digits top right, a clear CCTV look (colour lands near-neutral, not cool, so 'cool' was dropped from the summary).",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/092b.png",
+     "note": "Nearly colourless contrasty picture, slightly soft with noise, mild barrel bend with thin black corners and bare white timecode digits top right, a clear CCTV look; vs Premiere: AE barrel is milder than Premiere's, otherwise the same look.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Bodycam / dashcam POV",
+   "summary": "Chest-camera look: strong fisheye barrel with black corners, walking shake, hard contrast with clipped highlights, sensor noise and a corner timecode.",
+   "use_for": [
+    "police / army action reconstructions",
+    "first-person POV moments in reels",
+    "protest or chase POV",
+    "trailer action beats"
+   ],
+   "avoid": [
+    "presenting a reconstruction as genuine bodycam evidence (label it)",
+    "shots longer than ~6 s: shake fatigues viewers",
+    "locked-off tripod shots: the stabilised base motion looks fake even with shake"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Camera Shake",
+     "pr_props": {
+      "Camera Mode": 2,
+      "Master": 50,
+      "Speed": 110,
+      "Variation": 30,
+      "Motion Blur": 30
+     }
+    },
+    {
+     "name": "Lens Distortion",
+     "pr_props": {
+      "Curvature": 40,
+      "Fill Color": "#000000"
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 30,
+      "Saturation": 80,
+      "Highlights": -25,
+      "Sharpen": 20
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 5,
+      "Use Color Noise": true
+     }
+    },
+    {
+     "name": "Timecode",
+     "pr_props": {
+      "Position": [
+       0.8,
+       0.06
+      ],
+      "Size": 34,
+      "Opacity": 0,
+      "Format": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Optics Compensation",
+     "props": {
+      "Field Of View (FOV)": 70
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 30,
+      "Saturation": 80,
+      "Highlights": -25,
+      "Sharpen": 20
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 5,
+      "Noise Type": 1,
+      "Clipping": 1
+     }
+    },
+    {
+     "name": "ADBE Timecode",
+     "props": {
+      "Display Format": 1,
+      "Time Source": 2,
+      "Text Position": [
+       1500,
+       70
+      ],
+      "Text Size": 34,
+      "Text Color": "#FFFFFF",
+      "Show Box": 0,
+      "Composite On Original": 1
+     }
+    }
+   ],
+   "sfx": [
+    "heartbeat",
+    "amb_sirens"
+   ],
+   "keyframes_note": "Shake goes BEFORE the lens so the fisheye border stays fixed while the picture moves inside it. Camera Mode labels are unknown (1 = subtle handheld default, 2-4 stronger); give each clip a different Seed. After Effects: no shake effect in the list, so shake the layer with the vfx layer expr {\"position\": \"wiggle(4, 12)\"} and keep Optics Compensation on the layer (transparent corners show the comp's black background).",
+   "built_from": [
+    "Camera Shake",
+    "Lens Distortion",
+    "Lumetri Color",
+    "Noise",
+    "Timecode",
+    "Optics Compensation"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/073b.png",
+    "note": "Strong fisheye barrel with black corners, hard contrast and a corner timecode, and the picture moves between the 0.2 s and 1.0 s frames (shake).",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/093b.png",
+     "note": "Strong fisheye barrel with wide black corners, firm contrast with fine sensor noise and small bare timecode digits top right; the picture does not move between frames because the shake is a layer expression outside the stack; vs Premiere: Premiere also shakes and has larger timecode digits; AE border and picture stay fixed here.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Drone camera HUD",
+   "summary": "Aerial-camera viewfinder: a slightly muted, controlled grade with a running corner timecode; After Effects adds the thin 6x6 telemetry grid and centre reticle ring, which Premiere has no effect for (add a frame/bracket MOGRT on the track above).",
+   "use_for": [
+    "aerial establishing shots in explainers",
+    "'surveillance from above' sections",
+    "infrastructure / real-estate flyovers",
+    "map-to-ground transitions"
+   ],
+   "avoid": [
+    "fake telemetry numbers that could be read as real data",
+    "HUD lines over faces",
+    "white HUD over bright sky: switch Color to #00E5FF",
+    "drone-strike footage of real casualties"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 15,
+      "Saturation": 85,
+      "Highlights": -15
+     }
+    },
+    {
+     "name": "Timecode",
+     "pr_props": {
+      "Position": [
+       0.12,
+       0.06
+      ],
+      "Size": 36,
+      "Opacity": 0,
+      "Format": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": 15,
+      "Saturation": 85,
+      "Highlights": -15
+     }
+    },
+    {
+     "name": "ADBE Grid",
+     "props": {
+      "Size From": 3,
+      "Width": 320,
+      "Height": 180,
+      "Border": 2,
+      "Color": "#FFFFFF",
+      "Opacity": 20,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Radius": 70,
+      "Edge": 3,
+      "Contextual Slider": 3,
+      "Color": "#FFFFFF",
+      "Opacity": 85,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "ADBE Timecode",
+     "props": {
+      "Display Format": 1,
+      "Time Source": 2,
+      "Text Position": [
+       240,
+       80
+      ],
+      "Text Size": 36,
+      "Text Color": "#FFFFFF",
+      "Show Box": 0,
+      "Composite On Original": 1
+     }
+    }
+   ],
+   "sfx": [
+    "amb_drone",
+    "blip"
+   ],
+   "keyframes_note": "After Effects is the complete version: Grid Size From 3 with 320x180 cells = a 6x6 grid (Width/Height top out at 400, so the Grid card's 640x360 'rule of thirds' tip is out of range; for true thirds use Size From 1 with Anchor [0, 0] and Corner [640, 360], unverified); Circle Edge 3 draws a ring whose thickness is Contextual Slider; Blending Mode 2 (Normal) keeps the footage. Lock-on move: Circle Radius [[0, 160], [0.3, 70]] with 'blip'. Extra AE reticles: presets 'Crosshair - brackets' / 'Crosshair - round'. Premiere has no grid or reticle effect: add the 'Rectangle Frame' MOGRT (corner brackets, e.g. {\"Color\": \"#FFFFFF\", \"Stroke Width\": 4}) on the track above as an mgt; Premiere half is partial.",
+   "built_from": [
+    "Lumetri Color",
+    "Timecode",
+    "Grid",
+    "Circle",
+    "Rectangle Frame",
+    "Crosshair - brackets"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/074b.png",
+    "note": "Slightly muted picture (mean HSV saturation 136 -> 109-114) with a running top-left timecode; no grid, reticle or vignette.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the summary from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: summary rewrite agreed; dropped the Premiere Vignette (35, default Scale) as a no-op: 074b corners measure 118 vs 120 in ref, and AE has no vignette"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/094b.png",
+     "note": "Slightly muted grade with a faint thin 6x6 white grid, a white reticle ring at frame centre and a running timecode top left, a clear drone viewfinder; vs Premiere: Premiere has only the grade and a larger timecode, AE adds the grid and reticle.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Face pixelation (anonymise)",
+   "summary": "Coarse square pixelation confined to a tracked box (face, number plate, document) on a duplicate of the clip, the rest of the frame untouched.",
+   "use_for": [
+    "minors, victims, witnesses and bystanders in protest or crime footage",
+    "number plates, addresses, phone numbers, ID cards and documents",
+    "people who did not consent to appear",
+    "pixelate / censor / redact a face, plate or document to anonymise it"
+   ],
+   "avoid": [
+    "fine mosaic (more than ~80 horizontal blocks on 1080p) on a close face: can stay recognisable",
+    "Premiere's new 'Mosaic' (Film Impact tile look): use 'Mosaic (Legacy)' for redaction",
+    "forgetting the voice, reflections, tattoos and name tags",
+    "any frame where the face leaves the box: one frame exposes the identity"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Mosaic (Legacy)",
+     "pr_props": {
+      "Horizontal Blocks": 48,
+      "Vertical Blocks": 27,
+      "Sharp Colors": false
+     }
+    },
+    {
+     "name": "Crop",
+     "pr_props": {
+      "Left": 38,
+      "Top": 15,
+      "Right": 42,
+      "Bottom": 50,
+      "Edge Feather": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Mosaic",
+     "props": {
+      "Horizontal Blocks": 48,
+      "Vertical Blocks": 27,
+      "Sharp Colors": 1
+     }
+    }
+   ],
+   "keyframes_note": "Premiere: put a duplicate of the clip on the track above (same start/in) and give ONLY the duplicate these effects; Mosaic first, then Crop, whose cropped area is transparent so the clean clip shows around the box. Crop values are percent from each edge; pad 10% beyond the face and keyframe all four every 0.2-0.5 s to follow it, e.g. \"Left\": [[0, 38], [1.0, 45]]. 48x27 blocks = 40 px squares on 1920x1080; on close-ups use 24x14. After Effects (vfx scene): clean footage layer, duplicate footage layer with Mosaic and \"matte\": {\"layer\": \"FACE\", \"type\": \"alpha\"}, and a filled ellipse shape layer named FACE whose position segs follow the face. Check every frame before export.",
+   "built_from": [
+    "Mosaic (Legacy)",
+    "Crop",
+    "Mosaic",
+    "Track mattes (any layer, 23.0+)"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/075b.png",
+    "note": "Coarse square blocks fill exactly the Left 38 / Top 15 / Right 42 / Bottom 50 box; outside it is transparent (black here, the clean clip below was not in the gallery render).",
+    "rerender": false,
+    "ae": {
+     "verdict": "untested:needs_second_layer",
+     "frame": "pve/gallery/recipes_ae/095b.png",
+     "note": "Mosaic renders correctly as coarse ~40 px square blocks, but over the whole frame, because confining it to a tracked box needs the clean layer plus a FACE matte layer the single-layer harness does not build; vs Premiere: Premiere confines the blocks to its Crop box, AE pixelates the full frame.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Soft face blur (oval)",
+   "summary": "Heavy blur inside a soft-edged patch on a duplicate of the clip: a gentler anonymising look than pixelation (a feathered box in Premiere, a soft oval in After Effects).",
+   "use_for": [
+    "passers-by in feature and documentary pieces",
+    "logos, brand marks and screens in b-roll",
+    "background faces where pixel blocks would distract",
+    "blur a face or logo to anonymise or censor it softly"
+   ],
+   "avoid": [
+    "legal anonymisation of victims, minors or witnesses: use pixelation",
+    "text redaction: blurred text can stay readable",
+    "blur Amount below 50: features remain recognisable"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 70
+     }
+    },
+    {
+     "name": "Crop",
+     "pr_props": {
+      "Left": 31,
+      "Top": 4,
+      "Right": 54,
+      "Bottom": 65,
+      "Edge Feather": 30
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 60,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": 1
+     }
+    }
+   ],
+   "keyframes_note": "Premiere: effects go on a duplicate of the clip on the track above; Crop (percent from each edge, outside transparent, render-verified in place by the pixelation recipe) with Edge Feather 30 px, keyframed to follow the subject. Do not use Rounded Crop for this: in the gallery render it kept the outside transparent but re-centred the cropped patch at frame centre (a circle at 38/38/28/29% from the edges), so it does not stay on the face. After Effects: duplicate layer with Gaussian Blur and an alpha matte from a filled ellipse shape layer that itself carries Gaussian Blur 2 Blurriness 15 to feather the oval edge.",
+   "built_from": [
+    "Gaussian Blur",
+    "Rounded Crop",
+    "Crop",
+    "Track mattes (any layer, 23.0+)"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/076b.png",
+    "note": "The Crop + Edge Feather patch (heavy blur, soft box edge) now sits over the upper-left figure at 31/4/54/65% instead of Rounded Crop's frame-centre circle, so it covers the face; the clip carries the stack alone, so outside the patch is transparent/black as intended for a duplicate on the track above.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: Crop swap agreed, but the 38/15/42/50 box covered only half the face plus the area below it on the gallery clip; box moved to Left 31 Top 4 Right 54 Bottom 65, which frames the upper-left face",
+    "ae": {
+     "verdict": "untested:needs_second_layer",
+     "frame": "pve/gallery/recipes_ae/096b.png",
+     "note": "Gaussian Blur 60 renders a heavy even blur, but over the whole frame, because the soft oval patch needs a duplicate layer with a blurred ellipse matte the single-layer harness does not build; vs Premiere: Premiere confines the blur to its feathered Crop box, AE blurs the full frame.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Blur-to-reveal",
+   "summary": "Shot opens defocused and desaturated, then pulls into focus and full colour on the key word.",
+   "use_for": [
+    "revealing the subject after a question in the VO",
+    "opening a documentary scene",
+    "title over a blurred plate, then reveal",
+    "'who is this?' teasers"
+   ],
+   "avoid": [
+    "resolves longer than ~1.5 s in reels: feels slow",
+    "using it on every shot: the device wears out"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": [
+       [
+        0,
+        70
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": [
+       [
+        0,
+        40
+       ],
+       [
+        0.8,
+        100
+       ]
+      ],
+      "Exposure": [
+       [
+        0,
+        -0.4
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Camera Lens Blur",
+     "props": {
+      "Blur Radius": [
+       [
+        0,
+        40
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": [
+       [
+        0,
+        40
+       ],
+       [
+        0.8,
+        100
+       ]
+      ],
+      "Exposure": [
+       [
+        0,
+        -0.4
+       ],
+       [
+        0.8,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Blur Dissolve",
+    "dur": 0.6
+   },
+   "sfx": [
+    "riser",
+    "whoosh"
+   ],
+   "keyframes_note": "Times are from the clip start; shift so the 0.8 s key lands on the reveal word (hold blurred under the question). Riser under the blurred part, whoosh/air on the resolve. Reverse the keys at the clip end for a blur-out exit to a title. AE Camera Lens Blur gives a lens-like defocus but renders slowly; Gaussian Blur 2 Blurriness 60 -> 0 is the fast alternative. Use the Blur Dissolve transition when the reveal is also a cut.",
+   "built_from": [
+    "Gaussian Blur",
+    "Lumetri Color",
+    "Camera Lens Blur",
+    "Blur Dissolve"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/077a.png",
+    "note": "At 0.2 s the frame is heavily defocused and desaturated (saturation 62 vs 136); at 1.0 s (077b) it is sharp and full colour, identical to the reference.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/097a.png",
+     "note": "At 0.2 s the frame is clearly defocused, greyish and slightly dark; at 1.0 s it is sharp and full colour, identical to the reference; vs Premiere: AE's 0.2 s defocus is lighter than Premiere's near-total blur, same resolve by 1.0 s.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Pixel-resolve reveal",
+   "summary": "Shot starts as a few giant colour blocks and resolves in doubling steps to full resolution, like an image loading.",
+   "use_for": [
+    "tech / AI / data reveals",
+    "revealing a person, logo or object",
+    "gaming or 'loading' reels",
+    "transition out of a pixelated thumbnail"
+   ],
+   "avoid": [
+    "revealing someone who must stay anonymous",
+    "holding the coarse stage long (eye strain)",
+    "4K sources with the 1920/1080 end values: use 3840/2160 so the last stage is truly 1 px"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Mosaic (Legacy)",
+     "pr_props": {
+      "Horizontal Blocks": [
+       [
+        0,
+        8
+       ],
+       [
+        0.15,
+        16
+       ],
+       [
+        0.3,
+        32
+       ],
+       [
+        0.45,
+        64
+       ],
+       [
+        0.6,
+        1920
+       ]
+      ],
+      "Vertical Blocks": [
+       [
+        0,
+        5
+       ],
+       [
+        0.15,
+        9
+       ],
+       [
+        0.3,
+        18
+       ],
+       [
+        0.45,
+        36
+       ],
+       [
+        0.6,
+        1080
+       ]
+      ],
+      "Sharp Colors": false
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Mosaic",
+     "props": {
+      "Horizontal Blocks": [
+       [
+        0,
+        8
+       ],
+       [
+        0.15,
+        16
+       ],
+       [
+        0.3,
+        32
+       ],
+       [
+        0.45,
+        64
+       ],
+       [
+        0.6,
+        1920
+       ]
+      ],
+      "Vertical Blocks": [
+       [
+        0,
+        5
+       ],
+       [
+        0.15,
+        9
+       ],
+       [
+        0.3,
+        18
+       ],
+       [
+        0.45,
+        36
+       ],
+       [
+        0.6,
+        1080
+       ]
+      ],
+      "Sharp Colors": 1
+     }
+    }
+   ],
+   "sfx": [
+    "blip",
+    "glitch"
+   ],
+   "keyframes_note": "Times from the clip start; put a 'blip' on each step (0, 0.15, 0.3, 0.45) and land the last key on the beat. Ending at 1920x1080 blocks (1 px each on a 1080p frame) leaves the picture clean, so the effect can stay on; reverse the keys for a pixelate-out exit. Keep Vertical = round(Horizontal x 9/16) for square blocks.",
+   "built_from": [
+    "Mosaic (Legacy)",
+    "Mosaic"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/078a.png",
+    "note": "At 0.2 s the frame is 16x9 giant colour blocks; at 1.0 s (078b) it is fully resolved and identical to the reference.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/098a.png",
+     "note": "At 0.2 s the frame is about 21x12 giant colour blocks (between the 16 and 32 keys); at 1.0 s it is fully resolved and identical to the reference; vs Premiere: identical block size and resolve to Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Colour splash",
+   "summary": "Everything goes grey except one chosen colour (a flag, a party colour, a red file), with a small contrast push.",
+   "use_for": [
+    "party-colour or flag emphasis in political explainers",
+    "isolating one object in a busy frame",
+    "Sin City style trailer moment",
+    "brand-colour beat"
+   ],
+   "avoid": [
+    "colours close to skin (red/orange): faces stay patchily coloured",
+    "heavily compressed footage: colour edges crawl",
+    "frames where the chosen colour also fills the background"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Color Pass",
+     "pr_props": {
+      "Color": "#903C1A",
+      "Similarity": 15,
+      "Reverse": false
+     }
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Contrast": 20
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Leave Color",
+     "props": {
+      "Amount to Decolor": 100,
+      "Color To Leave": "#C8102E",
+      "Tolerance": 30,
+      "Edge Softness": 15,
+      "Match colors": 2
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Contrast": 20
+     }
+    }
+   ],
+   "sfx": [
+    "hit"
+   ],
+   "keyframes_note": "Sample the real colour from a frame of the clip and replace #903C1A (the gallery clip's stripe red): both effects are very sensitive to the exact hue, and the generic flag red #C8102E kept nothing, the whole frame went grey. Colour drains away on a hit: Premiere Similarity [[0, 120], [1.0, 15]] (harvested units 0..127); AE Amount to Decolor [[0, 0], [0.5, 100]]. Match colors 2 = Using Hue copes better with changing light. After Effects: Leave Color matches by its own hue window, so the Premiere-sampled #903C1A keeps every warm hue in the frame (nothing goes grey) while the generic #C8102E is the AE-verified value on this clip.",
+   "built_from": [
+    "Color Pass",
+    "Leave Color",
+    "Brightness & Contrast"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/079b.png",
+    "note": "With #903C1A the red stripes keep their colour (saturation 119 vs 162 in the ref) while walls and dark clothing go fully grey, instead of v1's all-grey frame; faces, skin and flowers keep patchy partial orange (saturation 31-72), the skin spill the avoid list warns about for red/orange keys.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: #903C1A agreed (pr/005 shows it keeps the red stripes; ref stripe median RGB 138,53,31); AE Leave Color still had the generic #C8102E the note says keeps nothing, set to #903C1A too",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/099b.png",
+     "note": "Nothing goes grey: walls, plants, stripes and flowers all keep full colour (mean saturation 144 vs 136 in the reference) and only the small contrast push shows; vs Premiere: Premiere greys everything but the red stripes, AE keeps every colour.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: With Using Hue at Tolerance 30 the brownish #903C1A spans every warm hue of this clip, while the Leave Color card's AE-verified #C8102E greys the walls and plants and keeps the red stripes, foreground blocks and flowers.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/099b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Painted brush strokes",
+   "summary": "Painterly repaint of the frame with visible diagonal daubs and slightly richer colour.",
+   "use_for": [
+    "historical figures and freedom-struggle segments",
+    "dream, memory or flashback passages",
+    "artistic chapter openers",
+    "poetry / shayari reels"
+   ],
+   "avoid": [
+    "fast motion: strokes re-randomise every frame and flicker",
+    "small faces: eyes and mouths dissolve",
+    "frames carrying text"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Brush Strokes",
+     "pr_props": {
+      "Stroke Angle": 135,
+      "Brush Size": 4,
+      "Stroke Length": 22,
+      "Stroke Density": 1.6,
+      "Stroke Randomness": 1.2,
+      "Paint Surface": 0,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 120,
+      "Contrast": 10
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE PS Median",
+     "props": {
+      "Radius": 6
+     }
+    },
+    {
+     "name": "ADBE Brush Strokes",
+     "props": {
+      "Stroke Angle": 135,
+      "Brush Size": 5,
+      "Stroke Length": 40,
+      "Stroke Density": 2,
+      "Stroke Randomness": 1,
+      "Paint Surface": 1,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 120,
+      "Contrast": 10
+     }
+    }
+   ],
+   "transition": {
+    "name": "Cross Dissolve",
+    "dur": 0.8
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "Photo-to-painting: Blend With Original [[0, 1], [1.0, 0]] (0..1 fraction in both apps). Paint Surface 0 (Premiere, 0-based) = 1 (AE, 1-based) = paint on the original image. Premiere values are the render-verified demo. AE Brush Strokes rendered only a faint smear at moderate values (verdict weak), so AE runs it at its maxima on top of Median Radius 6, which supplies most of the painterly flattening (verified). Best on stills or slow shots. After Effects: the maxed Stroke Length drags a black jagged fringe in along the left and top frame edges, so scale the layer slightly past the frame or crop those edges.",
+   "built_from": [
+    "Brush Strokes",
+    "Lumetri Color",
+    "Median"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/080b.png",
+    "note": "Frame is repainted in visible diagonal daubs with slightly richer colour, a clear painterly look.",
+    "rerender": false,
+    "ae": {
+     "verdict": "weak",
+     "frame": "pve/gallery/recipes_ae/100b.png",
+     "note": "Median flattening and slightly richer colour give a soft smoothed image with jagged stroke edges visible only on zoom, plus a black jagged fringe along the left and top frame edges; diagonal daubs do not read at normal size; vs Premiere: Premiere shows clear diagonal daubs, AE reads as a soft smear.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "stylized",
+   "name": "Engraved gold relief",
+   "summary": "Raised-relief emboss toned gold-brown, like a coin, medal, stamp or plaque.",
+   "use_for": [
+    "currency, budget and economy explainers",
+    "awards, medals and honours segments",
+    "monuments, plaques and commemorations",
+    "logo or emblem backgrounds"
+   ],
+   "avoid": [
+    "faces in close-up: relief reads as a mask",
+    "low-contrast footage: little relief",
+    "news evidence footage"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    },
+    {
+     "name": "Color Emboss",
+     "pr_props": {
+      "Direction": 45,
+      "Relief": 6,
+      "Contrast": 300,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map Black To": "#3A2A10",
+      "Map White To": "#F2D58A",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {}
+    },
+    {
+     "name": "ADBE Color Emboss",
+     "props": {
+      "Direction": 45,
+      "Relief": 6,
+      "Contrast": 300,
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#3A2A10",
+      "Map White To": "#F2D58A",
+      "Amount to Tint": 100
+     }
+    }
+   ],
+   "sfx": [
+    "shutter"
+   ],
+   "keyframes_note": "Static look; works well on a still with a slow push-in. Relief rises in: Relief [[0, 0], [0.5, 6]]. Premiere's Map Black To set via '#RRGGBB' renders (gallery: shadows dark gold-brown). Relief 4 / Contrast 200 was too faint, the shot read as a gold-toned photo; 6 / 300 is the Color Emboss card's verified strong relief. Direction 45 lights from the top left.",
+   "built_from": [
+    "Black & White",
+    "Color Emboss",
+    "Tint"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/081b.png",
+    "note": "Relief 6 / Contrast 300 now gives strong light-and-dark embossed ridges on every edge (faces, stripes, foreground blocks, flowers), so the gold-brown frame reads as a raised relief rather than v1's gold-toned photo with thin ridges.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: Premiere Relief 6 / Contrast 300 agreed (Color Emboss card verified strong relief); AE Color Emboss was still 4 / 200, which the note calls too faint, raised to 6 / 300",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/101b.png",
+     "note": "Strong light-and-dark embossed ridges on every edge over a gold-brown field (shadows ~RGB 62,47,19, highlights ~217,195,128), a clear raised gold relief; vs Premiere: matches Premiere, AE slightly more saturated gold.",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

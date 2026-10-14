@@ -1,0 +1,1358 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Premiere audio scripting surface",
+   "summary": "What audio work in Premiere 26 can be automated from scripts, and what is UI-only. Scriptable: clip Volume Level (gain, fades, ducking keyframes), adding clip audio effects by name and setting their params, track mute, clip audio channel mapping (Modify > Audio Channels) on project items, export with a loudness-normalizing .epr. UI-only: everything in the Essential Sound panel (tagging, presets, Auto-Match, Auto Ducking, Enhance Speech, Repair/Clarity sliders, Remix), Audio Gain/Normalize dialog, Audio Track Mixer track effects, Loudness Meter readings, Separate Crosstalk, bleep/mute.",
+   "use_for": [
+    "deciding which audio steps an automated edit can do",
+    "planning a VO + music mix without UI clicks"
+   ],
+   "how": "ExtendScript DOM: app.project.sequences[i].audioTracks[t].clips[k].components -> 'Volume' (Level), 'Channel Volume', 'Panner'; ComponentParam.setValue/addKey/setValueAtKey/setTimeVarying. QE DOM adds effects to clips. UXP (Premiere 25.6+) has AudioFilterFactory, AudioComponentChain, AudioClipTrackItem, AudioTrack.setMute, ComponentParam actions, EncoderManager. AdobeBridge today exposes only audio[] gain_db / fade_in / fade_out (pr_build.jsx writes Volume Level keyframes); PVE check_spec validates clip effects against the VIDEO harvest, so audio effect names in a spec would be reported as unknown until audio support is wired.",
+   "scriptable": "partial",
+   "script_api": "ExtendScript: TrackItem.components, ComponentParam.setValue(v, true)/addKey(t)/setValueAtKey(t, v, true)/setTimeVarying(true), Track.setMute(1)/isMuted(), ProjectItem.getAudioChannelMapping (attribute) + AudioChannelMapping.setMappingForChannel(ch, src) + ProjectItem.setAudioChannelMapping(mapping) (Adobe PProPanel sample; setter not in the community guide), Sequence.exportAsMediaDirect(out, epr, workArea); QE: qe.project.getAudioEffectList(), qe.project.getAudioEffectByName(name), QETrackItem.addAudioEffect(fx), qe.project.getAudioTransitionList() (all four used successfully by pve/harvest_pr.jsx on 26.x); UXP: AudioFilterFactory.getDisplayNames()/createComponentByDisplayName(name, item), AudioComponentChain.createAppendComponentAction/createInsertComponentAction/createRemoveComponentAction, AudioTrack.setMute(bool), ComponentParam.createKeyframe/createAddKeyframeAction/createSetValueAction, EncoderManager.exportSequence(seq, exportType, out, epr, exportFull) (all UXP calls listed are 'since 25.6', so they exist in the installed Premiere 26.0.2; 26.3+ additions such as AudioTrack.createSetNameAction do not)",
+   "limits": "QE is undocumented and unsupported. Stereo-only effects fail SILENTLY on mono clips: in the 2026-10-03 harvest (mono 32 kHz WAV) Channel Mixer, Balance, Swap Channels, Fill Left with Right, Fill Right with Left, Channel Volume and Stereo Expander were not added (the last component stayed 'Volume'); always re-read components[last].displayName after adding. Live wave 3 (2026-10-14) added all 53 audio effects to a stereo clip and dumped their real rows (pve/harvest/pr_audio_params_w3.json) and measured their 0..1 values in dB / Hz / s / LUFS (the pr_audio cards' params[].measured). getVideoEffectByName returns an object even for unknown names (README); assume the same for audio and check getAudioEffectList() first. Clip component keyframe times are in source-media seconds: add trackItem.inPoint.seconds (pr_build.jsx does). No Essential Sound API in ExtendScript or in the UXP reference as of 26.5 (absence = not found, not confirmed by Adobe). The Premiere Scripting Guide says ExtendScript is supported 'through September 2026' while Adobe's Sept 2026 UXP blog says ExtendScripts are not affected by the CEP retirement; it still runs in the installed Premiere 26.0.2 on 2026-10-03, but plan UXP ports.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "https://ppro-scripting.docsforadobe.dev/sequence/track/",
+    "https://ppro-scripting.docsforadobe.dev/item/trackitem/",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiocomponentchain",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiocliptrackitem",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiotrack",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/componentparam",
+    "https://developer.adobe.com/premiere-pro/uxp/changelog/",
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "pr_build.jsx",
+    "https://ppro-scripting.docsforadobe.dev/other/audiochannelmapping/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Premiere audio effect parameter scale (scripts)",
+   "summary": "Through ExtendScript/QE every Premiere audio-effect parameter reads and writes as a normalized 0..1 number, not the dB/ms/% the UI shows. Linear params map as (ui - min) / (max - min). The intrinsic clip Volume 'Level' is the exception: linear amplitude where 0 dB = 10^(-15/20).",
+   "use_for": [
+    "converting a dB/ms target into a pr_props value",
+    "reading back Auto Ducking keyframes",
+    "sanity-checking specs"
+   ],
+   "how": "Verified against Adobe's documented defaults vs harvested defaults: Automatic Click Remover Threshold 30 (1..100) -> 0.2929, Complexity 16 -> 0.1515; Single-band/Multiband Compressor Threshold 0 dB (-60..0) -> 1.0, Attack 10 ms (0..500) -> 0.02, Release 100 ms (0..5000) -> 0.02, Single-band 'Gain' 0 dB (-30..+30) -> 0.5; Tube-modeled 'Gain' 0 dB (-18..+18) -> 0.5; Pitch Shifter 'Transpose Ratio' 1.0 (0.5..2.0) -> 0.3333; Graphic EQ bands 0.5 = 0 dB. Volume 'Level' = 10^((dB - 15) / 20): 0.1778 = 0 dB, 1.0 = +15 dB (Essential Sound clip volume range -60..+15 dB). Worked examples: compressor threshold -20 dB -> 0.6667; ratio 3:1 -> (3-1)/29 = 0.069; makeup +4 dB on Single-band 'Gain' -> 0.5667. In a PVE spec: {\"name\": \"Single-band Compressor\", \"pr_props\": {\"Threshold\": 0.6667, \"Ratio\": 0.069, \"Attack\": 0.02, \"Release\": 0.02, \"Gain\": 0.5667}}.",
+   "scriptable": "yes",
+   "script_api": "trackItem.components[n].properties[i].getValue() / setValue(normalized, true); for Volume: comp('Volume').properties 'Level' setValue(Math.pow(10, (dB - 15) / 20), true) (pr_build.jsx)",
+   "limits": "Frequency and some time params are NOT linear (Parametric EQ band centres 0.0019..0.80, DeHummer base 0.002, Highpass Cutoff 0.25): their mapping is unverified, so do not compute them; read a value set in the UI with getValue() first, or leave defaults. Popup params (Mode, Type) are stored as fractions whose index mapping is unverified. Ratio mapping (r-1)/29 is inferred from the documented 1..30 range. Values outside 0..1 are clamped.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "pr_build.jsx",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Essential Sound panel",
+   "summary": "Task-based audio panel: tag each clip Dialogue, Music, SFX or Ambience and get type-specific one-slider tools. Sections per type (from the installed PremiereAdjustmentsModes.json): Dialogue = Enhance Speech, Loudness, Repair, Clarity, Creative (Reverb), Clip Volume; Music = Loudness, Duration (Remix), Ducking, Clip Volume; SFX = Loudness, Creative, Pan, Clip Volume; Ambience = Loudness, Creative, Stereo Width, Ducking, Clip Volume.",
+   "use_for": [
+    "fast documentary VO cleanup",
+    "music bed ducking and length fitting",
+    "consistent per-type loudness"
+   ],
+   "how": "Window > Essential Sound (Audio workspace). Select clip(s) in the Timeline, choose the type (or Auto Tag), then use a Preset or the section sliders (0-10). Settings are stored as regular audio effects in the clip's stack (documented for Ducking -> Amplify; inferred for the rest from preset data, see the Repair/Clarity/Creative cards). Save the state as a preset with the icon next to the Preset menu.",
+   "scriptable": "no",
+   "script_api": "none (no ExtendScript or UXP API found for audio type, presets or ES sliders; replicate with the standalone effects listed on the Repair, Clarity and Reverb cards)",
+   "limits": "UI-only; per clip, not per track; one type per clip. Changing ES volume while previewing with Timeline Sync changed sequence levels: fixed in 26.2, so the installed Premiere 26.0.2 still has it (avoid ES volume edits during Timeline Sync preview).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/audio-editing-with-essential-sound-panel.html",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Settings/EssentialSound/PremiereAdjustmentsModes.json",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Auto Tag (audio category tagging)",
+   "summary": "AI classifier that labels selected clips as Dialogue, Music, SFX or Ambience and adds clickable Essential Sound badges to the clips.",
+   "use_for": [
+    "tagging a whole rough cut before Auto-Match or Ducking",
+    "letting ducking know which clips are dialogue"
+   ],
+   "how": "Select clips in the Timeline > Essential Sound > Auto Tag. Badges appear on clips; click a badge to open its section. The classifier models ship in Settings/EssentialSound (SoundClassifier.json, Classifier_Speech_Music_Other.json).",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "UI-only; check results: news clips with music under speech may be mis-tagged. Ducking needs the driving clips tagged.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/audio-category-tagging.html",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Settings/EssentialSound/PremiereAdjustmentsModes.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Essential Sound presets",
+   "summary": "Factory one-click presets per audio type. Installed list (2026-10-03): Dialogue - Background Walla Walla, Balanced High Tone Voice, Balanced Low Tone Voice, Clean Up Noisy Dialogue, From Outside a Building, From the Radio, From the Telephone, From the Television, In a Large Room, In a Small Room, Make Close Up, Make Distant, Make Medium Shot, Over the Intercom, Podcast Voice. Music - Balanced Background Music, Duck against everything, Hard Vocal Ducking, Smooth Vocal Ducking, Remix to 30/60/90 Seconds. SFX - Explosion, From Outside, From the Left, From the Right, In a Large Room, Make Close Up, Make Distant, Make Medium Shot. Ambience - Focused, From Outside, Room Tone, Wide and Deep.",
+   "use_for": [
+    "'Podcast Voice' or 'Clean Up Noisy Dialogue' as a VO starting point",
+    "'From the Telephone'/'From the Radio' for phone-call or archive-radio recreations",
+    "'Remix to 30/60 Seconds' for reel-length music"
+   ],
+   "how": "Essential Sound > choose type > Preset menu. Presets are JSON files (.essentialsound) in %APPDATA%\\Adobe\\Premiere Pro\\26.0\\EssentialSound\\Default\\<dialog|music|sfx|ambience|generic>\\; '(Config)' holds the defaults/ranges, '(Default)' the reset state. User presets are saved from the panel.",
+   "scriptable": "no",
+   "script_api": "none (files can be read for reference values; applying a preset needs the panel)",
+   "limits": "Preset file format is undocumented; editing/adding files is unsupported. Applying a preset overwrites the clip's ES settings.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/create-audio-presets.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Loudness Auto-Match",
+   "summary": "Essential Sound > Loudness > Auto-Match sets each clip to a per-type integrated loudness so cuts do not jump in level. Installed default targets (from (Config).essentialsound): Dialogue -23 LUFS, Music -25 LUFS, SFX -21 LUFS, Ambience -30 LUFS, untagged -24 LUFS (allowed range -42..-12 LUFS). The measured clip LUFS is shown under the button.",
+   "use_for": [
+    "evening out interview/VO clips recorded at different levels",
+    "first pass before the mix"
+   ],
+   "how": "Tag clips, select them, Essential Sound > Loudness > Auto-Match. Then mix relative levels with Clip Volume. Scripted equivalent (0 credits): measure each source's integrated LUFS (ffmpeg -af ebur128 or loudnorm print_format=json), gain_db = target - measured, write Volume Level = 10^((gain_db - 15)/20) (AdobeBridge audio[].gain_db does exactly this conversion).",
+   "scriptable": "no",
+   "script_api": "none; equivalent = ComponentParam 'Level' of the 'Volume' component via setValue (yes)",
+   "limits": "Clip-level normalization, not a mix master: the sum of VO + music will be louder than each target. -23 LUFS dialogue is a broadcast-style level, about 9 LU below web delivery (-14); push the final mix at export. Which internal property Auto-Match writes is unverified. Targets are not editable in Premiere's UI (Adobe PM note, 2017).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/auto-match-audio-loudness.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound",
+    "https://larryjordan.com/articles/adobe-premiere-pro-cc-modify-essential-sound-panel-settings/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Auto Ducking",
+   "summary": "Essential Sound > Ducking on a Music or Ambience clip computes volume dips wherever the chosen 'Duck Against' types (Dialogue, Music, SFX, Ambience, untagged) play. Premiere adds an Amplify effect and writes the keyframes to its Gain param.",
+   "use_for": [
+    "music bed under documentary VO",
+    "ambience under interview bites",
+    "reels where music must drop for each line"
+   ],
+   "how": "Tag VO as Dialogue and music as Music. Select the music clip > Ducking > pick Duck Against icons > set Sensitivity, Duck Amount, Fade Duration, Fade Position (outside / inside / middle of dialogue) > Generate Keyframes. Factory preset values (music preset files, slot meaning inferred): default and 'Balanced Background Music' = sensitivity 6, fade 800 ms, duck -18 dB; 'Smooth Vocal Ducking' = 4, 1200 ms, -24 dB; 'Hard Vocal Ducking' = 7, 250 ms, -36 dB. Scripted equivalent: from the VO clip timings (or a VAD pass on the VO file) keyframe the music clip's Volume Level down 12-18 dB with 250-800 ms ramps, ramping back up after gaps longer than about 1 s (pr_build.jsx already writes Volume keyframes for fades).",
+   "scriptable": "no",
+   "script_api": "none for Generate Keyframes; equivalent = Volume 'Level' addKey/setValueAtKey (yes). Reading generated keyframes: Amplify 'Gain' via getKeys()/getValueAtKey() returns normalized values (0.6667 = 0 dB).",
+   "limits": "Pressing Generate Keyframes again overwrites manual keyframe edits. Only Music/Ambience clips can be ducked; the driving clips must be tagged. Bugs fixed after the installed 26.0.2, so still present there: crash ducking Music against many Dialogue clips (fixed 26.3), Save As Copy breaking ducking (fixed 26.3), deleted ducking keyframes still audible (fixed 26.5): to undo ducking, disable or delete the Amplify effect rather than deleting keyframes. See also: 'Scripted ducking from VO ranges'; 'Music ducks under VO (scripted, from VO ranges)'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/automatically-duck-audio.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Enhance Speech (Essential Sound)",
+   "summary": "On-device AI that rebuilds a dialogue recording to sound like a close studio mic (removes noise, room and muddiness). Runs in the background with a progress bar; a Mix Amount slider blends enhanced and original.",
+   "use_for": [
+    "phone/lav interviews with room echo or traffic",
+    "AI-education VO recorded in an untreated room",
+    "rescuing archive news bites"
+   ],
+   "how": "Select a Dialogue clip > Essential Sound > Enhance Speech > Enhance. Wait for processing (keeps editing). Back the Mix Amount off (partial blend sounds less synthetic). Add EQ/compression after it like any clip.",
+   "scriptable": "no",
+   "script_api": "none (no ExtendScript/UXP call found). Scriptable stand-ins: DeNoise + DeReverb via QE/UXP (yes); external batch tools outside Premiere if a clean file is needed (not part of PVE).",
+   "limits": "Mono and stereo only; no multichannel, no nested sequences; a stereo clip is returned as a MONO downmix. Slow on older hardware (Adobe example: 25 s to process a 5 s clip); recommended Apple M1+/macOS 13+ or a recommended GPU on Windows. Can sound processed or invent consonants on very bad sources: check by ear. Not a cloud feature (Adobe lists Separate Crosstalk as the only cloud AI voice feature).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/enhance-speech.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/enhance-speech-technical-requirements.html",
+    "https://helpx.adobe.com/premiere/desktop/troubleshooting/audio-issues/enhance-speech-is-running-slow.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/about-cloud-based-ai-voice-features.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Essential Sound Repair (Reduce Noise, Rumble, DeHum, DeEss, Reduce Reverb)",
+   "summary": "Dialogue > Repair: five checkbox+slider (0-10) fixes. The installed (Config) file shows what each slider drives, which gives scriptable equivalents: Reduce Noise -> DeNoise 'Amount' 0..1; Reduce Reverb -> DeReverb 'Amount' 0..1 with 'Auto Gain' on; Reduce Rumble -> an FFT Filter high-pass curve (266 values); DeEss -> DeEsser params interpolated from 'Threshold' 0.875, 'Center Frequency' 0.191, 'Bandwidth' 0.257 (slider 0) to 0.5 / 0.261 / 0.527 (slider 10).",
+   "use_for": [
+    "hiss/fan noise under VO",
+    "low rumble from traffic or handling (<80 Hz)",
+    "50 Hz mains hum (India)",
+    "harsh S sounds",
+    "echoey rooms"
+   ],
+   "how": "Essential Sound > Dialogue > Repair > tick the fix > slider 0-10 (start 3-5, listen). Script stand-in: add the named effect with QE/UXP and set the mapped param, e.g. {\"name\": \"DeNoise\", \"pr_props\": {\"Amount\": 0.3}}.",
+   "scriptable": "no",
+   "script_api": "none for the panel; stand-ins DeNoise / DeReverb / DeEsser / FFT Filter / DeHummer are scriptable (see their cards)",
+   "limits": "Mapping read from preset data; that Repair adds exactly these effects is inferred (medium). DeHum's effect and its 50/60 Hz switch were not found in the config: use DeHummer or Notch Filter at 50 Hz for India.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/repair-dialogue.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound",
+    "pve/harvest/pr/pr_audio_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Essential Sound Clarity (Dynamics, EQ presets, Vocal Enhancer)",
+   "summary": "Dialogue > Clarity: Dynamics (Natural -> Focused compression/leveling), an EQ preset + Amount, and Vocal Enhancer (High Tone / Low Tone). The EQ presets are stored as 15-value arrays that match Graphic Equalizer (10 Bands) params exactly (Accuracy, Gain, Range, Reset, EQ Band 1-10, Is Processing), so they can be reproduced by script. Installed EQ presets: Background Voice, Intercom, Locked in the Trunk, Old Radio, On the Telephone, Outside of the Room, Podcast Voice, Subtle Boost (High Tone), Subtle Boost (Low Tone), That Public Radio Sound, Vocal Presence.",
+   "use_for": [
+    "polishing VO presence",
+    "radio/telephone voice for recreations",
+    "consistent narrator tone"
+   ],
+   "how": "UI: Essential Sound > Clarity > tick Dynamics / EQ / Vocal Enhancer. Script stand-in = 'Graphic Equalizer (10 Bands)' with values (EQ Band 1..10): Podcast Voice Range 0.3924, bands 0.5, 0.5, 0.5, 0.5179, 0.5077, 0.5, 0.5179, 0.5281, 0.5103, 0.5; Vocal Presence Accuracy 0.0966, Range 0.3249, bands 0.3572, 0.3572, 0.4643, 0.4786, 0.4764, 0.4957, 0.5592, 0.5652, 0.5086, 0.4699; On the Telephone Range 0.3924, bands 0.3286 x4, 0.4857, 0.5307, 0.5307, 0.4836, 0.3286, 0.3286; Old Radio Range 0.7975, bands 0.1572 x3, 0.2844, 0.4832, 0.365, 0.5285, 0.4351, 0.2715, 0.1572. Other presets: read the array from dialog/(Config).essentialsound.",
+   "scriptable": "no",
+   "script_api": "none for the panel; stand-in = QE addAudioEffect('Graphic Equalizer (10 Bands)') + setValue per band (yes)",
+   "limits": "Clarity 'Amount' scaling between flat and the preset curve is not in the file (unverified, likely a blend). Vocal Enhancer here maps to the 'Vocal Enhancer' effect whose 'Mode' index mapping is unverified.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/improve-dialogue-clarity.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound",
+    "pve/harvest/pr/pr_audio_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Essential Sound Creative Reverb",
+   "summary": "Creative > Reverb adds a preset room with Amount and Clip Volume sliders. Presets are 13-value arrays that match Studio Reverb params in order (Low Frequency Cut, High Frequency Cut, Room Size, Width, Diffusion, Damping, Decay, Early Reflections, Early Reflections Delay, Dry Output Level, Wet Output Level, Is Processing, Number of Channels). Dialogue presets: Auditorium, Church, Large Reflective Room, Outside the Club, Small Dry Room, Thicken Voice, Warm Room, Warm Voice. SFX: Heavy Reverb, Light Reverb, Outside Reverb, Room Reverb. Ambience: Large Room Ambience, Outside Ambience, Room Ambience, Wind Effect.",
+   "use_for": [
+    "matching dry VO to on-location sync sound",
+    "'Thicken Voice'/'Warm Voice' for narrator weight",
+    "space on SFX hits in trailers"
+   ],
+   "how": "UI: Essential Sound > Creative > Reverb > Preset + Amount. Script stand-in: 'Studio Reverb' with the preset array, e.g. Warm Voice = {\"Low Frequency Cut\": 0.196, \"High Frequency Cut\": 0.8999, \"Room Size\": 0, \"Width\": 0.4, \"Diffusion\": 0.2, \"Damping\": 0.4, \"Decay\": 0.102, \"Early Reflections\": 0.09, \"Early Reflections Delay\": 0.5, \"Dry Output Level\": 1, \"Wet Output Level\": 0.3}.",
+   "scriptable": "no",
+   "script_api": "none for the panel; stand-in = Studio Reverb via QE/UXP (yes)",
+   "limits": "Reverb on documentary VO is usually wrong: use it only to match a location or for a stylised effect. How 'Amount' scales Wet Output Level is unverified.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/create-reverb-effect.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound",
+    "pve/harvest/pr/pr_audio_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Remix tool and Essential Sound Duration",
+   "summary": "AI retimes a music clip to a target duration by cutting and crossfading the middle at beat-compatible points, keeping the intro and ending. Usually within 1 s of the target (always within 5 s).",
+   "use_for": [
+    "fitting a stock track to a 30/60/90 s reel",
+    "music ending exactly on the last frame of a trailer",
+    "re-fitting music after the cut changes length"
+   ],
+   "how": "Toolbar: hold the Ripple Edit tool group > Remix Tool, drag the music clip's end to the new length; or Essential Sound > Music > Duration: Target Duration, Segments (fewer/more cuts), Variations (melodic vs harmonic). Zigzag marks show the edits. For a hit point mid-song, split there and remix both halves. Presets 'Remix to 30/60/90 Seconds' exist.",
+   "scriptable": "no",
+   "script_api": "none (no API found); fallback = cut and crossfade manually in the spec",
+   "limits": "Ignores lyrics: vocal tracks can splice lines from different verses. Remixing an Adobe Stock preview then licensing it can shift timing: re-apply on the licensed file. Not on read-only projects.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/remix-audio-in-premiere.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/remix-in-premiere.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/remix-tool-considerations-in-premiere.html",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Separate Crosstalk",
+   "summary": "Cloud AI that splits overlapping speakers in one clip into one track per speaker plus a background track; the original is disabled.",
+   "use_for": [
+    "panel debates and TV-studio arguments where guests talk over each other",
+    "street interviews with two voices"
+   ],
+   "how": "Cut the clip down to the overlap (1 s to 10 min), then right-click > Separate Crosstalk (or Clip menu / Properties panel) > Separate. One clip at a time.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Premium: 1 Generative Credit per second processed, plus an automatic 2 s handle each side. Requires sign-in and internet; uploads audio and voice embeddings to Adobe; consent needed; unavailable for files from Illinois or Texas. No default shortcut. Not in the installed Premiere 26.0.2 (no 'Crosstalk' UI string) and not named in the release notes or What's New through 26.5.2 (Adobe's help page dated 2026-07-28 documents it without a beta label): confirm it exists in the Clip menu after updating before planning on it.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/basic-audio-editing/separate-overlapping-speakers.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/about-cloud-based-ai-voice-features.html",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Dictionaries/en_US/zdictionary_PPRO_en_US.dat"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Bulk mute or bleep (censored word list)",
+   "summary": "Transcript-driven censoring: add words to a Censored word list, filter them in the Text panel and apply a bleep tone or mute to one or all hits.",
+   "use_for": [
+    "bleeping abuse in political street interviews",
+    "muting names/sensitive info",
+    "client-safe social cuts"
+   ],
+   "how": "Transcribe the sequence > Text panel > More options > Censored word list (import/export lists supported) > Filter: Censored words > Apply dropdown: choose tone, apply to one or all instances.",
+   "scriptable": "no",
+   "script_api": "none for applying; UXP Transcript.transcribeClipProjectItem (since 25.6) can create transcripts; Transcript has no censor/bleep/mute call",
+   "limits": "Only as good as the transcript (check Hindi/Hinglish recognition). Shipped with the media-intelligence features (release notes 25.6; What's New lists it under 26.0); present in the installed 26.0.2 (Censored word list strings found).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/advanced-audio-techniques/clean-audio-with-bulk-mute-or-bleep.html",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/transcript",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/whats-new.html",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Dictionaries/en_US/zdictionary_PPRO_en_US.dat"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Generative Extend (audio)",
+   "summary": "Firefly-powered extension of a clip's head or tail; for audio it can add up to 10 s of continuing ambience or room tone (video up to 2 s).",
+   "use_for": [
+    "room tone to cover a cut in an interview",
+    "letting ambience ring out under an end card"
+   ],
+   "how": "Generative Extend tool, drag the clip edge. Original media is unchanged.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Never extends spoken dialogue (dialogue is muted in the extension); music clips are not eligible; mono/stereo only (no 5.1); cloud model, needs sign-in/internet; uses generative credits. Bugs present in the installed 26.0.2: gain doubled on clips with audio gain (fixed 26.3), waveform offset when extending a clip head (fixed 26.5).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generative-extend-faq.html",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Generative Media Tool (sound effects)",
+   "summary": "Generate sound effects (and video) from a text prompt inside the timeline, optionally guiding timing and intensity with your voice; results are added as editable clips.",
+   "use_for": [
+    "custom whooshes/impacts for trailers",
+    "foley a news recreation lacks"
+   ],
+   "how": "Generative Media Tool in the timeline: prompt, check the credit cost shown, generate, place the result.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Uses generative credits (cost shown before generating); cloud, needs sign-in/internet. Added in 26.5 (September 2026): NOT in the installed Premiere 26.0.2 (no UI strings for it), so unavailable until Premiere is updated.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generative-media-tool-overview.html",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Dictionaries/en_US/zdictionary_PPRO_en_US.dat"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Generate Music (beta)",
+   "summary": "Firefly Music model generates instrumental background music for a selected timeline range from a prompt and tempo, with variations and optional looping; 48 kHz clips, no vocals.",
+   "use_for": [
+    "temp or final background beds when stock music does not fit",
+    "beds that match a cut's exact length"
+   ],
+   "how": "Premiere (beta) only: select a range, describe the music, set tempo, generate, compare the four variations; results are kept in Generation history.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Premiere (beta) app only, not the release 26.x; uses generative credits; instrumental only; Adobe states commercially safe, royalty-free use.",
+   "status": "beta",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generate-music-overview.html",
+    "https://helpx.adobe.com/premiere/desktop/edit-projects/edit-with-generative-ai/generate-music-faq.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Clip volume (Volume effect 'Level')",
+   "summary": "Every audio clip's intrinsic 'Volume' component ('Bypass', 'Level') sets clip level and carries fades and ducking keyframes. The main scriptable mixing control.",
+   "use_for": [
+    "setting VO/music/SFX balance",
+    "fade in/out",
+    "scripted ducking",
+    "per-clip loudness match"
+   ],
+   "how": "UI: Effect Controls > Volume > Level, rubber band in the Timeline (Ctrl+click adds keyframes), Essential Sound Clip Volume. Script: Level = 10^((dB - 15)/20) (0.1778 = 0 dB, max 1.0 = +15 dB); keyframe times are source seconds: t_key = trackItem.inPoint.seconds + offset. AdobeBridge spec: audio[] {\"src\", \"gain_db\", \"fade_in\", \"fade_out\"}.",
+   "scriptable": "yes",
+   "script_api": "prop = components['Volume'].properties['Level']; prop.setValue(lv, true); prop.setTimeVarying(true); prop.addKey(t); prop.setValueAtKey(t, lv, true) (verified in AdobeBridge pr_build.jsx); UXP (25.6+): ComponentParam.createSetTimeVaryingAction(true), createKeyframe(v) (set its position to a TickTime) + createAddKeyframeAction(kf), run inside project.executeTransaction",
+   "limits": "Mono clips get a further -3 dB pan law (AdobeBridge README). Fades written by pr_build are linear in the Level value. Track-level volume (mixer fader) is separate and not scriptable.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/adjust-track-volume.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "pr_build.jsx",
+    "README.md",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/componentparam"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Audio Gain dialog (Set / Adjust / Normalize peaks)",
+   "summary": "Clip gain applied before the Volume effect: Set Gain to, Adjust Gain by, Normalize Max Peak to, Normalize All Peaks to (dB), with the measured Peak Amplitude shown.",
+   "use_for": [
+    "peak-normalizing quiet archive clips",
+    "matching many clips' peaks at once (keyboard G)"
+   ],
+   "how": "Select clips > right-click > Audio Gain (G). Normalize Max Peak to -1 dB for a peak ceiling; use Loudness Auto-Match or LUFS math for perceived loudness instead.",
+   "scriptable": "no",
+   "script_api": "none found in ExtendScript/UXP (unverified absence); use Volume 'Level' gain instead",
+   "limits": "Peak normalization is not loudness normalization.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/adjust-gain-in-audio.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Audio Track Mixer (track effects, automation, submixes)",
+   "summary": "Per-track faders, pan, mute/solo, insert effects and sends, automation modes (Off, Read, Write, Latch, Touch) and submix tracks; the Mix track is where a final limiter or Loudness Meter belongs.",
+   "use_for": [
+    "one EQ/compressor on a whole VO track",
+    "a music submix with one limiter",
+    "mix-bus Loudness Meter"
+   ],
+   "how": "Window > Audio Track Mixer > Show/Hide Effects and Sends > effect slot menu. Submixes: Sequence > Add Tracks. Automation writes track keyframes in the Timeline.",
+   "scriptable": "partial",
+   "script_api": "Track.setMute(1)/isMuted() (ExtendScript), AudioTrack.setMute(bool)/isMuted() (UXP 25.6); track volume, pan, track effects and submix routing: none found",
+   "limits": "Track effects cannot be added by script, so automated chains must use clip effects (or nest the sequence and put effects on the nested clip: unverified). 'Write' automation mode did not work until 26.5, so in the installed 26.0.2 use Latch or Touch.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/apply-effects-using-audio-track-mixer.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-track-mixer-automation-modes.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/advanced-audio-techniques/create-a-submix.html",
+    "https://ppro-scripting.docsforadobe.dev/sequence/track/",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiotrack",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Audio meters, Dynamic Audio Waveforms and Global Mute",
+   "summary": "Monitoring aids: Audio Meters (peak dBFS), waveforms that redraw with volume/keyframe/ducking changes (View > Dynamic Audio Waveforms) and live during trims, and muting of all/Source/Program playback: in the installed 26.0.2 via right-click on the Audio Meters (Mute All Audio / Mute Program Monitor); the menu-bar Global Mute button arrived in 26.2 (April 2026) and is not in 26.0.2.",
+   "use_for": [
+    "spotting clipping (red) or holes",
+    "checking ducking depth visually",
+    "silent picture review"
+   ],
+   "how": "Window > Audio Meters; View > Dynamic Audio Waveforms (also scales with Audio Gain); mute: right-click the Audio Meters (26.0.2) or the menu-bar Global Mute button (26.2+); mute state is not saved with the project.",
+   "scriptable": "no",
+   "script_api": "none",
+   "limits": "Peak meters do not show LUFS: use the Loudness Meter or measure the export.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/monitor-volume-levels.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/dynamic-audio-waveforms.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/global-mute.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/live-waveform-editing.html",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/whats-new.html",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Dictionaries/en_US/zdictionary_PPRO_en_US.dat"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Audio crossfade transitions (Constant Power, Constant Gain, Exponential Fade)",
+   "summary": "The three installed audio transitions. Constant Power = smooth equal-power crossfade (default choice), Constant Gain = linear, can dip mid-fade, Exponential Fade = logarithmic and more gradual.",
+   "use_for": [
+    "smoothing audio edits between interview bites",
+    "music-to-music crossfades",
+    "1-4 frame fades to kill clicks at cuts"
+   ],
+   "how": "Effects > Audio Transitions > Crossfade; drag onto the cut. Default: right-click > Set Selected As Default Transition; default duration in Preferences > Timeline > Audio Transition Default Duration. For custom curves use Volume keyframes instead.",
+   "scriptable": "partial",
+   "script_api": "QE (unverified for audio): qeAudioTrackItem.addTransition(qe.project.getAudioTransitionByName('Constant Power'), ...); qe.project.getAudioTransitionList() is verified; UXP TransitionFactory only creates VIDEO transitions; verified route = Volume 'Level' keyframe fades (pr_build.jsx)",
+   "limits": "Needs media handles for a centred crossfade.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-transitions/audio-crossfade-transitions.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-transitions/specify-default-audio-transitions.html",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/transitionfactory",
+    "pve/harvest/pr/pr_lists.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Loudness Meter (and Loudness Radar)",
+   "summary": "TC Electronic ITU BS.1770 meter effect: Input (true-peak aware), Momentary (400 ms), Short-Term (3 s) and Integrated loudness, with presets for EBU R128, ATSC A/85 and online targets (YouTube, Spotify, Apple Podcasts, Netflix). Measures only, never changes audio. 'Loudness Radar' is the older TC radar-style meter, still installed.",
+   "use_for": [
+    "checking a mix hits -14 LUFS / -1 dBTP before export",
+    "QC of broadcast deliveries"
+   ],
+   "how": "Audio Track Mixer > Mix track > first effect slot > Special > Loudness Meter; double-click > Settings: Target Loudness, Low Level Below, Maximum True Peak, Scale (EBU +9 / +18), Unit (LKFS, LUFS, LU) or a preset. Play the whole sequence for Integrated.",
+   "scriptable": "partial",
+   "script_api": "can be added to a clip via QE addAudioEffect('Loudness Meter') (done in the harvest) but readings are not exposed to scripts; its settings are the harvested params 'Target Level', 'Maximum True Peak', 'Scale', 'Unit', 'Low Below Level', 'Reset on Playback', 'Show Input/Short-Term/Integrated/Momentary Meter' (normalized 0..1, dB mapping unverified; the UI labels 'Target Loudness'/'Low Level Below' are NOT the script names); for automated QC measure the exported file instead (ffmpeg -af ebur128=peak=true, 0 credits)",
+   "limits": "On a clip it measures that clip only; on the Mix track it measures the sequence. Integrated needs a full real-time playthrough.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/about-loudness-meter.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/apply-loudness-meter-to-a-track.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/edit-loudness-meter-settings.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/measure-the-loudness-of-your-track.html",
+    "pve/harvest/pr/pr_audio_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Export Loudness Normalization",
+   "summary": "Export Settings / Media Encoder > Effects > Loudness Normalization: normalizes the rendered file to ATSC A/85, EBU R128 or ITU BS.1770-3 (only ITU allows a custom target), with optional true-peak limiter (look-ahead, release) and an XML loudness report.",
+   "use_for": [
+    "hitting -14 LUFS / -1 dBTP for YouTube and Reels in the render",
+    "broadcast -23/-24 deliverables"
+   ],
+   "how": "Enable in the export preset. In the .epr XML it is <StandardFilterWrapperLoudnessNormalization> with Enabled, LoudnessStandard, TargetLoudness, TruePeakLevel, LoudnessTolerance, LookAheadTime, ReleaseTime, UseCustomTruePeakLimiterSettings, WriteLoudnessReport (installed preset defaults: Enabled false, standard 0, target -24, true peak -2, tolerance 2, look-ahead 12, release 200). Script route: copy an .epr, set these XML values, export with it.",
+   "scriptable": "partial",
+   "script_api": "edit the .epr XML, then Sequence.exportAsMediaDirect(outPath, eprPath, app.encoder.ENCODE_ENTIRE) (used by pve/harvest_pr.jsx) or UXP EncoderManager.getManager().exportSequence(seq, Constants.ExportType.IMMEDIATELY, out, epr, exportFull)",
+   "limits": "LoudnessStandard index mapping is unverified (0 with target -24 suggests ATSC A/85; the ITU index needed for a custom -14 target is unknown: set it once in the UI, save the preset and reuse the file). Natively mono, stereo and 5.1; other layouts need channel configuration. It is whole-file gain + limiting: a badly balanced mix stays badly balanced. A bug normalized all streams regardless of the Process checkbox (fixed in 26.0, so not in the installed 26.0.2).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/media-encoder/using/automatic-loudness-correction.html",
+    "https://larryjordan.com/articles/adobe-media-encoder-loudness-normalization/",
+    "file:///C:/Program Files/Adobe/Adobe Premiere Pro 2026/Settings/EncoderPresets/WAV_Mono_16bit_16kHz.epr",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/encodermanager",
+    "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "DeNoise",
+   "summary": "Adobe's modern broadband noise reducer (hiss, hum, fans, AC) with one Amount slider (0-100 %).",
+   "use_for": [
+    "VO hiss and fan noise",
+    "laptop-mic tutorials",
+    "Essential Sound 'Reduce Noise' equivalent"
+   ],
+   "how": "Effects > Audio Effects > Noise Reduction/Restoration > DeNoise. Harvested params: 'Amount' (default 0.4), 'Make-Up Gain', 'Auto Gain', 'Shelve Type', 'Output Difference Signal' (1 = hear only what is removed). Start 0.2-0.4. Spec: {\"name\": \"DeNoise\", \"pr_props\": {\"Amount\": 0.3}}. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"DeNoise\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"DeNoise\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "High amounts give watery/underwater artifacts; apply before compression (compression raises the noise floor).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "DeReverb",
+   "summary": "Estimates and reduces room reverberation (0-100 %).",
+   "use_for": [
+    "echoey interviews in halls/offices",
+    "Essential Sound 'Reduce Reverb' equivalent"
+   ],
+   "how": "Params: 'Amount' (default 0.4), 'Make-Up Gain', 'Auto Gain' (default 1), 'Shelve Type', 'Output Difference Signal'. Start 0.3-0.5. Spec: {\"name\": \"DeReverb\", \"pr_props\": {\"Amount\": 0.4}}. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"DeReverb\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"DeReverb\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Strong settings thin the voice; Enhance Speech usually beats it on very roomy sources.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Adaptive Noise Reduction",
+   "summary": "Older adaptive spectral noise reducer that learns changing noise; heavier to tune than DeNoise.",
+   "use_for": [
+    "varying background noise (street interviews)"
+   ],
+   "how": "Params: 'Reduce Noise By', 'Noisiness', 'Fine Tune Noise Floor', 'Signal Threshold', 'Spectral Decay Rate', 'Broadband Preservation', 'FFT Size', 'High Quality Mode (slower)'. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Adaptive Noise Reduction\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Adaptive Noise Reduction\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Not described on Adobe's current audio-effects library page (installed and appliable in 26.x): prefer DeNoise unless it fails.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "DeHummer",
+   "summary": "Removes a hum frequency and its harmonics (power-line hum, lights, resonant tones).",
+   "use_for": [
+    "50 Hz mains hum on Indian location audio",
+    "buzz from bad camera cables"
+   ],
+   "how": "Params: 'Harmonic Base Frequency', 'Harmonic Base Q', 'Harmonic Base Gain', 'Harmonic Slope', 'Output Hum Only', 'Num Harmonics'. India mains = 50 Hz: set the base frequency to 50 in the UI (the normalized mapping for Hz is unknown) and save an effect preset. Notch Filter / Simple Notch Filter are alternatives. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"DeHummer\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"DeHummer\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Do not script the frequency by formula; the default base frequency was not confirmed as 50 or 60 Hz.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "DeEsser",
+   "summary": "Compresses only the sibilance band to tame harsh S/T sounds.",
+   "use_for": [
+    "bright VO mics",
+    "after heavy EQ presence boosts",
+    "Essential Sound 'DeEss' equivalent"
+   ],
+   "how": "Params: 'Threshold' (default 0.625), 'Attack', 'Release', 'Center Frequency', 'Bandwidth', 'Output Sibilance Only', 'Mode' (Broadband / Multiband; harvested default 1). Essential Sound's DeEss slider moves Threshold 0.875 -> 0.5 and widens Center Frequency 0.191 -> 0.261, Bandwidth 0.257 -> 0.527: use those as script values. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"DeEsser\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"DeEsser\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Over-de-essing gives a lisp; place after EQ, before or after compression by ear.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Automatic Click Remover",
+   "summary": "Removes clicks, crackle and pops (designed for vinyl, works on some mouth clicks and digital ticks).",
+   "use_for": [
+    "clicky archive audio",
+    "digital ticks at edit points"
+   ],
+   "how": "Params: 'Threshold' (1-100, default 30 = 0.2929; lower = more detection), 'Complexity' (1-100, default 16 = 0.1515). Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Automatic Click Remover\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Automatic Click Remover\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Can soften consonants at aggressive settings.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Highpass",
+   "summary": "Simple high-pass filter: removes everything below the Cutoff.",
+   "use_for": [
+    "first step of every VO chain (cut rumble/plosives below ~80 Hz)",
+    "thin 'phone' voice with Lowpass"
+   ],
+   "how": "Param: 'Cutoff' (normalized, default 0.25). The Hz mapping is unverified: for a known cutoff use Parametric Equalizer's 'High-Pass Filter Enable' + 'High-Pass Cutoff Frequency' set in the UI, or set Cutoff once in the UI and read it back with getValue(). 'Lowpass' (param 'Cutoff') is its mirror for muffled/behind-a-wall voices. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Highpass\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Highpass\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Internal (legacy-style) filter, match name 'Internal Highpass'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Parametric Equalizer",
+   "summary": "Five peaking bands plus low/high shelves and high-/low-pass filters with full frequency, Q and gain control.",
+   "use_for": [
+    "VO tone shaping (cut 200-400 Hz mud, add 3-5 kHz presence)",
+    "notching a whine",
+    "carving music under VO"
+   ],
+   "how": "Harvested params include 'Low Shelf Frequency/Gain', 'High Shelf Frequency/Gain', 'EQ Band 1..5 Center Frequency/Q/Gain/Enable', 'Gain' (master, default 0.6667), 'High-Pass Filter Enable', 'High-Pass Cutoff Frequency', 'High-Pass Slope', 'Low-Pass Filter Enable', 'Low-Pass Cutoff Frequency', 'Low-Pass Slope'. Band gains are centred at 0.5 = 0 dB. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Parametric Equalizer\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Parametric Equalizer\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Frequency/Q mapping is non-linear and unverified: build the curve in the UI and save an effect preset, or read values back; for scripted EQ prefer Graphic Equalizer (10 Bands) whose bands are fixed.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Graphic Equalizer (10 Bands)",
+   "summary": "Fixed-frequency 10-band (octave) EQ; the engine behind Essential Sound Clarity EQ presets, so its presets can be copied as numbers. 20- and 30-band versions also exist.",
+   "use_for": [
+    "scripted VO EQ (Podcast Voice, Vocal Presence curves)",
+    "telephone/radio voice effects"
+   ],
+   "how": "Params: 'Accuracy', 'Gain', 'Range', 'Reset', 'EQ Band 1'..'EQ Band 10', 'Is Processing'. Band 0.5 = 0 dB. Copy values from the Clarity card, e.g. Podcast Voice: {\"name\": \"Graphic Equalizer (10 Bands)\", \"pr_props\": {\"Range\": 0.3924, \"EQ Band 4\": 0.5179, \"EQ Band 5\": 0.5077, \"EQ Band 7\": 0.5179, \"EQ Band 8\": 0.5281, \"EQ Band 9\": 0.5103}}. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Graphic Equalizer (10 Bands)\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Graphic Equalizer (10 Bands)\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "dB per band depends on 'Range' (1.5-120 dB per Adobe; default 0.3924 = about 48 dB if linear: unverified). Exact band centre frequencies were not confirmed.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Dynamics",
+   "summary": "Four-in-one dynamics strip: AutoGate, Compressor, Expander, Limiter, each with an Enabled switch.",
+   "use_for": [
+    "one-effect VO leveling + peak safety",
+    "gating breaths/room between lines"
+   ],
+   "how": "Params: 'AutoGate Enabled/Threshold/Attack/Release/Hold', 'Compressor Enabled/Threshold/Ratio/Attack/Release/MakeUp Gain', 'Expander Enabled/Threshold/Ratio', 'Limiter Enabled/Threshold/Release'. All sections are off by default: e.g. {\"name\": \"Dynamics\", \"pr_props\": {\"Compressor Enabled\": 1, \"Limiter Enabled\": 1}}. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Dynamics\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Dynamics\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Threshold/ratio unit mapping unverified (defaults 0.6667 / 0); set in UI and read back for exact dB.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Single-band Compressor",
+   "summary": "Classic compressor (threshold, ratio, attack, release, output gain); Adobe recommends it for voiceovers so the voice sits over music.",
+   "use_for": [
+    "VO leveling",
+    "evening out interview bites"
+   ],
+   "how": "Params: 'Gain' (output, -30..+30 dB -> 0.5 = 0 dB), 'Threshold' (-60..0 dB), 'Ratio' (1..30), 'Attack' (0..500 ms), 'Release' (0..5000 ms), 'Auto Makeup Gain'. Defaults do nothing (Threshold 1.0 = 0 dB, Ratio 0 = 1:1). VO start: threshold -20 dB, 3:1, 10 ms / 100 ms, +4 dB -> {\"Threshold\": 0.6667, \"Ratio\": 0.069, \"Attack\": 0.02, \"Release\": 0.02, \"Gain\": 0.5667}. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Single-band Compressor\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Single-band Compressor\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Ratio mapping (r-1)/29 inferred; over-compression pumps and lifts noise.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Multiband Compressor",
+   "summary": "Four-band compressor with crossover, per-band threshold/ratio/attack/release/gain and an output limiter (LMAX); a mastering tool.",
+   "use_for": [
+    "taming a boomy or harsh music bed",
+    "final polish of a music-heavy trailer mix"
+   ],
+   "how": "Params include 'Output Gain', 'Threshold 1..4', 'Ratio 1..4', 'Attack 1..4', 'Release 1..4', 'Gain 1..4', 'Cutoff 1..3', 'Band 1..4 Bypass', 'LMAX: Threshold', 'LMAX: Margin'. Linear mappings as on the parameter scale card (Threshold -60..0, Attack 0..500 ms, Release 0..5000 ms). Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Multiband Compressor\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Multiband Compressor\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "105 params; easy to over-process VO. Brickwall limiter attack max 5 ms.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Hard Limiter",
+   "summary": "Brickwall limiter with input boost and an optional true-peak mode; the last effect before export.",
+   "use_for": [
+    "peak ceiling -1 dBTP for YouTube/Instagram",
+    "adding loudness to a quiet reel mix"
+   ],
+   "how": "Params: 'Maximum Amplitude', 'Input Boost', 'Look-Ahead Time', 'Release Time' (Adobe: ~100 ms default works), 'Link Channels', 'Decay to Ceiling', 'Limit True Peak' (default 0). Turn on true-peak: {\"name\": \"Hard Limiter\", \"pr_props\": {\"Limit True Peak\": 1}}; set Maximum Amplitude to -1 dB in the UI (normalized mapping unverified, default 0.999). Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Hard Limiter\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Hard Limiter\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Best on the Mix track (not scriptable); on clips it limits only that clip. More than a few dB of limiting audibly squashes VO.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Amplify",
+   "summary": "Gain boost/cut per channel; Auto Ducking writes its keyframes to this effect's 'Gain'.",
+   "use_for": [
+    "reading or deleting ducking keyframes",
+    "extra gain beyond +15 dB clip volume"
+   ],
+   "how": "Params: 'Channel Count', 'Link Sliders', 'Gain' (default 0.6667 = 0 dB), unnamed per-channel sliders, 'Link Keyframes'. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Amplify\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Amplify\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "dB mapping of 'Gain' besides 0.6667 = 0 dB unverified: for scripted level use Volume 'Level'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Vocal Enhancer",
+   "summary": "One-control voice-over polish: Male/Female modes cut sibilance, plosives and rumble and add radio-style compression; Music mode makes a bed sit under VO.",
+   "use_for": [
+    "quick VO sweetening",
+    "Essential Sound Clarity 'Vocal Enhancer' (High/Low Tone)"
+   ],
+   "how": "Param: 'Mode' (default 0.5). Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Vocal Enhancer\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Vocal Enhancer\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Mode index-to-value mapping unverified (3 modes); stacks badly with other compressors.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Mastering",
+   "summary": "All-in-one finisher: 3-band EQ, reverb, exciter (Retro/Tape/Tube), stereo widener, Loudness Maximizer, output gain.",
+   "use_for": [
+    "quick polish of a music bed",
+    "brightening dull archive music"
+   ],
+   "how": "Params: 'EQ Band 1..3 Freq/Gain/Q/Enable', 'Reverb Amount', 'Widener Width', 'Exciter Amount', 'Exciter Mode', 'Loudness Maximizer Amount' (0 % = none, 100 % = max limiting), 'Output Gain'. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Mastering\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Mastering\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Default Exciter Amount is high (0.8): reduce before use; not for VO.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Studio Reverb",
+   "summary": "Algorithmic (non-convolution, light CPU) reverb; Essential Sound Creative Reverb presets are Studio Reverb settings.",
+   "use_for": [
+    "matching VO to a room",
+    "trailer impact tails",
+    "dream/flashback voice"
+   ],
+   "how": "Params: 'Low Frequency Cut', 'High Frequency Cut', 'Room Size', 'Width', 'Diffusion', 'Damping', 'Decay', 'Early Reflections', 'Early Reflections Delay', 'Dry Output Level' (0.75), 'Wet Output Level' (0.25). Copy preset arrays from the Creative Reverb card. Convolution Reverb is the realistic (heavier) alternative. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Studio Reverb\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Studio Reverb\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Keep reverb off narration unless it is a stylistic choice.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory",
+    "%APPDATA%/Adobe/Premiere Pro/26.0/EssentialSound/Default/<type>/(Config).essentialsound"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Pitch Shifter",
+   "summary": "Real-time pitch change (semitones, cents or ratio 0.5-2.0).",
+   "use_for": [
+    "disguising an anonymous source's voice in news/documentary",
+    "creature/robot voices"
+   ],
+   "how": "Params: 'Transpose Ratio' (0.5..2.0 -> (r-0.5)/1.5; default 0.3333 = 1.0), 'Precision', 'Frequency', 'Overlapping', 'Use Default Setting', 'Use Positive Cents'. -3 semitones = ratio 0.8409 -> 0.2273. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Pitch Shifter\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Pitch Shifter\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Pitch shift alone is reversible: for real source protection also re-voice or add distortion/EQ, and blur the face. Precision/semitone controls mapping unverified.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Fill Left with Right",
+   "summary": "Copies one channel into the other (Fill Left with Right / Fill Right with Left), for a mic recorded on one channel only.",
+   "use_for": [
+    "camera audio with the lav on one channel and silence on the other"
+   ],
+   "how": "Apply to the stereo clip; no parameters besides Bypass. Alternative (better for mono sources, where this effect cannot be added): Clip > Modify > Audio Channels, scriptable; see card 'Modify Audio Channels (clip channel mapping)'. Premiere audio-effect params are normalized 0..1 in scripts (see card 'Premiere audio effect parameter scale (scripts)'); the first unnamed bool param of every audio effect is its Bypass.",
+   "scriptable": "yes",
+   "script_api": "QE (unsupported): var qe = app.enableQE(); qeAudioTrackItem.addAudioEffect(qe.project.getAudioEffectByName(\"Fill Left with Right\")) then set values via ExtendScript trackItem.components[last].properties[i].setValue(v, true); UXP 25.6+: AudioFilterFactory.createComponentByDisplayName(\"Fill Left with Right\", audioClipTrackItem) + (await audioClipTrackItem.getComponentChain()).createAppendComponentAction(component) executed in project.executeTransaction",
+   "limits": "Stereo clips only: on a mono clip QE addAudioEffect silently adds nothing (seen in the harvest). Channel mapping is writable from ExtendScript (getAudioChannelMapping + setMappingForChannel + ProjectItem.setAudioChannelMapping, per Adobe's PProPanel sample).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "pve/harvest/pr/pr_audio_effects.json",
+    "https://community.adobe.com/t5/premiere-pro-discussions/add-audio-effect-using-script/m-p/10559331",
+    "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/classes/audiofilterfactory",
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://ppro-scripting.docsforadobe.dev/other/audiochannelmapping/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "Modify Audio Channels (clip channel mapping)",
+   "summary": "Project-item audio channel mapping (Clip > Modify > Audio Channels): sets the clip channel format (Mono, Stereo, 5.1, Multichannel) and which source channel feeds each clip channel. The scriptable way to fix one-sided lav audio, pick the clean channel of a dual-mono recording, or turn a mono file into a stereo clip so stereo-only effects can be added.",
+   "use_for": [
+    "camera audio with the lav on channel 1 and silence or the camera mic on channel 2",
+    "making a mono VO behave as stereo before adding stereo-only effects (Fill Left with Right, Swap Channels, Stereo Expander, Channel Volume)",
+    "picking the clean channel of a dual-mono interview recording"
+   ],
+   "how": "UI: select the clip in the Project panel > Clip > Modify > Audio Channels > Clip Channel Format + source channel checkboxes. Script (ExtendScript, from Adobe's PProPanel sample): var m = projectItem.getAudioChannelMapping; m.audioChannelsType = 1 /* 0 mono, 1 stereo, 2 5.1, 3 multichannel, 4 4-channel */; m.audioClipsNumber = 1; m.setMappingForChannel(0, srcA); m.setMappingForChannel(1, srcB); projectItem.setAudioChannelMapping(m). Do it on the project item BEFORE inserting the clip into the sequence.",
+   "scriptable": "yes",
+   "script_api": "ExtendScript: ProjectItem.getAudioChannelMapping (attribute, returns AudioChannelMapping {audioChannelsType, audioClipsNumber, setMappingForChannel(channelIndex, sourceChannelIndex) -> true/false}); ProjectItem.setAudioChannelMapping(mapping) (used in Adobe's PProPanel sample, not listed in the community scripting guide). UXP: no channel-mapping call found in the 26.5 reference.",
+   "limits": "setAudioChannelMapping is undocumented in the guide: re-read getAudioChannelMapping afterwards to confirm. Source channel index numbering (0- or 1-based; the sample maps channels to sources 4 and 5) is unverified: read the mapping of a clip set in the UI first. Clips already edited into a sequence are not expected to pick up the change (unverified): set the mapping before placing the clip, or re-insert it.",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/item/projectitem/",
+    "https://ppro-scripting.docsforadobe.dev/other/audiochannelmapping/",
+    "https://github.com/Adobe-CEP/Samples/blob/master/PProPanel/jsx/PPRO/Premiere.jsx",
+    "pve/harvest/pr/pr_audio_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "PR",
+   "name": "VO cleanup and mastering chain (recipe)",
+   "summary": "Order of operations for documentary/explainer narration and reels, with the scriptable choice at each step.",
+   "use_for": [
+    "Hindi/English documentary VO",
+    "AI-education explainers",
+    "political news reels with music beds"
+   ],
+   "how": "1) Fix sources: Highpass ~80 Hz; DeNoise 0.2-0.4 (or Enhance Speech in UI); DeReverb if roomy; DeHummer at 50 Hz if hum. 2) Tone: Graphic Equalizer (10 Bands) 'Podcast Voice'/'Vocal Presence' values; DeEsser. 3) Dynamics: Single-band Compressor about 3:1 at -20 dB, 10 ms / 100 ms. 4) Level: VO-only near -16..-18 LUFS integrated via Volume 'Level' (measured LUFS math). 5) Music: duck 12-18 dB under VO (Auto Ducking or scripted Volume keyframes); SFX hits peak below VO. 6) Master: Hard Limiter with Limit True Peak, ceiling -1 dB (Mix track in UI) and/or Export Loudness Normalization to -14 LUFS / -1 dBTP. 7) QC the file: ffmpeg ebur128 integrated + true peak, and listen on phone speakers.",
+   "scriptable": "partial",
+   "script_api": "steps 1-5 via QE addAudioEffect + ComponentParam.setValue / Volume keyframes; step 6 via .epr edit; Enhance Speech, Auto Ducking, Auto-Match and track effects are UI-only",
+   "limits": "Numbers are common practice starting points, not Adobe specs; judge by ear. Noise reduction before compression; limiting last.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/apply-audio-effects/audio-effects-library.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/repair-dialogue.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/improve-dialogue-clarity.html",
+    "https://helpx.adobe.com/premiere/desktop/add-audio-effects/adjust-volume-and-levels/automatically-duck-audio.html",
+    "https://helpx.adobe.com/media-encoder/using/automatic-loudness-correction.html",
+    "https://aes.org/wp-content/uploads/2024/01/20210924_TD1008_v3.13.pdf",
+    "https://workflow.frame.io/guide/loudness-for-youtube"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "both",
+   "name": "Delivery loudness targets (YouTube, Instagram, broadcast)",
+   "summary": "Integrated loudness and true-peak targets for final mixes. YouTube: no official published spec; it turns loud uploads down toward about -14 LUFS and does not raise quiet ones (visible as 'content loudness' in Stats for nerds). Instagram/Facebook Reels: no published spec; community measurements point to about -14 LUFS. Ceiling -1 dBTP for lossy platforms (AES). Broadcast: EBU R128 -23 LUFS, ATSC A/85 -24 LKFS.",
+   "use_for": [
+    "setting export normalization",
+    "QC before upload",
+    "TV deliverables for news channels"
+   ],
+   "how": "Web/social deliveries: -14 LUFS integrated (acceptable -16..-13), true peak <= -1 dBTP; dialogue-led long-form can sit at -16 LUFS without being turned up by YouTube. Keep integrated above about -20 LUFS (bottom of the older AES TD1004 -16..-20 range; TD1008 warns that content quieter than its targets can be unsatisfyingly quiet on low-gain devices such as phones). Broadcast: follow the channel's spec sheet (R128 -23 LUFS or A/85 -24 LKFS; the export Loudness Normalization has both).",
+   "scriptable": "partial",
+   "script_api": "Export Loudness Normalization via .epr XML (see that card); verify with ffmpeg -af ebur128=peak=true",
+   "limits": "YouTube/Instagram numbers are measured behaviour, not published specs, and can change. AES TD1008 (-18 LUFS speech, -16 music, -1 dBTP) is written for audio streaming, not sound-with-picture. See also: 'Documentary mix-level plan (dialogue, music, effects)'; 'Broadcast audio track layouts (EBU R 123)'; 'Stems and split-track export (dialogue, music, effects)'; 'Delivery spec: YouTube upload (16:9, HD and 4K)'; 'Delivery spec: vertical Reels, Shorts and TikTok (9:16)'; 'Delivery spec: broadcast masters (ProRes 422 HQ, XDCAM HD422 MXF OP1a)'.",
+   "status": "current",
+   "sources": [
+    "https://aes.org/wp-content/uploads/2024/01/20210924_TD1008_v3.13.pdf",
+    "https://workflow.frame.io/guide/loudness-for-youtube",
+    "https://youlean.co/how-to-edit-a-video-to-achieve-good-audio-loudness-on-youtube/",
+    "https://cutscore.io/blog/loudness-for-instagram-reels",
+    "https://en.wikipedia.org/wiki/EBU_R_128",
+    "https://helpx.adobe.com/media-encoder/using/automatic-loudness-correction.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Audio Levels (layer property)",
+   "summary": "Every AE layer with audio has Audio > Audio Levels, a [left, right] pair in dB; keyframe it for fades and ducks inside a comp.",
+   "use_for": [
+    "fading SFX/music inside an AE comp",
+    "balancing whooshes against a title animation"
+   ],
+   "how": "Timeline: select layer, press L (Audio Levels) or LL (waveform). Script: layer.property(\"ADBE Audio Group\").property(\"ADBE Audio Levels\").setValueAtTime(t, [dB, dB]); layer.audioEnabled = true/false toggles the speaker switch.",
+   "scriptable": "yes",
+   "script_api": "AVLayer.property('ADBE Audio Group').property('ADBE Audio Levels').setValue([l, r]) / setValueAtTime(t, [l, r]); AVLayer.hasAudio, audioEnabled (r/w), audioActive, audioActiveAtTime(t)",
+   "limits": "AE has no loudness meter or mixer: do the final mix in Premiere. Audio from a Dynamic-Linked comp arrives in Premiere already mixed by these levels.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/avlayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Compressor",
+   "summary": "New (2026) AE audio compressor: Threshold (dB) -60..0 (default -16), Ratio (x:1) 0.4..30 (3), Knee (db) 0..30 (15), Attack (ms) 0..400 (6), Release (ms) 1..4000 (440), Auto Release (on), Makeup Gain (dB) -30..30, Output Limit (dB) -30..0 (-1).",
+   "use_for": [
+    "evening out a VO or SFX layer that lives in an AE comp",
+    "punchier trailer hits"
+   ],
+   "how": "Effect > Audio > Compressor. Spec: {\"name\": \"ADBE Aud Compressor\", \"props\": {\"Threshold (dB)\": -20, \"Ratio (x:1)\": 3, \"Makeup Gain (dB)\": 4, \"Output Limit (dB)\": -1}}. Adobe tip: dialogue 3:1 fast attack; music 2:1-4:1 slower attack.",
+   "scriptable": "yes",
+   "script_api": "layer.property('ADBE Effect Parade').addProperty('ADBE Aud Compressor') then setValue on the named props",
+   "limits": "Release is ignored while 'Auto Release' = 1. Property name 'Knee (db)' has a lowercase 'db'. Added in the 2026 cycle (beta 26.0x8, then release; present in the installed AE 26.0 harvest): not in AE 2024/2025.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "https://community.adobe.com/announcements-532/new-audio-plugins-for-after-effects-in-ae-26-0x8-314502",
+    "https://helpx.adobe.com/after-effects/desktop/what-s-new/whats-new.html",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Gate",
+   "summary": "New (2026) AE noise gate: Threshold (dB) -60..0 (default -60), Attack (ms) 0..1000 (10), Hold (ms) 0..2500 (40), Release (ms) 5..4000 (220).",
+   "use_for": [
+    "cutting hiss between words on a layer in AE",
+    "hard-gated rhythmic SFX"
+   ],
+   "how": "Effect > Audio > Gate; raise Threshold until the noise between phrases disappears. Spec: {\"name\": \"ADBE Aud Gate\", \"props\": {\"Threshold (dB)\": -45, \"Release (ms)\": 150}}.",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Aud Gate') + setValue",
+   "limits": "Too high a threshold chops word tails; default -60 dB does almost nothing.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "https://community.adobe.com/announcements-532/new-audio-plugins-for-after-effects-in-ae-26-0x8-314502",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Distortion",
+   "summary": "New (2026) AE distortion + bitcrusher: Type 1-6 (Soft Clip, Hard Clip, Saturation 1, Saturation 2, Tube, Fuzz), Drive 0..100 (25), Gain 0..300 (25), Mix 0..100 (100), Volume 0..100 (11), Resolution (bit) 1..24 (24), Downsample (x) 1..48 (1).",
+   "use_for": [
+    "walkie-talkie/radio voice in news recreations",
+    "lo-fi glitch SFX for tech reels",
+    "warmth on synth hits"
+   ],
+   "how": "Effect > Audio > Distortion. Radio voice: {\"name\": \"ADBE Aud Distortion\", \"props\": {\"Type\": 2, \"Drive\": 50, \"Mix\": 60}} plus High-Low Pass; lo-fi: Resolution (bit) 8, Downsample (x) 4.",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Aud Distortion') + setValue",
+   "limits": "Volume default 11 is low-ish; check levels after. Type dropdown order taken from Adobe's list.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "https://community.adobe.com/announcements-532/new-audio-plugins-for-after-effects-in-ae-26-0x8-314502",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "High-Low Pass",
+   "summary": "Single high-pass or low-pass filter with Cutoff Frequency 1..20000 Hz (default 2000) and Dry/Wet Out.",
+   "use_for": [
+    "muffled 'behind the wall' or underwater voice (low pass)",
+    "thin phone voice (two instances: HP ~300 Hz + LP ~3400 Hz)",
+    "sweeping a filter into a drop"
+   ],
+   "how": "Effect > Audio > High-Low Pass. Filter Options 1 = High Pass, 2 = Low Pass (order as in the UI list; verify). For a filter, Dry Out 0 and Wet Out 100. Animate Cutoff Frequency for sweeps.",
+   "scriptable": "yes",
+   "script_api": "var fx = layer.property('ADBE Effect Parade').addProperty('ADBE Aud HiLo'); fx.property('Filter Options').setValue(2); fx.property('Cutoff Frequency').setValueAtTime(t, hz)",
+   "limits": "Gentle slope; for steep phone EQ stack two.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Parametric EQ",
+   "summary": "Three-band peaking EQ (Band 1/2/3 Enabled, Frequency 1..21609 Hz, Bandwidth 0.1..99, Boost/Cut -100..100) with a response graph.",
+   "use_for": [
+    "cutting a whine or rumble in an AE-only audio layer"
+   ],
+   "how": "Effect > Audio > Parametric EQ; band 1 on by default (1000 Hz), bands 2-3 off (5000 / 10000 Hz).",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Param EQ'); bands 2-3 share property names with band 1, so address them by index (effect.property(n)) rather than by name",
+   "limits": "Property names repeat per band ('Frequency', 'Bandwidth', 'Boost/Cut'), so a PVE spec addressing them by name is ambiguous; harvested default Boost/Cut is 50 and its unit is not documented (test by ear). Usually better done in Premiere.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Reverb (AE)",
+   "summary": "Simple algorithmic reverb: Reverb Time (ms) 0..5000 (100), Diffusion 0..100 (75), Decay 0..100 (25), Brightness 0..100 (10), Dry Out 0..400 (90), Wet Out 0..400 (10).",
+   "use_for": [
+    "tails on trailer hits and whooshes inside a comp",
+    "echo on a title sting"
+   ],
+   "how": "Effect > Audio > Reverb; raise Decay for bigger spaces. Delay ('ADBE Aud Delay') is the echo counterpart.",
+   "scriptable": "yes",
+   "script_api": "addProperty('ADBE Aud Reverb') + setValue",
+   "limits": "Low quality next to Premiere's Studio/Convolution Reverb; fine for SFX.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Tone",
+   "summary": "Synthesizes up to five tones (Frequency 1-5 Hz, Level 0..100 default 20, Waveform options 1-5) on any layer, even a solid; original audio is ignored.",
+   "use_for": [
+    "censor bleep in AE (single 1000 Hz sine)",
+    "UI blips and data beeps for tech/news graphics",
+    "drone beds"
+   ],
+   "how": "Effect > Audio > Tone. Turn off unused tones by setting their Frequency to 0; keep Level <= 100 / number of tones; keyframe Level to 0 on the last frame to avoid a click.",
+   "scriptable": "yes",
+   "script_api": "var fx = layer.property('ADBE Effect Parade').addProperty('ADBE Aud Tone'); fx.property('Frequency 2').setValue(0) etc.",
+   "limits": "'Waveform options' 1-5 covers Sine, Triangle, Saw, Square, White Noise (Adobe's list); default 1 = sine is likely, the order of 2-5 is unverified: test by ear. No sound on placeholder layers.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "De-esser (AE beta)",
+   "summary": "Sibilance reducer being tested in After Effects (beta): Threshold, Frequency (default 7000 Hz), Bandwidth (3000 Hz), Attack (1 ms), Release (50 ms), Sibilance Only.",
+   "use_for": [
+    "harsh S on VO kept inside AE"
+   ],
+   "how": "AE (beta) only. Adobe starting points: narration about -20 dB / 7 kHz / 3 kHz / 1 ms / 50-100 ms; deeper male voice -18 dB / 4-5 kHz.",
+   "scriptable": "no",
+   "script_api": "unverified (not in the installed AE 2026 harvest; match name unknown)",
+   "limits": "Not in release AE 2026 as harvested on 2026-10-03; use Premiere's DeEsser.",
+   "status": "beta",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "pve/harvest/ae_effects.json"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Convert Audio to Keyframes",
+   "summary": "Keyframe assistant that creates an 'Audio Amplitude' null with sliders 'Left Channel', 'Right Channel', 'Both Channels' keyed every frame from the comp's audio, for audio-reactive motion.",
+   "use_for": [
+    "pulsing logos/text to the VO or music",
+    "beat-reactive shapes in reels",
+    "waveform-driven scale on podcasts clips"
+   ],
+   "how": "Select the audio layer > Animation > Keyframe Assistant > Convert Audio to Keyframes. Drive a property with linear(thisComp.layer(\"Audio Amplitude\").effect(\"Both Channels\")(\"Slider\"), 0, peak, minVal, maxVal).",
+   "scriptable": "partial",
+   "script_api": "unverified: select the layer, then app.executeCommand(app.findMenuCommandId(\"Convert Audio to Keyframes\")) (both functions are documented; the command name lookup is not verified here); fallback = build the null yourself from an offline amplitude analysis and setValuesAtTimes",
+   "limits": "Uses the whole comp's audio (all audible layers), not one layer: solo or precompose first. Amplitude values are arbitrary units: remap with linear().",
+   "status": "current",
+   "sources": [
+    "https://www.surfacedstudio.com/blog/vfx-vlog/after-effects-audio-to-keyframes/",
+    "http://motionscript.com/design-guide/basic-audio.html",
+    "https://ae-scripting.docsforadobe.dev/general/application/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "Audio Spectrum and Audio Waveform (visualizers)",
+   "summary": "Generate effects that draw a frequency spectrum (ADBE AudSpect) or waveform (ADBE AudWave) from an audio layer, optionally along a mask path.",
+   "use_for": [
+    "podcast/clip audiograms",
+    "VO waveform under a speaker name",
+    "music visual for AI-education reels"
+   ],
+   "how": "Apply to a solid; set Audio Layer to the music/VO layer; Start/End Point (pixels) or a Path; Spectrum: Start/End Frequency, Frequency bands, Maximum Height, Display Options 1-3; Waveform: Displayed Samples, Maximum Height. Spec example: {\"name\": \"ADBE AudSpect\", \"props\": {\"Frequency bands\": 48, \"Maximum Height\": 600, \"Inside Color\": \"#FFFFFF\"}}.",
+   "scriptable": "partial",
+   "script_api": "props settable by name except 'Audio Layer' (layer type) and 'Path' (mask type), which a PVE spec cannot set; set them in ExtendScript: effect.property('Audio Layer').setValue(layerIndex) and effect.property('Path').setValue(maskIndex) (PropertyValueType LAYER_INDEX / MASK_INDEX are integers, 0 = none, per the AE scripting guide)",
+   "limits": "Reads the source footage audio without time remapping, effects, stretch or levels: precompose the audio layer if those must show.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/generate-effects.html",
+    "pve/harvest/ae_effects.json",
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "audio_post",
+   "app": "AE",
+   "name": "After Effects audio output and limits",
+   "summary": "AE is not a mixing tool: legacy-quality audio effects (plus the 2026 Compressor/Gate/Distortion), no loudness meter, no ducking, no noise reduction. Render audio comes from the Output Module.",
+   "use_for": [
+    "deciding where audio work happens (answer: Premiere)",
+    "rendering an AE comp with or without audio"
+   ],
+   "how": "Keep VO and music in Premiere; in AE keep only SFX tied to animation. Enable audio output in the Output Module (Audio Output on/off, sample rate, channels). For scripted renders, read the exact keys with outputModule.getSettings(GetSettingsFormat.STRING_SETTABLE) before calling setSettings.",
+   "scriptable": "partial",
+   "script_api": "OutputModule.getSettings(GetSettingsFormat.STRING_SETTABLE) / setSettings({...}) (audio key names unverified: read them first)",
+   "limits": "Audio preview in AE needs RAM preview; Dynamic Link passes AE audio into Premiere already mixed.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/list-of-effects/audio-effects.html",
+    "https://ae-scripting.docsforadobe.dev/renderqueue/outputmodule/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/"
+   ],
+   "confidence": "medium"
+  }
+ ]
+}

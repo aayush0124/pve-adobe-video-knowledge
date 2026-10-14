@@ -1,0 +1,1217 @@
+{
+ "cards": [
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Invert",
+   "match": "Internal Invert",
+   "category": "Special",
+   "status": "current",
+   "summary": "Flips the polarity (phase) of the clip's audio by 180 degrees. On its own it sounds identical; it only matters when the clip is mixed with a second mic or another copy of the same sound.",
+   "look": [
+    "polarity flip",
+    "phase invert",
+    "no audible change alone",
+    "phase-cancellation fix"
+   ],
+   "use_for": [
+    "Fix a thin, hollow interview mix when one of two mics on the same take (lav + boom) was recorded with reversed polarity: invert that mic's clip",
+    "Null-test two renders or two versions of a mix: invert one copy on a second track, whatever you still hear is the difference"
+   ],
+   "avoid": [
+    "Expecting an audible change on a single solo track: nothing changes",
+    "It flips all channels; it cannot invert just the left or right side",
+    "Cancelling music or bleed with an inverted copy only works when both copies are identical and sample-aligned; a camera mic and a clean file never null",
+    "Lav/boom comb filtering caused by distance (time offset) is not fixed by Invert: nudge the clips into sync instead"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer (Invert Phase)",
+   "pairs_with": [
+    "Volume",
+    "Channel Volume"
+   ],
+   "scripting": "No settable parameters. The only harvested row is an unnamed boolean, very likely the component's Bypass switch: leave it false. Apply by name with QE addAudioEffect; presence = on. To prove it works, put a duplicate of the clip on a second track with Invert on one copy: the pair should cancel to near-silence. Effects-panel folder is a best guess. Measured on a split stereo pair: both channels come out with inverted polarity (correlation -1 with the dry input) at unchanged level.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Lowpass",
+   "match": "Internal Lowpass",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Removes frequencies above the Cutoff and lets the lows through, so sound becomes muffled and distant. Keyframing the Cutoff gives the classic muffled-to-full sweep.",
+   "look": [
+    "muffled",
+    "underwater",
+    "next room",
+    "through a wall",
+    "dull",
+    "distant"
+   ],
+   "use_for": [
+    "Muffle music while a character goes underwater, faints or drifts into a flashback",
+    "Make music sound like it plays in another room before a reveal or door-open",
+    "Sweep music from muffled to full at a trailer or reel beat drop",
+    "Gently tame hiss on a noisy archival clip"
+   ],
+   "avoid": [
+    "Using it on VO: speech loses clarity fast once the cutoff drops into the presence range",
+    "A static, extreme cutoff on a whole music track sounds broken rather than stylised"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Cutoff",
+     "does": "Frequency above which sound is removed; normalized 0..1, higher = brighter (more highs kept). Measured on pink noise: -3 dB at 66 Hz / 1.2 kHz / 4.8 kHz / 11.3 kHz for 0.05 / 0.25 / 0.5 / 0.75, close to Hz = 18 000 x v^1.9 (within about 12 %).",
+     "typical": "default 0.25 (-3 dB at 1.2 kHz, measured); telephone top 3.4 kHz = 0.42; 500 Hz muffle = 0.16; 1 for nearly open",
+     "measured": {
+      "figure": "-3 dB cut-off (Hz)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.05,
+        65.7
+       ],
+       [
+        0.25,
+        1191.1
+       ],
+       [
+        0.5,
+        4762.3
+       ],
+       [
+        0.75,
+        11280.7
+       ]
+      ],
+      "line": {
+       "slope": 16032.7314,
+       "intercept": -1887.7334,
+       "worst_residual": 1366.332
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "High-Low Pass",
+   "pairs_with": [
+    "Highpass",
+    "Volume",
+    "Studio Reverb"
+   ],
+   "scripting": "Cutoff is exposed normalized 0..1 (default 0.25). The API does not report Hz; measured -3 dB points follow Hz = 18 000 x v^1.9 (0.05 = 66 Hz, 0.5 = 4.8 kHz). The unnamed boolean row is very likely Bypass: leave false. For an 'other room' look, pair a fixed low Cutoff with -6 to -10 dB on Volume. Recipe sweeps 0.05 -> 1 over 1.5 s from clip start; 0.05 is only 66 Hz (measured), so the sweep starts near-silent: start it at 0.15 (about 500 Hz) for a muffled start.",
+   "recipe": {
+    "Cutoff": [
+     [
+      0,
+      0.05
+     ],
+     [
+      1.5,
+      1
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -1.58,
+     "thd_pct": 0.012,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Mute",
+   "match": "Internal Mute",
+   "category": "Special",
+   "status": "current",
+   "summary": "Silences the clip's audio, either all channels at once or individual channels, and can be keyframed to silence just a section.",
+   "look": [
+    "silence",
+    "channel mute",
+    "hard cut-out"
+   ],
+   "use_for": [
+    "Silence a dead or noisy channel inside a multichannel camera clip (e.g. 4-channel XLR recording) while keeping the others; on a stereo pair use Fill Left with Right / Fill Right with Left instead so the good mic plays in both ears",
+    "Hard-silence a profanity or a name that must be dropped from a news bite (keyframed)",
+    "Silence a clip's audio temporarily while keeping it on the timeline for reference"
+   ],
+   "avoid": [
+    "Keyframed mute is a hard on/off and can click; use Volume keyframes with short ramps for smooth dips",
+    "To drop a clip's sound entirely, disabling or deleting the audio clip is cleaner"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Mute All",
+     "does": "Silences every channel (0 = sound on, 1 = muted). Measured: 1 silences the clip (-129 dB), 0 leaves it unchanged.",
+     "typical": "1 to mute the whole clip",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        1,
+        -128.99
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Mute 1",
+     "does": "Silences channel 1 only (0 = on, 1 = muted)",
+     "typical": "1 to drop a bad first channel"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Volume",
+    "Fill Left with Right",
+    "Fill Right with Left"
+   ],
+   "scripting": "Harvested on a mono clip, so only 'Mute All' and 'Mute 1' are named; the 31 unnamed numeric rows after them are the slots for channels 2-32 (Premiere's 32-channel maximum; on multichannel clips they are expected to appear as Mute 2, Mute 3...; unverified). Values are normalized 0..1 toggles: set 1 to mute, 0 to unmute. The first unnamed boolean is very likely Bypass. Keyframes are expected to act as hold on/off toggles (unverified: if a scripted ramp 0->1 fades instead, set hold interpolation). Effects-panel folder is a best guess; After Effects has no mute effect (use the layer audio switch or Audio Levels).",
+   "recipe": {
+    "Mute All": [
+     [
+      0,
+      0
+     ],
+     [
+      2.0,
+      1
+     ],
+     [
+      2.6,
+      0
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Simple Parametric EQ",
+   "match": "Internal Parameteric EQ",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "A single-band bell EQ: boosts or cuts a band of frequencies around Center, with Q setting how narrow the band is.",
+   "look": [
+    "single-band EQ",
+    "presence lift",
+    "mud cut",
+    "tone shaping"
+   ],
+   "use_for": [
+    "Cut boxy or muddy room tone (around 200-400 Hz) on an interview",
+    "Add a small presence lift (around 3-5 kHz) so VO cuts through music",
+    "Carve a dip in a music bed where the narration sits",
+    "Quick one-band fix when the full Parametric Equalizer is overkill"
+   ],
+   "avoid": [
+    "Big boosts with a narrow Q ring and sound harsh",
+    "Stacking several copies for multi-band work: use Parametric Equalizer instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Center",
+     "does": "Centre frequency of the band; normalized 0..1 (default 0.25), measured about 24 000 x v^2 Hz. Measured: the band centre is about 24 000 x v^2 Hz (0.1 = 250 Hz, 0.25 = 1.6 kHz, 0.5 = 6.3 kHz, 0.75 = 12.7 kHz, third-octave readings): v = sqrt(Hz / 24 000).",
+     "typical": "mud 250-400 Hz = 0.10-0.13; presence 3-5 kHz = 0.35-0.46",
+     "measured": {
+      "figure": "band of the largest boost (Hz, third-octave resolution)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0.1,
+        250.0
+       ],
+       [
+        0.25,
+        1587.4
+       ],
+       [
+        0.5,
+        6349.6
+       ],
+       [
+        0.75,
+        12699.2
+       ]
+      ],
+      "line": {
+       "slope": 19455.3878,
+       "intercept": -2560.6051,
+       "worst_residual": 865.066
+      }
+     }
+    },
+    {
+     "name": "Q",
+     "does": "Bandwidth: higher = narrower band",
+     "typical": "0.3-0.5 for broad musical moves; higher for surgical cuts"
+    },
+    {
+     "name": "Boost",
+     "does": "Gain at the centre; 0.5 = 0 dB (flat), below cuts, above boosts. Measured on pink noise at Center 0.25: 0.75 = +12.0 dB, 1 = +23.8 dB, so about 48 dB per unit around 0.5 (a +/-24 dB span); cuts read only as a notch.",
+     "typical": "0.46-0.48 for a 1-2 dB cut, 0.52-0.54 for a 1-2 dB lift",
+     "measured": {
+      "figure": "largest boost (dB, third-octave)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        -2.79
+       ],
+       [
+        0.25,
+        -1.12
+       ],
+       [
+        0.75,
+        12.0
+       ],
+       [
+        1,
+        23.83
+       ]
+      ],
+      "line": {
+       "slope": 26.544,
+       "intercept": -5.292,
+       "worst_residual": 2.616
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "Highpass",
+    "DeEsser",
+    "Dynamics Processing",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Match name keeps Adobe's spelling 'Internal Parameteric EQ' (sic). All three controls are normalized 0..1 and Boost 0.5 is flat. The API reports no Hz or dB, but both are measured: Center about 24 000 x v^2 Hz, Boost about +/-24 dB. The unnamed boolean is very likely Bypass. Prefer 'Parametric Equalizer' for multi-band VO chains.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Swap Channels",
+   "match": "Internal Audio Swap Channels",
+   "category": "Special",
+   "status": "current",
+   "summary": "Swaps the left and right channels of a stereo clip, so what was on the left plays on the right and vice versa.",
+   "look": [
+    "stereo swap",
+    "L/R flip",
+    "channel swap"
+   ],
+   "use_for": [
+    "Match channel order across cameras when one camera had its mic inputs reversed (lav on CH2 instead of CH1)",
+    "Keep on-screen sound positions matching after a shot was mirrored horizontally",
+    "Correct a stereo music or ambience file with reversed channels"
+   ],
+   "avoid": [
+    "Mono clips: there is nothing to swap and the effect does not attach"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer",
+   "pairs_with": [
+    "Fill Left with Right",
+    "Fill Right with Left",
+    "Channel Volume"
+   ],
+   "scripting": "Stereo clips only; no parameters of its own: it exchanges the left and right channels (measured: each output matches the opposite input) on a split stereo pair (live wave 3). The mono harvest could not attach it and read the clip Volume row; the batch now holds the stereo dump (match 'Internal Audio Swap Channels'). Apply it by name with QE addAudioEffect to a stereo clip and check the last component's displayName.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Fill Left with Right",
+   "match": "Internal Audio Fill Left",
+   "category": "Special",
+   "status": "current",
+   "summary": "Copies the right channel into the left and discards the original left, so both speakers play the right channel.",
+   "look": [
+    "mono from right",
+    "centred",
+    "one-sided fix"
+   ],
+   "use_for": [
+    "Interview where the good lav is only on the right channel: make it play in both ears",
+    "Remove a dead, noisy or camera-mic left channel from a field recording",
+    "Turn a one-sided dual-mono camera track into centred speech"
+   ],
+   "avoid": [
+    "It throws away the left channel: listen first, the left may be the better mic",
+    "Mono clips: no effect (it does not attach)"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer",
+   "pairs_with": [
+    "Fill Right with Left",
+    "Swap Channels",
+    "Volume"
+   ],
+   "scripting": "Stereo clips only; no parameters of its own: it copies the right channel into the left, so both play the right side (measured) on a split stereo pair (live wave 3). The mono harvest could not attach it and read the clip Volume row; the batch now holds the stereo dump (match 'Internal Audio Fill Left'). Apply it by name with QE addAudioEffect to a stereo clip and check the last component's displayName.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Fill Right with Left",
+   "match": "Internal Audio Fill Right",
+   "category": "Special",
+   "status": "current",
+   "summary": "Copies the left channel into the right and discards the original right, so both speakers play the left channel.",
+   "look": [
+    "mono from left",
+    "centred",
+    "one-sided fix"
+   ],
+   "use_for": [
+    "Interview where the good mic is only on the left channel (common with camera XLR input 1): play it in both ears",
+    "Remove a dead or noisy right channel from a camera recording",
+    "Centre a dual-mono VO recorded into one input"
+   ],
+   "avoid": [
+    "It throws away the right channel: check it is not the better mic first",
+    "Mono clips: no effect (it does not attach)"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer",
+   "pairs_with": [
+    "Fill Left with Right",
+    "Swap Channels",
+    "Volume"
+   ],
+   "scripting": "Stereo clips only; no parameters of its own: it copies the left channel into the right, so both play the left side (measured) on a split stereo pair (live wave 3). The mono harvest could not attach it and read the clip Volume row; the batch now holds the stereo dump (match 'Internal Audio Fill Right'). Apply it by name with QE addAudioEffect to a stereo clip and check the last component's displayName.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Treble",
+   "match": "Internal Treble",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "High-shelf EQ with one Boost control that raises or lowers the high frequencies (roughly 4 kHz and up).",
+   "look": [
+    "brighter",
+    "airy",
+    "crisp",
+    "darker when cut",
+    "sibilant if overdone"
+   ],
+   "use_for": [
+    "Add a little air and clarity to a dull lav VO",
+    "Cut tape hiss or a harsh top end on old archival audio (phone/WhatsApp audio has little above 4 kHz, so Treble barely changes it)",
+    "Darken a music bed slightly so narration sits on top"
+   ],
+   "avoid": [
+    "Boosting a noisy recording lifts hiss along with the voice",
+    "Big boosts on VO make S sounds harsh; add DeEsser if you must"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Boost",
+     "does": "High-shelf gain; 0.5 = 0 dB (flat), lower cuts, higher boosts. Measured at 10 kHz on pink noise: 0 = -15.5 dB, 0.25 = -8.6, 0.75 = +11.1, 1 = +23.9 dB; a full cut also takes about 7 dB off 1 kHz.",
+     "typical": "VO: 0.52-0.58 for a slight lift; music bed under VO 0.40-0.45 (measured: -15.5 dB at 0, +23.9 dB at 1 at 10 kHz)",
+     "measured": {
+      "figure": "gain at 10 kHz (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        -15.48
+       ],
+       [
+        0.25,
+        -8.64
+       ],
+       [
+        0.75,
+        11.09
+       ],
+       [
+        1,
+        23.86
+       ]
+      ],
+      "line": {
+       "slope": 39.364,
+       "intercept": -16.9745,
+       "worst_residual": 1.507
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Bass & Treble",
+   "pairs_with": [
+    "Bass",
+    "DeEsser",
+    "Highpass"
+   ],
+   "scripting": "Boost is normalized 0..1 with 0.5 = flat; the API reports no dB, but the span is measured (see Boost). The unnamed boolean is very likely Bypass. Keep moves small; for anything more precise use Parametric Equalizer.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.005,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Volume",
+   "match": "Internal Volume",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Stackable gain effect that raises or lowers loudness and can be keyframed for fades and ducking. Same control as the fixed Volume every clip already has, but placed wherever you want in the effect chain.",
+   "look": [
+    "louder",
+    "quieter",
+    "fade",
+    "duck"
+   ],
+   "use_for": [
+    "Duck music under VO with keyframes (about -10 to -18 dB)",
+    "Fade SFX and music in and out",
+    "Add a gain stage after an EQ or compressor in the chain",
+    "Balance clip levels before final loudness normalisation"
+   ],
+   "avoid": [
+    "Pushing towards the scripted +15 dB maximum (the Effect Controls slider itself stops at +6 dB) on quiet VO also raises noise; use Audio Gain or Amplify first",
+    "Level 0 is silence (-infinity dB), not 0 dB"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Level",
+     "does": "Gain as normalized linear amplitude: value = 10^((dB - 15) / 20), so 0.17783 = 0 dB, 1.0 = +15 dB, 0 = silence. Measured on a tone: 0.0562 = -10.0 dB, 0.1778 = 0, 0.3162 = +5.0, 1 = +15.0 dB: the formula confirmed.",
+     "typical": "0 dB 0.1778; +6 dB 0.3548; -6 dB 0.0891; -10 dB 0.0562; -12 dB 0.0447; -18 dB 0.0224",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0.0562,
+        -10.01
+       ],
+       [
+        0.1778,
+        0.0
+       ],
+       [
+        0.3162,
+        5.0
+       ],
+       [
+        1.0,
+        15.0
+       ]
+      ],
+      "line": {
+       "slope": 22.748,
+       "intercept": -6.3185,
+       "worst_residual": 4.97
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Audio Levels (layer property) / Stereo Mixer",
+   "pairs_with": [
+    "Dynamics Processing",
+    "Hard Limiter",
+    "Parametric Equalizer"
+   ],
+   "scripting": "Match 'Internal Volume'. Level uses Premiere's audio-level normalization: v = 10^((dB-15)/20), dB = 20*log10(v) + 15. Every clip also has a fixed Volume component (match 'Internal Volume Mono' on mono clips) with the same mapping; scripts usually keyframe that one and add this effect only when a second gain stage is needed. The unnamed boolean is very likely Bypass. Effects-panel folder is a best guess.",
+   "recipe": {
+    "Level": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      0.1778
+     ],
+     [
+      4.5,
+      0.1778
+     ],
+     [
+      5,
+      0
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Channel Volume",
+   "match": "Internal Channel Volume",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Sets the level of each channel of a stereo or 5.1 clip separately (for example left and right), in dB.",
+   "look": [
+    "per-channel level",
+    "balance fix",
+    "lopsided stereo fix"
+   ],
+   "use_for": [
+    "Balance a dual-mic interview where one lav channel is louder than the other",
+    "Pull down a noisy channel without removing it",
+    "Trim one side of a lopsided stereo music or ambience file"
+   ],
+   "avoid": [
+    "Mono clips: no effect (it does not attach)",
+    "To remove a channel completely, Fill Left with Right / Fill Right with Left is cleaner"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Left",
+     "does": "Level of the left channel. Measured: the same scale as clip Volume, 0.1778 = 0 dB (the default), 0 = silent, 0.5 = +9 dB, 1 = +15 dB (dB = 20 log10(v / 0.1778)).",
+     "typical": "0.1778 = 0 dB; 0.0889 = -6 dB; 0 mutes the channel",
+     "measured": {
+      "figure": "left channel level (dBFS rms)",
+      "signal": "a split stereo pair (L 440 Hz at -12 dBFS, R 1 kHz at -24 dBFS)",
+      "points": [
+       [
+        0,
+        -150.0
+       ],
+       [
+        0.5,
+        -6.07
+       ],
+       [
+        1,
+        -1.68
+       ]
+      ],
+      "line": {
+       "slope": 148.32,
+       "intercept": -126.7433,
+       "worst_residual": 46.513
+      }
+     }
+    },
+    {
+     "name": "Right",
+     "does": "Level of the right channel. Measured: the same scale as Left (0.1778 = 0 dB, 0.5 = +9 dB, 1 = +15 dB, 0 = silent).",
+     "typical": "0.1778 = 0 dB",
+     "measured": {
+      "figure": "right channel level (dBFS rms)",
+      "signal": "a split stereo pair (L 440 Hz at -12 dBFS, R 1 kHz at -24 dBFS)",
+      "points": [
+       [
+        0,
+        -150.0
+       ],
+       [
+        0.5,
+        -18.11
+       ],
+       [
+        1,
+        -12.09
+       ]
+      ],
+      "line": {
+       "slope": 137.91,
+       "intercept": -129.0217,
+       "worst_residual": 41.957
+      }
+     }
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Stereo Mixer",
+   "pairs_with": [
+    "Fill Left with Right",
+    "Fill Right with Left",
+    "Volume"
+   ],
+   "scripting": "Stereo / multichannel clips only (the mono harvest could not attach it; the batch now holds the stereo dump, match 'Internal Channel Volume'). Properties 'Left' and 'Right' (30 more unnamed rows for channels 3-32), on the clip Volume scale: 0.1778 = 0 dB (default), dB = 20 log10(v / 0.1778), 0 = silent, 0.5 = +9 dB, 1 = +15 dB (measured, live wave 3). Use it to trim or mute one side; stereo clips also carry a fixed Channel Volume component with the same rows.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Multiband Compressor",
+   "match": "3981e750-c8ae-40a2-889f-41a01c7efa03",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "Splits audio into up to four frequency bands (default crossovers about 120 Hz, 2 kHz and 10 kHz) and compresses each separately, with a peak limiter on the output. Tames boomy lows or harsh highs without pumping the whole mix.",
+   "look": [
+    "even",
+    "dense",
+    "broadcast",
+    "controlled lows",
+    "polished master",
+    "radio"
+   ],
+   "use_for": [
+    "Control boomy proximity-effect lows on a close-miked VO without dulling the voice",
+    "Dense broadcast/radio-style narration for news and political explainers",
+    "Master the final mix so VO and music are loud but controlled",
+    "Tame harsh highs in a music bed under narration"
+   ],
+   "avoid": [
+    "High ratios on every band squash and pump the mix: sounds over-processed",
+    "Defaults barely compress (all thresholds sit at 0 dB): set thresholds or it does almost nothing",
+    "Heavier than a single-band compressor; put one instance on the track or mix rather than on every clip"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold 1",
+     "does": "Level above which band 1 (lows, below about 120 Hz) is compressed; inferred dB = -60 + 60*v, default 1 = 0 dB",
+     "typical": "0.55-0.65 (about -27 to -21 dB) to tame boom"
+    },
+    {
+     "name": "Threshold 2",
+     "does": "Threshold for band 2 (about 120 Hz-2 kHz, the body of a voice); inferred dB = -60 + 60*v",
+     "typical": "VO 0.6-0.7 (about -24 to -18 dB)"
+    },
+    {
+     "name": "Ratio 2",
+     "does": "Compression ratio for band 2; inferred ratio = 1 + 29*v (default 0.0345 = 2:1)",
+     "typical": "0.0345-0.1035 (2:1 to 4:1)"
+    },
+    {
+     "name": "Attack 2",
+     "does": "How fast band 2 compression reacts; inferred ms = 500*v (default 0.02 = 10 ms)",
+     "typical": "0.01-0.02 (5-10 ms) for VO"
+    },
+    {
+     "name": "Release 2",
+     "does": "How fast band 2 recovers; inferred ms = 5000*v (default 0.02 = 100 ms)",
+     "typical": "0.02-0.04 (100-200 ms)"
+    },
+    {
+     "name": "Gain 2",
+     "does": "Makeup gain for band 2; 0.5 = 0 dB",
+     "typical": "0.5-0.55"
+    },
+    {
+     "name": "Output Gain",
+     "does": "Overall output gain after the bands; 0.5 = 0 dB. Measured: 0.25 = -9 dB, 0.5 = 0, 0.75 = +9 dB: dB = 36 v - 18 (a +/-18 dB span).",
+     "typical": "0.5-0.56 (0 to +2 dB)",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -18 dBFS",
+      "points": [
+       [
+        0.25,
+        -9.0
+       ],
+       [
+        0.5,
+        0.0
+       ],
+       [
+        0.75,
+        9.0
+       ]
+      ],
+      "line": {
+       "slope": 36.0,
+       "intercept": -18.0,
+       "worst_residual": 0.0
+      }
+     }
+    },
+    {
+     "name": "Cutoff 1",
+     "does": "Crossover between bands 1 and 2; inferred Hz = 20 + 19980*v (default 0.005 = 120 Hz)",
+     "typical": "0.005-0.009 (120-200 Hz)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "DeEsser",
+    "Hard Limiter",
+    "Loudness Meter"
+   ],
+   "scripting": "Audition-derived effect; match is a GUID. Every control is normalized 0..1. Unit mappings are inferred from defaults that line up exactly with Audition's (crossovers 120/2000/10000 Hz, 2:1, 10 ms, 100 ms): Threshold dB = -60 + 60v; Ratio = 1 + 29v; Attack ms = 500v; Release ms = 5000v; Cutoff Hz = 20 + 19980v; Gain n / Output Gain 0.5 = 0 dB. Not verified against the panel readout. Bands 1-4 run low to high. Toggles (Bypass n, Solo n, Band n Bypass/Mute, Link band controls, LMAX: Bypass) are 0/1. 'LMAX: ...' rows are the output limiter. Rows from 'Spectrum Show Peak Hold' onward (repeated as #2..#5) and the 'Level Meter ...' rows are analyser/meter UI state: ignore.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Notch Filter",
+   "match": "ee38cdc5-5914-4a75-b7dd-73a265e55c31",
+   "category": "Filter and EQ",
+   "status": "current",
+   "summary": "Cuts up to six very narrow frequency bands (notches), each with its own frequency, depth and on/off switch, plus DTMF options that remove phone keypad tones.",
+   "look": [
+    "surgical cut",
+    "hum removal",
+    "tone removal",
+    "clean"
+   ],
+   "use_for": [
+    "Remove 50 Hz mains hum and its harmonics (100, 150, 200 Hz) from Indian field recordings when DeHummer is not enough",
+    "Kill a steady whine (camera fan, tube-light buzz, monitor whistle) at a fixed pitch",
+    "Remove DTMF keypad tones from a phone-call recording",
+    "Notch a feedback ring out of a press-conference PA recording"
+   ],
+   "avoid": [
+    "Many or wide notches in the voice range make VO hollow and phasey",
+    "It only helps on steady-pitch tones; a wrong frequency does nothing useful",
+    "Applying it with defaults: all six notches are enabled at preset frequencies and already cut"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Frequency 1",
+     "does": "Centre frequency of notch 1; normalized 0..1, Hz mapping unverified",
+     "typical": "calibrate against the panel, then set to the hum/whine pitch"
+    },
+    {
+     "name": "Gain 1",
+     "does": "Depth of notch 1; inferred dB = (v - 0.5) * 192 (default 0.3698 = -25 dB)",
+     "typical": "0.29-0.40 (about -40 to -20 dB) for hum"
+    },
+    {
+     "name": "Enable 1",
+     "does": "Turns notch 1 on (1) or off (0)",
+     "typical": "1 for notches in use, 0 for the rest"
+    },
+    {
+     "name": "Notch Width",
+     "does": "Width selector for all notches. Audition's Notch Filter offers Narrow / Very Narrow / Super Narrow; here it is a normalized 0..1 value (likely 0 / 0.5 / 1, unverified)",
+     "typical": "0 (default, Narrow)"
+    },
+    {
+     "name": "Ultra Quiet",
+     "does": "Lower-noise processing mode (0/1)",
+     "typical": "1 for the final export"
+    },
+    {
+     "name": "DTMF Lower",
+     "does": "Adds notches for the low DTMF keypad tones (0/1)",
+     "typical": "1 together with DTMF Upper on phone audio"
+    },
+    {
+     "name": "DTMF Upper",
+     "does": "Adds notches for the high DTMF keypad tones (0/1)",
+     "typical": "1 together with DTMF Lower on phone audio"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Parametric EQ",
+   "pairs_with": [
+    "DeHummer",
+    "Highpass",
+    "DeNoise"
+   ],
+   "scripting": "Audition-derived (GUID match); all controls normalized 0..1. Gains appear to map dB = (v - 0.5) * 192 (defaults decode to -25, -18, -12, -8, -3, -2 dB): inferred, not verified. Frequency mapping is unknown: set Frequency 1 once, read the Hz shown in Effect Controls, and store the mapping before scripting exact pitches. All six notches default to enabled, so set 'Enable n' = 0 for unused ones. 'Fixed Gain' and the DTMF attenuation rows default to 0.65625 (meaning unverified). 'Original Sample Rate' and 'Horizontal Range Start/End' are display rows: ignore. For 50 Hz hum try DeHummer first.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Dynamics",
+   "match": "1eee85a7-3087-439e-906d-dc6204330e25",
+   "category": "Amplitude and Compression",
+   "status": "current",
+   "summary": "All-in-one dynamics processor (the current Audition-derived Dynamics) with AutoGate (silences low-level noise between words), Compressor, Expander and Limiter sections, each switched on separately.",
+   "look": [
+    "controlled level",
+    "even VO",
+    "gated silence",
+    "punchy",
+    "limited peaks"
+   ],
+   "use_for": [
+    "Even out a talking-head VO with gentle compression",
+    "Gate room tone or AC noise between phrases of an interview",
+    "Catch peaks with the limiter before export",
+    "One-effect VO chain for quick social reels"
+   ],
+   "avoid": [
+    "AutoGate with a high threshold chops word endings and breaths: sounds choppy",
+    "Every section is off by default: applying it alone changes nothing",
+    "For precise control prefer Dynamics Processing, Single-band Compressor or Hard Limiter"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Compressor Enabled",
+     "does": "Turns the compressor on (1) or off (0)",
+     "typical": "1"
+    },
+    {
+     "name": "Compressor Threshold",
+     "does": "Level where compression starts; inferred dB = -60 + 60*v (default 0.667 = -20 dB). Measured on a -6 dBFS tone with Compressor Ratio 0.5: 0.25 = -30.1 dB, 0.5 = -18.5, 0.6667 = -10.7 dB of gain reduction, which fits threshold dB = -60 + 60 v with Ratio 0.5 = about 4.3:1 (so not the 1 + 29 v ratio scale of Multiband Compressor).",
+     "typical": "VO 0.6-0.7 (about -24 to -18 dB)",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "1 kHz tone at -6 dBFS",
+      "points": [
+       [
+        0.25,
+        -30.07
+       ],
+       [
+        0.5,
+        -18.45
+       ],
+       [
+        0.6667,
+        -10.69
+       ]
+      ],
+      "line": {
+       "slope": 46.506,
+       "intercept": -41.6984,
+       "worst_residual": 0.005
+      }
+     }
+    },
+    {
+     "name": "Compressor Ratio",
+     "does": "Compression ratio; 0 = 1:1 (none, the default, so enabling the compressor alone does nothing). Measured: 0.5 gives about 4.3:1 (from the gain reduction at three thresholds), so it is NOT the 1 + 29 v scale of Multiband Compressor",
+     "typical": "aim for 2:1-4:1 on VO: somewhere below 0.5 (0.5 = about 4.3:1, measured); the rest of the scale is not measured"
+    },
+    {
+     "name": "Compressor MakeUp Gain",
+     "does": "Gain added after compression; 0 = 0 dB",
+     "typical": "raise a little until perceived loudness is back"
+    },
+    {
+     "name": "AutoGate Enabled",
+     "does": "Turns the noise gate on (1) or off (0)",
+     "typical": "1 only on noisy interviews"
+    },
+    {
+     "name": "AutoGate Threshold",
+     "does": "Level below which audio is gated; inferred dB = -60 + 60*v (default -20 dB is too high for most VO)",
+     "typical": "0.25-0.4 (about -45 to -36 dB)"
+    },
+    {
+     "name": "Limiter Enabled",
+     "does": "Turns the peak limiter on (1) or off (0)",
+     "typical": "1 on final VO"
+    },
+    {
+     "name": "Limiter Threshold",
+     "does": "Limiter ceiling; on the inferred -60..0 dB scale the default 0.983 = -1 dB (unverified)",
+     "typical": "0.95-0.983 (about -3 to -1 dB)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Parametric Equalizer",
+    "DeEsser",
+    "Hard Limiter",
+    "DeNoise"
+   ],
+   "scripting": "Audition-derived effect with a GUID match (no legacy Dynamics exists in this install's audio list). All controls are normalized 0..1; the '... Enabled' rows are 0/1 and every section is OFF by default, so set the relevant Enabled row to 1. Unit mappings are inferred from defaults, not verified: threshold rows 0.667 = -20 dB on a -60..0 scale; AutoGate Attack 0.0909 = 1 ms on 0.1..10 ms; AutoGate Hold 0.009 = 10 ms on 1..1000 ms; Compressor/Limiter Release 0.0816 = 50 ms on 10..500 ms. Confirm against the Effect Controls readout before relying on exact dB.",
+   "recipe": {},
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": 0.0,
+     "thd_pct": 0.002,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  },
+  {
+   "kind": "pr_audio",
+   "app": "PR",
+   "name": "Phaser",
+   "match": "d7ca44f4-7ac1-4243-a79e-59e283b71cca",
+   "category": "Modulation",
+   "status": "current",
+   "summary": "Sweeping phase-shift filter like the classic guitar pedal: moving notches give a swirling, whooshing, spacey motion to the sound.",
+   "look": [
+    "swirl",
+    "whoosh",
+    "sweeping",
+    "psychedelic",
+    "retro",
+    "spacey",
+    "jet"
+   ],
+   "use_for": [
+    "Stylise a riser or whoosh SFX on a trailer transition",
+    "Retro or psychedelic treatment on a music sting or flashback",
+    "Robotic or sci-fi voice for an AI character (low Mix)",
+    "Add movement to a static drone or ambience pad"
+   ],
+   "avoid": [
+    "On documentary or news VO it sounds like a broken effect",
+    "High Feedback with high Intensity turns harsh and resonant"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Mix",
+     "does": "Wet/dry balance (0 = dry, 1 = fully phased). Measured on pink noise: almost no level change (-0.26 dB at 0.5, notches to -1.9 dB): the sweep is heard, not measured, at the defaults.",
+     "typical": "0.3-0.5",
+     "measured": {
+      "figure": "level change (dB)",
+      "signal": "pink noise",
+      "points": [
+       [
+        0,
+        0.0
+       ],
+       [
+        0.5,
+        -0.26
+       ],
+       [
+        1,
+        0.0
+       ]
+      ],
+      "line": {
+       "slope": 0.0,
+       "intercept": -0.0867,
+       "worst_residual": 0.173
+      }
+     }
+    },
+    {
+     "name": "Mod Rate",
+     "does": "Speed of the sweep (normalized)",
+     "typical": "0.02-0.1 for a slow swirl; higher = fast warble"
+    },
+    {
+     "name": "Depth",
+     "does": "How far the sweep travels (likely 0..1 = 0..100%)",
+     "typical": "0.5-0.8"
+    },
+    {
+     "name": "Intensity",
+     "does": "Strength of the phasing (likely 0..1 = 0..100%)",
+     "typical": "0.7-0.95"
+    },
+    {
+     "name": "Feedback",
+     "does": "Amount of output fed back into the input: further from 0.5 = more resonant, metallic. Audition's range is -100..+100%, so 0.5 is most likely 0% (no feedback) and values below 0.5 feed back inverted",
+     "typical": "0.5 default; 0.6-0.75 (about +20 to +50%) for a stronger jet sound (scale unverified)"
+    },
+    {
+     "name": "Stages",
+     "does": "Number of filter stages: more = deeper, more notches",
+     "typical": "0.4-0.6"
+    },
+    {
+     "name": "Upper Freq",
+     "does": "Top of the sweep range; inferred Hz = 20 + 19980*v (default 0.7 = 14 kHz)",
+     "typical": "0.3-0.7"
+    },
+    {
+     "name": "Gain",
+     "does": "Output gain (default 0.75)",
+     "typical": "keep 0.75; lower if the effect makes the clip louder"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Flange & Chorus",
+   "pairs_with": [
+    "Flanger",
+    "Studio Reverb",
+    "Lowpass"
+   ],
+   "scripting": "Audition-derived (GUID match); all controls normalized 0..1. Mix, Depth and Intensity most likely map 0..1 = 0..100%; the other unit mappings are unverified. Keyframe Mix for swells rather than toggling the effect.",
+   "recipe": {
+    "Mix": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      0.5
+     ],
+     [
+      1.5,
+      0
+     ]
+    ]
+   },
+   "measured": {
+    "defaults_on_tone": {
+     "signal": "1 kHz tone at -18 dBFS, stereo",
+     "gain_db": -0.03,
+     "thd_pct": 0.004,
+     "freq_hz": 1000.0
+    },
+    "how": "Premiere 26 render, 3 s test signal per setting, analysed with ffmpeg (live wave 3, 2026-10-14)"
+   }
+  }
+ ]
+}

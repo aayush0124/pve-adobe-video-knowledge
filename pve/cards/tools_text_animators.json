@@ -1,0 +1,226 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "text_animators",
+   "app": "AE",
+   "name": "Text animator properties: the full set with match names",
+   "summary": "Every property an After Effects text Animator can hold, with its match name: transform (Anchor Point, Position, Scale, Skew, Skew Axis, X/Y/Z Rotation, Opacity), Fill and Stroke (Color, Hue, Saturation, Brightness, Opacity, Stroke Width), spacing (Tracking Type and Amount, Line Anchor, Line Spacing), characters (Character Value, Offset, Alignment, Range) and Blur.",
+   "use_for": [
+    "scripting text animations without the Animate menu",
+    "reading which properties a shipped text preset animates",
+    "kerning-safe word reveals (Opacity / Position per word)",
+    "colour sweeps across a headline (Fill Hue / Color)"
+   ],
+   "how": "Script: anim = layer.property('ADBE Text Properties').property('ADBE Text Animators').addProperty('ADBE Text Animator'); props = anim.property('ADBE Text Animator Properties'); props.addProperty(<match name>). Match names with the display names the scripting guide gives: ADBE Text Anchor Point 3D (Anchor Point), ADBE Text Position 3D (Position), ADBE Text Scale 3D (Scale), ADBE Text Skew (Skew), ADBE Text Skew Axis (Skew Axis), ADBE Text Rotation X (X Rotation), ADBE Text Rotation Y (Y Rotation), ADBE Text Rotation (Z Rotation), ADBE Text Opacity (Opacity), ADBE Text Fill Color / Fill Hue / Fill Saturation / Fill Brightness / Fill Opacity, ADBE Text Stroke Color / Stroke Hue / Stroke Saturation / Stroke Brightness / Stroke Opacity / Stroke Width, ADBE Text Line Anchor (Line Anchor), ADBE Text Line Spacing (Line Spacing), ADBE Text Track Type (Tracking Type), ADBE Text Tracking Amount (Tracking Amount), ADBE Text Character Replace (Character Value), ADBE Text Character Offset (Character Offset), ADBE Text Blur (Blur). Not on the docs page, but listed under these names by After Effects 26.0 itself (live wave 3 readback): ADBE Text Character Change Type (Character Alignment), ADBE Text Character Range (Character Range); from the shipped presets: the 2D forms ADBE Text Anchor Point, ADBE Text Position, ADBE Text Scale.",
+   "scriptable": "yes",
+   "script_api": "PropertyGroup.addProperty(matchName) on 'ADBE Text Animator Properties'; set the 'from' value on the property, then keyframe the selector (see 'Text selectors'). Re-fetch every reference after an addProperty (adding to a group invalidates earlier references: vfx_build.jsx). Character Value / Character Offset values change the glyphs, so they also change sourceRectAtTime results.",
+   "limits": "The docs page lists Z Rotation as 'ADBE Text Rotation' (the UI calls it Rotation on 2D text). The 3D-named match names (Anchor Point 3D, Position 3D, Scale 3D) are what the shipped presets and the docs use for ordinary 2D text too. Character Alignment / Character Range / Tracking Type are menus (enum_labels, read from After Effects 26.0); on a fresh animator they are hidden until the property is added, and setting them before that fails ('Can not set value ... hidden'). Fill/Stroke Color only show if the text has a fill/stroke. Per-character animation can split Devanagari conjuncts and matras (PVE text cards): prefer Based On = Words for Indic text.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "pve/harvest/files.json (match names inside the shipped After Effects text presets)"
+   ],
+   "confidence": "high",
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "enum_labels": {
+    "Tracking Type": {
+     "1": "Before & After",
+     "2": "Before",
+     "3": "After"
+    },
+    "Character Alignment": {
+     "1": "Left or Top",
+     "2": "Center",
+     "3": "Right or Bottom",
+     "4": "Adjust Kerning"
+    },
+    "Character Range": {
+     "1": "Preserve Case & Digits",
+     "2": "Full Unicode"
+    }
+   }
+  },
+  {
+   "kind": "tool",
+   "topic": "text_animators",
+   "app": "AE",
+   "name": "Text selectors: Range, Wiggly and Expression (match names and Advanced options)",
+   "summary": "What decides which characters an Animator affects: the Range Selector (Start, End, Offset in percent or index, plus Advanced: Units, Based On, Mode, Amount, Shape, Smoothness, Ease High, Ease Low, Randomize Order, Random Seed), the Wiggly Selector (random per-character amounts over time) and the Expression Selector (an Amount expression per character).",
+   "use_for": [
+    "typewriter, word-by-word and line-by-line reveals",
+    "random flicker-on of letters (Randomize Order)",
+    "per-character jitter (Wiggly) for glitch titles",
+    "custom falloffs with textIndex / textTotal (Expression)"
+   ],
+   "how": "Range Selector (scripting guide names): ADBE Text Selectors (Selectors) > ADBE Text Selector (Range Selector): ADBE Text Percent Start / End / Offset (Start, End, Offset in Percentage units), ADBE Text Index Start / End / Offset (the same in Index units), ADBE Text Range Advanced (Advanced): ADBE Text Range Units (Units), ADBE Text Selector Mode (Mode), ADBE Text Selector Max Amount (Amount), ADBE Text Selector Smoothness (Smoothness), ADBE Text Levels Max Ease (Ease High), ADBE Text Levels Min Ease (Ease Low), ADBE Text Random Seed (Random Seed). Named so by After Effects 26.0 itself (live wave 3 readback): ADBE Text Range Type2 (Based On), ADBE Text Range Shape (Shape); from the shipped presets: ADBE Text Randomize Order (Randomize Order); Wiggly Selector: ADBE Text Wiggly Selector, ADBE Text Wiggly Max Amount / Min Amount, ADBE Text Temporal Freq (Wiggles/Second), ADBE Text Character Correlation (Correlation), ADBE Text Temporal Phase, ADBE Text Spatial Phase, ADBE Text Wiggly Lock Dim (Lock Dimensions), ADBE Text Wiggly Random Seed; Expression Selector: ADBE Text Expressible Selector with ADBE Text Expressible Amount (Amount).",
+   "scriptable": "yes",
+   "script_api": "sel = anim.property('ADBE Text Selectors').addProperty('ADBE Text Selector' | 'ADBE Text Wiggly Selector' | 'ADBE Text Expressible Selector'); keyframe sel.property('ADBE Text Percent Start') etc.; dropdowns (Units, Based On, Mode, Shape) are 1-based integers set with setValue(n).",
+   "limits": "Dropdown indices (read from After Effects 26.0's own menus, live wave 3; index n = the n-th UI item): Units 1 Percentage, 2 Index; Based On 1 Characters, 2 Characters Excluding Spaces, 3 Words, 4 Lines; Mode 1 Add, 2 Subtract, 3 Intersect, 4 Min, 5 Max, 6 Difference; Shape 1 Square, 2 Ramp Up, 3 Ramp Down, 4 Triangle, 5 Round, 6 Smooth. The Wiggly Selector has the same Mode and Based On menus and the Expression Selector the same Based On (the readback found them under those selector names). Percent and Index ranges are separate properties: keyframe the pair that matches Units.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "pve/harvest/files.json (match names inside the shipped After Effects text presets)",
+    "https://ae-expressions.docsforadobe.dev/text/text/"
+   ],
+   "confidence": "high",
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "enum_labels": {
+    "Units": {
+     "1": "Percentage",
+     "2": "Index"
+    },
+    "Based On": {
+     "1": "Characters",
+     "2": "Characters Excluding Spaces",
+     "3": "Words",
+     "4": "Lines"
+    },
+    "Mode": {
+     "1": "Add",
+     "2": "Subtract",
+     "3": "Intersect",
+     "4": "Min",
+     "5": "Max",
+     "6": "Difference"
+    },
+    "Shape": {
+     "1": "Square",
+     "2": "Ramp Up",
+     "3": "Ramp Down",
+     "4": "Triangle",
+     "5": "Round",
+     "6": "Smooth"
+    }
+   }
+  },
+  {
+   "kind": "tool",
+   "topic": "text_animators",
+   "app": "AE",
+   "name": "Text More Options: Anchor Point Grouping, Grouping Alignment, Fill & Stroke, Inter-Character Blending",
+   "summary": "The text layer's More Options group: what each character/word/line scales and rotates around (Anchor Point Grouping + Grouping Alignment), how fill and stroke stack across characters (Fill & Stroke), how overlapping characters blend (Inter-Character Blending), and Variable Font Spacing.",
+   "use_for": [
+    "words that scale from their own centre (Grouping = Word)",
+    "a tumble-in that pivots each line from its baseline",
+    "stroke-behind-fill look on overlapping letters"
+   ],
+   "how": "Match names: ADBE Text More Options (More Options), ADBE Text Anchor Point Align (Grouping Alignment, an [x, y] percentage offset of the pivot), ADBE Text Variable Font Spacing (Variable Font Spacing), all from the scripting guide. In the shipped presets, not on the docs page; After Effects 26.0 lists them under these names (live wave 3 readback): ADBE Text Anchor Point Option (Anchor Point Grouping: Character, Word, Line, All), ADBE Text Render Order (Fill & Stroke), ADBE Text Character Blend Mode (Inter-Character Blending).",
+   "scriptable": "yes",
+   "script_api": "layer.property('ADBE Text Properties').property('ADBE Text More Options').property('ADBE Text Anchor Point Option').setValue(n) (1 Character, 2 Word, 3 Line, 4 All); Grouping Alignment takes [x, y] in percent (-50 = left/top edge of the group).",
+   "limits": "The TextLayer page names AnchorPointGrouping, Fill&Stroke and InterCharacterBlending only as attribute-style labels with no match names; the three match names above come from shipped presets and the installed 26.0 confirms them (live readback, menus in enum_labels): Anchor Point Grouping 1 Character, 2 Word, 3 Line, 4 All; Fill & Stroke 1 Per Character Palette, 2 All Fills Over All Strokes, 3 All Strokes Over All Fills; Inter-Character Blending 1 Normal, 2 Dissolve, 4 Darken ... 29 Luminosity (separators at 3, 8, 14, 22, 25); Variable Font Spacing 1 Adaptive, 2 Per Character, 3 Default (hidden on a non-variable font: setting it fails).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/textlayer/",
+    "pve/harvest/files.json (match names inside the shipped After Effects text presets)"
+   ],
+   "confidence": "high",
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "enum_labels": {
+    "Anchor Point Grouping": {
+     "1": "Character",
+     "2": "Word",
+     "3": "Line",
+     "4": "All"
+    },
+    "Fill & Stroke": {
+     "1": "Per Character Palette",
+     "2": "All Fills Over All Strokes",
+     "3": "All Strokes Over All Fills"
+    },
+    "Inter-Character Blending": {
+     "1": "Normal",
+     "2": "Dissolve",
+     "3": "(separator)",
+     "4": "Darken",
+     "5": "Multiply",
+     "6": "Linear Burn",
+     "7": "Color Burn",
+     "8": "(separator)",
+     "9": "Add",
+     "10": "Lighten",
+     "11": "Screen",
+     "12": "Linear Dodge",
+     "13": "Color Dodge",
+     "14": "(separator)",
+     "15": "Overlay",
+     "16": "Soft Light",
+     "17": "Hard Light",
+     "18": "Linear Light",
+     "19": "Vivid Light",
+     "20": "Pin Light",
+     "21": "Hard Mix",
+     "22": "(separator)",
+     "23": "Difference",
+     "24": "Exclusion",
+     "25": "(separator)",
+     "26": "Hue",
+     "27": "Saturation",
+     "28": "Color",
+     "29": "Luminosity"
+    },
+    "Variable Font Spacing": {
+     "1": "Adaptive",
+     "2": "Per Character",
+     "3": "Default"
+    }
+   }
+  },
+  {
+   "kind": "tool",
+   "topic": "text_animators",
+   "app": "AE",
+   "name": "Text on a path (Path Options)",
+   "summary": "Makes a text layer follow a mask path: Path (which mask), Reverse Path, Perpendicular To Path, Force Alignment, First Margin and Last Margin. Animating First Margin slides the text along the path.",
+   "use_for": [
+    "captions that follow a road, river or route on a map",
+    "curved titles around a logo or badge",
+    "text that travels along a line in an infographic"
+   ],
+   "how": "Draw a mask on the text layer, then Text > Path Options > Path = that mask. Match names (scripting guide): ADBE Text Path Options (Path Options), ADBE Text Reverse Path, ADBE Text Perpendicular To Path, ADBE Text Force Align Path (Force Alignment), ADBE Text First Margin, ADBE Text Last Margin. The mask chooser itself is ADBE Text Path in the shipped presets (not on the docs page). Keyframe First Margin from a negative value (text off the start) to a positive one to run the text along the path.",
+   "scriptable": "partial",
+   "script_api": "Create the mask with layer.property('ADBE Mask Parade').addProperty('ADBE Mask Atom') and a Shape; the Path chooser is a mask-index property (type mask), which PVE's spec checks cannot set and whose setValue form was not verified; margins and switches are ordinary values.",
+   "limits": "Path takes a mask on the SAME text layer (not a shape-layer path). Force Alignment stretches tracking to fill the path between the margins. Paragraph (box) text cannot follow a path. The bridge's VFX text layers have no mask support, so path text is built by hand or by a dedicated script.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "pve/harvest/files.json (match names inside the shipped After Effects text presets)",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/avlayer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "text_animators",
+   "app": "AE",
+   "name": "Per-character 3D text (Enable Per-character 3D)",
+   "summary": "The text layer switch that gives every character its own Z position and X/Y rotation inside a 3D layer, so Animator X Rotation, Y Rotation and Position Z act per character, and characters can face the camera.",
+   "use_for": [
+    "letters flipping in on Y (card-flip title)",
+    "characters scattering in depth under a camera move",
+    "text that keeps facing a moving camera"
+   ],
+   "how": "Animate > Enable Per-character 3D (makes the layer 3D). Script: textLayer.threeDPerChar = true; then add 'ADBE Text Rotation Y' / 'ADBE Text Position 3D' to an Animator. With a camera, layer.autoOrient = AutoOrientType.CHARACTERS_TOWARD_CAMERA turns each character toward it.",
+   "scriptable": "yes",
+   "script_api": "AVLayer.threeDPerChar (read/write Boolean, text layers only); Layer.autoOrient = AutoOrientType.CHARACTERS_TOWARD_CAMERA",
+   "limits": "Per-character 3D needs a 3D-capable renderer (Classic 3D or Advanced 3D; extruded geometry is a separate 3D text feature). Slow on long text. No effect on 2D comps without a camera beyond the extra rotation axes.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/"
+   ],
+   "confidence": "high",
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ]
+  }
+ ]
+}

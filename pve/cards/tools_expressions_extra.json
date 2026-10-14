@@ -1,0 +1,199 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "Marker-driven animation (expressions keyed to markers)",
+   "summary": "Fire an animation at every comp or layer marker: the expression finds the latest marker at or before the current time and animates from it, so moving a marker (a beat, a VO cue) moves the animation with no keyframes.",
+   "use_for": [
+    "text pops on beats placed as markers",
+    "lower thirds in and out on VO cue markers",
+    "flashes or punch-ins on hits"
+   ],
+   "how": "On Opacity (or Scale), with markers on the comp: var m = thisComp.marker, n = 0; if (m.numKeys > 0) { n = m.nearestKey(time).index; if (m.key(n).time > time) n--; } if (n == 0) value; else { var t = time - m.key(n).time; ease(t, 0, 0.3, 0, 100); }. Use thisLayer.marker for layer markers; m.key(n).comment carries a label (route different cues), m.key(n).duration a marker's length (hold until it ends).",
+   "scriptable": "yes",
+   "script_api": "Expressions: thisComp.marker / thisLayer.marker (a Marker property): numKeys, key(index) (time order), key(name) (matches the comment; the earliest one on duplicates), nearestKey(t); MarkerKey .comment, .duration, .chapter, .url, .parameters, plus .time and .index. Script the markers: comp.markerProperty.setValueAtTime(t, new MarkerValue('cue')) (PVE 'Layer and composition markers').",
+   "limits": "nearestKey can return the NEXT marker, hence the index step back. With no markers numKeys is 0 and key() throws: keep the guard. Expressions re-evaluate every frame: long marker lists are fine, nested loops over them are slow.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/objects/marker-property/",
+    "https://ae-expressions.docsforadobe.dev/objects/markerkey/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "Live lines between layers: createPath() and points()",
+   "summary": "A shape path that is rebuilt every frame from layer positions: a connector between two nulls, a callout leader from a label to a point on a map, or a polyline through several points, with Trim Paths still working on it.",
+   "use_for": [
+    "map connectors and route lines that follow animated pins",
+    "callout leaders that stay attached while things move",
+    "a graph line driven by sliders"
+   ],
+   "how": "On a shape layer's Path: var a = thisComp.layer('A'), b = thisComp.layer('B'); var p1 = fromComp(a.toComp(a.anchorPoint)), p2 = fromComp(b.toComp(b.anchorPoint)); createPath([p1, p2], [], [], false). Read another path's vertices with thisComp.layer('Map').content('Route').content('Path 1').path.points(), or sample along it with pointOnPath(percentage) / tangentOnPath / normalOnPath.",
+   "scriptable": "yes",
+   "script_api": "PathProperty.createPath(points, inTangents=[], outTangents=[], is_closed=true), points(t), inTangents(t), outTangents(t), isClosed(), pointOnPath(p, t), tangentOnPath(p, t), normalOnPath(p, t) (AE 15.0+). Set from a script with prop.expression = '...'.",
+   "limits": "Shape-path points are relative to the shape group's anchor (mask points to the layer's top-left), hence the toComp/fromComp round trip. Empty tangent arrays = straight segments. The vfx.py shape type cannot carry a path expression (its 'expr' covers transform, trim, fill and stroke only), so connectors are a hand or custom-script step.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/objects/path-property/",
+    "https://ae-expressions.docsforadobe.dev/layer/layer-space-transforms/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "clamp(), linear() and ease() remaps",
+   "summary": "Keep a driven value inside limits (clamp) and remap one range onto another with linear or eased interpolation: the glue of every rig (a slider driving opacity, scale from audio amplitude, a counter that must stop at 100).",
+   "use_for": [
+    "audio-reactive scale that never exceeds a cap",
+    "slider rigs with safe ranges",
+    "progress bars driven by a 0-1 control"
+   ],
+   "how": "clamp(effect('Slider Control')('Slider'), 0, 100) on Opacity; linear(t, tMin, tMax, value1, value2) and ease(t, tMin, tMax, v1, v2) remap a driver (time, a slider, audio amplitude) into the output range and clamp at the ends; e.g. 100 + linear(thisComp.layer('Audio Amplitude').effect('Both Channels')('Slider'), 0, 30, 0, 25) on Scale (as [s, s]).",
+   "scriptable": "yes",
+   "script_api": "clamp(value, limit1, limit2) works per component on arrays; linear/ease/easeIn/easeOut(t, [tMin, tMax,] v1, v2).",
+   "limits": "clamp on an array needs array limits of the same length. ease() is not the same curve as a keyframe's Easy Ease with custom influence.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/general/vector-math/",
+    "https://ae-expressions.docsforadobe.dev/general/interpolation/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "lookAt() and pointing layers at targets",
+   "summary": "Orient a 3D layer toward a target point (lookAt), or rotate a 2D layer toward one with atan2: arrows that point at a moving pin, a camera-facing card, a needle that tracks a value.",
+   "use_for": [
+    "arrows and pointers aimed at map pins",
+    "3D cards that always face a target",
+    "gauge needles"
+   ],
+   "how": "3D: on Orientation: lookAt(position, thisComp.layer('Target').position). 2D: on Rotation: var d = thisComp.layer('Target').toComp([0, 0]) - toComp(anchorPoint); radiansToDegrees(Math.atan2(d[1], d[0])).",
+   "scriptable": "yes",
+   "script_api": "lookAt(fromPoint, atPoint) (3D, returns an orientation); toComp/fromComp for 2D angles",
+   "limits": "lookAt returns an Orientation value: apply it to Orientation, not Rotation. Add a fixed offset if the artwork's 'forward' is not +X.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/general/vector-math/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "Space transforms: toComp, fromComp, toWorld, fromWorld",
+   "summary": "Convert points between a layer's own space, the comp's 2D space and 3D world space: pin a 2D label to a point on a 3D layer, attach things to parented or scaled layers, or measure distances for focus pulls.",
+   "use_for": [
+    "2D labels and lower thirds that track a point on a 3D map",
+    "callouts attached to a parented, zooming layer",
+    "camera focus distance to a layer"
+   ],
+   "how": "On a 2D label's Position: thisComp.layer('Map 3D').toComp([x, y, 0]); on a point inside another layer: fromComp(otherLayer.toComp(otherLayer.anchorPoint)); world-space position of a parented 3D layer: toWorld(anchorPoint). Direction vectors use toCompVec / fromCompVec / toWorldVec / fromWorldVec.",
+   "scriptable": "yes",
+   "script_api": "toComp(point, t=time), fromComp(point, t), toWorld(point, t), fromWorld(point, t), the Vec variants, fromCompToSurface(point, t)",
+   "limits": "toComp on a 3D layer projects through the active camera, so the result changes when the camera moves (that is the point).",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/layer/layer-space-transforms/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "Text style expressions (sourceText.style)",
+   "summary": "Drive font size, fill colour, font and the text itself from expressions (AE 17.0+), per character from 25.0: data-driven captions, a word coloured by a checkbox, size that adapts to a slider.",
+   "use_for": [
+    "templates where a control changes the colour of one word",
+    "captions whose size follows a slider",
+    "counters that also change colour past a threshold"
+   ],
+   "how": "On Source Text: text.sourceText.style.setFontSize(effect('Size')('Slider')).setFillColor([1, 0.82, 0]) (methods chain); setText(value) replaces the string; text.sourceText.getStyleAt(i, time) reads one character's style; per-character: setFillColor([r, g, b], startIndex, numOfCharacters) (25.0+).",
+   "scriptable": "yes",
+   "script_api": "SourceText.style (17.0+): setFontSize, setFillColor([r, g, b] 0..1), setText, setFont, ...; getStyleAt(charIndex, t); createStyle(); per-character arguments 25.0+.",
+   "limits": "Colours are 0..1 arrays, not hex. Per-character arguments need 25.0+ (the installed AE is 26.0). Style expressions override the Character panel for those attributes, so a template user cannot then restyle them by hand.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/text/style/",
+    "https://ae-expressions.docsforadobe.dev/text/sourcetext/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "sampleImage() colour pickup",
+   "summary": "Read the average colour of an area of a layer at a given time: tint a graphic to the footage under it, drive a light wrap or glow colour from the plate, or detect brightness for auto-contrast text.",
+   "use_for": [
+    "matching a graphic's colour to the shot",
+    "auto black/white caption colour from the background brightness",
+    "colour-reactive overlays"
+   ],
+   "how": "On a Fill Color: thisComp.layer('Plate').sampleImage(thisComp.layer('Plate').fromComp([960, 900]), [60, 20], true, time); for caption contrast: var c = ...sampleImage(...); var l = 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]; l > 0.5 ? [0, 0, 0, 1] : [1, 1, 1, 1].",
+   "scriptable": "yes",
+   "script_api": "sampleImage(point, radius=[0.5, 0.5], postEffect=true, t=time) -> [r, g, b, a] averaged and alpha-weighted, point in the SAMPLED layer's space",
+   "limits": "Slow: it renders the sampled layer; keep the radius small and avoid it on many layers. The luma weights above are the Rec.709 coefficients applied to gamma-encoded values (an approximation).",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/layer/general/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "framesToTime() and timeToFrames()",
+   "summary": "Frame-exact maths in expressions: offset by whole frames regardless of comp rate, step animation to frames, or print a frame counter.",
+   "use_for": [
+    "delays of N frames that survive a frame-rate change",
+    "stepped or held animation",
+    "timecode-like counters"
+   ],
+   "how": "valueAtTime(time - framesToTime(3)) delays by 3 frames; timeToFrames(time) gives the current frame number; framesToTime(Math.floor(timeToFrames(time) / 2) * 2) holds every second frame (on twos).",
+   "scriptable": "yes",
+   "script_api": "framesToTime(frames, fps=1/thisComp.frameDuration); timeToFrames(t=time+thisComp.displayStartTime, fps=..., isDuration=false) -> integer",
+   "limits": "timeToFrames adds the comp's display start time by default: pass isDuration=true or subtract it for durations.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/general/time-conversion/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "expressions",
+   "app": "AE",
+   "name": "Index-based stagger and seeded randomness",
+   "summary": "Duplicate a layer and let each copy offset itself by its layer index (stagger) or pick a stable random value (seedRandom with timeless): cascades, scattered particles and varied-but-repeatable motion without keyframing each copy.",
+   "use_for": [
+    "cascading bars or icons from one animated master",
+    "a grid of tiles that flip in one after another",
+    "random but frozen rotations or positions per copy"
+   ],
+   "how": "Delay: var d = (index - 1) * 0.08; thisComp.layer(1).transform.scale.valueAtTime(time - d) on each copy's Scale (copy 1 = master). Stable random per copy: seedRandom(index, true); value + [random(-40, 40), random(-40, 40)].",
+   "scriptable": "yes",
+   "script_api": "index (layer number in the comp); seedRandom(offset, timeless=false); random(min, max); valueAtTime(t)",
+   "limits": "index changes when layers are reordered or added above, which shifts every copy: reference a named master layer and keep copies contiguous. Without timeless=true, random() changes every frame.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/layer/general/",
+    "https://ae-expressions.docsforadobe.dev/general/random-numbers/",
+    "https://ae-expressions.docsforadobe.dev/objects/property/"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

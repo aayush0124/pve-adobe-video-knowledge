@@ -1,0 +1,931 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Plane to Sphere",
+   "match": "AE.Mettle SkyBox Project 2D",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Projects a flat 2D layer (title, logo, photo, inset clip) onto the inside of a 360 equirectangular sphere so it looks undistorted when the 360 video is viewed in a headset or 360 player. On a normal flat sequence it shows the clip curved and shrunk on a transparent background.",
+   "look": [
+    "360 inset",
+    "equirectangular projection",
+    "curved plane",
+    "feathered edge",
+    "VR title"
+   ],
+   "use_for": [
+    "Place a lower-third or title card inside a 360 documentary so it reads flat in the viewer",
+    "Drop a flat news clip or photo as a floating screen inside 360 footage",
+    "Put a channel logo or watermark into a 360 YouTube upload without seam distortion"
+   ],
+   "avoid": [
+    "Using it on ordinary 16:9 projects: the output is a warped, shrunk frame that looks like an error",
+    "Pushing the plane towards the poles (large Projection Tilt, beyond about +/-45): it stretches hard in the flat equirect frame and is awkward to read in a headset",
+    "Forgetting to match Frame Layout / FOV to the 360 sequence, or the plane lands with the wrong size or doubled"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scale (Degrees)",
+     "does": "Angular width of the projected plane on the sphere",
+     "typical": "30-60 for a title, 90-120 for a large floating screen"
+    },
+    {
+     "name": "Feather",
+     "does": "Softens the edges of the projected plane",
+     "typical": "0 for crisp graphics, 10-25 for photo insets"
+    },
+    {
+     "name": "Projection Pan (Y axis)",
+     "does": "Moves the plane left/right around the sphere (degrees); works directly, no switch needed",
+     "typical": "-180..180; 0 = front of the viewer"
+    },
+    {
+     "name": "Projection Tilt (X axis)",
+     "does": "Moves the plane up/down on the sphere (degrees)",
+     "typical": "-20..20 so it stays near eye level"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Mono or stereo layout of the 360 sequence (dropdown)",
+     "typical": "0 for monoscopic 360"
+    },
+    {
+     "name": "Horizontal Field of View",
+     "does": "Horizontal FOV of the 360 output",
+     "typical": "360"
+    },
+    {
+     "name": "Stereo Disparity (Degrees)",
+     "does": "Depth offset between eyes for stereo layouts",
+     "typical": "0 mono; 0.5-3 to float a title in stereo"
+    }
+   ],
+   "demo_settings": {
+    "Scale (Degrees)": 120,
+    "Feather": 20
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "VR Plane to Sphere (After Effects Immersive Video)",
+   "pairs_with": [
+    "VR Projection",
+    "VR Rotate Sphere",
+    "Essential Graphics titles"
+   ],
+   "scripting": "Apply to the graphic/inset clip on a track above the 360 footage in a 360 (2:1 equirect) sequence. Rows named \"\" are group-end markers: ignore. 'Rotate Source' and 'Rotate Projection' are twirl-down group headers (harvested as bools, like Lumetri's 'Basic Correction'/'Light' headers), NOT switches: do not set them; the Tilt/Pan/Roll angles under them work on their own. Angles are degrees even though the harvested clamp is +/-32768; keep them in -180..180. Which group positions the plane on the sphere (Projection) vs turns the flat source before projection (Source) follows the Adobe/Mettle docs, not a test render: verify. Frame Layout labels are from the docs, not the harvest. On a flat 1920x1080 frame the demo shows a curved, shrunken inset on black, which is the correct behaviour.",
+   "recipe": {
+    "Projection Pan (Y axis)": [
+     [
+      0,
+      -30
+     ],
+     [
+      4,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/085.png",
+    "note": "The flat frame is projected onto the sphere and shrunk to a curved, bulging inset (about 40% of the width) on black/transparent, as the summary says for a flat sequence.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Projection",
+   "match": "AE.ADBE VR Projection",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Reprojects 360/VR footage: changes its layout (mono, over/under, side by side), field of view, and re-orients it with Pan, Tilt and Roll. Used to fit 180/360 media into a different VR sequence or to reframe where the viewer starts.",
+   "look": [
+    "360 reorientation",
+    "equirectangular warp",
+    "stereo conversion",
+    "spherical pan"
+   ],
+   "use_for": [
+    "Rotate a 360 clip so the key action (speaker, stage) sits in front of the default view",
+    "Put 180-degree footage into a 360 sequence or convert stereo layouts",
+    "Level a tilted horizon in 360 interview footage",
+    "Animate Pan for a slow spherical spin in a 360 teaser"
+   ],
+   "avoid": [
+    "Applying to ordinary flat footage expecting a reframe: it bends and wraps the image instead",
+    "Wrong Input Layout for stereo media gives doubled or squashed images",
+    "Chaining several VR Projection / VR Rotate Sphere instances on one clip: every reprojection resamples and softens detail; do the whole reorientation in one instance"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Pan",
+     "does": "Rotates the sphere horizontally (degrees)",
+     "typical": "-180..180 to bring the subject to the front"
+    },
+    {
+     "name": "Tilt",
+     "does": "Rotates the sphere up/down (degrees)",
+     "typical": "-10..10 to level a horizon"
+    },
+    {
+     "name": "Roll",
+     "does": "Rotates the sphere around the view axis (degrees)",
+     "typical": "-10..10 to fix a rolled horizon"
+    },
+    {
+     "name": "Input Layout",
+     "does": "Layout of the source media (dropdown)",
+     "typical": "0 mono"
+    },
+    {
+     "name": "Output Layout",
+     "does": "Layout to write (dropdown)",
+     "typical": "match the sequence VR settings"
+    },
+    {
+     "name": "Input Horizontal FOV",
+     "does": "Horizontal coverage of the source",
+     "typical": "360 for 360 media, 180 for VR180"
+    },
+    {
+     "name": "Output Horizontal FOV",
+     "does": "Horizontal coverage of the output",
+     "typical": "360"
+    },
+    {
+     "name": "Filtering",
+     "does": "Resampling quality when reprojecting (dropdown)",
+     "typical": "keep default 1 (0..5 labels not harvested)"
+    }
+   ],
+   "demo_settings": {
+    "Pan": 90,
+    "Tilt": 25
+   },
+   "enum_labels": {
+    "Input Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    },
+    "Output Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "VR Converter / VR Rotate Sphere (After Effects)",
+   "pairs_with": [
+    "VR Rotate Sphere",
+    "VR Plane to Sphere",
+    "VR Color Gradients",
+    "Lumetri Color"
+   ],
+   "scripting": "Rows named \"\" or \" \" and NewRotationOrder are internal: ignore. Pan/Tilt/Roll are true degrees with sane clamps (-180..180, -90..90). Input/Output Projection are 0..1 dropdowns defaulting to 1 (likely equirectangular); labels unknown, leave them. Filtering 0..5 labels unknown, keep default 1 unless verified. Layout labels follow the usual Premiere VR order but are not harvested: verify. On flat 16:9 footage the demo shows a wrapped, bent picture, not a clean reframe.",
+   "recipe": {
+    "Pan": [
+     [
+      0,
+      0
+     ],
+     [
+      6,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/086.png",
+    "note": "Pan 90 / Tilt 25 re-orients the frame as a sphere: subjects shift left, the image wraps with a hard vertical seam at the right and pinches toward a pole at the bottom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Rotate Sphere",
+   "match": "AE.Mettle SkyBox Rotate Sphere",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Rotates 360 equirectangular footage around the X (tilt), Y (pan) and Z (roll) axes without seams, to set the starting view or fix a tilted horizon.",
+   "look": [
+    "360 rotation",
+    "horizon level",
+    "spherical pan",
+    "wraparound"
+   ],
+   "use_for": [
+    "Set the front-facing direction of a 360 rally or event clip so viewers start on the stage",
+    "Level a rolled or tilted 360 camera horizon",
+    "Animate a slow pan to guide attention in a 360 explainer"
+   ],
+   "avoid": [
+    "Using it on flat 16:9 footage: the image wraps and bends at the edges",
+    "Fast animated rotation in 360: causes motion sickness in headsets"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Pan (Y axis)",
+     "does": "Horizontal rotation of the sphere (degrees)",
+     "typical": "-180..180"
+    },
+    {
+     "name": "Tilt (X axis)",
+     "does": "Vertical rotation (degrees)",
+     "typical": "-15..15 to level"
+    },
+    {
+     "name": "Roll (Z axis)",
+     "does": "Roll around the view axis (degrees)",
+     "typical": "-15..15 to level"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Mono or stereo layout of the clip (dropdown)",
+     "typical": "0 mono"
+    },
+    {
+     "name": "Horizontal Field of View",
+     "does": "Horizontal coverage of the media",
+     "typical": "360"
+    }
+   ],
+   "demo_settings": {
+    "Pan (Y axis)": 90,
+    "Tilt (X axis)": 20
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "VR Rotate Sphere (After Effects Immersive Video)",
+   "pairs_with": [
+    "VR Projection",
+    "VR Plane to Sphere",
+    "VR Sharpen"
+   ],
+   "scripting": "Angles in degrees; harvested clamp is +/-32768 but use -180..180. Unnamed \"\" rows are internal: ignore. Frame Layout labels are from Mettle SkyBox docs, not harvested. Demo on a flat frame shows a shifted, wrapped and curved picture.",
+   "recipe": {
+    "Pan (Y axis)": [
+     [
+      0,
+      0
+     ],
+     [
+      8,
+      45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/087.png",
+    "note": "Pan 90 / Tilt 20 rotates the sphere: figures shift right, right-edge content wraps in at the left, and the horizon and foreground blocks curve.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "VR Sharpen",
+   "match": "AE.Mettle SkyBox Sharpen",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Sharpens 360 equirectangular footage while treating the left/right edges as one continuous seam, so no visible line appears where the sphere wraps.",
+   "look": [
+    "crisper detail",
+    "edge contrast",
+    "seamless 360 sharpening"
+   ],
+   "use_for": [
+    "Recover detail in soft stitched 360 camera footage before upload",
+    "Add bite to 360 drone or event shots that went soft after stabilisation"
+   ],
+   "avoid": [
+    "Pushing Sharpen Amount high: halos and crunchy noise, worse in headsets",
+    "Using it on flat footage: Unsharp Mask or Sharpen does the same job more cheaply; only 360 media needs the seam-aware wrap",
+    "On flat (non-360) footage at high Sharpen Amount the top and bottom rows (the sphere poles) smear into saturated colour fringes: crop or scale past them"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Sharpen Amount",
+     "does": "Strength of sharpening",
+     "typical": "10-30 for real footage"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "Mono or stereo layout (dropdown)",
+     "typical": "0 mono"
+    },
+    {
+     "name": "Horizontal Field of View",
+     "does": "Horizontal coverage of the media",
+     "typical": "360"
+    }
+   ],
+   "demo_settings": {
+    "Sharpen Amount": 100
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "0": "Monoscopic",
+     "1": "Stereoscopic - Over/Under",
+     "2": "Stereoscopic - Side by Side"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "VR Sharpen (After Effects Immersive Video)",
+   "pairs_with": [
+    "VR De-Noise",
+    "VR Rotate Sphere",
+    "Lumetri Color"
+   ],
+   "scripting": "Default Sharpen Amount is 0, so the effect does nothing until set. Unnamed \"\" row is internal. Frame Layout labels from Mettle docs, not harvested. Demo at 100 is deliberately strong to be visible; use 10-30 in real edits.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/088.png",
+    "note": "Interior detail is clearly crisper (mean horizontal gradient 3.7 to 6.1 vs the reference), and the top, bottom and corner rows smear into saturated colour fringes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Vertical Flip",
+   "match": "AE.ADBE Vertical Flip",
+   "category": "Transform",
+   "status": "current",
+   "summary": "Flips the clip upside down (mirror across the horizontal axis). No settings.",
+   "look": [
+    "upside down",
+    "mirror",
+    "inverted world",
+    "reflection"
+   ],
+   "use_for": [
+    "Fake a water or floor reflection by stacking a flipped copy under the original with lower opacity, blur and a Crop",
+    "Disorientation beat in a trailer or satire reel (world turned upside down), ideally on a hard cut or with a whip/spin transition",
+    "Mirror-symmetry title background: top half of a shot plus a flipped copy on the bottom half (Crop both)"
+   ],
+   "avoid": [
+    "Footage with readable text, logos, party symbols or number plates: they read as upside-down mirror writing",
+    "Fixing a camera mounted upside down: that image is rotated 180 degrees, so Vertical Flip alone leaves it mirrored left-right; use Motion Rotation 180 (or Vertical Flip + Horizontal Flip)",
+    "Real news or political footage presented as fact: a flipped image of a real event can read as manipulation"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Transform (Scale Height -100) in After Effects, or layer Scale [100, -100]",
+   "pairs_with": [
+    "Horizontal Flip",
+    "Gaussian Blur",
+    "Linear Wipe",
+    "Crop"
+   ],
+   "scripting": "No properties: apply with {\"name\": \"Vertical Flip\", \"pr_props\": {}}; adding the effect is the flip, so demo_settings is empty and the effect is still fully visible (validate_cards.py exempts effects with no settable properties). It has nothing to keyframe; to animate a flip use Motion/Transform Scale or Rotation, or cut it on and off.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/089.png",
+    "note": "The whole frame is mirrored top to bottom: flowers at the top, faces and stripes upside down at the bottom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Wave Warp",
+   "match": "AE.ADBE Wave Warp",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Bends the image with a travelling wave (sine, square, triangle, noise and so on) that animates on its own over time. Gives a flag, water, heat-haze or wobbly-cartoon distortion.",
+   "look": [
+    "wavy",
+    "rippling",
+    "underwater",
+    "heat haze",
+    "flag wave",
+    "wobble",
+    "dream"
+   ],
+   "use_for": [
+    "Make a flat flag or banner graphic ripple in a political explainer",
+    "Dream or flashback transition in a documentary (ramp Wave Height up then down)",
+    "Heat-haze or underwater feel on B-roll at low height",
+    "Wobbly comic distortion on a meme or satire beat"
+   ],
+   "avoid": [
+    "Large heights on faces or text: looks cheap and unreadable",
+    "Edges pulling in transparent or black gaps: scale the clip up a few percent (Pinning could hold edges, but its indices are unverified)",
+    "Leaving Antialiasing at Low on detailed footage: jagged edges"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wave Type",
+     "does": "Wave shape (dropdown)",
+     "typical": "0 sine for smooth ripples, 7/8 noise for haze"
+    },
+    {
+     "name": "Wave Height",
+     "does": "Amplitude of the distortion in pixels",
+     "typical": "5-15 subtle haze, 30-60 obvious ripple"
+    },
+    {
+     "name": "Wave Width",
+     "does": "Wavelength in pixels",
+     "typical": "80-200 on 1080p"
+    },
+    {
+     "name": "Direction",
+     "does": "Direction the waves travel (degrees, 0 = up); the image is displaced across that direction",
+     "typical": "90 default: waves travel left-to-right and horizontal lines ripple up/down (flag); 0/180: waves travel vertically, vertical lines wobble sideways (rising heat haze)"
+    },
+    {
+     "name": "Wave Speed",
+     "does": "Cycles per second the wave travels; 0 = static",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Pinning",
+     "does": "Which edges stay fixed (dropdown)",
+     "typical": "0 None (default); the edge options sit at other indices but the menu includes separator rows, so test-render before relying on one"
+    },
+    {
+     "name": "Phase",
+     "does": "Offset of the wave cycle (degrees)",
+     "typical": "keyframe instead of speed for exact control"
+    },
+    {
+     "name": "Antialiasing (Best Quality)",
+     "does": "Edge smoothing quality (dropdown)",
+     "typical": "2 high for final"
+    }
+   ],
+   "demo_settings": {
+    "Wave Type": 0,
+    "Wave Height": 40,
+    "Wave Width": 150,
+    "Wave Speed": 1,
+    "Antialiasing (Best Quality)": 2
+   },
+   "enum_labels": {
+    "Wave Type": {
+     "0": "Sine",
+     "1": "Square",
+     "2": "Triangle",
+     "3": "Sawtooth",
+     "4": "Circle",
+     "5": "Semicircle",
+     "6": "Uncircle",
+     "7": "Noise",
+     "8": "Smooth Noise"
+    },
+    "Antialiasing (Best Quality)": {
+     "0": "Low",
+     "1": "Medium",
+     "2": "High"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Wave Warp (After Effects Distort)",
+   "pairs_with": [
+    "Turbulent Displace",
+    "Gaussian Blur",
+    "Cross Dissolve",
+    "Transform"
+   ],
+   "scripting": "Animates by itself from Wave Speed even without keyframes; set Wave Speed 0 for a frozen wave. Heights/widths are pixels, so scale with resolution. Wave Type and Antialiasing labels follow the After Effects menus (9 and 3 entries matching the 0..8 and 0..2 ranges, Premiere is 0-based where AE is 1-based). Pinning has 11 indices (0..10) for 9 AE labels because the menu contains separators: only 0 = None is safe; verify any other index on a test render.",
+   "recipe": {
+    "Wave Height": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      40
+     ],
+     [
+      1.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/090.png",
+    "note": "Sine waves ripple the whole image (wavy walls, foreground blocks and faces) and scallop black gaps along the top and bottom edges.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "MXF/ARRIRAW Development Settings",
+   "match": "AE.ADBE ARRIRAW MXF.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source settings that develop ARRIRAW recorded inside MXF (ALEXA Mini LF / ALEXA 35 style): colour space, exposure index, white balance and tint applied at decode.",
+   "look": [
+    "raw development",
+    "white balance",
+    "LogC / Rec.709 decode",
+    "camera-native colour"
+   ],
+   "use_for": [
+    "Fix white balance of ARRIRAW MXF footage at the raw stage before grading",
+    "Choose a log or display colour space for ARRI footage in a documentary pipeline"
+   ],
+   "avoid": [
+    "Applying it to anything other than ARRIRAW MXF media: it does nothing or is not available",
+    "Grading WB in Lumetri when the raw setting can fix it cleaner"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "White Balance",
+     "does": "Colour temperature in kelvin used to develop the raw",
+     "typical": "3200 tungsten, 5600 daylight"
+    },
+    {
+     "name": "Tint",
+     "does": "Green/magenta correction",
+     "typical": "-3..3"
+    },
+    {
+     "name": "Color Space",
+     "does": "Output colour space of the decode (dropdown)",
+     "typical": "leave default unless the colour pipeline says otherwise"
+    },
+    {
+     "name": "Exposure Index",
+     "does": "ISO / EI the raw is developed at (dropdown filled from the clip)",
+     "typical": "the shooting EI, usually 800"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "ARRIRAW source settings via Interpret Footage in After Effects",
+   "pairs_with": [
+    "Lumetri Color",
+    "ARRI LUTs"
+   ],
+   "scripting": "Not a timeline effect: lives on the master clip (Source Settings / Master Clip effect) of an ARRIRAW MXF file, so a script must target the project item's master clip, not a sequence track item. Exposure Index harvested range is 0..0 because no ARRI clip was loaded: its options only appear with real media. White Balance harvested default 2000 is a placeholder, not the clip's metadata value. Color Space labels unknown. Low confidence on scripting reachability.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Card status is needs_input (source-settings / raw-format effect), so the gallery did not render a frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "ARRIRAW Development Settings",
+   "match": "AE.ADBE ARRIRAW.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source settings that develop classic ARRIRAW (.ari sequence) files: colour space, exposure index, white balance and tint applied at decode.",
+   "look": [
+    "raw development",
+    "white balance",
+    "LogC / Rec.709 decode",
+    "camera-native colour"
+   ],
+   "use_for": [
+    "Correct white balance and tint of ARRIRAW .ari footage before grading",
+    "Pick log or display-referred decode for ARRI cinema footage in a trailer grade"
+   ],
+   "avoid": [
+    "Expecting it on non-ARRIRAW clips: it only appears for .ari media",
+    "Big tint swings at the raw stage then fighting them in Lumetri"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "White Balance",
+     "does": "Colour temperature in kelvin used to develop the raw",
+     "typical": "3200 tungsten, 5600 daylight"
+    },
+    {
+     "name": "Tint",
+     "does": "Green/magenta correction",
+     "typical": "-3..3"
+    },
+    {
+     "name": "Color Space",
+     "does": "Output colour space of the decode (dropdown)",
+     "typical": "default 1"
+    },
+    {
+     "name": "Exposure Index",
+     "does": "ISO / EI used to develop the raw (dropdown filled from the clip)",
+     "typical": "the shooting EI"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "ARRIRAW source settings via Interpret Footage in After Effects",
+   "pairs_with": [
+    "Lumetri Color",
+    "ARRI LUTs"
+   ],
+   "scripting": "Master-clip Source Settings for .ari media, not a sequence effect; target the project item's master clip. Exposure Index range 0..0 in the harvest because no ARRI clip was loaded. White Balance default 2000 is a placeholder. Color Space defaults to 1 here (0 in the MXF variant); labels unknown.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Card status is needs_input (source-settings / raw-format effect), so the gallery did not render a frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Canon Cinema RAW Light Source Settings",
+   "match": "AE.ADBE CanonRaw.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source settings for Canon Cinema RAW Light (.crm) footage: colour temperature, tint, exposure, colour space and gamma chosen at decode.",
+   "look": [
+    "raw development",
+    "Canon Log decode",
+    "white balance",
+    "exposure recovery"
+   ],
+   "use_for": [
+    "Rescue a stop of under/over-exposure on Canon C70/C300/R5 raw clips",
+    "Match white balance across Canon raw interview cameras before grading",
+    "Pick Canon Log vs display gamma for a documentary colour pipeline"
+   ],
+   "avoid": [
+    "Exposure at the extremes (+/-3): noise and clipped highlights",
+    "Mixing gamma choices across cameras in one scene: shots will not match"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color Temperature",
+     "does": "White balance in kelvin",
+     "typical": "3200-5600 (default 5600)"
+    },
+    {
+     "name": "Tint",
+     "does": "Green/magenta correction",
+     "typical": "-2..2"
+    },
+    {
+     "name": "Exposure",
+     "does": "Exposure offset in stops",
+     "typical": "-1..1"
+    },
+    {
+     "name": "Color Space",
+     "does": "Decode colour gamut (dropdown 0..3)",
+     "typical": "leave default"
+    },
+    {
+     "name": "Gamma",
+     "does": "Decode transfer curve (dropdown 0..4)",
+     "typical": "leave default"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Camera raw interpretation in After Effects (no direct effect)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Canon LUTs"
+   ],
+   "scripting": "Only on .crm Canon Cinema RAW Light master clips; target the project item's master clip, not a track item. Unnamed \"\" bool rows are internal (the first likely toggles using clip metadata vs overrides). Color Space and Gamma labels unknown: do not guess indices.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Card status is needs_input (source-settings / raw-format effect), so the gallery did not render a frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "CinemaDNG Source Settings",
+   "match": "AE.ADBE CinemaDNG.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source settings for CinemaDNG raw image sequences (Blackmagic, DJI drones): temperature, tint and exposure applied at decode.",
+   "look": [
+    "raw development",
+    "white balance",
+    "exposure recovery"
+   ],
+   "use_for": [
+    "Fix white balance on DJI or Blackmagic CinemaDNG drone shots in a documentary",
+    "Pull back highlights or lift shadows a stop before grading"
+   ],
+   "avoid": [
+    "Applying to non-DNG media: not available",
+    "Extreme exposure (+/-5): noise and clipping"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Temperature",
+     "does": "White balance in kelvin",
+     "typical": "3200-6500"
+    },
+    {
+     "name": "Tint",
+     "does": "Green/magenta correction",
+     "typical": "-10..10"
+    },
+    {
+     "name": "Exposure",
+     "does": "Exposure offset in stops",
+     "typical": "-1..1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Camera Raw (Interpret Footage) in After Effects",
+   "pairs_with": [
+    "Lumetri Color"
+   ],
+   "scripting": "Master-clip Source Settings for CinemaDNG sequences only; target the master clip, not a track item. Temperature default 2000 in the harvest is a placeholder, real clips load their metadata white balance. Blank-named \" \" (single space) bool rows are group markers: ignore.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Card status is needs_input (source-settings / raw-format effect), so the gallery did not render a frame for it.",
+    "rerender": false,
+    "second_opinion": "corrected: scripting note called the blank rows \"\" but the harvest names them \" \" (single space); not_rendered / needs_input verdict and empty demo_settings agreed"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Cineon Source Settings",
+   "match": "AE.ADBE DPX.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source settings that convert log Cineon/DPX scans to a viewable image: black/white points, gamma, highlight rolloff and log-to-linear conversion.",
+   "look": [
+    "log to linear",
+    "film scan",
+    "flat to contrasty",
+    "highlight rolloff"
+   ],
+   "use_for": [
+    "Normalise flat log DPX film scans or archive transfers for a documentary",
+    "Set highlight rolloff on scanned archival footage before grading"
+   ],
+   "avoid": [
+    "Applying to ordinary video: only Cineon/DPX files expose it",
+    "Wrong black/white points crush shadows or clip highlights"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Preset",
+     "does": "Conversion preset (dropdown 0..5)",
+     "typical": "leave default unless the lab specifies"
+    },
+    {
+     "name": "Converted Black Point",
+     "does": "Output level mapped from the input black",
+     "typical": "0"
+    },
+    {
+     "name": "Converted White Point",
+     "does": "Output level mapped from the input white",
+     "typical": "255"
+    },
+    {
+     "name": "Current Gamma",
+     "does": "Gamma of the conversion",
+     "typical": "about 1.7 for standard Cineon"
+    },
+    {
+     "name": "Highlight Rolloff",
+     "does": "How softly highlights roll into white",
+     "typical": "20-60"
+    },
+    {
+     "name": "Logarithmic Conversion",
+     "does": "Converts log to linear when on",
+     "typical": "true for log scans"
+    },
+    {
+     "name": "Units",
+     "does": "Units used for the point values (dropdown 0..2)",
+     "typical": "leave default"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Cineon Converter (After Effects Utility) / Interpret Footage > Cineon Settings",
+   "pairs_with": [
+    "Lumetri Color"
+   ],
+   "scripting": "Master-clip Source Settings for .cin/.dpx media only. Input Black Point and Input White Point harvested as 0..0 (no DPX loaded) so they cannot be set without real media. Harvested defaults (white point 0, gamma 0.01) are placeholders. Preset and Units labels unknown; typical values come from AE Cineon Converter conventions, low confidence.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Card status is needs_input (source-settings / raw-format effect), so the gallery did not render a frame for it.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Sony Raw Source Settings",
+   "match": "AE.ADBE SonyRawF65.SourceSettings",
+   "category": "Source Settings (master clip, not in Effects panel)",
+   "status": "needs_input",
+   "summary": "Master-clip source setting of the Sony F65-family RAW decoder (match name SonyRawF65): picks the colour space the RAW is decoded into. VENICE / X-OCN MXF clips usually get the separate 'Sony RAW MXF Source Settings' component instead.",
+   "look": [
+    "raw development",
+    "S-Gamut / S-Log decode",
+    "camera-native colour"
+   ],
+   "use_for": [
+    "Choose a log (S-Gamut/S-Log) vs display (Rec.709) decode of Sony F65/F55 RAW before grading a trailer or documentary"
+   ],
+   "avoid": [
+    "Expecting it on XAVC, X-OCN/VENICE or other non-F65-family Sony files: they use other components or none",
+    "Decoding to log without a LUT or grade afterwards: the picture stays flat and grey"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Color Space",
+     "does": "Decode colour space (dropdown 0..3)",
+     "typical": "leave default unless the colour pipeline specifies"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Sony RAW interpretation in After Effects (no direct effect)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Sony LUTs"
+   ],
+   "scripting": "Master-clip Source Settings for Sony F65-family RAW .mxf only; target the master clip. Which cameras route through this importer (F65 for sure, F5/F55 RAW likely) is inferred from the match name, not tested. Color Space labels unknown. Blank-named \" \" (single space) rows are group markers: ignore.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": null,
+    "note": "Card status is needs_input (source-settings / raw-format effect), so the gallery did not render a frame for it.",
+    "rerender": false,
+    "second_opinion": "corrected: scripting note called the blank rows \"\" but the harvest names them \" \" (single space); not_rendered / needs_input verdict and empty demo_settings agreed"
+   }
+  }
+ ]
+}

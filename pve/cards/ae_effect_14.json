@@ -1,0 +1,1610 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Lens Flare",
+   "match": "ADBE Lens Flare",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Renders a classic optical lens flare (hot spot, streaks and a chain of coloured ghosts) on top of the layer at a chosen point.",
+   "look": [
+    "lens flare",
+    "sun glint",
+    "cinematic light",
+    "optical ghosts",
+    "warm glow"
+   ],
+   "use_for": [
+    "sun or stage-light glint on a trailer title or hero shot",
+    "light sweep across a logo or channel bumper (keyframe Flare Center)",
+    "spotlight / live-event feel on a rally or stage shot",
+    "flash transition when Brightness is keyframed up then down"
+   ],
+   "avoid": [
+    "default settings read as a dated stock effect; keep Brightness modest and use Blend With Original",
+    "a flare not tied to a real light source in the shot looks fake",
+    "8-bit generator; can band on heavy dark grades"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Flare Center",
+     "does": "position of the hot spot in layer pixels; ghosts line up through frame centre",
+     "typical": "on a real light source or near a top corner, e.g. [1550, 180]"
+    },
+    {
+     "name": "Flare Brightness",
+     "does": "flare intensity / size in %",
+     "typical": "60-130; 150-250 only for a flash moment"
+    },
+    {
+     "name": "Lens Type",
+     "does": "simulated lens: 1 = 50-300mm Zoom (busiest, longest chain of ghosts), 2 = 35mm Prime, 3 = 105mm Prime (fewer ghosts, different halo/streak shape)",
+     "typical": "1 for a big trailer flare; try 2 or 3 for a simpler flare"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mixes back toward the untouched image (100 = no flare)",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {
+    "Flare Center": [
+     1500,
+     220
+    ],
+    "Flare Brightness": 140,
+    "Lens Type": 1,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Lens Type": {
+     "1": "50-300mm Zoom",
+     "2": "35mm Prime",
+     "3": "105mm Prime"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Lens Flare",
+   "pairs_with": [
+    "Glow",
+    "Curves",
+    "Exposure",
+    "CC Light Sweep"
+   ],
+   "scripting": "Draws directly onto the layer it is applied to (no transparent/composite option). For a flare you can move and blend independently, apply it to a black solid and set that layer's blend mode to Add or Screen. Flare Center is in layer pixels; the default [768,432] sits up-left of centre, so always set it explicitly. Lens Type is a 1-based popup. 8 bpc effect.",
+   "recipe": {
+    "Flare Center": [
+     [
+      0,
+      [
+       300,
+       200
+      ]
+     ],
+     [
+      3,
+      [
+       1600,
+       220
+      ]
+     ]
+    ],
+    "Flare Brightness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      220
+     ],
+     [
+      0.7,
+      110
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/108.png",
+    "note": "Bright hot spot with streaks at top right and a chain of coloured ghost rings running down-left across the foreground, image otherwise intact.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Paint Bucket",
+   "match": "ADBE Paint Bucket",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Flood-fills a region of similar colour, starting from the Fill Point, with a solid colour (like Photoshop's paint bucket), with optional feathered, spread, choked or stroke-only edges.",
+   "look": [
+    "flat colour fill",
+    "cartoon",
+    "colour block",
+    "posterized",
+    "comic"
+   ],
+   "use_for": [
+    "recolour a flat region of a logo, map or vector graphic",
+    "fill outline / line-art illustrations in explainer animations",
+    "colour one state or constituency on a flat political map graphic",
+    "outline-only highlight of a flat shape region (Stroke = Stroke)"
+   ],
+   "avoid": [
+    "on live-action footage the fill is blotchy and flickers frame to frame as pixel colours change",
+    "high Tolerance floods most of the frame",
+    "Fill Point is fixed in layer space; moving subjects slip out of the fill"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Fill Point",
+     "does": "pixel where the flood fill starts (layer pixels)",
+     "typical": "inside the flat region to colour"
+    },
+    {
+     "name": "Tolerance",
+     "does": "how different a pixel can be from the seed colour and still be filled (0-255)",
+     "typical": "10-40 on flat graphics, 60-100 on photos"
+    },
+    {
+     "name": "Fill Selector",
+     "does": "what is compared when growing the fill (colour+alpha, straight colour, transparency, opacity, alpha)",
+     "typical": "1 (Color & Alpha, default)"
+    },
+    {
+     "name": "Stroke",
+     "does": "edge treatment of the fill",
+     "typical": "1 Antialias for clean fills, 2 Feather for soft, 5 Stroke for outline only"
+    },
+    {
+     "name": "Contextual Slider",
+     "does": "amount for the chosen Stroke mode (feather softness, spread/choke radius or stroke width)",
+     "typical": "2-10"
+    },
+    {
+     "name": "Color",
+     "does": "fill colour",
+     "typical": "brand colour, e.g. #FF6A00"
+    },
+    {
+     "name": "Opacity",
+     "does": "fill opacity in %",
+     "typical": "60-100"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "how the fill composites over the layer (1-based popup, 23 slots)",
+     "typical": "leave default 2"
+    }
+   ],
+   "demo_settings": {
+    "Fill Point": [
+     960,
+     540
+    ],
+    "Tolerance": 90,
+    "Color": "#FF2D55",
+    "Opacity": 85
+   },
+   "enum_labels": {
+    "Fill Selector": {
+     "1": "Color & Alpha",
+     "2": "Straight Color",
+     "3": "(separator)",
+     "4": "Transparency",
+     "5": "Opacity",
+     "6": "Alpha Channel"
+    },
+    "Stroke": {
+     "1": "Antialias",
+     "2": "Feather",
+     "3": "Spread",
+     "4": "Choke",
+     "5": "Stroke"
+    },
+    "Blending Mode": {
+     "1": "Fill Only",
+     "2": "Normal",
+     "3": "Stencil Alpha",
+     "4": "(separator)",
+     "5": "Add",
+     "6": "Multiply",
+     "7": "Screen",
+     "8": "Overlay",
+     "9": "Soft Light",
+     "10": "Hard Light",
+     "11": "(separator)",
+     "12": "Color Dodge",
+     "13": "Color Burn",
+     "14": "(separator)",
+     "15": "Darken",
+     "16": "Lighten",
+     "17": "Difference",
+     "18": "Exclusion",
+     "19": "(separator)",
+     "20": "Hue",
+     "21": "Saturation",
+     "22": "Color",
+     "23": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Simple Choker",
+    "Posterize",
+    "Cartoon"
+   ],
+   "scripting": "Fill Point is in layer pixels. Fill Selector (read from After Effects 26.0): 1 Color & Alpha, 2 Straight Color, 3 a separator, 4 Transparency, 5 Opacity, 6 Alpha Channel. Blending Mode: 1 Fill Only, 2 Normal (default), 3 Stencil Alpha, then the layer modes with separators at 4, 11, 14 and 19 (enum_labels). View Threshold = 1 shows a black/white preview of the selection, keep it 0 for renders. No Premiere equivalent: Paint Bucket is absent from the harvested Premiere 2026 video-effect list.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      85
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/109.png",
+    "note": "A flat pink-red fill flooded out from the centre over most of the frame (figures, stripes, wall), leaving only blotchy islands of the original, as the Tolerance-90 warning predicts.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Radio Waves",
+   "match": "APC Radio Waves",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Generates rings (circles, polygons or stars, or copies of a mask or image contour) that expand outward from a point over time, like sonar or broadcast signal pulses.",
+   "look": [
+    "sonar ping",
+    "signal pulse",
+    "concentric rings",
+    "shockwave",
+    "broadcast",
+    "radar"
+   ],
+   "use_for": [
+    "pulsing signal behind a LIVE / Breaking News badge",
+    "radar ping on a map location (rally venue, incident site)",
+    "rings behind a phone or notification icon in tech explainers",
+    "beat-synced shockwave accent in reels"
+   ],
+   "avoid": [
+    "default thin blue rings look like a 2005 template; set colour, widths and fade",
+    "nothing is visible at the very first frame because waves are born over time",
+    "large Lifespan with high Frequency piles up hundreds of rings and slows renders"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Producer Point",
+     "does": "centre the waves are emitted from (layer pixels)",
+     "typical": "the map pin or badge position"
+    },
+    {
+     "name": "Wave Type",
+     "does": "shape source: 1 Polygon (circle/polygon/star), 2 Image Contours, 3 Mask",
+     "typical": "1"
+    },
+    {
+     "name": "Frequency",
+     "does": "waves emitted per second",
+     "typical": "1-4"
+    },
+    {
+     "name": "Expansion",
+     "does": "how fast each wave grows",
+     "typical": "5-20"
+    },
+    {
+     "name": "Lifespan (sec) ",
+     "does": "how long each wave lives before it disappears (note trailing space in the name)",
+     "typical": "1-4"
+    },
+    {
+     "name": "Color",
+     "does": "stroke colour",
+     "typical": "brand red #E53935 or cyan #00E5FF"
+    },
+    {
+     "name": "Start Width",
+     "does": "stroke width at birth",
+     "typical": "4-12"
+    },
+    {
+     "name": "End Width",
+     "does": "stroke width at end of life",
+     "typical": "1-30"
+    },
+    {
+     "name": "Fade-out Time",
+     "does": "how long each wave takes to fade out before it dies (seconds, believed); default 5 is longer than a short Lifespan, so rings start part-faded",
+     "typical": "0.5-2, at or below Lifespan"
+    }
+   ],
+   "demo_settings": {
+    "Producer Point": [
+     960,
+     540
+    ],
+    "Wave Type": 1,
+    "Frequency": 3,
+    "Expansion": 12,
+    "Lifespan (sec) ": 4,
+    "Color": "#00E5FF",
+    "Start Width": 10,
+    "End Width": 24,
+    "Opacity": 1,
+    "Fade-out Time": 1.5
+   },
+   "enum_labels": {
+    "Parameters are set at": {
+     "1": "Birth",
+     "2": "Each Frame"
+    },
+    "Wave Type": {
+     "1": "Polygon",
+     "2": "Image Contours",
+     "3": "Mask"
+    },
+    "Value Channel": {
+     "1": "Intensity",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Value"
+    },
+    "Profile": {
+     "1": "Square",
+     "2": "Triangle",
+     "3": "Sawtooth Out",
+     "4": "Sawtooth In",
+     "5": "Gaussian",
+     "6": "Bell",
+     "7": "Sine"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur",
+    "Tint"
+   ],
+   "scripting": "The property name 'Lifespan (sec) ' ends with a space; use it exactly. Waves are generated over time from the layer's start, so sample/preview frames at least 1 s in. The effect renders the waves on transparency and hides the layer's own pixels (verified: applied to footage the frame showed only rings on black), so apply it to a full-frame solid above the footage rather than to the footage itself. Image Contours mode needs Source Layer (layer reference, not settable from a spec) and Mask mode needs a mask (mask reference). Opacity is 0-1, not %. Profile: 1 Square, 2 Triangle, 3 Sawtooth Out, 4 Sawtooth In, 5 Gaussian, 6 Bell, 7 Sine (read from After Effects 26.0). Orientation/Direction are angles in degrees; Velocity moves rings along Direction.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      1
+     ],
+     [
+      2.5,
+      1
+     ],
+     [
+      3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/110.png",
+    "note": "Six evenly spaced cyan concentric rings around a centre dot on solid black: the waves render and the footage itself is hidden.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Scribble",
+   "match": "ADBE Scribble Fill",
+   "category": "Generate",
+   "status": "needs_input",
+   "summary": "Fills or outlines a mask with animated, hand-drawn-looking zig-zag scribble strokes that can wiggle and draw on over time.",
+   "look": [
+    "hand-drawn",
+    "scribble fill",
+    "marker",
+    "doodle",
+    "sketchy",
+    "kinetic"
+   ],
+   "use_for": [
+    "hand-scribbled highlight or redaction over a word or face mask in explainers",
+    "doodle-style draw-on of shapes in reels",
+    "marker-style fills for infographic bars or map regions",
+    "cross-out / scribble-over a claim in fact-check videos"
+   ],
+   "avoid": [
+    "without a mask nothing is drawn and the default composite hides the layer",
+    "very small Spacing at 4K-ish sizes renders slowly",
+    "Wiggle on a static explainer graphic can feel jittery; use Static wiggle"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Mask",
+     "does": "which layer mask is scribbled (mask reference)",
+     "typical": "the mask created by the script"
+    },
+    {
+     "name": "Fill Type",
+     "does": "fill inside the mask or only along its edge",
+     "typical": "1 Inside for fills, 2 Center Edge for outlines"
+    },
+    {
+     "name": "Color",
+     "does": "scribble colour",
+     "typical": "highlighter yellow #FFE600 or red #E53935"
+    },
+    {
+     "name": "Angle",
+     "does": "direction of the scribble strokes in degrees",
+     "typical": "30-60"
+    },
+    {
+     "name": "Stroke Width",
+     "does": "thickness of each scribble line",
+     "typical": "3-10"
+    },
+    {
+     "name": "Spacing",
+     "does": "distance between scribble lines",
+     "typical": "5-15"
+    },
+    {
+     "name": "End",
+     "does": "how much of the scribble is drawn (%), animate for draw-on",
+     "typical": "0 -> 100"
+    },
+    {
+     "name": "Composite",
+     "does": "draw on the original image, on transparent, or reveal the original through the scribble",
+     "typical": "1 On Original Image"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Scribble": {
+     "1": "None",
+     "2": "(separator)",
+     "3": "Single Mask",
+     "4": "All Masks",
+     "5": "All Masks Using Modes"
+    },
+    "Fill Type": {
+     "1": "Inside",
+     "2": "Centered Edge",
+     "3": "Inside Edge",
+     "4": "Outside Edge",
+     "5": "Left Edge",
+     "6": "Right Edge"
+    },
+    "End Cap": {
+     "1": "Round",
+     "2": "Butt",
+     "3": "Projecting"
+    },
+    "Join": {
+     "1": "Round",
+     "2": "Bevel",
+     "3": "Miter"
+    },
+    "End Apply To": {
+     "1": "Mask Path",
+     "2": "Scribble Result"
+    },
+    "Wiggle Type": {
+     "1": "Static",
+     "2": "Jumpy",
+     "3": "Smooth"
+    },
+    "Composite": {
+     "1": "On Original Image",
+     "2": "On Transparent",
+     "3": "Reveal Original Image"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Stroke",
+    "Roughen Edges",
+    "Turbulent Displace",
+    "Drop Shadow"
+   ],
+   "scripting": "Needs at least one mask on the layer: create the mask first, then point the 'Mask' property at it (mask reference, not settable from a value spec). The 'Scribble' popup (Single Mask / All Masks / All Masks Using Modes in the UI) harvests 5 slots with default 3, so separators may shift indices; verify before setting. Default Composite = 2 (On Transparent) hides the original layer content; set 1 to draw over footage. Opacity is 0-1. Set Random Seed per layer so stacked scribbles differ.",
+   "recipe": {
+    "End": [
+     [
+      0,
+      0
+     ],
+     [
+      1.2,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: needs a mask set by script, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Stroke",
+   "match": "ADBE Stroke",
+   "category": "Generate",
+   "status": "needs_input",
+   "summary": "Paints a brush stroke along a layer mask path, with start/end controls that make it draw on or off like a pen tracing the path.",
+   "look": [
+    "draw-on line",
+    "outline",
+    "pen trace",
+    "path reveal",
+    "hand-drawn circle"
+   ],
+   "use_for": [
+    "circle-the-evidence ring around a face, name or number in news explainers",
+    "route line drawing on a map (yatra route, flight path)",
+    "underline that draws under a key word or headline",
+    "reveal footage along a path (Paint Style = Reveal Original Image)"
+   ],
+   "avoid": [
+    "without a mask path nothing renders",
+    "thin hard strokes look aliased on fast moves; drop Brush Hardness to ~0.75-0.85 and add a touch of glow",
+    "for shape-layer work a Trim Paths stroke is cleaner and scales better"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Path",
+     "does": "which mask the stroke follows (mask reference)",
+     "typical": "the mask created by the script"
+    },
+    {
+     "name": "All Masks",
+     "does": "stroke every mask on the layer instead of one",
+     "typical": "0"
+    },
+    {
+     "name": "Color",
+     "does": "stroke colour",
+     "typical": "#E53935 for callouts, #FFFFFF for routes"
+    },
+    {
+     "name": "Brush Size",
+     "does": "stroke thickness in pixels",
+     "typical": "6-16"
+    },
+    {
+     "name": "Brush Hardness",
+     "does": "edge softness (0-0.95)",
+     "typical": "0.7-0.95"
+    },
+    {
+     "name": "Start",
+     "does": "where along the path the stroke begins (%)",
+     "typical": "0; animate for write-off"
+    },
+    {
+     "name": "End",
+     "does": "where along the path the stroke ends (%), animate for draw-on",
+     "typical": "0 -> 100"
+    },
+    {
+     "name": "Paint Style",
+     "does": "draw on the original image, on transparent, or reveal the original through the stroke",
+     "typical": "1 On Original Image"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Paint Style": {
+     "1": "On Original Image",
+     "2": "On Transparent",
+     "3": "Reveal Original Image"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Drop Shadow",
+    "Scribble",
+    "Roughen Edges"
+   ],
+   "scripting": "Requires a mask on the layer: add the mask (closed ellipse for a circle callout, open path for a route) before applying, then set 'Path' to it (mask reference, not settable from a value spec). Opacity is 0-1; Brush Hardness max 0.95. Spacing is the interval between brush dabs (%); high values break the line into separate dots, keep the default 15 or lower. Keyframe End (and optionally Start) for draw-on / draw-off.",
+   "recipe": {
+    "End": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: needs a mask set by script, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Vegas",
+   "match": "APC Vegas",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Traces glowing line segments along the outlines found in an image (or along a mask path) and can run them around the contour like chasing marquee lights.",
+   "look": [
+    "neon outline",
+    "marquee lights",
+    "chasing lights",
+    "contour trace",
+    "electric edge",
+    "energy outline"
+   ],
+   "use_for": [
+    "animated neon outline around a logo or title text",
+    "energy / power outline tracing a leader cut-out in a political promo",
+    "chasing light border around a lower-third box or map region",
+    "tech-style edge trace in AI explainer graphics"
+   ],
+   "avoid": [
+    "on busy live-action frames Image Contours finds hundreds of tiny noisy contours; pre-blur or use a mask path",
+    "contours re-detected each frame flicker on moving footage",
+    "thin default yellow stroke looks cheap without glow"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Stroke",
+     "does": "trace source: 1 Image Contours, 2 Mask/Path",
+     "typical": "1 for logos/text, 2 for a drawn path"
+    },
+    {
+     "name": "Threshold",
+     "does": "brightness level (0-255) where contours are found",
+     "typical": "100-160"
+    },
+    {
+     "name": "Pre-Blur",
+     "does": "blurs the input before tracing to drop small noisy contours",
+     "typical": "5-20 on photos, 0-2 on text"
+    },
+    {
+     "name": "Segments",
+     "does": "number of lit segments per contour",
+     "typical": "1 for a single comet, 16-40 for marquee"
+    },
+    {
+     "name": "Length",
+     "does": "fraction of the contour covered by segments (1 = solid outline)",
+     "typical": "0.3-0.7 for chasing, 1 for full outline"
+    },
+    {
+     "name": "Rotation",
+     "does": "offsets segments along the contour in degrees; animate to make them travel",
+     "typical": "0 -> 360 over 2-4 s"
+    },
+    {
+     "name": "Width",
+     "does": "stroke width in pixels",
+     "typical": "3-10"
+    },
+    {
+     "name": "Color",
+     "does": "segment colour",
+     "typical": "#FFE600, #00E5FF or brand colour"
+    }
+   ],
+   "demo_settings": {
+    "Stroke": 1,
+    "Threshold": 127,
+    "Pre-Blur": 10,
+    "Length": 0.6,
+    "Width": 6,
+    "Hardness": 0.7,
+    "Color": "#FFE600",
+    "Start Opacity": 1,
+    "End Opacity": 1,
+    "Blend Mode": 2
+   },
+   "enum_labels": {
+    "Stroke": {
+     "1": "Image Contours",
+     "2": "Mask/Path"
+    },
+    "If Layer Sizes Differ": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    },
+    "Channel": {
+     "1": "Intensity",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Value"
+    },
+    "Render": {
+     "1": "All Contours",
+     "2": "Selected Contour"
+    },
+    "Shorter Contours Have": {
+     "1": "Same Number of Segments",
+     "2": "Fewer Segments"
+    },
+    "Segment Distribution": {
+     "1": "Bunched",
+     "2": "Even"
+    },
+    "Blend Mode": {
+     "1": "Transparent",
+     "2": "Over",
+     "3": "Under",
+     "4": "Stencil"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur",
+    "Stroke",
+    "Turbulent Displace"
+   ],
+   "scripting": "Input Layer is a layer reference (not settable from a value spec); left at None (0) the effect traces the layer it is applied to (believed behaviour, verify). Mask/Path mode (Stroke = 2) needs a mask and the 'Path' mask reference set. Channel: 1 Intensity (default), 2 Red, 3 Green, 4 Blue, 5 Alpha, 6 Hue, 7 Lightness, 8 Saturation, 9 Value (read from After Effects 26.0). End Opacity defaults to 0, so segments fade along their length; set Start/End Opacity 1 for solid segments. Blend Mode 1 (Transparent) shows only the strokes, useful on a duplicate layer for glow passes. Animate Rotation for chasing lights; set Random Phase 1 to desync multiple contours. Never set 'Segments' from a value spec: the 'Segments' group header sits before the 'Segments' slider, so a by-name lookup (ae_lib child()) gets the header, and writing to it killed the AE build (gallery 2026-10-04, no aep saved); leave it at the default 32 or address the slider by index.",
+   "recipe": {
+    "Rotation": [
+     [
+      0,
+      0
+     ],
+     [
+      4,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/111.png",
+    "note": "The old render failed to build (no aep, no frame); with the 'Segments' key dropped it now renders thick yellow dashed marquee segments tracing the contours of the figures, stripes, foreground blocks and flowers over the photo, with some small noisy contours in the background exactly as the avoid notes warn.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "second_opinion": "corrected: the build died before the aep was saved, which Input Layer = None cannot cause (it only affects the rendered image); the culprit is the 'Segments' demo key, which resolves to the 'Segments' group header (it precedes the slider; Vegas is the only AE effect with such a key and the only one in failed.json). Dropped 'Segments' from demo_settings (default 32), status back to current, scripting note fixed. Re-render needs 'APC Vegas' removed from gallery/ae/failed.json."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Write-on",
+   "match": "ADBE Write-on",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Paints brush dabs at the keyframed Brush Position over time, so an animated position leaves a hand-written / drawn stroke trail on the layer.",
+   "look": [
+    "handwriting",
+    "pen draw-on",
+    "brush stroke",
+    "signature",
+    "marker circle"
+   ],
+   "use_for": [
+    "hand-drawn circle or tick around a person or number in a news explainer",
+    "signature or handwritten word reveal in documentary titles",
+    "drawing a route on a map by keyframing the brush along it",
+    "reveal footage through a painted stroke (Paint Style = Reveal Original Image)"
+   ],
+   "avoid": [
+    "needs many Brush Position keyframes; with a static position it only paints a dot",
+    "sparse keyframes give polygonal, mechanical strokes; for clean paths a masked Stroke is easier",
+    "Brush Spacing too large leaves visible dot gaps"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Brush Position",
+     "does": "where the brush is at each moment (layer pixels); keyframe it to draw",
+     "typical": "dense keyframes tracing the shape"
+    },
+    {
+     "name": "Color",
+     "does": "paint colour",
+     "typical": "#E53935 for callouts"
+    },
+    {
+     "name": "Brush Size",
+     "does": "brush diameter in pixels",
+     "typical": "8-20"
+    },
+    {
+     "name": "Brush Hardness",
+     "does": "edge softness (0-0.95)",
+     "typical": "0.6-0.9"
+    },
+    {
+     "name": "Stroke Length (secs)",
+     "does": "how long each dab stays visible (0 = forever)",
+     "typical": "0 for draw-on, 0.3-1 for a comet tail"
+    },
+    {
+     "name": "Brush Spacing (secs)",
+     "does": "time between dabs; smaller = smoother line",
+     "typical": "0.001-0.01"
+    },
+    {
+     "name": "Paint Style",
+     "does": "paint on the original, on transparent, or reveal the original through the stroke",
+     "typical": "1 On Original Image"
+    }
+   ],
+   "demo_settings": {
+    "Brush Position": [
+     960,
+     540
+    ],
+    "Color": "#FF2020",
+    "Brush Size": 80,
+    "Brush Hardness": 0.9,
+    "Brush Opacity": 1
+   },
+   "enum_labels": {
+    "Paint Time Properties": {
+     "1": "None",
+     "2": "Opacity",
+     "3": "Color"
+    },
+    "Brush Time Properties": {
+     "1": "None",
+     "2": "Size",
+     "3": "Hardness",
+     "4": "Size & Hardness"
+    },
+    "Paint Style": {
+     "1": "On Original Image",
+     "2": "On Transparent",
+     "3": "Reveal Original Image"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Drop Shadow",
+    "Roughen Edges"
+   ],
+   "scripting": "The stroke only exists where Brush Position was keyframed in time: generate dense keyframes (every 1-2 frames) from the desired path, e.g. points sampled from a circle or a map route; a common manual trick is pasting a mask path into Brush Position. A static demo shows a single dab. Brush Opacity is 0-1. Paint Time Properties: 1 None, 2 Opacity, 3 Color (default); Brush Time Properties: 1 None (default), 2 Size, 3 Hardness, 4 Size & Hardness (read from After Effects 26.0); leave defaults. No Premiere equivalent: Write-on is absent from the harvested Premiere 2026 video-effect list.",
+   "recipe": {
+    "Brush Position": [
+     [
+      0,
+      [
+       1160,
+       540
+      ]
+     ],
+     [
+      0.1,
+      [
+       1101,
+       681
+      ]
+     ],
+     [
+      0.2,
+      [
+       960,
+       740
+      ]
+     ],
+     [
+      0.3,
+      [
+       819,
+       681
+      ]
+     ],
+     [
+      0.4,
+      [
+       760,
+       540
+      ]
+     ],
+     [
+      0.5,
+      [
+       819,
+       399
+      ]
+     ],
+     [
+      0.6,
+      [
+       960,
+       340
+      ]
+     ],
+     [
+      0.7,
+      [
+       1101,
+       399
+      ]
+     ],
+     [
+      0.8,
+      [
+       1170,
+       550
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/112.png",
+    "note": "A single solid red brush dab sits at frame centre over the untouched footage, exactly what the card says a static Brush Position paints.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Blur",
+   "match": "Mettle SkyBox Blur",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Blurs 360-degree (equirectangular) footage without leaving a visible seam at the left/right edges or pinching at the poles; on flat footage it still blurs, but treats the frame as a sphere, so the top and bottom smear more sideways than the centre.",
+   "look": [
+    "blur",
+    "soft focus",
+    "defocus",
+    "360 blur"
+   ],
+   "use_for": [
+    "blur 360/VR footage for a background or title plate",
+    "seamless blur-in / blur-out transition on 360 clips",
+    "soft background behind text in VR explainers"
+   ],
+   "avoid": [
+    "on normal 16:9 footage use Gaussian Blur or Camera Lens Blur instead; this one assumes a sphere and is slower",
+    "wrong Frame Layout on stereo footage blurs across the two eyes",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "blur amount",
+     "typical": "10-60; 100+ for a pure colour wash"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "mono, stereo over/under or stereo side-by-side 360 layout",
+     "typical": "1 Monoscopic"
+    },
+    {
+     "name": "Auto VR Properties",
+     "does": "read layout and field of view from the comp automatically",
+     "typical": "1 for real 360 comps"
+    },
+    {
+     "name": "Horizontal Field of View",
+     "does": "horizontal FOV the frame covers in degrees",
+     "typical": "360"
+    },
+    {
+     "name": "Vertical Field of View",
+     "does": "vertical FOV the frame covers in degrees",
+     "typical": "180"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 50
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Blur",
+   "pairs_with": [
+    "VR Glow",
+    "VR Sharpen",
+    "VR Rotate Sphere"
+   ],
+   "scripting": "Only meaningful on 2:1 equirectangular 360 footage; set Auto VR Properties = 1 or set the FOVs to match the source. Frame Layout labels are approximate (mono / stereo over-under / stereo side-by-side). Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Blurriness": [
+     [
+      0,
+      60
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/113.png",
+    "note": "GPU render: the whole frame is evenly blurred, with a thin horizontally smeared band along the top and bottom edges.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Chromatic Aberrations",
+   "match": "Mettle SkyBox Chromatic Aberrat",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Offsets the red, green and blue channels outward from a point of interest with a falloff, giving colour fringing that is seam-aware for 360 footage.",
+   "look": [
+    "chromatic aberration",
+    "RGB split",
+    "colour fringing",
+    "lens distortion",
+    "glitch"
+   ],
+   "use_for": [
+    "lens-imperfection realism on 360 footage",
+    "RGB-split hit on a beat or transition (keyframe the aberration)",
+    "edgy tech / glitch accent in AI explainers"
+   ],
+   "avoid": [
+    "on normal footage a dedicated RGB split / channel offset is lighter and more controllable",
+    "large values on faces or text make them unreadable",
+    "constant heavy fringing looks cheap; use as a short hit",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Aberration (Red)",
+     "does": "red channel offset (signed)",
+     "typical": "-10 to -40"
+    },
+    {
+     "name": "Aberration (Green)",
+     "does": "green channel offset (signed)",
+     "typical": "0"
+    },
+    {
+     "name": "Aberration (Blue)",
+     "does": "blue channel offset (signed)",
+     "typical": "10 to 40"
+    },
+    {
+     "name": "Point of Interest",
+     "does": "centre around which the frame stays clean (layer pixels)",
+     "typical": "[960, 540] or on the subject"
+    },
+    {
+     "name": "Falloff Distance",
+     "does": "how far from the point of interest the fringing builds up",
+     "typical": "30-70"
+    },
+    {
+     "name": "Falloff Invert",
+     "does": "flip the falloff so the centre is affected instead of the edges",
+     "typical": "0"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "mono / stereo 360 layout",
+     "typical": "1 Monoscopic"
+    }
+   ],
+   "demo_settings": {
+    "Aberration (Red)": -40,
+    "Aberration (Green)": 0,
+    "Aberration (Blue)": 40,
+    "Point of Interest": [
+     960,
+     540
+    ],
+    "Falloff Distance": 30
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    }
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Chromatic Aberrations",
+   "pairs_with": [
+    "VR Blur",
+    "VR Digital Glitch",
+    "VR Glow"
+   ],
+   "scripting": "Point of Interest is in layer pixels. Exact meaning/direction of Falloff Distance (0-100) is not verified; check a frame. Built for 360 equirectangular footage (set Auto VR Properties = 1 in a 2:1 comp); on flat footage it still splits channels. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Aberration (Red)": [
+     [
+      0,
+      -50
+     ],
+     [
+      0.25,
+      -5
+     ]
+    ],
+    "Aberration (Blue)": [
+     [
+      0,
+      50
+     ],
+     [
+      0.25,
+      5
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/114.png",
+    "note": "GPU render: strong red, green and blue fringes along the edges across the frame.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree (frame is the GPU-acceleration slate; only dropped the stale 'GPU flag not verified' sentence)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Color Gradients",
+   "match": "Mettle SkyBox Color Gradients",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Overlays a soft multi-point colour gradient (up to 8 coloured points) on the footage with a chosen blend mode and opacity, wrapped correctly for 360 footage.",
+   "look": [
+    "colour wash",
+    "gradient overlay",
+    "teal-orange",
+    "mood tint",
+    "light leak"
+   ],
+   "use_for": [
+    "mood tint / colour wash on 360 footage",
+    "teal-orange or brand-colour gradient over a title background",
+    "soft light-leak style wash in reels and trailers"
+   ],
+   "avoid": [
+    "at the default 100% Opacity and default blend mode the gradient covers the footage almost entirely; drop Opacity",
+    "default 8 points include black and white and produce a muddy rainbow; reduce Points Number",
+    "on flat footage 4-Color Gradient is simpler",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Points Number",
+     "does": "how many colour points are used (1-8)",
+     "typical": "2-4"
+    },
+    {
+     "name": "Point 1",
+     "does": "position of colour point 1 (layer pixels); Point 2..8 likewise",
+     "typical": "top-left area"
+    },
+    {
+     "name": "Color 1",
+     "does": "colour of point 1; Color 2..8 likewise",
+     "typical": "warm #FF8A00 vs cool #0070FF"
+    },
+    {
+     "name": "Gradient Power",
+     "does": "how strongly each point dominates its area",
+     "typical": "30-60"
+    },
+    {
+     "name": "Gradient Blend",
+     "does": "smoothness of transitions between points",
+     "typical": "10-50"
+    },
+    {
+     "name": "Opacity",
+     "does": "overall strength of the overlay in %",
+     "typical": "20-50"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "how the gradient composites (1-based popup, 22 slots)",
+     "typical": "leave default 2"
+    }
+   ],
+   "demo_settings": {
+    "Points Number": 2,
+    "Point 1": [
+     300,
+     250
+    ],
+    "Color 1": "#FF8A00",
+    "Point 2": [
+     1620,
+     830
+    ],
+    "Color 2": "#0070FF",
+    "Opacity": 50
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Color Gradients",
+   "pairs_with": [
+    "VR Glow",
+    "Curves",
+    "Lumetri Color"
+   ],
+   "scripting": "Points are in layer pixels; only the first 'Points Number' points are used. Blending Mode is a 22-slot popup (1 None, 2 Normal (default), 4 Add, 5 Multiply, 6 Screen ...; enum_labels (read from After Effects 26.0)); keep the default and control strength with Opacity. Harvested default point positions assume a 1920-wide frame. Built for 360 footage (Auto VR Properties = 1 in a 2:1 comp) but works as a gradient wash on flat footage. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/115.png",
+    "note": "GPU render: a soft orange wash from the upper left and a blue one at the lower left and right, at half opacity over the picture.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "(separator)",
+     "4": "Add",
+     "5": "Multiply",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "(separator)",
+     "11": "Color Dodge",
+     "12": "Color Burn",
+     "13": "(separator)",
+     "14": "Darken",
+     "15": "Lighten",
+     "16": "Difference",
+     "17": "Exclusion",
+     "18": "(separator)",
+     "19": "Hue",
+     "20": "Saturation",
+     "21": "Color",
+     "22": "Luminosity"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR Converter",
+   "match": "Mettle SkyBox Converter",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Re-projects footage between 360 formats (equirectangular, cube-map layouts, fisheye and a flat 2D source) and can re-orient the sphere with tilt, pan and roll.",
+   "look": [
+    "360 projection",
+    "spherical warp",
+    "cube map",
+    "tiny planet",
+    "re-orient"
+   ],
+   "use_for": [
+    "convert cube-map or fisheye 360 footage to equirectangular for editing",
+    "place a flat 2D graphic correctly into a 360 frame",
+    "re-orient a 360 shot so the subject faces front",
+    "extract a flat view out of 360 footage"
+   ],
+   "avoid": [
+    "on ordinary 16:9 footage it only produces a meaningless warp",
+    "changing Output Frame Width changes the effect's output size, so the layer may no longer fill the comp",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Input",
+     "does": "projection of the source footage (1-based popup, 9 options)",
+     "typical": "match the camera's export format"
+    },
+    {
+     "name": "Output",
+     "does": "projection to produce (1-based popup, 8 options)",
+     "typical": "equirectangular for editing"
+    },
+    {
+     "name": "Output Frame Width",
+     "does": "pixel width of the converted output",
+     "typical": "3840 for 4K 360, 1920 for drafts"
+    },
+    {
+     "name": "FOV",
+     "does": "field of view in degrees used for 2D/fisheye sources",
+     "typical": "90-180"
+    },
+    {
+     "name": "Pan (Y axis)",
+     "does": "rotates the sphere left/right in degrees",
+     "typical": "-180 to 180"
+    },
+    {
+     "name": "Tilt (X axis)",
+     "does": "rotates the sphere up/down in degrees",
+     "typical": "-30 to 30"
+    },
+    {
+     "name": "Roll (Z axis)",
+     "does": "rolls the horizon in degrees",
+     "typical": "-10 to 10 to level"
+    }
+   ],
+   "demo_settings": {
+    "Pan (Y axis)": 60,
+    "Tilt (X axis)": 15
+   },
+   "cost": "medium",
+   "gpu": "required",
+   "equivalent": "VR Projection",
+   "pairs_with": [
+    "VR Rotate Sphere",
+    "VR Blur",
+    "VR Sharpen"
+   ],
+   "scripting": "Input (read from After Effects 26.0): 1 2D Source, 2 Cube-map 4:3, 3 Sphere-map, 4 Equirectangular 2:1, 5 Fisheye (FullDome), 6 Cube-map Facebook 3:2, 7 Cube-map Pano2VR 3:2, 8 Cube-map GearVR 6:1, 9 Equirectangular 16:9; Output is the same list without 2D Source (1 Cube-map 4:3 ... 3 Equirectangular 2:1 ... 8 Equirectangular 16:9). Defaults (Input 1, Output 3) produce a visible re-projection on a flat frame. Output Frame Width (256-16384) resizes the effect output; put the layer in a precomp sized to the target projection (2:1 for equirectangular). No AE-to-Premiere one-to-one: Premiere's VR Projection covers re-orientation and 2D-to-360 placement only. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {
+    "Pan (Y axis)": [
+     [
+      0,
+      0
+     ],
+     [
+      6,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/116.png",
+    "note": "GPU render: the picture re-projected as a re-oriented sphere: panned sideways with wrap-around, horizontals bent into curves, a black band along the bottom.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree"
+     }
+    ]
+   },
+   "enum_labels": {
+    "Input": {
+     "1": "2D Source",
+     "2": "Cube-map 4:3",
+     "3": "Sphere-map",
+     "4": "Equirectangular 2:1",
+     "5": "Fisheye (FullDome)",
+     "6": "Cube-map Facebook 3:2",
+     "7": "Cube-map Pano2VR 3:2",
+     "8": "Cube-map GearVR 6:1",
+     "9": "Equirectangular 16:9"
+    },
+    "Output": {
+     "1": "Cube-map 4:3",
+     "2": "Sphere-map",
+     "3": "Equirectangular 2:1",
+     "4": "Fisheye (FullDome)",
+     "5": "Cube-map Facebook 3:2",
+     "6": "Cube-map Pano2VR 3:2",
+     "7": "Cube-map GearVR 6:1",
+     "8": "Equirectangular 16:9"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "VR De-Noise",
+   "match": "Mettle SkyBox Denoise",
+   "category": "Immersive Video",
+   "status": "current",
+   "summary": "Reduces video noise and grain in 360 footage without creating a seam at the wrap edges; high levels smooth fine detail into a plastic look.",
+   "look": [
+    "denoise",
+    "clean",
+    "smooth",
+    "plastic skin at high values"
+   ],
+   "use_for": [
+    "clean noisy low-light 360 footage",
+    "smooth grain before keying or upscaling 360 clips",
+    "reduce sensor noise on night rally footage shot in 360"
+   ],
+   "avoid": [
+    "high Noise Level smears faces and text into wax",
+    "slow; render-heavy on 4K/8K 360",
+    "on flat footage use Remove Grain or a dedicated denoiser",
+    "Software-only (CPU) renders: it draws only a dark-red 'This effect requires GPU acceleration' slate"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise Level",
+     "does": "strength of noise removal (0-1)",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Noise Type",
+     "does": "which kind of noise to target (1-based popup, 2 options)",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Frame Layout",
+     "does": "mono / stereo 360 layout",
+     "typical": "1 Monoscopic"
+    },
+    {
+     "name": "Auto VR Properties",
+     "does": "read layout and FOV from the comp",
+     "typical": "1 in 360 comps"
+    }
+   ],
+   "demo_settings": {
+    "Noise Level": 1
+   },
+   "enum_labels": {
+    "Frame Layout": {
+     "1": "Monoscopic",
+     "2": "Stereoscopic - Over/Under",
+     "3": "Stereoscopic - Side-by-Side"
+    },
+    "Noise Type": {
+     "1": "Random Valued",
+     "2": "Salt and Pepper"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "required",
+   "equivalent": "VR De-Noise",
+   "pairs_with": [
+    "VR Sharpen",
+    "VR Blur",
+    "Lumetri Color"
+   ],
+   "scripting": "Noise Type: 1 Random Valued (default), 2 Salt and Pepper (read from After Effects 26.0). On a clean still photo the demo (Noise Level 1) shows only as smoothed fine detail, which is subtle compared to most effects. Built for 2:1 equirectangular footage. Needs GPU acceleration (verified 2026-10-13): a software-only (Mercury Software Only) aerender draws a dark-red 'This effect requires GPU acceleration' slate instead of the image, a CUDA render draws the effect; set the project renderer to GPU (app.project.gpuAccelType, vfx.render_scenes(gpu=True), gallery.py --gpu) before building or rendering. The renderer a project is set to also becomes After Effects' default for new projects.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/117.png",
+    "note": "GPU render: visibly smoother than the reference (mean edge energy 8.0 -> 5.1), fine detail softened.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the CPU-only aerender showed the 'requires GPU acceleration' slate: a harness limit, not an effect fault"
+     },
+     {
+      "verdict": "untested:gpu_only",
+      "changed": "2026-10-13",
+      "why": "re-rendered with GPU acceleration (CUDA); a software-only control render showed the slate again",
+      "second_opinion": "agree (frame is the GPU-acceleration slate; only dropped the stale 'GPU flag not verified' sentence)"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,2254 @@
+{
+ "cards": [
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Ice (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Icy cyan-blue grade: brighter mids with a blue-cyan cast, cool shadows and skies pushed to saturated cyan, while greens and reds keep their hue. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "icy",
+    "cyan",
+    "teal",
+    "cool",
+    "bright",
+    "stylised"
+   ],
+   "use_for": [
+    "Stylised cold B-roll of winter, mountains or water",
+    "Futuristic tech mood shots in an AI explainer",
+    "Cold-palette montage in a reel or trailer"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Blue Ice (Universal)' instead",
+    "Skin turns pale pink against cyan surroundings; avoid on interviews",
+    "Cyan skies look artificial in news footage"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Blue Ice'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.5,
+      "Temperature": -30,
+      "Tint": -10,
+      "Saturation": 110
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Ice' (Lumetri\\Looks\\Legacy\\Blue Ice.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE ICE - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 6 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE ICE' (Lumetri\\LUTs\\Creative\\SL BLUE ICE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.5, \"Temperature\": -30, \"Tint\": -10, \"Saturation\": 110} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Intense (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Strong teal-blue grade with extra contrast: deeper shadows, a blue-green cast in the mids and saturated cyan skies. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "teal",
+    "intense blue",
+    "contrasty",
+    "saturated",
+    "thriller"
+   ],
+   "use_for": [
+    "Tension beats in a political thriller-style trailer",
+    "Night-city or rain B-roll",
+    "Dramatic hook shots in a reel"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Blue Intense (Universal)' instead",
+    "Heavy teal cast makes skin look sickly; avoid on speakers",
+    "Too strong for factual news packages"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Blue Intense'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.3,
+      "Contrast": 25,
+      "Temperature": -35,
+      "Tint": -12,
+      "Saturation": 115
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Intense' (Lumetri\\Looks\\Legacy\\Blue Intense.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE INTENSE - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 7 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE INTENSE' (Lumetri\\LUTs\\Creative\\SL BLUE INTENSE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.3, \"Contrast\": 25, \"Temperature\": -35, \"Tint\": -12, \"Saturation\": 115} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Moon (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Moderate cool grade: slightly brighter mids, a mild blue-green cast and saturated cyan skies over near-neutral shadows. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "cool",
+    "blue-green",
+    "moody",
+    "evening",
+    "soft teal"
+   ],
+   "use_for": [
+    "Dusk or evening B-roll with a calm cool mood",
+    "Reflective documentary passages",
+    "Cool-toned travel or nature cutaways"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Blue Moon (Universal)' instead",
+    "Greens shift teal, so landscapes can look unnatural"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Blue Moon'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.3,
+      "Contrast": 15,
+      "Temperature": -20,
+      "Tint": -10
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Moon' (Lumetri\\Looks\\Legacy\\Blue Moon.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE MOON - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 8 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE MOON' (Lumetri\\LUTs\\Creative\\SL BLUE MOON.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.3, \"Contrast\": 15, \"Temperature\": -20, \"Tint\": -10} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Steel (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Steely, bright, slightly cool grade with muted saturation: lifted mids, early highlight roll-off and grey-blue tones. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "steel blue",
+    "muted",
+    "cool",
+    "corporate",
+    "high-key"
+   ],
+   "use_for": [
+    "Corporate, finance or government-building B-roll",
+    "Clean tech-explainer cutaways",
+    "Neutral-cool look for an investigative documentary"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Blue Steel (Universal)' instead",
+    "Washes out footage that is already bright",
+    "Skin looks pale"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Blue Steel'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.7,
+      "Highlights": -20,
+      "Temperature": -10,
+      "Saturation": 75
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Steel' (Lumetri\\Looks\\Legacy\\Blue Steel.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE STEEL - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 9 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE STEEL' (Lumetri\\LUTs\\Creative\\SL BLUE STEEL.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.7, \"Highlights\": -20, \"Temperature\": -10, \"Saturation\": 75} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch HDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, near-neutral grade with extra saturation and brighter mids; the HDR curve lifts the blacks slightly and keeps the most shadow and highlight detail of the three Clean Punch variants. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "clean",
+    "punchy",
+    "natural",
+    "saturated",
+    "neutral"
+   ],
+   "use_for": [
+    "Everyday correction of flat GoPro B-roll",
+    "Social reels that need colour without a stylised cast",
+    "High-contrast outdoor scenes such as rallies with sky in frame"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Clean Punch HDR (Universal)' instead",
+    "The saturation boost pushes Indian skin toward orange"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Clean Punch HDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 15,
+      "Highlights": -20,
+      "Shadows": 10,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Clean Punch HDR' (Lumetri\\Looks\\Legacy\\Clean Punch HDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\CLEAN PUNCH HDR - SL - 3563.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 11 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Contrast\": 15, \"Highlights\": -20, \"Shadows\": 10, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch LDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, neutral grade that is bright and hard: mids lifted strongly, highlights clip early and saturation is boosted (the most contrasty Clean Punch). This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "clean",
+    "punchy",
+    "high-key",
+    "bright",
+    "saturated"
+   ],
+   "use_for": [
+    "Overcast or low-contrast footage that needs life",
+    "Bright upbeat social reels",
+    "Flat indoor footage"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Clean Punch LDR (Universal)' instead",
+    "Clips highlights on sunny or already-bright shots",
+    "Too hot for faces under strong light"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Clean Punch LDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 1.0,
+      "Contrast": 30,
+      "Whites": 30,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Clean Punch LDR' (Lumetri\\Looks\\Legacy\\Clean Punch LDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\CLEAN PUNCH LDR - SL - 3563.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 12 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 1.0, \"Contrast\": 30, \"Whites\": 30, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch NDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, neutral grade with boosted saturation and a middle tone curve, between the gentle HDR and the hard LDR variants. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "clean",
+    "punchy",
+    "natural",
+    "saturated",
+    "bright"
+   ],
+   "use_for": [
+    "Default 'make it pop' grade for flat B-roll",
+    "Explainer and reel cutaways",
+    "Travel and event footage"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Clean Punch NDR (Universal)' instead",
+    "Stacks badly on footage that is already graded"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Clean Punch NDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.5,
+      "Contrast": 25,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Clean Punch NDR' (Lumetri\\Looks\\Legacy\\Clean Punch NDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\CLEAN PUNCH NDR - SL - 3563.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 13 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.5, \"Contrast\": 25, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Heat (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Hot orange-gold grade: crushed blacks, bright mids with a strong warm cast and very saturated warm skin, while blue skies drain to a pale grey-blue and greens turn olive-yellow. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "hot",
+    "orange-gold",
+    "crushed blacks",
+    "saturated",
+    "desert",
+    "summer"
+   ],
+   "use_for": [
+    "Heatwave, drought or summer news B-roll",
+    "Desert or rural establishing shots",
+    "Energetic warm reel montage"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Heat (Universal)' instead",
+    "Indian skin goes orange; avoid on speakers",
+    "Crushed blacks lose detail after platform compression"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Heat'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.6,
+      "Contrast": 40,
+      "Blacks": -30,
+      "Temperature": 45,
+      "Tint": 5,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Heat' (Lumetri\\Looks\\Legacy\\Gold Heat.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD HEAT - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 19 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD HEAT' (Lumetri\\LUTs\\Creative\\SL GOLD HEAT.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.6, \"Contrast\": 40, \"Blacks\": -30, \"Temperature\": 45, \"Tint\": 5, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Orange (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Bright warm gold grade: lifted warm mids, reds pushed toward orange, clean white highlights and skies lightened to a pale blue. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "warm",
+    "gold-orange",
+    "bright",
+    "high-key",
+    "sunny"
+   ],
+   "use_for": [
+    "Sunny, upbeat warm B-roll",
+    "Sunset or golden-hour travel reels",
+    "Upbeat rally or festival montage"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Orange (Universal)' instead",
+    "Reds (party flags, saris, logos) shift toward orange, so brand colours change",
+    "Looks cliched if used on every shot"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Orange'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.9,
+      "Contrast": 20,
+      "Temperature": 20
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Orange' (Lumetri\\Looks\\Legacy\\Gold Orange.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD ORANGE - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 20 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD ORANGE' (Lumetri\\LUTs\\Creative\\SL GOLD ORANGE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.9, \"Contrast\": 20, \"Temperature\": 20} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush HDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Bright golden pastel grade: lifted mids, pale golden skin and highlights and pale cyan skies, with gentler shadows than Gold Rush LDR. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "golden",
+    "pastel",
+    "high-key",
+    "warm highlights",
+    "nostalgic"
+   ],
+   "use_for": [
+    "Warm nostalgic montage in a documentary",
+    "Golden-hour lifestyle or travel reels",
+    "Hopeful 'promise' segments in political explainers"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Rush HDR (Universal)' instead",
+    "Very bright: clips skies and white clothing"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Rush HDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 1.0,
+      "Highlights": -15,
+      "Temperature": 20
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Rush HDR' (Lumetri\\Looks\\Legacy\\Gold Rush HDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD RUSH HDR - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 21 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD RUSH HDR' (Lumetri\\LUTs\\Creative\\SL GOLD RUSH HDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 1.0, \"Highlights\": -15, \"Temperature\": 20} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush LDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Golden warm grade with more contrast than the HDR version: deeper shadows, bright golden mids and pale cyan skies. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "golden",
+    "warm",
+    "contrasty",
+    "bright",
+    "pale sky"
+   ],
+   "use_for": [
+    "Warm hero shots in trailers",
+    "Festival or rally B-roll",
+    "Golden-hour reels"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Rush LDR (Universal)' instead",
+    "Highlights clip early on bright scenes"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Rush LDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.9,
+      "Contrast": 30,
+      "Temperature": 20,
+      "Saturation": 105
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Rush LDR' (Lumetri\\Looks\\Legacy\\Gold Rush LDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD RUSH LDR - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 22 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD RUSH LDR' (Lumetri\\LUTs\\Creative\\SL GOLD RUSH LDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.9, \"Contrast\": 30, \"Temperature\": 20, \"Saturation\": 105} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Sport (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Punchy sports grade: crushed blacks, strong saturation and slightly warm highlights over a near-neutral midtone balance. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "punchy",
+    "sport",
+    "saturated",
+    "contrasty",
+    "warm highlights"
+   ],
+   "use_for": [
+    "GoPro action, sport and adventure B-roll",
+    "High-energy reel hooks",
+    "Event highlight montages"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Sport (Universal)' instead",
+    "Crushed shadows lose detail in dark venues"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Sport'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 30,
+      "Blacks": -30,
+      "Temperature": 10,
+      "Saturation": 120
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Sport' (Lumetri\\Looks\\Legacy\\Gold Sport.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD SPORT - SL - 3561.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 23 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Contrast\": 30, \"Blacks\": -30, \"Temperature\": 10, \"Saturation\": 120} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Tobacco (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Tobacco-amber grade: a warm brown-yellow cast in the mids, slightly lifted blacks, muted skies and olive greens. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "tobacco",
+    "amber",
+    "warm brown",
+    "muted",
+    "vintage"
+   ],
+   "use_for": [
+    "Period or 'old India' reconstructions",
+    "Nostalgic documentary flashbacks",
+    "Warm, gritty trailer beats"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Tobacco (Universal)' instead",
+    "Muddy on low-light footage",
+    "Not for neutral news coverage"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Tobacco'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 35,
+      "Tint": 5,
+      "Faded Film": 10,
+      "Saturation": 85
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Tobacco' (Lumetri\\Looks\\Legacy\\Gold Tobacco.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD TOBACCO - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 24 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD TOBACCO' (Lumetri\\LUTs\\Creative\\SL GOLD TOBACCO.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Temperature\": 35, \"Tint\": 5, \"Faded Film\": 10, \"Saturation\": 85} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Western (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Dusty western grade: a strong warm sepia-gold cast, lifted blacks, desaturated skies and yellow-olive greens. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "western",
+    "sepia-gold",
+    "dusty",
+    "faded",
+    "desaturated sky"
+   ],
+   "use_for": [
+    "Rural, dusty or desert storytelling",
+    "Historical recreation segments",
+    "Stylised trailer beats"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Gold Western (Universal)' instead",
+    "Very strong cast that jars next to neutral shots",
+    "Skin goes orange-brown"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Gold Western'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 50,
+      "Contrast": 10,
+      "Faded Film": 15,
+      "Saturation": 75
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Western' (Lumetri\\Looks\\Legacy\\Gold Western.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD WESTERN - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 25 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD WESTERN' (Lumetri\\LUTs\\Creative\\SL GOLD WESTERN.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Temperature\": 50, \"Contrast\": 10, \"Faded Film\": 15, \"Saturation\": 75} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Neutral Start (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Neutral normalising grade: turns the flat camera image into a standard-contrast, fully saturated Rec.709 picture with no creative colour cast. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "neutral",
+    "normalised",
+    "Rec.709",
+    "base grade",
+    "natural"
+   ],
+   "use_for": [
+    "Base correction for flat action-cam footage before a custom grade",
+    "Matching GoPro B-roll to main-camera footage",
+    "Clean factual look for news and explainers"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Neutral Start (Universal)' instead",
+    "Only for flat camera footage; on footage that is already Rec.709 it over-saturates"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Neutral Start'",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Neutral Start' (Lumetri\\Looks\\Legacy\\Neutral Start.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NEUTRAL START - SL - 3560.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 32 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NEUTRAL START' (Lumetri\\LUTs\\Creative\\SL NEUTRAL START.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: nothing; this look only normalises flat footage, so leave Rec.709 footage ungraded or use Lumetri Color at defaults."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir 1965 (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black and white with a bright, contrasty 1960s film curve: highlights clip early, skin and blue skies render light grey and reds go dark. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "1960s",
+    "contrasty",
+    "bright",
+    "classic film"
+   ],
+   "use_for": [
+    "Archive or flashback sections in documentaries",
+    "Political-history explainers set in the 1960s-70s",
+    "Dramatic monochrome trailer beats"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 5% versus 26% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir 1965 (Universal)' instead",
+    "Highlights clip early on sunny shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir 1965'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Exposure": 0.6,
+      "Contrast": 40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir 1965' (Lumetri\\Looks\\Legacy\\Noir 1965.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR 1965 - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 33 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR 1965' (Lumetri\\LUTs\\Creative\\SL NOIR 1965.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Exposure\": 0.6, \"Contrast\": 40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir HDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Soft, bright black and white with lifted shadows and low contrast, keeping the most tonal detail of the Noir set. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "soft",
+    "low contrast",
+    "airy",
+    "lifted blacks"
+   ],
+   "use_for": [
+    "Gentle monochrome memory or tribute segments",
+    "Monochrome interviews where detail matters",
+    "Calm documentary interludes"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 21% versus 46% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir HDR (Universal)' instead",
+    "Looks washed out on small phone screens"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir HDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Exposure": 0.6,
+      "Contrast": -30,
+      "Shadows": 40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir HDR' (Lumetri\\Looks\\Legacy\\Noir HDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR HDR - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 34 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR HDR' (Lumetri\\LUTs\\Creative\\SL NOIR HDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Exposure\": 0.6, \"Contrast\": -30, \"Shadows\": 40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir LDR (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Hard black and white: crushed blacks and whites that clip early, giving a graphic high-contrast monochrome. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "high contrast",
+    "graphic",
+    "crushed blacks",
+    "harsh"
+   ],
+   "use_for": [
+    "Punchy monochrome reel hooks",
+    "Dramatic 'dark chapter' beats in explainers",
+    "Stylised trailer inserts"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 2% versus 21% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir LDR (Universal)' instead",
+    "Destroys shadow and highlight detail",
+    "Bands after compression"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir LDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Exposure": 0.8,
+      "Contrast": 70,
+      "Blacks": -40,
+      "Whites": 40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir LDR' (Lumetri\\Looks\\Legacy\\Noir LDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR LDR - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 35 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR LDR' (Lumetri\\LUTs\\Creative\\SL NOIR LDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Exposure\": 0.8, \"Contrast\": 70, \"Blacks\": -40, \"Whites\": 40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "French New Wave black and white with a natural, moderate curve: soft highlight roll-off and slightly darker skies and greens. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "nouvelle vague",
+    "natural contrast",
+    "film",
+    "classic"
+   ],
+   "use_for": [
+    "Elegant monochrome for documentary flashbacks",
+    "Archive-style reconstructions",
+    "Arty reel or trailer moments"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 9% versus 29% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir Nouvelle (Universal)' instead",
+    "Looks flat on low-contrast footage"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir Nouvelle'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 10
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Nouvelle' (Lumetri\\Looks\\Legacy\\Noir Nouvelle.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR NOUVELLE - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 36 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR NOUVELLE' (Lumetri\\LUTs\\Creative\\SL NOIR NOUVELLE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 10} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle Red (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Noir Nouvelle black and white with a mild red-filter channel mix: reds and skin render slightly lighter and blue skies slightly darker than in plain Noir Nouvelle (a subtle difference). This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "red filter",
+    "darker skies",
+    "glowing skin",
+    "film"
+   ],
+   "use_for": [
+    "Monochrome portraits where skin should glow",
+    "Arty monochrome reel or trailer moments where faces should stay bright",
+    "Archive-style documentary sections"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 8% versus 29% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir Nouvelle Red (Universal)' instead",
+    "Red flags and banners render light grey and can merge with skin and sky tones"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir Nouvelle Red'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 10
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Nouvelle Red' (Lumetri\\Looks\\Legacy\\Noir Nouvelle Red.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR NOUVELLE RED - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 37 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR NOUVELLE RED' (Lumetri\\LUTs\\Creative\\SL NOIR NOUVELLE RED.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 10} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Red Wave (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Strong red-filter black and white: blue skies and greens go very dark, skin and reds stay bright, and highlights are capped below pure white. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "strong red filter",
+    "dark skies",
+    "dramatic",
+    "capped highlights"
+   ],
+   "use_for": [
+    "Dramatic monochrome landscapes and skies",
+    "Brooding trailer or thriller beats",
+    "Stylised monochrome portraits"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 7% versus 23% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir Red Wave (Universal)' instead",
+    "Green foliage turns near-black",
+    "Capped highlights look dull next to normal shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir Red Wave'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 20,
+      "Whites": -40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Red Wave' (Lumetri\\Looks\\Legacy\\Noir Red Wave.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR RED WAVE - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 38 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR RED WAVE' (Lumetri\\LUTs\\Creative\\SL NOIR RED WAVE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 20, \"Whites\": -40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Tri-X (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black and white in the style of Kodak Tri-X film: dense, slightly dark mids, deep blacks and soft highlights (no grain is added). This variant is for flat GoPro Protune footage shot under tungsten (3200K) light; because the output is monochrome its cooling input LUT only changes the grey mix, but on daylight or already-balanced footage it darkens and crushes the shadows.",
+   "look": [
+    "black and white",
+    "Tri-X",
+    "film stock",
+    "deep blacks",
+    "dense"
+   ],
+   "use_for": [
+    "Photojournalism-style monochrome in news documentaries",
+    "Archive or protest-history segments",
+    "Moody trailer inserts"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT darkens and crushes the shadows (measured: 25% grey comes out at 6% versus 20% through the SpeedLooks Rec.709 profile); it stays black and white. Use 'SL Noir Tri-X (Universal)' instead",
+    "Dark mids hide detail in low-light footage",
+    "Adds no grain; add grain separately"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Noir Tri-X'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 25,
+      "Blacks": -20
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Tri-X' (Lumetri\\Looks\\Legacy\\Noir Tri-X.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR TRI-X - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 39 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR TRI-X' (Lumetri\\LUTs\\Creative\\SL NOIR TRI-X.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 25, \"Blacks\": -20} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Retro Brown (GoPro 3200k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/3200 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Retro brown grade: a strong red-brown cast in the blacks and shadows, warm mids, clean near-neutral highlights, muted grey-blue skies and olive greens. This variant is for flat GoPro Protune footage shot under tungsten (3200K) light: its input LUT strongly cools the image first, so daylight or already-balanced footage turns heavily blue.",
+   "look": [
+    "retro",
+    "brown shadows",
+    "warm",
+    "muted",
+    "vintage",
+    "70s"
+   ],
+   "use_for": [
+    "1970s-80s era reconstructions",
+    "Nostalgic documentary montages",
+    "Vintage-style reel edits"
+   ],
+   "avoid": [
+    "On daylight or already-balanced footage the 3200K input LUT adds a heavy blue cast (measured: neutral grey comes out strongly blue); use 'SL Retro Brown (Universal)' instead",
+    "Red-brown shadows make dark or low-light shots look muddy; skin goes warm brown"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 3200K - SL - PROFILE' + Look 'Retro Brown'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 30,
+      "Contrast": 15,
+      "Faded Film": 10,
+      "Saturation": 80
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 3200K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 3200K - SL - PROFILE.itx) and Creative 'Look' = 'Retro Brown' (Lumetri\\Looks\\Legacy\\Retro Brown.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\RETRO BROWN - SL - 3562.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 23, outside the harvested 0-11 range; stored Look 40 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Temperature\": 30, \"Contrast\": 15, \"Faded Film\": 10, \"Saturation\": 80} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Cold (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Cool, airy grade: lifts the midtones well above neutral, rolls highlights off early, shifts skies toward cyan and mutes greens and skin. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "cool",
+    "cyan sky",
+    "high-key",
+    "muted greens",
+    "clinical",
+    "airy"
+   ],
+   "use_for": [
+    "Cold, clinical B-roll for a scam or data-leak explainer",
+    "Wintry or early-morning travel and action cutaways",
+    "Tech-explainer offices-and-screens montage"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Blue Cold (Universal)' instead",
+    "Bright mids plus early highlight roll-off can blow out white kurtas and skies"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Blue Cold'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.7,
+      "Highlights": -20,
+      "Temperature": -12,
+      "Tint": -5,
+      "Saturation": 85
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Cold' (Lumetri\\Looks\\Legacy\\Blue Cold.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE COLD - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 4 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE COLD' (Lumetri\\LUTs\\Creative\\SL BLUE COLD.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.7, \"Highlights\": -20, \"Temperature\": -12, \"Tint\": -5, \"Saturation\": 85} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Ice (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Icy cyan-blue grade: brighter mids with a blue-cyan cast, cool shadows and skies pushed to saturated cyan, while greens and reds keep their hue. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "icy",
+    "cyan",
+    "teal",
+    "cool",
+    "bright",
+    "stylised"
+   ],
+   "use_for": [
+    "Stylised cold B-roll of winter, mountains or water",
+    "Futuristic tech mood shots in an AI explainer",
+    "Cold-palette montage in a reel or trailer"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Blue Ice (Universal)' instead",
+    "Skin turns pale pink against cyan surroundings; avoid on interviews",
+    "Cyan skies look artificial in news footage"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Blue Ice'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.5,
+      "Temperature": -30,
+      "Tint": -10,
+      "Saturation": 110
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Ice' (Lumetri\\Looks\\Legacy\\Blue Ice.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE ICE - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 6 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE ICE' (Lumetri\\LUTs\\Creative\\SL BLUE ICE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.5, \"Temperature\": -30, \"Tint\": -10, \"Saturation\": 110} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Intense (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Strong teal-blue grade with extra contrast: deeper shadows, a blue-green cast in the mids and saturated cyan skies. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "teal",
+    "intense blue",
+    "contrasty",
+    "saturated",
+    "thriller"
+   ],
+   "use_for": [
+    "Tension beats in a political thriller-style trailer",
+    "Night-city or rain B-roll",
+    "Dramatic hook shots in a reel"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Blue Intense (Universal)' instead",
+    "Heavy teal cast makes skin look sickly; avoid on speakers",
+    "Too strong for factual news packages"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Blue Intense'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.3,
+      "Contrast": 25,
+      "Temperature": -35,
+      "Tint": -12,
+      "Saturation": 115
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Intense' (Lumetri\\Looks\\Legacy\\Blue Intense.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE INTENSE - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 7 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE INTENSE' (Lumetri\\LUTs\\Creative\\SL BLUE INTENSE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.3, \"Contrast\": 25, \"Temperature\": -35, \"Tint\": -12, \"Saturation\": 115} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Moon (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Moderate cool grade: slightly brighter mids, a mild blue-green cast and saturated cyan skies over near-neutral shadows. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "cool",
+    "blue-green",
+    "moody",
+    "evening",
+    "soft teal"
+   ],
+   "use_for": [
+    "Dusk or evening B-roll with a calm cool mood",
+    "Reflective documentary passages",
+    "Cool-toned travel or nature cutaways"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Blue Moon (Universal)' instead",
+    "Greens shift teal, so landscapes can look unnatural"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Blue Moon'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.3,
+      "Contrast": 15,
+      "Temperature": -20,
+      "Tint": -10
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Moon' (Lumetri\\Looks\\Legacy\\Blue Moon.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE MOON - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 8 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE MOON' (Lumetri\\LUTs\\Creative\\SL BLUE MOON.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.3, \"Contrast\": 15, \"Temperature\": -20, \"Tint\": -10} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Steel (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Steely, bright, slightly cool grade with muted saturation: lifted mids, early highlight roll-off and grey-blue tones. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "steel blue",
+    "muted",
+    "cool",
+    "corporate",
+    "high-key"
+   ],
+   "use_for": [
+    "Corporate, finance or government-building B-roll",
+    "Clean tech-explainer cutaways",
+    "Neutral-cool look for an investigative documentary"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Blue Steel (Universal)' instead",
+    "Washes out footage that is already bright",
+    "Skin looks pale"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Blue Steel'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.7,
+      "Highlights": -20,
+      "Temperature": -10,
+      "Saturation": 75
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Steel' (Lumetri\\Looks\\Legacy\\Blue Steel.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE STEEL - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 9 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE STEEL' (Lumetri\\LUTs\\Creative\\SL BLUE STEEL.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.7, \"Highlights\": -20, \"Temperature\": -10, \"Saturation\": 75} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch HDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, near-neutral grade with extra saturation and brighter mids; the HDR curve lifts the blacks slightly and keeps the most shadow and highlight detail of the three Clean Punch variants. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "clean",
+    "punchy",
+    "natural",
+    "saturated",
+    "neutral"
+   ],
+   "use_for": [
+    "Everyday correction of flat GoPro B-roll",
+    "Social reels that need colour without a stylised cast",
+    "High-contrast outdoor scenes such as rallies with sky in frame"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Clean Punch HDR (Universal)' instead",
+    "The saturation boost pushes Indian skin toward orange"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Clean Punch HDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 15,
+      "Highlights": -20,
+      "Shadows": 10,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Clean Punch HDR' (Lumetri\\Looks\\Legacy\\Clean Punch HDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\CLEAN PUNCH HDR - SL - 3563.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 11 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Contrast\": 15, \"Highlights\": -20, \"Shadows\": 10, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch LDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, neutral grade that is bright and hard: mids lifted strongly, highlights clip early and saturation is boosted (the most contrasty Clean Punch). This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "clean",
+    "punchy",
+    "high-key",
+    "bright",
+    "saturated"
+   ],
+   "use_for": [
+    "Overcast or low-contrast footage that needs life",
+    "Bright upbeat social reels",
+    "Flat indoor footage"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Clean Punch LDR (Universal)' instead",
+    "Clips highlights on sunny or already-bright shots",
+    "Too hot for faces under strong light"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Clean Punch LDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 1.0,
+      "Contrast": 30,
+      "Whites": 30,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Clean Punch LDR' (Lumetri\\Looks\\Legacy\\Clean Punch LDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\CLEAN PUNCH LDR - SL - 3563.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 12 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 1.0, \"Contrast\": 30, \"Whites\": 30, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch NDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, neutral grade with boosted saturation and a middle tone curve, between the gentle HDR and the hard LDR variants. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "clean",
+    "punchy",
+    "natural",
+    "saturated",
+    "bright"
+   ],
+   "use_for": [
+    "Default 'make it pop' grade for flat B-roll",
+    "Explainer and reel cutaways",
+    "Travel and event footage"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Clean Punch NDR (Universal)' instead",
+    "Stacks badly on footage that is already graded"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Clean Punch NDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.5,
+      "Contrast": 25,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Clean Punch NDR' (Lumetri\\Looks\\Legacy\\Clean Punch NDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\CLEAN PUNCH NDR - SL - 3563.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 13 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.5, \"Contrast\": 25, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Day4Nite (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Day-for-night: darkens the image by roughly a stop, pushes a strong blue moonlight cast into mids and highlights and drains saturation from skin. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "day-for-night",
+    "moonlight blue",
+    "dark",
+    "desaturated",
+    "night"
+   ],
+   "use_for": [
+    "Fake a night scene from daylight footage for a reconstruction",
+    "Cold open of a crime or thriller-style trailer",
+    "Mood shift into a 'what happened that night' segment"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Blue Day4Nite (Universal)' instead",
+    "Bright skies and a visible sun give the trick away",
+    "Faces go grey-blue and lose detail; not for interviews"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Blue Day4Nite'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": -1.2,
+      "Highlights": -30,
+      "Temperature": -45,
+      "Tint": 5,
+      "Saturation": 45
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Blue Day4Nite' (Lumetri\\Looks\\Legacy\\Blue Day4Nite.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE DAY4NITE - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 5 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE DAY4NITE' (Lumetri\\LUTs\\Creative\\SL BLUE DAY4NITE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": -1.2, \"Highlights\": -30, \"Temperature\": -45, \"Tint\": 5, \"Saturation\": 45} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold heat (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Hot orange-gold grade: crushed blacks, bright mids with a strong warm cast and very saturated warm skin, while blue skies drain to a pale grey-blue and greens turn olive-yellow. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "hot",
+    "orange-gold",
+    "crushed blacks",
+    "saturated",
+    "desert",
+    "summer"
+   ],
+   "use_for": [
+    "Heatwave, drought or summer news B-roll",
+    "Desert or rural establishing shots",
+    "Energetic warm reel montage"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Heat (Universal)' instead",
+    "Indian skin goes orange; avoid on speakers",
+    "Crushed blacks lose detail after platform compression"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Heat'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.6,
+      "Contrast": 40,
+      "Blacks": -30,
+      "Temperature": 45,
+      "Tint": 5,
+      "Saturation": 125
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Heat' (Lumetri\\Looks\\Legacy\\Gold Heat.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD HEAT - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 19 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD HEAT' (Lumetri\\LUTs\\Creative\\SL GOLD HEAT.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.6, \"Contrast\": 40, \"Blacks\": -30, \"Temperature\": 45, \"Tint\": 5, \"Saturation\": 125} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Orange (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Bright warm gold grade: lifted warm mids, reds pushed toward orange, clean white highlights and skies lightened to a pale blue. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "warm",
+    "gold-orange",
+    "bright",
+    "high-key",
+    "sunny"
+   ],
+   "use_for": [
+    "Sunny, upbeat warm B-roll",
+    "Sunset or golden-hour travel reels",
+    "Upbeat rally or festival montage"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Orange (Universal)' instead",
+    "Reds (party flags, saris, logos) shift toward orange, so brand colours change",
+    "Looks cliched if used on every shot"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Orange'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.9,
+      "Contrast": 20,
+      "Temperature": 20
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Orange' (Lumetri\\Looks\\Legacy\\Gold Orange.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD ORANGE - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 20 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD ORANGE' (Lumetri\\LUTs\\Creative\\SL GOLD ORANGE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.9, \"Contrast\": 20, \"Temperature\": 20} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush HDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Bright golden pastel grade: lifted mids, pale golden skin and highlights and pale cyan skies, with gentler shadows than Gold Rush LDR. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "golden",
+    "pastel",
+    "high-key",
+    "warm highlights",
+    "nostalgic"
+   ],
+   "use_for": [
+    "Warm nostalgic montage in a documentary",
+    "Golden-hour lifestyle or travel reels",
+    "Hopeful 'promise' segments in political explainers"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Rush HDR (Universal)' instead",
+    "Very bright: clips skies and white clothing"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Rush HDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 1.0,
+      "Highlights": -15,
+      "Temperature": 20
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Rush HDR' (Lumetri\\Looks\\Legacy\\Gold Rush HDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD RUSH HDR - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 21 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD RUSH HDR' (Lumetri\\LUTs\\Creative\\SL GOLD RUSH HDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 1.0, \"Highlights\": -15, \"Temperature\": 20} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush LDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Golden warm grade with more contrast than the HDR version: deeper shadows, bright golden mids and pale cyan skies. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "golden",
+    "warm",
+    "contrasty",
+    "bright",
+    "pale sky"
+   ],
+   "use_for": [
+    "Warm hero shots in trailers",
+    "Festival or rally B-roll",
+    "Golden-hour reels"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Rush LDR (Universal)' instead",
+    "Highlights clip early on bright scenes"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Rush LDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.9,
+      "Contrast": 30,
+      "Temperature": 20,
+      "Saturation": 105
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Rush LDR' (Lumetri\\Looks\\Legacy\\Gold Rush LDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD RUSH LDR - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 22 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD RUSH LDR' (Lumetri\\LUTs\\Creative\\SL GOLD RUSH LDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.9, \"Contrast\": 30, \"Temperature\": 20, \"Saturation\": 105} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Sport (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Punchy sports grade: crushed blacks, strong saturation and slightly warm highlights over a near-neutral midtone balance. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "punchy",
+    "sport",
+    "saturated",
+    "contrasty",
+    "warm highlights"
+   ],
+   "use_for": [
+    "GoPro action, sport and adventure B-roll",
+    "High-energy reel hooks",
+    "Event highlight montages"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Sport (Universal)' instead",
+    "Crushed shadows lose detail in dark venues"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Sport'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 30,
+      "Blacks": -30,
+      "Temperature": 10,
+      "Saturation": 120
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Sport' (Lumetri\\Looks\\Legacy\\Gold Sport.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD SPORT - SL - 3561.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 23 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Contrast\": 30, \"Blacks\": -30, \"Temperature\": 10, \"Saturation\": 120} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Tobacco (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Tobacco-amber grade: a warm brown-yellow cast in the mids, slightly lifted blacks, muted skies and olive greens. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "tobacco",
+    "amber",
+    "warm brown",
+    "muted",
+    "vintage"
+   ],
+   "use_for": [
+    "Period or 'old India' reconstructions",
+    "Nostalgic documentary flashbacks",
+    "Warm, gritty trailer beats"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Tobacco (Universal)' instead",
+    "Muddy on low-light footage",
+    "Not for neutral news coverage"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Tobacco'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 35,
+      "Tint": 5,
+      "Faded Film": 10,
+      "Saturation": 85
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Tobacco' (Lumetri\\Looks\\Legacy\\Gold Tobacco.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD TOBACCO - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 24 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD TOBACCO' (Lumetri\\LUTs\\Creative\\SL GOLD TOBACCO.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Temperature\": 35, \"Tint\": 5, \"Faded Film\": 10, \"Saturation\": 85} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Western (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Dusty western grade: a strong warm sepia-gold cast, lifted blacks, desaturated skies and yellow-olive greens. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "western",
+    "sepia-gold",
+    "dusty",
+    "faded",
+    "desaturated sky"
+   ],
+   "use_for": [
+    "Rural, dusty or desert storytelling",
+    "Historical recreation segments",
+    "Stylised trailer beats"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Gold Western (Universal)' instead",
+    "Very strong cast that jars next to neutral shots",
+    "Skin goes orange-brown"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Gold Western'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 50,
+      "Contrast": 10,
+      "Faded Film": 15,
+      "Saturation": 75
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Gold Western' (Lumetri\\Looks\\Legacy\\Gold Western.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\GOLD WESTERN - SL - 3528.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 25 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL GOLD WESTERN' (Lumetri\\LUTs\\Creative\\SL GOLD WESTERN.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Temperature\": 50, \"Contrast\": 10, \"Faded Film\": 15, \"Saturation\": 75} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Neutral Start (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Neutral normalising grade: turns the flat camera image into a standard-contrast, fully saturated Rec.709 picture with no creative colour cast. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "neutral",
+    "normalised",
+    "Rec.709",
+    "base grade",
+    "natural"
+   ],
+   "use_for": [
+    "Base correction for flat action-cam footage before a custom grade",
+    "Matching GoPro B-roll to main-camera footage",
+    "Clean factual look for news and explainers"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Neutral Start (Universal)' instead",
+    "Only for flat camera footage; on footage that is already Rec.709 it over-saturates"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Neutral Start'",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Neutral Start' (Lumetri\\Looks\\Legacy\\Neutral Start.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NEUTRAL START - SL - 3560.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 32 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NEUTRAL START' (Lumetri\\LUTs\\Creative\\SL NEUTRAL START.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: nothing; this look only normalises flat footage, so leave Rec.709 footage ungraded or use Lumetri Color at defaults."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir 1965 (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black and white with a bright, contrasty 1960s film curve: highlights clip early, skin and blue skies render light grey and reds go dark. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "1960s",
+    "contrasty",
+    "bright",
+    "classic film"
+   ],
+   "use_for": [
+    "Archive or flashback sections in documentaries",
+    "Political-history explainers set in the 1960s-70s",
+    "Dramatic monochrome trailer beats"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir 1965 (Universal)' instead",
+    "Highlights clip early on sunny shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir 1965'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Exposure": 0.6,
+      "Contrast": 40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir 1965' (Lumetri\\Looks\\Legacy\\Noir 1965.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR 1965 - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 33 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR 1965' (Lumetri\\LUTs\\Creative\\SL NOIR 1965.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Exposure\": 0.6, \"Contrast\": 40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir HDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Soft, bright black and white with lifted shadows and low contrast, keeping the most tonal detail of the Noir set. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "soft",
+    "low contrast",
+    "airy",
+    "lifted blacks"
+   ],
+   "use_for": [
+    "Gentle monochrome memory or tribute segments",
+    "Monochrome interviews where detail matters",
+    "Calm documentary interludes"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir HDR (Universal)' instead",
+    "Looks washed out on small phone screens"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir HDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Exposure": 0.6,
+      "Contrast": -30,
+      "Shadows": 40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir HDR' (Lumetri\\Looks\\Legacy\\Noir HDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR HDR - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 34 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR HDR' (Lumetri\\LUTs\\Creative\\SL NOIR HDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Exposure\": 0.6, \"Contrast\": -30, \"Shadows\": 40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir LDR (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Hard black and white: crushed blacks and whites that clip early, giving a graphic high-contrast monochrome. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "high contrast",
+    "graphic",
+    "crushed blacks",
+    "harsh"
+   ],
+   "use_for": [
+    "Punchy monochrome reel hooks",
+    "Dramatic 'dark chapter' beats in explainers",
+    "Stylised trailer inserts"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir LDR (Universal)' instead",
+    "Destroys shadow and highlight detail",
+    "Bands after compression"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir LDR'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Exposure": 0.8,
+      "Contrast": 70,
+      "Blacks": -40,
+      "Whites": 40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir LDR' (Lumetri\\Looks\\Legacy\\Noir LDR.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR LDR - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 35 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR LDR' (Lumetri\\LUTs\\Creative\\SL NOIR LDR.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Exposure\": 0.8, \"Contrast\": 70, \"Blacks\": -40, \"Whites\": 40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "French New Wave black and white with a natural, moderate curve: soft highlight roll-off and slightly darker skies and greens. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "nouvelle vague",
+    "natural contrast",
+    "film",
+    "classic"
+   ],
+   "use_for": [
+    "Elegant monochrome for documentary flashbacks",
+    "Archive-style reconstructions",
+    "Arty reel or trailer moments"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir Nouvelle (Universal)' instead",
+    "Looks flat on low-contrast footage"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir Nouvelle'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 10
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Nouvelle' (Lumetri\\Looks\\Legacy\\Noir Nouvelle.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR NOUVELLE - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 36 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR NOUVELLE' (Lumetri\\LUTs\\Creative\\SL NOIR NOUVELLE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 10} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle Red (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Noir Nouvelle black and white with a mild red-filter channel mix: reds and skin render slightly lighter and blue skies slightly darker than in plain Noir Nouvelle (a subtle difference). This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "red filter",
+    "darker skies",
+    "glowing skin",
+    "film"
+   ],
+   "use_for": [
+    "Monochrome portraits where skin should glow",
+    "Arty monochrome reel or trailer moments where faces should stay bright",
+    "Archive-style documentary sections"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir Nouvelle Red (Universal)' instead",
+    "Red flags and banners render light grey and can merge with skin and sky tones"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir Nouvelle Red'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 10
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Nouvelle Red' (Lumetri\\Looks\\Legacy\\Noir Nouvelle Red.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR NOUVELLE RED - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 37 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR NOUVELLE RED' (Lumetri\\LUTs\\Creative\\SL NOIR NOUVELLE RED.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 10} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Red Wave (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Strong red-filter black and white: blue skies and greens go very dark, skin and reds stay bright, and highlights are capped below pure white. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "strong red filter",
+    "dark skies",
+    "dramatic",
+    "capped highlights"
+   ],
+   "use_for": [
+    "Dramatic monochrome landscapes and skies",
+    "Brooding trailer or thriller beats",
+    "Stylised monochrome portraits"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir Red Wave (Universal)' instead",
+    "Green foliage turns near-black",
+    "Capped highlights look dull next to normal shots"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir Red Wave'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 20,
+      "Whites": -40
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Red Wave' (Lumetri\\Looks\\Legacy\\Noir Red Wave.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR RED WAVE - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 38 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR RED WAVE' (Lumetri\\LUTs\\Creative\\SL NOIR RED WAVE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 20, \"Whites\": -40} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Tri-X (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black and white in the style of Kodak Tri-X film: dense, slightly dark mids, deep blacks and soft highlights (no grain is added). This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look, which in monochrome exaggerates the colour-filter separation (skin and reds versus skies and greens).",
+   "look": [
+    "black and white",
+    "Tri-X",
+    "film stock",
+    "deep blacks",
+    "dense"
+   ],
+   "use_for": [
+    "Photojournalism-style monochrome in news documentaries",
+    "Archive or protest-history segments",
+    "Moody trailer inserts"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT adds contrast (deeper blacks) and exaggerates the filter separation; use 'SL Noir Tri-X (Universal)' instead",
+    "Dark mids hide detail in low-light footage",
+    "Adds no grain; add grain separately"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Noir Tri-X'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 25,
+      "Blacks": -20
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Noir Tri-X' (Lumetri\\Looks\\Legacy\\Noir Tri-X.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\NOIR TRI-X - SL - 3522.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 39 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL NOIR TRI-X' (Lumetri\\LUTs\\Creative\\SL NOIR TRI-X.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Saturation\": 0, \"Contrast\": 25, \"Blacks\": -20} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Retro Brown (GoPro 5800k)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/GoPro/5800 Kelvin",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Retro brown grade: a strong red-brown cast in the blacks and shadows, warm mids, clean near-neutral highlights, muted grey-blue skies and olive greens. This variant is for flat GoPro Protune daylight (5800K) footage: its input LUT roughly doubles saturation before the look.",
+   "look": [
+    "retro",
+    "brown shadows",
+    "warm",
+    "muted",
+    "vintage",
+    "70s"
+   ],
+   "use_for": [
+    "1970s-80s era reconstructions",
+    "Nostalgic documentary montages",
+    "Vintage-style reel edits"
+   ],
+   "avoid": [
+    "On normal Rec.709 (non-Protune) footage the GoPro input LUT stacks extra saturation and contrast and clips; use 'SL Retro Brown (Universal)' instead",
+    "Red-brown shadows make dark or low-light shots look muddy; skin goes warm brown"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'GOPRO - 5800K - SL - PROFILE' + Look 'Retro Brown'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 30,
+      "Contrast": 15,
+      "Faded Film": 10,
+      "Saturation": 80
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'GOPRO - 5800K - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\GOPRO - 5800K - SL - PROFILE.itx) and Creative 'Look' = 'Retro Brown' (Lumetri\\Looks\\Legacy\\Retro Brown.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\RETRO BROWN - SL - 3562.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 24, outside the harvested 0-11 range; stored Look 40 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). This look has no Rec.709 'SL' version in Lumetri\\LUTs\\Creative. Approximation on Rec.709 footage: Lumetri Color {\"Temperature\": 30, \"Contrast\": 15, \"Faded Film\": 10, \"Saturation\": 80} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Cold (Nikon D800)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/Nikon D800",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/Nikon D800",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Cool, airy grade: lifts the midtones well above neutral, rolls highlights off early, shifts skies toward cyan and mutes greens and skin. This variant is for Nikon D800 flat picture-control footage; measured on Rec.709 test colours its input LUT behaves almost like the SpeedLooks Rec.709 profile (slightly brighter highlights, a little less saturation), so on ordinary footage the look lands close to its intended strength.",
+   "look": [
+    "cool",
+    "cyan sky",
+    "high-key",
+    "muted greens",
+    "clinical",
+    "airy"
+   ],
+   "use_for": [
+    "Cold, clinical B-roll for a scam or data-leak explainer",
+    "Wintry or early-morning travel and action cutaways",
+    "Tech-explainer offices-and-screens montage"
+   ],
+   "avoid": [
+    "On non-D800 footage the result is close to intended but not exact (highlights a little brighter); check by eye or use 'SL Blue Cold (Universal)'",
+    "Bright mids plus early highlight roll-off can blow out white kurtas and skies"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'NIKON D800 - SL - PROFILE' + Look 'Blue Cold'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": 0.7,
+      "Highlights": -20,
+      "Temperature": -12,
+      "Tint": -5,
+      "Saturation": 85
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'NIKON D800 - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\NIKON D800 - SL - PROFILE.itx) and Creative 'Look' = 'Blue Cold' (Lumetri\\Looks\\Legacy\\Blue Cold.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE COLD - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 25, outside the harvested 0-11 range; stored Look 4 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE COLD' (Lumetri\\LUTs\\Creative\\SL BLUE COLD.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": 0.7, \"Highlights\": -20, \"Temperature\": -12, \"Tint\": -5, \"Saturation\": 85} (rough values from measuring the LUTs; verify by eye)."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Day4Nite (Nikon D800)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Cameras/Nikon D800",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Cameras/Nikon D800",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Day-for-night: darkens the image by roughly a stop, pushes a strong blue moonlight cast into mids and highlights and drains saturation from skin. This variant is for Nikon D800 flat picture-control footage; measured on Rec.709 test colours its input LUT behaves almost like the SpeedLooks Rec.709 profile (slightly brighter highlights, a little less saturation), so on ordinary footage the look lands close to its intended strength.",
+   "look": [
+    "day-for-night",
+    "moonlight blue",
+    "dark",
+    "desaturated",
+    "night"
+   ],
+   "use_for": [
+    "Fake a night scene from daylight footage for a reconstruction",
+    "Cold open of a crime or thriller-style trailer",
+    "Mood shift into a 'what happened that night' segment"
+   ],
+   "avoid": [
+    "On non-D800 footage the result is close to intended but not exact (highlights a little brighter); check by eye or use 'SL Blue Day4Nite (Universal)'",
+    "Bright skies and a visible sun give the trick away",
+    "Faces go grey-blue and lose detail; not for interviews"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color with Input LUT 'NIKON D800 - SL - PROFILE' + Look 'Blue Day4Nite'",
+   "recipe": [
+    {
+     "app": "PR",
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": -1.2,
+      "Highlights": -30,
+      "Temperature": -45,
+      "Tint": 5,
+      "Saturation": 45
+     }
+    }
+   ],
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset is one Lumetri Color (AE.ADBE Lumetri) with Basic Correction 'Input LUT' = SpeedLooks camera profile 'NIKON D800 - SL - PROFILE' (Lumetri\\LUTs\\Legacy\\NIKON D800 - SL - PROFILE.itx) and Creative 'Look' = 'Blue Day4Nite' (Lumetri\\Looks\\Legacy\\Blue Day4Nite.look, an identity Primary plus Lumetri\\LUTs\\Legacy\\BLUE DAY4NITE - SL - 3527.itx; verified in the 2026 install), 'Intensity#2' 100, every other control at default. The file stores both as dropdown indices from an older list (Input LUT 25, outside the harvested 0-11 range; stored Look 5 from the old Legacy-looks list, which does not match the 2026 0-68 Look menu), and LUTAsset/LookAsset are strings a spec cannot set, so it cannot be rebuilt from pr_props. Unverified: the 2026 Input LUT list appears to come from Lumetri\\LUTs\\Technical (8 files) and does not include the camera profile, so when the preset is applied the camera stage may not load; check the Input LUT field after applying (the 2026 install still ships these exact files in Lumetri\\LUTs\\Legacy and Lumetri\\Looks\\Legacy, which suggests the old values are resolved). To get the exact grade: apply it by hand or copy attributes from a template clip, or bake it offline (convert the camera .itx and the look's .itx: ITX3, 40-byte header, 32^3 float32 RGB with red varying fastest, to .cube and chain two ffmpeg lut3d filters). For ordinary Rec.709 footage the Look dropdown also lists 'SL BLUE DAY4NITE' (Lumetri\\LUTs\\Creative\\SL BLUE DAY4NITE.itx, apparently the version without the camera stage; pick it by name, the index is install-dependent). Approximation on Rec.709 footage: Lumetri Color {\"Exposure\": -1.2, \"Highlights\": -30, \"Temperature\": -45, \"Tint\": 5, \"Saturation\": 45} (rough values from measuring the LUTs; verify by eye)."
+  }
+ ]
+}

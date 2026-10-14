@@ -1,0 +1,1648 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Low-light noise cleanup",
+   "summary": "Smooths sensor noise and chroma speckle in dark rally, night or indoor phone footage, then restores a little edge crispness.",
+   "use_for": [
+    "night rally or candle-march footage before lifting shadows in the grade",
+    "dim indoor interviews shot on a phone at high ISO",
+    "noisy archive transfers before a clean documentary grade"
+   ],
+   "avoid": [
+    "faces at high strength: waxy, plastic skin (keep Premiere Noise Level <= 0.3, AE Noise Reduction <= 2)",
+    "fine on-screen text, hair or fabric: detail smooths away with the noise",
+    "sharpening before denoising: it amplifies the noise the denoiser then has to remove",
+    "using it on clean daylight footage: costs detail and render time for nothing"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "VR De-Noise",
+     "pr_props": {
+      "Frame Layout": 0,
+      "Noise Type": 0,
+      "Noise Level": 0.25
+     }
+    },
+    {
+     "name": "Unsharp Mask",
+     "pr_props": {
+      "Amount": 40,
+      "Radius": 1,
+      "Threshold": 0.04
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "VISINF Grain Removal",
+     "props": {
+      "Viewing Mode": 4,
+      "Noise Reduction": 2,
+      "Passes": 4,
+      "Chroma Suppression": 2,
+      "Texture": 0.2
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 40,
+      "Radius": 1,
+      "Threshold": 0.04
+     }
+    }
+   ],
+   "keyframes_note": "Static for the whole clip, no keyframes. Order matters: denoise first, sharpen last. Put it before any Lumetri shadow lift in the stack. Premiere's only general denoiser is VR De-Noise (a 360 effect that works on flat footage, verified): raise Noise Level 0.25 -> 0.35 only on very noisy shots and check a face at 100%. In AE set Viewing Mode 4 (Final Output) or only a preview box is processed; Remove Grain is slow, so pre-render long clips.",
+   "built_from": [
+    "VR De-Noise",
+    "Unsharp Mask",
+    "Remove Grain",
+    "Finishing: sharpening and noise reduction"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/016b.png",
+    "note": "Skin blotches, compression speckle and flower texture are visibly smoothed (mean change 2.5 levels) while hair and block edges hold; the Threshold 0.04 sharpen adds nothing visible on this soft source.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/017b.png",
+     "note": "Remove Grain smooths compression speckle and mid-tone blotches only faintly (mean change 1 level, edge energy down 6-10%), visible at 1:1 but not at preview size, and the Threshold 0.04 sharpen adds nothing visible; vs Premiere: about a third of Premiere's VR De-Noise smoothing (edge energy -6% vs -20%, mean change 0.8 vs 2.6 levels).",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: At Noise Reduction 1.5 with 2 passes the smoothing is a third of Premiere's and unreadable at preview size; the top of the card's natural range (2) with 4 passes reaches the larger compression blotches without the waxy 3-5 range.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/017b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Web delivery sharpen",
+   "summary": "Light, halo-free edge sharpening for 1080p footage that still holds fine detail; on very soft upscaled sources (360p/480p blown up to 1080p) Radius 2 is narrower than the blurred edges, so the gain is only a few percent and barely visible.",
+   "use_for": [
+    "press-pool or agency clips that are only slightly soft at native resolution",
+    "final pass on talking heads for Instagram / YouTube Shorts",
+    "B-roll that went soft after a small punch-in"
+   ],
+   "avoid": [
+    "heavily compressed WhatsApp / social re-uploads: it sharpens the blocks (denoise first or skip)",
+    "Amount above ~100 or Radius above 2: bright halos on faces, flag stripes and text",
+    "stacking with Lumetri Creative Sharpen or another sharpener on the same clip"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Unsharp Mask",
+     "pr_props": {
+      "Amount": 90,
+      "Radius": 2,
+      "Threshold": 0.01
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 90,
+      "Radius": 2,
+      "Threshold": 0.01
+     }
+    }
+   ],
+   "keyframes_note": "Static, last effect on the clip (after any Transform scaling). Premiere renders the fixed Motion scale AFTER every effect, so on a clip whose cover-fit Motion scale is well above 100% the halo grows with it: drop Amount to 40 there. Threshold 0.01 lets it bite at all on soft upscaled sources: the earlier Amount 60 / Radius 1 / Threshold 0.03 rendered no change on a soft 360p-upscaled 1080p clip, and 90 / 2 / 0.01 lifted edge energy only about 4% there (barely visible at 1:1), because the blurred edges are wider than Radius 2. Raise Threshold to 0.04-0.06 on noisy or already sharp sources so grain, skin and flat walls are spared.",
+   "built_from": [
+    "Unsharp Mask",
+    "Finishing: sharpening and noise reduction"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/017b.png",
+    "note": "Now a real but faint change: at 1080p 90 / 2 / 0.01 lifts edge energy 3-4% over the reference (mean change 1.4/255, max 40, up from +1% / encode noise in v1), visible only as slightly crisper hair and block edges at 1:1 and indistinguishable at preview size on this soft 360p-upscaled source, so summary now says it barely bites on heavily upscaled footage.",
+    "rerender": false,
+    "second_opinion": "corrected: Premiere rewrite agreed (017b differs from ref only by encode noise, mean 0.93; a simulated unsharp mask on the ref frame changes nothing at 60/1/0.03 and adds about 13% edge energy, max 37 levels, at 90/2/0.01), but the After Effects side still held the 60/1/0.03 values the note says rendered no change on the same plugin (AE.ADBE Unsharp Mask, Threshold also 0..1), so AE set to 90/2/0.01 too",
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "weak",
+     "frame": "pve/gallery/recipes_ae/018b.png",
+     "note": "Edges are only slightly crisper than the reference (edge energy up 3-7%, mean change under 1 level), visible on fine edges at 1:1 and indistinguishable at preview size on this soft upscaled source; vs Premiere: as faint as Premiere's (edge energy +3% vs +4% on the same frame).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Low-res archive upscale cleanup",
+   "summary": "Makes 360p-720p archive or web clips hold up in a 1080p edit: mild denoise before the cover-fit scale-up and gentle sharpening to counter the softness. On a file that is already 1080p (soft but pre-upscaled) only the faint denoise shows: the Radius 0.8 sharpen changes nothing there (render-checked), so use Web delivery sharpen on such files.",
+   "use_for": [
+    "old TV news clips, YouTube rips and 480p archive in documentaries",
+    "screen recordings or WhatsApp forwards placed full-frame",
+    "phone stills from the 2000s used as B-roll"
+   ],
+   "avoid": [
+    "expecting real detail recovery: for a 3x+ jump pre-upscale outside the NLE (an AI upscaler) and import the result",
+    "high sharpen on blocky sources: blocks become crunchy squares",
+    "AE Detail-preserving Upscale on an AdobeBridge clip layer: the builder already cover-fit scales the layer, so the upscale doubles (use it only where the layer sits at 100%, see after_effects_alt)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "VR De-Noise",
+     "pr_props": {
+      "Frame Layout": 0,
+      "Noise Type": 0,
+      "Noise Level": 0.15
+     }
+    },
+    {
+     "name": "Unsharp Mask",
+     "pr_props": {
+      "Amount": 50,
+      "Radius": 0.8,
+      "Threshold": 0.03
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "VISINF Grain Removal",
+     "props": {
+      "Viewing Mode": 4,
+      "Noise Reduction": 1,
+      "Passes": 2,
+      "Chroma Suppression": 2,
+      "Texture": 0.2
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 50,
+      "Radius": 0.8,
+      "Threshold": 0.03
+     }
+    }
+   ],
+   "after_effects_alt": [
+    {
+     "name": "ADBE Upscale",
+     "props": {
+      "Scale": 300,
+      "Detail": 50,
+      "Reduce Noise": 20
+     }
+    }
+   ],
+   "keyframes_note": "Static. The builders already scale each clip to cover the frame (Motion Scale in Premiere, layer scale in AE), and in Premiere that scale renders after the effects, so Radius stays below 1 (it is enlarged with the image). after_effects_alt is for an AE layer kept at 100% scale (a vfx.py scene or a precomp): set Scale = 100 x comp width / source width (e.g. 300 for 640 px into 1920).",
+   "built_from": [
+    "VR De-Noise",
+    "Unsharp Mask",
+    "Remove Grain",
+    "Detail-preserving Upscale",
+    "Motion"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/set2/pr_006.0_0.54.png",
+    "note": "On the 640x480 blocky archive plate the Premiere stack only smooths a little (block-edge contrast -14 %, small blocks rounded) with no visible sharpening: too faint to read as a cleanup.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "weak",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/recipes/018b.png",
+      "note": "Only a faint smoothing of skin texture (mean change 2 levels) and no added crispness, because the test file is 1080p at scale 100, so the Radius 0.8 / Threshold 0.03 sharpen found no edges to boost; summary now says so.",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "weak",
+     "frame": "pve/gallery/set2/S_recipe_0_1.04.png",
+     "note": "On the archive plate the After Effects stack sharpens slightly (+11 % edge gradient) but leaves the blocks as they are (block-edge contrast 3.02 both); vs Premiere: Premiere smooths a little and does not sharpen.",
+     "rerender": false,
+     "previous": [
+      {
+       "verdict": "untested:no_suitable_footage",
+       "changed": "2026-10-14",
+       "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+       "frame": "pve/gallery/recipes_ae/019b.png",
+       "note": "Only a faint smoothing shows (edge energy down 5-8%, mean change under 1 level) and the Radius 0.8 sharpen adds no crispness, because the test file is already 1080p at 100% scale, so there is no low-res upscale for the stack to rescue; vs Premiere: same outcome as Premiere, with about a third of its smoothing (edge energy -5% vs -15%)."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Timelapse and archive deflicker",
+   "summary": "Averages each frame with its neighbours to iron out exposure flicker in locked-off timelapses and flickery film/archive transfers.",
+   "use_for": [
+    "timelapse of a city, crowd assembly or construction site with exposure flicker",
+    "telecine or archive film with frame-to-frame brightness pumping",
+    "fluorescent-light flicker on a static wide shot"
+   ],
+   "avoid": [
+    "anything with real motion (people walking, pans): averaging leaves ghost trails",
+    "talking heads: double faces",
+    "placing it after other effects: Echo reads the clip's source frames, so effects above it are dropped from the echoes"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Echo",
+     "pr_props": {
+      "Echo Time (seconds)": -0.0333,
+      "Number Of Echoes": 2,
+      "Starting Intensity": 0.333,
+      "Decay": 1,
+      "Echo Operator": 6
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Echo",
+     "props": {
+      "Echo Time (seconds)": -0.0333,
+      "Number Of Echoes": 2,
+      "Starting Intensity": 0.333,
+      "Decay": 1,
+      "Echo Operator": 7
+     }
+    }
+   ],
+   "keyframes_note": "Static. Echo must be the FIRST effect on the clip. Echo Time = minus one frame (-0.0333 at 30 fps, -0.04 at 25); Echo Operator Blend (Premiere index 6, AE 7) with Decay 1 and Starting Intensity = 1 / (Number Of Echoes + 1) averages the current frame with the ones before it. In Premiere operator 6 ADDS the weighted frames (the render matched a plain 3-frame sum at Starting Intensity 1, blowing the picture to white), so the intensity must divide by the frame count: 0.333 for 2 echoes, 0.2 for 4. Raise Number Of Echoes to 4 (Starting Intensity 0.2) for heavy flicker on a fully static shot. AE adds Color Stabilizer (match 'ADBE Deflicker', Stabilize 1 = Brightness): move its Mid Point onto a static mid-grey area ([x, y] layer pixels); its reference frame is chosen in the UI, so check a render.",
+   "built_from": [
+    "Echo",
+    "Color Stabilizer",
+    "Shot matching and flicker tools"
+   ],
+   "status": "current",
+   "confidence": "low",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/019b.png",
+    "note": "Exposure is back to normal (mean luma 96.8 vs 98.3 reference, was blown to 210 in v1) and the frame matches the average of the current and two previous source frames to 2.2/255, so the exposure flashes are ironed out (frame-to-frame luma jump 19.3 -> 6.9 mean, peak 195 -> 161) with the ghosting on the moving people the avoid list already warns about.",
+    "rerender": false,
+    "second_opinion": "corrected: verdict and Premiere fix agreed (019b matches the clipped sum of the reference frames at 0, -1 and -2 frames to 2.6 levels mean, so Blend adds the weighted frames and 0.333 x 3 is a true average), but the After Effects Echo still had Starting Intensity 1 with Blend; Premiere runs the same plugin (AE.ADBE Echo), so AE would blow out the same way: set to 0.333 as the card's own note prescribes",
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/020a.png",
+     "note": "The echo blend ghosts the moving shapes as intended, but the picture is pulled from its warm yellow cast to a dull cool grey (saturation halved, 65 -> 29, mean luma down 15%), a colour shift only the Color Stabilizer can make since averaging frames of one scene cannot change their hue; vs Premiere: Premiere's Echo-only stack keeps normal colour and exposure (luma 96.8 vs 98.3 reference).",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Color Stabilizer has no reference frame or sample points set from the spec and drags the whole frame towards grey, so drop it and keep the Echo average that already works in Premiere on the same plugin.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/020a.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Handheld shake stabilize",
+   "summary": "Smooths jittery handheld or phone footage while keeping the camera move, cropping slightly to hide the moving edges.",
+   "use_for": [
+    "ground reports and rally footage shot handheld",
+    "phone B-roll from a moving vehicle",
+    "lock-off look for a shaky static shot (Result = No Motion)"
+   ],
+   "avoid": [
+    "exporting before background analysis ends: the 'Analyzing in background' banner is burned into the render (seen in both apps)",
+    "clips with a speed change or a size that differs from the sequence: Premiere refuses until nested",
+    "Subspace Warp on faces and crowds: rubbery wobble (this recipe uses Position, Scale, Rotation)",
+    "Smoothness above ~50 on walking shots: big auto-scale crop and jelly"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Warp Stabilizer",
+     "pr_props": {
+      "Result": 0,
+      "Smoothness": 15,
+      "Method": 1,
+      "Framing": 2,
+      "Maximum Scale": 115,
+      "Rolling Shutter Ripple": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE SubspaceStabilizer",
+     "props": {
+      "Result": 1,
+      "Smoothness": 15,
+      "Method": 2,
+      "Framing": 3,
+      "Maximum Scale": 115,
+      "Rolling Shutter Ripple": 1
+     }
+    }
+   ],
+   "keyframes_note": "Static settings; analysis starts by itself after the effect is applied and must finish before export (Premiere: wait until AnalysisStatusCounter stops changing; AE: let it finish inside AE and save before aerender). Apply per shot (split at cuts first). Method 1 / AE 2 = Position, Scale, Rotation for people; switch to Subspace Warp (Premiere 3 / AE 4) only for landscapes or drone shots. Result 1 / AE 2 = No Motion for a tripod lock-off. Phone jello: Premiere 'Rolling Shutter Ripple' 1 (Enhanced Reduction), AE 2.",
+   "built_from": [
+    "Warp Stabilizer"
+   ],
+   "status": "current",
+   "confidence": "low",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/020b.png",
+    "note": "Picture intact with a slight stabilizer crop (about 1.7-2.5% scale-up, no moving edges) and the camera push-in kept between 0.2 s and 1.0 s; the smoothing itself cannot show in a still.",
+    "rerender": false,
+    "ae": {
+     "verdict": "untested:needs_analysis",
+     "frame": "pve/gallery/recipes_ae/021b.png",
+     "note": "Both frames carry the blue 'Analyzing in background (step 1 of 2)' banner across the picture, so Warp Stabilizer rendered before its analysis finished and no stabilised result exists; vs Premiere: Premiere's analysed render shows the intended slight stabiliser crop.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Phone pan jello fix",
+   "summary": "Straightens the leaning verticals and wobble that phone and CMOS cameras produce on fast pans. On footage with no skew it leaves the picture unchanged (render-checked), so it has no visible look of its own.",
+   "use_for": [
+    "fast phone pans across crowds, buildings or flag lines",
+    "vibration from a car or bike mount",
+    "drone footage with propeller jello"
+   ],
+   "avoid": [
+    "footage without skew: it adds subtle warping",
+    "applying it after scaling, speed changes or stabilisation: it must act on the source first",
+    "stacking with Warp Stabilizer's own Enhanced rolling-shutter mode (double correction)",
+    "rendering before its background analysis finishes"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Rolling Shutter Repair",
+     "pr_props": {
+      "Rolling Shutter Rate": 90,
+      "Scan Direction": 0,
+      "Method": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Rolling Shutter",
+     "props": {
+      "Rolling Shutter Rate": 90,
+      "Scan Direction": 1,
+      "Method": 1
+     }
+    }
+   ],
+   "keyframes_note": "Static, first effect on the clip. Rate 90 suits phones; use 50-70 for DSLR/mirrorless and raise until verticals stand straight. Scan Direction Top -> Bottom (Premiere 0, AE 1); for a phone filmed sideways try the other directions. Method Warp (Premiere 0 / AE 1); Pixel Motion (1 / 2) if wobble remains. Measured on a synthetic skewed pan (live wave 3): both apps remove about Rate % of one frame of pan motion of skew (the most a real sensor produces), so verticals straighten by that much.",
+   "built_from": [
+    "Rolling Shutter Repair"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/pr_012.0_0.54.png",
+    "note": "On the skewed pan the bars stand straighter than in the control (skew 39 -> 30 px of 1920 on average): it straightens the lean by the share Rolling Shutter Rate 90 allows.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "weak",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/recipes/021b.png",
+      "note": "Frame is identical to the reference at 1:1 because the test clip has no rolling-shutter skew to correct; summary now states it is invisible on skew-free footage.",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/set2/S_recipe_1_1.04.png",
+     "note": "The After Effects stack straightens the skewed bars (37 -> 26 px of 1920 on average); vs Premiere: a little more correction at the same Rate 90.",
+     "rerender": false,
+     "previous": [
+      {
+       "verdict": "untested:no_suitable_footage",
+       "changed": "2026-10-14",
+       "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+       "frame": "pve/gallery/recipes_ae/022b.png",
+       "note": "The picture looks identical to the reference even at 1:1 (only a sub-pixel resample, mean change 2 levels, no warp or leaning visible) because the test clip has no rolling-shutter skew to correct; vs Premiere: same outcome as Premiere, whose frame was identical to its reference."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Frame-rate judder conform",
+   "summary": "Meant to blend in-between frames when 24/25 fps footage sits in a 30 fps edit (or vice versa) so pans stop stuttering. Render-checked, it changes nothing: neither at 25 fps into 25 fps nor on a 30 fps variable-frame-rate phone clip in a 25 fps sequence (frame-to-frame change identical to the plain clip in both apps, the clip's repeated frames kept).",
+   "use_for": [
+    "25 fps Indian broadcast clips in a 30 fps reel",
+    "24 fps film trailers or cinema B-roll in a 30 fps timeline",
+    "slow pans that judder after a frame-rate mismatch"
+   ],
+   "avoid": [
+    "Pixel Motion on crowds, flags and hands: warping and tearing (Frame Mix is the safe default here)",
+    "fast action: Frame Mix ghosts; a straight cut at native rate may look better",
+    "as a slow-motion tool: see the Timewarp card's own speed-ramp recipe"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Timewarp",
+     "pr_props": {
+      "Method": 1,
+      "Adjust Time By": 0,
+      "Speed": 100,
+      "Filtering": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Timewarp",
+     "props": {
+      "Method": 2,
+      "Adjust Time By": 1,
+      "Speed": 100,
+      "Filtering": 1
+     }
+    }
+   ],
+   "keyframes_note": "Static. Speed must be set to 100 explicitly (Premiere's harvested default is 50). Method Frame Mix = Premiere 1 / AE 2; Pixel Motion = Premiere 2 / AE 3 for smoother pans on simple scenes. Measured live wave 3: at Speed 100 Timewarp Frame Mix leaves a 30-to-25 fps VFR clip exactly as it is in both apps, so this stack does not conform anything; conform VFR to a constant rate before import (transcode) and use AE's layer Frame Blending or Premiere's Frame Blend time interpolation for rate mismatches (neither is a spec effect). In AE the cheaper route is the layer Frame Blending switch (scripting, not a spec effect).",
+   "built_from": [
+    "Timewarp",
+    "Frame blending (Frame Mix / Pixel Motion)"
+   ],
+   "status": "current",
+   "confidence": "low",
+   "verified": {
+    "verdict": "broken",
+    "frame": "pve/gallery/set2/pr_015.0_0.54.png",
+    "note": "On the VFR phone plate in a 25 fps sequence the frames and their frame-to-frame change match the plain clip (the six repeated frames stay): nothing is blended.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "weak",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/recipes/022b.png",
+      "note": "Frame matches the reference to encode noise (mean diff 0.66, same as an untouched clip): the 25 fps test clip in a 25 fps sequence has no rate mismatch to blend; summary now says so.",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "broken",
+     "frame": "pve/gallery/set2/S_recipe_2_1.04.png",
+     "note": "On the VFR plate in a 25 fps comp the frame-to-frame change is identical to the control frame for frame: Timewarp at Speed 100 blends nothing; vs Premiere: the same.",
+     "rerender": false,
+     "previous": [
+      {
+       "verdict": "untested:no_suitable_footage",
+       "changed": "2026-10-14",
+       "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+       "frame": "pve/gallery/recipes_ae/023b.png",
+       "note": "Both frames are pixel-identical to the reference, because the 25 fps clip in a 25 fps comp has no frame-rate mismatch for Timewarp to blend; vs Premiere: same outcome as Premiere."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Interlace combing and line twitter fix",
+   "summary": "A tiny vertical-only blur that hides interlace combing on old TV recordings and the twitter of thin horizontal lines in tickers and documents. On clean progressive footage it leaves no visible change (render-checked at Softness 1.5).",
+   "use_for": [
+    "old 576i / 1080i news recordings with combing on motion",
+    "screenshots of documents, spreadsheets or tickers whose thin lines shimmer",
+    "scaled-down graphics with fine horizontal rules"
+   ],
+   "avoid": [
+    "progressive web footage with no combing: it only costs sharpness",
+    "Softness well above ~3: a vertical smear that reads as a broken deinterlace",
+    "whole-sequence adjustment layers: apply to the affected clip so faces elsewhere stay sharp"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Reduce Interlace Flicker",
+     "pr_props": {
+      "Softness": 1.5
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 1.5,
+      "Blur Dimensions": 3,
+      "Repeat Edge Pixels": 1
+     }
+    }
+   ],
+   "keyframes_note": "Static, last effect on the clip. Softness 0.5-1 for line twitter on graphics, 1.5-3 for visible combing. A real deinterlace is a source setting, not an effect (AE FootageSource fieldSeparationType; Premiere Field Options): use that when the build can set it, this blur when it cannot. AE uses Gaussian Blur with Blur Dimensions 3 (Vertical) because its Reduce Interlace Flicker is obsolete. Measured live wave 3: an mp4 flagged top-field-first is field-separated on import by both apps, so its combing never reaches the render and this blur is not needed for it (the raw file combs at 6.4 on our measure, the imported control at 0.7-0.9); it matters only for interlaced material flagged progressive, which the bridge cannot interpret otherwise.",
+   "built_from": [
+    "Reduce Interlace Flicker",
+    "Gaussian Blur"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/set2/pr_021.0_0.54.png",
+    "note": "Both controls already show no combing because Premiere separated the fields of the flagged 1080i file on import; the blur only lowered the residual measure 0.85 -> 0.68. Needs the plate interpreted as progressive.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "weak",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "the interlaced plate was field-separated on import by both apps, so the render had no combing to remove",
+      "frame": "pve/gallery/recipes/023b.png",
+      "note": "Frame looks identical to the reference even at 1:1: Softness 1.5 is a sub-pixel vertical blur and the progressive test clip has no combing to hide; summary now says so.",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/set2/S_recipe_3_1.04.png",
+     "note": "After Effects also separated the fields on import, so the control had no combing (0.73) and the blur changed little (0.71); vs Premiere: the same setup limit.",
+     "rerender": false,
+     "previous": [
+      {
+       "verdict": "untested:no_suitable_footage",
+       "changed": "2026-10-14",
+       "why": "the interlaced plate was field-separated on import by both apps, so the render had no combing to remove",
+       "frame": "pve/gallery/recipes_ae/024b.png",
+       "note": "Frames match the reference to encode noise (vertical edge energy unchanged), since a 1.5 px vertical blur is invisible on progressive footage that has no combing or line twitter to hide; vs Premiere: same outcome as Premiere."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Corner logo crop-zoom removal",
+   "summary": "Pushes a corner watermark or channel bug out of frame by scaling the clip about the OPPOSITE corner, so the other three edges stay put.",
+   "use_for": [
+    "a channel logo or app watermark in one corner of B-roll you have rights to use",
+    "a timestamp or REC overlay in a corner of phone or CCTV footage",
+    "a burnt-in corner credit you will re-add as a clean caption"
+   ],
+   "avoid": [
+    "stripping an agency or broadcaster watermark from footage you have no licence for: credit the source on screen instead",
+    "logos larger than ~15% of the frame: the zoom crops the subject and softens the picture",
+    "faces or key action near the opposite edges: check the crop does not cut them"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Anchor Point": [
+       0,
+       1
+      ],
+      "Position": [
+       0,
+       1
+      ],
+      "Uniform Scale": true,
+      "Scale Height": 113,
+      "Scale Width": 113
+     }
+    },
+    {
+     "name": "Unsharp Mask",
+     "pr_props": {
+      "Amount": 40,
+      "Radius": 1,
+      "Threshold": 0.03
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Anchor Point": [
+       0,
+       1080
+      ],
+      "Position": [
+       0,
+       1080
+      ],
+      "Uniform Scale": 1,
+      "Scale Height": 113
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 40,
+      "Radius": 1,
+      "Threshold": 0.03
+     }
+    }
+   ],
+   "keyframes_note": "Static. Scale % = 100 / (1 - f) where f = the logo's larger extent from its corner as a frame fraction plus a 0.01 margin (a 10% x 8% top-right bug: f = 0.11 -> 113). Anchor Point and Position are the SAME point: the corner opposite the logo. Premiere (frame fractions): top-right logo [0, 1], top-left [1, 1], bottom-right [0, 0], bottom-left [1, 0]. AE (layer pixels of the SOURCE, shown for 1920x1080): [0, 1080], [1920, 1080], [0, 0], [1920, 0]; scale them for other source sizes. Leave the clip's own zoom at 1. A patch blur or Content-Aware Fill needs a drawn, tracked mask, which a spec cannot make (AE Content-Aware Fill is UI-only).",
+   "built_from": [
+    "Transform",
+    "Unsharp Mask",
+    "Content-Aware Fill"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/024b.png",
+    "note": "Frame is scaled 113% about its bottom-left corner (measured fixed point 0,1078): left and bottom edges stay put while the top-right corner, where a bug would sit, is pushed out of frame.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/025b.png",
+     "note": "The frame is scaled 113% about its bottom-left corner: the left and bottom edges hold while the top-right corner, where a channel bug would sit, is pushed out of frame; vs Premiere: matches Premiere's 113% bottom-left scale.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Burned-in ticker and band crop-out",
+   "summary": "Removes a burnt-in news ticker, lower third or subtitle band along one edge by scaling about the opposite edge's centre.",
+   "use_for": [
+    "repurposing TV news clips whose bottom ticker would clash with your own captions",
+    "removing burnt-in foreign subtitles before adding Hindi/English captions",
+    "cropping a top banner or date strip off a recorded broadcast"
+   ],
+   "avoid": [
+    "bands deeper than ~20% of the frame: scale above 125% softens 1080p visibly",
+    "removing a channel's identity from footage you cannot license: credit it on screen",
+    "bands on two opposite edges (letterbox): use the clip's zoom field instead (centre scale)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Transform",
+     "pr_props": {
+      "Anchor Point": [
+       0.5,
+       0
+      ],
+      "Position": [
+       0.5,
+       0
+      ],
+      "Uniform Scale": true,
+      "Scale Height": 122,
+      "Scale Width": 122
+     }
+    },
+    {
+     "name": "Unsharp Mask",
+     "pr_props": {
+      "Amount": 40,
+      "Radius": 1,
+      "Threshold": 0.03
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Anchor Point": [
+       960,
+       0
+      ],
+      "Position": [
+       960,
+       0
+      ],
+      "Uniform Scale": 1,
+      "Scale Height": 122
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 40,
+      "Radius": 1,
+      "Threshold": 0.03
+     }
+    }
+   ],
+   "keyframes_note": "Static. Scale % = 100 / (1 - b), b = band depth as a frame fraction plus 0.01 (ticker + strap = 0.17 -> 122). Bottom band: anchor = position = top-centre (Premiere [0.5, 0], AE [W/2, 0]); top band: bottom-centre (Premiere [0.5, 1], AE [W/2, H]). Left and right edges are cropped by (scale-100)/2 % each, so check faces near the sides. Values shown for a 1920x1080 source in AE.",
+   "built_from": [
+    "Transform",
+    "Unsharp Mask",
+    "Crop"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/025b.png",
+    "note": "Frame is scaled 122% about the top-centre (measured fixed point 959,1): the top edge stays, the bottom band with the flowers is pushed out, and both sides crop equally.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/026b.png",
+     "note": "The frame is scaled 122% about the top centre: the top edge holds, the bottom band with the flowers is pushed out of frame and both sides crop equally; vs Premiere: matches Premiere's 122% top-centre scale.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Talking-head skin smoothing",
+   "summary": "Gentle beauty pass that softens skin texture and compression blotches on interviews while edges stay defined.",
+   "use_for": [
+    "presenter and anchor close-ups for reels",
+    "harsh phone-camera interviews with crunchy skin",
+    "political talking heads that look over-sharpened by the camera"
+   ],
+   "avoid": [
+    "strong settings: waxy, plastic faces that viewers read as a filter",
+    "wide shots and crowds: it just softens the whole picture",
+    "evidence or documentary footage where retouching misrepresents the subject",
+    "Premiere version on detailed backgrounds: it is a whole-frame soften (no skin key), keep it subtle"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "VR De-Noise",
+     "pr_props": {
+      "Frame Layout": 0,
+      "Noise Type": 0,
+      "Noise Level": 0.3
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Sharpen": -15
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Bilateral",
+     "props": {
+      "Radius": 8,
+      "Threshold": 20,
+      "Colorize": 1
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 30,
+      "Radius": 1,
+      "Threshold": 0.06
+     }
+    }
+   ],
+   "keyframes_note": "Static. AE is the better tool: Bilateral Blur is edge-preserving (verified), and the following Unsharp Mask with Threshold 0.06 re-crisps eyes and hair while sparing skin; scale Radius with resolution (4 at 1080p, 8 at 4K). Premiere has no edge-preserving blur: VR De-Noise smooths fine texture and Lumetri Creative 'Sharpen' below 0 softens; a skin-only key via Lumetri HSL Secondary needs eyedropper ranges that are blobs a spec cannot set.",
+   "built_from": [
+    "Bilateral Blur",
+    "Unsharp Mask",
+    "VR De-Noise",
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/026b.png",
+    "note": "Faces, skin and flowers read visibly softer and smoother (edge energy down 20%) while hair and block outlines stay defined, a gentle beauty pass.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/027b.png",
+     "note": "Bilateral Blur softens mid-tone and wall texture only slightly (edge energy down 6-9%, mean change 1 level) while hard edges hold, a change visible at 1:1 but not readable at preview size; vs Premiere: about a third of Premiere's smoothing (edge energy -6% vs -22%).",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Radius 4 / Threshold 12 barely reaches the blotches of this soft upscaled 1080p source; Radius 8 and Threshold 20 stay in the card's skin and subtle ranges while the Threshold 0.06 sharpen still restores hard edges.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/027b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Wire, boom and scratch line removal",
+   "summary": "Paints out one thin straight line (a cable, boom pole, wire or vertical film scratch) by pulling in neighbouring pixels.",
+   "use_for": [
+    "a mic cable or power line across a static interview background",
+    "a boom pole dipping into the top of frame",
+    "a single vertical scratch running through archive film"
+   ],
+   "avoid": [
+    "curved or thick objects: it only handles a straight band; wide bands smear",
+    "moving lines without keyframed or tracked end points",
+    "Premiere: there is no equivalent effect; cut away or crop-zoom instead"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "CC Simple Wire Removal",
+     "props": {
+      "Point A": [
+       700,
+       0
+      ],
+      "Point B": [
+       760,
+       1080
+      ],
+      "Removal Style": 3,
+      "Thickness": 6,
+      "Slope": 0.5,
+      "Mirror Blend": 0.25
+     }
+    }
+   ],
+   "keyframes_note": "Point A / Point B are per-shot [x, y] SOURCE layer pixels at the line's two ends (the values shown are placeholders). Keyframe both points if the line moves, e.g. 'Point A': [[0, [700, 0]], [2, [720, 0]]]. Thickness 2-10, just covering the line. Removal Style 3 Displace for textured backgrounds; 2 Frame Offset (with 'Frame Offset' +/-5) when the line moves over a static background. Larger objects need AE Content-Aware Fill, which is UI-only.",
+   "built_from": [
+    "CC Simple Wire Removal",
+    "Content-Aware Fill"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/S_recipe_4_1.04.png",
+    "note": "On the dust-and-wire plate the 4 px dark wire from (700, 0) to (760, 1080) is gone (contrast across it 154 -> 1) and the grid behind it continues, the specks untouched as expected.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/recipes_ae/028a.png",
+      "note": "Only a faint, near-invisible smear along the placeholder line between x 700 and 760 changes (mean change under 0.5 levels there), because the test clip has no wire, pole or scratch at those points."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Archive dust and speck cleanup",
+   "summary": "Removes white/black dust specks and small dirt from scanned film and old photos with a small median-style despeckle.",
+   "use_for": [
+    "scanned newsreel and Films Division footage",
+    "old photographs of leaders and events used as stills",
+    "telecine transfers with dirt hits"
+   ],
+   "avoid": [
+    "Radius above 3: faces and text smear into plastic",
+    "on a clip you are deliberately ageing with an archive-look grain or scratch overlay",
+    "Premiere: no despeckle effect exists; use AE or accept the dirt",
+    "1 px detail: at Radius 2 the thin grid lines of the test plate faded with the specks (measured live wave 3); keep it off shots whose hairlines, small text or fine texture matter"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Dust & Scratches",
+     "props": {
+      "Radius": 2,
+      "Threshold": 0.08,
+      "Operate on Alpha channel": 0
+     }
+    },
+    {
+     "name": "ADBE Unsharp Mask2",
+     "props": {
+      "Amount": 25,
+      "Radius": 1,
+      "Threshold": 0.04
+     }
+    }
+   ],
+   "keyframes_note": "Static. Threshold is harvested as 0..1 while the panel is documented 0-255; 0.08 assumes 1 = 255 (about 20 levels), unverified, so read the panel back once. Lower Threshold removes more but softens more. For specks that remain, try 'ADBE PS Median' Radius 1 instead. The light Unsharp Mask restores edges the despeckle softened.",
+   "built_from": [
+    "Dust & Scratches",
+    "Median",
+    "Unsharp Mask"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/S_recipe_5_1.04.png",
+    "note": "On the dust plate all 930 single-pixel specks are gone (0 left) and the wire stays; the 1 px grid lines also fade, the softening the card's Unsharp Mask is there for.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/recipes_ae/029b.png",
+      "note": "Frames match the reference to encode noise (a handful of pixels change by up to 26 levels), because the clean digital test clip has no dust or specks to remove."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Green screen key",
+   "summary": "Keys a green (or blue) screen presenter cleanly over a background clip on the track below, with spill removed and screen edges matted off. On footage with no green screen the key removes nothing and only the garbage-matte trim shows (edges go black where no background track sits below, render-checked).",
+   "use_for": [
+    "AI-explainer presenters shot on a green screen",
+    "anchor-style political explainers over B-roll or a map",
+    "virtual studio set for news reels"
+   ],
+   "avoid": [
+    "leaving Key Color / Screen Colour at the default (black): nothing keys",
+    "green in the subject (clothes, flags, plants): it is keyed out too; shoot blue there",
+    "low-bitrate phone green screens with aggressive settings: chattering edges",
+    "no background on the track below: the keyed area renders black",
+    "Advanced Spill Suppressor in Ultra mode (Method 2) with wide Tolerance / Spill Range: it desaturates every hue and the whole frame goes black and white (card verdict 'wrong' from exactly that render); keep Method 1"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Ultra Key",
+     "pr_props": {
+      "Key Color": "#00B140",
+      "Setting": 0,
+      "Output": 0,
+      "Pedestal": 15,
+      "Choke": 5,
+      "Soften": 5,
+      "Spill": 60
+     }
+    },
+    {
+     "name": "Four-Point Garbage Matte",
+     "pr_props": {
+      "Top Left": [
+       0.05,
+       0.02
+      ],
+      "Top Right": [
+       0.95,
+       0.02
+      ],
+      "Bottom Right": [
+       0.95,
+       1
+      ],
+      "Bottom Left": [
+       0.05,
+       1
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "Keylight 906",
+     "props": {
+      "Screen Colour": "#00B140",
+      "View": 11,
+      "Screen Gain": 105,
+      "Screen Balance": 50,
+      "Clip Black": 15,
+      "Clip White": 85,
+      "Screen Shrink/Grow": -1,
+      "Screen Softness": 0.5
+     }
+    },
+    {
+     "name": "ADBE KeyCleaner",
+     "props": {
+      "Additional Edge Radius": 8,
+      "Reduce Chatter": 1,
+      "Strength": 100
+     }
+    },
+    {
+     "name": "ADBE Spill2",
+     "props": {
+      "Method": 1,
+      "Suppression": 80
+     }
+    }
+   ],
+   "keyframes_note": "Static. Replace #00B140 with a colour sampled from the actual screen beside the subject (blue screen about #0047BB; AE Screen Balance 95 for blue). Premiere: Setting first (0 Default, 2 Aggressive for uneven screens), then the cleanup values; QC with Output 1 (alpha) then back to 0. Set all four garbage-matte corners (unset points collapse the matte): they trim light stands and screen edges, frame fractions per shot. AE: View 11 = Final Result (5 = Screen Matte for QC); a garbage mask is drawn in AE, not set from a spec. Keyed presenter on track 2, background on track 1. After Effects: on shots with no screen, Keylight's despill and Advanced Spill Suppressor still strip green from foliage (brown plants, peach walls), so apply this stack only to real green-screen shots.",
+   "built_from": [
+    "Ultra Key",
+    "Four-Point Garbage Matte",
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Advanced Spill Suppressor"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/pr_027.0_0.54.png",
+    "note": "On the synthetic green-screen plate over the background clip the screen is fully keyed (0 % screen green left, 84 % before) with a thin pale rim and the fine strands partly kept: a clean key, as the summary says.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "weak",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/recipes/027b.png",
+      "note": "No green screen in the test clip, so the key removed nothing (inner picture unchanged) and only the garbage matte shows as black bands 96 px left/right and 22 px top; summary now says so.",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/set2/S_recipe_green_1.04.png",
+     "note": "The After Effects stack keys the plate cleanly over the background clip (0 % screen green, rim despilled); vs Premiere: a similar key, the fine strands removed by Key Cleaner.",
+     "rerender": false,
+     "previous": [
+      {
+       "verdict": "untested:no_suitable_footage",
+       "changed": "2026-10-14",
+       "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+       "frame": "pve/gallery/recipes_ae/030b.png",
+       "note": "With no green screen nothing is keyed out, but the despill turns the green plants muddy brown and warms the walls towards peach (green channel down 11 levels), the only visible change; vs Premiere: Premiere's inner picture stays unchanged with black garbage-matte bands, while AE has no bands but shifts the greens."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Interview jump-cut smoothing",
+   "summary": "Hides a jump cut inside one locked-off talking-head shot so the speaker seems to talk continuously after an 'um' or a cut sentence is removed.",
+   "use_for": [
+    "tightening a politician's soundbite without a visible jump",
+    "removing ums and pauses from a static interview",
+    "AI-explainer talking heads shot on one fixed camera"
+   ],
+   "avoid": [
+    "cuts between different shots or with camera moves: Morph Cut melts and tears (verified failure case)",
+    "big head turns or hands crossing the face at the cut",
+    "durations over ~0.5 s",
+    "exporting before Premiere's background analysis finishes"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 112
+     }
+    }
+   ],
+   "transition": {
+    "name": "Morph Cut",
+    "dur": 0.3
+   },
+   "keyframes_note": "Premiere: put 'Morph Cut' (0.2-0.4 s, centred) on the clip AFTER the jump cut; both clips must come from the same static shot with handles on both sides, and the render must wait for analysis. After Effects has no Morph Cut (an unknown transition becomes a hard cut there), so AE disguises the jump as an intentional cut-in instead: Transform 112% on the clip after the cut (centre it on the face by setting Anchor Point = Position = the face in source pixels). The same punch-in is the Premiere fallback when Morph Cut artefacts show ({'name': 'Transform', 'pr_props': {'Uniform Scale': true, 'Scale Height': 112, 'Scale Width': 112}}).",
+   "built_from": [
+    "Morph Cut",
+    "Transform"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the premiere list is empty (its work is the Morph Cut transition), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/031b.png",
+     "note": "Both frames show a static 112% centre punch-in with the edges cropped evenly, the deliberate cut-in that disguises the jump.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Narration VO polish chain",
+   "summary": "Studio-style voice-over from a home or office recording: hiss and room removed, rumble cut, warmer and clearer, evened out and peak-safe.",
+   "use_for": [
+    "Hindi / English documentary and explainer narration",
+    "AI-education VO recorded on a USB or phone mic",
+    "political reel VO that must sit over a music bed"
+   ],
+   "avoid": [
+    "DeNoise above ~0.5: watery, underwater artefacts",
+    "compressing before denoising: it raises the noise floor the denoiser must fight",
+    "stacking on top of Essential Sound Dialogue presets or Enhance Speech (double processing)",
+    "leaving 'Output Difference Signal' or 'Output Sibilance Only' at 1: the render plays only the removed part"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Aud HiLo",
+     "props": {
+      "Filter Options": 1,
+      "Cutoff Frequency": 80,
+      "Dry Out": 0,
+      "Wet Out": 100
+     }
+    },
+    {
+     "name": "ADBE Aud Compressor",
+     "props": {
+      "Threshold (dB)": -20,
+      "Ratio (x:1)": 3,
+      "Knee (db)": 6,
+      "Attack (ms)": 5,
+      "Release (ms)": 150,
+      "Auto Release": 0,
+      "Makeup Gain (dB)": 3,
+      "Output Limit (dB)": -1
+     }
+    }
+   ],
+   "premiere_audio": [
+    {
+     "name": "DeNoise",
+     "pr_props": {
+      "Amount": 0.3,
+      "Auto Gain": 0,
+      "Output Difference Signal": 0
+     }
+    },
+    {
+     "name": "DeReverb",
+     "pr_props": {
+      "Amount": 0.3,
+      "Auto Gain": 1,
+      "Output Difference Signal": 0
+     }
+    },
+    {
+     "name": "Parametric Equalizer",
+     "pr_props": {
+      "High-Pass Filter Enable": 1,
+      "High-Pass Cutoff Frequency": 0.00275,
+      "EQ Band 2 Gain": 0.47,
+      "EQ Band 4 Gain": 0.53
+     }
+    },
+    {
+     "name": "Single-band Compressor",
+     "pr_props": {
+      "Threshold": 0.667,
+      "Ratio": 0.069,
+      "Attack": 0.01,
+      "Release": 0.03,
+      "Gain": 0.55,
+      "Auto Makeup Gain": 0
+     }
+    },
+    {
+     "name": "DeEsser",
+     "pr_props": {
+      "Threshold": 0.58,
+      "Output Sibilance Only": 0
+     }
+    },
+    {
+     "name": "Hard Limiter",
+     "pr_props": {
+      "Maximum Amplitude": 0.99,
+      "Limit True Peak": 1,
+      "Link Channels": 1
+     }
+    }
+   ],
+   "keyframes_note": "Static, on the VO clip, in this order (clean -> tone -> dynamics -> peaks). Premiere values are normalised: Parametric EQ High-Pass 0.00275 = 80 Hz on the inferred scale Hz = 25 + 19975*v, Band 2 (250 Hz) 0.47 = small mud cut, Band 4 (4 kHz) 0.53 = small presence lift; compressor Threshold 0.667 = -20 dB, Ratio 0.069 = 3:1, Attack 0.01 = 5 ms, Release 0.03 = 150 ms, Gain 0.55 = about +3 dB; Hard Limiter 0.99 = -1 dB ceiling. Then set the VO level with the audio clip's gain_db so the VO alone measures about -16 LUFS (ffmpeg ebur128). AE has no denoiser or de-esser: its chain is only high-pass + compressor with a -1 dB output limit. Premiere audio effects: AdobeBridge's pr_build.jsx adds VIDEO effects only (QE addVideoEffect), so 'premiere_audio' needs an audio path (QE addAudioEffect on the audio track item, then set the LAST component's params) before it can be built; pve.py check does not validate audio names. All Premiere audio values are normalised 0..1, and the unit mappings quoted are inferred from harvested defaults.",
+   "built_from": [
+    "DeNoise",
+    "DeReverb",
+    "Parametric Equalizer",
+    "Single-band Compressor",
+    "DeEsser",
+    "Hard Limiter",
+    "High-Low Pass",
+    "Compressor",
+    "VO cleanup and mastering chain (recipe)"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the premiere list is empty (an audio-only chain in premiere_audio), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:audio_only",
+     "frame": "pve/gallery/recipes_ae/032b.png",
+     "note": "Picture is pixel-identical to the untouched reference at 0.2 s and 1.0 s, as expected for a stack of audio effects only.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Field interview noise rescue",
+   "summary": "Rescues a noisy location interview or piece-to-camera: heavier steady-noise removal, rumble cut, the gaps between phrases gated down, level evened and peaks caught.",
+   "use_for": [
+    "lapel or phone-mic interviews at rallies, markets or roadsides",
+    "reporter piece-to-camera with traffic or generator wash",
+    "vox-pops recorded with AC or fan noise"
+   ],
+   "avoid": [
+    "non-steady noise (horns, crowd chatter, dogs): DeNoise cannot remove it; cut away or use Enhance Speech in the UI",
+    "AutoGate threshold too high: word endings and breaths are chopped",
+    "gating ambience you need for continuity under B-roll"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Aud HiLo",
+     "props": {
+      "Filter Options": 1,
+      "Cutoff Frequency": 100,
+      "Dry Out": 0,
+      "Wet Out": 100
+     }
+    },
+    {
+     "name": "ADBE Aud Gate",
+     "props": {
+      "Threshold (dB)": -40,
+      "Attack (ms)": 5,
+      "Hold (ms)": 150,
+      "Release (ms)": 200
+     }
+    },
+    {
+     "name": "ADBE Aud Compressor",
+     "props": {
+      "Threshold (dB)": -24,
+      "Ratio (x:1)": 3,
+      "Knee (db)": 6,
+      "Attack (ms)": 5,
+      "Release (ms)": 150,
+      "Auto Release": 0,
+      "Makeup Gain (dB)": 4,
+      "Output Limit (dB)": -1
+     }
+    }
+   ],
+   "premiere_audio": [
+    {
+     "name": "DeNoise",
+     "pr_props": {
+      "Amount": 0.45,
+      "Auto Gain": 0,
+      "Output Difference Signal": 0
+     }
+    },
+    {
+     "name": "Parametric Equalizer",
+     "pr_props": {
+      "High-Pass Filter Enable": 1,
+      "High-Pass Cutoff Frequency": 0.00375
+     }
+    },
+    {
+     "name": "Dynamics",
+     "pr_props": {
+      "AutoGate Enabled": 1,
+      "AutoGate Threshold": 0.33,
+      "Compressor Enabled": 1,
+      "Compressor Threshold": 0.6,
+      "Compressor Ratio": 0.07,
+      "Limiter Enabled": 1,
+      "Limiter Threshold": 0.983
+     }
+    }
+   ],
+   "keyframes_note": "Static, on the interview clip. Premiere: DeNoise 0.45 needs about a second of lead-in to learn the noise, so keep handles. Parametric EQ High-Pass 0.00375 = 100 Hz (inferred scale). Dynamics: every section is OFF by default, so the Enabled rows are set; AutoGate Threshold 0.33 = about -40 dB, Compressor Threshold 0.6 = -24 dB on the inferred -60..0 scale, Ratio 0.07 = about 3:1 if the scale is 1..30 (unverified: read the panel once), Limiter 0.983 = -1 dB. Premiere audio effects: AdobeBridge's pr_build.jsx adds VIDEO effects only (QE addVideoEffect), so 'premiere_audio' needs an audio path (QE addAudioEffect on the audio track item, then set the LAST component's params) before it can be built; pve.py check does not validate audio names. All Premiere audio values are normalised 0..1, and the unit mappings quoted are inferred from harvested defaults.",
+   "built_from": [
+    "DeNoise",
+    "Parametric Equalizer",
+    "Dynamics",
+    "High-Low Pass",
+    "Gate",
+    "Compressor"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the premiere list is empty (an audio-only chain in premiere_audio), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:audio_only",
+     "frame": "pve/gallery/recipes_ae/033b.png",
+     "note": "Picture is pixel-identical to the untouched reference at 0.2 s and 1.0 s, as expected for a stack of audio effects only.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Archive and phone-call audio restoration",
+   "summary": "Cleans old broadcast, vinyl-era or phone-recorded speech: clicks and crackle repaired, hiss reduced, and the band limited to what the source really carries.",
+   "use_for": [
+    "archival speeches and old radio recordings in documentaries",
+    "phone-call or WhatsApp voice-note audio quoted in a news reel",
+    "old TV recordings with tape hiss"
+   ],
+   "avoid": [
+    "low click Threshold with high Complexity: consonants smear and speech turns lispy",
+    "expecting full-range sound from a narrowband source: the low-pass only removes hiss above the speech",
+    "processing a deliberately vintage sound you want to keep"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Aud HiLo",
+     "props": {
+      "Filter Options": 1,
+      "Cutoff Frequency": 100,
+      "Dry Out": 0,
+      "Wet Out": 100
+     }
+    },
+    {
+     "name": "ADBE Aud HiLo",
+     "props": {
+      "Filter Options": 2,
+      "Cutoff Frequency": 8000,
+      "Dry Out": 0,
+      "Wet Out": 100
+     }
+    }
+   ],
+   "premiere_audio": [
+    {
+     "name": "Automatic Click Remover",
+     "pr_props": {
+      "Threshold": 0.2,
+      "Complexity": 0.35
+     }
+    },
+    {
+     "name": "DeNoise",
+     "pr_props": {
+      "Amount": 0.4,
+      "Auto Gain": 0,
+      "Output Difference Signal": 0
+     }
+    },
+    {
+     "name": "Parametric Equalizer",
+     "pr_props": {
+      "High-Pass Filter Enable": 1,
+      "High-Pass Cutoff Frequency": 0.00375,
+      "Low-Pass Filter Enable": 1,
+      "Low-Pass Cutoff Frequency": 0.399
+     }
+    }
+   ],
+   "keyframes_note": "Static. Premiere: Automatic Click Remover first (Threshold 0.2 = UI about 21, Complexity 0.35 = UI about 36 on the inferred (v-1)/99 scale), then DeNoise 0.4, then a band-limit on the Parametric Equalizer: High-Pass 0.00375 (100 Hz) and Low-Pass 0.399 (8 kHz; use 0.169 = 3.4 kHz for phone calls). AE has no click or noise removal: two High-Low Pass instances give the band-limit only. Premiere audio effects: AdobeBridge's pr_build.jsx adds VIDEO effects only (QE addVideoEffect), so 'premiere_audio' needs an audio path (QE addAudioEffect on the audio track item, then set the LAST component's params) before it can be built; pve.py check does not validate audio names. All Premiere audio values are normalised 0..1, and the unit mappings quoted are inferred from harvested defaults.",
+   "built_from": [
+    "Automatic Click Remover",
+    "DeNoise",
+    "Parametric Equalizer",
+    "High-Low Pass"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the premiere list is empty (an audio-only chain in premiere_audio), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:audio_only",
+     "frame": "pve/gallery/recipes_ae/034b.png",
+     "note": "Picture is pixel-identical to the untouched reference at 0.2 s and 1.0 s, as expected for a stack of audio effects only.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Mains hum removal (50 Hz)",
+   "summary": "Removes the steady electrical hum (Indian 50 Hz mains and its harmonics) from lights, cameras or ground loops under speech.",
+   "use_for": [
+    "interviews recorded near tube lights or generators",
+    "camera-mic audio with a ground-loop buzz",
+    "archive recordings with a constant low drone"
+   ],
+   "avoid": [
+    "leaving DeHummer at its default base frequency (believed 60 Hz, US mains): it misses Indian 50 Hz hum",
+    "too many harmonics or wide notches: thin male voices and music bass",
+    "leaving 'Output Hum Only' at 1: the render plays only the hum"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Aud HiLo",
+     "props": {
+      "Filter Options": 1,
+      "Cutoff Frequency": 120,
+      "Dry Out": 0,
+      "Wet Out": 100
+     }
+    }
+   ],
+   "premiere_audio": [
+    {
+     "name": "DeHummer",
+     "pr_props": {
+      "Harmonic Base Frequency": 0.001668,
+      "Output Hum Only": 0
+     }
+    },
+    {
+     "name": "Parametric Equalizer",
+     "pr_props": {
+      "High-Pass Filter Enable": 1,
+      "High-Pass Cutoff Frequency": 0.00275
+     }
+    }
+   ],
+   "keyframes_note": "Static, first in the voice chain. 'Harmonic Base Frequency' 0.001668 assumes the scale is linear 0..about 29970 Hz (default 0.002002 = 60 Hz); this is unverified, so set it once, read the Hz shown in Effect Controls and correct the value before batch use. The Parametric EQ high-pass at 0.00275 (80 Hz) removes the fundamental as a backstop. AE has no comb notch: a 120 Hz high-pass removes the 50/100 Hz components only and thins the voice slightly. Premiere audio effects: AdobeBridge's pr_build.jsx adds VIDEO effects only (QE addVideoEffect), so 'premiere_audio' needs an audio path (QE addAudioEffect on the audio track item, then set the LAST component's params) before it can be built; pve.py check does not validate audio names. All Premiere audio values are normalised 0..1, and the unit mappings quoted are inferred from harvested defaults.",
+   "built_from": [
+    "DeHummer",
+    "Parametric Equalizer",
+    "High-Low Pass",
+    "Essential Sound Repair (Reduce Noise, Rumble, DeHum, DeEss, Reduce Reverb)"
+   ],
+   "status": "current",
+   "confidence": "low",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the premiere list is empty (an audio-only chain in premiere_audio), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:audio_only",
+     "frame": "pve/gallery/recipes_ae/035b.png",
+     "note": "Picture is pixel-identical to the untouched reference at 0.2 s and 1.0 s, as expected for a stack of audio effects only.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "cleanup",
+   "name": "Loudness master for social and broadcast",
+   "summary": "Final level stage: the mix lands on the delivery loudness (about -14 LUFS for YouTube/Instagram, -23/-24 for TV) with a true-peak-safe ceiling.",
+   "use_for": [
+    "every reel and YouTube upload (-14 LUFS integrated, <= -1 dBTP)",
+    "dialogue-led long-form YouTube documentaries (-16 LUFS is fine)",
+    "TV news package deliveries (EBU R128 -23 LUFS or ATSC A/85 -24 LKFS, per the channel's spec sheet)"
+   ],
+   "avoid": [
+    "using the limiter to make things loud: push more than a few dB into it and music pumps",
+    "trusting the Loudness Meter in an automated build: a script cannot read it; measure the rendered file",
+    "mastering each clip to -14 separately: VO, music and SFX must be balanced first, then the mix is normalised"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Aud Compressor",
+     "props": {
+      "Threshold (dB)": -3,
+      "Ratio (x:1)": 20,
+      "Knee (db)": 0,
+      "Attack (ms)": 1,
+      "Release (ms)": 100,
+      "Auto Release": 0,
+      "Makeup Gain (dB)": 0,
+      "Output Limit (dB)": -1
+     }
+    }
+   ],
+   "premiere_audio": [
+    {
+     "name": "Hard Limiter",
+     "pr_props": {
+      "Maximum Amplitude": 0.99,
+      "Input Boost": 0.667,
+      "Limit True Peak": 1,
+      "Link Channels": 1
+     }
+    }
+   ],
+   "keyframes_note": "Static. Loop: render -> measure integrated LUFS and true peak with ffmpeg (-af ebur128=peak=true) -> shift the audio clips' gain_db by (target - measured) -> re-render; or set Loudness Normalization in the export .epr (-14 LUFS / -1 dBTP web, R128 or A/85 for TV). The Hard Limiter (0.99 = -1 dB ceiling, Limit True Peak on, Input Boost left at 0.667 = 0 dB) belongs on the mix; the Mix track is not scriptable, so put it on every audio clip or on a nested sequence's clip. AE is not a mastering tool: its version is a compressor used as a -1 dB limiter on a final layer. Premiere audio effects: AdobeBridge's pr_build.jsx adds VIDEO effects only (QE addVideoEffect), so 'premiere_audio' needs an audio path (QE addAudioEffect on the audio track item, then set the LAST component's params) before it can be built; pve.py check does not validate audio names. All Premiere audio values are normalised 0..1, and the unit mappings quoted are inferred from harvested defaults.",
+   "built_from": [
+    "Hard Limiter",
+    "Loudness Meter",
+    "Delivery loudness targets (YouTube, Instagram, broadcast)",
+    "Export Loudness Normalization",
+    "Compressor"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the premiere list is empty (an audio-only chain in premiere_audio), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:audio_only",
+     "frame": "pve/gallery/recipes_ae/036b.png",
+     "note": "Picture is pixel-identical to the untouched reference at 0.2 s and 1.0 s, as expected for a stack of audio effects only.",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

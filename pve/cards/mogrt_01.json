@@ -1,0 +1,1415 @@
+{
+ "cards": [
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Graphic Overlay",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Small corner 'LIVE' bug: a slanted white bar with an amber edge and dark condensed text (Bebas Neue) that animates on in the top-left corner; Align Bottom / Align Right move it to the other corners.",
+   "look": [
+    "live bug",
+    "corner tag",
+    "sports broadcast",
+    "slanted bar",
+    "white-amber"
+   ],
+   "use_for": [
+    "LIVE / BREAKING / EXCLUSIVE corner tag on news footage",
+    "'ARCHIVE' or 'FILE' tag on old footage in a documentary",
+    "episode or series tag ('EP 3') in the corner of a reel"
+   ],
+   "avoid": [
+    "Sports-network styling looks off-brand on sober documentaries unless recoloured",
+    "Keep it to one or two words: the bar is sized for a short tag (whether it grows with longer text is unverified)",
+    "Fonts are Latin-only (BebasNeue-Regular): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Graphic Overlay.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Styling",
+    "Main Color",
+    "Highlight Color",
+    "Title Color",
+    "Align Bottom",
+    "Align Right"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('Live') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #F6F6F6, Highlight Color #F4BB21, Title Color #535353. Checkboxes (setValue(true/false, true)): Align Bottom=off, Align Right=off. Group headers are labels, not settable: Text, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: BebasNeue-Regular (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Intro",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Full-screen show open: amber, black and white diagonal slabs sweep across while a striped shield badge with Title/Subtitle (both Bungee) lands in the centre with a lens-flare glint.",
+   "look": [
+    "sports broadcast open",
+    "diagonal stripes",
+    "shield badge",
+    "yellow-black",
+    "lens flare",
+    "bold"
+   ],
+   "use_for": [
+    "opener for a cricket or sports bulletin",
+    "election-results special opener with the show name in the shield (recolour to channel brand)",
+    "episode title card at the start of a sports-explainer reel"
+   ],
+   "avoid": [
+    "Loud sports branding clashes with serious documentary or satire tone",
+    "The shield fits only short words: keep Title and Subtitle to about 8 characters",
+    "Hindi/Devanagari (measured 2026-10-13): with the text field's font swapped to NirmalaUI-Bold the glyphs draw but without Indic shaping (vowel signs after or detached from their consonants), so a font swap alone does not make this template usable for Hindi: use a house or Premiere Composer template"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Intro.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Shield",
+    "Shield Design",
+    "Hide Shield",
+    "Title",
+    "Force Uppercase",
+    "Subtitle",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, yet a 5 s clip (62% of native) showed no exit (measured 2026-10-13: the badge was still fully on at 4.7 s and the graphic still filled the frame at the 4.96 s cut), so shortening does not squeeze an outro into the clip: add your own exit (transition or cut); lengthening is untested. Measured 2026-10-13 (5 s clip, 25 fps): fills the frame from 0.00 s (the ink scan cannot time a full-frame graphic), the badge is in place by 1.5 s and still fully on at 4.7 s, and the graphic still covers the frame at the cut (4.96 s); Devanagari identical.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('Adobe'), Subtitle ('Sports') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #F7F7F7, Secondary Color #000000, Highlight Color #F4BB21, Title Color #000000, Subtitle Color #FFFFFF, Main Color#2 #F7F7F7, Secondary Color#2 #1B1B1B, Highlight Color#2 #F4BB21. Checkboxes (setValue(true/false, true)): Hide Shield=off, Force Uppercase=on. Sliders (setValue(n, true)): Shield Design 1..3 (default 1). Group headers are labels, not settable: Shield, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular (Adobe Fonts; must be active or Premiere substitutes). Devanagari run 2026-10-13: Both lines rendered in the swapped font with identical timing but unshaped (the Title reads 'अभलिख' with ि and े misplaced, and क्ति is mis-ordered in the Subtitle).",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/mogrts/019_lat_template_b.png",
+    "note": "White and lavender slabs sweep the frame at 0.5 s, then amber, black and white diagonal slabs sit behind a striped shield badge carrying both lines with a glint as described, but Title and Subtitle render in a substitute face rather than Bungee.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     },
+     {
+      "verdict": "weak",
+      "changed": "2026-10-14",
+      "why": "card text rewritten to the measured timing / text fields; not rendered again",
+      "frame": "pve/gallery/mogrts/019_lat_template_b.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Logo Loop",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Looping full-screen background of moving amber, black and white diagonal stripes with a lens flare and no text; Flip mirrors the direction and Blurriness softens it.",
+   "look": [
+    "looping background",
+    "diagonal stripes",
+    "yellow-black-white",
+    "sports",
+    "lens flare"
+   ],
+   "use_for": [
+    "backdrop behind your own logo or title placed on a track above",
+    "background plate behind a cut-out speaker or product PNG",
+    "holding frame between segments of a sports bulletin"
+   ],
+   "avoid": [
+    "Very busy: raise Blurriness before putting text on top",
+    "Despite the name it carries no logo or text field: add your own on a track above"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Logo Loop.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Flip",
+    "Blurriness"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold). It is a loop: for longer than 8 s place copies back-to-back rather than stretching.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields: none (no text[] entries apply). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #F6F6F6, Secondary Color #0D0D0D, Highlight Color #F4BB21. Checkboxes (setValue(true/false, true)): Flip=off. Sliders (setValue(n, true)): Blurriness 0..20 (default 0). Group headers are labels, not settable: Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Looping Background",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Looping full-screen version of the sports look with the striped shield badge and Title/Subtitle in the centre over moving diagonal stripes; Hide removes the striped background so the shield floats over the footage below.",
+   "look": [
+    "looping background",
+    "shield logo",
+    "sports broadcast",
+    "yellow-black",
+    "diagonal stripes"
+   ],
+   "use_for": [
+    "hold behind a host voice-over while the show or team name stays on screen",
+    "sports-segment bumper / 'we'll be right back' card",
+    "background for a giveaway or score update reel"
+   ],
+   "avoid": [
+    "Shield text must stay short (one word per line)",
+    "Not suited to political or documentary tone without heavy recolouring",
+    "The colour param is named 'Main Shield Color ' with a trailing space: pr_build matches display names exactly, so the params key must keep that space",
+    "Font is Latin-only (Bungee-Regular): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Looping Background.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Force Uppercase",
+    "Subtitle",
+    "Shield",
+    "Shield Design",
+    "Main Shield Color ",
+    "Secondary Shield Color",
+    "Highlight Shield Color",
+    "Title Color",
+    "Subtitle Color",
+    "Background",
+    "Main BG Color",
+    "Secondary BG Color",
+    "Highlight BG Color",
+    "Flip",
+    "Blurriness",
+    "Hide"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold). Loop: for longer holds place copies back-to-back.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('Adobe'), Subtitle ('Sports') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Shield Color  #F6F6F6, Secondary Shield Color #000000, Highlight Shield Color #F4BB21, Title Color #2C2C2C, Subtitle Color #FFFFFF, Main BG Color #F6F6F6, Secondary BG Color #000000, Highlight BG Color #F4BB21. Checkboxes (setValue(true/false, true)): Force Uppercase=on, Flip=off, Hide=off. Sliders (setValue(n, true)): Shield Design 1..3 (default 1.1), Blurriness 0..20 (default 0). Group headers are labels, not settable: Text, Shield, Background. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Lower Third Center",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Name strap near the bottom centre: a slanted white bar with an amber edge carrying the Title, with the Subtitle on a dark strip under it, plus a small shield badge on the left with its own two-line text; Align Right / Align Top reposition it and Hide Shield removes the badge.",
+   "look": [
+    "lower third",
+    "name strap",
+    "shield badge",
+    "sports broadcast",
+    "white-amber",
+    "slanted"
+   ],
+   "use_for": [
+    "name and designation strap for a player, coach or sports official",
+    "party / constituency badge plus candidate name in an election reel (recolour the shield)",
+    "speaker ID in a sports documentary"
+   ],
+   "avoid": [
+    "Shield text is tiny: two or three short words at most",
+    "'Shield Title' and 'Shield Subtitle' are each both a text field and a colour param: set the text with text[] {param: 'Shield Title'}, the colour with params {'Shield Title': '#RRGGBB'} (pr_build only matches colour-holding params for '#' values)",
+    "Fonts are Latin-only (Bungee-Regular, VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Lower Third Center.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Subtitle",
+    "Force Uppercase",
+    "Shield",
+    "Shield Design",
+    "Hide Shield",
+    "Shield Title",
+    "Force Uppercase",
+    "Shield Subtitle",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Shield Title",
+    "Shield Subtitle",
+    "Align Right",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color",
+    "Align Top"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('COACH ADOBE'), Subtitle ('MVP OF THE GAME'), Shield Title ('Adobe'), Shield Subtitle ('SPORTS') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #FFFFFF, Secondary Color #0C0C0C, Highlight Color #F4BB21, Shield Title #0C0C0C, Shield Subtitle #FFFFFF, Main Color#2 #F6F6F6, Secondary Color#2 #000000, Highlight Color#2 #F4BB21, Title Color #828282, Subtitle Color #FFFFFF. Checkboxes (setValue(true/false, true)): Force Uppercase=on, Hide Shield=off, Force Uppercase#2=on, Align Right=off, Align Top=off. Sliders (setValue(n, true)): Shield Design 1..3 (default 1.1). Group headers are labels, not settable: Text, Shield, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Lower Third Side",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Lower-left name strap: a slanted white bar with an amber slash, a bold condensed Title (Bebas Neue) and a smaller Subtitle line; Align Right / Align Top move it to the other corners.",
+   "look": [
+    "lower third",
+    "name strap",
+    "sports broadcast",
+    "slanted bar",
+    "white-amber"
+   ],
+   "use_for": [
+    "speaker name and title for interviews in news or sports pieces",
+    "location / dateline strap ('MUMBAI | 2 OCT')",
+    "quick fact strap in a reel"
+   ],
+   "avoid": [
+    "Sporty slant reads cheap on a serious documentary; prefer a plainer strap there",
+    "Hindi/Devanagari (measured 2026-10-13): with the text field's font swapped to NirmalaUI-Bold the glyphs draw but without Indic shaping (vowel signs after or detached from their consonants), so a font swap alone does not make this template usable for Hindi: use a house or Premiere Composer template"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Lower Third Side.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Subtitle",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color",
+    "Align Right",
+    "Align Top"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, yet a 5 s clip (62% of native) played no in or out animation at all (measured 2026-10-13: fully on from 0.00 s, unchanged, still on at the 4.96 s cut), so shortening does not squeeze an outro into the clip: add your own exit (transition or cut); lengthening is untested. Measured 2026-10-13 (5 s clip, 25 fps): fully on from 0.00 s with no in animation, unchanged throughout, still on at the cut (4.96 s); Devanagari identical.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('Sports Team'), Subtitle ('for the win') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #F6F6F6, Secondary Color #000000, Highlight Color #F4BB21, Title Color #2C2C2C, Subtitle Color #FFFFFF. Checkboxes (setValue(true/false, true)): Align Right=off, Align Top=off. Group headers are labels, not settable: Text, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: BebasNeue-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes). Devanagari run 2026-10-13: Both lines rendered in the swapped Devanagari font with identical timing but without Indic shaping (ि drawn after its consonant and े as a detached mark, 'अभलि ` ख'), so a font swap alone does not make this template Hindi-safe.",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/mogrts/017_lat_template_a.png",
+    "note": "The look matches (slanted white bar with an amber slash, condensed Title over a smaller Subtitle at lower left), but the strap sat fully formed and motionless from the first frame to the cut, with no in or out animation in the 5 s clip.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "card text rewritten to the measured timing / text fields; not rendered again",
+      "frame": "pve/gallery/mogrts/017_lat_template_a.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Scoreboard",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Full-screen results board: a Title/Subtitle header over the amber/black/white stripe background, then 1-3 match rows each showing two team names with their scores; Hide removes the background so the table floats over footage.",
+   "look": [
+    "scoreboard",
+    "results table",
+    "sports broadcast",
+    "yellow-black",
+    "full screen",
+    "data card"
+   ],
+   "use_for": [
+    "match results / fixtures card for sports bulletins",
+    "election seat tally: party names in the team fields and seat counts in the score fields (all are free text)",
+    "A-vs-B comparison card in an explainer (two numbers per row)"
+   ],
+   "avoid": [
+    "Maximum 3 rows of 2 teams; long names overflow the row",
+    "Team #1's name field is the one called 'Source Text' (default 'Seattle AE')",
+    "Fonts are Latin-only (BebasNeue-Regular, Bungee-Regular, VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Scoreboard.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Number of Matches",
+    "Text",
+    "Title",
+    "Subtitle",
+    "Force Uppercase",
+    "Source Text",
+    "Team #1 Score",
+    "Team #2 Name",
+    "Team #2 Score",
+    "Team #3 Name",
+    "Team #3 Score",
+    "Team #4 Name",
+    "Team #4 Score",
+    "Team #5 Name",
+    "Team #5 Score",
+    "Team #6 Name",
+    "Team #6 Score",
+    "Team Names Uppercase",
+    "Background",
+    "Main BG Color",
+    "Secondary BG Color",
+    "Highlight BG Color",
+    "Blurriness",
+    "Flip",
+    "Hide",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color",
+    "Team Name Color",
+    "Team Score Color",
+    "Align Right",
+    "Align Bottom"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('SOCCER RESULTS'), Subtitle ('Adobe Soccer World Cup'), Source Text ('Seattle AE'), Team #1 Score ('2'), Team #2 Name ('San Jose PR'), Team #2 Score ('1'), Team #3 Name ('Glorious AU'), Team #3 Score ('3'), Team #4 Name ('Stroked IN'), Team #4 Score ('0'), Team #5 Name ('Brushed PS'), Team #5 Score ('2'), Team #6 Name ('Slick IL'), Team #6 Score ('2') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main BG Color #F6F6F6, Secondary BG Color #000000, Highlight BG Color #F4BB21, Main Color #F6F6F6, Secondary Color #000000, Highlight Color #F4BB21, Title Color #2C2C2C, Subtitle Color #FFFFFF, Team Name Color #2C2C2C, Team Score Color #FFFFFF. Checkboxes (setValue(true/false, true)): Force Uppercase=off, Team Names Uppercase=on, Flip=off, Hide=off, Align Right=off, Align Bottom=off. Sliders (setValue(n, true)): Number of Matches 1..3 (default 3), Blurriness 0..20 (default 0). Group headers are labels, not settable: Text, Background, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Names containing '#' (e.g. 'Team #2 Name') break pr_build's mparam (it splits on '#'); they are text fields, so set them through text[] with param: 'Team #2 Name', which matches the full display name. Fonts used: BebasNeue-Regular, Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Text Background",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Full-screen card: a Title/Subtitle header bar over the striped sports background with a large empty translucent dark panel for your own content.",
+   "look": [
+    "full-screen card",
+    "header bar",
+    "empty panel",
+    "sports broadcast",
+    "yellow-black"
+   ],
+   "use_for": [
+    "'Quote of the day' or statement card: put the quote text on a track above, inside the panel",
+    "stats panel background for numbers added on top",
+    "picture-in-picture frame: place footage inside the panel"
+   ],
+   "avoid": [
+    "The panel has no body-text field: the main text must be a separate graphic on top",
+    "Busy background behind long quotes: raise Blurriness",
+    "Fonts are Latin-only (BebasNeue-Regular, VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Text Background.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Subtitle",
+    "Force Uppercase",
+    "Background",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Blurriness",
+    "Flip",
+    "Hide",
+    "Header",
+    "Main Color",
+    "Secondary Color",
+    "Title Color",
+    "Subtitle Color",
+    "Align Right",
+    "Align Bottom"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('QUOTE OF THE DAY'), Subtitle ('Adobe Sports Coach') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #F6F6F6, Secondary Color #000000, Highlight Color #F4BB21, Main Color#2 #F6F6F6, Secondary Color#2 #000000, Title Color #2C2C2C, Subtitle Color #FFFFFF. Checkboxes (setValue(true/false, true)): Force Uppercase=on, Flip=off, Hide=off, Align Right=off, Align Bottom=off. Sliders (setValue(n, true)): Blurriness 0..20 (default 0). Group headers are labels, not settable: Text, Background, Header. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: BebasNeue-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Sports Transition",
+   "match": null,
+   "category": "[AE] Sports Package",
+   "status": "current",
+   "summary": "Full-frame wipe (about 1.75 s) of amber, black and white diagonal slabs that sweep across to cover a cut and then clear; Flip mirrors the direction and Play Backwards reverses it.",
+   "look": [
+    "wipe transition",
+    "diagonal slabs",
+    "sports broadcast",
+    "yellow-black-white",
+    "fast"
+   ],
+   "use_for": [
+    "segment change in a sports bulletin (place it on a track above the cut, centred on it)",
+    "between highlights in a sports reel",
+    "stinger into a scoreboard or results card"
+   ],
+   "avoid": [
+    "Too loud for documentary or political explainer cuts",
+    "Overuse cheapens it: one per segment break"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Sports Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Sports Package\\Sports Transition.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Flip",
+    "Play Backwards"
+   ],
+   "duration_note": "Native 1.75 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields: none (no text[] entries apply). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #F6F6F6, Secondary Color #0D0D0D, Highlight Color #F4BB21. Checkboxes (setValue(true/false, true)): Flip=off, Play Backwards=off. Group headers are labels, not settable: Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Background Loop",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Looping full-screen blue tech background: a moving grid with extruded white and blue 3D blocks sliding along diagonals; speed, angle and block motion are adjustable.",
+   "look": [
+    "looping background",
+    "tech grid",
+    "3D blocks",
+    "blue-cyan",
+    "gaming",
+    "esports"
+   ],
+   "use_for": [
+    "background for titles or screen recordings in an AI/tech explainer",
+    "YouTube intro or end-screen backdrop",
+    "backdrop behind a host cut-out in a tech reel"
+   ],
+   "avoid": [
+    "Gamer/esports flavour looks cheap on political news or documentaries",
+    "Busy: keep text on a solid or blurred panel"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Background Loop.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Grid",
+    "Animation Speed",
+    "Direction Angle",
+    "Blocks",
+    "Animation Speed",
+    "Animation Amplitude",
+    "Horizontal Flip",
+    "Vertical Flip",
+    "Styling",
+    "Main Color",
+    "Secondary Color"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold). Loop: for longer holds place copies back-to-back.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields: none (no text[] entries apply). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #065384, Secondary Color #D6F3FF. Checkboxes (setValue(true/false, true)): Horizontal Flip=off, Vertical Flip=off. Sliders (setValue(n, true)): Animation Speed 0..10 (default 3), Direction Angle 0..359 (default 45.1), Animation Speed#2 0..10 (default 1), Animation Amplitude 0..50 (default 20). Group headers are labels, not settable: Grid, Blocks, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. No editable text. The AE project references Orbitron Medium for an internal text layer (not visible in the preview frame); if a render shows odd glyphs, activate Orbitron in Adobe Fonts."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Bullet List",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Full-screen list card: a Title/Subtitle header and up to five bulleted lines (Number of Matches 1-5 sets how many show) in a translucent dark-blue panel over the animated blue grid-and-blocks background; Hide Background floats the panel over footage.",
+   "look": [
+    "bullet list",
+    "full-screen card",
+    "tech",
+    "gaming",
+    "blue-orange",
+    "3D blocks"
+   ],
+   "use_for": [
+    "'Top 5 AI tools' or 'five key points' card in a tech explainer",
+    "agenda or recap list at the start/end of a YouTube video",
+    "step list for a how-to"
+   ],
+   "avoid": [
+    "Only five short lines; long lines overflow the panel",
+    "Gaming look is wrong for political/news content",
+    "Fonts are Latin-only (Bungee-Regular, VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Bullet List.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Force Uppercase",
+    "Subtitle",
+    "Force Uppercase",
+    "Matches",
+    "Number of Matches",
+    "Match Text Color",
+    "Force Uppercase",
+    "1st Match",
+    "2nd Match",
+    "3rd Match",
+    "4th Match",
+    "5th Match",
+    "Grid",
+    "Animation Speed",
+    "Direction Angle",
+    "Blocks",
+    "Animation Speed",
+    "Animation Amplitude",
+    "Horizontal Flip",
+    "Vertical Flip",
+    "Styling",
+    "Main Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color",
+    "Main BG Color",
+    "Secondary BG Color",
+    "Blurriness",
+    "Hide Background"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('Match Times'), Subtitle ('Thursday'), 1st Match ('Match One'), 2nd Match ('Match Two'), 3rd Match ('Match Three'), 4th Match ('Match Four'), 5th Match ('Match Five') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Match Text Color #F8F8F8, Main Color #065384, Highlight Color #FC9B03, Title Color #F8F8F8, Subtitle Color #FC9B03, Main BG Color #065384, Secondary BG Color #D6F3FF. Checkboxes (setValue(true/false, true)): Force Uppercase=on, Force Uppercase#2=on, Force Uppercase#3=on, Horizontal Flip=off, Vertical Flip=off, Hide Background=off. Sliders (setValue(n, true)): Number of Matches 1..5 (default 5), Animation Speed 0..10 (default 2.7), Direction Angle 0..359 (default 45), Animation Speed#2 0..10 (default 1), Animation Amplitude 0..50 (default 20.4), Blurriness 0..20 (default 0). Group headers are labels, not settable: Text, Matches, Grid, Blocks, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Graphic Overlay",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Small corner tag: letter-spaced pale-blue text on a small dark-blue box between orange square brackets that animates on in the top-left corner; Align Right / Align Bottom move it.",
+   "look": [
+    "corner tag",
+    "live bug",
+    "brackets",
+    "tech",
+    "minimal",
+    "blue-orange"
+   ],
+   "use_for": [
+    "LIVE / NEW / DEMO tag on a tech reel",
+    "corner label for a screen recording ('ON SCREEN: CLAUDE')",
+    "series tag on an AI-education video"
+   ],
+   "avoid": [
+    "Short text only",
+    "Gaming styling is out of place on news or political content",
+    "Fonts are Latin-only (VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Graphic Overlay.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Source Text",
+    "Styling",
+    "Main Color",
+    "Highlight Color",
+    "Text Color",
+    "Align Right",
+    "Align Bottom"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Source Text ('Live') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #065384, Highlight Color #FC9B03, Text Color #D6F3FF. Checkboxes (setValue(true/false, true)): Align Right=off, Align Bottom=off. Group headers are labels, not settable: Text, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Intro",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Full-screen open over the blue grid and 3D-block background: an orange bracket logo frames a small Title above a big Subtitle word (default 'LEAGUE' / 'PLAY'); Alternative Design switches the logo variant.",
+   "look": [
+    "intro",
+    "logo reveal",
+    "tech",
+    "gaming",
+    "blue-orange",
+    "3D blocks"
+   ],
+   "use_for": [
+    "opener for an AI/tech YouTube episode",
+    "segment title card ('TOOL OF THE WEEK')",
+    "esports or gaming news open"
+   ],
+   "avoid": [
+    "Note the layout: Subtitle is the big word, Title the small one above it",
+    "Big word fits about 6-8 characters",
+    "Wrong tone for political or documentary pieces"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Intro.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Force Uppercase",
+    "Subtitle",
+    "Force Uppercase",
+    "Grid",
+    "Animation Speed",
+    "Direction Angle",
+    "Logo",
+    "Alternative Design",
+    "Main Logo Color",
+    "Highlight Logo Color",
+    "Title Color",
+    "Subtitle Color",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Horizontal Flip",
+    "Vertical Flip"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('League'), Subtitle ('PLAY') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Logo Color #065384, Highlight Logo Color #FC9B03, Title Color #FC9B03, Subtitle Color #F9F9F9, Main Color #065384, Secondary Color #D6F3FF. Checkboxes (setValue(true/false, true)): Force Uppercase=on, Force Uppercase#2=on, Alternative Design=on, Horizontal Flip=off, Vertical Flip=off. Sliders (setValue(n, true)): Animation Speed 0..10 (default 3), Direction Angle 0..359 (default 44.7). Group headers are labels, not settable: Text, Grid, Logo, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Logo Loop",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Looping full-screen hold of the bracket logo with Title/Subtitle over the animated blue grid and 3D-block background; Hide Background leaves only the logo over your footage.",
+   "look": [
+    "looping background",
+    "logo hold",
+    "tech",
+    "gaming",
+    "blue-orange"
+   ],
+   "use_for": [
+    "hold card behind voice-over in a tech explainer",
+    "'subscribe / next episode' end hold",
+    "stream-style waiting screen"
+   ],
+   "avoid": [
+    "Short words only in the logo",
+    "Gaming look is wrong for news or documentaries",
+    "Fonts are Latin-only (Bungee-Regular, VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Logo Loop.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Force Uppercase",
+    "Subtitle",
+    "Force Uppercase",
+    "Logo",
+    "Alternative Design",
+    "Main Color",
+    "Highlight Color",
+    "Grid",
+    "Animation Speed",
+    "Direction Angle",
+    "Blocks",
+    "Animation Speed",
+    "Animation Amplitude",
+    "Horizontal Flip",
+    "Vertical Flip",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Title Color",
+    "Subtitle Color",
+    "Blurriness",
+    "Hide Background"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold). Loop: for longer holds place copies back-to-back.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('League'), Subtitle ('PLAY') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #065384, Highlight Color #FC9B03, Main Color#2 #065384, Secondary Color #D6F3FF, Title Color #FC9B03, Subtitle Color #F8F8F8. Checkboxes (setValue(true/false, true)): Force Uppercase=on, Force Uppercase#2=on, Alternative Design=on, Horizontal Flip=off, Vertical Flip=off, Hide Background=off. Sliders (setValue(n, true)): Animation Speed 0..10 (default 3), Direction Angle 0..359 (default 45), Animation Speed#2 0..10 (default 1), Animation Amplitude 0..50 (default 20), Blurriness 0..20 (default 0). Group headers are labels, not settable: Text, Logo, Grid, Blocks, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Lower Third Left",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Lower-left strap: a blue gradient bar with small 3D blocks and an orange rule, bold white Title (Bungee) with an orange Subtitle under it.",
+   "look": [
+    "lower third",
+    "name strap",
+    "tech",
+    "gaming",
+    "blue-orange",
+    "3D blocks"
+   ],
+   "use_for": [
+    "presenter or guest name in a tech/AI video",
+    "tool or product name callout over a screen recording",
+    "chapter strap in a YouTube explainer"
+   ],
+   "avoid": [
+    "Bungee is wide: names over about 16 characters overflow",
+    "Out of place in news or political documentaries",
+    "Hindi/Devanagari (measured 2026-10-13): with the text field's font swapped to NirmalaUI-Bold the glyphs draw but without Indic shaping (vowel signs after or detached from their consonants), so a font swap alone does not make this template usable for Hindi: use a house or Premiere Composer template"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Lower Third Left.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Subtitle",
+    "Grid",
+    "Animation Speed",
+    "Direction Angle",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, yet a 5 s clip (62% of native) played no out animation (measured 2026-10-13: bar and text on from 0.00 s, 3D blocks grow in until 1.40 s, still fully on at the 4.96 s cut), so shortening does not squeeze an outro into the clip: add your own exit (transition or cut); lengthening is untested. Measured 2026-10-13 (5 s clip, 25 fps): bar and text on from 0.00 s, 3D blocks settle at 1.40 s, no out animation, still on at the cut (4.96 s); Devanagari identical.",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('READY PLAYER 1?'), Subtitle ('Ready Set, Play!') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #065384, Secondary Color #D6F3FF, Highlight Color #FC9B03, Title Color #FFFFFF, Subtitle Color #FC9B03. Sliders (setValue(n, true)): Animation Speed 0..10 (default 3), Direction Angle 0..359 (default 45). Group headers are labels, not settable: Text, Grid, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes). Devanagari run 2026-10-13: Both lines rendered in the swapped font with identical timing but unshaped (ि after its consonant, े and ू detached, 'अभलि ` ख'), and the Subtitle's wide tracking spreads the marks further apart.",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/mogrts/018_lat_template_b.png",
+    "note": "The blue gradient bar with an orange rule, white Title and tracked orange Subtitle is on from the first frame while the 3D blocks grow in until 1.4 s, but nothing animates out before the cut and the Title renders in a substitute face rather than Bungee.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "card text rewritten to the measured timing / text fields; not rendered again",
+      "frame": "pve/gallery/mogrts/018_lat_template_b.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Lower Third Right",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Mirror of Gaming Lower Third Left: a blue gradient strap with 3D blocks and an orange rule at the lower right, white Title over an orange Subtitle.",
+   "look": [
+    "lower third",
+    "name strap",
+    "tech",
+    "gaming",
+    "blue-orange",
+    "right aligned"
+   ],
+   "use_for": [
+    "second speaker's name opposite a left strap in a two-person conversation",
+    "product or tool callout when the subject is on the left of frame",
+    "chapter strap"
+   ],
+   "avoid": [
+    "Bungee is wide: keep names short",
+    "Out of place in news or political documentaries",
+    "Fonts are Latin-only (Bungee-Regular, VoxRound-Semibold): Hindi/Devanagari renders as boxes unless the text field's font is swapped (pr_build text 'font')"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Lower Third Right.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Text",
+    "Title",
+    "Subtitle",
+    "Grid",
+    "Animation Speed",
+    "Direction Angle",
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Highlight Color",
+    "Title Color",
+    "Subtitle Color"
+   ],
+   "duration_note": "Native 8.01 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields in order: Title ('Ready Player 1?'), Subtitle ('Ready, Set, Play!') - getValue() is JSON: set o.textEditValue (pr_build also sets fontTextRunLength=[len] and optional fontEditValue=[PostScript font] / fontSizeEditValue), then setValue(JSON.stringify(o), true). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #065384, Secondary Color #D6F3FF, Highlight Color #FC9B03, Title Color #FFFFFF, Subtitle Color #FC9B03. Sliders (setValue(n, true)): Animation Speed 0..10 (default 3), Direction Angle 0..359 (default 45). Group headers are labels, not settable: Text, Grid, Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end. Fonts used: Bungee-Regular, VoxRound-Semibold (Adobe Fonts; must be active or Premiere substitutes)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Gaming Transition",
+   "match": null,
+   "category": "[AE] Video Gaming Package",
+   "status": "current",
+   "summary": "Full-frame wipe (about 2 s) of blue and white extruded 3D blocks sliding diagonally across the frame to cover a cut; Horizontal/Vertical Flip change the direction.",
+   "look": [
+    "wipe transition",
+    "3D blocks",
+    "tech",
+    "gaming",
+    "blue-white"
+   ],
+   "use_for": [
+    "segment change in a tech/AI explainer (track above the cut, centred on it)",
+    "stinger into a list or title card",
+    "gaming-news reel cuts"
+   ],
+   "avoid": [
+    "Too playful for political news or documentaries",
+    "Use sparingly: one per segment break"
+   ],
+   "confidence": "high",
+   "origin": "premiere_bundled",
+   "folder": "[AE] Video Gaming Package",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\[AE] Video Gaming Package\\Gaming Transition.mogrt",
+   "author_app": "AE",
+   "params": [
+    "Styling",
+    "Main Color",
+    "Secondary Color",
+    "Horizontal Flip",
+    "Vertical Flip"
+   ],
+   "duration_note": "Native 2.00 s at 23.976 fps. definition.json records no protected (Responsive Design - Time) regions, so lengthening or shortening the clip is expected to time-stretch the whole animation, intro and outro included (unverified: test before relying on a long hold).",
+   "scripting": "After Effects-authored template. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); mc = t.getMGTComponent(); params by display name. Text fields: none (no text[] entries apply). Colours (setColorValue(255,r,g,b,true); spec '#RRGGBB'): Main Color #065384, Secondary Color #D6F3FF. Checkboxes (setValue(true/false, true)): Horizontal Flip=off, Vertical Flip=off. Group headers are labels, not settable: Styling. A repeated name is '<Name>#2' in pr_build params. No 'Duration' param: clip length is set by trimming t.end."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Basic Lower Third",
+   "match": null,
+   "category": "Essential Graphics",
+   "status": "current",
+   "summary": "Plain two-line lower third with no background: a large 'Your Name Here' line (Myriad Pro Regular) over a smaller bold second line (Myriad Pro Bold), white, left-aligned at the lower left; static, no animation.",
+   "look": [
+    "lower third",
+    "minimal",
+    "plain text",
+    "white",
+    "clean"
+   ],
+   "use_for": [
+    "clean name and designation strap for documentary interviews",
+    "location / date line in a news package",
+    "base strap to restyle by hand"
+   ],
+   "avoid": [
+    "No backing box: unreadable over bright footage without a shadow or box",
+    "Static: add Opacity fades or a dissolve",
+    "Myriad Pro has no Devanagari"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Essential Graphics",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Basic Lower Third.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Native 4.92 s at 23.976 fps. Premiere-authored graphic with no keyframes (static): it can be trimmed or extended freely.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Second Line is Smaller'; field 2 default 'Your Name Here'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Basic Title",
+   "match": null,
+   "category": "Essential Graphics",
+   "status": "current",
+   "summary": "Single centred line of plain white Myriad Pro text ('Your Title Here') in the middle of frame with no background; static, no animation.",
+   "look": [
+    "title",
+    "minimal",
+    "plain text",
+    "centred",
+    "white"
+   ],
+   "use_for": [
+    "plain chapter heading or date card over black",
+    "simple on-screen statement in a documentary",
+    "placeholder title during rough cuts"
+   ],
+   "avoid": [
+    "Looks unfinished on social reels without styling",
+    "No backing box: unreadable over busy footage",
+    "Myriad Pro has no Devanagari"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Essential Graphics",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Basic Title.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Native 4.92 s at 23.976 fps. Premiere-authored graphic with no keyframes (static): it can be trimmed or extended freely.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Your Title Here'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Broadcast Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style text graphic: ONE text field holding two lines (line break) of white Bebas Neue (caps-only font), left-aligned at the lower left inside broadcast margins, smaller than the Web version; 0.1 s fade in/out.",
+   "look": [
+    "subtitle",
+    "caption",
+    "uppercase",
+    "condensed",
+    "lower left",
+    "broadcast safe"
+   ],
+   "use_for": [
+    "burned-in translation of an English or Hindi quote in a news package (with a Devanagari font swap for Hindi)",
+    "one-off highlighted line under a speaker",
+    "TV-safe subtitles for a broadcast deliverable"
+   ],
+   "avoid": [
+    "One graphic per line: for full subtitles use a Premiere caption track (import SRT) instead",
+    "Bebas Neue is Latin-only",
+    "No backing box: weak over bright footage"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Bold Broadcast Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Native 5.00 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for broadcast \\r(smaller font size and bigger margins)' (one field, two lines). The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Web Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style text graphic: one centred line of larger white Bebas Neue (caps-only font) near the bottom, sized for online video; 0.1 s fade in/out.",
+   "look": [
+    "subtitle",
+    "caption",
+    "uppercase",
+    "condensed",
+    "large",
+    "web"
+   ],
+   "use_for": [
+    "punchy burned-in subtitle line on a YouTube video",
+    "key quote line under a speaker",
+    "highlight caption in a reel (move it up out of the UI zone)"
+   ],
+   "avoid": [
+    "Sits low: on 9:16 reels it collides with platform UI",
+    "One graphic per line: use a caption track for full subtitles",
+    "Bebas Neue is Latin-only"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Bold Web Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Native 3.50 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for online use'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Broadcast Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic in Roboto Slab: two separate text fields (one line each, same size, 70 px) of white serif text at the lower left with broadcast margins.",
+   "look": [
+    "subtitle",
+    "serif",
+    "classic",
+    "two-line",
+    "lower left",
+    "broadcast safe"
+   ],
+   "use_for": [
+    "sober translated quote under an interview in a documentary",
+    "speaker line plus source line ('- Press conference, 2 Oct')",
+    "TV-safe subtitles"
+   ],
+   "avoid": [
+    "One graphic per caption line",
+    "Roboto Slab is Latin-only",
+    "No backing box"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Classic Broadcast Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Native 5.00 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions for broadcast use'; field 2 default '(smaller text and larger margins)'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Web Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic: one line of white Roboto Slab serif text centred near the bottom, sized for online video.",
+   "look": [
+    "subtitle",
+    "serif",
+    "classic",
+    "centred",
+    "web"
+   ],
+   "use_for": [
+    "readable subtitle line on a documentary-style YouTube video",
+    "translated quote under a speaker",
+    "calm explainer captions"
+   ],
+   "avoid": [
+    "One graphic per line: use a caption track for full subtitles",
+    "Roboto Slab is Latin-only",
+    "No backing box"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Classic Web Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Native 2.92 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for online use'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Broadcast Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic in Trajan Pro 3 (caps with small-cap lowercase): ONE text field holding two lines (line break) of white serif text, left-aligned at the lower left inside broadcast margins; 0.1 s fade in/out.",
+   "look": [
+    "cinematic",
+    "Trajan",
+    "small caps",
+    "serif",
+    "subtitle",
+    "lower left"
+   ],
+   "use_for": [
+    "cinematic subtitle or epigraph line in a trailer or short film",
+    "dateline / place card in a cinematic documentary",
+    "translated dialogue in an AI film"
+   ],
+   "avoid": [
+    "Trajan is the 'movie trailer' cliche: reads pompous on news",
+    "Latin-only",
+    "Small text: poor on phones"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Film Broadcast Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Native 5.00 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for broadcast \\r(smaller font size and bigger margins)' (one field, two lines). The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Web Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic: one line of white Trajan Pro 3 small caps centred near the bottom, sized for online video.",
+   "look": [
+    "cinematic",
+    "Trajan",
+    "small caps",
+    "serif",
+    "subtitle"
+   ],
+   "use_for": [
+    "trailer-style subtitle line on YouTube",
+    "epigraph or quote card in a cinematic short",
+    "location card ('DELHI, 1975')"
+   ],
+   "avoid": [
+    "Trajan cliche on news content",
+    "Latin-only",
+    "Thin serif weak over bright footage"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Film Web Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Native 2.92 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for online use'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Broadcast Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic in League Gothic: two separate text fields (one line each, same size, 90 px) of tall condensed white text at the lower left with broadcast margins.",
+   "look": [
+    "subtitle",
+    "condensed",
+    "modern",
+    "two-line",
+    "lower left"
+   ],
+   "use_for": [
+    "news-package subtitle plus source line",
+    "punchy quote line in a political explainer",
+    "TV-safe subtitles"
+   ],
+   "avoid": [
+    "One graphic per caption line",
+    "League Gothic is Latin-only",
+    "No backing box"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Modern Broadcast Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Native 5.00 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions for broadcast use'; field 2 default '(smaller text and larger margins)'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Web Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic: one line of tall condensed white League Gothic centred near the bottom, sized for online video.",
+   "look": [
+    "subtitle",
+    "condensed",
+    "modern",
+    "centred",
+    "web"
+   ],
+   "use_for": [
+    "punchy subtitle line in a YouTube explainer",
+    "quote line in a news reel",
+    "translated sound bite"
+   ],
+   "avoid": [
+    "One graphic per line: use a caption track for full subtitles",
+    "League Gothic is Latin-only",
+    "On 9:16 reels move it above the platform UI"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Modern Web Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Native 2.96 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.1 s holding a quick Opacity fade in and out; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for online use'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Simple Broadcast Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic in Lato: two separate text fields (one line each, same size, 58 px) of plain white sans-serif text at the lower left with broadcast margins.",
+   "look": [
+    "subtitle",
+    "sans-serif",
+    "plain",
+    "two-line",
+    "lower left"
+   ],
+   "use_for": [
+    "neutral translation of a sound bite in news or documentary",
+    "speaker line plus attribution line",
+    "TV-safe subtitles"
+   ],
+   "avoid": [
+    "One graphic per caption line",
+    "Lato is Latin-only",
+    "No backing box"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Simple Broadcast Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Native 5.00 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.17 s holding a quick Opacity fade in and out plus a small Position move; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for broadcast use'; field 2 default '(smaller font and larger margins)'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Simple Web Caption",
+   "match": null,
+   "category": "Captions and Subtitles",
+   "status": "current",
+   "summary": "Subtitle-style graphic: one line of plain white Lato sans-serif text centred near the bottom, sized for online video.",
+   "look": [
+    "subtitle",
+    "sans-serif",
+    "plain",
+    "centred",
+    "web"
+   ],
+   "use_for": [
+    "neutral subtitle line on any YouTube video",
+    "translated sound bite",
+    "on-screen quote in an explainer"
+   ],
+   "avoid": [
+    "One graphic per line: use a caption track for full subtitles",
+    "Lato is Latin-only",
+    "No backing box"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Captions and Subtitles",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Captions and Subtitles\\Simple Web Caption.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Native 3.55 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro/outro of 0.17 s holding a quick Opacity fade in and out plus a small Position move; trimming or extending the clip keeps those fades at the head and tail and the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'Captions and Subtitles for online use'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Credits",
+   "match": null,
+   "category": "Credits",
+   "status": "current",
+   "summary": "Movie-poster billing block: seven lines of dense white Trajan Pro 3 credits (company presents, film title, starring, music by, director of photography, story/screenplay) set small and centred at the bottom of frame; the lines pop in one after another (scale up + fade, de-blurring) over about 0.5 s and blur/fade out over the last second.",
+   "look": [
+    "billing block",
+    "movie poster credits",
+    "Trajan",
+    "cinematic",
+    "small caps",
+    "end credits"
+   ],
+   "use_for": [
+    "credit block on the end card of an AI short film or trailer",
+    "mock movie-poster frame for a trailer-parody reel",
+    "closing credits card for a documentary"
+   ],
+   "avoid": [
+    "Tiny text: unreadable on phones and in reels",
+    "Seven separate text fields must each be filled or they show placeholder names",
+    "Latin-only font"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Credits",
+   "file": "C:\\Program Files\\Adobe\\Adobe Premiere Pro 2026\\Essential Graphics\\Credits\\Angled Credits.mogrt",
+   "author_app": "PR",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Native 4.71 s at 23.976 fps. Premiere-authored graphic with Responsive Design - Time intro 0.57 s / outro 1.0 s: the build-in and blur-out stay at the head and tail when the clip is lengthened; the middle holds.",
+   "scripting": "Premiere-authored template (authorApp ppro), confidence LOW for scripting. t = seq.importMGT(file, String(Math.round(startSec*254016000000)), vTrackIndex, aTrackIndex); imports it, but t.getMGTComponent() is expected to return null for Premiere-authored graphics, so pr_build.jsx places it and warns 'no editable parameters' without changing the text. Its fields are all named 'TextLayer' (no unique display names): field 1 default 'COMPANY PRESENTS'; field 2 default 'IN ASSOCIATION WITH PARTNER COMPANY AND'; field 3 default '“FILM TITLE” A FILM BY DIRECTOR NAME AND'; field 4 default 'FEATURING ACTOR ACTOR ACTOR ACTOR ACTOR'; field 5 default 'MUSIC BY MUSICIAN COSTUME DESIGNER COSTU'; field 6 default 'DIRECTOR OF PHOTOGRAPHY D.O.P., A.S.C.'; field 7 default 'STORY BY WRITER SCREENPLAY BY WRITER AND'. The text lives in the clip's own Text component ('Source Text'); setting it from ExtendScript in v26 is unverified. Until that is proven, put scripted text in an After Effects-authored template or build the text in AE, and use this template only where the default layout is edited by hand."
+  }
+ ]
+}

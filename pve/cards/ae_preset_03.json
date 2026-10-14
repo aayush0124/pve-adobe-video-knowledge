@@ -1,0 +1,1755 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bloom - crystallize 1",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Minimax (Operation Maximum, Radius 2, Channel Color) spreads bright pixels by 2 layer pixels, then Calculations lays the layer's original pixels back on top (Blending Mode Overlay, Second Layer Opacity 0.5). On footage it reads mainly as an Overlay-style contrast and saturation lift with slightly fattened, glowing highlights; the square 'crystal' facets are only a couple of pixels wide and are not visible when footage is scaled down to fit the comp (Radius is measured in layer pixels).",
+   "look": [
+    "contrasty",
+    "saturated",
+    "soft highlight bloom",
+    "subtle"
+   ],
+   "use_for": [
+    "Dreamy glow on city lights or stage lights in a trailer montage",
+    "Highlight bloom on a logo or title reveal",
+    "Stylised flashback shots in a documentary"
+   ],
+   "avoid": [
+    "Small square artefacts show on fine bright detail (text edges, catchlights): keep it off shots with small captions",
+    "The Overlay pass adds contrast and saturation: check skin and already contrasty shots"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Minimax"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration. Gallery render (1080p clip at 50% in a 960x540 comp): only a contrast/saturation lift, no visible facets.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Variant 1 of 2: Maximum at Radius 2 (subtle). 'Bloom - crystallize 2' uses Maximum Then Minimum at Radius 6 (chunkier, painterly). Raise Minimax 'Radius' for bigger facets; Calculations 'Second Layer Opacity' sets how much original detail returns. Calculations blends the layer's own original pixels back in: the gallery render, made with applyPreset alone, already shows the Overlay pass (shadows get darker, which Minimax cannot do on its own), so no extra step is needed on a footage layer. If 'Second Layer' reads None and the contrast lift is missing, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)). Apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/080a.png",
+    "note": "Footage gets an Overlay-style contrast and saturation lift (luma std 44 -> 53) with slightly brighter highlights on the foreground blocks, but no faceting or crystal sparkle is visible.",
+    "rerender": false,
+    "second_opinion": "corrected: verdict weak agreed (no facets at 50% layer scale, only an Overlay contrast/saturation lift); scripting no longer says Second Layer must be set by hand, since the applyPreset-only render already darkens shadows 47 -> 36 levels, which Minimax alone cannot do, so the self-blend is already working"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bloom - crystallize 2",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Minimax (Operation Maximum Then Minimum, Radius 6) closes small dark gaps between bright areas, then Calculations lays the original back on top (Overlay, Second Layer Opacity 0.5). On footage it reads as a slight painterly smoothing of fine detail plus an Overlay contrast and saturation lift; Radius is in layer pixels, so on 1080p footage scaled to fit a smaller comp no blocks show, and the blocky look only appears near 100% layer scale or with a larger Radius.",
+   "look": [
+    "painterly",
+    "softened detail",
+    "contrasty",
+    "subtle"
+   ],
+   "use_for": [
+    "Stylised dream or flashback sequences",
+    "Music-video style beats in reels",
+    "Abstract, textured backdrop behind titles"
+   ],
+   "avoid": [
+    "6 px blocks read as compression damage on faces and low-res footage",
+    "Fine text inside the footage becomes illegible"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Minimax"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration. Gallery render (1080p clip at 50% in a 960x540 comp): slight smoothing and contrast, no visible blocks.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Variant 2 of 2 (variant 1 = Maximum, Radius 2). Minimax 'Radius' sets block size. Calculations blends the layer's own original pixels back in: the gallery render, made with applyPreset alone, already shows the Overlay pass (shadows get darker, which Minimax cannot do on its own), so no extra step is needed on a footage layer. If 'Second Layer' reads None and the contrast lift is missing, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)). Apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/081a.png",
+    "note": "Fine detail (flowers, clothing) is slightly smoothed and painterly with a contrast lift (luma std 44 -> 52); no blocky facets are visible on the fit-scaled 1080p clip.",
+    "rerender": false,
+    "second_opinion": "corrected: verdict weak agreed (no facets at 50% layer scale, only an Overlay contrast/saturation lift); scripting no longer says Second Layer must be set by hand, since the applyPreset-only render already darkens shadows 47 -> 36 levels, which Minimax alone cannot do, so the self-blend is already working"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - blue wash",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Cool blue cast: Color Balance pulls Red and Green down by 20 and pushes Blue up by 20 in shadows, midtones and highlights, and Color Balance (HLS) lowers Saturation by 25, so the picture stays readable but reads cold and slightly muted.",
+   "look": [
+    "blue cast",
+    "cold",
+    "muted",
+    "night",
+    "moody"
+   ],
+   "use_for": [
+    "Cold, tense mood for crime or investigation segments",
+    "Day-for-night style treatment on stock shots",
+    "Background plate under white text so the text pops"
+   ],
+   "avoid": [
+    "Skin tones turn sickly blue: avoid on presenter shots",
+    "Mixing it with warm graded shots in the same sequence looks inconsistent"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Balance",
+    "Color Balance (HLS)"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Strength lives in Color Balance's nine Red/Green/Blue Balance values (+-20): move them toward 0 to soften, or lower the adjustment layer's opacity. Color Balance (HLS) 'Saturation' (-25) sets how muted it is. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/082a.png",
+    "note": "Muted cool cast over the whole picture; on this warm footage it reads lavender-violet rather than pure blue (mean RGB 132/104/60 -> 88/64/98).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - gold dip",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Solid Composite combines the layer with a gold solid (#E0B116) in Color Burn mode at 60% Opacity. On footage it removes blue almost entirely and maps tones to a hot, very saturated duotone: shadows turn deep red, midtones orange and highlights gold-yellow. Dark areas are lifted to red rather than crushed to black, so contrast drops a little.",
+   "look": [
+    "gold-red duotone",
+    "hot",
+    "saturated",
+    "warm",
+    "stylised"
+   ],
+   "use_for": [
+    "Hot, fiery duotone on a montage or music beat",
+    "Bold gold/red background plate behind titles",
+    "Stylised 'heat' or alarm moment in an explainer"
+   ],
+   "avoid": [
+    "Dark clothes and hair turn saturated red and skin goes orange: not for presenters or natural colour",
+    "Flattens colour: unsuitable when colours carry meaning (party flags, charts)"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Solid Composite"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Change Solid Composite 'Color' for another dip colour and 'Opacity' (0-100, preset 60) for strength. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "Premiere: none direct (a gold Color Matte above the clip with Blend Mode Color Burn)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/083a.png",
+    "note": "Hot gold-red duotone: blue removed, dark areas lifted to red, midtones orange, highlights gold-yellow.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: blue drops to ~5, darkest tones go red (52/38/13 -> 148/0/1), mid-tones orange, highlights gold (224/199/150 -> 227/201/25); rewrite matches"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - infrared",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "False-colour 'infrared': Solid Composite blends pure red (#FF0000) at 100%, which inverts the red channel, and the Levels / Hue/Saturation stored in the preset are not neutral, so the result comes out very dark and low-key. Tones split three ways: the darkest areas (black clothing, hair, dark red wood) turn deep red, mid-tones such as skin fall to near-black, and light areas (cream walls) turn dark green, with bright highlights (lamps) glowing green. Overall brightness drops to roughly a quarter.",
+   "look": [
+    "false colour",
+    "dark green and red",
+    "low-key",
+    "surreal",
+    "inverted red"
+   ],
+   "use_for": [
+    "Surreal or dream sequences in trailers",
+    "Stylised landscape shots in music-led reels",
+    "Glitchy 'something is wrong' beat in an explainer"
+   ],
+   "avoid": [
+    "Not a real infrared or thermal camera look: never present it as actual IR/thermal footage in news",
+    "Faces fall to near-black and the whole frame goes very dark: unusable on presenters"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Hue/Saturation",
+    "Levels",
+    "Solid Composite"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Lower Solid Composite 'Opacity' (100 = full red inversion) to soften. The preset's Levels and Hue/Saturation (Reds channel) are not neutral: the render is about a quarter as bright as a plain red inversion, so reset or brighten Levels for a lighter result. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/084a.png",
+    "note": "Very dark false colour: light walls dark green, lamps bright green, the darkest areas deep red, midtones near-black.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: skin does not turn dark green. By tone band: darkest areas go deep red (69/50/30 -> 71/10/15), mid-tones and skin go near-black (107/74/42 -> 35/9/7, 137/111/67 -> 20/23/5), light walls go dark green and highlights bright green (230/204/152 -> 12/150/57). Summary and avoid rewritten. Very-dark finding (mean 99 -> 27) agreed"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - moonshadows",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Night look: Solid Composite puts deep navy (#0B0080) under the layer in Color Burn mode at 50%, which darkens the picture and strips red and green so what is left reads as dim blue moonlight. Hue/Saturation is included at neutral values (no change) as a tweak point.",
+   "look": [
+    "moonlight",
+    "night",
+    "dark blue",
+    "low-key",
+    "moody"
+   ],
+   "use_for": [
+    "Day-for-night on daytime stock footage",
+    "Quiet, sombre mood for tragedy or memorial segments",
+    "Atmospheric trailer cutaways"
+   ],
+   "avoid": [
+    "Daytime shots with hard sun shadows and bright skies still read as day",
+    "Can go too dark on already dim footage"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Hue/Saturation",
+    "Solid Composite"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Lower Solid Composite 'Opacity' (preset 50) to soften. Hue/Saturation Master values are 0 (no effect) until edited, e.g. Master Saturation -30 for a greyer night. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/085a.png",
+    "note": "The picture drops to about a fifth of its brightness with a dim violet-blue cast (wall 164/129/80 -> 43/26/41), a dark low-key night look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - red hand tint",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Leave Color (Color To Leave red, Amount to Decolor 100, Tolerance 15, Edge Softness 5, Match colors Using Hue) greys out hues outside a band around red, and Hue/Saturation on the Reds channel clearly boosts what is kept. At Tolerance 15 the band covers reds, oranges, skin tones and warm yellow/cream, so on warm footage almost everything keeps its colour (noticeably more saturated, with skin pushed toward orange) and only greens, blues and other cool colours go grey; it only becomes a grey picture with red accents after Tolerance is lowered.",
+   "look": [
+    "selective colour",
+    "cool colours removed",
+    "warm tones kept",
+    "saturated reds"
+   ],
+   "use_for": [
+    "Mute greenery and blue tones so reds, flags and skin dominate",
+    "Red-only accent shot after lowering Tolerance (e.g. a red flag or garment)",
+    "Hand-tinted photo feel on neutral or cool footage"
+   ],
+   "avoid": [
+    "At the stored Tolerance 15, skin, wood, orange and cream are kept along with red: on warm interiors the effect almost disappears",
+    "Kept skin gets noticeably more orange (face saturation 0.43 -> 0.64 in the gallery render): check presenters",
+    "Busy scenes with many warm items lose the selective effect"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Hue/Saturation",
+    "Leave Color"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Lower Leave Color 'Tolerance' (e.g. 5) for a true red-only accent, raise it to widen the kept range, or change 'Color To Leave' to keep another colour (e.g. a saffron flag); Red Saturation/Red Lightness in Hue/Saturation then push the kept colour. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "Premiere: Color Pass (keeps one colour)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/086a.png",
+    "note": "Warm tones keep (and gain) colour while the greenery goes grey; not a grey picture with red accents.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: wrong verdict and greenery-goes-grey agreed (leaves 61/66/30 -> 59/59/59, neutral even though they look bluish next to the warm wall). The Reds Hue/Saturation boost is not slight: skin 0.43 -> 0.64 and red wood 0.60 -> 0.83 saturation, so summary now says so and avoid warns about orange skin"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - royal purple",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Solid Composite puts a purple solid (#5900B2) under the layer in Hard Light mode at 67% Opacity, giving a strong, contrasty purple tint. Levels is included at neutral values (no change) as a tweak point.",
+   "look": [
+    "purple tint",
+    "royal",
+    "high contrast",
+    "stylised",
+    "night club"
+   ],
+   "use_for": [
+    "Stylised background plate for titles and quotes",
+    "Music/party mood segments in reels",
+    "Branded colour wash matching a purple channel identity"
+   ],
+   "avoid": [
+    "Unnatural on people; avoid for factual news footage",
+    "Low-contrast footage turns muddy"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Levels",
+    "Solid Composite"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Change Solid Composite 'Color' for other brand tints and 'Opacity' (preset 67) for strength; Levels does nothing until edited. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/087a.png",
+    "note": "Strong magenta-purple tint over the whole frame (wall 164/129/80 -> 133/43/92) with deep purple shadows.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - sepia",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Old-photo sepia: Fill turns the layer solid brown (#AB6E1A), Calculations puts the original layer's luminosity back onto that brown (Blending Mode Luminosity, Second Layer Opacity 1), and Tint (Map White To #FFD599, Amount to Tint 33) warms the highlights.",
+   "look": [
+    "sepia",
+    "vintage",
+    "old photo",
+    "warm",
+    "monochrome"
+   ],
+   "use_for": [
+    "Archive and history segments in documentaries",
+    "Flashback to an earlier year in a political explainer",
+    "Old-photo treatment for stills before they come to colour"
+   ],
+   "avoid": [
+    "Overused cliche for 'the past'; keep it to short sections",
+    "Applied over modern footage with phones/cars it reads as fake"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Fill",
+    "Tint"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). To fade from sepia back to colour, keyframe Fill 'Opacity' (0-1) from 1 to 0 and Tint 'Amount to Tint' from 33 to 0. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "Premiere: Tint (Map White To a warm cream) or Lumetri Color, approximate",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/088a.png",
+    "note": "Brown-toned monochrome sepia with warm highlights over the whole frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - sky blue",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Graduated blue sky: Gradient Ramp fills the layer with a linear ramp from blue-violet (#8066FF) at the top to neutral 50% grey (#808080) at the bottom (an expression sets 'End of Ramp' to [0, thisLayer.height]), and Calculations blends the original layer back in Hard Light, so the top of frame takes the tint and the bottom stays unchanged.",
+   "look": [
+    "graduated filter",
+    "blue sky",
+    "gradient tint",
+    "cool",
+    "landscape"
+   ],
+   "use_for": [
+    "Deepen a pale (not clipped) sky in landscape or skyline B-roll",
+    "Cooler establishing shots in documentaries",
+    "Gradient-tinted background plate behind titles"
+   ],
+   "avoid": [
+    "Clipped pure-white skies stay (almost) white: Hard Light barely tints 100% white: it only helps skies that still have detail",
+    "Tints people or buildings that reach the top of frame"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Gradient Ramp"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The ramp follows the layer size (Start [0,0], End [0, layer height]), so vertical and 4K layers work. Move 'Start Color' toward #808080 to weaken. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/089a.png",
+    "note": "Top of frame takes a lavender/blue-violet tint (top band 167/136/83 -> 164/110/159) while the bottom stays unchanged (98/77/39 -> 96/77/44).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - sky orange",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Graduated orange sky: Gradient Ramp fills the layer with a linear ramp from orange (#FF6640) at the top to neutral 50% grey (#808080) at the bottom (an expression sets 'End of Ramp' to [0, thisLayer.height]), and Calculations blends the original layer back in Hard Light, so the top of frame takes the tint and the bottom stays unchanged.",
+   "look": [
+    "graduated filter",
+    "orange sky",
+    "golden hour",
+    "warm",
+    "gradient tint"
+   ],
+   "use_for": [
+    "Fake golden-hour warmth on flat daytime skies",
+    "Warm establishing shots for hopeful or nostalgic segments",
+    "Gradient backdrop for quote cards"
+   ],
+   "avoid": [
+    "Clipped white skies stay white, and a tilted horizon makes the straight top-down grade obvious",
+    "Tints faces or buildings that reach the top of frame"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Gradient Ramp"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The ramp follows the layer size (Start [0,0], End [0, layer height]), so vertical and 4K layers work. Move 'Start Color' toward #808080 to weaken. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/090a.png",
+    "note": "Top of frame turns strongly orange (167/136/83 -> 228/111/49) fading to an unchanged bottom (98/77/39 -> 102/76/40).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Colorize - sunset gradient",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Sunset grade: Gradient Ramp fills the layer with a linear ramp from coral (#FF8566) at the top to blue-violet (#7765FC) at the bottom (an expression sets 'End of Ramp' to [0, thisLayer.height]), and Calculations blends the original back in Hard Light, so the top warms and the bottom cools. Unlike sky blue/orange, no part of the frame stays neutral.",
+   "look": [
+    "sunset",
+    "gradient tint",
+    "warm-cool",
+    "graduated filter",
+    "cinematic"
+   ],
+   "use_for": [
+    "Sunset mood on skyline or landscape B-roll",
+    "Ending or reflective section of a documentary",
+    "Background for trailer title cards"
+   ],
+   "avoid": [
+    "The bottom of frame turns blue-violet too, shifting foreground skin and ground colour",
+    "Looks fake on night or indoor footage"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Gradient Ramp"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The ramp follows the layer size, so vertical and 4K layers work. Move 'Start Color' and 'End Color' toward #808080 to weaken. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/091a.png",
+    "note": "Top warms to coral (167/136/83 -> 229/133/78) and the bottom cools to violet (98/77/39 -> 96/59/75), so the whole frame is graded.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Contrast - luminance",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Auto Contrast (Black Clip 0.1, White Clip 0.1, Temporal Smoothing 0, Scene Detect off) stretches each frame's darkest and brightest pixels to full black and white without shifting hue; a Curves effect is added with a straight (neutral) curve as a tweak point.",
+   "look": [
+    "high contrast",
+    "punchy",
+    "auto levels",
+    "clean",
+    "dehaze"
+   ],
+   "use_for": [
+    "Quick fix for flat or hazy archive and stock footage",
+    "Punch up phone footage in news reels",
+    "Consistent contrast across mixed sources on an adjustment layer"
+   ],
+   "avoid": [
+    "Temporal Smoothing 0 analyses every frame on its own, so contrast can pump or flicker on flashes, pans and cuts",
+    "Footage that already reaches full black and white barely changes"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Auto Contrast",
+    "Curves"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). To stop pumping set Auto Contrast 'Temporal Smoothing (seconds)' to about 1 and turn on 'Scene Detect'. The Curves effect does nothing until its curve is edited (custom data, not settable by value from a spec). No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/092a.png",
+    "note": "Punchier, higher-contrast picture with deeper blacks and brighter highlights (luma std 44 -> 59) and no hue shift.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Contrast - saturation",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Calculations overlays the layer's original pixels onto itself (Blending Mode Overlay, Second Layer Opacity 0.67), which deepens shadows, lifts highlights and boosts saturation in one pass.",
+   "look": [
+    "saturated",
+    "vivid",
+    "punchy",
+    "high contrast",
+    "pop"
+   ],
+   "use_for": [
+    "Make dull stock footage pop in social reels",
+    "Vibrant festival or rally B-roll",
+    "Boost colour in AI-education screen graphics"
+   ],
+   "avoid": [
+    "Oversaturates skin and red/orange tones quickly",
+    "Amplifies compression noise in low-bitrate phone video"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Lower 'Second Layer Opacity' (0.67) to soften. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/093a.png",
+    "note": "Deeper shadows, brighter highlights and stronger colour (luma std 44 -> 55, saturation up), an in-place Overlay boost.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dimension - bevel+shadow",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Bevel Alpha (Edge Thickness 2.5, Light Angle -45, Light Intensity 0.4) adds a lit, embossed edge to the layer's alpha, and a Drop Shadow (black, Opacity 153 on the 0-255 scale = 60%, Distance 8, Softness 5, Direction linked by expression to the bevel's light angle + 180) lifts it off the background; all of it appears only along alpha edges, so on full-frame footage none of it is visible. The preset also sets the layer's Scale to an absolute 90%: a footage layer that was scaled down to fit the comp (e.g. 1080p at 50% in a 960x540 comp) jumps to 90% and looks zoomed in about 1.8x.",
+   "look": [
+    "bevel",
+    "emboss",
+    "3D text",
+    "drop shadow",
+    "raised"
+   ],
+   "use_for": [
+    "Raised look for a channel logo or bug",
+    "Title text that needs depth over busy footage",
+    "Badge or button graphics in explainers"
+   ],
+   "avoid": [
+    "Only visible on layers with transparency (text, logos, cut-outs); full-frame footage only bevels the frame edge",
+    "It sets the layer's Scale to an absolute 90%: footage scaled to fit jumps in (a 50% layer zooms 1.8x); re-set scale after applying",
+    "Bevel looks dated/clip-art on modern flat titles"
+   ],
+   "confidence": "high",
+   "applies_to": "text, shape and logo/cut-out layers with transparency (not full-frame footage)",
+   "effects_used": [
+    "Bevel Alpha",
+    "Drop Shadow"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Best on text, shape or PNG logo layers. Re-set layer.transform.scale after applying if 90% is not wanted. Turning Bevel Alpha 'Light Angle' also turns the shadow (expression).",
+   "equivalent": "Premiere: Drop Shadow (shadow part only)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/094a.png",
+    "note": "No bevel or shadow; the footage is zoomed in about 1.8x because the preset sets Scale to an absolute 90%.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: frame equals the untouched frame zoomed exactly 1.8x about centre (error 0.9 levels), no bevel or shadow; rewrite matches"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dimension - glow+shadow",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Three Drop Shadows with Distance 0 and Softness 20: 'Drop Shadow - white glow' (white, full opacity) wraps the alpha in a soft white glow, then 'Drop Shadow - dark halo 1' and '- dark halo 2' (black, full opacity) add a dark halo outside it; all of it appears only along alpha edges, so on full-frame footage none of it is visible. The preset also sets the layer's Scale to an absolute 90%: a footage layer that was scaled down to fit the comp (e.g. 1080p at 50% in a 960x540 comp) jumps to 90% and looks zoomed in about 1.8x.",
+   "look": [
+    "glow",
+    "dark halo",
+    "outer glow",
+    "separation",
+    "soft halo"
+   ],
+   "use_for": [
+    "Keep white titles readable over bright footage",
+    "Soft halo around a logo reveal",
+    "Lower-third text separation"
+   ],
+   "avoid": [
+    "Needs alpha: no visible effect on full-frame footage",
+    "It sets the layer's Scale to an absolute 90%: footage scaled to fit jumps in (a 50% layer zooms 1.8x); re-set scale after applying",
+    "Large soft halos look cheap on small captions"
+   ],
+   "confidence": "high",
+   "applies_to": "text, shape and logo/cut-out layers with transparency (not full-frame footage)",
+   "effects_used": [
+    "Drop Shadow"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Best on text or logo layers. The three effects are named 'Drop Shadow - white glow', 'Drop Shadow - dark halo 1' and 'Drop Shadow - dark halo 2'; lower their 'Softness' or 'Opacity' to tighten. Re-set layer.transform.scale after applying if needed.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/095a.png",
+    "note": "Same as the bevel+shadow frame: no glow or halo, only the 1.8x zoom from Scale 90%.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: pixel-identical to bevel+shadow (max diff 0), only the 1.8x zoom from Scale 90%; rewrite matches"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grayscale 1",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Black and white by Color Balance (HLS) Saturation -100: a straight desaturation (HLS lightness) with no channel weighting.",
+   "look": [
+    "black and white",
+    "monochrome",
+    "desaturated",
+    "neutral"
+   ],
+   "use_for": [
+    "Archive or flashback treatment",
+    "Muted background plate under coloured graphics",
+    "Sombre memorial or tribute segments"
+   ],
+   "avoid": [
+    "Flat result with no channel weighting: may look grey and lifeless",
+    "Colour-coded graphics lose meaning"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Balance (HLS)"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Simplest of the four: Grayscale 2 = luminance-weighted, Grayscale 3 = red-channel (red-filter) B&W, Grayscale 4 = this plus a neutral Curves to edit. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "Premiere: Black & White",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/096a.png",
+    "note": "Neutral black and white of the whole frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grayscale 2",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Set Channels sets Red, Green and Blue all to the source's Luminance (alpha kept), giving a luminance-weighted black and white that keeps natural brightness relationships between colours.",
+   "look": [
+    "black and white",
+    "natural",
+    "luminance",
+    "monochrome"
+   ],
+   "use_for": [
+    "Natural-looking B&W for archive or memorial segments",
+    "Greyscale source for luma-driven effects or mattes",
+    "Turning colour footage grey while keeping relative brightness"
+   ],
+   "avoid": [
+    "Source Layer 1-3 stay at None (the layer itself): pointing them at another layer pulls channels from that layer",
+    "Colour-coded graphics lose meaning"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Set Channels"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Apply to the footage layer or a precomp; verify before relying on it on an adjustment layer (Set Channels reads its source layers).",
+   "equivalent": "Premiere: Black & White",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/097a.png",
+    "note": "Luminance-weighted black and white, a bit brighter than Grayscale 1 (mean 97 -> 107).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grayscale 3",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Channel Mixer with Monochrome on and Red-Red 100 (Red-Green and Red-Blue 0), so the picture becomes the red channel alone: a red-filter black and white with bright skin and lips, darker blue skies and darker greenery.",
+   "look": [
+    "black and white",
+    "red filter",
+    "film b&w",
+    "dramatic skies",
+    "monochrome"
+   ],
+   "use_for": [
+    "Dramatic B&W skies in trailer and landscape shots",
+    "Flattering B&W on faces (the red channel smooths skin)",
+    "Historical recreation shots"
+   ],
+   "avoid": [
+    "Blue and green subjects (sky, foliage, blue clothes) go very dark",
+    "Red-channel noise shows on low-light phone footage",
+    "Colour-coded charts lose meaning"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Channel Mixer"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). With Monochrome on only the Red-* row counts: e.g. Red-Red 30, Red-Green 59, Red-Blue 11 gives a luminance-style mix. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "Premiere: Black & White (no red-filter weighting)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/098a.png",
+    "note": "Red-channel black and white: skin, red stripes and the warm wall come out bright (mean 132) and greenery dark.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grayscale 4",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Desaturation as in Grayscale 1 (Color Balance (HLS) Saturation -100) followed by a Curves effect stored with a strong S-curve: darks below about 20% are crushed toward black and highlights above about 80% clip toward white, so it is a punchy, high-contrast black and white, clearly harder than Grayscale 1.",
+   "look": [
+    "black and white",
+    "high contrast",
+    "crushed blacks",
+    "punchy",
+    "monochrome"
+   ],
+   "use_for": [
+    "Hard, high-contrast B&W for noir or dramatic beats",
+    "Archive or flashback treatment",
+    "Graphic B&W background behind titles"
+   ],
+   "avoid": [
+    "Crushes shadow detail (dark suits, hair) and clips bright skin or skies: check faces and low-key shots",
+    "Curves is custom data and cannot be set by value from a spec: for a flatter B&W use Grayscale 1 or 2 instead"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Balance (HLS)",
+    "Curves"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The stored curve is a strong S-curve; soften it by hand in Curves, or use Grayscale 1 for a flat B&W. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "Premiere: Black & White plus Lumetri Color RGB Curves",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/099a.png",
+    "note": "Punchy black and white with crushed blacks and bright highlights, clearly harder than a plain desaturate.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: against Grayscale 1 the curve maps 48 -> 8, 80 -> 40, 128 -> 130, 176 -> 217, 200 -> 244, a strong S-curve; rewrite matches"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Hand Drawn Effect",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Hand-drawn 'boil': two Turbulent Displace effects ('Turbulent Displace - Low Freq': Size 50, Complexity 2; '- High Freq': Size 5, Complexity 5; both Pinning Pin All) wobble the layer, driven by four Slider Controls: 'Overall Displacement' (8, low-freq Amount), 'Rough Edges' (30, high-freq Amount), 'Effect Speed' (8, boil frame rate via posterizeTime) and 'Wiggle Amount' (1500, evolution speed). At these defaults the boil is subtle on footage: edges roughen and wobble by only a few pixels, easy to miss on soft or busy shots; it reads better on crisp line art and text, and needs higher 'Overall Displacement' / 'Rough Edges' for an obvious hand-drawn look.",
+   "look": [
+    "hand-drawn",
+    "boil",
+    "subtle wobble",
+    "rough edges",
+    "organic"
+   ],
+   "use_for": [
+    "Hand-drawn feel on doodle or whiteboard explainer graphics",
+    "Playful wobble on titles and icons in AI-education reels",
+    "Stylised stickman or cartoon segments"
+   ],
+   "avoid": [
+    "High 'Rough Edges' makes small text unreadable",
+    "Pin All holds the layer edges still, so full-frame footage only wobbles inside; keep it on graphics"
+   ],
+   "confidence": "high",
+   "applies_to": "text, shape and line-art layers (subtle on footage)",
+   "effects_used": [
+    "Slider Control",
+    "Turbulent Displace"
+   ],
+   "duration_note": "No keyframes: Evolution expressions (time * 'Wiggle Amount', posterised to 'Effect Speed' fps, 8 by default) make it boil over the whole layer; comp.time does not matter. Gallery render on footage: only a faint few-pixel edge roughening at 0.5 s and 1.4 s.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Best on text, shape and line-art layers. Tune with the Slider Controls 'Overall Displacement', 'Rough Edges', 'Effect Speed' and 'Wiggle Amount' (layer.effect('Rough Edges').property('Slider')); expressions must stay enabled.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/100a.png",
+    "note": "Only a faint few-pixel roughening of edges (foreground blocks, mouldings) is visible, mean change 5 levels: too subtle to read as a hand-drawn boil on this footage.",
+    "rerender": false,
+    "second_opinion": "agree: mean change 4 levels, only a few-pixel wobble on moulding and block edges; subtle-at-defaults rewrite matches"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Mood Lighting - amorphous",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Overlays animated greyscale Fractal Noise (Basic, Soft Linear, Contrast 225, Brightness -25) on the layer in Overlay mode, so soft drifting blobs brighten and darken the picture like shifting stage or window light (no colour of its own). The 'Mood Lighting - amorphous' controls drive it: 'Evolution Speed' 150, 'Cloud Size' 75 (noise Scale = layer width x Cloud Size / 50) and 'Intensity' 50 (noise Opacity).",
+   "look": [
+    "moving light",
+    "soft blobs",
+    "atmospheric",
+    "fractal noise",
+    "dreamy"
+   ],
+   "use_for": [
+    "Add life to static stills in documentaries",
+    "Atmospheric backgrounds for titles and quotes",
+    "Dreamy music-video style overlay in reels"
+   ],
+   "avoid": [
+    "Heavy on render time at 4K",
+    "Blobs crossing faces look like exposure errors"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Fractal Noise",
+    "Mood Lighting - amorphous"
+   ],
+   "duration_note": "No keyframes: expressions animate it over the whole layer duration from the moment it is applied; comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Adjust 'Evolution Speed', 'Cloud Size' and 'Intensity' on the 'Mood Lighting - amorphous' effect (layer.effect('Mood Lighting - amorphous').property('Intensity')). Size follows the layer width. Fractal Noise blends with whatever it sits on, so it also works on an adjustment layer.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/101b.png",
+    "note": "Soft light/dark blobs modulate the picture; by 1.4 s a large dark patch has dimmed most of the frame (mean 98 -> 73).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Mood Lighting - digital",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Overlays animated greyscale Fractal Noise (Threads, Block noise, Contrast 170) on the layer in Overlay mode, so hard-edged rectangular light patches flicker and shift across the picture. The 'Mood Lighting - digital' controls drive it: 'Evolution Speed' 100, 'Block Size' 250 (noise Scale = layer width x Block Size / 500) and 'Intensity' 75 (noise Opacity).",
+   "look": [
+    "digital light",
+    "blocky noise",
+    "tech",
+    "moving light",
+    "atmospheric"
+   ],
+   "use_for": [
+    "Tech mood for AI or cyber explainers",
+    "Animated background behind data graphics",
+    "Light texture on static screenshots"
+   ],
+   "avoid": [
+    "Can read as compression glitches on news footage",
+    "Distracting behind small text"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Fractal Noise",
+    "Mood Lighting - digital"
+   ],
+   "duration_note": "No keyframes: expressions animate it over the whole layer duration from the moment it is applied; comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Adjust 'Evolution Speed', 'Block Size' and 'Intensity' on the 'Mood Lighting - digital' effect. Lower Intensity (e.g. 30) behind text. Works on an adjustment layer too.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/102a.png",
+    "note": "Hard-edged rectangular darker/lighter patches are visible across the picture (e.g. top-left), which darkens overall.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 0,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 0 flashes, at most 0 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 4 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Mood Lighting - streaks",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Overlays animated greyscale Fractal Noise (Threads, Soft Linear, Brightness 33) stretched vertically (Scale Height = layer height x 4) on the layer in Soft Light mode, so tall vertical light streaks drift across the picture. The 'Mood Lighting - streaks' controls drive it: 'Evolution Speed' 200, 'Streak Width' 75 (Scale Width = layer width x Streak Width / 400) and 'Intensity' 75 (noise Opacity). At the default Intensity 75 the streaks are soft on normal footage: the frame lifts about 5 levels on average and the strongest vertical band about 20, showing mostly as a pale haze over dark areas (Soft Light) and barely on bright walls, so raise 'Intensity' for clearly visible light streaks.",
+   "look": [
+    "light streaks",
+    "subtle",
+    "moving light",
+    "atmospheric",
+    "fractal noise"
+   ],
+   "use_for": [
+    "Cinematic light sweep on trailer title cards",
+    "Energy on static photos in a reel",
+    "Background texture for lower thirds"
+   ],
+   "avoid": [
+    "Streaks over faces look like lens problems",
+    "Strong settings flatten contrast"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Fractal Noise",
+    "Mood Lighting - streaks"
+   ],
+   "duration_note": "No keyframes: expressions animate it over the whole layer duration from the moment it is applied; comp.time does not matter. Gallery render on footage: average lift about 5 levels, strongest band about 20 (a pale haze over a dark area), faint on bright areas.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Adjust 'Evolution Speed', 'Streak Width' and 'Intensity' on the 'Mood Lighting - streaks' effect. Streaks are vertical; rotate a precomp for diagonal light. Works on an adjustment layer too.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/103a.png",
+    "note": "Faint vertical bands brighten the picture by only about 4-7 levels; the streaks show in a difference map but are barely visible in the frame.",
+    "rerender": false,
+    "second_opinion": "corrected: weak agreed, but the 4-7 level figure is only the average. Column-averaged lift ranges from -8 to +21 levels, so the strongest streak shows as a pale haze over the darkest area; Soft Light lifts darks (~6) more than bright areas (~2). Summary and duration_note numbers updated"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Noisy Vignette",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "CC Vignette (Amount 100, Angle of View 45, centred) darkens the frame edges and Noise (Amount of Noise 8%, colour noise on) adds moving grain: a quick filmic edge falloff with texture.",
+   "look": [
+    "vignette",
+    "film grain",
+    "noise",
+    "dark edges",
+    "vintage"
+   ],
+   "use_for": [
+    "Focus attention on the centre of interview or talking-head shots",
+    "Gritty texture for crime/investigation stories",
+    "Vintage film feel for archive segments"
+   ],
+   "avoid": [
+    "Noise re-renders every frame and adds bitrate: can turn blocky after Instagram compression",
+    "Heavy vignette darkens corner graphics and captions"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "CC Vignette",
+    "Noise"
+   ],
+   "duration_note": "No keyframes; the Noise changes every frame on its own, so the grain moves for the whole layer. comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Put it on an adjustment layer below captions and logos so text is not darkened or noised. Lower CC Vignette 'Amount' or Noise 'Amount of Noise' to soften.",
+   "equivalent": "Premiere: Vignette + Noise (or Lumetri Color Vignette)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/104a.png",
+    "note": "Corners are darkened by about 35 levels while the centre is untouched, a clear vignette with fine grain.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stacked Drop Shadows",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "needs_input",
+   "summary": "Three hard-edged Drop Shadows ('First/Second/Third Drop Shadow', Softness 0) in black, cyan (#00F0FF) and green (#00FF24), offset 13, 10 and 8 px in one shared direction; each shadow also copies the ones before it, so they compound into a stepped, multi-colour retro extrusion behind text or logos. Unverified: in the gallery render on full-frame footage all three shadows fell behind the opaque layer and nothing changed, so it needs a re-test on a text or shape layer before use.",
+   "look": [
+    "stacked shadow",
+    "retro",
+    "multi-colour offset",
+    "80s",
+    "bold type"
+   ],
+   "use_for": [
+    "Bold retro titles for reels and thumbnails-style cards",
+    "Punchy quote cards in political explainers",
+    "Logo stings with an extruded look"
+   ],
+   "avoid": [
+    "Needs alpha: does nothing visible on full-frame footage",
+    "The default cyan/green palette is loud: recolour to the channel's brand colours",
+    "Offset shadows over busy backgrounds look messy"
+   ],
+   "confidence": "high",
+   "applies_to": "text, shape and logo layers with transparency (invisible on full-frame footage)",
+   "effects_used": [
+    "Angle Control",
+    "Color Control",
+    "Drop Shadow",
+    "Slider Control"
+   ],
+   "duration_note": "Static: expressions link the shadows to the controls but there are no keyframes; comp.time does not matter. Gallery render: no visible change on full-frame footage.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Best on text or shape layers. Controls: Color Controls 'First Color', 'Second Color', 'Third Color'; Angle Control 'Shadow Direction'; Slider Controls 'First Shadow Distance' (13), 'Second Shadow Distance' (10), 'Third Shadow Distance' (8). Expressions must stay enabled.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/presets/105a.png",
+    "note": "Both frames are pixel-identical to the untouched footage: the three shadows fall behind a full-frame opaque layer, so nothing shows; it needs a render on a text or shape layer.",
+    "rerender": false,
+    "second_opinion": "agree: both frames equal the untouched render (105 vs 112 differ by 0.01-0.03 levels); needs_input with a text/shape re-test is right",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "VHS Flicker Effect",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "VHS look: Venetian Blinds (Transition Completion 80, Width 7, Direction 90) cuts the picture into scan lines, Wave Warp (Square, Wave Height 4, Wave Width 84.5) adds horizontal line jitter, two Glows ('Glow 1' radius 20, 'Glow 2' radius 162, Composite Original Behind) bloom the lines back together, Fast Box Blur (0.3) softens, and Solid Composite's keyframed 'Source Opacity' flickers the layer through a looping, randomised expression.",
+   "look": [
+    "VHS",
+    "retro",
+    "scanlines",
+    "flicker",
+    "analog",
+    "lo-fi"
+   ],
+   "use_for": [
+    "Retro/90s archive feel for old political clips",
+    "Glitchy transition moments in reels",
+    "Found-footage or 'leaked tape' style segments"
+   ],
+   "avoid": [
+    "Blur, glow and scan lines make small captions unreadable: keep text on layers above it",
+    "Venetian Blinds hides 80% of each line and the flicker drops opacity to 0 on some frames: whatever is under the layer (black if nothing) shows through, so the result is darker than the source"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Angle Control",
+    "Fast Box Blur",
+    "Glow",
+    "Slider Control",
+    "Solid Composite",
+    "Venetian Blinds",
+    "Wave Warp"
+   ],
+   "duration_note": "Keyframed: Solid Composite 'Source Opacity' has 11 keys (about 0.87 s, values 0-100) that an expression loops using time % (last key time), which assumes the keys start at 0 s. Apply with comp.time = 0 on a layer that starts at 0 s, or the flicker may stop after the first cycle.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Apply to the footage layer or a precomp starting at 0 s, with time 0. Tune with Slider Controls 'Glow 1 - Intensity', 'Glow 1 - Radius', 'Glow 2 - Intensity', 'Glow 2 - Radius', 'Displacement Wave Speed' and Angle Control 'Displacement Wave Direction'; lower Venetian Blinds 'Transition Completion' for a cleaner picture. Put captions on layers above it.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/106a.png",
+    "note": "The picture is cut into fine horizontal scan lines and darkened, with heavy yellow-orange glow blooming from the bright areas.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 3,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 8 flashes, at most 3 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 7 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Vignette Lighting",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Spotlight vignette: a Gradient Ramp named 'Ramp' draws a radial ramp from 55% grey (#8C8C8C) at the layer centre to black at the corners (expressions put Start at the centre and End at [0,0]), Levels is added at neutral values, and Calculations blends the original layer back in Hard Light, so the centre stays near normal and the edges fall off to dark.",
+   "look": [
+    "vignette",
+    "spotlight",
+    "dark edges",
+    "cinematic",
+    "focus"
+   ],
+   "use_for": [
+    "Draw the eye to a speaker or subject",
+    "Cinematic edge falloff on trailer shots",
+    "Subtle framing for documentary interviews"
+   ],
+   "avoid": [
+    "The falloff starts right at the centre and only reaches black at the corners: off-centre faces get darkened too",
+    "Too strong a vignette looks dated"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Gradient Ramp",
+    "Levels"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Ramp centre and size follow the layer by expression, so vertical and 4K layers work. Lighten 'End Color' toward #808080 to weaken; Levels does nothing until edited. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/107a.png",
+    "note": "Centre brightened (about +30 levels) and corners darkened (-40 to -50 levels): a spotlight vignette.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bad TV 1 - warp",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Strongest warp of the three Bad TV presets: Grow Bounds (60 px) lets the picture spill past the layer edge, Wave Warp (Semicircle, Wave Width = layer height, Wave Height = noise(time) * 60 + 30) bends it sideways, Transform shifts the whole picture horizontally by the same wave height, Color Balance (HLS) Saturation -33 mutes colour, Noise (20%, colour) adds static and Venetian Blinds (15%, Width 5) cuts scan lines.",
+   "look": [
+    "bad TV",
+    "signal warp",
+    "scanlines",
+    "static",
+    "analog glitch",
+    "distortion"
+   ],
+   "use_for": [
+    "Glitch transitions between segments in reels",
+    "'Broken broadcast' moment in a news satire",
+    "Retro TV screen inserts"
+   ],
+   "avoid": [
+    "Strong distortion makes faces and text unreadable: use in short bursts",
+    "The sideways Transform shift exposes the layer edge: scale the layer up about 110% or expect a black edge"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Balance (HLS)",
+    "Grow Bounds",
+    "Noise",
+    "Transform",
+    "Venetian Blinds",
+    "Wave Warp"
+   ],
+   "duration_note": "No keyframes: the Wave Height expression (noise(time)) makes the bend pulse over time and Noise changes every frame; comp.time does not matter. Trim or split the layer to keep the glitch short.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Apply to the footage layer or a precomp (Grow Bounds and the Transform shift are layer-based). Lower Noise 'Amount of Noise' or Venetian Blinds 'Transition Completion' to soften.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/108a.png",
+    "note": "Picture is bent and shifted sideways with a curved dark edge on the left, muted colour, static and scan lines.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bad TV 2 - old",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Old, soft television: Wave Warp (Smooth Noise, Wave Height 50, Wave Width 600, Wave Speed -0.05) slowly sways the picture, Fast Box Blur (Blur Radius 4, Horizontal) smears it sideways, Color Balance (HLS) Saturation +33 over-saturates colour like an old tube set, Noise (20%, colour) adds static and Venetian Blinds (15%, Width 5) cuts scan lines.",
+   "look": [
+    "old TV",
+    "scanlines",
+    "soft",
+    "static",
+    "retro broadcast",
+    "oversaturated"
+   ],
+   "use_for": [
+    "Archive broadcast feel for old political speeches",
+    "TV-screen insert inside a scene",
+    "Retro flashback segments"
+   ],
+   "avoid": [
+    "Blur kills legibility of on-screen text in the footage",
+    "Looks fake on 4K-sharp modern shots without other grading"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Balance (HLS)",
+    "Fast Box Blur",
+    "Noise",
+    "Venetian Blinds",
+    "Wave Warp"
+   ],
+   "duration_note": "Wave Warp and Noise animate on their own over the whole layer; no keyframes, comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Apply to the footage layer or a precomp (Venetian Blinds cuts transparent lines). Raise Fast Box Blur 'Blur Radius' for a softer set; set Color Balance (HLS) 'Saturation' negative for faded colour instead.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/109a.png",
+    "note": "Wavy sway at the frame edge, horizontal smear and over-saturated warm colour with static and scan lines.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bad TV 3 - weak",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Weak-signal TV: the heaviest static of the set (Noise 33%, colour) and the most washed-out colour (Color Balance (HLS) Saturation -50), with a Wave Warp waver (Noise type, Wave Width 500, Wave Height = noise(time/1.5) * 50 + 25) and Venetian Blinds scan lines (15%, Width 5); no blur and no picture shift.",
+   "look": [
+    "weak signal",
+    "heavy static",
+    "washed out",
+    "scanlines",
+    "analog"
+   ],
+   "use_for": [
+    "'Weak reception' texture on clips shown on a TV",
+    "Surveillance-feed or archive-transmission feel",
+    "Background TV screens in explainers"
+   ],
+   "avoid": [
+    "33% colour noise is heavy: too dirty for clean news footage and it compresses badly on Instagram",
+    "Scan lines can moire after phone downscaling"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Balance (HLS)",
+    "Noise",
+    "Venetian Blinds",
+    "Wave Warp"
+   ],
+   "duration_note": "No keyframes: the Wave Height expression and Noise animate on their own over the whole layer; comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Compared with 1 and 2 it has more noise and desaturation but less geometric distortion. Apply to the footage layer or a precomp (Venetian Blinds cuts transparent lines); lower Noise 'Amount of Noise' to soften.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/110a.png",
+    "note": "Washed-out, grainy picture torn by strong jagged horizontal wave displacement with scan lines.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Cracked Tiles",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Card Wipe (Transition Completion 0) splits the layer into a tile grid set by the 'Cracked Tiles' pseudo-effect: 'Tiles Across' (50) sets both Rows and Columns, and 'Tile Cracking' (33) shrinks each card (Card Scale 1 to 0.9) to open thin cracks and drives X/Y/Z Position Jitter, so the picture looks like a cracked tile mosaic whose pieces drift slightly. No rotation.",
+   "look": [
+    "mosaic",
+    "tiles",
+    "shattered",
+    "broken screen",
+    "grid"
+   ],
+   "use_for": [
+    "'Broken' or 'fractured' metaphor in political explainers",
+    "Stylised title backdrop",
+    "Glitchy transition frame in trailers"
+   ],
+   "avoid": [
+    "The cracks are transparent: whatever is under the layer (black if nothing) shows through",
+    "Rows = Columns = Tiles Across, so tiles are wide on 16:9 and tall on 9:16 frames"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Card Wipe",
+    "Cracked Tiles"
+   ],
+   "duration_note": "No keyframes: Card Wipe Position Jitter (X and Y Jitter Speed 1) keeps the tiles moving gently over time; comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Adjust 'Tile Cracking' and 'Tiles Across' on the 'Cracked Tiles' effect. Card Wipe uses its own Camera Position system, so comp cameras do not change it. To shatter the picture away, keyframe Card Wipe 'Transition Completion' 0 to 100.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/111a.png",
+    "note": "The picture is split into a fine grid of tiles separated by thin black cracks, slightly offset from each other.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Light Leaks - layer markers",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "needs_input",
+   "summary": "White exposure flash on every layer marker: within 'Flash Width (msec)' (200 ms in total) of each marker, Calculations adds the layer's original pixels onto itself (Blending Mode Add, Second Layer Opacity eased up and back down by expression) and Solid Composite adds white (Add, Opacity = half that value), so the frame blows out toward white for a moment. It is a flash, not a coloured light-leak texture. Unverified: the gallery test layer had no markers and both frames were unchanged, so it needs a re-test with a marker at the sampled time before use.",
+   "look": [
+    "exposure flash",
+    "white flash",
+    "beat flash",
+    "overexposure",
+    "transition"
+   ],
+   "use_for": [
+    "Flash on music beats or cuts (put a layer marker on each beat)",
+    "Camera-flash or photo-snap moment on documentary stills",
+    "Punctuate key words in reels"
+   ],
+   "avoid": [
+    "Without layer markers it shows little or nothing",
+    "Too many markers turns it into constant flicker"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Light Leaks - layer markers",
+    "Solid Composite"
+   ],
+   "duration_note": "Expression-driven and timed by the layer's markers, not keyframes: add layer markers (layer.property('Marker').setValueAtTime(t, new MarkerValue(''))) where flashes should happen; comp.time at apply does not matter. Gallery render without markers: no change at 0.5 s or 1.4 s.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Add markers before or after applying; flashes follow marker times. The only pseudo-effect control is 'Flash Width (msec)'. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/presets/112a.png",
+    "note": "Both frames are pixel-identical to the untouched footage because the test layer had no layer markers, so no flash fired; it needs a render with a marker inside the sampled time.",
+    "rerender": false,
+    "second_opinion": "agree: both frames equal the untouched render; no markers means no flash, so needs_input with a marker re-test is right",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   },
+   "flash": {
+    "rate": 1,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 3 flashes, at most 1 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 1 a second; with layer markers at 0.5, 1.5, 2.5 s it flashed once per marker, so the rate follows the marker spacing (keep markers 0.34 s or more apart)"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Light Leaks - random",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Random exposure flicker: Calculations adds the layer's original pixels onto itself (Add) and Solid Composite adds white (Add), both at a strength set by a noise() expression from the 'Light Leaks - random' controls 'Chance of Flashing' (100) and 'Flash Nervousness' (50), so brightness surges up and down at random. A white overexposure flicker, not a coloured leak.",
+   "look": [
+    "exposure flicker",
+    "random flash",
+    "overexposed",
+    "film flicker",
+    "nervous"
+   ],
+   "use_for": [
+    "Old-film or home-video exposure flicker on photo montages",
+    "Nervous, unstable mood in trailers",
+    "Celebration-style reels"
+   ],
+   "avoid": [
+    "At the default 'Chance of Flashing' 100 almost every frame is brightened: lower it (about 20-40) for occasional flashes",
+    "Random flashes can land on an important face or caption: render and check"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Light Leaks - random",
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expressions animate it over the whole layer duration from the moment it is applied; comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Controls: 'Chance of Flashing' (how often) and 'Flash Nervousness' (how fast the noise moves). Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/113b.png",
+    "note": "At 1.4 s the frame is blown out almost to white (mean 98 -> 231) and at 0.5 s it is already brighter (mean 152), a random exposure surge.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 3,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 6 flashes, at most 3 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 6 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Motion Registration Errors",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Time Difference compares the layer with itself about 0.25 s away in time (Time Offset (sec) wiggles 0.25 +- 0.25 via wiggle(1, .25), Contrast 200, Absolute Difference off), and Calculations blends the original back in Hard Light, so static areas look normal while moving edges get light/dark, colour-fringed ghost outlines like misregistered film.",
+   "look": [
+    "ghosting",
+    "motion trails",
+    "misregistration",
+    "experimental",
+    "retro film"
+   ],
+   "use_for": [
+    "Experimental music-video look on moving footage",
+    "Unsettling/psychological beat in a trailer",
+    "Stylised crowd or rally motion"
+   ],
+   "avoid": [
+    "Static stills or locked-off shots show almost nothing",
+    "Fast motion becomes a smeary mess"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Time Difference"
+   ],
+   "duration_note": "No keyframes; the effect depends on motion in the footage over time. comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Use on footage with motion, not stills. Time Difference 'Target' stays None (the layer itself), so it needs the footage layer or a precomp, not an adjustment layer. Raise Time Difference 'Contrast' for stronger ghosts. Calculations 'Second Layer' is stored as 0 (None) and the look depends on it blending the layer's own original pixels: after applying, set it to the layer itself (layer.effect('Calculations').property('Second Layer').setValue(layer.index)) and apply to the footage layer or a precomp, not an adjustment layer. 'Second Layer Opacity' is 0-1.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/114a.png",
+    "note": "Moving edges carry dark/light, colour-fringed ghost outlines on a high-contrast picture, like misregistered film (the clip moves almost everywhere).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Night Vision",
+   "match": null,
+   "category": "Image - Special Effects",
+   "status": "current",
+   "summary": "Green night-vision: Solid Composite puts green (#248000) under the layer in Luminosity mode so the picture becomes green monochrome, Minimax (Maximum, Radius 1) slightly fattens highlights, Noise (10%, monochrome) adds sensor grain and Venetian Blinds (Transition Completion 10, Width = layer height / 100) cuts fine scan lines.",
+   "look": [
+    "night vision",
+    "green tint",
+    "surveillance",
+    "grain",
+    "scanlines"
+   ],
+   "use_for": [
+    "Military or surveillance segments in explainers",
+    "Crime-reconstruction footage",
+    "Trailer beat with a 'found footage' feel"
+   ],
+   "avoid": [
+    "Do not present it as real night-vision footage in news",
+    "Bright daytime shots still look like day"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Minimax",
+    "Noise",
+    "Solid Composite",
+    "Venetian Blinds"
+   ],
+   "duration_note": "No keyframes; Noise changes every frame automatically. comp.time does not matter.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Apply to the footage layer or a precomp (Venetian Blinds cuts transparent lines). Combine with a vignette or circular mask for a goggle view.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/115a.png",
+    "note": "Green monochrome picture with fine horizontal scan lines and grain.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Alpha From Lightness (Unmult)",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Makes alpha from brightness: Shift Channels takes Alpha from Lightness (Red, Green, Blue unchanged) and Remove Color Matting un-premultiplies against black, so black areas go transparent. Because Lightness is (max+min)/2, any channel brighter than it overflows when un-premultiplied and is clipped in 8/16-bpc projects: saturated colours lose their strongest channel, so warm footage turns desaturated olive/greenish-grey (over black it shows as min(channel, lightness)). Clean colour needs a 32-bpc project.",
+   "look": [
+    "unmult",
+    "remove black",
+    "transparent darks",
+    "desaturates colour",
+    "utility"
+   ],
+   "use_for": [
+    "Remove the black background from light leak, flare, fire or spark stock",
+    "Overlay glowing elements without using Screen blend mode",
+    "Prepare black-background graphics for further effects"
+   ],
+   "avoid": [
+    "Also makes dark parts of normal footage transparent: only use on elements shot on black",
+    "In 8/16-bpc projects saturated colours clip and shift (orange fire or flares lose red): work in 32 bpc or use Screen blend instead",
+    "Dim, low-contrast elements become too transparent"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Remove Color Matting",
+    "Shift Channels"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Apply to the flare/stock layer itself (not an adjustment layer). Same job as the third-party 'Unmult' plug-in. Set the project to 32 bpc (app.project.bitsPerChannel = 32) to avoid colour clipping.",
+   "equivalent": "Premiere: none direct (set the clip's Opacity Blend Mode to Screen)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/116a.png",
+    "note": "Over the black comp background the picture keeps its brightness but turns a desaturated olive/greenish-grey.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: simulating min(channel, (max+min)/2) over black matches both frames to 1.7 levels (identity 14, grey 13); rewrite matches"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Compress-Expand Dynamic Range",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Adds two HDR Compander effects back to back: the first with Mode Compress Range, the second with Mode Expand Range (Gain 1, Gamma 1 on both). Moving an 8- or 16-bit-only effect between them lets 32-bpc over-range highlights survive it; as applied, with nothing in between, the pair changes nothing.",
+   "look": [
+    "HDR",
+    "32-bit",
+    "utility",
+    "dynamic range",
+    "no visible look"
+   ],
+   "use_for": [
+    "Protect HDR highlights when an 8-bit-only effect sits in a 32-bpc chain",
+    "Keep bright light-leak or glow values from clipping in 32-bpc comps"
+   ],
+   "avoid": [
+    "Does nothing useful in 8 or 16 bpc projects",
+    "With Gain 1 values above 1.0 are not compressed: set 'Gain' on BOTH instances to the brightest over-range value (e.g. 4); the two are not linked"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "HDR Compander"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Only meaningful in a 32-bpc project. Move the low-bit-depth effect between the two Companders (e.g. effect.moveTo(<index of the Expand instance>)) and keep both 'Gain' values equal. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/117a.png",
+    "note": "Both frames are pixel-identical to the untouched footage, exactly as the card says for the pair with nothing in between.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Crop Edges",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Crops all four edges by one shared amount: the 'Crop Edges' pseudo-effect ('Crop Amount (per edge)' 5, 'Feather' 0) drives four Linear Wipes (Wipe Angle 0, 180, 90, -90) by expression, so 5% is cut from every side, leaving transparency.",
+   "look": [
+    "crop",
+    "trim edges",
+    "frame edges",
+    "utility",
+    "matte"
+   ],
+   "use_for": [
+    "Trim burnt-in borders, tickers or edge logos evenly from sourced news footage",
+    "Clean black edges off scanned archive or screen recordings",
+    "Soft feathered frame edge (raise 'Feather') for picture-in-picture"
+   ],
+   "avoid": [
+    "One amount for all four sides: for one edge or letterbox bars, disable the expression on the unwanted Linear Wipes and set their 'Transition Completion' to 0",
+    "Cropped edges are transparent: scale the layer up or put a background behind it"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Crop Edges",
+    "Linear Wipe"
+   ],
+   "duration_note": "Static crop values; no keyframes, comp.time does not matter. Keyframe 'Crop Amount (per edge)' yourself to animate a crop.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Set layer.effect('Crop Edges').property('Crop Amount (per edge)') and .property('Feather'); the four Linear Wipes follow by expression.",
+   "equivalent": "Premiere: Crop (Left/Top/Right/Bottom set independently)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/118a.png",
+    "note": "Black border of about 5% on all four sides (32 of 640 px, 18 of 360 px) around the uncropped centre.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flip + Flop",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Transform effect with Uniform Scale on and Scale -100, centred on the layer by expressions (Anchor Point and Position = layer centre): the picture is mirrored on both axes at once, which equals rotating it 180 degrees (upside down). It is not a left-right mirror.",
+   "look": [
+    "upside down",
+    "180 rotation",
+    "flip both axes",
+    "utility"
+   ],
+   "use_for": [
+    "Upside-down 'world turned over' gag or transition beat in reels",
+    "Fix footage recorded upside down (inverted camera mount)",
+    "Starting point for a one-axis flip: turn Uniform Scale off and set Scale Width -100 (horizontal) or Scale Height -100 (vertical)"
+   ],
+   "avoid": [
+    "Not a horizontal mirror: text and faces end up upside down",
+    "Flipping or rotating real news footage misrepresents it"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform"
+   ],
+   "duration_note": "Static look: the preset sets effect values with no keyframes, so comp.time does not matter; it affects the whole layer duration.",
+   "scripting": "Apply with ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). For a left-right mirror after applying: layer.effect('Transform').property('Uniform Scale').setValue(0); property('Scale Height').setValue(100); property('Scale Width').setValue(-100). Without a preset, layer Scale [-100, 100] also mirrors. No layer references, so it also works on an adjustment layer to treat everything beneath.",
+   "equivalent": "Premiere: Horizontal Flip + Vertical Flip together",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/119a.png",
+    "note": "The picture is upside down (rotated 180 degrees), not a left-right mirror.",
+    "rerender": false
+   }
+  }
+ ]
+}

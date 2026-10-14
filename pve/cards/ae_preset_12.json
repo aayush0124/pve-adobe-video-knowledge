@@ -1,0 +1,1556 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Angle Fly-In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Characters grow from zero scale one after another, left to right, swooping in on an angled arc because the scale pivots around an offset anchor point (1000, 500); a 30 %-wide Ramp Up selector sweeps across in 2 s.",
+   "look": [
+    "fly-in",
+    "per-character",
+    "scale up from zero",
+    "diagonal arc",
+    "title reveal"
+   ],
+   "use_for": [
+    "Lower-third name reveal in a news package",
+    "Chapter title in an explainer",
+    "Punchy hook word in a reel"
+   ],
+   "avoid": [
+    "The arc swings characters a few hundred pixels off their line mid-move: keep the title clear of 9:16 frame edges",
+    "Text is invisible (scale 0) on the first frame",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2 s ('Animator - Scale/Tracking': Anchor Point (1000, 500) and Scale 0 %; its Tracking property is switched on but left at 0. 'Selector - Offset': Offset -30 to 100, End 30 %, Ramp Up, Ease Low -50). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. To change the swoop direction or distance edit the animator's Anchor Point. Several names in this .ffx start with a TAB character (ExtendScript \"\\t...\"), and the expressions reference them that way: look effects/animators up by index or match name, and never rename them. Behaviour decoded from the .ffx values, not render-tested: preview once before relying on it.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/434a.png",
+    "note": "At 0.5 s small characters are scaling up and swooping in scattered above-left of the line; at 1.4 s ARCHIVE has landed and 1, 9 are still flying in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Back Flip",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "A flip wave rolls through the text left to right: each character stretches wide (X-scale 200 %), squeezes to zero width and turns upside down (Y-scale to -100 %) as the wave passes, lifting into an arch above the line mid-flip, then returns to normal. The text is readable before and after, so it is an in-place emphasis, not an entrance.",
+   "look": [
+    "flip",
+    "per-character",
+    "playful",
+    "wave",
+    "2D flip",
+    "emphasis"
+   ],
+   "use_for": [
+    "Playful emphasis on a held word in a reel",
+    "Fun fact headers in an AI-education explainer",
+    "Kinetic typography on a beat"
+   ],
+   "avoid": [
+    "Too cartoonish for serious news or documentary titles",
+    "Not an entrance: the text is fully visible on the first frame; pair with a reveal if needed",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2.17 s (three animators: 'X-Scale Char 200%' wave 0-1.67 s, 'X-Scale Char 0%' and 'Invert Char Y-Scale' (Y-scale -100 %) waves 0.5-2.17 s; each 'Selector - Offset' sweeps -100 to 100 with a Smooth shape). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Scale-based fake flip (no 3D layer or camera needed).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/435b.png",
+    "note": "0.5 s shows the plain line; at 1.4 s the middle characters are stretched, upside-down and lifted into an arch above the line as the flip wave passes, ends still upright.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blow Away Out",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "In random order, characters are blown away mostly toward the lower right (each slides about 1230 px right and 360 px down while spinning five turns); a static wiggly selector gives every character a different amount, some even going the opposite way, until the text is gone.",
+   "look": [
+    "wind",
+    "dissolve out",
+    "per-character",
+    "scatter",
+    "exit"
+   ],
+   "use_for": [
+    "Exit for a headline before the next story",
+    "Ending a quote card in a documentary",
+    "Transition out of a title in a reel"
+   ],
+   "avoid": [
+    "Ends with nothing visible: the layer looks empty after +2 s",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2 s ('Animator - Position/Rotation': Position (1231, 360), Rotation 1800; 'Range Selector 1' Offset -50 to 100, End 50 %, Ramp Down, Randomize Order; 'Wiggly Selector - Wind Angle' in Intersect mode, 0 wiggles/s, correlation 90 %). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText). This is an OUT animation: set comp.time to (exit time - preset length) so the text leaves at the right moment. Change the wind direction and distance by editing the animator's Position value; the 'Wiggly Selector - Wind Angle' only varies how far each character travels.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/436a.png",
+    "note": "Characters are spinning off toward the lower right in random order at 0.5 s and only a few remain, still blowing right, at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bounce In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Characters bounce in from the left like bouncing balls: each starts about 700 px left of its place, hopping up to 150 px high, and travels into position, left to right, over 2 s.",
+   "look": [
+    "bounce",
+    "slide-in from left",
+    "per-character",
+    "springy",
+    "playful"
+   ],
+   "use_for": [
+    "Kids or light-hearted explainer titles",
+    "Reel hook words that land on the beat",
+    "Fun stat call-outs"
+   ],
+   "avoid": [
+    "Too bouncy for sombre documentary or hard news",
+    "Text is visible from the first frame, shifted 700 px left: in a 9:16 frame it starts partly off-screen",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2 s ('Animator - Position': Position keyed 32 times with X fixed at -700 and Y bouncing between -4 and -150; 'Selector - Offset' Offset -80 to 100, Ramp Up, Ease High -100). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Bounce height is the Y of the Position keyframes and travel distance the X (-700); scale them to tone it down. Animator and selector names start with a TAB character; address them by index.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/437a.png",
+    "note": "At 0.5 s characters are piled up on the left hopping at different heights; at 1.4 s the line has landed with the 7 still settling.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bungee",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "The whole line swings side to side (up to 280 px) while its letter spacing pumps between 0 and 50 every third of a second, like a bungee cord; from 1.35 s the characters settle into place left to right, finishing at 3 s.",
+   "look": [
+    "elastic",
+    "tracking pump",
+    "side-to-side swing",
+    "springy",
+    "kinetic"
+   ],
+   "use_for": [
+    "Energetic reel title",
+    "Product or tool name reveal in an AI channel video",
+    "Comedic emphasis on a single word"
+   ],
+   "avoid": [
+    "The 280 px swing plus tracking can push text out of a narrow 9:16 frame",
+    "Feels gimmicky on long sentences",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3 s ('Animator - Oscillate Tracking': Tracking keyed 0/50 every 0.33 s; 'Animator - X-Position': Position X keyed 0, -280, 280, -280, 280, 156; both 'Selector - Offset' sweep -100 to 100 from 1.35 s to 3.0 s, Ramp Up). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/438a.png",
+    "note": "At 0.5 s the line is swung left (partly off-frame) with wide tracking; at 1.4 s it is swung right with tracking back to normal.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Chaotic In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Characters start jittering with random position (up to 50 px), scale (including mirror flips) and 70-degree skew, and the chaos calms down within half a second to leave clean text. The 'Wiggle Rotation' animator's Rotation is 0, so there is no visible rotation.",
+   "look": [
+    "chaos",
+    "jitter",
+    "wiggle",
+    "glitchy",
+    "settle",
+    "energetic"
+   ],
+   "use_for": [
+    "Glitch-style hook in a reel",
+    "Breaking-news style word slam",
+    "Tension beat in a trailer title"
+   ],
+   "avoid": [
+    "Very short (under 0.5 s): may read as a flicker on slow edits",
+    "Text is fully scrambled on the first frame",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +0.47 s ('Wiggle Position' animator's 'Wiggly Selector 1' Max/Min Amount keyed 100/-100 to 0; the Wiggle Scale, Wiggle Skew and Wiggle Rotation animators' wiggly selectors are expression-linked to it). Times read from the .ffx keyframes; retime by scaling the keyframes. Render check (applied at 0 s): the frames at 0.5 s and 1.4 s are identical to the untouched text, so the scramble is over before +0.5 s; at normal edit speed it reads as a brief flicker in.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. The wiggles are expression-linked to the 'Wiggle Position' animator's 'Wiggly Selector 1' (max/min amount, wiggles/second, correlation); edit that selector to change all four.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/439a.png",
+    "note": "Both frames are pixel-identical to the plain text: the chaos ends at +0.47 s, before the first sample, so the jitter itself could not be seen.",
+    "rerender": false,
+    "second_opinion": "agree (full render G439.mp4 checked: the scramble is visible on frames 0-10 and the text is clean from about +0.44 s, so both samples fall after it)"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Clay Pigeons Out",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "In random order, each character pops up on a short arc and shrinks to nothing (Scale 0 % pivoting on an anchor 400 px below) while tracking tightens by 25, until the text is gone after about 2 s.",
+   "look": [
+    "random exit",
+    "per-character",
+    "pop",
+    "shrink out",
+    "playful"
+   ],
+   "use_for": [
+    "Comedic exit of a word in a satire reel",
+    "Clearing a title before the next beat",
+    "Explainer list item leaving"
+   ],
+   "avoid": [
+    "Ends with empty text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2.03 s ('Animator - Anchor/Scale/Track': Anchor (0, 400), Scale 0 %, Tracking -25; 'Selector - Offset (Random)': Offset -10 to 100, End 10 %, Ramp Down, Randomize Order). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText). This is an OUT animation: set comp.time to (exit time - preset length) so the text leaves at the right moment.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/440a.png",
+    "note": "At 0.5 s the C has popped up small above the line and is gone from it; by 1.4 s only H, I and a shrinking 9 remain.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Explode Out",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Text bursts apart: characters scatter outward with rotation, shrink and fade until nothing is left.",
+   "look": [
+    "explosion",
+    "scatter",
+    "fade out",
+    "shatter",
+    "impact",
+    "exit"
+   ],
+   "use_for": [
+    "Dramatic exit of a claim being debunked",
+    "Trailer title blowing apart on a hit",
+    "End of a hook in a reel"
+   ],
+   "avoid": [
+    "Long (about 3.7 s of motion) for fast reels: scale the keyframes down",
+    "Ends with empty text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start 0.4 s after comp.time and run to +4.07 s ('Animator - Explode (Pos/Rot)': Position (-530, -475), Rotation 1800, amount randomised per character by 'Wiggly Selector - Randomize'; 'Animator - Scale Down': Scale 0 %; both driven by 'Selector - Amount' Max Amount 0 to 100; 'Animator - Fade Opacity': Opacity keyed 100 to 0). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText). This is an OUT animation: set comp.time to (exit time - preset length) so the text leaves at the right moment. Motion begins 0.4 s after comp.time.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/441a.png",
+    "note": "At 0.5 s characters are already scattered across the frame, rotated and about half faded; at 1.4 s fewer, smaller and fainter ones remain.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Glitchy Text Decoder",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Types the text on behind a cursor (a Source Text expression reveals it left to right as the 'Animation' slider goes 0 to 100); each newly typed character arrives glitched (random symbol, heavy blur, pushed 100 px down) and resolves about 5 frames later. Venetian Blinds stripes the layer and Glow adds bloom.",
+   "look": [
+    "glitch",
+    "decoder",
+    "cursor",
+    "hacker",
+    "tech",
+    "glow",
+    "digital"
+   ],
+   "use_for": [
+    "AI or tech topic titles in the AI-education channel",
+    "Cyber-crime or data-leak news headline",
+    "Reel hook that 'decodes' a keyword",
+    "Tech-thriller trailer title"
+   ],
+   "avoid": [
+    "Cursor keeps blinking after the reveal unless 'Cursor On/Off' is unchecked",
+    "Venetian Blinds sits at 50 % completion with 5 px blinds, so the text stays striped (scanline look) for the whole layer: disable '(Venetian Blinds)' for clean text",
+    "Glow (radius 39, intensity 1.82, Add) can bloom heavily on white text over bright footage",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Checkbox Control",
+    "Glow",
+    "Slider Control",
+    "Venetian Blinds"
+   ],
+   "duration_note": "Keyframes start at comp.time and run to +1 s (the '\\tAnimation' slider goes 0 to 100; Source Text and selectors are expression-driven, the glitch selector trails the reveal by 5 frames). Cursor blink is expression-driven and runs for the whole layer. Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Adds (each name starts with a TAB, e.g. \"\\tAnimation\"): Slider 'Animation' (keyed), Checkbox 'Cursor On/Off' (on), dropdown pseudo effect 'Cursor Shape' (1 Vertical Bar, 2 Underscore, 3 Dash, 4 Less Than, 5 Greater Than, 6 Angle Quotes Left, 7 Angle Quotes Right, 8 Caret), Slider 'Cursor Blink Speed' (4), Checkbox 'Bright Text On/Off' (on), Sliders 'Character Glitch Amount' (946), 'Blur Amount' (83), 'Position Glitch X Amount' (0), 'Position Glitch Y Amount' (100), then '(Venetian Blinds)' and '(Glow)'. Expressions look these up with the tab, so never rename them; address them by index in the Effects group. Retime by moving the 'Animation' keyframes. Source Text gets an expression (reveal + cursor), so set the text before applying and do not overwrite sourceText afterwards.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/442a.png",
+    "note": "At 0.5 s the line is half typed with glitch symbols and a cursor, striped by Venetian Blinds and glowing; at 1.4 s ARCHIVE 1947 is fully decoded with the stripes and glow.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Hop Skip And A Jump",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "A smooth wave travels through the text left to right over 3 s: each character dips down (up to 320 px) and rises back into place as the wave passes. The text is readable at the start and end (in-place emphasis).",
+   "look": [
+    "dip",
+    "wave",
+    "per-character",
+    "playful",
+    "bouncy"
+   ],
+   "use_for": [
+    "Light-hearted reel caption",
+    "Kids or education explainer title",
+    "Musical beat emphasis"
+   ],
+   "avoid": [
+    "Too playful for serious news",
+    "The 320 px dip drops characters well below the line: keep clear of captions and lower-thirds",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3 s ('Animator 1': Position (0, 320); 'Smooth Shape Selector' Offset -50 to 100, End 50 %, Smooth shape, based on characters excluding spaces). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. The animated property is Position (0, 320), i.e. downward; use a negative Y for an upward hop.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/443b.png",
+    "note": "Characters dip far below the line as the wave passes (A, R at 0.5 s; H, I, V, E at 1.4 s) while the rest stay in place.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pendulum In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "All characters hang from a pivot 900 px above them and swing like long pendulums: they start rotated 50 degrees (displaced far to the side), oscillate with decaying amplitude and hang straight at 3 s.",
+   "look": [
+    "swing",
+    "pendulum",
+    "oscillate",
+    "per-character",
+    "settle"
+   ],
+   "use_for": [
+    "Playful title in an explainer",
+    "Signboard or hanging-label style text",
+    "Comedic reveal in a reel"
+   ],
+   "avoid": [
+    "The 900 px pendulum throws characters hundreds of pixels sideways in the first second: titles can leave a 9:16 frame",
+    "The swing takes the full 3 s: slow for fast cuts",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3 s ('Animator - Anchor/Y-Position': Anchor (0, -900) with Position (0, -900) compensation; 'Animator - Oscillate Rotation': Rotation keyed 50, -33, 16, -8.6 ... -0.35 (13 keys) and 'Selector - Amount' Max Amount 100 to 0). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Swing width comes from the Anchor/Position -900 pair (pivot height) and the first Rotation key.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/444a.png",
+    "note": "At 0.5 s the whole line is swung left and tilted; at 1.4 s it hangs almost straight, a few px off its rest position.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Question",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "The text first appears as small question marks (each character's value replaced by '?', scaled to 55 % with +35 tracking) and the real characters replace them from left to right at full size within about half a second of the in-point.",
+   "look": [
+    "question marks",
+    "reveal",
+    "per-character",
+    "quiz",
+    "mystery"
+   ],
+   "use_for": [
+    "Quiz or 'guess the answer' reveal in an explainer",
+    "Mystery name or number reveal in a reel",
+    "Rhetorical question title"
+   ],
+   "avoid": [
+    "The '?' placeholders are visible from the first frame",
+    "Character Value replaces every code point: Devanagari shows one '?' per letter or matra until revealed",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "The .ffx stores the 'Range Selector 1' Start keys (0 to 100) at 0.5-1.0 s, but in the test render (applied at 0 s) the layer already showed the plain text at 0.5 s and 1.4 s: AE lands the first key at comp.time, so the '?' stage runs from comp.time to about +0.5 s ('Animator 1': Character Value 63 ('?'), Character Alignment Adjust Kerning, Scale 55 %, Tracking 35; based on characters excluding spaces, Smoothness 0). Retime by moving or scaling the two Start keys.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Move the two Start keyframes to hold the question marks longer. Full test render (applied at 0 s, 25 fps): frame 0 shows one small '?' per non-space character, the real letters replace them left to right one per frame, and the line is plain text from about +0.48 s.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/445a.png",
+    "note": "Both frames are pixel-identical to the plain text: no question marks at 0.5 s, so the '?' stage finishes before the first sample (the card had it at 0.5-1.0 s).",
+    "rerender": false,
+    "second_opinion": "corrected: the full render G445.mp4 shows the '?' stage on frames 0-11 (reveal done at about +0.48 s), confirming the rewrite; removed the 'stage not captured' caveat from scripting and raised confidence from low to high"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rattle",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "A smooth wave passes through the text word by word over 3 s, skewing each word 30 degrees while the skew axis spins ten turns, so words wobble and rattle; the text is readable at start and end.",
+   "look": [
+    "shake",
+    "rattle",
+    "skew wobble",
+    "by word",
+    "nervous"
+   ],
+   "use_for": [
+    "Tension or scare word in a reel",
+    "Comedic nervous emphasis",
+    "Alarm or warning title in an explainer"
+   ],
+   "avoid": [
+    "Can look cheap on long lines",
+    "In-place emphasis only: it does not reveal or hide the text"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start -0.03 s after comp.time and run to +3 s ('Animator 1': Skew 30, Skew Axis 3600; 'Range Selector 1' Offset -100 to 100, based on words, Smooth shape; the first key sits one frame before comp.time). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Behaviour decoded from the .ffx values, not render-tested: preview once before relying on it.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/446b.png",
+    "note": "0.5 s is the plain line; at 1.4 s the word ARCHIVE is skewed and wobbling while 1947 is still clean.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Roll Bounce In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "In random order, characters roll in from about 550 px to the left, spinning three turns while growing from 10 % scale, then do two small hops with a slight tilt (50 px, then 10 px) before settling.",
+   "look": [
+    "roll",
+    "bounce",
+    "per-character",
+    "playful",
+    "kinetic"
+   ],
+   "use_for": [
+    "Playful reel title",
+    "Kids or light explainer heading",
+    "Product name reveal"
+   ],
+   "avoid": [
+    "Ends about 3.2 s after start: long for quick hooks",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3.16 s (Roll-In, Bounce 1 (Pos/Rot) and Bounce 2 (Pos/Rot) animators with staggered offsets: 0-2.0 s, 0.96-2.8 s, 1.8-3.16 s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Selectors share an expression-linked random seed from 'Animator - Roll-In'.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/447b.png",
+    "note": "At 0.5 s small characters roll in from the far left; at 1.4 s they are spinning and hopping in tilted, in random order, near their places.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sequential Jump",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "A wave runs through the text: characters hop up 25 px one after another, tilting 15 degrees counter-clockwise then 15 degrees clockwise, and land back in place. The text is visible before and after (emphasis, not an entrance).",
+   "look": [
+    "jump",
+    "tilt",
+    "per-character",
+    "sequential",
+    "playful"
+   ],
+   "use_for": [
+    "Animated word emphasis in a reel",
+    "Fun title in an AI-education short",
+    "Beat-synced caption hit"
+   ],
+   "avoid": [
+    "Not an entrance: the text is static and visible before and after the wave",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start 0.1 s after comp.time and run to +1.86 s ('Animator - Y-Pos (Jump)': Position (0, -25), Round shape; 'Animator - Rotation (Counter)': -15; 'Animator - Rotation Clockwise': +15; each 'Selector - Offset' -39 to 100, End 30 %, staggered 0.1-0.33 s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Text is static for the first 0.1 s.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/448a.png",
+    "note": "At 0.5 s A, R, C are hopping up and tilting; at 1.4 s the wave has reached 9, 4, 7 while the rest sit back in place.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Six-Shooter in",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Characters shoot up into place from 400 px below, left to right in about 0.7 s, starting stretched tall and mirrored narrow (scale -50 %, 200 %) and snapping back to normal, while a fast 5 px vertical rattle passes through them in random order until about 1 s.",
+   "look": [
+    "shoot-in",
+    "stretch",
+    "fast",
+    "snappy",
+    "rattle"
+   ],
+   "use_for": [
+    "Fast reel hook word",
+    "Stat or number slam in an explainer",
+    "Trailer quick-cut title"
+   ],
+   "avoid": [
+    "Very fast (about 1 s): unreadable if the layer is shorter",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1.03 s ('Animator - Y-Position (Shoot)': Position (0, 400), 'Range Selector 1' Offset 0 to 100 over 0-0.67 s; 'Animator - Wiggle Y-Pos': Position keyed +/-5 px every frame, Ramp Up offset 0.3-1.03 s with 'Wiggly Selector - Randomize'; 'Animator - Scale (Stretch)': Scale (-50, 200) % in Subtract mode, offset 0.07-0.73 s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/449a.png",
+    "note": "At 0.5 s ARCHIVE has landed and 1, 9 are shooting up from below as tall narrow stretched glyphs; at 1.4 s the line is settled.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slide Bounce In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "In random order, characters slide in horizontally, then hop up 50 px leaning 45 degrees over their neighbour and do a smaller second bounce before settling upright.",
+   "look": [
+    "slide-in",
+    "bounce",
+    "lean",
+    "per-character",
+    "cartoony"
+   ],
+   "use_for": [
+    "Comedic title in a satire reel",
+    "Playful explainer heading",
+    "Casual or kids content"
+   ],
+   "avoid": [
+    "Cartoon physics look wrong for serious news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2.5 s ('Animator - Adjust Anchor Point' has no selector and Position (-374, 0); 'Slide In (X-Pos)': Position (600, 0), 'Selector - Animate End' End 0 to 100 over 2 s, Randomize Order; Bounce 1 (0, -50)/45 deg, Lean Over Neighbor (10, 0), Bounce 2 (0, -10)/3 deg, each on a Smooth Start/End window). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. The net start and end offsets were not render-verified (the -374 and +600 X offsets combine): preview the first and last frame to confirm the text lands where it was typed.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/450a.png",
+    "note": "Characters are sliding horizontally in random order (some off-frame left) and leaning 45 degrees mid-hop at 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slip In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "In random order, characters slip up into place from far below as tall vertical streaks (Y-scale up to about 3500 %), snapping to normal size within 1.5 s.",
+   "look": [
+    "slip-in",
+    "stretch",
+    "random order",
+    "vertical",
+    "smooth"
+   ],
+   "use_for": [
+    "Clean title entrance in an explainer",
+    "Lower-third text arrival",
+    "Reel caption entrance"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1.5 s ('Animator - Y-Position/Y-Scale': Position (0, 4391), Scale (100, 3570) %; 'Selector - Offset' Offset -15 to 100, End 15 %, Ramp Up, Randomize; static 'Selector - Offset 2' and 'Wiggly Selector - Randomize' (Intersect)). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/451a.png",
+    "note": "At 0.5 s only C, 1, 4 and a sliver of a stretched glyph are in; at 1.4 s all but the E have snapped in, in random order.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Smokey",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "A wave of wispy distortion passes through the text character by character over 3 s: each character is skewed 30 degrees while the skew axis spins ten turns, giving a smoke-like wobble. The text is fully readable before and after; it does not fade, blur or dissolve.",
+   "look": [
+    "wispy",
+    "skew wobble",
+    "wave",
+    "per-character",
+    "eerie"
+   ],
+   "use_for": [
+    "Eerie or mysterious emphasis on a held documentary title",
+    "Dream or memory flavour on a quote",
+    "Moody trailer text accent"
+   ],
+   "avoid": [
+    "Not a dissolve: the text never fades or blurs; add an opacity fade if it must disappear",
+    "Distortion reduces legibility mid-wave on busy footage",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start -0.03 s after comp.time and run to +3 s ('Animator 1': Skew 30, Skew Axis 3600; 'Range Selector 1' Offset -100 to 100, Triangle shape, based on characters excluding spaces; the first key sits one frame before comp.time). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Behaviour decoded from the .ffx values, not render-tested: preview once before relying on it.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/452b.png",
+    "note": "Characters skew and wobble one by one: the A at 0.5 s, C-H-I-V-E heavily distorted at 1.4 s, the line otherwise readable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Squeeze",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "A soft selection wanders back and forth through the text in random character order, ballooning the selected letters to 500 % scale at 10 % opacity with +50 tracking, so ghostly giant letters swell and shrink over the words.",
+   "look": [
+    "swell",
+    "ghost letters",
+    "tracking",
+    "wandering",
+    "pulsing"
+   ],
+   "use_for": [
+    "Dreamy or chaotic emphasis on a short title in a reel",
+    "Abstract text texture behind a voice-over beat"
+   ],
+   "avoid": [
+    "wiggle(1,150) on the selector Offset keeps it wandering for the whole layer: the text never settles",
+    "Busy and hard to read: not for information text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3 s ('Animator - Scale/Opacity/Track': Scale 500 %, Opacity 10 %, Tracking 50; 'Range Selector 1' Offset keyed 14 times plus a wiggle(1,150) expression, Smooth shape, Randomize Order). The .ffx also stores wiggle(30,30) on Fill Hue, a property that is not switched on in the animator, so it should have no effect. Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Delete the Offset expression to make it stop after the keys. Behaviour decoded from the .ffx values, not render-tested: preview once before relying on it.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/453b.png",
+    "note": "Selected letters balloon into giant, semi-transparent ghosts (7 at 0.5 s; I, V, 1, 7 at 1.4 s) over the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Superhero In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Characters swoop in along a looping flight path (swinging up to about 250 px around their spot) while growing from zero scale, landing left to right in about 1 s.",
+   "look": [
+    "fly-in",
+    "swoop",
+    "scale up from zero",
+    "heroic",
+    "fast"
+   ],
+   "use_for": [
+    "Trailer title slam",
+    "Hero name or channel name reveal",
+    "Reel hook with a strong landing"
+   ],
+   "avoid": [
+    "The looping path crosses neighbouring text in the first half second: keep the title short",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1.02 s ('Animator Position': Position keyed along (-6, 443), (-217, 246), (257, -197), (270, 266), (-235, 65), (2, 0); 'Animator - Scale': Scale 0 %; both 'Selector - Offset' -100 to 100, End 50 %, Ramp Up, Ease 100/50). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/454a.png",
+    "note": "At 0.5 s A, R have landed and later characters are still tiny and flying in; at 1.4 s the line is settled.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Vanishing Point In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Characters start enormous (500 %) and far off to the lower right, sweep across the frame and shrink into place left to right over 1.5 s, jittered by a fast 15 Hz wiggly selector.",
+   "look": [
+    "zoom",
+    "shrink-in",
+    "sweep",
+    "jitter",
+    "depth"
+   ],
+   "use_for": [
+    "Trailer title that rushes in from the frame",
+    "Explainer section title",
+    "Reel hook word"
+   ],
+   "avoid": [
+    "The first frames are giant glyphs crossing the frame: not for subtle titles",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1.5 s ('Animator - Postion/Scale' (Adobe's spelling): Position keyed (1500, 500) to (-1500, 500), Scale 500 %; 'Range Selector 1' Offset 0 to 100; 'Wiggly Selector - Randomize' Intersect, 15 wiggles/s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. 2D fake perspective; no camera needed.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/455a.png",
+    "note": "At 0.5 s ARC has landed while I, V, 7 are large and off to the lower right (one huge glyph at the corner); at 1.4 s only the 7 is still settling.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggly Lines In",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "Text starts displaced and wobbling (up to 200 px; character correlation 95 % so whole lines bend like wavy strands) and straightens into readable lines left to right in about 1.2 s.",
+   "look": [
+    "wiggle",
+    "jitter",
+    "organic",
+    "per-character",
+    "settle"
+   ],
+   "use_for": [
+    "Quirky title in a reel",
+    "Hand-made feel caption in an explainer"
+   ],
+   "avoid": [
+    "Random wiggle can look messy on long paragraphs",
+    "Text is scrambled on the first frame"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1.16 s ('Animator 1': Position (200, 200); 'Range Selector 1' Offset -100 to 100, Ramp Up; 'Wiggly Selector 1' Intersect, 6 wiggles/s, correlation 95 %). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/456a.png",
+    "note": "At 0.5 s the line is bent into a wavy arc; at 1.4 s it is straight and readable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Yo-Yo",
+   "match": null,
+   "category": "Text/Miscellaneous",
+   "status": "current",
+   "summary": "In random order, characters drop 208 px spinning two full turns and spring back up into place, like yo-yos, as a soft selection passes through the text over 4 s. The text is readable at start and end.",
+   "look": [
+    "yo-yo",
+    "drop",
+    "spin",
+    "spring",
+    "playful"
+   ],
+   "use_for": [
+    "Playful reel caption",
+    "Kids or casual explainer title"
+   ],
+   "avoid": [
+    "Long (4 s)",
+    "In-place emphasis, not an entrance",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +4 s ('Animator - Position/Rotation': Position (0, 208), Rotation 720; 'Selector - Offset' -50 to 100, End 50 %, Smooth shape, Randomize Order). The .ffx also stores wiggle(30,30) on Fill Hue, a property not switched on in the animator, so it should have no effect. Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/457b.png",
+    "note": "Characters drop well below the line spinning in random order (H, 7 at 0.5 s; A, E, 4, 9, 7 at 1.4 s) while the rest stay in place.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Alphabet Soup",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Characters start scattered, enlarged (up to 400 %), rotated and partly faded across and beyond the right of the frame, then, word by word in random order, fly in from the right spinning and shrinking into place; in the test render the first word had assembled by +1.4 s and the line by about +2 s.",
+   "look": [
+    "scatter",
+    "assemble",
+    "random",
+    "spin-in",
+    "playful"
+   ],
+   "use_for": [
+    "Explainer title that 'comes together'",
+    "Quote card build in a documentary",
+    "Concept reveal in an AI-education video"
+   ],
+   "avoid": [
+    "Scattered, half-faded letters are on screen from the in-point: there is no blank hold before the fly-in",
+    "Per-character animation can split Devanagari conjuncts/matras: test Hindi text before using"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "The .ffx stores the keys at 1-3 s, but the test render (applied at 0 s) shows the move running from comp.time: letters already flying at 0.5 s and ARCHIVE assembled at 1.4 s, so AE lands the first key at comp.time and the fly-in lasts about 2 s ('Animator - Pos/Rot/Opacity': Position (1725, -100), Rotation 720, Opacity 0 %, 'Selector - Offset (By Word)' 0 to 100, Randomize; 'Animator - Randomize Scale': Scale 400 %, 'Selector - Start (By Word)' 0 to 100, both with Intersect wiggly selectors). Retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Works on multi-line (paragraph) text.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/458a.png",
+    "note": "Large rotated scattered characters fly in at 0.5 s; the first word assembled at 1.4 s with the second still flying in from the right.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree (full render G458.mp4: scattered letters drift from frame 0, ARCHIVE flies in and lands about +1.0 s, 1947 is still flying at +1.56 s)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Alternating Stack In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Lines slide in horizontally (626 px) from alternating sides, odd lines from one side and even lines from the other, and stack into a block within 1 s.",
+   "look": [
+    "alternating",
+    "slide-in",
+    "by line",
+    "clean",
+    "stacked"
+   ],
+   "use_for": [
+    "Multi-line headline in a news package",
+    "Bullet list in an explainer",
+    "Quote lines in a documentary"
+   ],
+   "avoid": [
+    "Needs at least two lines to show the alternation"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1 s ('Animator -  X-Position' (two spaces in Adobe's name): Position X 626; 'Expression Selector - Even/Odd' flips the sign per line with textIndex; 'Selector - Offset (By Line)' Offset -10 to 100, End 10 %, Ramp Up, Intersect). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Use paragraph or multi-line point text; the Even/Odd expression uses textIndex.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/459a.png",
+    "note": "Single test line: at 0.5 s it is shifted right, sliding in; at 1.4 s it sits in place (alternation needs several lines).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Currents In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Text fades up while flowing into place like a current: lines start squeezed together (line spacing -50), shifted 210 px left and 100 px down with tracking tightened by 141, and a line-correlated wiggly phase ripples them as a soft selection releases the text left to right over 3 s.",
+   "look": [
+    "flowing",
+    "wave",
+    "ripple",
+    "multi-line",
+    "smooth"
+   ],
+   "use_for": [
+    "Calm documentary quote",
+    "Environment or water topic titles",
+    "Soft paragraph reveal in an explainer"
+   ],
+   "avoid": [
+    "Slow (3 s) for fast reels"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3 s ('Animator - Line Spacing' (0, -50), 'Animator - Position/Tracking' (-210, 100) and Tracking -141, 'Animator - Opacity' 0 %; 'Selector - Offset' -100 to 100 (opacity sweep 0.8-3.0 s), Ramp Up; 'Wiggly Selector - Phase' Spatial Phase keyed 0 to 720). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/460b.png",
+    "note": "Frame is empty at 0.5 s; at 1.4 s ARCH is fading up with a wavy, offset flow from the left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Data Packet",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "An in-and-out text burst: characters scale up from zero while tracking collapses (0-0.33 s), resolve from a randomised, scattered state into legible lines as a legibility window sweeps through, then scale back to zero and spread out from 2.5 s, so the text is gone by +2.97 s.",
+   "look": [
+    "data",
+    "digital",
+    "random",
+    "tech",
+    "scramble"
+   ],
+   "use_for": [
+    "Quick stat or data-bite flash in a tech explainer",
+    "Cyber or data-leak news sting",
+    "Transitional keyword burst in a reel"
+   ],
+   "avoid": [
+    "Ends invisible at +2.97 s: delete the last two Intro/Outro Scale and Tracking keys to hold the text",
+    "Text is legible only for about 1.5 s",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2.97 s ('Animator - (Intro/Outro)': Scale 0 to 100 % over 0-0.33 s and back to 0 % over 2.5-2.97 s, Tracking 200 to 0 to 200; 'Animator 1': Scale 0 %, Tracking 670 with 'Wiggly Selector - Randomize' and 'Selector - (Make Legible)' in Subtract mode, End keyed 0-2.0 s and Start 0.97-2.97 s, by line). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. To hold the text, remove the outro keys at 2.5-2.97 s and the closing Start keys of 'Selector - (Make Legible)'. Behaviour decoded from the .ffx values, not render-tested: preview once before relying on it.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/461a.png",
+    "note": "At 0.5 s the characters are at zero scale and spread out (only a speck shows at the left); at 1.4 s the line is fully legible.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Data Stream In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Characters stream in horizontally on a travelling cosine wave: neighbouring characters start up to about 3940 px off to opposite sides and converge into place over 2 s while tracking tightens from 80 to 0, like a data feed locking in.",
+   "look": [
+    "data stream",
+    "wave",
+    "horizontal",
+    "digital",
+    "tech"
+   ],
+   "use_for": [
+    "AI or tech channel titles",
+    "Live data or market ticker style text",
+    "Futuristic trailer text"
+   ],
+   "avoid": [
+    "The first frames are nearly empty (characters thousands of pixels off-frame)",
+    "The cosine expression selector stays live, but Position ends at (1, 0) so the residual motion is 1 px",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keyframes start at comp.time and run to +2 s ('Animator - Y-Scale/Opacity': despite the name, its live properties are Position, keyed (3940, 0) to (1, 0), and Tracking, keyed 80 to 0; 'Expression Selector - Waveform' = Math.cos(Period*textIndex/textTotal + time*Frequency)*100). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Adds two Slider Controls named with a leading TAB, \"\\tFrequency\" and \"\\tPeriod\" (both 5), that drive the waveform; the expression references them with the tab, so never rename them.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/462b.png",
+    "note": "At 0.5 s only the I is in place (the rest are far off-frame); at 1.4 s ARCHIVE is converging with overlaps and 1947 still widely tracked.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Deal In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Characters are dealt in one at a time, left to right, one every 0.24 s (a 12-character line takes about 2.9 s): each letter swoops down into its slot from off-frame at the upper left, lands skewed about 70 degrees and straightens within a couple of frames, then holds about two frames before the next one comes. Unlanded letters stay off-frame, so it reads as a left-to-right build with a quick swoop per letter.",
+   "look": [
+    "deal",
+    "skew",
+    "card",
+    "swoop-in",
+    "per-character",
+    "sequential reveal"
+   ],
+   "use_for": [
+    "List reveal in an explainer",
+    "Card-style title in a reel",
+    "Ranking or top-5 list text"
+   ],
+   "avoid": [
+    "Slow on long lines: one character every 0.24 s (12 characters take about 2.9 s); scale the Offset keys for a faster deal",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2.9 s ('Animator - Skew': Skew 70, Skew Axis -66.3; 'Animator - Anchor/Skew': Anchor (800, 50) which shifts characters left until deselected; both 'Selector - Offset' 0 to 100, End 10 %, Ramp Up, offsets 0.07-2.9 s and 0-2.83 s). Times read from the .ffx keyframes; retime by scaling the keyframes. Render check (applied at 0 s, 25 fps): frames 0-1 are blank, the first A is in flight on frames 2-4 and lands on frame 5, and each later letter follows 6 frames after the previous one; the 0.5 s and 1.4 s samples happen to fall on hold frames between letters, so they show nothing in transit.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/463a.png",
+    "note": "Letters just appear in place left to right (AR at 0.5 s, ARCHIV at 1.4 s) with nothing in transit anywhere in frame: the skewed slide is too brief and off-frame to see.",
+    "rerender": false,
+    "second_opinion": "corrected: the full render G463.mp4 shows every letter in transit for about 3 frames, swooping in from the upper left (A enters near x 160, y 170 on the 960x540 comp), so 'nothing visible in transit' was wrong: the samples landed on hold frames. Rewrote summary, look ('swoop-in') and avoid[0] (the untested 1920 px left-edge claim), and added the render check to duration_note"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Encryption In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Characters cycle through random characters with dimmed flickers, then decrypt into the real text from left to right.",
+   "look": [
+    "decrypt",
+    "hacker",
+    "scramble",
+    "digital",
+    "tech",
+    "matrix"
+   ],
+   "use_for": [
+    "Cyber-security or data-leak news",
+    "AI and tech explainer titles",
+    "Investigative documentary reveal",
+    "Thriller trailer text"
+   ],
+   "avoid": [
+    "Character Offset swaps glyphs: Devanagari text can show broken glyphs mid-scramble",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2 s (Character Offset, Opacity (Reveal) and Opacity (Dim Chars) animators; Start keyed 0-1.37 s, second Offset 0.63-2.0 s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Use a monospaced font to stop the width jumping while characters scramble.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/464b.png",
+    "note": "At 0.5 s dimmed random characters show; at 1.4 s ARCHIV is decrypted with random dim characters still cycling at the end.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fly In By Characters",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "In random order, characters zoom down into place from a huge 3000 % scale, as if flying in from in front of the camera, building the text over about 3 s.",
+   "look": [
+    "zoom-in",
+    "scale down",
+    "per-character",
+    "random order",
+    "build"
+   ],
+   "use_for": [
+    "Title build in an explainer",
+    "Lower-third or name reveal",
+    "Reel caption entrance"
+   ],
+   "avoid": [
+    "The first frames show giant glyph fragments filling the frame",
+    "3 s build is slow for short hooks",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3.07 s ('Animator 1': Scale 3000 %; 'Range Selector 1' Offset 100 to -100, Ramp Down, Randomize Order, based on characters). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/465a.png",
+    "note": "At 0.5 s and 1.4 s single giant characters (V, E) fill the frame as they zoom down from huge scale.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fly In By Words",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "In random order, words zoom down into place from a huge 3000 % scale, as if flying in from in front of the camera, building the sentence over about 3 s.",
+   "look": [
+    "zoom-in",
+    "scale down",
+    "by word",
+    "random order",
+    "build"
+   ],
+   "use_for": [
+    "Quote build in a documentary",
+    "Headline build in a news package",
+    "Explainer key sentence",
+    "Hindi titles (selection by word keeps a word's characters moving together)"
+   ],
+   "avoid": [
+    "Words appear in random order, not reading order: not for sentences that must be read as they build",
+    "3 s build is slow for short hooks"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +3.07 s ('Animator 1': Scale 3000 %; 'Range Selector 1' Offset 100 to -100, Ramp Down, Randomize Order, based on words). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Prefer this over 'Fly In By Characters' for Hindi/Devanagari text, but preview conjuncts: scaling still pivots per character.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/466b.png",
+    "note": "At 0.5 s and 1.4 s the word ARCHIVE fills the frame at huge scale, zooming down.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ideas",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "A floating letter cloud: characters are scattered individually a few hundred px around the line, smaller than normal, rotated at different angles and partly faded, drifting slowly. As a soft selection sweeps through, each word in turn (random order) flies together into its normal readable form for a moment and then scatters back into the cloud; in the test render '1947' read cleanly at about +1.1 to +1.25 s. Keys run to +4 s.",
+   "look": [
+    "brainstorm",
+    "letter cloud",
+    "floating",
+    "scatter",
+    "fleeting"
+   ],
+   "use_for": [
+    "Abstract brainstorm or 'thoughts' moment behind a voice-over",
+    "Creative or AI-education intro texture"
+   ],
+   "avoid": [
+    "Never holds a readable line: each word reads only for about 0.2 s, one word at a time, so not for titles that must be read",
+    "Long (4 s)",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +4 s ('Animator - Wiggle Position': Position (472, -140) on a static by-word wiggly selector with no range; 'Animator - Pos/Rot/Opacity': Position (390, 530), Rotation 1580, Opacity 0 %; 'Animator - Randomize Scale': Scale 200 %; both use 'Selector - Offset (By Word)' in Subtract mode, Offset -20 to 100, End 20 %, Smooth shape, Randomize Order). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Full test render (applied at 0 s): letter cloud on frames 0-24, '1947' flies together and reads on frames 27-31, then scatters again by frame 34; ARCHIVE had not had its turn by +1.56 s.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/467a.png",
+    "note": "A cloud of small, rotated, partly faded single characters at both 0.5 s and 1.4 s (the readable moment falls between the samples).",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: the full render G467.mp4 shows '1947' assembling into a readable word at full size on frames 27-31 (about +1.1 to +1.25 s) before scattering again, so 'never reads as words' was wrong; the 0.5 s and 1.4 s samples both fell in cloud phases. Rewrote summary, avoid[0] and the scripting note"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Jetstream In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Characters rush in vertically on a travelling cosine wave: neighbouring characters start up to 750 px above or below their line and converge over 3 s to a small 5 px ripple that keeps running.",
+   "look": [
+    "stream",
+    "wave",
+    "vertical",
+    "ripple",
+    "tech"
+   ],
+   "use_for": [
+    "Fast tech or travel title",
+    "Explainer transition text",
+    "Trailer whoosh text"
+   ],
+   "avoid": [
+    "A 5 px vertical ripple keeps running after 3 s (Position ends at (0, 5) under a live cosine selector): set that last key to (0, 0) for a still hold",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keyframes start at comp.time and run to +3 s ('Animator - Y-Scale/Opacity': despite the name, its live property is Position, keyed (0, 750) to (0, 5); 'Expression Selector - Waveform' = Math.cos(Period*textIndex/textTotal + time*Frequency)*100). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Adds two Slider Controls named with a leading TAB, \"\\tFrequency\" and \"\\tPeriod\" (both 5), that drive the waveform; the expression references them with the tab, so never rename them.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/468a.png",
+    "note": "At 0.5 s characters are spread far above and below the line; at 1.4 s they ride a cosine arch converging on the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pneumatic In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Characters are revealed left to right (opacity, 0-1.33 s) while a soft wave pumps through them like a piston: each character shrinks to 50 %, nudges 58 px right and pushes the following text apart with +300 tracking, settling by 2 s.",
+   "look": [
+    "punch",
+    "piston",
+    "slide-in",
+    "mechanical",
+    "snappy"
+   ],
+   "use_for": [
+    "Industrial or infrastructure topic title",
+    "Stat reveal in an explainer",
+    "Punchy reel caption"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +2 s ('Animator - X-Position/Scale': Position (58, 0), Scale 50 %, Tracking 300 (after), 'Selector - Offset' -50 to 100, End 50 %, Smooth shape; 'Animator - Opacity (Reveal)': Opacity 0 %, Offset 0 to 100 over 0-1.33 s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/469b.png",
+    "note": "Characters are revealed left to right with huge tracking pushing them apart (RCH I at 0.5 s; HIVE 1 9 4 at 1.4 s, the start pushed off-frame left).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Word Processor In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Text types on character by character behind a blinking cursor, like typing in a word processor; the default speed is fast (about 27 characters per second), so a short line is typed almost instantly.",
+   "look": [
+    "typewriter",
+    "cursor",
+    "typing",
+    "clean",
+    "digital"
+   ],
+   "use_for": [
+    "Typed quote in a documentary",
+    "Search-bar or chat-prompt style text in an AI channel",
+    "News fact typed on screen",
+    "Reel hook typed on"
+   ],
+   "avoid": [
+    "Cursor blink expression (Math.tan) runs for the whole layer",
+    "Progress counts characters and ends at 55: text longer than 55 characters stays cut off unless the last Progress key is raised",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keyframes start at comp.time and run to +2 s (the Progress slider is keyed 0 to 55 characters, about 27 characters per second; all three selectors use Index units driven by it). Cursor blink is expression-driven and keeps running. Times read from the .ffx keyframes; retime by scaling the keyframes. Render check (applied at 0 s): the 12-character test line was fully typed before +0.5 s and no cursor showed at 0.5 s or 1.4 s; for a visible type-on, move the last Progress key so the speed suits the text length.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Adds Slider Controls whose names start with a TAB: \"\\tProgress\" (drives the reveal, in characters) and \"\\tCursor Blink Rate\" (4). Set the last Progress key to the text's character count (spaces included) and move it to set the typing speed; never rename the controls.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/470a.png",
+    "note": "Both frames are pixel-identical to the plain text with no cursor visible: the 12-character test line is fully typed by about +0.44 s, before the first sample.",
+    "rerender": false,
+    "second_opinion": "agree (full render G470.mp4: one character per frame with an underscore cursor while typing, line complete on frame 11 (+0.44 s), no cursor after that)"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zippy In",
+   "match": null,
+   "category": "Text/Multi-Line",
+   "status": "current",
+   "summary": "Lines zip in from about 800 px to the left one after another (top line first), skewing hard as they arrive and overshooting with a small bounce before stopping, all within about 1.1 s.",
+   "look": [
+    "zip",
+    "skew",
+    "fast",
+    "bounce",
+    "by line"
+   ],
+   "use_for": [
+    "Snappy headline in a news reel",
+    "List items in an explainer",
+    "Energetic reel captions"
+   ],
+   "avoid": [
+    "Skew wobble reads as cartoony on serious content"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes start at comp.time and run to +1.13 s ('Animator - Slide In': Position (-800, 0); 'Animator - Bounce': (30, 0); 'Skew Left' -68 and 'Skew Right' 60; every 'Selector - Select By Line' keyed Start 0 to 100 or a 5 % window, staggered 0-0.17 s). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. ",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/471a.png",
+    "note": "At 0.5 s the line is skewed hard and arriving from the left (partly off-frame); at 1.4 s it is settled.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Counter Countdown Monospaced",
+   "match": null,
+   "category": "Text/Number Counters",
+   "status": "current",
+   "summary": "Turns the text layer into an animated number counter driven by the 'Counter Countdown Controls' pseudo effect; by default it counts down ('Animate Value' keyed 100 to 0 over 1.5 s) with monospaced digit spacing so the number does not jitter.",
+   "look": [
+    "counter",
+    "numbers",
+    "count-up",
+    "stat",
+    "monospaced"
+   ],
+   "use_for": [
+    "Statistic count-up in an explainer (votes, crores, percentages)",
+    "Election results or seat tally in a news package",
+    "Countdown timer in a reel",
+    "Data-driven documentary figures"
+   ],
+   "avoid": [
+    "By default the typed text is hidden ('Show Original Text' = Hide Original Text); set it to Before Numbers or After Numbers to keep a prefix or suffix such as '%' or ' seats'",
+    "Only 3-digit grouping formats (1,234,567.01 / 1.234.567,01 / 1 234 567,01), and separators are off by default: no Indian lakh/crore grouping",
+    "Large values need the '10x Value Multiplier' control: check the first and last frame"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Counter Controls"
+   ],
+   "duration_note": "Keyframes start at comp.time and run to +1.5 s ('Animate Value' of the 'Counter Countdown Controls' pseudo effect is keyed 100 to 0). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Adds the pseudo effect '\\tCounter Countdown Controls' (leading TAB in the name; match name 'Pseudo/ADBE Counter Controls', batch name 'Counter Controls'). Property indices: 1 Animate Value (keyed), 2 10x Value Multiplier (2; the expressions use powers of ten of value-1), 3 Pad Zeros (4), 4 Digits After Decimal (0), 7 Number Format (1 '1,234,567.01', 2 '1.234.567,01', 3 '1 234 567,01'), 8 Show Original Text (1 Before Numbers, 2 After Numbers, 3 Hide Original Text; preset 3), 11 Show Group Separators (off), 12 Group Spacing, 13 Group Separator Offset, 14 Align Group Spacing (1 Left, 2 Right, 3 Center). Set start/target by editing the two Animate Value keys (effect(1).property(1)). Source Text is expression-driven.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/472a.png",
+    "note": "The layer shows a zero-padded counter counting down: 0484 at 0.5 s, 0009 at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Currency Counter Monospaced",
+   "match": null,
+   "category": "Text/Number Counters",
+   "status": "current",
+   "summary": "Turns the text layer into an animated currency counter driven by the 'Currency Counter Controls' pseudo effect: it rolls up ('Animate Value' keyed 0 to 100 over 1.5 s) with a $, EUR, JPY or GBP symbol, group separators, 2 decimals and monospaced digits.",
+   "look": [
+    "counter",
+    "currency",
+    "money",
+    "numbers",
+    "stat",
+    "monospaced"
+   ],
+   "use_for": [
+    "Dollar, euro or pound figures in an AI-business or tech video (funding, valuations)",
+    "Market or price figures in a news package (non-INR)",
+    "Indian budget amounts only with a separate rupee-sign text layer"
+   ],
+   "avoid": [
+    "No rupee option: 'Currency Symbol' offers only $ USD, EUR, JPY and GBP. For INR use a separate text layer with the rupee sign, or Counter Countdown Monospaced with 'Show Original Text' = Before Numbers (verify)",
+    "No Indian lakh/crore grouping (formats are $1,234,567.01 / 1.234.567,01 $ / 1 234 567,01 $)",
+    "Source Text is expression-driven: typed text is replaced"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Currency Controls"
+   ],
+   "duration_note": "Keyframes start at comp.time and run to +1.5 s ('Animate Value' of the 'Currency Counter Controls' pseudo effect is keyed 0 to 100). Times read from the .ffx keyframes; retime by scaling the keyframes.",
+   "scripting": "Set comp.time to the planned in-point, make the text layer the only selected layer, then layer.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer (comp.layers.addText); on a non-text layer the text animators cannot be added. Adds the pseudo effect '\\tCurrency Counter Controls' (leading TAB in the name; match name 'Pseudo/ADBE Currency Controls', batch name 'Currency Controls'). Property indices: 1 Animate Value (keyed), 2 10x Value Multiplier (3), 3 Pad Zeros (5), 4 Digits After Decimal (2), 7 Currency Format (1 '$1,234,567.01', 2 '1.234.567,01 $', 3 '1 234 567,01 $'), 8 Currency Symbol (1 $ USD, 2 EUR, 3 JPY, 4 GBP), 9 Use Currency Code, 10 Currency Symbol Position, 11 Currency Symbol Scale (100), 14 Show Group Separators (on), 15 Group Spacing, 16 Group Separator Offset, 17 Align Group Spacing (1 Left, 2 Right, 3 Center). Set the target by editing the Animate Value key at +1.5 s.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/473a.png",
+    "note": "The layer shows a rolling dollar counter with separators and 2 decimals: $ 02,325.94 at 0.5 s, $ 09,661.67 at 1.4 s.",
+    "rerender": false
+   }
+  }
+ ]
+}

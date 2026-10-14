@@ -1,0 +1,1340 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "ExtendScript language and runtime",
+   "summary": "AE scripts are ExtendScript (.jsx): JavaScript at ECMA-262 3rd edition (ES3) plus E4X, File/Folder, ScriptUI, Socket and the $ debug object.",
+   "use_for": [
+    "any automated AE build",
+    "deciding what JavaScript syntax a generated script may use"
+   ],
+   "how": "Write .jsx files; run via File > Scripts > Run Script File, the Scripts / ScriptUI Panels folders, or AfterFX.exe -r. Generated scripts should stick to ES3 (var, function, for loops; no let/const, arrow functions, template strings, Array.map/forEach, JSON). Debug helpers: getEnumAsString(layer.blendingMode) -> 'BlendingMode.SCREEN' (24.0+), isValid(obj), $.writeln() to the debugger console, timeToCurrentFormat(t, fps).",
+   "scriptable": "yes",
+   "script_api": "ExtendScript global scope: app, system, $, File, Folder, alert(); getEnumAsString(enum) (24.0), isValid(obj), generateRandomNumber(), timeToCurrentFormat(time, fps[, isDuration]), currentFormatToTime(str, fps[, isDuration]); app.version (string, e.g. '26.0x67': parseFloat(app.version) gives 26), app.buildNumber",
+   "limits": "ES3 only: no native JSON object, so pass data in as a JS literal (AdobeBridge prepends `var S = <json>;` built with json.dumps(ensure_ascii=True)). Docs say any UTF-8 .jsx is accepted, but AdobeBridge saw non-ASCII garbled on -r runs and keeps every script pure ASCII (field-tested in AdobeBridge). .jsxbin may not work with every integration feature.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/introduction/overview/",
+    "https://ae-scripting.docsforadobe.dev/general/globals/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Run a script from the command line (AfterFX.exe -r / -s)",
+   "summary": "Send a .jsx file (-r) or a script string (-s) to the already-running After Effects instance from a shell or another program.",
+   "use_for": [
+    "pipeline-driven builds (AdobeBridge runs every AE job this way)",
+    "batch jobs without touching the UI"
+   ],
+   "how": "afterfx.exe -r C:\\full\\path\\job.jsx  (runs in the existing instance; does not start a second one). app.exitAfterLaunchAndEval (Windows only) quits AE after a -r/-s launch; app.exitCode returns a status to the command line.",
+   "scriptable": "yes",
+   "script_api": "AfterFX.exe -r <file> | -s \"<script>\"; app.exitAfterLaunchAndEval; app.exitCode",
+   "limits": "Field-tested limits (field-tested in AdobeBridge): a relative -r path is resolved against AE's own cwd and silently ignored, so pass an absolute path; launch through PowerShell Start-Process with an 8.3 short path (quoting the path made AE ignore the script; launching from a hidden parent made AE run the job and quit). AE can go deaf to every later -r after a MOGRT export, after its open .aep was deleted, or after app.open/close from inside a script: run a cheap canary after each job and force-restart AE when it stops answering. A crash-recovery dialog (after a force-kill) and a disk-cache 'Warning' dialog block all -r jobs until dismissed. Scripts have no stdout: report results through the saved project (AdobeBridge writes 'AB_WARN ... ~' comp names and greps the .aep bytes).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/introduction/overview/",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appexitafterlaunchandeval",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appexitcode"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "aerender command-line renderer",
+   "summary": "aerender.exe renders comps or the whole render queue of a project from the command line, in a new headless AE instance or (with -reuse) the running one.",
+   "use_for": [
+    "final renders after a scripted build",
+    "rendering one comp or one render-queue item to a chosen file",
+    "frame-range test renders"
+   ],
+   "how": "\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/aerender.exe\" -project p.aep -comp \"Main\" -RStemplate \"Best Settings\" -OMtemplate \"H.264 - Match Render Settings - 40 Mbps\" -output out.mp4. Other flags (from aerender -help, v26.0x67): -rqindex, -renderSettings \"key: value; ...\", -outputSettings, -s/-e/-i frames, -mem_usage, -mfr ON|OFF max_cpu, -v ERRORS|ERRORS_AND_PROGRESS, -close DO_NOT_SAVE_CHANGES|SAVE_CHANGES|DO_NOT_CLOSE, -reuse, -log, -sound ON|OFF, -version, -continueOnMissingFootage, -teamproject.",
+   "scriptable": "yes",
+   "script_api": "aerender.exe (not an ExtendScript object); in-app equivalent app.project.renderQueue.render(); network rendering: app.watchFolder(folder), app.pauseWatchFolder(pause), app.endWatchFolder(), app.isWatchFolder, app.isRenderEngine",
+   "limits": "Without -comp/-rqindex it renders the whole queue as saved and ignores -RStemplate/-OMtemplate/-output/-s/-e/-i. Template names must exist exactly or it errors. A new instance always closes and quits when done. Without -reuse it starts a second AE (heavy on an 8 GB-VRAM laptop). Watch-folder rendering on another machine needs collected files and the same fonts/plug-ins there; aerender over SSH is simpler for one worker. -close defaults to DO_NOT_SAVE_CHANGES, so -reuse closes the project open in the running AE after the render unless you pass -close DO_NOT_CLOSE (and closing the open project is one of the things that has left AE deaf to -r here). With -reuse AE also writes its preferences on quit.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/automated-rendering-network-rendering.html",
+    "https://gfxhacks.com/reduce-render-times-with-aerender/",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appwatchfolder"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Allow Scripts To Write Files And Access Network (preference)",
+   "summary": "Security preference that gates File writes, Socket/network access and similar from scripts; off by default.",
+   "use_for": [
+    "deciding how a script reports results",
+    "any script that writes logs, JSON or sidecar files"
+   ],
+   "how": "Edit > Preferences > Scripting & Expressions > Allow Scripts To Write Files And Access Network (moved there from General in CC 2019; older docs still say General).",
+   "scriptable": "no",
+   "script_api": "read-only check: app.preferences.getPrefAsLong('Main Pref Section v2', 'Pref_SCRIPTING_FILE_NETWORK_SECURITY') -> 1 on / 0 off (key found in 'Adobe After Effects 26.0 Prefs.txt', the default PREF_Type_MACHINE_SPECIFIC file; value is \"0\" on this machine). Key name is not in the scripting guide.",
+   "limits": "It is the user's setting: do not flip it from a pipeline. It is OFF on this machine, so AdobeBridge reports through the saved .aep (warning comps named 'AB_WARN ... ~') instead of writing files (field-tested in AdobeBridge). Saving the project and rendering are not blocked by it. The scripting guide's overview page still says Preferences > General; that text predates the move.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/using/scripts.html",
+    "https://ae-scripting.docsforadobe.dev/introduction/overview/#activating-full-scripting-features"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "both",
+   "name": "BridgeTalk inter-application messaging (AE -> Premiere)",
+   "summary": "ExtendScript's BridgeTalk sends a script string from one Adobe app to another; AdobeBridge uses it because Premiere has no -r flag.",
+   "use_for": [
+    "driving Premiere Pro from an AE job",
+    "building a .prproj alongside the .aep"
+   ],
+   "how": "In AE: if (!BridgeTalk.isRunning('premierepro')) BridgeTalk.launch('premierepro'); var bt = new BridgeTalk(); bt.target = 'premierepro'; bt.body = 'eval(decodeURIComponent(\"<percent-encoded script>\"))'; bt.send();  Optional bt.onResult / bt.onError callbacks.",
+   "scriptable": "yes",
+   "script_api": "BridgeTalk.isRunning(spec), BridgeTalk.launch(spec[, where]), BridgeTalk.getSpecifier(), new BridgeTalk(): .target, .body, .onResult, .onError, .send([timeout])",
+   "limits": "BridgeTalk re-escapes backslashes and quotes in the body; percent-encode the whole payload and decodeURIComponent it first thing (field-tested in AdobeBridge). If AE has gone deaf to -r the relay never fires: watch for the Premiere job's start marker and restart AE after ~60 s.",
+   "status": "current",
+   "sources": [
+    "https://extendscript.docsforadobe.dev/interapplication-communication/bridgetalk-class/",
+    "https://extendscript.docsforadobe.dev/interapplication-communication/bridgetalk-message-object/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "both",
+   "name": "UXP vs ExtendScript status (2026)",
+   "summary": "AE has no UXP scripting yet (Adobe plans a public UXP plugin beta by November 2026); ExtendScript stays the AE scripting API. Premiere has UXP since 25.6, and Adobe says ExtendScripts are not affected by the CEP-to-UXP transition.",
+   "use_for": [
+    "choosing the automation technology for AdobeBridge",
+    "planning panel/plugin work"
+   ],
+   "how": "Keep AE automation in ExtendScript (.jsx). CEP panels: AE stops new CEP submissions and disables CEP by default in December 2028; Premiere stops new CEP submissions December 2027, disabled by default December 2028; CEP removed from new versions December 2029.",
+   "scriptable": "partial",
+   "script_api": "AE: ExtendScript only; Premiere: ExtendScript and UXP (premierepro module, async API)",
+   "limits": "AE UXP is announced, not shipped: as of 2026-10-03 there is no AE UXP beta yet (target: November 2026), so treat any 'AE UXP' API as unavailable. Premiere UXP needs v25.6+ (developer.adobe.com prerequisites). Adobe promises at least two years between the AE UXP beta and CEP removal.",
+   "status": "current",
+   "sources": [
+    "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+    "https://developer.adobe.com/premiere-pro/uxp/plugins/",
+    "https://hyperbrew.co/blog/uxp-plugins-in-premiere-2026/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "ExtendScript Toolkit (ESTK) -> VS Code ExtendScript Debugger",
+   "summary": "The ExtendScript Toolkit is deprecated and unmaintained (and does not run on 64-bit-only macOS); Adobe's ExtendScript Debugger extension for VS Code is the official replacement.",
+   "use_for": [
+    "debugging generated .jsx step by step",
+    "inspecting the object model while writing builders"
+   ],
+   "how": "Install 'ExtendScript Debugger' (Adobe.extendscript-debug) in VS Code, pick After Effects 2026 as the target, run or debug the .jsx. The extension can also export .jsxbin (UI or command line). 'File > Scripts > Open Script Editor' in the AE guide refers to ESTK.",
+   "scriptable": "no",
+   "script_api": "none (developer tool)",
+   "limits": "Do not plan around ESTK. Whether the VS Code extension offers an equivalent of ESTK's Object Model Viewer is unverified. .jsxbin may not work with every AE integration feature (AE guide).",
+   "status": "obsolete",
+   "sources": [
+    "https://extendscript.docsforadobe.dev/extendscript-toolkit/",
+    "https://extendscript.docsforadobe.dev/vscode-debugger/",
+    "https://extendscript.docsforadobe.dev/vscode-debugger/vscode-extension-features/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Undo groups",
+   "summary": "Wrap a script's edits into one Edit > Undo entry.",
+   "use_for": [
+    "making a whole scripted build undoable in one step",
+    "keeping the user's undo history clean"
+   ],
+   "how": "app.beginUndoGroup('AdobeBridge build'); ...edits...; app.endUndoGroup();  Pairs may nest; inner names are ignored.",
+   "scriptable": "yes",
+   "script_api": "app.beginUndoGroup(undoString), app.endUndoGroup()",
+   "limits": "If the script never calls endUndoGroup, AE closes the group when the script ends; calling endUndoGroup without a beginUndoGroup throws. Some calls are documented as not undoable (Project.replaceFont).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#appbeginundogroup",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appendundogroup"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Error handling and uncatchable failures",
+   "summary": "Script errors raise exceptions or modal dialogs; app.beginSuppressDialogs()/endSuppressDialogs() suppress script error dialogs, app.onError names a callback for errors (useful during renders), app.saveProjectOnCrash=false skips the save-on-crash dialog, and app.exitCode reports a status to a -r/-s caller.",
+   "use_for": [
+    "unattended builds that must not stop on a modal dialog",
+    "logging render errors"
+   ],
+   "how": "app.beginSuppressDialogs(); try { ... } catch (e) { record(e); } app.endSuppressDialogs(false); app.onError = function (s) { ... };",
+   "scriptable": "yes",
+   "script_api": "app.beginSuppressDialogs(), app.endSuppressDialogs(alert), app.onError (callback gets error string and severity), app.saveProjectOnCrash, app.exitCode, isValid(obj)",
+   "limits": "Field-tested in AdobeBridge: some failures end the script with no catchable error and no dialog: setting a number outside a property's min/max (clamp with hasMin/minValue/hasMax/maxValue first), for-in over undefined, asking a non-group property for a child (CC effects' 'Producer'/'Physics' header rows are PropertyType.PROPERTY), and touching a Project object after a MOGRT export ('Object is invalid'). Leave a breadcrumb after each host call so the last one locates the failure.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#appbeginsuppressdialogs",
+    "https://ae-scripting.docsforadobe.dev/general/application/#apponerror",
+    "https://ae-scripting.docsforadobe.dev/general/globals/#isvalid",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appsaveprojectoncrash",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appexitcode"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Menu command fallback (app.executeCommand)",
+   "summary": "Runs any menu command by numeric ID; the only route to features with no scripting API.",
+   "use_for": [
+    "UI-only commands such as Convert To Bezier Path, Easy Ease, layer styles",
+    "anything missing from the object model"
+   ],
+   "how": "Find the ID once during development with app.findMenuCommandId('Exact Menu Text'), then hard-code the number: app.executeCommand(4162) // Convert To Bezier Path (docs example). Select the target layers/properties and make sure the right comp viewer is active first.",
+   "scriptable": "partial",
+   "script_api": "app.executeCommand(id), app.findMenuCommandId(commandText)",
+   "limits": "findMenuCommandId is not reliable across language packs; IDs can change between versions; commands act on the current selection/active panel, so they fail silently when focus is elsewhere. No return value to confirm success: read the result back.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#appexecutecommand",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appfindmenucommandid",
+    "https://hyperbrew.co/blog/after-effects-command-ids/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Application control: scheduled tasks and restart",
+   "summary": "Run a JavaScript string after a delay (once or repeatedly) inside AE, and restart AE from a script (app.restart, added 25.4).",
+   "use_for": [
+    "polling a job folder from inside AE",
+    "deferring work until AE finishes an operation",
+    "recovering or reloading AE"
+   ],
+   "how": "var id = app.scheduleTask(\"$.writeln('tick')\", 1000, true); ... app.cancelTask(id);  app.restart();",
+   "scriptable": "yes",
+   "script_api": "app.scheduleTask(stringToExecute, delayMs, repeat), app.cancelTask(taskID), app.restart() (25.4)",
+   "limits": "Scheduled strings run in global scope; a repeating task runs until cancelled or AE quits. app.restart ends the current script (whether it prompts to save is unverified) and cannot help when AE already ignores scripts: AdobeBridge restarts from outside instead (taskkill, relaunch, answer Crash Repair with Continue).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#appscheduletask",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appcanceltask",
+    "https://ae-scripting.docsforadobe.dev/general/application/#apprestart",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Memory, cache and rendering switches",
+   "summary": "Purge caches, cap memory, switch rendering off (Caps Lock equivalent) or set Multi-Frame Rendering for the next render.",
+   "use_for": [
+    "long batch builds that bloat RAM",
+    "speeding up a build by disabling viewer rendering",
+    "limiting CPU during background renders"
+   ],
+   "how": "app.purge(PurgeTarget.ALL_MEMORY_CACHES); app.disableRendering = true (set back to false at the end); app.setMultiFrameRenderingConfig(true, 80); app.setMemoryUsageLimits(imageCachePct, maxMemPct).",
+   "scriptable": "yes",
+   "script_api": "app.purge(PurgeTarget.ALL_CACHES|ALL_MEMORY_CACHES|UNDO_CACHES|SNAPSHOT_CACHES|IMAGE_CACHES), app.disableRendering, app.setMultiFrameRenderingConfig(mfr_on, max_cpu_perc), app.setMemoryUsageLimits(), app.memoryInUse",
+   "limits": "Since 24.3 ALL_CACHES also clears the disk cache (ALL_MEMORY_CACHES = RAM only). The MFR setting resets to the UI value after the script ends.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#apppurge",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appdisablerendering",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appsetmultiframerenderingconfig"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Installed effects list (app.effects)",
+   "summary": "Read-only array of every effect AE has: displayName, matchName, category, version. The authoritative existence check before adding an effect.",
+   "use_for": [
+    "validating a plan's effect names before a build",
+    "mapping display names to match names"
+   ],
+   "how": "for (var i = 0; i < app.effects.length; i++) if (app.effects[i].matchName == 'ADBE Gaussian Blur 2') ...  Apply with layer.property('ADBE Effect Parade').addProperty(matchName).",
+   "scriptable": "yes",
+   "script_api": "app.effects[i].displayName / .matchName / .category / .version",
+   "limits": "displayName and category are localized; matchName is stable across versions and languages, so plans should store match names. A lookup that cannot fail is not an existence check: test against this list (or canAddProperty) rather than the truthiness of an add.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#appeffects"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Preferences and Settings objects",
+   "summary": "Read and write AE preference-file keys (app.preferences) and script settings (app.settings), persisted between sessions.",
+   "use_for": [
+    "storing a pipeline's own settings",
+    "reading a preference before a build"
+   ],
+   "how": "app.settings.saveSetting('AdobeBridge', 'lastRun', '...'); app.settings.getSetting(...); app.preferences.getPrefAsLong(section, key[, PREFType.PREF_Type_MACHINE_SPECIFIC]).",
+   "scriptable": "yes",
+   "script_api": "app.preferences.getPrefAsBool/Long/Float/String, savePrefAsBool/Long/Float/String, havePref, deletePref, reload, saveToDisk; app.settings.getSetting/saveSetting/haveSetting",
+   "limits": "Exact section/key names for built-in preferences are undocumented; writing AE's own preferences changes the user's setup (don't). Values are strings in the file.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/other/preferences/",
+    "https://ae-scripting.docsforadobe.dev/other/settings/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Shell commands from a script (system.callSystem)",
+   "summary": "Run an OS command line from ExtendScript and get its text output.",
+   "use_for": [
+    "calling ffmpeg or python from inside an AE job",
+    "reading the environment"
+   ],
+   "how": "var out = system.callSystem('cmd.exe /c \"ffprobe -v error ...\"');",
+   "scriptable": "yes",
+   "script_api": "system.callSystem(cmdLine); system.osName, system.machineName, system.userName",
+   "limits": "Blocks AE until the command finishes. Whether the file/network preference gates it is unverified. Prefer doing shell work in the Python runner outside AE.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/system/#systemcallsystem"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Project create / open / save / close",
+   "summary": "Create, open, save and close .aep projects from a script.",
+   "use_for": [
+    "starting a fresh build",
+    "saving the built project for Premiere/aerender"
+   ],
+   "how": "var proj = app.newProject(); ...; proj.save(new File('C:/out/name_v2.aep'));  app.open(file) opens a project; proj.close(CloseOptions.DO_NOT_SAVE_CHANGES).",
+   "scriptable": "yes",
+   "script_api": "app.newProject(), app.open([file]), app.openFast(file) (undocumented), Project.save([file]), Project.saveWithDialog(), Project.close(closeOptions), Project.dirty (17.5, officially undocumented), Project.file",
+   "limits": "Field rule (AdobeBridge memory + field-tested in AdobeBridge): never app.open/close a project from inside a pipeline script, and never overwrite or delete the .aep AE has open; both have left AE deaf to later -r jobs. Version output names (_v2, _v3) instead. Check app.project.dirty and refuse to clobber the user's unsaved work. save() without a file on a never-saved project opens a dialog. app.newProject() asks the user to save an edited current project (modal) and returns null if they cancel; app.open() with no file opens a dialog.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/application/#appnewproject",
+    "https://ae-scripting.docsforadobe.dev/general/application/#appopen",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectsave",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectdirty"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Project items and stable IDs: comps, folders, lookup",
+   "summary": "Create comps and folders, find items by index, ID or selection, and find layers by their persistent ID (Layer.id / Project.layerByID, 22.0+).",
+   "use_for": [
+    "building a comp per scene",
+    "organising imports into bins",
+    "mapping plan items to built layers across script runs"
+   ],
+   "how": "var comp = app.project.items.addComp('Main', 1920, 1080, 1, 30, 30);  // name, w, h, pixelAspect, durationSec, fps. app.project.items.addFolder('Footage'); item.parentFolder = folder; app.project.item(i) is 1-based. var id = layer.id; ... app.project.layerByID(id).",
+   "scriptable": "yes",
+   "script_api": "Project.items (ItemCollection.addComp(name, width, height, pixelAspect, duration, frameRate), addFolder(name)), Project.item(index), Project.itemByID(id), Project.activeItem, Project.selection, Project.rootFolder, Item.id/.name/.comment/.label/.remove(), Layer.id (22.0), Project.layerByID(id) (22.0)",
+   "limits": "Indices are 1-based and shift when items or layers are added/removed; keep IDs for stable references. Layer IDs survive save/reload but are reassigned when the project is imported into another project.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/itemcollection/",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectitem",
+    "https://ae-scripting.docsforadobe.dev/item/item/",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/#layerid",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectlayerbyid"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Import footage and image sequences",
+   "summary": "Import files (video, audio, stills, PSD/AI as comps, image sequences) into the project.",
+   "use_for": [
+    "bringing clips, music, PNG overlays into a build",
+    "importing a PSD as a layered comp"
+   ],
+   "how": "var io = new ImportOptions(new File(path)); io.sequence = true; if (io.canImportAs(ImportAsType.COMP)) io.importAs = ImportAsType.COMP; var item = app.project.importFile(io);",
+   "scriptable": "yes",
+   "script_api": "new ImportOptions(file), ImportOptions.importAs (ImportAsType.FOOTAGE|COMP|COMP_CROPPED_LAYERS|PROJECT), .sequence, .forceAlphabetical, .rangeStart/.rangeEnd, .canImportAs(), .isFileNameNumbered(); Project.importFile(importOptions); Project.importPlaceholder(name, w, h, fps, dur)",
+   "limits": "Pass native absolute paths (File(path).fsName); throws if the file can't be imported. importFileWithDialog opens UI (avoid in pipelines).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/other/importoptions/",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectimportfile"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Replace footage / layer source",
+   "summary": "Swap what a footage item or a layer points at.",
+   "use_for": [
+    "re-linking media",
+    "template comps whose clips are swapped per episode"
+   ],
+   "how": "footageItem.replace(new File(path)); layer.replaceSource(otherItem, false);  replaceWithSequence / replaceWithSolid / replaceWithPlaceholder also exist.",
+   "scriptable": "yes",
+   "script_api": "FootageItem.replace(file), replaceWithSequence(file, forceAlphabetical), replaceWithSolid(), replaceWithPlaceholder(); AVLayer.replaceSource(newSource, fixExpressions)",
+   "limits": "replaceSource on a null layer keeps isNull true, so the layer stays invisible. fixExpressions=true can be slow on big projects.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/footageitem/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayerreplacesource"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Footage interpretation (FootageSource: frame rate, loop, alpha)",
+   "summary": "Script the Interpret Footage settings of an imported item: conform frame rate, loop count, alpha mode, fields.",
+   "use_for": [
+    "conforming 25/29.97 fps news footage to the comp rate",
+    "looping short GIF/MP4 overlays",
+    "fixing premultiplied-alpha PNG/MOV overlays"
+   ],
+   "how": "var src = item.mainSource; if (!src.isStill) { src.conformFrameRate = 25; src.loop = 3; } if (src.hasAlpha) src.guessAlphaMode();  // or src.alphaMode = AlphaMode.PREMULTIPLIED; src.premulColor = [0,0,0]",
+   "scriptable": "yes",
+   "script_api": "FootageItem.mainSource / .proxySource (FootageSource): conformFrameRate (0 = native), nativeFrameRate, displayFrameRate, loop (1..9999), isStill, hasAlpha, alphaMode (AlphaMode.IGNORE|STRAIGHT|PREMULTIPLIED), premulColor, invertAlpha, fieldSeparationType, removePulldown, guessAlphaMode(), guessPulldown()",
+   "limits": "Setting conformFrameRate, loop or fieldSeparationType on a still throws (check isStill). conformFrameRate range 0..99. premulColor only matters with PREMULTIPLIED. Changes apply to every layer using that item.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/sources/footagesource/",
+    "https://ae-scripting.docsforadobe.dev/item/footageitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Project housekeeping (reduce, consolidate, fix expressions)",
+   "summary": "Script equivalents of File > Dependencies: reduce project, remove unused footage, consolidate, and auto-fix expressions after renames.",
+   "use_for": [
+    "shrinking a project before handoff",
+    "repairing expressions after renaming layers/effects"
+   ],
+   "how": "app.project.reduceProject([comp]); app.project.removeUnusedFootage(); app.project.consolidateFootage(); app.project.autoFixExpressions(oldText, newText);",
+   "scriptable": "yes",
+   "script_api": "Project.reduceProject(array_of_items), Project.removeUnusedFootage(), Project.consolidateFootage(), Project.autoFixExpressions(oldText, newText)",
+   "limits": "Destructive to the open project; run on a saved copy.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/project/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Project settings (depth, color, expression engine, GPU)",
+   "summary": "Read/write Project Settings: bit depth, working space, linear blending, expression engine, GPU renderer, time display.",
+   "use_for": [
+    "forcing 16/32 bpc for glows and gradients",
+    "choosing the JavaScript expression engine",
+    "color-managed pipelines"
+   ],
+   "how": "app.project.bitsPerChannel = 16; app.project.expressionEngine = 'javascript-1.0'; app.project.workingSpace = <name from app.project.listColorProfiles()>; app.project.linearBlending = true;",
+   "scriptable": "yes",
+   "script_api": "Project.bitsPerChannel (8|16|32), Project.expressionEngine ('extendscript'|'javascript-1.0'), Project.workingSpace, Project.workingGamma, Project.linearizeWorkingSpace, Project.compensateForSceneReferredProfiles, Project.listColorProfiles(), Project.linearBlending, Project.gpuAccelType, Project.timeDisplayType",
+   "limits": "Setting workingSpace needs an exact profile name from listColorProfiles(). Expression syntax differs between engines (JavaScript engine is the default and faster).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectbitsperchannel",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectexpressionengine"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Composition settings and actions",
+   "summary": "CompItem attributes for size, duration, frame rate, background, work area, motion blur, renderer, plus duplicate/open.",
+   "use_for": [
+    "setting 1080x1920 reels or 1920x1080 docs",
+    "enabling comp motion blur",
+    "trimming the work area before render"
+   ],
+   "how": "comp.width/height/duration/frameRate (from AVItem); comp.bgColor = [0,0,0]; comp.workAreaStart = 0; comp.workAreaDuration = 10; comp.motionBlur = true; comp.shutterAngle = 180; comp.renderer = comp.renderers[i]; comp.duplicate(); comp.openInViewer();",
+   "scriptable": "yes",
+   "script_api": "CompItem.bgColor, .workAreaStart, .workAreaDuration, .motionBlur, .shutterAngle, .shutterPhase, .motionBlurSamplesPerFrame, .frameBlending, .renderer, .renderers, .resolutionFactor, .draft3d, .displayStartTime, .layers, .numLayers, .selectedLayers, .duplicate(), .openInViewer(), .layer(index|name)",
+   "limits": "Times are seconds; frameDuration = 1/frameRate. Snap every time to the frame grid in one place (floor(t*fps+0.5)/fps) so AE and Premiere agree.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/compitem/",
+    "https://ae-scripting.docsforadobe.dev/item/avitem/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Add layers (footage, solid, null, shape, camera, light)",
+   "summary": "LayerCollection methods that create each layer type.",
+   "use_for": [
+    "placing clips on the timeline",
+    "colour solids for dips and backgrounds",
+    "nulls for rigs",
+    "cameras for 2.5D moves"
+   ],
+   "how": "comp.layers.add(item[, stillDurationSec]); comp.layers.addSolid([r,g,b], 'BG', 1920, 1080, 1[, dur]); comp.layers.addNull([dur]); comp.layers.addShape(); comp.layers.addCamera('Cam', [960,540]); comp.layers.addLight('Key', [960,540]);",
+   "scriptable": "yes",
+   "script_api": "LayerCollection.add(), addSolid(color, name, width, height, pixelAspect[, duration]), addNull([duration]), addShape(), addCamera(name, centerPoint), addLight(name, centerPoint), byName(name)",
+   "limits": "New layers go to the top (index 1) and honour the 'Create Layers at Composition Start Time' preference: set startTime/inPoint explicitly. Colors are 0-1 floats, not hex.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Text layers: point and box (paragraph) text",
+   "summary": "Create point text, box (paragraph) text and vertical text layers.",
+   "use_for": [
+    "titles, lower thirds, captions",
+    "wrapped paragraph text inside a fixed box"
+   ],
+   "how": "var t = comp.layers.addText('HELLO'); var b = comp.layers.addBoxText([1650, 540]); then set Source Text: var p = b.property('Source Text'), d = p.value; d.text = 'Long caption...'; p.setValue(d);",
+   "scriptable": "yes",
+   "script_api": "LayerCollection.addText([sourceText]), addBoxText([width, height]), addVerticalText([sourceText]) (24.2), addVerticalBoxText([width, height]) (24.2)",
+   "limits": "The docs list only [width, height] for addBoxText; AdobeBridge's ae_build.jsx also passes the string as an undocumented 2nd argument, but the documented route is to set Source Text afterwards. addBoxText/addText live on comp.layers (LayerCollection), not on a Layer. boxTextSize throws on point text.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/#layercollectionaddboxtext",
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/#layercollectionaddtext",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Pre-compose layers",
+   "summary": "Move a set of layers into a new comp and replace them with a single precomp layer.",
+   "use_for": [
+    "grouping a title's layers",
+    "isolating a clip for effects or a track matte"
+   ],
+   "how": "var pc = comp.layers.precompose([2, 3], 'TXT_01', true);  // indices, name, moveAllAttributes",
+   "scriptable": "yes",
+   "script_api": "LayerCollection.precompose(layerIndices, name[, moveAllAttributes])",
+   "limits": "moveAllAttributes=false is only allowed for a single layer. Returns the new CompItem; layer indices in the parent comp shift afterwards.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/#layercollectionprecompose"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Layer timing, order and copies",
+   "summary": "Set when a layer starts/ends, its stretch, stacking order, and duplicate or copy it to another comp.",
+   "use_for": [
+    "cutting clips to an edit",
+    "speed-changes by stretch",
+    "reusing a styled layer"
+   ],
+   "how": "layer.startTime = 2.0; layer.inPoint = 2.5; layer.outPoint = 6.0; layer.stretch = 50 (=2x speed); layer.moveToBeginning(); layer.moveAfter(other); var d = layer.duplicate(); layer.copyToComp(otherComp); layer.remove();",
+   "scriptable": "yes",
+   "script_api": "Layer.startTime, .inPoint, .outPoint, .stretch, .index, .moveBefore(), .moveAfter(), .moveToBeginning(), .moveToEnd(), .duplicate(), .copyToComp(intoComp), .remove(), .enabled, .solo, .shy, .locked, .label, .name, .activeAtTime(t)",
+   "limits": "inPoint/outPoint are comp time. copyToComp prepends the copy at index 1 of the target comp and returns nothing (read intoComp.layer(1)); undoing a copyToComp of a layer with effects has crashed AE (docs warning).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Parenting",
+   "summary": "Parent a layer to another so it inherits transforms.",
+   "use_for": [
+    "rigs: a null driving several titles",
+    "camera-locked overlays"
+   ],
+   "how": "child.parent = nullLayer;  // keeps the child visually in place (AE offsets its transforms)\nchild.setParentWithJump(nullLayer);  // keeps raw transform values, so the child may jump",
+   "scriptable": "yes",
+   "script_api": "Layer.parent, Layer.setParentWithJump([newParent])",
+   "limits": "Parent must be in the same comp. Set parent before keyframing if keyframe values are meant to be parent-relative.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/#layerparent",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/#layersetparentwithjump"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "AVLayer switches (blend mode, 3D, adjustment, motion blur, quality)",
+   "summary": "Timeline switches and modes on footage/solid/text/shape layers.",
+   "use_for": [
+    "Screen/Add blend for light leaks and flares",
+    "adjustment layers for grades",
+    "3D layers for parallax",
+    "per-layer motion blur"
+   ],
+   "how": "layer.blendingMode = BlendingMode.SCREEN; layer.adjustmentLayer = true; layer.threeDLayer = true; layer.motionBlur = true; layer.quality = LayerQuality.BEST; layer.frameBlendingType = FrameBlendingType.PIXEL_MOTION; layer.guideLayer = true; layer.audioEnabled = false;",
+   "scriptable": "yes",
+   "script_api": "AVLayer.blendingMode (BlendingMode.NORMAL|ADD|SCREEN|MULTIPLY|OVERLAY|SOFT_LIGHT|...), .adjustmentLayer, .threeDLayer, .threeDPerChar (text), .motionBlur, .quality, .samplingQuality, .frameBlendingType, .collapseTransformation (check canSetCollapseTransformation), .guideLayer, .environmentLayer, .preserveTransparency, .audioEnabled, .effectsActive",
+   "limits": "Comp motion blur must also be on (comp.motionBlur) for layer motion blur to render. Enum constant names are exact (note the docs spelling BlendingMode.SILHOUETE_ALPHA).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayerblendingmode",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Track mattes (setTrackMatte, AE 23.0+)",
+   "summary": "Since AE 23.0 any layer can use any other layer as its track matte (not just the one above) by reference.",
+   "use_for": [
+    "text-reveal and shape-reveal mattes",
+    "masking footage inside titles",
+    "luma-matte transitions"
+   ],
+   "how": "fill.setTrackMatte(matteLayer, TrackMatteType.ALPHA); fill.setTrackMatte(fill.trackMatteLayer, TrackMatteType.LUMA_INVERTED); fill.removeTrackMatte();",
+   "scriptable": "yes",
+   "script_api": "AVLayer.setTrackMatte(trackMatteLayer, TrackMatteType.ALPHA|ALPHA_INVERTED|LUMA|LUMA_INVERTED), AVLayer.removeTrackMatte(), AVLayer.trackMatteLayer, AVLayer.trackMatteType (legacy setter), .hasTrackMatte, .isTrackMatte",
+   "limits": "setTrackMatte(layer, TrackMatteType.NO_TRACK_MATTE) is a silent no-op; pass null as the layer to remove. Setting trackMatteType directly is the legacy pre-23 API. Used in AdobeBridge vfx_build.jsx (field-tested in AdobeBridge).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayersettrackmatte",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Time remapping",
+   "summary": "Enable time remap and keyframe source time for freeze frames, speed ramps and reverses.",
+   "use_for": [
+    "speed ramps in trailers",
+    "freeze-frame holds",
+    "reversing a clip"
+   ],
+   "how": "if (layer.canSetTimeRemapEnabled) { layer.timeRemapEnabled = true; var tr = layer.property('ADBE Time Remapping'); tr.setValueAtTime(0, 0); tr.setValueAtTime(2, 4); }",
+   "scriptable": "yes",
+   "script_api": "AVLayer.canSetTimeRemapEnabled, AVLayer.timeRemapEnabled, property('ADBE Time Remapping')",
+   "limits": "Enabling adds 2 keyframes (start/end); remove or overwrite them. Scene Edit Detection fails on time-remapped layers.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayertimeremapenabled",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/avlayer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Layer geometry helpers (sourceRectAtTime, point mapping)",
+   "summary": "Measure a text/shape layer's real bounds at a time, and map points between layer and comp space.",
+   "use_for": [
+    "auto-sizing a box behind text",
+    "centering text by its visible bounds",
+    "placing overlays on tracked points"
+   ],
+   "how": "var r = layer.sourceRectAtTime(t, false); // {top, left, width, height} in layer space\nvar p = layer.sourcePointToComp([x, y]); var q = layer.compPointToSource([x, y]);",
+   "scriptable": "yes",
+   "script_api": "AVLayer.sourceRectAtTime(timeT, extents), AVLayer.sourcePointToComp(point), AVLayer.compPointToSource(point), AVLayer.calculateTransformFromPoints(pointTopLeft, pointTopRight, pointBottomRight)",
+   "limits": "Bounds are in layer coordinates, before the layer's transform; extents=true includes shape stroke extents.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayersourcerectattime",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayersourcepointtocomp"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Property tree navigation (Property / PropertyGroup)",
+   "summary": "Every layer setting is a Property inside nested PropertyGroups, reachable by display name, match name or index.",
+   "use_for": [
+    "finding Transform, Effects, Masks, Text and shape contents",
+    "walking an effect's parameters"
+   ],
+   "how": "layer.property('ADBE Transform Group').property('ADBE Position'); layer.property('ADBE Effect Parade').property(1).property('Blurriness'); group.numProperties; p.matchName; p.propertyType (PropertyType.PROPERTY|INDEXED_GROUP|NAMED_GROUP).",
+   "scriptable": "yes",
+   "script_api": "PropertyGroup.property(index|name|matchName), PropertyGroup.numProperties, PropertyGroup.canAddProperty(name), PropertyGroup.addProperty(name), PropertyBase.matchName/.name/.propertyIndex/.propertyType/.parentProperty/.enabled/.remove()/.duplicate()/.moveTo()",
+   "limits": "Adding (addProperty), moving (moveTo) or removing a child of an indexed group invalidates every existing reference into that group: add all children first, then re-fetch by index/match name. Use match names, not display names, for language-proof scripts.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/propertygroup/",
+    "https://ae-scripting.docsforadobe.dev/property/propertybase/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Setting values and keyframes",
+   "summary": "Set static values or keyframes on any property.",
+   "use_for": [
+    "animating position/scale/opacity",
+    "effect parameter ramps",
+    "keyframes [[seconds, value], ...] from a plan"
+   ],
+   "how": "p.setValue(v) (no keyframes only); p.setValueAtTime(t, v); p.setValuesAtTimes([t1, t2], [v1, v2]); p.setValueAtKey(k, v); p.valueAtTime(t, false); p.removeKey(k); p.numKeys.",
+   "scriptable": "yes",
+   "script_api": "Property.setValue(), setValueAtTime(time, value), setValuesAtTimes(times, values), setValueAtKey(), addKey(time), removeKey(), valueAtTime(time, preExpression), keyTime(), keyValue(), numKeys, nearestKeyIndex(time), propertyValueType, hasMin/minValue/hasMax/maxValue, dimensionsSeparated, isSeparationLeader, getSeparationFollower(dim)",
+   "limits": "Times are COMP time in seconds (layer start offsets are the caller's job). setValue throws if the property already has keyframes. Value shapes: OneD number; TwoD/TwoD_SPATIAL [x,y]; ThreeD (Scale) [x,y,z]; COLOR [r,g,b,a] floats 0-1; popups 1-based integers; LAYER_INDEX integer (0 = none). Clamp numbers to minValue/maxValue first: out-of-range values ended AdobeBridge scripts uncatchably. If Position has separated dimensions (p.dimensionsSeparated true), animate 'ADBE Position_0' / 'ADBE Position_1' (or p.getSeparationFollower(dim)) instead of 'ADBE Position'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysetvalueattime",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertypropertyvaluetype",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysetvalue",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertydimensionsseparated"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Keyframe interpolation and easing",
+   "summary": "Control linear/bezier/hold interpolation, temporal ease (speed + influence), spatial tangents, roving and keyframe labels.",
+   "use_for": [
+    "Easy Ease equivalents",
+    "snappy ease-out pops",
+    "hold keys for step animation",
+    "colour-labelled keys"
+   ],
+   "how": "var B = KeyframeInterpolationType.BEZIER; p.setInterpolationTypeAtKey(k, B, B); p.setTemporalEaseAtKey(k, [new KeyframeEase(0, 33.333)], [new KeyframeEase(0, 33.333)]);  // one KeyframeEase per dimension for TwoD/ThreeD (Scale needs 3), one for spatial props",
+   "scriptable": "yes",
+   "script_api": "Property.setInterpolationTypeAtKey(k, inType[, outType]), keyInInterpolationType(k), keyOutInterpolationType(k), setTemporalEaseAtKey(k, inEase[, outEase]), keyInTemporalEase(k), keyOutTemporalEase(k), new KeyframeEase(speed, influence), setSpatialTangentsAtKey(), setTemporalContinuousAtKey(), setTemporalAutoBezierAtKey(), setSpatialAutoBezierAtKey(), setRovingAtKey(), keyLabel(k)/setLabelAtKey(k, label) (22.6)",
+   "limits": "influence must be 0.1-100. Ease array length must match the property's dimensions (AdobeBridge reads keyInTemporalEase(k).length). AE's Easy Ease = speed 0, influence 33.333 on both sides, which is smoothstep (field-tested in AdobeBridge).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysettemporaleaseatkey",
+    "https://ae-scripting.docsforadobe.dev/other/keyframeease/",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysetinterpolationtypeatkey"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Expressions from scripts",
+   "summary": "Write, enable and check expressions on any expressible property.",
+   "use_for": [
+    "wiggle/loopOut on generated layers",
+    "linking titles to slider rigs",
+    "procedural counters"
+   ],
+   "how": "if (p.canSetExpression) { p.expression = 'wiggle(2, 20)'; if (p.expressionError) warn(p.expressionError); }  Setting '' disables it.",
+   "scriptable": "yes",
+   "script_api": "Property.expression, Property.expressionEnabled, Property.expressionError, Property.canSetExpression, Project.expressionEngine, Project.autoFixExpressions(old, new)",
+   "limits": "Expressions are checked when set: an invalid one sets expressionEnabled=false and raises an error. Expression text must match the project's engine ('javascript-1.0' default). Expressions slow renders; bake keyframes for heavy comps.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertyexpression",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertyexpressionerror"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Apply an effect by match name and set its parameters",
+   "summary": "Add any installed effect to a layer and set its controls; the core of PVE effect specs.",
+   "use_for": [
+    "every {'name': <match name>, 'props': {...}} spec in PVE",
+    "grades, blurs, glows, distortions"
+   ],
+   "how": "var fx = layer.property('ADBE Effect Parade').addProperty('ADBE Gaussian Blur 2'); fx.property('Blurriness').setValue(20); nested: fx.property('Group').property('Child'). Re-fetch the effect by index after adding another effect.",
+   "scriptable": "yes",
+   "script_api": "layer.property('ADBE Effect Parade').addProperty(matchName|displayName), PropertyGroup.canAddProperty(), Property.setValue()/setValueAtTime(), hasMin/minValue/hasMax/maxValue",
+   "limits": "Clamp to the harvested min/max (out-of-range kills the script). Popup values are 1-based. Colours are [r,g,b,a] 0-1 (PVE specs use #RRGGBB, converted by ae_lib.jsx hex()). CC effects' 'Producer'/'Physics' rows look like groups but are flat PropertyType.PROPERTY headers: asking them for a child ends the script (field-tested in AdobeBridge). Some effects need extra installs (Cineware needs Cinema 4D) and fail on add.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/propertygroup/#propertygroupaddproperty",
+    "https://ae-scripting.docsforadobe.dev/matchnames/effects/firstparty/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Expression controls (Slider, Checkbox, Color, Point, Angle, Layer, Dropdown)",
+   "summary": "Effects whose only job is to hold a value for expressions or rigs; the backbone of scripted templates.",
+   "use_for": [
+    "rig controls on a null",
+    "MOGRT-exposed knobs",
+    "driving many layers from one value"
+   ],
+   "how": "var s = ctl.property('ADBE Effect Parade').addProperty('ADBE Slider Control'); s.name = 'Count'; s.property(1).setValue(250);  Match names (harvested): ADBE Slider Control (Slider, -1000000..1000000), ADBE Checkbox Control (0/1), ADBE Color Control, ADBE Point Control, ADBE Point3D Control, ADBE Angle Control, ADBE Layer Control, ADBE Dropdown Control (Menu, 1-based).",
+   "scriptable": "yes",
+   "script_api": "PropertyGroup.addProperty('ADBE Slider Control' | 'ADBE Checkbox Control' | 'ADBE Color Control' | 'ADBE Point Control' | 'ADBE Point3D Control' | 'ADBE Angle Control' | 'ADBE Layer Control' | 'ADBE Dropdown Control')",
+   "limits": "Renaming the effect changes its display name only; expressions should reference it by the new name. Adding a second control invalidates the first reference (re-fetch).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/propertygroup/#propertygroupaddproperty",
+    "https://ae-scripting.docsforadobe.dev/matchnames/effects/firstparty/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Dropdown Menu Control items (isDropdownEffect, setPropertyParameters)",
+   "summary": "Script the item list of a Dropdown Menu Control and read dropdown labels.",
+   "use_for": [
+    "template style switches (e.g. 'Red / Saffron / Black')",
+    "MOGRT dropdowns for Premiere editors"
+   ],
+   "how": "var m = fx.property('Menu'); if (m.isDropdownEffect) m.setPropertyParameters(['Saffron', 'White', 'Green']); m.setValue(2);  Read back (26.0+): m.propertyParameters (all labels), m.valueText (selected label).",
+   "scriptable": "yes",
+   "script_api": "Property.isDropdownEffect (17.0.1), Property.setPropertyParameters(items) (17.0.1), Property.propertyParameters (26.0), Property.valueText (26.0)",
+   "limits": "Only the Dropdown Menu Control's Menu property accepts new items. Items must be non-empty, unique strings with no backslash; '(-' makes a separator that still takes an index; the call throws on failure. Items must be ASCII or in the system code page: Devanagari labels on an English-locale Windows come out illegible, so keep labels ASCII. Values stay 1-based indices. The harvested Menu range (1..3) is the DEFAULT three items: after setPropertyParameters the max is the new item count, so do not clamp custom menus to 3.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysetpropertyparameters",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertyisdropdowneffect",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertypropertyparameters"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Layer parameter render stage (AE 26.5)",
+   "summary": "Choose whether a layer parameter (e.g. Displacement Map's map layer) reads the source, masks only, or all effects.",
+   "use_for": [
+    "effects that sample another layer after its own effects",
+    "avoiding a pre-comp just to bake effects"
+   ],
+   "how": "var p = fx.property('Displacement Map Layer'); p.setLayerInputStage(-1);  // -1 = ALL_EFFECTS, -2 = ONLY_MASKS, 0 = SOURCE (named values on p.LayerInputStageType)  p.setInputLayerAndStage(layerIndex, stage) sets both as one undo step (layerIndex 0 = none). Check p.getInputStageCycleSafeLimit() before choosing a stage above SOURCE.",
+   "scriptable": "yes",
+   "script_api": "Property.layerInputStage (read-only), Property.setLayerInputStage(stageIndex), Property.inputLayerAndStage, Property.setInputLayerAndStage(layerIndex, stageIndex), Property.getInputStageCycleSafeLimit(), Property.LayerInputStageType.SOURCE(0)|ALL_EFFECTS(-1)|ONLY_MASKS(-2)",
+   "limits": "Added in 26.5 (September 2026). Installed AE here is 26.0 (AfterFX.exe ProductVersion 26.0, aerender 26.0x67): gate on parseFloat(app.version) >= 26.5 before calling. All of these throw on properties that are not layer parameters (propertyValueType LAYER_INDEX). 'Displacement Map Layer' is the harvested layer parameter of ADBE Displacement Map; other effects' layer parameters are the props harvested with type 'layer'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysetlayerinputstage",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Animation presets (.ffx) via applyPreset",
+   "summary": "Apply any .ffx preset (text animators, transitions, effect stacks) from a script.",
+   "use_for": [
+    "typewriter / fade-by-character text animations",
+    "AE 'Transitions - *' reveal presets",
+    "house effect stacks"
+   ],
+   "how": "Deselect all layers, select the target, set comp.time to where keyframes should start, then: target.applyPreset(new File(presetsDir + '/Text/Animate In/Typewriter.ffx')); target.selected = false;",
+   "scriptable": "yes",
+   "script_api": "Layer.applyPreset(File)",
+   "limits": "Applies to the SELECTED layers of the comp, not to the layer it is called on; with nothing selected it creates a new solid. Keyframed presets start at the comp's current time (field-tested in AdobeBridge). 'Transitions - *' presets are reveals (in only). Presets folder: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/#layerapplypreset"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Layer styles (Drop Shadow, Stroke, etc.)",
+   "summary": "Photoshop-style layer styles have match names (e.g. 'dropShadow/enabled') but adding them by script is not documented.",
+   "use_for": [
+    "quick shadows/strokes on titles"
+   ],
+   "how": "Prefer the Drop Shadow effect ('ADBE Drop Shadow') or stroke via Text/Shape properties. If a style is required: select the layer and run the Layer > Layer Styles menu command via app.executeCommand(app.findMenuCommandId(...)); then set values through the layer's styles group using the documented match names.",
+   "scriptable": "partial",
+   "script_api": "unverified: no documented add method; match names listed under Layer Styles (e.g. 'dropShadow/enabled', 'dropShadow/color', 'dropShadow/opacity')",
+   "limits": "addProperty for layer styles is unverified and widely reported not to work; the menu-command route depends on selection and focus. Use effects instead in pipelines.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/layerstyles/",
+    "https://creativecow.net/forums/thread/how-do-i-add-layer-styles-to-a-layer-with-scriptae/"
+   ],
+   "confidence": "low"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "TextDocument styling (Source Text)",
+   "summary": "Style text by reading Source Text's TextDocument, changing it, and setting it back.",
+   "use_for": [
+    "font, size, fill and stroke of titles",
+    "justification and tracking",
+    "keyframed text changes"
+   ],
+   "how": "var sp = tl.property('Source Text'), td = sp.value; td.resetCharStyle(); td.resetParagraphStyle(); td.font = 'NirmalaUI-Bold'; td.fontSize = 96; td.applyFill = true; td.fillColor = [1,1,1]; td.applyStroke = true; td.strokeColor = [0,0,0]; td.strokeWidth = 4; td.strokeOverFill = false; td.tracking = 20; td.justification = ParagraphJustification.CENTER_JUSTIFY; sp.setValue(td);",
+   "scriptable": "yes",
+   "script_api": "Property('Source Text').value -> TextDocument; .text, .font (PostScript name), .fontSize, .fillColor, .strokeColor, .applyFill, .applyStroke, .strokeWidth, .strokeOverFill, .tracking, .leading, .autoLeading, .justification, .allCaps, .smallCaps, .fauxBold, .fauxItalic, .baselineShift, .horizontalScale, .verticalScale, .resetCharStyle(), .resetParagraphStyle(); sp.setValueAtTime(t, td)",
+   "limits": "Character attributes read from the FIRST character only, and setting one applies it to all characters (use CharacterRange for per-range styling). Nothing changes until sp.setValue(td). New text inherits the user's Character panel, so reset styles first (field-tested in AdobeBridge). Colours are [r,g,b] 0-1.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/",
+    "https://ae-scripting.docsforadobe.dev/layer/textlayer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Box text layout (auto-fit, vertical alignment, insets)",
+   "summary": "Paragraph (box) text controls added in 24.6: box auto-fit height, vertical alignment in the box, inset spacing, overflow check.",
+   "use_for": [
+    "captions that must stay inside a safe area",
+    "lower thirds that grow with text",
+    "detecting overset text"
+   ],
+   "how": "td.boxTextSize = [1650, 400]; td.boxVerticalAlignment = BoxVerticalAlignment.CENTER; td.boxInsetSpacing = 20; sp.setValue(td); if (sp.value.boxOverflow) shrinkFont();  For growing boxes keep alignment TOP and set td.boxAutoFitPolicy = BoxAutoFitPolicy.HEIGHT_CURSOR.",
+   "scriptable": "yes",
+   "script_api": "TextDocument.boxText, .boxTextSize, .boxTextPos, .boxAutoFitPolicy (NONE|HEIGHT_CURSOR|HEIGHT_PRECISE_BOUNDS|HEIGHT_BASELINE), .boxVerticalAlignment (TOP|CENTER|BOTTOM|JUSTIFY), .boxInsetSpacing, .boxFirstBaselineAlignment, .boxFirstBaselineAlignmentMinimum, .boxOverflow (read-only)",
+   "limits": "boxAutoFitPolicy is disabled unless boxVerticalAlignment is TOP; the box only grows downward. boxTextSize throws on point text.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/#textdocumentboxautofitpolicy",
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/#textdocumentboxverticalalignment",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Per-character / per-paragraph styling (CharacterRange, 24.3+)",
+   "summary": "Style part of a text layer (one word in a different colour, a different font for a phrase).",
+   "use_for": [
+    "highlighting a keyword in a headline",
+    "mixed Hindi/English lines with different fonts"
+   ],
+   "how": "var td = sp.value; var r = td.characterRange(6, 11); r.fillColor = [1, 0.6, 0]; r.font = 'Arial-BoldMT'; sp.setValue(td);  Paragraphs: td.paragraphRange(i); lines: td.composedLineRange(i); counts td.paragraphCount / td.composedLineCount.",
+   "scriptable": "yes",
+   "script_api": "TextDocument.characterRange(start[, signedEnd]), TextDocument.paragraphRange(), TextDocument.composedLineRange(), CharacterRange.pasteFrom() (25.1), CharacterRange.isRangeValid, .characterStart, .characterEnd",
+   "limits": "Ranges are 0-based, end exclusive (-1 = to the end). Mixed values read as undefined. A range becomes invalid (throws) if the text length changes. Not available on CharacterRange: boxText, boxTextSize, pointText, paragraphCount, lineOrientation, baselineLocs. Only 24.3+.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/text/characterrange/",
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/#textdocumentcharacterrange",
+    "https://ae-scripting.docsforadobe.dev/text/paragraphrange/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Fonts API (app.fonts, usedFonts, replaceFont)",
+   "summary": "Query installed fonts, detect missing/substituted fonts, and replace fonts project-wide (24.0+).",
+   "use_for": [
+    "checking a plan's fonts exist before a build",
+    "fixing missing fonts in received projects",
+    "picking a font that has Devanagari glyphs"
+   ],
+   "how": "var f = app.fonts.getFontsByPostScriptName('NirmalaUI-Bold'); if (!f.length || f[0].isSubstitute) warn(...); app.fonts.missingOrSubstitutedFonts; app.project.usedFonts; app.project.replaceFont(fromFont, toFont); f[0].hasGlyphsFor('\\u0928\\u092E\\u0938\\u094D\\u0924\\u0947') (25.1; \\u escapes keep the .jsx pure ASCII).",
+   "scriptable": "yes",
+   "script_api": "app.fonts (FontsObject): allFonts, getFontsByPostScriptName(), getFontsByFamilyNameAndStyleName(), getFontByID(), missingOrSubstitutedFonts, getCTScriptForString(), getDefaultFontForCTScript(), setDefaultFontForCTScript(); FontObject: postScriptName, familyName, styleName, isSubstitute, isFromAdobeFonts, writingScripts, location, hasGlyphsFor(); Project.usedFonts (24.5), Project.replaceFont(from, to[, noFontLocking]) (24.5); TextDocument.fontObject",
+   "limits": "Setting TextDocument.font to an unknown name silently creates a substitute: verify with fontObject.isSubstitute or by reading the font back (AdobeBridge warns when sp.value.font differs). replaceFont is not undoable. replaceFont falls back to another font when toFont lacks glyphs unless noFontLocking=true, and nothing reports it. hasGlyphsFor cannot say which character is missing. See also: 'Missing fonts (After Effects Resolve Fonts, Adobe Fonts, templates)'; 'Collect a project for hand-off (AE Collect Files, Premiere Project Manager)'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/text/fontsobject/",
+    "https://ae-scripting.docsforadobe.dev/text/fontobject/",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectreplacefont",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projectusedfonts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Indic and complex-script text (composer engine)",
+   "summary": "Devanagari and other complex scripts need the Universal Type Engine composer (the default for new text layers since 22.1.1); TextDocument exposes composerEngine, digitSet, direction and kerning type.",
+   "use_for": [
+    "Hindi titles and captions for Indian political/news channels",
+    "avoiding broken matras and conjuncts"
+   ],
+   "how": "var td = sp.value; td.resetCharStyle(); td.composerEngine = ComposerEngine.UNIVERSAL_TYPE_ENGINE; td.autoKernType = AutoKernType.METRIC_KERN; td.font = 'NirmalaUI-Bold'; sp.setValue(td);  Only text layers from projects made before 22.1.1 come back as LATIN_CJK_ENGINE.",
+   "scriptable": "partial",
+   "script_api": "TextDocument.composerEngine (ComposerEngine.UNIVERSAL_TYPE_ENGINE | LATIN_CJK_ENGINE), .autoKernType (AutoKernType.METRIC_KERN|OPTICAL_KERN|NO_AUTO_KERN), .digitSet, .direction, .lineOrientation (24.2)",
+   "limits": "composerEngine can only be written to UNIVERSAL_TYPE_ENGINE (writing LATIN_CJK_ENGINE throws) and applies to every paragraph; a mixed value reads as undefined. The Text Engine preference itself is UI-only. Optical kerning opened gaps after Devanagari matras, so AdobeBridge forces Metric kerning; per-letter text animators can break conjuncts (field-tested in AdobeBridge).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/#textdocumentcomposerengine",
+    "https://ae-scripting.docsforadobe.dev/text/textdocument/#textdocumentautokerntype"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Text animators and selectors by script",
+   "summary": "Build text animators (opacity, position, blur per character) with range selectors, plus variable-font axis animators (26.0).",
+   "use_for": [
+    "word-by-word reveals without presets",
+    "kinetic typography",
+    "variable font weight animation"
+   ],
+   "how": "var an = tl.property('ADBE Text Properties').property('ADBE Text Animators').addProperty('ADBE Text Animator'); an.property('ADBE Text Animator Properties').addProperty('ADBE Text Opacity').setValue(0); var sel = an.property('ADBE Text Selectors').addProperty('ADBE Text Selector'); sel.property('ADBE Text Percent Start').setValueAtTime(0, 0); ...  Variable fonts: an.property('ADBE Text Animator Properties').addVariableFontAxis('wght').",
+   "scriptable": "yes",
+   "script_api": "PropertyGroup.addProperty('ADBE Text Animator' | 'ADBE Text Opacity' | 'ADBE Text Position 3D' | 'ADBE Text Blur' | 'ADBE Text Fill Color' | 'ADBE Text Selector' | ...), PropertyGroup.addVariableFontAxis(axisTag) (26.0)",
+   "limits": "Text animators are the documented exception that can be added to a named group. Re-fetch after each add (references invalidate). Match names above are from the scripting guide's text-layer match-name table. Per-character animation can break Indic conjuncts. See also: 'Text animator properties: the full set with match names'; 'Text selectors: Range, Wiggly and Expression (match names and Advanced options)'; 'Text More Options: Anchor Point Grouping, Grouping Alignment, Fill & Stroke, Inter-Character Blending'; 'Text on a path (Path Options)'; 'Per-character 3D text (Enable Per-character 3D)'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/textlayer/",
+    "https://ae-scripting.docsforadobe.dev/property/propertygroup/#propertygroupaddvariablefontaxis"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Shape layer contents (groups, paths, fill, stroke, trim, repeater)",
+   "summary": "Build shape graphics by adding vector items under the shape layer's Contents group.",
+   "use_for": [
+    "animated underlines and boxes behind text",
+    "progress bars, circles, arrows",
+    "trim-path line reveals"
+   ],
+   "how": "var sh = comp.layers.addShape(); var g = sh.property('ADBE Root Vectors Group').addProperty('ADBE Vector Group'); var c = g.property('ADBE Vectors Group'); var r = c.addProperty('ADBE Vector Shape - Rect'); r.property('ADBE Vector Rect Size').setValue([800, 12]); c.addProperty('ADBE Vector Graphic - Fill').property('ADBE Vector Fill Color').setValue([1,0.6,0.1,1]); var tr = c.addProperty('ADBE Vector Filter - Trim'); tr.property('ADBE Vector Trim End').setValueAtTime(0, 0);",
+   "scriptable": "yes",
+   "script_api": "LayerCollection.addShape(); property('ADBE Root Vectors Group').addProperty('ADBE Vector Group' | 'ADBE Vector Shape - Rect' | 'ADBE Vector Shape - Ellipse' | 'ADBE Vector Shape - Star' | 'ADBE Vector Shape - Group' | 'ADBE Vector Graphic - Fill' | 'ADBE Vector Graphic - Stroke' | 'ADBE Vector Graphic - G-Fill' | 'ADBE Vector Filter - Trim' | 'ADBE Vector Filter - Repeater' | 'ADBE Vector Filter - RC' | 'ADBE Vector Filter - Offset' | 'ADBE Vector Filter - Wiggler' | ...)",
+   "limits": "A group's children live in its 'ADBE Vectors Group'; its transform in 'ADBE Vector Transform Group'. Free paths ('ADBE Vector Shape - Group' -> 'ADBE Vector Shape') take a Shape object. Each addProperty invalidates sibling references. Stroke taper/wave match names exist since 17.1.1.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/shapelayer/",
+    "https://ae-scripting.docsforadobe.dev/other/shape/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Masks and the Shape object",
+   "summary": "Add masks and set their path, mode, feather and expansion from a script.",
+   "use_for": [
+    "vignette and spotlight masks",
+    "wipe reveals by animating a mask path",
+    "cropping footage to a shape"
+   ],
+   "how": "var m = layer.property('ADBE Mask Parade').addProperty('ADBE Mask Atom'); var s = new Shape(); s.vertices = [[0,0],[960,0],[960,1080],[0,1080]]; s.closed = true; m.property('ADBE Mask Shape').setValue(s); m.maskMode = MaskMode.ADD; m.property('ADBE Mask Feather').setValue([40, 40]);",
+   "scriptable": "yes",
+   "script_api": "property('ADBE Mask Parade').addProperty('ADBE Mask Atom'), Shape (vertices, inTangents, outTangents, closed, feather*), MaskPropertyGroup.maskMode, .inverted, .rotoBezier, .maskMotionBlur, .maskFeatherFalloff, .locked, .color; mask props 'ADBE Mask Shape' (in the guide), 'ADBE Mask Feather', 'ADBE Mask Opacity', 'ADBE Mask Offset' (= Expansion) (community-known; not in the guide's match-name tables)",
+   "limits": "Vertices are in layer coordinates. Mask paths keyframe like any property (setValueAtTime(t, shape)); keep vertex counts equal between keys for clean morphs. 'ADBE Mask Feather' takes [x, y] pixels.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/maskpropertygroup/",
+    "https://ae-scripting.docsforadobe.dev/other/shape/",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertypropertyvaluetype"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Layer and composition markers",
+   "summary": "Create layer or comp markers with comments, durations, labels, chapters and cue-point parameters.",
+   "use_for": [
+    "beat markers for cutting to music",
+    "chapter points",
+    "marking edit points for later passes"
+   ],
+   "how": "var mv = new MarkerValue('BEAT'); mv.duration = 0; mv.label = 3; layer.property('Marker').setValueAtTime(t, mv); comp.markerProperty.setValueAtTime(t, new MarkerValue('Chapter 1'));",
+   "scriptable": "yes",
+   "script_api": "new MarkerValue(comment[, chapter, url, frameTarget, cuePointName, params]), MarkerValue.duration, .label (16.0), .protectedRegion (16.0), .getParameters(), .setParameters(); Layer.marker, CompItem.markerProperty (14.0)",
+   "limits": "Times are comp time. Only comment is required.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/other/markervalue/",
+    "https://ae-scripting.docsforadobe.dev/item/compitem/#compitemmarkerproperty"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Scene Edit Detection (22.3+)",
+   "summary": "Find cuts inside a video layer and optionally add markers, split the layer, or split and pre-compose each shot.",
+   "use_for": [
+    "chopping downloaded news footage into shots",
+    "finding cut points in reference reels"
+   ],
+   "how": "var cuts = layer.doSceneEditDetection(SceneEditDetectionMode.MARKERS);  // returns cut times in comp time; SPLIT, SPLIT_PRECOMP or NONE also allowed",
+   "scriptable": "yes",
+   "script_api": "Layer.doSceneEditDetection(SceneEditDetectionMode.MARKERS|SPLIT|SPLIT_PRECOMP|NONE)",
+   "limits": "Errors on non-video layers and on layers with time remapping enabled. Runs synchronously and can take a while on long clips.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layer/#layerdosceneeditdetection",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Render Queue and Output Modules",
+   "summary": "Queue comps, apply render-settings and output-module templates, set the output file, and render in-app.",
+   "use_for": [
+    "scripted final render of each build",
+    "per-scene renders with alpha",
+    "reading/writing render settings as objects"
+   ],
+   "how": "var rq = app.project.renderQueue.items.add(comp); rq.applyTemplate('Best Settings'); var om = rq.outputModule(1); om.applyTemplate('H.264 - Match Render Settings - 40 Mbps'); om.file = new File('C:/out/scene01.mp4'); app.project.renderQueue.render();  Alpha: om.applyTemplate('High Quality with Alpha').",
+   "scriptable": "yes",
+   "script_api": "RenderQueue.items.add(comp), RenderQueue.render(), .pauseRendering(), .stopRendering(), .rendering, .showWindow(), .queueNotify (22.0); RenderQueueItem.applyTemplate(), .templates, .outputModule(i), .status (RQItemStatus.*), .onStatusChanged, .timeSpanStart/.timeSpanDuration, .getSettings(GetSettingsFormat.*), .setSettings(obj), .queueItemNotify (22.0); OutputModule.applyTemplate(), .templates, .file, .getSettings(), .setSettings(), .saveAsTemplate()",
+   "limits": "render() blocks until done. The output Format cannot be set via setSettings: pick an OM template (look it up in om.templates; AdobeBridge picks the first /H\\.264/ match). After om.setSettings the OutputModule object is invalidated: fetch it again. AdobeBridge renders with aerender instead of render() so the GUI stays free (field-tested in AdobeBridge).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/renderqueue/renderqueue/",
+    "https://ae-scripting.docsforadobe.dev/renderqueue/renderqueueitem/",
+    "https://ae-scripting.docsforadobe.dev/renderqueue/outputmodule/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Queue in Adobe Media Encoder",
+   "summary": "Send queued render-queue items to Adobe Media Encoder and optionally start encoding.",
+   "use_for": [
+    "offloading H.264/HEVC encodes so AE stays free",
+    "AME presets not available as AE templates"
+   ],
+   "how": "if (app.project.renderQueue.canQueueInAME) app.project.renderQueue.queueInAME(false);  // true = start encoding immediately",
+   "scriptable": "yes",
+   "script_api": "RenderQueue.canQueueInAME, RenderQueue.queueInAME(render_immediately_in_AME)",
+   "limits": "AME applies its most recently used preset, which the script cannot choose; with true there is no chance to change it. Needs AME installed (AME 2026 is installed here). See also: 'Export encoding choices: VBR 2-pass vs CBR, maximum depth and quality, field order'; 'Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift' and the 'Delivery spec: ...' cards (YouTube upload, vertical Reels/Shorts/TikTok, broadcast masters, mezzanine and archive masters, alpha overlays).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/renderqueue/renderqueue/#renderqueuequeueiname"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Motion Graphics template (.mogrt) export",
+   "summary": "Expose properties in the Essential Graphics panel and export the comp as a .mogrt for Premiere.",
+   "use_for": [
+    "house lower thirds, counters, captions editable in Premiere",
+    "AdobeBridge 'house_mogrts'"
+   ],
+   "how": "comp.motionGraphicsTemplateName = 'HB Counter'; if (p.canAddToMotionGraphicsTemplate(comp)) p.addToMotionGraphicsTemplateAs(comp, 'Label'); app.project.save(new File(aep)); var ok = comp.exportAsMotionGraphicsTemplate(true, 'C:/out/mogrt_folder');",
+   "scriptable": "yes",
+   "script_api": "CompItem.motionGraphicsTemplateName, CompItem.exportAsMotionGraphicsTemplate(doOverWriteFileIfExisting[, folderPath]), CompItem.openInEssentialGraphics(), CompItem.motionGraphicsTemplateControllerCount, CompItem.getMotionGraphicsTemplateControllerName(i), CompItem.setMotionGraphicsControllerName(i, name), Property.addToMotionGraphicsTemplate(comp), Property.addToMotionGraphicsTemplateAs(comp, name), Property.canAddToMotionGraphicsTemplate(comp)",
+   "limits": "The path argument is a FOLDER; the file is named from motionGraphicsTemplateName. Save the project first or AE prompts. Field-tested (field-tested in AdobeBridge): the export invalidates the old Project object (re-read app.project) and afterwards AE ignores every later -r script until restarted, so run exports as the last step and restart AE. Unsupported property types return false and AE shows a warning dialog.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/compitem/#compitemexportasmotiongraphicstemplate",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertyaddtomotiongraphicstemplate",
+    "https://ae-scripting.docsforadobe.dev/item/compitem/#compitemsetmotiongraphicscontrollername"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Media Replacement in MOGRTs (18.0+)",
+   "summary": "Let Premiere editors swap an image/video inside a .mogrt by adding the layer itself to the Essential Graphics panel.",
+   "use_for": [
+    "photo-frame templates (leader photos in press cards)",
+    "logo slots"
+   ],
+   "how": "if (layer.canAddToMotionGraphicsTemplate(comp)) layer.addToMotionGraphicsTemplateAs(comp, 'Photo');  Swap the alternate source on the essential property: prop.setAlternateSource(item) after checking item.isMediaReplacementCompatible and prop.canSetAlternateSource.",
+   "scriptable": "yes",
+   "script_api": "AVLayer.addToMotionGraphicsTemplate(comp), AVLayer.addToMotionGraphicsTemplateAs(comp, name), AVLayer.canAddToMotionGraphicsTemplate(comp), AVItem.isMediaReplacementCompatible, Property.alternateSource, Property.canSetAlternateSource, Property.setAlternateSource(newSource)",
+   "limits": "Only footage-type (media replacement) layers qualify; fails (with a dialog) if already added.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/#avlayeraddtomotiongraphicstemplateas",
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertysetalternatesource"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Essential Properties and the Properties panel",
+   "summary": "Precomp layers carry 'Essential Properties' (the parent comp's EGP controls) under match name 'ADBE Layer Overrides'; the Properties panel (Window > Properties) shows them and common layer controls in the UI.",
+   "use_for": [
+    "overriding a reused precomp's text/colour per instance",
+    "templating many variants from one precomp"
+   ],
+   "how": "var ep = precompLayer.essentialProperty.property(1); ep.setValue(...); ep.essentialPropertySource gives the original property. The Properties panel itself is UI-only.",
+   "scriptable": "partial",
+   "script_api": "layer.property('ADBE Layer Overrides') / layer.essentialProperty, Property.essentialPropertySource (22.0)",
+   "limits": "Properties panel layout and its quick controls have no scripting API; everything it edits is reachable through the normal property tree. The version that first showed Essential Properties in the Properties panel (about 23.6) comes from a third-party news post and is unverified.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/#propertyessentialpropertysource",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/avlayer/",
+    "https://www.toolfarm.com/news/update-adobe-after-effects-2023-6-essential-properties-in-the-properties-panel/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Guides and rulers",
+   "summary": "Add, move and remove comp/layer guides (e.g. title-safe and 9:16 safe-zone guides).",
+   "use_for": [
+    "marking Instagram/YouTube safe areas in templates",
+    "layout checks in review projects"
+   ],
+   "how": "comp.addGuide(1, 960);  // 1 = vertical, 0 = horizontal, position px  (26.5+: comp.addGuide(new GuideOptions()) with percent position, colour, pinning)",
+   "scriptable": "yes",
+   "script_api": "Item.addGuide(orientationType, position), Item.setGuide(position, guideIndex), Item.removeGuide(index), Item.guides; Layer.addGuide/setGuide/removeGuide; 26.5: GuideOptions, Item.getGuideAsObject(); ViewOptions.guidesVisibility/guidesLocked/guidesSnap/rulers",
+   "limits": "Guides do not render. GuideOptions, GuideOrientationType/GuidePositionType and getGuideAsObject need 26.5; installed AE here is 26.0 (aerender 26.0x67), where only addGuide(0|1, px) / setGuide(px, index) exist and guides[] entries carry integers. The integer values behind orientationType/positionType change in 26.5: on 26.5+ compare against the enum constants, and gate on parseFloat(app.version). See also: 'Broadcast safe areas (action and title safe)'; 'Premiere Safe Margins and After Effects safe guides (their defaults)'; 'Platform UI safe zones (1080x1920 Reels, Shorts, TikTok)'.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/item/#itemaddguide",
+    "https://ae-scripting.docsforadobe.dev/other/guideoptions/",
+    "https://ae-scripting.docsforadobe.dev/introduction/changelog/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "Viewer and selection control",
+   "summary": "Open comps in the viewer, read/set selected layers and properties, and the active tool.",
+   "use_for": [
+    "preparing focus for executeCommand / applyPreset",
+    "reading what the user selected"
+   ],
+   "how": "comp.openInViewer(); comp.selectedLayers; layer.selected = true; comp.time = 2.0; app.activeViewer.setActive(); app.project.toolType = ToolType.Tool_Arrow;",
+   "scriptable": "yes",
+   "script_api": "CompItem.openInViewer(), CompItem.selectedLayers, CompItem.selectedProperties, Layer.selected, CompItem.time (via AVItem.time), app.activeViewer (Viewer.setActive(), .views, .maximized), Project.toolType",
+   "limits": "Selection-dependent calls (applyPreset, executeCommand) need the right comp active; viewer state is unreliable in headless/aerender runs.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/item/compitem/#compitemopeninviewer",
+    "https://ae-scripting.docsforadobe.dev/other/viewer/",
+    "https://ae-scripting.docsforadobe.dev/general/project/#projecttooltype"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "3D: model layers, parametric meshes, cameras",
+   "summary": "Imported 3D models are ThreeDModelLayer (24.4+); parametric meshes can be created by script from 26.3; camera/light layers via addCamera/addLight.",
+   "use_for": [
+    "3D logo/flag objects in political explainers",
+    "simple 3D shapes for cinematic titles",
+    "camera moves"
+   ],
+   "how": "Import a .glb/.obj with app.project.importFile(...) and comp.layers.add(item) (instanceof ThreeDModelLayer). 26.3+: comp.layers.addParametricMesh('Cube', ParametricMeshType.CUBE); cam = comp.layers.addCamera('Cam', [960,540]).",
+   "scriptable": "partial",
+   "script_api": "ThreeDModelLayer (24.4), LayerCollection.addParametricMesh(name, ParametricMeshType.SPHERE|PLANE|CYLINDER|CONE|TORUS|CUBE) (26.3), ParametricMeshLayer.parametricMeshType/.parametricMeshOptions/.parametricBevelOptions, LayerCollection.addCamera(), addLight(), CameraLayer FocusAreaWidth/NearFarBlurMultiplier (26.3, Advanced 3D only)",
+   "limits": "addParametricMesh needs 26.3: installed AE here is 26.0 (AfterFX.exe ProductVersion 26.0, aerender 26.0x67): gate on parseFloat(app.version) before calling. parametricMeshOptions fields depend on the type (CUBE: width, height, depth, smoothingAngle). Rendering needs the Advanced 3D renderer (comp.renderer).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/threedmodellayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/parametricmeshlayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/#layercollectionaddparametricmesh"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "ae_scripting",
+   "app": "AE",
+   "name": "UI-only features (no scripting API)",
+   "summary": "Several AI/analysis tools have no documented scripting entry point: Roto Brush propagation, Content-Aware Fill, 3D Camera Tracker / Warp Stabilizer analysis control, Track Mask / tracker analysis, the Graph Editor UI, the Properties panel UI, preference panes.",
+   "use_for": [
+    "deciding what a pipeline must leave to a human",
+    "routing such steps to other tools (local AI models, Premiere)"
+   ],
+   "how": "Applying the effects is scriptable (e.g. Warp Stabilizer starts analysing on apply in the UI), but starting/controlling analysis, Roto Brush strokes and Content-Aware Fill renders are not. Some commands can be triggered with app.executeCommand on a prepared selection.",
+   "scriptable": "no",
+   "script_api": "none documented (fallback: app.executeCommand(id), unverified per feature)",
+   "limits": "Absence is inferred from the scripting guide's object model, not from an Adobe statement; treat any workaround as unverified and verify output by rendering.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/introduction/objectmodel/",
+    "https://helpx.adobe.com/after-effects/using/content-aware-fill.html",
+    "https://helpx.adobe.com/after-effects/using/tracking-3d-camera-movement.html"
+   ],
+   "confidence": "medium"
+  }
+ ]
+}

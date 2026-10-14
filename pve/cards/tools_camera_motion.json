@@ -1,0 +1,205 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "camera_moves",
+   "app": "AE",
+   "name": "Camera rigs: one-node vs two-node and a null rig for orbit, dolly and truck",
+   "summary": "How to move an After Effects camera cleanly: a two-node camera aims at its Point of Interest, a one-node camera is aimed by rotation; parenting the camera to a 3D null turns orbit (rotate the null), dolly (move along the camera's Z) and truck/pedestal (move X/Y) into one keyframed property each.",
+   "use_for": [
+    "orbit around a 3D title or product",
+    "slow dolly-in through layered photo cards",
+    "documentary push through a 2.5D scene"
+   ],
+   "how": "Script: var cam = comp.layers.addCamera('CAM', [comp.width / 2, comp.height / 2]) (the centre point is the Point of Interest, z 0); one-node: cam.autoOrient = AutoOrientType.NO_AUTO_ORIENT; rig: var rig = comp.layers.addNull(); rig.threeDLayer = true; rig.position.setValue([cx, cy, 0]); cam.parent = rig; orbit = keyframe rig Y Rotation; dolly = keyframe the camera's own Position Z (one-node) or both Position and Point of Interest (two-node); zoom changes the lens (Camera Options > Zoom), which is not a dolly.",
+   "scriptable": "yes",
+   "script_api": "LayerCollection.addCamera(name, centerPoint) -> CameraLayer; Layer.autoOrient (NO_AUTO_ORIENT, ALONG_PATH, CAMERA_OR_POINT_OF_INTEREST, CHARACTERS_TOWARD_CAMERA); Layer.parent; camera options group 'ADBE Camera Options Group' with 'ADBE Camera Zoom', 'ADBE Camera Depth of Field', 'ADBE Camera Focus Distance', 'ADBE Camera Aperture', 'ADBE Camera Blur Level', iris properties 'ADBE Iris Shape' ...",
+   "limits": "The Point of Interest's match name is not on the scripting guide's camera page: loop over the camera's Transform group and print each matchName before setting it. A two-node camera parented to a rotating null still aims at its own (unparented-space) Point of Interest: use one-node cameras inside rigs. The bridge's VFX 'cam' is a 2D null zoom, not a camera: real camera rigs are a hand or custom-script step.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/cameralayer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "camera_moves",
+   "app": "AE",
+   "name": "Camera depth of field and rack focus",
+   "summary": "A real rack focus in After Effects: 3D layers at different distances, a camera with Depth of Field on, and Focus Distance keyframed (or expression-linked) from the near subject to the far one; Aperture and Blur Level set how shallow it is.",
+   "use_for": [
+    "shifting attention from a foreground object to a background subject",
+    "2.5D photo scenes with a focus change",
+    "product shots with a soft background"
+   ],
+   "how": "Camera Options: Depth of Field On, Focus Distance (px from the camera), Aperture, Blur Level %. Rack: two keyframes of Focus Distance, ease both (Easy Ease), 0.6-1.2 s (working default). Link to a layer: select the camera and the subject, Layer > Camera > Link Focus Distance to Layer, or the expression var t = thisComp.layer('Subject'); dot(t.toWorld(t.anchorPoint) - toWorld([0, 0, 0]), toWorldVec([0, 0, 1])) on Focus Distance (distance along the camera's view axis).",
+   "scriptable": "yes",
+   "script_api": "cam.property('ADBE Camera Options Group').property('ADBE Camera Depth of Field').setValue(1); 'ADBE Camera Focus Distance'.setValueAtTime(t, d); 'ADBE Camera Aperture'; 'ADBE Camera Blur Level'",
+   "limits": "Only 3D layers blur. Render it with the comp on Classic 3D (comp.renderer = 'ADBE Advanced 3d', the old internal name): measured on 26.0, a layer 900 px in front of focus lost a third of its sharpness at Aperture 300 / Blur Level 100 and the focused layer stayed sharp. Advanced 3D ('ADBE Calder') hides the camera's depth-of-field properties on 26.0 (setting them from a script fails) and gets depth of field only in 26.3. For flat footage, a 2D stand-in is a keyframed blur ('Focus pull in' recipe) or Camera Lens Blur with a depth map layer (its Layer property cannot be set from a spec).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/cameralayer/",
+    "https://ae-expressions.docsforadobe.dev/layer/layer-space-transforms/",
+    "https://helpx.adobe.com/after-effects/desktop/work-with-layers/camera-layer/cameras-lights-points-interest.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "camera_moves",
+   "app": "AE",
+   "name": "Photo parallax with 3D layers and a camera",
+   "summary": "The full-3D version of photo parallax: cut-out planes placed at different Z depths in front of one camera, each scaled up to cancel the perspective shrink, then a slow camera dolly or truck. Unlike the 2D two-plane recipe, perspective and occlusion are computed by AE.",
+   "use_for": [
+    "archive photos with several depth layers (foreground, subject, background)",
+    "drone-like pushes into stills"
+   ],
+   "how": "Cut the photo into planes (subject, foreground, clean background plate), import as 3D layers, push each back in Z, then scale it by (zoom + z) / zoom x 100% so it fills the frame again (pinhole projection: a layer z px behind the zoom plane appears zoom / (zoom + z) as large; zoom = Camera Options > Zoom, the distance at which a layer shows at 100%). Then dolly the camera 5-15% of the depth range over 4-8 s (working default).",
+   "scriptable": "yes",
+   "script_api": "layer.threeDLayer = true; layer.transform.position.setValue([x, y, z]); layer.transform.scale.setValue([s, s, s]); camera rig as in 'Camera rigs'",
+   "limits": "The scale formula is geometry, not an Adobe-documented rule, and assumes the camera sits at -zoom on the Z axis looking at z 0 (read cam.transform.position and the Zoom value back after addCamera). Gaps behind foreground planes show unless the background plate is filled (Content-Aware Fill / Photoshop Generative Fill). The bridge cannot build cameras: see '2.5D photo parallax (two planes)' for the buildable 2D version.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/cameralayer/",
+    "https://helpx.adobe.com/after-effects/desktop/work-with-layers/camera-layer/cameras-lights-points-interest.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "camera_moves",
+   "app": "both",
+   "name": "Ken Burns move (stills pan and zoom)",
+   "summary": "The documentary pan-and-zoom on a photo in either app: a slow scale change plus a pan, eased at both ends, kept inside the photo's real resolution.",
+   "use_for": [
+    "archive and press photos under narration",
+    "giving stills the pace of moving footage"
+   ],
+   "how": "Premiere: Effect Controls > Motion: keyframe Scale and Position at the clip's start and end, right-click the keys > Ease In / Ease Out (or Bezier). After Effects: keyframe layer Scale and Position (select keys > Easy Ease, F9). Scripted: the bridge builds it from the clip 'zoom' ramp plus Transform effect Position keys ('Ken Burns pan and zoom on a still' recipe); for an eased curve sample it as several linear keys ('Eased slow push-in'). Working defaults: 10-20% scale change over 5-8 s; pan at most the spare picture the zoom leaves; start on the subject the VO names first.",
+   "scriptable": "yes",
+   "script_api": "Premiere ExtendScript: Motion 'Scale' / 'Position' ComponentParam.setTimeVarying(true), addKey, setValueAtKey; setInterpolationTypeAtKey (PVE 'Keyframes' card). AE: Property.setValueAtTime, setTemporalEaseAtKey with KeyframeEase(speed, influence).",
+   "limits": "Pushing beyond the source's pixels softens it: maximum clean scale = source width / frame width x the fit scale (a 4000 px scan in a 1920 frame allows about 2x before upscaling). A pan at zoom 1.0 exposes the edge on the axis the photo only just covers. The bridge's AE half ignores clip 'pan' and 'zoom_from' (Premiere-only keys).",
+   "status": "current",
+   "sources": [
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/",
+    "https://ae-scripting.docsforadobe.dev/other/keyframeease/",
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "camera_moves",
+   "app": "AE",
+   "name": "Camera wiggle on the camera, not the layers",
+   "summary": "Handheld or drift shake applied to the camera (through a parent null) so every 3D layer moves together with correct parallax, instead of wiggling each layer on its own.",
+   "use_for": [
+    "handheld feel on 3D title scenes and 2.5D photo parallax",
+    "subtle drift on a locked-off virtual camera"
+   ],
+   "how": "Parent the camera to a 3D null (see 'Camera rigs'), then on the null: Position: wiggle(0.8, 6) (frequency per second, amplitude px); Z Rotation: wiggle(0.5, 0.4). Keep the keyframed move on the camera and the shake on the null so they stay separate. For a different but repeatable pattern put seedRandom(n, false) first. 2D comps: wiggle a null that all layers are parented to (the bridge's VFX CAM null is that parent, but its expressions are not exposed in vfx scenes).",
+   "scriptable": "yes",
+   "script_api": "null.transform.position.expression = 'wiggle(0.8, 6)'; seedRandom(offset, timeless)",
+   "limits": "Wiggle values are working defaults (0.5-1.5 Hz, 3-10 px for 'handheld'); strong shakes at more than about 3 large-area contrast reversals a second also fall under the flash rule. Motion blur makes shake read as real.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/objects/property/",
+    "https://ae-expressions.docsforadobe.dev/general/random-numbers/",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "motion_paths",
+   "app": "AE",
+   "name": "Auto-Orient: Orient Along Path",
+   "summary": "Makes a layer rotate to face the direction it is moving along its motion path: a plane, car or arrow following a route on a map points the right way automatically.",
+   "use_for": [
+    "map routes (plane, ship, car icons)",
+    "arrows travelling along a curve",
+    "particles or icons following a path"
+   ],
+   "how": "Layer > Transform > Auto-Orient > Orient Along Path. Draw the artwork pointing right (+X) or add a fixed Rotation offset afterwards (changing Rotation or Orientation offsets the auto-orientation). Pair with a pasted mask path (see 'Paste a mask or shape path into Position') for a route that follows a drawn line.",
+   "scriptable": "yes",
+   "script_api": "layer.autoOrient = AutoOrientType.ALONG_PATH (other values: NO_AUTO_ORIENT, CAMERA_OR_POINT_OF_INTEREST, CHARACTERS_TOWARD_CAMERA)",
+   "limits": "Orientation follows the spatial path's tangent, so a sharp corner in the path snaps the rotation: smooth the path or the keyframes' spatial tangents. 'Orient Towards Camera' (3D layers only) is a different option.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/work-with-layers/select-and-arrange-layers/selecting-arranging-layers.html",
+    "https://ae-scripting.docsforadobe.dev/layer/layer/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "motion_paths",
+   "app": "AE",
+   "name": "Paste a mask or shape path into Position (motion path)",
+   "summary": "Turns a drawn line into motion: copy a mask or shape Path and paste it into Position, and the layer travels along it, with roving keyframes for an even speed.",
+   "use_for": [
+    "route animation on a map (draw the route once, reuse it for the line and the moving icon)",
+    "a logo or object following a hand-drawn curve"
+   ],
+   "how": "Select the Path property > Edit > Copy; select the target layer's Position (or Anchor Point); put the current-time indicator where the move should start; Edit > Paste. The pasted keyframes rove in time except the first and last, and the move lasts 2 s by default: drag the last keyframe to retime it. Expression alternative (no keyframes, timing from a slider or time): on Position: var p = thisComp.layer('Route').mask('Mask 1').maskPath; thisComp.layer('Route').toComp(p.pointOnPath(linear(time, 0, 4, 0, 1))). Draw the line itself with Trim Paths on the same path, with the same timing.",
+   "scriptable": "partial",
+   "script_api": "Menu paste is UI-only; scripted equivalent: read Shape.vertices / inTangents / outTangents from the path value, then Property.setValuesAtTimes(times, points) on Position, setSpatialTangentsAtKey(i, in, out) for the curves, setRovingAtKey(i, true) for the middle keys; or the pointOnPath expression above.",
+   "limits": "Mask points are in the mask layer's space (layer top-left origin): convert with toComp, as in the expression. Roving is ignored on the first and last keyframes. Pair it with 'Auto-Orient: Orient Along Path'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/animate-in-after-effects/assorted-animation-tools/assorted-animation-tools.html",
+    "https://ae-expressions.docsforadobe.dev/objects/path-property/",
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "motion_paths",
+   "app": "AE",
+   "name": "Separate Dimensions (X and Y position curves)",
+   "summary": "Splits Position into X Position and Y Position (and Z) so each gets its own keyframes and easing: arcs, bounces and news-graphic moves where horizontal and vertical motion need different timing.",
+   "use_for": [
+    "a box that slides in on X with a long ease while Y settles with a bounce",
+    "arcing moves without editing spatial tangents",
+    "independent graph-editor curves per axis"
+   ],
+   "how": "Right-click Position > Separate Dimensions (or Animation > Separate Dimensions); keyframe X Position and Y Position separately; in the Graph Editor each shows its own value graph.",
+   "scriptable": "yes",
+   "script_api": "positionProp.dimensionsSeparated = true (valid when isSeparationLeader); positionProp.getSeparationFollower(0) / (1) / (2) for X / Y / Z (0-based)",
+   "limits": "Separating loses some speed information (the motion path itself does not change) and gives up roving keyframes, which need the single Position property. Expressions then address transform.xPosition / yPosition.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/work-with-layers/select-and-arrange-layers/selecting-arranging-layers.html",
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "motion_paths",
+   "app": "AE",
+   "name": "Speed graph vs value graph (shaping eases)",
+   "summary": "How to shape motion in the Graph Editor: the value graph shows the property's value over time, the speed graph its rate of change; spatial properties (Position) open on the speed graph, others on the value graph. Ease strength is keyframe velocity plus influence.",
+   "use_for": [
+    "snappy 'expo' news-graphic eases",
+    "matching an ease between AE and Premiere titles",
+    "smoothing a jerky camera move"
+   ],
+   "how": "Select keys > F9 (Easy Ease), then in the Graph Editor pull the influence handles: a long outgoing influence on the first key and a long incoming one on the last gives a fast-middle, slow-ends move. Working defaults: influence 33% = Easy Ease, 70-90% for a strong 'expo' feel. Use the value graph on separated dimensions to see overshoot; use the speed graph to make speed continuous through a middle key.",
+   "scriptable": "yes",
+   "script_api": "Property.setTemporalEaseAtKey(keyIndex, inEase[], outEase[]) with new KeyframeEase(speed, influence) (influence 0.1-100; one ease for spatial properties, 2 for 2D, 3 for 3D non-spatial); setInterpolationTypeAtKey(i, KeyframeInterpolationType.BEZIER)",
+   "limits": "Influence percentages are working defaults, not Adobe-documented looks. Speed units follow the property (px/s for Position, %/s for Opacity). The bridge's seg eases are fixed (33.333% influence).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/after-effects/desktop/animate-in-after-effects/animation-basics/animation-basics.html",
+    "https://ae-scripting.docsforadobe.dev/other/keyframeease/",
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

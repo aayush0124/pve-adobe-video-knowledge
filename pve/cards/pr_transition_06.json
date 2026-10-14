@@ -1,0 +1,637 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "VR Spherical Blur",
+   "match": null,
+   "category": "Immersive Video",
+   "status": "current",
+   "family": "blur",
+   "summary": "Blurs the outgoing 360/VR clip with a seam-aware spherical blur, crossfades at peak blur and sharpens into the incoming clip. Made for equirectangular footage.",
+   "look": [
+    "spherical blur",
+    "blur-through",
+    "soft",
+    "360 / VR",
+    "swirl rings on flat footage"
+   ],
+   "use_for": [
+    "cuts between 360/VR equirectangular shots",
+    "soft location or time change in immersive documentary segments",
+    "blur-through between two VR explainer scenes"
+   ],
+   "avoid": [
+    "on flat 16:9 footage it renders concentric swirl/ring artefacts (seen in the gallery render): use Blur Dissolve instead",
+    "heavier to render than flat blur transitions"
+   ],
+   "feel": "soft dreamy blur-through",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: VR Blur (Immersive Video) keyframed up on A to the cut and down on B with an opacity crossfade at the peak; for flat footage Gaussian Blur + opacity crossfade.",
+   "scripting": "Placed OK by QE addTransition at 1 s centred: 321.52-322.52 s on the cut at 322.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Single-sided use (blur in from / out to black) assumed, not tested.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/080b.png",
+    "note": "A blurs into concentric spherical swirl rings at the cut and B sharpens out of them, matching the flat-footage ring artefact the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Whip (Legacy)",
+   "match": null,
+   "category": "Slide",
+   "status": "obsolete",
+   "family": "slide/push",
+   "summary": "Old native GPU whip: the incoming clip pushes the outgoing one off horizontally under heavy directional motion blur, like a fast whip-pan. Superseded by the new 'Whip' (Film Impact based).",
+   "look": [
+    "whip pan",
+    "horizontal motion blur",
+    "streaks",
+    "fast push"
+   ],
+   "use_for": [
+    "whip-pan cut between two locations in a reel",
+    "energetic b-roll change in explainers",
+    "matching a real camera whip-pan"
+   ],
+   "avoid": [
+    "use the current 'Whip' (Slide folder) for new edits",
+    "fewer controls than the new Whip (which adds speed curves and chromatic aberration), so the move can look dated"
+   ],
+   "feel": "fast energetic whip-pan",
+   "duration_typical": "0.3-0.5",
+   "sfx": "whoosh",
+   "single_sided_ok": false,
+   "equivalent": "Replacement in Premiere: 'Whip' (Slide folder, Film Impact AE.Impact_Whip). AE: animate Position of A out and B in over 6-10 frames with layer Motion Blur (shutter 360) or Directional Blur (direction 90 deg) keyframed to peak at the cut.",
+   "scripting": "Placed OK by QE addTransition at 1 s centred: 325.52-326.52 s on the cut at 326.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: horizontal blur streak with both images sliding sideways. Folder 'Slide' is from memory of older Premiere versions (not verified in 2026).",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/081b.png",
+    "note": "Heavy horizontal motion-blur streaks smear A off and B on, a clear fast whip-pan.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Louver",
+   "match": null,
+   "category": "Transformers",
+   "status": "current",
+   "family": "3D",
+   "summary": "Turns the outgoing clip into angled 3D venetian-blind slats that rotate with perspective and motion blur to reveal the next shot.",
+   "look": [
+    "rotating slats",
+    "venetian blinds",
+    "angled 3D panels",
+    "black gaps between slats",
+    "perspective",
+    "motion blur"
+   ],
+   "use_for": [
+    "section or chapter change in explainers",
+    "reveal of a new location or b-roll in reels",
+    "reveal of a title or stat card",
+    "segment bumper in news packages"
+   ],
+   "avoid": [
+    "black shows between the slats mid-turn; on a dark-to-dark cut it reads as a flicker",
+    "too decorative for sombre documentary moments"
+   ],
+   "feel": "stylish geometric, mid-energy",
+   "duration_typical": "0.6-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: Card Wipe (Rows 1, Columns 10-16, Flip Axis Y, Back Layer = incoming clip, Transition Completion 0->100%) with camera tilt for the angled look; Venetian Blinds for a flat version.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_3D_Blinds; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 329.52-330.52 s on the cut at 330.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: slanted slats with black gaps, B visible through the slats after the cut.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/082b.png",
+    "note": "Angled slats with black gaps alternate A and B strips with perspective, exactly the venetian-blind look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Block Motion",
+   "match": null,
+   "category": "Animation",
+   "status": "current",
+   "family": "motion",
+   "summary": "3D block animation: the frame moves like a solid block or cube that rotates and dollies with perspective and motion blur to bring in the next shot. It is also made to animate graphic layers in and out.",
+   "look": [
+    "3D block",
+    "cube rotation",
+    "perspective",
+    "motion blur",
+    "snappy"
+   ],
+   "use_for": [
+    "snappy shot change in reels",
+    "animating a lower third or stat card in/out over footage",
+    "explainer scene change with a motion-graphics feel"
+   ],
+   "avoid": [
+    "in the 1 s default gallery render the whole move happened in the first ~3 frames and B then held still, so check timing/curve settings or keep it short",
+    "too playful for serious news"
+   ],
+   "feel": "snappy motion-graphics",
+   "duration_typical": "0.4-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: precompose each clip, make it 3D and rotate X or Y 90 deg about an anchor on the block edge (cube turn), add a camera dolly and Motion Blur; a simpler version is Transform effect rotation/position keyframes with shutter angle 180-360.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_3D_Block; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 333.52-334.52 s on the cut at 334.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Catalog content type fullScreen|motionGraphics, so single-sided on a graphic layer animates it in or out.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/083a.png",
+    "note": "At -0.3 s B is already in on a tilted perspective block with black above it and is nearly settled by the cut, a quick 3D block move as the card (and its timing caveat) says.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Flip Motion",
+   "match": null,
+   "category": "Animation",
+   "status": "current",
+   "family": "3D",
+   "summary": "Flips the picture over like a 3D plane with perspective, a dolly, an easing curve and motion blur, revealing the incoming shot on the back (catalog: flip-over clock style). At defaults the gallery render turned around the vertical axis. It can also flip graphics in or out.",
+   "look": [
+    "flip-over plane",
+    "flip clock",
+    "perspective tilt",
+    "black behind the plane",
+    "motion blur"
+   ],
+   "use_for": [
+    "flip to a new number or stat card",
+    "before/after flip between two shots in reels",
+    "turning to the next chapter in explainers",
+    "animating graphic cards in or out"
+   ],
+   "avoid": [
+    "black shows around the tilted plane mid-flip unless something sits on the track below",
+    "too playful for sombre or obituary content"
+   ],
+   "feel": "playful snappy flip",
+   "duration_typical": "0.4-0.7",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: 3D layers with a camera; Y Rotation 0->90 on A then -90->0 on B with easy ease and Motion Blur (or Card Wipe 1x1 with Flip).",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_3D_Flip; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 337.52-338.52 s on the cut at 338.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: A tilts away in perspective on black, B lands with slight skew and blur.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/084b.png",
+    "note": "A turns on a perspective plane around the vertical axis over black, then B lands with horizontal motion blur, a flip-over as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "3D Roll",
+   "match": null,
+   "category": "Slide",
+   "status": "current",
+   "family": "3D",
+   "summary": "A 3D take on the roll transition: the image rolls around a curved, bulged surface with perspective and strong motion blur, carrying the next shot in from the side.",
+   "look": [
+    "rolling cylinder",
+    "bulge",
+    "horizontal motion blur",
+    "perspective",
+    "fast"
+   ],
+   "use_for": [
+    "fast location change in reels",
+    "energetic b-roll sequence in explainers",
+    "trailer montage beats on the music"
+   ],
+   "avoid": [
+    "heavy blur hides the picture for most of the transition; keep it short",
+    "frequent use feels like a template edit"
+   ],
+   "feel": "fast slick energetic",
+   "duration_typical": "0.4-0.7",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: Offset (Shift Center To keyframed) or a Position move with Directional Blur, plus Optics Compensation / CC Cylinder for the bulge; or a 3D precomp on CC Cylinder rotating with Motion Blur.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_3D_Roll; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 341.52-342.52 s on the cut at 342.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: horizontal streaked roll, B entering from the left. Single-sided rolls in over black or the track below (assumed, not tested).",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/085b.png",
+    "note": "Both shots share the frame in a fast horizontal roll smeared by strong motion blur with B coming from the left; the bulge is hard to see at this size.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "3D Spin",
+   "match": null,
+   "category": "Transformers",
+   "status": "current",
+   "family": "3D",
+   "summary": "The outgoing shot twirls away into depth, shrinking to a small spinning card over black, then the incoming shot spins back toward camera to full frame with zoom blur.",
+   "look": [
+    "twirling card",
+    "spin into depth",
+    "black void",
+    "zoom blur",
+    "dolly"
+   ],
+   "use_for": [
+    "playful topic switch in AI-education reels",
+    "comedic or satirical beat change",
+    "intro into a title or logo reveal"
+   ],
+   "avoid": [
+    "frame is almost all black mid-transition with a tiny picture: reads cheap/2000s in documentaries",
+    "faces become tiny and unreadable"
+   ],
+   "feel": "playful high-energy, flashy",
+   "duration_typical": "0.6-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: 3D layers with a camera; Z Rotation + Scale/Z Position out on A and in on B, Motion Blur on, plus CC Radial Fast Blur or Radial Blur (Zoom).",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_3D_Rotate; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 345.52-346.52 s on the cut at 346.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render confirmed the shrink-spin-to-black then spin-in.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/086b.png",
+    "note": "A twirls away into a tiny spinning card over black at the cut and B spins back toward camera with zoom blur.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Additive Dissolve",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "family": "dissolve",
+   "summary": "Additive dissolve: the two images' light is added, so the mix blooms brighter mid-way before settling on the incoming shot. Has curve and gamma controls. Replaces Additive Dissolve (Legacy).",
+   "look": [
+    "bright bloom",
+    "luminous mix",
+    "overexposed midpoint",
+    "filmic"
+   ],
+   "use_for": [
+    "dreamy memory or flashback beat",
+    "soft emotional montage",
+    "music-driven reel montage on bright footage",
+    "transition into a bright or sunlit scene"
+   ],
+   "avoid": [
+    "bright footage clips to white at the midpoint",
+    "on dark-to-dark cuts the bloom is weak and it reads close to a plain cross dissolve"
+   ],
+   "feel": "soft bright dreamy",
+   "duration_typical": "0.5-1.5",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: overlap A and B, put B on top in Add blend mode; first half B opacity 0->100% with A held at 100% (the sum blooms), second half A opacity 100->0%.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.Impact_Additive_Dissolve; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 349.52-350.52 s on the cut at 350.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/087b.png",
+    "note": "The midpoint mix of A and B is visibly brighter and washed out, the additive bloom described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Blur Dissolve",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "family": "blur",
+   "summary": "Blurs the outgoing shot while crossfading into the incoming one, which comes back into focus. Optional chromatic aberration.",
+   "look": [
+    "defocus",
+    "dreamy",
+    "soft",
+    "blur-through",
+    "chromatic aberration"
+   ],
+   "use_for": [
+    "dream, memory or flashback beat",
+    "soft time skip in documentary",
+    "music montage in reels",
+    "blur into a title or graphic"
+   ],
+   "avoid": [
+    "too soft for hard news cuts",
+    "long durations look like a focus mistake"
+   ],
+   "feel": "soft dreamy",
+   "duration_typical": "0.5-1.0",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: Gaussian Blur or Camera Lens Blur keyframed up on A to the cut and down on B, with an opacity crossfade.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Blur_dissolve; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 353.52-354.52 s on the cut at 354.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/088b.png",
+    "note": "At the cut the picture is a heavy defocus blur dissolving A into B, then B is sharp again.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Burn Alpha",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "family": "stylized",
+   "summary": "Luma-driven burn dissolve: the outgoing shot burns away through its darker tones (dark blotches spread, near black at the midpoint) and the incoming shot burns in from the shadows. Colourise options.",
+   "look": [
+    "dark burn",
+    "ink spread",
+    "luma key",
+    "moody",
+    "organic"
+   ],
+   "use_for": [
+    "dramatic mood change in documentary",
+    "dark or tense political explainer beat",
+    "trailer act break"
+   ],
+   "avoid": [
+    "goes near-black mid-transition, so on dark footage it reads as a dip to black",
+    "dark faces and clothing burn first"
+   ],
+   "feel": "moody dramatic organic",
+   "duration_typical": "0.8-1.5",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: CC Burn Film on A keyframed up to the cut and down on B; or Gradient Wipe on A (Gradient Layer = A itself, Softness 30-50%) over a black solid to the cut, then the same on B with Invert Gradient, completion 100->0%. Plain Gradient Wipe over B would reveal B instead of burning to black.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Burn_Alpha; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 357.52-358.52 s on the cut at 358.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: black burn blotches spread over A, almost fully dark at the cut.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/089b.png",
+    "note": "A burns away through dark blotches to a near-black midpoint before B appears, a dark luma burn.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Burn Chroma",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "family": "light/flare",
+   "summary": "Bright burn: the outgoing shot's highlights flare into an overexposed white (optionally colourised) burn that spreads and then reveals the incoming shot, like a film burn to light.",
+   "look": [
+    "overexposed",
+    "white burn",
+    "film burn",
+    "luminous",
+    "colourised glow"
+   ],
+   "use_for": [
+    "energetic music-video style cut in reels",
+    "nostalgic or archival montage",
+    "transition into a bright celebration or rally shot",
+    "trailer flash between beats"
+   ],
+   "avoid": [
+    "blows out text and faces mid-transition",
+    "too flashy for sober news"
+   ],
+   "feel": "bright nostalgic film burn",
+   "duration_typical": "0.6-1.2",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "AE: Gradient Wipe driven by A's inverted luminance plus Exposure/Glow keyframed up around the cut; or a film-burn / light-leak overlay in Screen or Add mode over an opacity crossfade.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Burn_White; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 361.52-362.52 s on the cut at 362.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: white bleached blobs spreading, B showing through.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/090b.png",
+    "note": "The mix at the cut has blown-out white burn patches spreading from the highlights over both shots.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Travel Motion",
+   "match": null,
+   "category": "Animation",
+   "status": "current",
+   "family": "motion",
+   "summary": "Travel/push animation: the outgoing shot travels out of frame and the incoming one travels in, with an adjustable angle, an easing (speed) curve and motion blur. At defaults the gallery render moved vertically (A up and out, B up from below). Also used to animate graphics in or out.",
+   "look": [
+    "travel",
+    "vertical push",
+    "vertical motion blur",
+    "eased movement",
+    "snappy"
+   ],
+   "use_for": [
+    "snappy scene change in reels",
+    "explainer slide-to-slide movement",
+    "animating titles or cards in/out over footage"
+   ],
+   "avoid": [
+    "at default (1 s) the gallery showed a short black gap of 2-3 frames between A leaving and B arriving: put a background on the track below or shorten it",
+    "bouncy feel is wrong for sombre content"
+   ],
+   "feel": "snappy modern motion-graphics",
+   "duration_typical": "0.4-0.7",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: Position keyframes with strong ease (or the Transform effect), A straight up and out of frame then B up in from below, layer Motion Blur on.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_C-Push; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 365.52-366.52 s on the cut at 366.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render at defaults: A shot up out of frame, B rose from below with vertical blur.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/091a.png",
+    "note": "A is shifted up out of frame with black below at -0.3 s and B rises from below at +0.3 s; the cut frame itself is fully black, the gap the card already warns about.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Chaos",
+   "match": null,
+   "category": "Grunge & Distort",
+   "status": "current",
+   "family": "glitch/damage",
+   "summary": "Camera-shake transition: both clips jitter in hard position jumps (about 10-30 px at 1080p, alternating horizontal and vertical, each held 2 frames) with a light blur, around a short ~0.2 s 50/50 mix on the cut. At defaults on a 1 s transition the shake runs from ~0.45 s before the cut to ~0.55 s after; frame edges stay filled. The catalog also lists noise distortion and chromatic aberration, but no colour split or warp showed in the default render.",
+   "look": [
+    "shake",
+    "jitter",
+    "earthquake",
+    "light blur",
+    "quick mid-point mix"
+   ],
+   "use_for": [
+    "hard energetic cut on a beat drop in reels",
+    "shock or reveal moment in a political explainer",
+    "trailer impact cut"
+   ],
+   "avoid": [
+    "a single still looks like a plain dissolve; the shake only reads in playback, so judge it on the moving render",
+    "no RGB split or noise warp at defaults (the batch exposes no properties): add those separately if wanted",
+    "overuse makes an edit feel frantic"
+   ],
+   "feel": "hard energetic chaotic",
+   "duration_typical": "0.3-0.6",
+   "sfx": "hit",
+   "single_sided_ok": true,
+   "equivalent": "AE: on the A/B overlap, Transform effect with Position = posterize-time 12.5 fps wiggle of ~25 px plus a light Directional/Gaussian Blur on both clips, and a ~0.2 s opacity crossfade centred on the cut; add Shift Channels or offset RGB copies for the catalog's colour split.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Chaos; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 369.52-370.52 s on the cut at 370.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Measured at defaults (phase correlation against the clean sources, Cross Dissolve as control at 0 px): A shakes from -0.44 s, the mix runs -0.08 to +0.12 s, B shakes until +0.52 s and is clean from +0.56 s; peak offset 31 px, sharpness down to ~0.6x, R/B channel offset 0.",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/092b.png",
+    "note": "Frame-by-frame scan of the render shows a real camera shake: A and B are offset 11-31 px (1080p) in alternating directions for ~1 s with mild blur, around a ~0.2 s mid-point mix; 092b catches only the mix, so the shake is invisible in the still. No colour split (R/B offset 0) or noise warp.",
+    "rerender": false,
+    "second_opinion": "corrected: first verifier said no visible shake and a slight zoom on B; measurement shows an 11-31 px shake on both clips from -0.44 s to +0.52 s (no zoom, translation only) with light blur, so the shake is the effect at defaults. Summary/look/avoid/scripting rewritten to the measured look, chromatic aberration and noise warp dropped from look, verdict weak -> pass, confidence low -> medium."
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Chroma Leak",
+   "match": null,
+   "category": "Lights & Blurs",
+   "status": "current",
+   "family": "light/flare",
+   "summary": "Colourful light-leak streaks (warm orange/red with chroma split) sweep across the frame and wash out the cut between the two shots.",
+   "look": [
+    "light leak",
+    "warm streaks",
+    "orange-red",
+    "chroma",
+    "glow",
+    "film"
+   ],
+   "use_for": [
+    "travel or vlog style reels",
+    "sunset or romantic montage",
+    "energetic music cut",
+    "transition into a celebration or rally shot"
+   ],
+   "avoid": [
+    "warm wash clashes with cold grades or brand colours",
+    "reads cheap if every cut uses it"
+   ],
+   "feel": "warm nostalgic to energetic (speed dependent)",
+   "duration_typical": "0.5-1.2",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: light-leak overlay footage in Screen/Add mode, or Fractal Noise + Directional Blur + Colorama/Tint in Screen mode, opacity keyframed across an A/B crossfade.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Chroma_Leaks; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 373.52-374.52 s on the cut at 374.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: orange-red streaks filling the frame at the cut.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/093b.png",
+    "note": "Warm orange-red light-leak streaks sweep across the frame and wash out the cut.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Clock Wipe",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "family": "wipe",
+   "summary": "Radial clock-hand wipe: the incoming shot is revealed by a hand sweeping clockwise from 12 o'clock around the centre (hard edge at defaults). Adds repeats, mirroring and curve controls. Replaces Clock Wipe (Legacy).",
+   "look": [
+    "radial sweep",
+    "clock hand",
+    "circular reveal",
+    "hard edge",
+    "timer"
+   ],
+   "use_for": [
+    "time-passing beat ('hours later')",
+    "countdown or deadline explainer moment",
+    "retro news bumper",
+    "pie-chart style stat reveal"
+   ],
+   "avoid": [
+    "looks cheesy and 2000s on ordinary cuts",
+    "the moving edge slices through faces"
+   ],
+   "feel": "playful retro 'time passes'",
+   "duration_typical": "0.6-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: Radial Wipe on A (Start Angle 0, Wipe Clockwise, Feather 0 for the default hard edge, Transition Completion 0->100%) over B.",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Clock_Wipe; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 377.52-378.52 s on the cut at 378.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Gallery render: clockwise sweep from 12 o'clock, B in the top-right quadrant first.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/094b.png",
+    "note": "A hard-edged radial hand sweeps clockwise from 12: B fills the top-right quadrant at -0.3 s, the right half at the cut and nearly all of the frame at +0.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Cross Dissolve",
+   "match": null,
+   "category": "Dissolve",
+   "status": "current",
+   "family": "dissolve",
+   "summary": "Standard crossfade from one shot into the next, rebuilt with curve and gamma-correction controls for a cleaner midpoint. Replaces Cross Dissolve (Legacy).",
+   "look": [
+    "soft",
+    "smooth",
+    "classic crossfade",
+    "unobtrusive"
+   ],
+   "use_for": [
+    "soft time or location change in documentary",
+    "softening an interview-to-b-roll change",
+    "archival photo or still montage",
+    "fade in/out at sequence start or end (single-sided)"
+   ],
+   "avoid": [
+    "slow and amateur on fast reels; prefer hard cuts",
+    "mismatched exposure makes a muddy midpoint (use the gamma control)"
+   ],
+   "feel": "soft neutral classic",
+   "duration_typical": "0.3-1.0",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "AE: overlap the layers and keyframe opacity of the upper (incoming) layer 0->100% (fade A out as well for a true crossfade on transparent backgrounds).",
+   "scripting": "Built-in 2026 Film Impact transition (Film Impact catalog match name AE.AE_Impact_Dissolve; the batch has no match name, so match is null). Placed OK by QE addTransition at 1 s centred: 381.52-382.52 s on the cut at 382.0 s (starts 0.48 s before the cut, ends 0.52 s after, about half a frame late of exact centre at 25 fps). Centred needs handles on both clips: outgoing media >= dur/2 past its out point, incoming >= dur/2 before its in point. Not verified whether the sequence default transition (Ctrl+D) uses this or Cross Dissolve (Legacy); apply by exact name.",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/095b.png",
+    "note": "A clean even crossfade of A and B at the midpoint with no other effect.",
+    "rerender": false
+   }
+  }
+ ]
+}

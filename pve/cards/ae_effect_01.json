@@ -1,0 +1,860 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "3D Channel Extract",
+   "match": "ADBE AUX CHANNEL EXTRACT",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "Turns an auxiliary 3D channel stored in a multichannel render (RPF/EXR from a 3D app: Z-depth, object ID, normals, UVs) into a visible greyscale or colour image. On ordinary footage it shows nothing useful.",
+   "look": [
+    "depth pass",
+    "greyscale matte",
+    "utility pass",
+    "normals map"
+   ],
+   "use_for": [
+    "Turn a 3D render's Z-depth into a greyscale map to use as the Blur Map of Camera Lens Blur (precompose it first)",
+    "Preview which aux channels a CGI render actually carries before compositing",
+    "Build a depth matte for colour-grading the background of a 3D title shot separately"
+   ],
+   "avoid": [
+    "Applying it to camera footage, stock video or press photos: there is no 3D channel, so the output is blank or flat",
+    "Leaving Black/White Point at defaults: the depth range of the render rarely matches, giving a solid black or white frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "3D Channel",
+     "does": "Which aux channel to display (popup, 1-based)",
+     "typical": "1 (Z-Depth) for depth work"
+    },
+    {
+     "name": "Black Point",
+     "does": "Channel value mapped to black (depth units from the 3D app)",
+     "typical": "nearest scene depth of the render"
+    },
+    {
+     "name": "White Point",
+     "does": "Channel value mapped to white",
+     "typical": "farthest scene depth of the render"
+    },
+    {
+     "name": "Invert Depth Map",
+     "does": "Swaps near/far brightness",
+     "typical": "1 when near should be white"
+    },
+    {
+     "name": "Clamp Output",
+     "does": "Clamps the result to 0-1",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "3D Channel": {
+     "1": "Z-Depth",
+     "2": "Object ID",
+     "3": "Texture UV",
+     "4": "Surface Normals",
+     "5": "Coverage",
+     "6": "Background RGB",
+     "7": "Unclamped RGB",
+     "8": "Material ID"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Camera Lens Blur",
+    "Fog 3D",
+    "Depth Matte",
+    "Levels"
+   ],
+   "scripting": "Only works on a layer whose source is an RPF or multichannel EXR with aux channels; there is no Premiere equivalent. Black Point / White Point are in the 3D app's depth units, so read the render's range first (Info panel shows 3D channel values while the effect is selected). For multichannel EXRs whose passes AE does not map to its 3D channels, use EXtractoR instead. 3D Channel popup order (Z-Depth, Object ID, Texture UV, Surface Normals, Coverage, Background RGB, Unclamped RGB, Material ID) is from Adobe docs, not from the harvest: verify before relying on indices above 1.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an RPF/EXR with 3D aux channels; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cryptomatte",
+   "match": "Cryptomatte",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "Picks per-object or per-material mattes out of a Cryptomatte EXR render by clicking objects, giving clean anti-aliased isolation of any CG element. Without Cryptomatte layers in the EXR it produces nothing.",
+   "look": [
+    "object matte",
+    "ID matte",
+    "CG isolation",
+    "colour-coded IDs"
+   ],
+   "use_for": [
+    "Isolate one building, prop or vehicle in a 3D render to grade or glow it separately",
+    "Cut out a CG logo or map element for a trailer or explainer composite",
+    "Mask a 3D object to place text behind it"
+   ],
+   "avoid": [
+    "Any footage that is not a Cryptomatte EXR from Blender, C4D, Houdini, Maya etc.",
+    "Expecting a script to pick objects: the selection lives in the custom Settings data"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Output",
+     "does": "What the effect outputs (popup, 4 options, 1-based): 1 Colors (colour-coded IDs), 2 Matted Colors, 3 Matted RGBA, 4 Matte Only (read from After Effects 26.0)",
+     "typical": "the matte option once objects are picked (check the label in the UI)"
+    },
+    {
+     "name": "Selection Mode",
+     "does": "Toggles interactive click-to-pick mode in the Composition panel",
+     "typical": "1 while picking, 0 for render"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Output": {
+     "1": "Colors",
+     "2": "Matted Colors",
+     "3": "Matted RGBA",
+     "4": "Matte Only"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "EXtractoR",
+    "Set Matte",
+    "Curves",
+    "Glow"
+   ],
+   "scripting": "Needs a multichannel EXR containing Cryptomatte layers. The layer choice and the picked object keys are stored in the custom 'Settings' property, which cannot be set from a spec; save a configured instance as a .ffx animation preset and apply that preset instead. Output: 1 Colors, 2 Matted Colors, 3 Matted RGBA, 4 Matte Only (read from After Effects 26.0).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a Cryptomatte EXR and custom Settings data; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Depth Matte",
+   "match": "ADBE DEPTH MATTE",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "Reads the Z-depth channel of a 3D render (RPF/EXR) and keeps only the parts nearer or farther than a chosen depth, creating a depth-based transparency matte. Does nothing on normal footage.",
+   "look": [
+    "depth cutout",
+    "foreground isolation",
+    "matte",
+    "z-depth"
+   ],
+   "use_for": [
+    "Separate foreground and background of a CG render so a title can sit between them",
+    "Cut a 3D city or map render at a depth to reveal a layer behind",
+    "Make depth-based layers for a parallax trailer shot"
+   ],
+   "avoid": [
+    "Live-action or stock footage: no depth channel, so the layer goes fully opaque or fully transparent",
+    "Zero Feather on aliased depth renders: jagged edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Depth",
+     "does": "Depth value where the cut happens (3D app units)",
+     "typical": "a value between the render's near and far depth"
+    },
+    {
+     "name": "Feather",
+     "does": "Softness of the depth cut",
+     "typical": "small, a few percent of the scene depth range"
+    },
+    {
+     "name": "Invert",
+     "does": "Keep far instead of near",
+     "typical": "0 or 1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "3D Channel Extract",
+    "Fog 3D",
+    "Depth of Field",
+    "Drop Shadow"
+   ],
+   "scripting": "Source layer must be an RPF or EXR with a Z-depth aux channel. Depth/Feather are in the 3D application's units; use 3D Channel Extract first to read the range. No Premiere equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a Z-depth channel from an RPF/EXR; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Depth of Field",
+   "match": "ADBE DEPTH FIELD",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "Simulates camera focus on a 3D render by blurring pixels according to their distance from a focal plane read from the Z-depth channel. On footage without a depth channel nothing happens.",
+   "look": [
+    "shallow focus",
+    "rack focus",
+    "bokeh-ish blur",
+    "depth blur"
+   ],
+   "use_for": [
+    "Add focus falloff to a CG render of a building, map or product",
+    "Rack focus between foreground and background objects in a 3D trailer shot",
+    "Soften a busy 3D background behind a title"
+   ],
+   "avoid": [
+    "Camera footage or photos: use Camera Lens Blur with a depth map or a mask instead",
+    "Large Maximum Radius on edges with no coverage data: halos around objects"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Focal Plane",
+     "does": "Depth that stays sharp (3D app units)",
+     "typical": "depth of the hero object"
+    },
+    {
+     "name": "Maximum Radius",
+     "does": "Largest blur radius for out-of-focus areas",
+     "typical": "5-20"
+    },
+    {
+     "name": "Focal Plane Thickness",
+     "does": "Depth range around the focal plane that stays sharp",
+     "typical": "10-30% of scene depth"
+    },
+    {
+     "name": "Focal Bias",
+     "does": "How fast blur ramps up away from the focal plane",
+     "typical": "50"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "3D Channel Extract",
+    "Fog 3D",
+    "Depth Matte"
+   ],
+   "scripting": "Needs an RPF/EXR layer with a Z-depth channel; this is not AE's camera depth of field (that is a camera layer setting) and not Camera Lens Blur. Focal Plane is in the 3D app's depth units: for a rack focus keyframe Focal Plane from the near object's depth to the far object's depth (read both with 3D Channel Extract / the Info panel; no generic values work across renders).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a Z-depth channel from an RPF/EXR; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "EXtractoR",
+   "match": "EXtractoR",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "fnord ProEXR plug-in bundled with AE that pulls any channel set (render passes such as diffuse, specular, AO, depth) out of a multichannel EXR and maps it into RGB/alpha for compositing.",
+   "look": [
+    "render pass",
+    "AOV",
+    "multichannel EXR",
+    "utility pass"
+   ],
+   "use_for": [
+    "Rebuild a CG shot from its EXR passes so lighting can be tweaked in the comp",
+    "Pull a depth or AO pass from an EXR to drive blur or shading",
+    "Extract a mask pass from a 3D render for an explainer graphic"
+   ],
+   "avoid": [
+    "Single-layer EXRs or normal footage: nothing extra to extract",
+    "Scripted use without a preset: the channel mapping is custom data"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Black Point",
+     "does": "Input value mapped to black (float)",
+     "typical": "0 for colour passes, near depth for Z"
+    },
+    {
+     "name": "White Point",
+     "does": "Input value mapped to white (float)",
+     "typical": "1 for colour passes, far depth for Z"
+    },
+    {
+     "name": "UnMult",
+     "does": "Un-premultiplies the extracted channels by alpha",
+     "typical": "0; 1 for premultiplied colour passes"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "IDentifier",
+    "Cryptomatte",
+    "Camera Lens Blur",
+    "Curves"
+   ],
+   "scripting": "Which EXR layer/channels go to R, G, B, A is stored in the custom 'Channel Info' property, which cannot be set from a spec; configure it once in the UI and save an .ffx animation preset, then apply the preset. Black/White Point are 32-bit float values; work in a 32-bpc project for unclamped passes.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a multichannel EXR and custom Channel Info data; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fog 3D",
+   "match": "ADBE FOG_3D",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "Adds atmospheric fog that thickens with distance, using the Z-depth channel of a 3D render (RPF/EXR) to decide how much fog each pixel gets.",
+   "look": [
+    "atmospheric haze",
+    "depth fog",
+    "aerial perspective",
+    "misty"
+   ],
+   "use_for": [
+    "Add depth haze to a CG city or landscape render for a documentary opener",
+    "Push background buildings back in a 3D map flythrough",
+    "Moody trailer atmosphere on a 3D environment"
+   ],
+   "avoid": [
+    "Camera footage: no depth channel, so it either fogs the whole frame flat or does nothing; use a gradient + Fractal Noise instead",
+    "Pure white fog at 100% opacity: washes out the whole render"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Fog Color",
+     "does": "Colour of the fog",
+     "typical": "#C8D2DC cool grey or a warm haze tone"
+    },
+    {
+     "name": "Fog Start Depth",
+     "does": "Depth where fog begins (3D app units)",
+     "typical": "just behind the hero object"
+    },
+    {
+     "name": "Fog End Depth",
+     "does": "Depth where fog is at full density",
+     "typical": "the far background depth"
+    },
+    {
+     "name": "Fog Opacity",
+     "does": "Overall fog strength",
+     "typical": "40-80"
+    },
+    {
+     "name": "Scattering Density",
+     "does": "How quickly fog builds up between start and end",
+     "typical": "30-60"
+    },
+    {
+     "name": "Foggy Background",
+     "does": "Also fogs empty background pixels",
+     "typical": "1"
+    },
+    {
+     "name": "Layer Contribution",
+     "does": "How much the optional gradient layer modulates the fog",
+     "typical": "0 unless a Gradient Layer is set"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "3D Channel Extract",
+    "Depth of Field",
+    "Fractal Noise",
+    "Curves"
+   ],
+   "scripting": "Needs an RPF/EXR layer with Z-depth. 'Gradient Layer' is a layer-reference property: set it to a layer index in the comp from script, not through the spec. Fog Color is a colour property: pass \"#RRGGBB\".",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a Z-depth channel from an RPF/EXR; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "ID Matte",
+   "match": "ADBE ID MATTE",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "Creates a matte that isolates one object or material from a 3D render, using the Object ID or Material ID aux channel stored in an RPF/EXR file.",
+   "look": [
+    "object isolation",
+    "ID matte",
+    "CG matte"
+   ],
+   "use_for": [
+    "Isolate one object in an older RPF-based 3D render to grade it",
+    "Mask a specific material (glass, screen) in a CG product shot"
+   ],
+   "avoid": [
+    "Ordinary footage: no ID channel, so the whole layer disappears or stays",
+    "Modern Cryptomatte EXRs: use the Cryptomatte effect instead, it gives cleaner edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Aux. Channel",
+     "does": "Which ID channel to read: Object ID or Material ID (popup, 1-based)",
+     "typical": "match the channel the render carries"
+    },
+    {
+     "name": "ID Selection",
+     "does": "ID number of the object/material to keep",
+     "typical": "the ID read with the Info panel"
+    },
+    {
+     "name": "Feather",
+     "does": "Softens the matte edge",
+     "typical": "0-2"
+    },
+    {
+     "name": "Invert",
+     "does": "Keep everything except the selected ID",
+     "typical": "0 or 1"
+    },
+    {
+     "name": "Use Coverage",
+     "does": "Uses the coverage channel for anti-aliased edges",
+     "typical": "1 if the render has coverage"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Aux. Channel": {
+     "1": "Material ID",
+     "2": "Object ID"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "3D Channel Extract",
+    "Cryptomatte",
+    "Curves"
+   ],
+   "scripting": "Needs an RPF/EXR layer with Object ID or Material ID channels. Aux. Channel: 1 Material ID, 2 Object ID (the default) (read from After Effects 26.0).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an Object/Material ID channel from an RPF/EXR; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "IDentifier",
+   "match": "IDentifier",
+   "category": "3D Channel",
+   "status": "needs_input",
+   "summary": "fnord ProEXR plug-in that reads an object/material ID channel in a multichannel EXR and shows it as random colours or outputs a matte for a chosen ID number.",
+   "look": [
+    "ID colours",
+    "object matte",
+    "utility pass"
+   ],
+   "use_for": [
+    "Visualise object IDs in a 3D render to find the right ID number",
+    "Matte out one object from an EXR render for a separate grade or glow"
+   ],
+   "avoid": [
+    "Footage without an integer ID channel: shows nothing",
+    "Hard ID edges on moving objects: use Cryptomatte when the render provides it"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Display",
+     "does": "Output mode: colour-coded IDs or a matte (popup, 1-based)",
+     "typical": "1 to inspect, a matte mode to cut"
+    },
+    {
+     "name": "ID",
+     "does": "Integer ID to isolate",
+     "typical": "ID read from the colour view"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Display": {
+     "1": "Colors",
+     "2": "Luma Matte",
+     "3": "Alpha Matte",
+     "4": "Raw"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "EXtractoR",
+    "Cryptomatte",
+    "Set Matte"
+   ],
+   "scripting": "The EXR channel to read is chosen in the custom 'Channel Info' property, which cannot be set from a spec; use a saved .ffx preset. Display: 1 Colors, 2 Luma Matte, 3 Alpha Matte, 4 Raw (read from After Effects 26.0).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs an EXR ID channel and custom Channel Info data; the photo reference has none), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Backwards",
+   "match": "ADBE Aud Reverse",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Plays the layer's audio in reverse; optional left/right channel swap. Video is unaffected.",
+   "look": [
+    "reversed audio",
+    "reverse swell",
+    "rewind sound"
+   ],
+   "use_for": [
+    "Reverse a cymbal or whoosh to build a riser into a trailer hit",
+    "Rewind sound for a 'let's go back' moment in an explainer",
+    "Reverse-reverb swell into a news sting: put Reverb above Backwards in the effect stack"
+   ],
+   "avoid": [
+    "Reversing dialogue under on-screen speech: sounds broken",
+    "Expecting the picture to reverse too: use Time Remap or Time-Reverse Layer for video"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Swap Channels",
+     "does": "Swaps left and right channels while reversing",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Swap Channels": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Reverb",
+    "High-Low Pass",
+    "Stereo Mixer"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). Reversal happens simply by applying the effect; Swap Channels is a 0/1 checkbox. Only audible on layers with audio. Premiere has no reverse-audio effect: reverse a clip there via Speed/Duration 'Reverse Speed'.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (audio-only effect, nothing visible to render), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bass & Treble",
+   "match": "ADBE Aud BT",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Simple two-knob tone control that boosts or cuts low (bass) and high (treble) frequencies of the layer's audio.",
+   "look": [
+    "warmer voice",
+    "brighter voice",
+    "bass boost",
+    "tone control"
+   ],
+   "use_for": [
+    "Add low-end weight to a trailer hit or music bed",
+    "Brighten a muffled VO or interview clip",
+    "Thin out music under narration by cutting bass"
+   ],
+   "avoid": [
+    "Big bass boosts on voice: boomy and can clip",
+    "Precise EQ work: use Parametric EQ instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Bass",
+     "does": "Boost (+) or cut (-) low frequencies",
+     "typical": "-20 to +25"
+    },
+    {
+     "name": "Treble",
+     "does": "Boost (+) or cut (-) high frequencies",
+     "typical": "-15 to +20"
+    }
+   ],
+   "demo_settings": {
+    "Bass": 25,
+    "Treble": 20
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Bass",
+   "pairs_with": [
+    "Parametric EQ",
+    "Compressor",
+    "High-Low Pass"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). Values are relative -100..100 (not dB). Premiere splits this into separate 'Bass' and 'Treble' effects.",
+   "recipe": {
+    "Bass": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      25
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (audio-only effect, nothing visible to render), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "corrected: not_rendered is right (audio-only, test footage has no audio stream), but demo Bass 50 / Treble 30 and recipe Bass 40 sat outside the card's own typical range and in its 'can clip' avoid; set demo Bass 25 / Treble 20 and recipe Bass 0->25"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Compressor",
+   "match": "ADBE Aud Compressor",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Dynamic range compressor that turns down audio louder than a threshold, evening out loud and soft parts of voice or music, with makeup gain and an output limit.",
+   "look": [
+    "even voice level",
+    "punchy",
+    "broadcast loud",
+    "controlled dynamics"
+   ],
+   "use_for": [
+    "Even out a VO or interview so quiet words stay audible under music",
+    "Glue and punch up a trailer music bed",
+    "Tame peaks in a phone-recorded news clip"
+   ],
+   "avoid": [
+    "Very high ratio with fast release on voice: pumping and breathing artefacts",
+    "Too much makeup gain: raises background noise and hiss"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Threshold (dB)",
+     "does": "Level above which compression starts",
+     "typical": "-24 to -16"
+    },
+    {
+     "name": "Ratio (x:1)",
+     "does": "How strongly signal above threshold is reduced",
+     "typical": "2-4 for voice, 4-8 for punch"
+    },
+    {
+     "name": "Attack (ms)",
+     "does": "How fast compression reacts",
+     "typical": "3-10"
+    },
+    {
+     "name": "Release (ms)",
+     "does": "How fast it recovers",
+     "typical": "100-300"
+    },
+    {
+     "name": "Makeup Gain (dB)",
+     "does": "Gain added after compression",
+     "typical": "3-8"
+    },
+    {
+     "name": "Output Limit (dB)",
+     "does": "Ceiling for the output",
+     "typical": "-1"
+    },
+    {
+     "name": "Knee (db)",
+     "does": "Softness of the transition around threshold",
+     "typical": "6-15"
+    }
+   ],
+   "demo_settings": {
+    "Threshold (dB)": -30,
+    "Ratio (x:1)": 8,
+    "Attack (ms)": 5,
+    "Release (ms)": 150,
+    "Makeup Gain (dB)": 10,
+    "Output Limit (dB)": -1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Single-band Compressor",
+   "pairs_with": [
+    "Parametric EQ",
+    "Bass & Treble",
+    "High-Low Pass"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). Premiere's closest match is Single-band Compressor (Threshold, Ratio, Attack, Release, Gain). Property names include units in brackets and the knee uses lowercase 'db': 'Knee (db)'. Auto Release is a 0/1 checkbox; with it on, Release (ms) is probably largely ignored (not verified). Final loudness normalisation is better done in Premiere or at export.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (audio-only effect, nothing visible to render), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Delay",
+   "match": "ADBE Aud Delay",
+   "category": "Audio",
+   "status": "needs_input",
+   "summary": "Echo effect that repeats the audio after a set time, with feedback for multiple repeats and separate dry/wet levels.",
+   "look": [
+    "echo",
+    "slapback",
+    "repeating tail",
+    "dreamy"
+   ],
+   "use_for": [
+    "Echo tail on the last word of a trailer line or title hit",
+    "Slapback on a whoosh or impact for extra size",
+    "Stylised echo on a quote for a dramatic documentary moment"
+   ],
+   "avoid": [
+    "Feedback above about 70: repeats pile up and get muddy (the harvested 0-1000 range is not a usable range)",
+    "Echo on full narration: hurts intelligibility"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Delay Time (milliseconds)",
+     "does": "Gap between original and echo",
+     "typical": "80-150 slapback, 250-500 echo"
+    },
+    {
+     "name": "Delay Amount",
+     "does": "Level of the delayed signal",
+     "typical": "30-60"
+    },
+    {
+     "name": "Feedback",
+     "does": "How much echo is fed back for repeats",
+     "typical": "20-50"
+    },
+    {
+     "name": "Dry Out",
+     "does": "Level of the original signal",
+     "typical": "75-100"
+    },
+    {
+     "name": "Wet Out",
+     "does": "Level of the echo signal",
+     "typical": "40-75"
+    }
+   ],
+   "demo_settings": {
+    "Delay Time (milliseconds)": 350,
+    "Delay Amount": 60,
+    "Feedback": 50,
+    "Dry Out": 75,
+    "Wet Out": 75
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Delay",
+   "pairs_with": [
+    "Reverb",
+    "High-Low Pass",
+    "Compressor"
+   ],
+   "scripting": "Audio effect: needs a layer with audio, nothing visible (status needs_input). Harvested ranges go above 100 for Delay Amount/Feedback (0-1000) and Dry/Wet Out (0-400); stay within 0-100 for sane results. Echo throw: keep Wet Out at 0 and jump it to 75 at the start of the last word (the recipe's 1.95/2.0 s stand for that word's time; replace them) and extend the layer so the tail can ring out. Premiere's Delay has only Delay, Feedback, Mix.",
+   "recipe": {
+    "Wet Out": [
+     [
+      0,
+      0
+     ],
+     [
+      1.95,
+      0
+     ],
+     [
+      2.0,
+      75
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (audio-only effect, nothing visible to render), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

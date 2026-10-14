@@ -1,0 +1,1002 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Cineon Converter",
+   "match": "ADBE Cineon Converter",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Cineon Converter: converts 10-bit logarithmic Cineon/DPX film-scan footage to linear (or linear to log) using film black/white points, gamma and a highlight roll-off. On normal footage it shifts contrast and brightness heavily.",
+   "look": [
+    "log to linear",
+    "film scan",
+    "contrast restore",
+    "flat log",
+    "highlight rolloff"
+   ],
+   "use_for": [
+    "Normalising archival Cineon/DPX film scans in a documentary so they show normal contrast",
+    "Viewing a flat Cineon-log telecine/DPX transfer normally before grading",
+    "Deliberately flattening a shot to a washed-out log look (Linear to Log) for a 'raw footage' reveal"
+   ],
+   "avoid": [
+    "Applying to ordinary Rec.709 camera or press footage: it crushes or blows out the image",
+    "Camera log footage (S-Log, V-Log, C-Log, LogC): Cineon is a different curve, use the camera's LUT (Apply Color LUT / Lumetri) instead",
+    "Using this legacy match name in new builds: use 'ADBE Cineon Converter2' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Conversion Type",
+     "does": "Direction of the conversion (log to linear, linear to log, log to log)",
+     "typical": "keep default 3 (renders as Log to Linear on normal footage: contrast expands)"
+    },
+    {
+     "name": "10 Bit Black Point",
+     "does": "Code value treated as black in the 10-bit log source",
+     "typical": "95 (film standard)"
+    },
+    {
+     "name": "10 Bit White Point",
+     "does": "Code value treated as white in the 10-bit log source",
+     "typical": "685 (film standard)"
+    },
+    {
+     "name": "Internal Black Point",
+     "does": "Where log black lands in the output (normalised 0-1)",
+     "typical": "0-0.05"
+    },
+    {
+     "name": "Internal White Point",
+     "does": "Where log white lands in the output (normalised 0-1)",
+     "typical": "0.95-1"
+    },
+    {
+     "name": "Gamma",
+     "does": "Film gamma used for the conversion",
+     "typical": "1.7 (default), 1.5-2.0"
+    },
+    {
+     "name": "Highlight Rolloff",
+     "does": "Softens how highlights clip to white",
+     "typical": "20 (default), 10-40"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Conversion Type": {
+     "1": "Log to Linear (obsolete)",
+     "2": "Linear to Log",
+     "3": "Log to Linear",
+     "4": "Log to Log",
+     "5": "Log to Linear (obsolete)",
+     "6": "Log to Log (obsolete)"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Cineon Converter (ADBE Cineon Converter2, Utility); Premiere: Cineon Converter (Utility), which runs this same legacy engine (AE.ADBE Cineon Converter) with a 0-based Conversion Type (0 Linear to Log, 1 Log to Linear, 2 Log to Log)",
+   "pairs_with": [
+    "Levels",
+    "Curves",
+    "Lumetri Color"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Cineon Converter2' instead; it has the same property names (its Conversion Type is a clean 1-3 popup: 1 Linear to Log, 2 Log to Linear, 3 Log to Log). Here Conversion Type is a 1-6 popup (read from After Effects 26.0): 1 Log to Linear (obsolete), 2 Linear to Log, 3 Log to Linear (the default), 4 Log to Log, 5 Log to Linear (obsolete), 6 Log to Log (obsolete); a test render with default 3 on normal footage expanded contrast (highlights clip, shadows crush), the Log to Linear behaviour. Internal Black/White Point are normalised 0-1, the 10 Bit points are raw code values 0-1023.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/244.png",
+    "note": "With all defaults (Conversion Type 3) the frame gets much harsher contrast: background highlights blow to white and dark clothing crushes, the heavy contrast/brightness shift the summary predicts and consistent with Log to Linear.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Balance",
+   "match": "ADBE Color Balance",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old three-slider Color Balance: shifts the whole image toward or away from red, green and blue (-100 to 100 each) to add or remove a global colour cast. It has no shadow/midtone/highlight split.",
+   "look": [
+    "colour cast",
+    "warm tint",
+    "cool tint",
+    "global RGB shift"
+   ],
+   "use_for": [
+    "Neutralising a colour cast on archival or phone footage in a documentary",
+    "Quick warm (red up, blue down) or cool (blue up) cast on a flashback or B-roll",
+    "Matching two press clips that came from different cameras"
+   ],
+   "avoid": [
+    "Large values: a channel clips and skin goes garish",
+    "Using it for grading where shadows and highlights need different tints: use Color Balance (ADBE Color Balance 2) or Lumetri Color"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Red Balance",
+     "does": "Adds red (positive) or cyan (negative) across the image",
+     "typical": "-20 to 20"
+    },
+    {
+     "name": "Green Balance",
+     "does": "Adds green (positive) or magenta (negative)",
+     "typical": "-15 to 15"
+    },
+    {
+     "name": "Blue Balance",
+     "does": "Adds blue (positive) or yellow (negative)",
+     "typical": "-20 to 20"
+    }
+   ],
+   "demo_settings": {
+    "Red Balance": 30,
+    "Blue Balance": -30
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Color Balance (ADBE Color Balance 2, Color Correction); Premiere: Color Balance (RGB) or Lumetri Color",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Hue/Saturation"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Color Balance 2' (9 sliders: Shadow/Midtone/Highlight x Red/Green/Blue Balance, -100..100) instead. Exact per-unit behaviour of this legacy version is not verified; 0 on all three is neutral.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/245.png",
+    "note": "Red +30 / Blue -30 gives a strong orange-amber cast over the whole frame (shadows go brown, whites go cream), a clear global colour shift.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Exposure",
+   "match": "ADBE Exposure",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Exposure: brightens or darkens the image in photographic stops, with Offset (lifts/crushes blacks) and Gamma, either for the master or per RGB channel, computed in linear light.",
+   "look": [
+    "overexposed",
+    "brightened",
+    "whiteout",
+    "underexposed",
+    "flash"
+   ],
+   "use_for": [
+    "Rescuing a dark interview or night press shot by +0.5 to +1.5 stops",
+    "Flash-to-white or camera-flash hit between two news shots (animate Exposure up and back)",
+    "Darkening a background plate behind lower-thirds or titles"
+   ],
+   "avoid": [
+    "Values beyond about +/-5 stops give a solid white or black frame",
+    "Using this legacy match name: apply 'ADBE Exposure2' instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channels:",
+     "does": "Master (one control) or Individual Channels (per-RGB controls)",
+     "typical": "1 (Master)"
+    },
+    {
+     "name": "Exposure",
+     "does": "Master brightness change in stops",
+     "typical": "-1.5 to 1.5; 3-5 for a flash peak"
+    },
+    {
+     "name": "Offset",
+     "does": "Adds/subtracts a constant: lifts or crushes blacks",
+     "typical": "-0.05 to 0.05"
+    },
+    {
+     "name": "Gamma",
+     "does": "Midtone gamma (1 = unchanged)",
+     "typical": "0.8-1.2"
+    },
+    {
+     "name": "Red Exposure",
+     "does": "Red channel exposure, only with Channels: = 2",
+     "typical": "-0.5 to 0.5"
+    },
+    {
+     "name": "Blue Exposure",
+     "does": "Blue channel exposure, only with Channels: = 2",
+     "typical": "-0.5 to 0.5"
+    },
+    {
+     "name": "Bypass Linear Light Conversion",
+     "does": "Checkbox: apply the adjustment to the raw (gamma-encoded) pixel values instead of converting to linear light first; changes how the stops scale in a normal non-linear project",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Exposure": 1.5
+   },
+   "enum_labels": {
+    "Channels:": {
+     "1": "Master",
+     "2": "Individual Channels"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Exposure (ADBE Exposure2, Color Correction); Premiere: Lumetri Color (Basic Correction > Exposure)",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Glow",
+    "Gaussian Blur"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Exposure2' instead. Note the rename: this legacy version calls the gamma controls 'Gamma' / 'Red Gamma' / 'Green Gamma' / 'Blue Gamma', while Exposure2 uses 'Gamma Correction' (check names in its card). Per-channel properties only act when 'Channels:' = 2; set it first. Bypass Linear Light Conversion is a 0/1 checkbox.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/246.png",
+    "note": "+1.5 stops brightens the whole frame strongly: the white wall and white stripes clip toward white and the dark clothing lifts to grey-blue, a clear overexposed look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Fast Blur (Legacy)",
+   "match": "ADBE Fast Blur",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy fast blur: an approximated Gaussian-style blur of the whole layer, horizontal, vertical or both. Superseded by the GPU Gaussian Blur and Fast Box Blur.",
+   "look": [
+    "blur",
+    "soft focus",
+    "defocus",
+    "background blur"
+   ],
+   "use_for": [
+    "Blurring a background plate behind titles or a quote card",
+    "Blur-in / blur-out transitions between news shots",
+    "Hiding unusable detail (logos, faces of bystanders) on B-roll: it blurs the whole layer, so put it on a masked duplicate layer"
+   ],
+   "avoid": [
+    "Leaving Repeat Edge Pixels at 0 on full-frame footage: edges go dark/transparent",
+    "Using this legacy match name in new builds: use 'ADBE Gaussian Blur 2' or 'ADBE Box Blur2'"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "Blur amount in pixels",
+     "typical": "10-40 for background, 60-150 for full defocus"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "Blur both directions, horizontal only or vertical only",
+     "typical": "1 (Horizontal and Vertical); 2 for a horizontal smear"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "Checkbox: extend edge pixels so frame edges stay solid",
+     "typical": "1 on full-frame footage"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 40,
+    "Blur Dimensions": 1,
+    "Repeat Edge Pixels": 1
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Gaussian Blur (ADBE Gaussian Blur 2) or Fast Box Blur (ADBE Box Blur2); Premiere: Fast Blur (AE.ADBE Fast Blur, this same engine, dropdown 0-based) or Gaussian Blur (Legacy) for the same Blurriness-style controls (Premiere's new 'Gaussian Blur' uses different property names)",
+   "pairs_with": [
+    "Levels",
+    "Exposure",
+    "Vignette",
+    "Glow"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Gaussian Blur 2' (Blurriness, Blur Dimensions, Repeat Edge Pixels: same names) instead. Blur Dimensions is a 1-based popup; Repeat Edge Pixels is 0/1. Blurriness range runs to 30000 but values above a few hundred are pointless.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/247.png",
+    "note": "Blurriness 40 in both directions turns the frame into a heavy soft defocus where faces and small motifs are unreadable, edges stay solid.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Levels",
+   "match": "ADBE Easy Levels",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Levels: remaps input black/white points, midtone gamma and output black/white to set contrast and brightness. Values are normalised 0-1.",
+   "look": [
+    "contrast",
+    "punchy",
+    "crushed blacks",
+    "lifted blacks",
+    "faded"
+   ],
+   "use_for": [
+    "Adding contrast to flat news or archival footage",
+    "Faded / lifted-black look for documentary flashbacks (raise Output Black)",
+    "Darkening a shot under lower-thirds"
+   ],
+   "avoid": [
+    "Pulling Input Black/White too far: clipped skin tones and posterised skies",
+    "Using this legacy match name: apply 'ADBE Easy Levels2' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Channel:",
+     "does": "Which channel the UI histogram and sliders edit (RGB, Red, Green, Blue, Alpha)",
+     "typical": "1 (RGB); keep it there when scripting"
+    },
+    {
+     "name": "Input Black",
+     "does": "Input level mapped to black (0-1)",
+     "typical": "0.03-0.12"
+    },
+    {
+     "name": "Input White",
+     "does": "Input level mapped to white (0-1)",
+     "typical": "0.85-0.97"
+    },
+    {
+     "name": "Gamma",
+     "does": "Midtone brightness (1 = unchanged, <1 darker, >1 brighter)",
+     "typical": "0.85-1.2"
+    },
+    {
+     "name": "Output Black",
+     "does": "Lowest output level: raise for faded blacks",
+     "typical": "0-0.1"
+    },
+    {
+     "name": "Output White",
+     "does": "Highest output level: lower to dull highlights",
+     "typical": "0.9-1"
+    },
+    {
+     "name": "Clip To Output Black",
+     "does": "Checkbox: clamp results below Output Black",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Input Black": 0.1,
+    "Input White": 0.85,
+    "Gamma": 0.9
+   },
+   "enum_labels": {
+    "Channel:": {
+     "1": "RGB",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Levels (ADBE Easy Levels2, Color Correction); Premiere: Levels (different names and units: '(RGB) Black Input Level' 0-255, '(RGB) Gamma' x100) or Lumetri Color",
+   "pairs_with": [
+    "Curves",
+    "Hue/Saturation",
+    "Exposure"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Easy Levels2' instead. Difference: here Clip To Output Black/White are 0/1 checkboxes; in Easy Levels2 they are 1-3 popups. Values normalised 0-1 (1.0 = 255 in 8 bpc). Only the master (RGB) sliders are harvested as properties; how they behave when 'Channel:' is set to another channel is not verified, so leave 'Channel:' at 1 and use 'Levels (Individual Controls)' (ADBE Pro Levels2) for per-channel work. 'Histogram' is a custom display property and cannot be set.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/248.png",
+    "note": "Input Black 0.1 / Input White 0.85 / Gamma 0.9 makes the frame visibly punchier: brighter whites and deeper darks than the flat baseline.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Levels (Individual Controls)",
+   "match": "ADBE Pro Levels",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Levels (Individual Controls): the same black/white/gamma remapping as Levels but with every channel (RGB master, Red, Green, Blue, Alpha) exposed as separate properties, so it can tint and grade per channel.",
+   "look": [
+    "contrast",
+    "colour tint",
+    "split tone",
+    "faded",
+    "crushed blacks"
+   ],
+   "use_for": [
+    "Per-channel grade: warm highlights / cool shadows on documentary B-roll",
+    "Faded film look by raising Output Black on one channel (e.g. blue for blue-tinted shadows)",
+    "Tightening alpha edges of a key (Alpha Input Black/White)"
+   ],
+   "avoid": [
+    "Unbalanced per-channel gammas give ugly green/magenta skin",
+    "Using this legacy match name: apply 'ADBE Pro Levels2' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Input Black",
+     "does": "RGB master input black (0-1)",
+     "typical": "0.03-0.1"
+    },
+    {
+     "name": "Input White",
+     "does": "RGB master input white (0-1)",
+     "typical": "0.88-0.97"
+    },
+    {
+     "name": "Gamma",
+     "does": "RGB master midtone gamma",
+     "typical": "0.85-1.2"
+    },
+    {
+     "name": "Red Gamma",
+     "does": "Red midtones: >1 warmer, <1 cooler",
+     "typical": "0.9-1.15"
+    },
+    {
+     "name": "Blue Gamma",
+     "does": "Blue midtones: >1 cooler, <1 warmer",
+     "typical": "0.85-1.1"
+    },
+    {
+     "name": "Blue Output Black",
+     "does": "Lifts blue in the shadows (blue-tinted, faded shadows)",
+     "typical": "0.03-0.1"
+    },
+    {
+     "name": "Alpha Input Black",
+     "does": "Alpha input black point: raise to cut away faint semi-transparent fringe of a matte",
+     "typical": "0-0.15"
+    },
+    {
+     "name": "Alpha Input White",
+     "does": "Alpha input white point: lower to make semi-transparent areas of the matte solid",
+     "typical": "0.8-1"
+    }
+   ],
+   "demo_settings": {
+    "Input Black": 0.05,
+    "Red Gamma": 1.2,
+    "Blue Output Black": 0.15
+   },
+   "enum_labels": {
+    "Channel:": {
+     "1": "RGB",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Levels (Individual Controls) (ADBE Pro Levels2, Color Correction); Premiere: Levels (has per-channel '(R)/(G)/(B) ...' controls, 0-255 units, gamma x100) or Lumetri Color (RGB Curves)",
+   "pairs_with": [
+    "Curves",
+    "Hue/Saturation",
+    "Noise"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Pro Levels2' instead (same per-channel property names). All values normalised 0-1. 'Channel:' only changes which histogram the UI shows. Here Clip To Output Black/White are 0/1 checkboxes (popups 1-3 in Pro Levels2).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/249.png",
+    "note": "Visible per-channel tint: Red Gamma 1.2 plus Blue Output Black 0.15 shift the whole frame toward magenta/lavender, the navy areas turn purple and the white wall goes pinkish.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise",
+   "match": "ADBE Noise",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Noise: adds random per-pixel noise (colour or monochrome) that changes every frame, for a grainy video-noise texture.",
+   "look": [
+    "noise",
+    "grain",
+    "video noise",
+    "gritty",
+    "VHS"
+   ],
+   "use_for": [
+    "Light grain to blend stock or AI shots into real news footage",
+    "Gritty 'leaked footage' / CCTV texture in an explainer",
+    "Adding texture over flat graphics or backgrounds so they do not band"
+   ],
+   "avoid": [
+    "Amount above about 30 looks like a broken signal, not film grain",
+    "Using this legacy match name: apply 'ADBE Noise2' instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount of Noise",
+     "does": "Noise strength in percent",
+     "typical": "5-15 subtle, 25-40 heavy"
+    },
+    {
+     "name": "Noise Type",
+     "does": "Checkbox: 1 = colour noise, 0 = monochrome",
+     "typical": "0 for film-like, 1 for video noise"
+    },
+    {
+     "name": "Clipping",
+     "does": "Checkbox: clip noisy values so the image does not wash out",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Amount of Noise": 50,
+    "Noise Type": 1,
+    "Clipping": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Noise (ADBE Noise2, Noise & Grain); Premiere: Noise (AE.ADBE Noise2; there the checkboxes are named 'Use Color Noise' and 'Clip Result Values')",
+   "pairs_with": [
+    "Add Grain",
+    "Levels",
+    "Venetian Blinds",
+    "Wave Warp"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Noise2' instead (same three property names). Noise Type (UI label 'Use Color Noise') and Clipping ('Clip Result Values') are 0/1 checkboxes. Noise re-randomises every frame automatically; no keyframes needed.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/250.png",
+    "note": "Fine colour speckle now reads clearly over the whole frame with faces, stripes and foreground blocks intact; Amount 50 is visibly grainier than the old Amount 25 render, where the noise all but vanished after downscaling.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise Alpha",
+   "match": "ADBE Noise Alpha",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Noise Alpha: adds random noise to the layer's alpha channel, so the layer becomes speckled or dissolves in noisy patches over whatever is underneath.",
+   "look": [
+    "speckled",
+    "dissolve",
+    "noisy alpha",
+    "disintegrate"
+   ],
+   "use_for": [
+    "Noisy dissolve-in of a title or logo",
+    "Speckled 'broken signal' breakup of a graphic layer",
+    "Rough grunge edge on a text card"
+   ],
+   "avoid": [
+    "Expecting a change on a full-frame opaque layer with nothing under it: only alpha changes",
+    "Using this legacy match name: apply 'ADBE Noise Alpha2' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise",
+     "does": "Noise style popup (Uniform/Squared Random, Uniform/Squared Animation)",
+     "typical": "default 1"
+    },
+    {
+     "name": "Amount",
+     "does": "How much alpha noise is added (0-100 here)",
+     "typical": "20-70"
+    },
+    {
+     "name": "Original Alpha",
+     "does": "How the noise combines with the existing alpha (Add, Clamp, Scale, Edges)",
+     "typical": "2 (Clamp, default)"
+    },
+    {
+     "name": "Overflow",
+     "does": "How values outside 0-255 are handled (Clip, Wrap Back, Wrap)",
+     "typical": "2 (Wrap Back, default)"
+    },
+    {
+     "name": "Contextual Control",
+     "does": "Random Seed (Random noise types) or Noise Phase (Animation types); animate to change the pattern",
+     "typical": "0; keyframe for moving noise"
+    },
+    {
+     "name": "Cycle Noise",
+     "does": "Checkbox: make animated noise loop",
+     "typical": "0"
+    },
+    {
+     "name": "Cycle (in Revolutions)",
+     "does": "Revolutions before the noise loop repeats",
+     "typical": "1-4"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 60
+   },
+   "enum_labels": {
+    "Noise": {
+     "1": "Uniform Random",
+     "2": "Squared Random",
+     "3": "(separator)",
+     "4": "Uniform Animation",
+     "5": "Squared Animation"
+    },
+    "Original Alpha": {
+     "1": "Add",
+     "2": "Clamp",
+     "3": "Scale",
+     "4": "Edges"
+    },
+    "Overflow": {
+     "1": "Clip",
+     "2": "Wrap Back",
+     "3": "Wrap"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: Noise Alpha (ADBE Noise Alpha2, Noise & Grain); no Premiere equivalent in v26",
+   "pairs_with": [
+    "Fractal Noise",
+    "Linear Wipe",
+    "Levels"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Noise Alpha2' instead (same property names, but its Amount runs 0-10000 while this one harvests 0-100). Original Alpha (1 Add, 2 Clamp, 3 Scale, 4 Edges), Overflow (1 Clip, 2 Wrap Back, 3 Wrap) and Noise (1 Uniform Random, 2 Squared Random, 3 a separator, 4 Uniform Animation, 5 Squared Animation) are read from After Effects 26.0. 'Contextual Control' is the seed/phase control whose UI label changes with the Noise type; it has no harvested range. Result shows only over another layer or a coloured comp background.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/251.png",
+    "note": "Fine speckled transparent holes over the whole layer let the black comp background through, giving a darker, dusty, eroded texture as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise HLS",
+   "match": "ADBE Noise HLS",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Noise HLS: adds noise separately to hue, lightness and saturation, with an optional film-grain mode and grain size. The noise is static unless Noise Phase is animated.",
+   "look": [
+    "film grain",
+    "colour noise",
+    "grainy",
+    "textured",
+    "vintage"
+   ],
+   "use_for": [
+    "Controlled film grain (lightness-only noise) on documentary archival recreations",
+    "Colour speckle for a damaged-tape look",
+    "Matching grain between AI-generated and real footage"
+   ],
+   "avoid": [
+    "Hue noise above a small amount turns skin into rainbow speckle",
+    "Using this legacy match name: apply 'ADBE Noise HLS2' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise",
+     "does": "Noise style: Uniform, Squared or Grain",
+     "typical": "3 (Grain) for film grain"
+    },
+    {
+     "name": "Lightness",
+     "does": "Amount of brightness noise",
+     "typical": "0.1-0.5 (1 = 100%; 8 wiped the image to static in a test render)"
+    },
+    {
+     "name": "Saturation",
+     "does": "Amount of saturation noise",
+     "typical": "0.05-0.2"
+    },
+    {
+     "name": "Hue",
+     "does": "Amount of hue noise",
+     "typical": "0-0.05"
+    },
+    {
+     "name": "Grain Size",
+     "does": "Grain size, only with Noise = 3",
+     "typical": "1-3"
+    },
+    {
+     "name": "Noise Phase",
+     "does": "Seed/phase of the pattern; animate to make grain move",
+     "typical": "keyframe or time*360 expression"
+    }
+   ],
+   "demo_settings": {
+    "Noise": 3,
+    "Lightness": 0.3,
+    "Saturation": 0.15,
+    "Hue": 0.03,
+    "Grain Size": 2
+   },
+   "enum_labels": {
+    "Noise": {
+     "1": "Uniform",
+     "2": "Squared",
+     "3": "Grain"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Noise HLS (ADBE Noise HLS2, Noise & Grain); Premiere: Noise (no HLS variant in v26)",
+   "pairs_with": [
+    "Levels",
+    "Curves",
+    "Add Grain"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Noise HLS2' instead. Hue/Lightness/Saturation harvest here as 0-10 (Noise HLS2 harvests 0-1000), and a test render confirmed the scale is 1 = 100% (Lightness 8 / Saturation 4 / Hue 1 turned the frame into pure static): divide Noise HLS2 values by 100 (30 there = 0.3 here). Noise popup: 1 Uniform, 2 Squared, 3 Grain. Noise Phase has no range; without keyframes the grain is frozen.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/252.png",
+    "note": "The picture is back: an even film-grain speckle sits over the intact picture with no rainbow on faces, where the old Lightness 8 / Saturation 4 / Hue 1 render was pure grey-white static.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Noise HLS Auto",
+   "match": "ADBE Noise HLS Auto",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Noise HLS Auto: the same hue/lightness/saturation noise as Noise HLS, but it animates by itself at a set speed, giving moving grain with no keyframes.",
+   "look": [
+    "film grain",
+    "moving grain",
+    "colour noise",
+    "vintage",
+    "gritty"
+   ],
+   "use_for": [
+    "Animated film grain over archival recreations or flashbacks",
+    "Live grain on still photos in an explainer so they do not feel frozen",
+    "Gritty texture under trailer title cards"
+   ],
+   "avoid": [
+    "High Hue values: rainbow speckle on faces",
+    "Using this legacy match name: apply 'ADBE Noise HLS Auto2' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Noise",
+     "does": "Noise style: Uniform, Squared or Grain",
+     "typical": "3 (Grain)"
+    },
+    {
+     "name": "Lightness",
+     "does": "Amount of brightness noise",
+     "typical": "0.1-0.5 (1 = 100%; 8 wiped the image to static in a test render)"
+    },
+    {
+     "name": "Saturation",
+     "does": "Amount of saturation noise",
+     "typical": "0.05-0.2"
+    },
+    {
+     "name": "Hue",
+     "does": "Amount of hue noise",
+     "typical": "0-0.05"
+    },
+    {
+     "name": "Grain Size",
+     "does": "Grain size, only with Noise = 3",
+     "typical": "1-3"
+    },
+    {
+     "name": "Noise Animation Speed",
+     "does": "How fast the noise changes (0 freezes it)",
+     "typical": "24 (default), 12-30"
+    }
+   ],
+   "demo_settings": {
+    "Noise": 3,
+    "Lightness": 0.3,
+    "Saturation": 0.15,
+    "Hue": 0.02,
+    "Grain Size": 2,
+    "Noise Animation Speed": 24
+   },
+   "enum_labels": {
+    "Noise": {
+     "1": "Uniform",
+     "2": "Squared",
+     "3": "Grain"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Noise HLS Auto (ADBE Noise HLS Auto2, Noise & Grain); Premiere: Noise (no HLS variant in v26)",
+   "pairs_with": [
+    "Levels",
+    "Curves",
+    "Vignette"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Noise HLS Auto2' instead. Hue/Lightness/Saturation harvest here as 0-10 (the current version harvests 0-1000), and a test render confirmed the scale is 1 = 100% (Lightness 8 / Saturation 4 / Hue 1 turned the frame into pure static): divide Noise HLS Auto2 values by 100 (30 there = 0.3 here). Static values only; animation comes from Noise Animation Speed.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/253.png",
+    "note": "Now a readable grainy frame with faces, stripes and foreground blocks intact and only faint colour speckle, instead of the full-frame static the old Lightness 8 / Saturation 4 / Hue 1 render produced.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Paint",
+   "match": "ADBE Paint",
+   "category": "_Obsolete",
+   "status": "hidden",
+   "summary": "Internal container effect AE adds when you paint on a layer with the Brush, Clone Stamp or Eraser tools; it holds the paint strokes. It is not in the Effects panel and with no strokes it shows nothing.",
+   "look": [
+    "brush strokes",
+    "hand-drawn",
+    "clone stamp",
+    "write-on"
+   ],
+   "use_for": [
+    "Hand-drawn write-on circles or arrows over evidence in an explainer (strokes painted in the UI)",
+    "Clone-stamp cleanup of a small blemish or logo on a few frames",
+    "Eraser touch-ups on a matte"
+   ],
+   "avoid": [
+    "Applying it from a script and expecting a visible result: it needs brush strokes",
+    "Long frame-by-frame paint jobs: slow to build and fragile to edit"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Paint on Transparent",
+     "does": "Checkbox: show only the strokes on a transparent layer instead of over the layer's pixels",
+     "typical": "0; 1 for isolated strokes"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "No Premiere equivalent (use a shape/mask stroke or a graphic overlay)",
+   "pairs_with": [
+    "Stroke",
+    "Write-on",
+    "Glow"
+   ],
+   "scripting": "Not superseded but internal: it is not in the Effects panel and is created by the paint tools. A script would have to add stroke groups (likely under 'ADBE Paint Group') with path data, which is not verified (low confidence). For scripted hand-drawn lines prefer a shape layer with Trim Paths or the Stroke / Write-on effects on a mask. 'Paint on Transparent' is a 0/1 checkbox with no harvested range.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Hidden internal paint container (status hidden): no gallery frame exists, and with no strokes it would show nothing anyway.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Photo Filter",
+   "match": "ADBE Photo Filter",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Old version of Photo Filter: mimics a coloured lens filter (warming, cooling, coloured or custom) laid over the image at a set density, optionally keeping brightness unchanged.",
+   "look": [
+    "warm",
+    "cool",
+    "colour filter",
+    "sepia",
+    "tinted"
+   ],
+   "use_for": [
+    "Warm golden tint on rally or ceremony B-roll",
+    "Cool blue tint for night, tension or crisis segments",
+    "Sepia-style tint for historical flashbacks in a documentary (Filter 13 Sepia here, 15 in ADBE PhotoFilterPS)"
+   ],
+   "avoid": [
+    "Density above about 60 floods the frame with one colour",
+    "Copying Filter indices between this legacy version and ADBE PhotoFilterPS: the lists differ (no LBA / LBB filters here, so Cooling Filter (80) is 3 here and 4 there; Custom is 20 here, 22 there)",
+    "Using this legacy match name: apply 'ADBE PhotoFilterPS' instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Filter",
+     "does": "Preset lens filter (warming, cooling, colour filters); 1 = Warming Filter (85)",
+     "typical": "1 for warm"
+    },
+    {
+     "name": "Color",
+     "does": "Filter colour, used when the custom option is chosen",
+     "typical": "#EC8A00 warm, #0064FF cool"
+    },
+    {
+     "name": "Density",
+     "does": "Strength of the tint in percent",
+     "typical": "20-45"
+    },
+    {
+     "name": "Preserve Luminosity",
+     "does": "Checkbox: keep overall brightness when tinting",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Filter": 1,
+    "Density": 60,
+    "Preserve Luminosity": 1
+   },
+   "enum_labels": {
+    "Filter": {
+     "1": "Warming Filter (85)",
+     "2": "Warming Filter (81)",
+     "3": "Cooling Filter (80)",
+     "4": "Cooling Filter (82)",
+     "5": "Red",
+     "6": "Orange",
+     "7": "Yellow",
+     "8": "Green",
+     "9": "Cyan",
+     "10": "Blue",
+     "11": "Violet",
+     "12": "Magenta",
+     "13": "Sepia",
+     "14": "Deep Red",
+     "15": "Deep Blue",
+     "16": "Deep Emerald",
+     "17": "Deep Yellow",
+     "18": "Underwater",
+     "19": "(separator)",
+     "20": "Custom"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Photo Filter (ADBE PhotoFilterPS, Color Correction); Premiere: Lumetri Color (Temperature/Tint or Creative tints)",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Vignette",
+    "Noise HLS Auto"
+   ],
+   "scripting": "Obsolete: apply 'ADBE PhotoFilterPS' instead. Filter here is a 1-20 popup (read from After Effects 26.0): 1 Warming Filter (85), 2 Warming Filter (81), 3 Cooling Filter (80), 4 Cooling Filter (82), 5 Red ... 13 Sepia ... 18 Underwater, 19 a separator, 20 Custom; the current version has 22 (with the LBA / LBB filters), so indices do not carry over. Only index 1 has been rendered. Preserve Luminosity is 0/1.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/254.png",
+    "note": "Warming Filter (85) at Density 60 gives a clear amber cast over the whole frame (red up, blue down) while brightness stays about the same.",
+    "rerender": false
+   }
+  }
+ ]
+}

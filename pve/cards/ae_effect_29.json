@@ -1,0 +1,891 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Transform",
+   "match": "ADBE Geometry",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy CPU version of the Transform effect: moves, scales, skews, rotates and fades the layer inside the effect stack, with its own shutter angle for motion blur. Superseded by the current GPU Transform ('ADBE Geometry2'), which has the same controls.",
+   "look": [
+    "punch-in",
+    "zoom",
+    "motion blur",
+    "whip",
+    "rotation",
+    "skew"
+   ],
+   "use_for": [
+    "opening older templates / projects that already contain it",
+    "motion-blurred punch-in on a quote beat in a legacy comp (rebuild with ADBE Geometry2 for new work)",
+    "whip / slide transition with built-in shutter blur in old templates"
+   ],
+   "avoid": [
+    "new work: apply Transform 'ADBE Geometry2' (GPU) instead",
+    "scaling 1080p footage above ~130% (visible softness)",
+    "rotating without scaling up: empty (transparent) corners appear"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Moves the image (layer pixels)",
+     "typical": "[960, 540] centre; offset by 1920 px for a whip slide"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Checkbox 0/1: 1 = Scale Height drives both axes",
+     "typical": "1"
+    },
+    {
+     "name": "Scale Height",
+     "does": "Vertical scale %; the single Scale value when Uniform Scale = 1",
+     "typical": "100-120 for punch-ins"
+    },
+    {
+     "name": "Scale Width",
+     "does": "Horizontal scale %, used only when Uniform Scale = 0",
+     "typical": "100-120"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotation in degrees",
+     "typical": "-5 to 5 for tilt / shake"
+    },
+    {
+     "name": "Skew",
+     "does": "Skew amount (-70..70)",
+     "typical": "5-20 for a dynamic slide-in"
+    },
+    {
+     "name": "Use Composition’s Shutter Angle",
+     "does": "1 = use the comp motion-blur shutter, 0 = use this effect's Shutter Angle",
+     "typical": "0"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "Motion blur for animated values of this effect (0-360)",
+     "typical": "180-270"
+    },
+    {
+     "name": "Opacity",
+     "does": "Opacity % applied inside the effect stack (0-100)",
+     "typical": "100; keyframe 0->100 for a fade that respects effect order"
+    }
+   ],
+   "demo_settings": {
+    "Uniform Scale": 1,
+    "Scale Height": 125,
+    "Rotation": 8,
+    "Skew": 10
+   },
+   "enum_labels": {
+    "Sampling": {
+     "1": "Bilinear",
+     "2": "Bicubic"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Transform",
+   "pairs_with": [
+    "Directional Blur",
+    "Motion Tile",
+    "Gaussian Blur"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Geometry2' (Transform, Distort) instead; property names and ranges are the same. The harvested default of Uniform Scale here is 0 (the current effect defaults to 1), so a Scale Height-only animation stretches the image vertically: always set Uniform Scale = 1 first (Scale Height is then the single scale; the recipe does this). 'Use Composition’s Shutter Angle' contains a curly apostrophe (U+2019); set it to 0 so this effect's Shutter Angle (e.g. 180) gives motion blur on animated values. Position / Anchor Point are layer pixels. Sampling 1 = Bilinear, 2 = Bicubic. Premiere equivalent: Transform.",
+   "recipe": {
+    "Uniform Scale": 1,
+    "Use Composition’s Shutter Angle": 0,
+    "Shutter Angle": 180,
+    "Scale Height": [
+     [
+      0,
+      100
+     ],
+     [
+      0.3,
+      115
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/265.png",
+    "note": "Image is scaled up ~125%, rotated ~8 degrees and skewed, with transparent (black) corners exposed, exactly the Transform punch-in/rotate/skew described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Unsharp Mask",
+   "match": "ADBE Unsharp Mask",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Unsharp Mask: sharpens by raising contrast along edges (image minus a blurred copy). Superseded by the current Unsharp Mask ('ADBE Unsharp Mask2', Blur & Sharpen).",
+   "look": [
+    "sharpened",
+    "crisp edges",
+    "local contrast",
+    "clarity",
+    "edge halo"
+   ],
+   "use_for": [
+    "opening older projects that already contain it",
+    "crisping soft archival or upscaled clips in legacy documentary comps",
+    "large-radius, low-amount clarity on flat b-roll (rebuild with ADBE Unsharp Mask2 for new work)"
+   ],
+   "avoid": [
+    "new work: use 'ADBE Unsharp Mask2'",
+    "high Amount with small Radius on compressed web news clips (blocks and noise get exaggerated)",
+    "halos around faces and on-screen text at high Amount + Radius"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "Sharpening strength in percent; default 0 = no change",
+     "typical": "50-150 for detail; 20-40 with a large Radius for clarity"
+    },
+    {
+     "name": "Radius",
+     "does": "Edge distance in pixels over which contrast is boosted",
+     "typical": "1-3 for detail; 20-60 for clarity"
+    },
+    {
+     "name": "Threshold",
+     "does": "Minimum edge difference that gets sharpened, in 0-255 levels; protects skin and noise",
+     "typical": "0-10"
+    },
+    {
+     "name": "Color Mode",
+     "does": "0/1 switch (likely luminance-only vs colour sharpening; meaning unverified)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 250,
+    "Radius": 6,
+    "Threshold": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Unsharp Mask",
+   "pairs_with": [
+    "Lumetri Color",
+    "Curves",
+    "Add Grain"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Unsharp Mask2' (Blur & Sharpen) instead; same four controls. Threshold here is 0-255 levels, while the current effect's Threshold is normalised 0..1: divide by 255 when porting. Amount defaults to 0 (nothing visible until set). Color Mode is a 0/1 switch whose meaning is not confirmed; leave 0. Put sharpening after any scale/Transform in the stack. Legacy CPU effect (the GPU path is the Unsharp Mask2 version). Premiere equivalent: Unsharp Mask.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/266.png",
+    "note": "Edges (stripes, faces, foreground blocks) are clearly crisper with higher local contrast and light halos; edge energy roughly doubles versus the reference.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "2D Text Box",
+   "match": "Pseudo/ADBE 2D Text Box",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control panel (pseudo effect) for Adobe's '2D Text Box' presets: it holds the padding, scale, offset and corner-rounding values that the preset's expressions use to draw an auto-sizing rounded box behind a text layer. On its own it renders nothing.",
+   "look": [
+    "text box",
+    "caption plate",
+    "rounded rectangle",
+    "pill label",
+    "lower third",
+    "auto-size background"
+   ],
+   "use_for": [
+    "auto-sizing background plate behind reel captions / subtitles",
+    "lower-third name plates that grow with the name length",
+    "callout label boxes in explainers",
+    "BREAKING / LIVE tag boxes on news reels"
+   ],
+   "avoid": [
+    "adding the pseudo effect alone: nothing appears without the preset's expressions",
+    "Measure Text = 2 During Whole Comp on text that changes (type-on, animators, counters) when you want a fixed box: it re-measures every frame, so the box resizes and jitters with the text; use 1 At Single Time instead",
+    "renaming the effect instance: the preset expressions find it by the name '2D Text Box'"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Padding Overall",
+     "does": "Space in pixels between the text bounds and the box on all sides",
+     "typical": "20-40"
+    },
+    {
+     "name": "Padding Left",
+     "does": "Extra padding on the left only (added to Overall)",
+     "typical": "0-30"
+    },
+    {
+     "name": "Roundness",
+     "does": "Corner radius in layer pixels, clamped to half the box's shorter side",
+     "typical": "8-20; very large = pill shape"
+    },
+    {
+     "name": "Measure Text",
+     "does": "Popup: when the text bounds are measured. 1 At Single Time = size frozen at Measure At Time; 2 During Whole Comp = re-measured every frame (box follows the text); 3 After Time = size at Measure At Time until then, live after; 4 Before Time = live until Measure At Time, then frozen",
+     "typical": "1 for a fixed plate; 2 for a box that grows with typed-on text; 4 to grow then hold"
+    },
+    {
+     "name": "Measure At Time [sec]",
+     "does": "Time (seconds) used by modes 1, 3 and 4",
+     "typical": "0 or the time the full text is on screen"
+    },
+    {
+     "name": "Scale X",
+     "does": "Box scale % from Scale Origin; with Uniform Scale 1 (default) it scales both axes, with Uniform Scale 0 only the width (Scale Y then sets height)",
+     "typical": "100; animate 0 -> 100 with Uniform Scale 0 + Scale Origin 2 for a left-to-right wipe-on"
+    },
+    {
+     "name": "Scale Origin",
+     "does": "Popup: pivot of the box scale (1 Center, 2 Upper Left, 3 Upper Right, 4 Lower Right, 5 Lower Left)",
+     "typical": "2 for a left-to-right grow"
+    },
+    {
+     "name": "Offset X",
+     "does": "Shifts the box horizontally in pixels",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Measure Text": {
+     "1": "At Single Time",
+     "2": "During Whole Comp",
+     "3": "After Time",
+     "4": "Before Time"
+    },
+    "Scale Origin": {
+     "1": "Center",
+     "2": "Upper Left",
+     "3": "Upper Right",
+     "4": "Lower Right",
+     "5": "Lower Left"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Fill",
+    "Stroke",
+    "Linear Wipe"
+   ],
+   "scripting": "Pseudo effect from Support Files/PresetEffects.xml, not in the Effects panel. Apply one of the installed presets instead: 'Presets/Shapes/Elements/2D Text Box (Shape).ffx' (on a shape layer; then point its 'Select a Text Layer' Layer Control at the text layer) or 'Presets/Text/Expressions/2D Text Box (Mask & Effects).ffx' (on the text layer itself: mask + Fill + Stroke). The expressions read the controls by index (twoDTxtBox(1), (2), ...), so never reorder or remove controls. Checkboxes are 0/1: Uniform Scale, Uniform Roundness, Scale Roundness, Round Upper Left / Upper Right / Lower Right / Lower Left. Group headers (Scaling, Padding, Offset, Round Corners, Shape, Enable Per Corner) are not settable; use the flat names. Wipe-on recipe needs Uniform Scale 0 and Scale Origin 2 first. Premiere has no effect equivalent: use the text layer's Background (with corner roundness) in Essential Graphics / Properties.",
+   "recipe": {
+    "Uniform Scale": 0,
+    "Scale Origin": 2,
+    "Scale X": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Animated Shape Control",
+   "match": "ADBE CM Animated Shape Control",
+   "category": "",
+   "status": "hidden",
+   "summary": "Pseudo-effect control used by Adobe's animated shape presets (Box Swarm, Kaleidoscopic, Alien Face, Mandala, SpiroMandala): its sliders feed wiggle() expressions that animate the shapes' size, position and rounding. Renders nothing on its own.",
+   "look": [
+    "abstract background",
+    "wiggling shapes",
+    "kaleidoscope",
+    "mandala",
+    "swarm",
+    "motion graphics"
+   ],
+   "use_for": [
+    "animated abstract background behind explainer titles or AI-education slides",
+    "looping texture under a quote card",
+    "motion backdrop for intro / outro cards"
+   ],
+   "avoid": [
+    "adding it alone: it is only a control panel",
+    "busy wiggling backgrounds under dense on-screen text",
+    "high Speed: jittery, cheap-looking motion"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Speed",
+     "does": "Wiggle frequency base; each preset scales it (Box Swarm x0.02-0.05, Kaleidoscopic /10-/40, Mandala /10), so 10 = roughly 0.2-1 wiggle per second",
+     "typical": "5-20"
+    },
+    {
+     "name": "Dimensions",
+     "does": "Base shape size [w, h] in pixels; Box Swarm / Kaleidoscopic / Mandala wiggle the size around it",
+     "typical": "[200, 200] to [960, 540]"
+    },
+    {
+     "name": "Spread",
+     "does": "Preset-specific amount: in Box Swarm the position wiggle in pixels; Kaleidoscopic and Mandala reuse it differently (Mandala multiplies Rounding by it)",
+     "typical": "10-200 in Box Swarm; start from the preset's value elsewhere"
+    },
+    {
+     "name": "Rounding",
+     "does": "Base roundness of the shapes (Kaleidoscopic and Mandala wiggle around it)",
+     "typical": "0-50"
+    },
+    {
+     "name": "Random Seed",
+     "does": "Seed for seedRandom(); change it for a different random layout",
+     "typical": "any whole number"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Gradient Ramp",
+    "Echo",
+    "Glow"
+   ],
+   "scripting": "Pseudo effect from PresetEffects.xml. Apply via the presets Presets/Shapes/Backgrounds/Box Swarm.ffx, Kaleidoscopic.ffx or Presets/Shapes/Sprites - Animated/Alien Face - animated.ffx, Mandala - animated.ffx, SpiroMandala.ffx (on a shape layer), then edit these controls. Two different pseudo effects share the display name 'Animated Shape Control': this one ('ADBE CM Animated Shape Control', 5 controls) and 'ADBE CM Animated Shape 3' (Speed + Random Seed only); address them by match name. Dimensions is a 2D point in layer pixels (harvested default [960, 540]) but is used as a size, not a position. Random Seed is an angle-type control used as a seed. Expressions (seedRandom + wiggle) find the effect by display name, so do not rename it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Animated Shape Control",
+   "match": "ADBE CM Animated Shape 3",
+   "category": "",
+   "status": "hidden",
+   "summary": "Two-control pseudo effect (Speed, Random Seed) used by Adobe's animated shape presets such as Nerve Net, Ring Chart, Wireframe Worm, Circular - cellular division and Dancing Knot; it sets how fast and with which random pattern their wiggle() expressions move. Renders nothing on its own.",
+   "look": [
+    "abstract background",
+    "network lines",
+    "ring chart",
+    "organic motion",
+    "motion graphics"
+   ],
+   "use_for": [
+    "tech / network backdrop for AI-education explainers (Nerve Net)",
+    "animated ring-chart decoration behind a statistic",
+    "looping abstract element for intro cards"
+   ],
+   "avoid": [
+    "adding it alone: it is only a control panel",
+    "high Speed: frantic motion distracts from narration"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Speed",
+     "does": "Wiggle frequency base; presets divide it heavily (Ring Chart /50 and /100, Nerve Net /200 to /1220), so at 10 Nerve Net is almost static",
+     "typical": "start from the preset's value; 10-30 for Ring Chart, 50-300 for visible Nerve Net drift"
+    },
+    {
+     "name": "Random Seed",
+     "does": "Seed for seedRandom(); change for a different pattern",
+     "typical": "any whole number"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Glow",
+    "Echo"
+   ],
+   "scripting": "Pseudo effect from PresetEffects.xml. Apply via Presets/Shapes/Backgrounds/Nerve Net - Circular.ffx, Nerve Net - Penta.ffx, Presets/Shapes/Elements/Ring Chart.ffx, Wireframe Worm.ffx, or Presets/Shapes/Sprites - Animated/Circular - cellular division.ffx, Dancing Knot.ffx (on a shape layer). Shares the display name 'Animated Shape Control' with 'ADBE CM Animated Shape Control'; address by match name 'ADBE CM Animated Shape 3'. Expressions find it by display name, so do not rename it.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Autoscroll - horizontal",
+   "match": "ADBE CM AutoscrollHorizontal",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the 'Autoscroll - horizontal' behaviour preset: one Speed slider drives a Motion Tile expression that scrolls the layer's content sideways endlessly, wrapping seamlessly. Alone it renders nothing.",
+   "look": [
+    "news ticker",
+    "crawl",
+    "infinite scroll",
+    "marquee",
+    "looping strip"
+   ],
+   "use_for": [
+    "news ticker / headline crawl strip at the bottom of a news reel",
+    "endless scrolling logo, flag or photo strip",
+    "slow looping pan of a background texture behind titles"
+   ],
+   "avoid": [
+    "adding the control without the preset (no Motion Tile, no motion)",
+    "speeds above ~400 px/s strobe at 25/30 fps",
+    "artwork whose left and right edges do not match shows a seam at the wrap"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Speed (pixels/second)",
+     "does": "Scroll speed in pixels per second from the layer in-point; positive = content moves right, negative = left",
+     "typical": "-80 to -200 for a right-to-left news crawl"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Offset",
+   "pairs_with": [
+    "Motion Tile",
+    "Linear Wipe",
+    "Drop Shadow"
+   ],
+   "scripting": "Pseudo effect. Apply Presets/Behaviors/Autoscroll - horizontal.ffx: it adds this control plus Motion Tile ('ADBE Tile') with expressions Tile Center = [width/2 + Speed*(time-inPoint)*(100/scale[0]), height/2] and Output Width = comp width / scaled layer width * 100, so the tiled layer fills the comp width and loops. Keep Speed static: the offset is Speed*time, so keyframing Speed makes the content jump. Premiere: keyframe Offset's Shift Center To linearly for the same wrap-around scroll.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Autoscroll - vertical",
+   "match": "ADBE CM AutoscrollVertical",
+   "category": "",
+   "status": "hidden",
+   "summary": "Control for the 'Autoscroll - vertical' behaviour preset: one Speed slider drives a Motion Tile expression that scrolls the layer's content up or down endlessly, wrapping seamlessly. Alone it renders nothing.",
+   "look": [
+    "credits roll",
+    "vertical scroll",
+    "infinite scroll",
+    "feed scroll",
+    "looping strip"
+   ],
+   "use_for": [
+    "end-credits / sources roll in documentaries",
+    "scrolling document, tweet or headline list behind a presenter",
+    "social-feed scroll mock-up in explainer reels"
+   ],
+   "avoid": [
+    "adding the control without the preset (no Motion Tile, no motion)",
+    "fast scrolls of small text: unreadable and strobing",
+    "artwork whose top and bottom edges do not match shows a seam at the wrap"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Speed (pixels/second)",
+     "does": "Scroll speed in pixels per second from the layer in-point; negative = content moves up (default -25), positive = down",
+     "typical": "-25 to -120"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Offset",
+   "pairs_with": [
+    "Motion Tile",
+    "Linear Wipe",
+    "Gradient Ramp"
+   ],
+   "scripting": "Pseudo effect. Apply Presets/Behaviors/Autoscroll - vertical.ffx: it adds this control plus Motion Tile with expressions Tile Center = [width/2, height/2 + Speed*(time-inPoint)*(100/scale[0])] and Output Height = comp height / scaled layer height * 100. Keep Speed static (offset = Speed*time, keyframing makes jumps). Premiere: keyframe Offset's Shift Center To, or roll a title, for the same effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bounce",
+   "match": "ADBE DE Bounce",
+   "category": "",
+   "status": "hidden",
+   "summary": "Parameter-holder pseudo effect for a decaying bounce behaviour (amplitude, frequency, decay, delay, repeat cycle). No preset installed with AE 2026 uses it, so it does nothing unless an expression on the layer reads it.",
+   "look": [
+    "bounce",
+    "overshoot",
+    "elastic",
+    "springy",
+    "pop-in"
+   ],
+   "use_for": [
+    "springy pop-in of icons or lower-third elements (with our own expression)",
+    "bouncing callout arrow in explainers",
+    "repeating bounce on a CTA / subscribe badge using Cycle Time"
+   ],
+   "avoid": [
+    "adding it expecting motion: it renders nothing",
+    "large bounces on serious news graphics look cartoonish"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Bounce strength (default 250); unit depends on the expression that reads it (the example expressions use Amplitude/10 = % of Scale)",
+     "typical": "50-250 with the example expression (= 5-25 % scale overshoot); 50-100 for news graphics"
+    },
+    {
+     "name": "Frequency",
+     "does": "Bounces per second (inferred)",
+     "typical": "2-4"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast the bounce settles (inferred)",
+     "typical": "3-6"
+    },
+    {
+     "name": "Delay",
+     "does": "Seconds before the bounce starts (inferred)",
+     "typical": "0-1"
+    },
+    {
+     "name": "Cycle Time",
+     "does": "Seconds between repeats, 0 = once (inferred)",
+     "typical": "0 or 2-4"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Slider Control"
+   ],
+   "scripting": "Pseudo effect defined in PresetEffects.xml ('ADBE DE Bounce'); no .ffx in AE 2026 Support Files/Presets or Documents/Adobe uses it, so a script must also write the expression. Example on Scale: c=effect('Bounce'); t=time-inPoint-c('Delay'); if(c('Cycle Time')>0) t=t%c('Cycle Time'); b=t<0?0:c('Amplitude')/10*Math.sin(c('Frequency')*t*2*Math.PI)/Math.exp(c('Decay')*t); value+[b,b]. The expression must reference the effect by its instance name. Parameter meanings beyond the names are inferred (low confidence). Premiere has no equivalent: keyframe Scale with an overshoot.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bounce At Marker",
+   "match": "ADBE DE Bounce At Marker",
+   "category": "",
+   "status": "hidden",
+   "summary": "Parameter-holder pseudo effect for a decaying bounce that retriggers at each layer marker (amplitude, frequency, decay). No installed preset uses it, so it does nothing unless an expression reads it.",
+   "look": [
+    "bounce",
+    "beat hit",
+    "overshoot",
+    "pop",
+    "springy"
+   ],
+   "use_for": [
+    "pop a word, icon or counter on each narration beat marked with layer markers",
+    "bump a logo on edit points in a reel",
+    "emphasis bounces timed to VO keywords in explainers"
+   ],
+   "avoid": [
+    "adding it expecting motion: it renders nothing",
+    "markers closer together than the decay time make stacked, messy bounces"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Bounce strength (default 250); unit depends on the expression that reads it (the example expressions use Amplitude/10 = % of Scale)",
+     "typical": "50-250 with the example expression (= 5-25 % scale overshoot); 50-100 for news graphics"
+    },
+    {
+     "name": "Frequency",
+     "does": "Bounces per second (inferred)",
+     "typical": "2-4"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each bounce settles (inferred)",
+     "typical": "4-8"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Slider Control"
+   ],
+   "scripting": "Pseudo effect ('ADBE DE Bounce At Marker'); no installed preset uses it, so write the expression too and add layer markers at the trigger times. Example on Scale: c=effect('Bounce At Marker'); n=0; if(marker.numKeys>0){n=marker.nearestKey(time).index; if(marker.key(n).time>time) n--;} b=0; if(n>0){t=time-marker.key(n).time; b=c('Amplitude')/10*Math.sin(c('Frequency')*t*2*Math.PI)/Math.exp(c('Decay')*t);} value+[b,b]. Parameter meanings are inferred from names (low confidence).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bounce On Beat",
+   "match": "ADBE DE Bounce On Beat",
+   "category": "",
+   "status": "hidden",
+   "summary": "Parameter-holder pseudo effect for a bounce triggered whenever an audio-amplitude layer crosses a threshold (amplitude, frequency, decay, audio layer, threshold). Needs an 'Audio Amplitude' keyframe layer and an expression; renders nothing on its own.",
+   "look": [
+    "beat sync",
+    "bounce",
+    "music-reactive",
+    "pulse",
+    "pop"
+   ],
+   "use_for": [
+    "logo or text bouncing to the music beat in reels",
+    "beat-reactive graphics in trailer title cards",
+    "music-driven icon pops in AI-education intros"
+   ],
+   "avoid": [
+    "adding it without an Audio Amplitude layer and an expression: nothing happens",
+    "threshold too low: it fires on every frame and jitters"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Bounce strength (default 250); unit depends on the expression that reads it (the example expressions use Amplitude/10 = % of Scale)",
+     "typical": "50-250 with the example expression (= 5-25 % scale overshoot); 50-100 for news graphics"
+    },
+    {
+     "name": "Frequency",
+     "does": "Bounces per second (inferred)",
+     "typical": "2-4"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each bounce settles (inferred)",
+     "typical": "5-10"
+    },
+    {
+     "name": "Audio Keyframe Layer",
+     "does": "Layer holding audio amplitude keyframes (from Convert Audio to Keyframes)",
+     "typical": "the 'Audio Amplitude' null"
+    },
+    {
+     "name": "Audio Threshold",
+     "does": "Amplitude level that counts as a beat (0-100)",
+     "typical": "10-30, tune to the track"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Transform"
+   ],
+   "scripting": "Pseudo effect ('ADBE DE Bounce On Beat'); no installed preset uses it. Needs: (1) an 'Audio Amplitude' layer made with Animation > Keyframe Assistant > Convert Audio to Keyframes; (2) 'Audio Keyframe Layer' is a layer-type property that cannot be set from a props spec: set it in ExtendScript with effect.property('Audio Keyframe Layer').setValue(layerIndex); (3) an expression on the target property that finds the last time the amplitude crossed Audio Threshold and adds a decaying sine (same form as Bounce). Parameter meanings are inferred (low confidence). Also effectively needs_input (audio).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bounce Random",
+   "match": "ADBE DE Bounce Random",
+   "category": "",
+   "status": "hidden",
+   "summary": "Parameter-holder pseudo effect for a decaying bounce that retriggers at random intervals between Min Delay and Max Delay seconds. No installed preset uses it, so it does nothing unless an expression reads it.",
+   "look": [
+    "random bounce",
+    "playful",
+    "organic motion",
+    "idle animation",
+    "springy"
+   ],
+   "use_for": [
+    "idle 'alive' motion on icons or stickers in explainer reels",
+    "staggered random pops across a grid of elements",
+    "attention-grabbing CTA badge that bounces now and then"
+   ],
+   "avoid": [
+    "adding it expecting motion: it renders nothing",
+    "too short delays: constant jitter that looks broken"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Amplitude",
+     "does": "Bounce strength (default 250); unit depends on the expression that reads it (the example expressions use Amplitude/10 = % of Scale)",
+     "typical": "50-250 with the example expression (= 5-25 % scale overshoot); 50-100 for news graphics"
+    },
+    {
+     "name": "Frequency",
+     "does": "Bounces per second (inferred)",
+     "typical": "2-4"
+    },
+    {
+     "name": "Decay",
+     "does": "How fast each bounce settles (inferred)",
+     "typical": "4-8"
+    },
+    {
+     "name": "Min Delay",
+     "does": "Shortest random wait between bounces, seconds (inferred)",
+     "typical": "1-2"
+    },
+    {
+     "name": "Max Delay",
+     "does": "Longest random wait between bounces, seconds (inferred)",
+     "typical": "3-5"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Slider Control"
+   ],
+   "scripting": "Pseudo effect ('ADBE DE Bounce Random'); no installed preset uses it, so write the expression too: seedRandom(index, true), walk forward from inPoint adding random(Min Delay, Max Delay) until past time to find the last trigger, then add the decaying sine (same form as Bounce). Keep Max Delay >= Min Delay. Parameter meanings are inferred from names (low confidence).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Card Wipe Master Control",
+   "match": "ADBE CM TransCard",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master slider for Adobe's three Card Wipe transition presets (2D fractured, 3D pixelstorm, 3D swing): one Transition Completion percentage drives the Card Wipe effect's completion plus its card rotation / jitter settings through expressions, and a checkbox flips the flip direction. Alone it renders nothing.",
+   "look": [
+    "card flip",
+    "tile transition",
+    "mosaic wipe",
+    "pixel storm",
+    "shatter into cards"
+   ],
+   "use_for": [
+    "tile-flip reveal of a headline card or press photo in news reels",
+    "segment transition in political explainers",
+    "trailer-style pixelstorm reveal of a title"
+   ],
+   "avoid": [
+    "overuse: dated 2000s broadcast look",
+    "leaving the default 50: the layer sits mid-transition (half-wiped in 3D swing, still jittering in the other two)",
+    "on talking heads mid-sentence"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0-100 %: 0 = layer fully wiped away, 100 = fully assembled. 3D swing maps it to Card Wipe completion 100 -> 0 over the whole range; 2D fractured and 3D pixelstorm finish the card reveal by 33 and spend 33-100 settling rotation / jitter",
+     "typical": "keyframe 0 -> 100 over 0.8-1.5 s to transition in"
+    },
+    {
+     "name": "reverse direction",
+     "does": "Checkbox 0/1: flips the card rotation / wipe side",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Card Wipe",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Pseudo effect. Apply Presets/Transitions - Movement/Card Wipe - 2D fractured.ffx, Card Wipe - 3D pixelstorm.ffx or Card Wipe - 3D swing.ffx to the incoming layer. In 3D swing the Card Wipe completion = linear(TC, 0, 100, 100, 0); in 2D fractured and 3D pixelstorm it is linear(TC, 0, 33, 100, 0) (reveal done by 33, the rest settles jitter/rotation). In all three keyframe this control 0 -> 100 to bring the layer in and 100 -> 0 to take it out. Default is 50 (half-wiped): always keyframe it or set 100. 'reverse direction' is lower-case in the property name; 0/1. Expressions find the effect by its display name, so do not rename it. Render cost comes from the Card Wipe effect it drives. Premiere has no Card Wipe equivalent.",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is hidden (pseudo-effect control panel that renders nothing on its own), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

@@ -1,0 +1,1402 @@
+{
+ "cards": [
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Slate",
+   "match": null,
+   "category": "Slates",
+   "origin": "premiere_bundled",
+   "folder": "Slates",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Full-frame technical slate: SMPTE-style colour bars behind a dark translucent info panel in Bebas Neue caps (Project, Client, Date, Version, Duration, Frame Rate, Interlacing, Resolution, Aspect Ratio, Bit Depth, Colour Profile, Contact, Notes; the whole slate fades up from black), a blue 'LOGOTYPE' circle placeholder top-left and a running timecode top-right.",
+   "look": [
+    "colour bars",
+    "slate",
+    "technical",
+    "dark panel",
+    "condensed caps",
+    "broadcast leader"
+   ],
+   "use_for": [
+    "Pre-roll slate on documentary / explainer masters sent to a channel or client for QC",
+    "Version identification on review copies (v1, v2, final) of political explainers",
+    "Archive masters and deliverable leaders (bars + project info + running timecode)"
+   ],
+   "avoid": [
+    "Never leave it in a published reel, YouTube upload or social post",
+    "Colour bars are decorative, not a calibrated SMPTE reference for monitor setup",
+    "Info fields ship as placeholders ('Project Name', 'Client Name', 'Date', 'Name and Contact Details'); all 13 label/value lines are ONE text layer, so they are edited as a single block, not reliably from a script"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Bebas Neue (Adobe Fonts; substituted if not activated). All slate fields live in the one 'TextLayer' value: 13 lines separated by \\r, label and value separated by a tab (Project, Client, Date, Version, Duration, Frame Rate, Interlacing, Resolution, Aspect Ratio, Bit Depth, Color Profile, Contact, Notes); replace the whole block, keeping the tabs and line breaks."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Slate",
+   "match": null,
+   "category": "Slates",
+   "origin": "premiere_bundled",
+   "folder": "Slates",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Full-frame technical slate: colour bars behind a white info panel set in Roboto Slab (serif) listing project, client, date, version, duration, frame rate, interlacing, resolution, aspect ratio, bit depth, colour profile, contact and notes (the panel animates in over the first ~0.5 s), with a logotype placeholder and running timecode.",
+   "look": [
+    "colour bars",
+    "slate",
+    "white panel",
+    "serif",
+    "technical",
+    "broadcast leader"
+   ],
+   "use_for": [
+    "Pre-roll slate on documentary / explainer masters sent to a channel or client for QC",
+    "Version identification on review copies (v1, v2, final) of political explainers",
+    "Archive masters and deliverable leaders (bars + project info + running timecode)"
+   ],
+   "avoid": [
+    "Never leave it in a published reel, YouTube upload or social post",
+    "Colour bars are decorative, not a calibrated SMPTE reference for monitor setup",
+    "Info fields ship as placeholders ('Project Name', 'Client Name', 'Date', 'Name and Contact Details'); all 13 label/value lines are ONE text layer, so they are edited as a single block, not reliably from a script"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Roboto Slab (Adobe Fonts; substituted if not activated). All slate fields live in the one 'TextLayer' value: 13 lines separated by \\r, label and value separated by a tab (Project, Client, Date, Version, Duration, Frame Rate, Interlacing, Resolution, Aspect Ratio, Bit Depth, Color Profile, Contact, Notes); replace the whole block, keeping the tabs and line breaks."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Slate",
+   "match": null,
+   "category": "Slates",
+   "origin": "premiere_bundled",
+   "folder": "Slates",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Full-frame technical slate: colour bars behind a pale grey translucent panel in Trajan small caps (cinema-poster serif) with project/client/tech fields, a large logotype placeholder and running timecode.",
+   "look": [
+    "colour bars",
+    "slate",
+    "cinematic serif",
+    "grey panel",
+    "technical",
+    "film leader"
+   ],
+   "use_for": [
+    "Pre-roll slate on documentary / explainer masters sent to a channel or client for QC",
+    "Version identification on review copies (v1, v2, final) of political explainers",
+    "Archive masters and deliverable leaders (bars + project info + running timecode)",
+    "Leader on trailer / film-festival screeners"
+   ],
+   "avoid": [
+    "Never leave it in a published reel, YouTube upload or social post",
+    "Colour bars are decorative, not a calibrated SMPTE reference for monitor setup",
+    "Info fields ship as placeholders ('Project Name', 'Client Name', 'Date', 'Name and Contact Details'); all 13 label/value lines are ONE text layer, so they are edited as a single block, not reliably from a script"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Trajan Pro 3 (Adobe Fonts; substituted if not activated). All slate fields live in the one 'TextLayer' value: 13 lines separated by \\r, label and value separated by a tab (Project, Client, Date, Version, Duration, Frame Rate, Interlacing, Resolution, Aspect Ratio, Bit Depth, Color Profile, Contact, Notes); replace the whole block, keeping the tabs and line breaks."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Slate",
+   "match": null,
+   "category": "Slates",
+   "origin": "premiere_bundled",
+   "folder": "Slates",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Full-frame technical slate: colour bars behind a bright cyan info panel in League Gothic condensed type with project/client/tech fields, a small logotype placeholder and running timecode.",
+   "look": [
+    "colour bars",
+    "slate",
+    "cyan panel",
+    "condensed",
+    "technical",
+    "modern"
+   ],
+   "use_for": [
+    "Pre-roll slate on documentary / explainer masters sent to a channel or client for QC",
+    "Version identification on review copies (v1, v2, final) of political explainers",
+    "Archive masters and deliverable leaders (bars + project info + running timecode)"
+   ],
+   "avoid": [
+    "Never leave it in a published reel, YouTube upload or social post",
+    "Colour bars are decorative, not a calibrated SMPTE reference for monitor setup",
+    "Info fields ship as placeholders ('Project Name', 'Client Name', 'Date', 'Name and Contact Details'); all 13 label/value lines are ONE text layer, so they are edited as a single block, not reliably from a script"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: League Gothic (Adobe Fonts; substituted if not activated). All slate fields live in the one 'TextLayer' value: 13 lines separated by \\r, label and value separated by a tab (Project, Client, Date, Version, Duration, Frame Rate, Interlacing, Resolution, Aspect Ratio, Bit Depth, Color Profile, Contact, Notes); replace the whole block, keeping the tabs and line breaks."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Like",
+   "match": null,
+   "category": "Social Media",
+   "origin": "premiere_bundled",
+   "folder": "Social Media",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Social call-to-action: a hot-pink script 'Like' pops up from tiny in the frame centre while a ring of grey-white radiating dashes bursts outward, then the word holds alone and blurs out over the last ~0.4 s; transparent background.",
+   "look": [
+    "social CTA",
+    "burst",
+    "pop",
+    "script font",
+    "hot pink",
+    "playful"
+   ],
+   "use_for": [
+    "Mid-video 'like' nudge on AI-education YouTube explainers",
+    "End-card CTA on reels and shorts (scale up first)",
+    "Pair with Share / Subscribe for a quick CTA trio"
+   ],
+   "avoid": [
+    "Moderate size at default (word about 340 px wide x 95 px tall on 1920x1080, dead centre): scale up and move it for 9:16 reels, and keep it off faces",
+    "Cartoonish on hard news, political documentary or sombre stories",
+    "Latin script font: no Devanagari, so Hindi text will not render in this style"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Sarina (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Share",
+   "match": null,
+   "category": "Social Media",
+   "origin": "premiere_bundled",
+   "folder": "Social Media",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Social call-to-action: a teal/cyan bold-italic 'Share' pops up from tiny in the frame centre while a ring of grey dashes bursts outward, then the word holds and blurs out over the last ~0.4 s; transparent background.",
+   "look": [
+    "social CTA",
+    "burst",
+    "pop",
+    "bold italic",
+    "teal",
+    "playful"
+   ],
+   "use_for": [
+    "Mid-video 'share this' prompt on explainers and reels",
+    "End-card CTA on YouTube / Instagram uploads",
+    "Pair with Like / Subscribe for a CTA trio"
+   ],
+   "avoid": [
+    "Moderate size at default (word about 290 px wide on 1920x1080, dead centre): scale up and move it for 9:16 reels",
+    "Generic stock look on news packages or serious documentary",
+    "Latin-only font: no Hindi rendering"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Lato Black Italic (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Subscribe",
+   "match": null,
+   "category": "Social Media",
+   "origin": "premiere_bundled",
+   "folder": "Social Media",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Small social call-to-action: a wavy starburst outline pops out around a lime-green black-italic 'SUBSCRIBE', then the word zooms up and fades away within roughly the first two seconds.",
+   "look": [
+    "social CTA",
+    "starburst",
+    "pop",
+    "lime green",
+    "bold italic",
+    "YouTube"
+   ],
+   "use_for": [
+    "Subscribe nudge in the first 30 s of a YouTube explainer",
+    "End-card CTA on AI-education videos",
+    "Quick CTA beat in reels (scale up, place clear of faces)"
+   ],
+   "avoid": [
+    "Animation is over in about 2 s and the rest of the clip is empty: trim to it",
+    "Small at default and dead centre (word about 300-600 px wide during the zoom): scale and move it for reels; cartoonish on news / political documentary",
+    "Latin-only font: no Hindi rendering"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Source Sans Pro Black Italic (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Presents",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer"
+   ],
+   "status": "current",
+   "summary": "Single word 'PRESENTS' in light-grey, thin wide-tracked Lato Thin that builds in from glitchy horizontal slices, holds and slices out at the end; it sits BELOW centre (about y 690-750 of 1080, centred horizontally); transparent background.",
+   "look": [
+    "glitch slices",
+    "thin type",
+    "minimal",
+    "tech",
+    "presents card",
+    "light grey on transparent"
+   ],
+   "use_for": [
+    "Opening credit beat before a documentary or trailer title ('CHANNEL presents')",
+    "Tech / AI-explainer channel intro card",
+    "Stacked with Angled Title for a matched intro"
+   ],
+   "avoid": [
+    "Hairline Lato Thin can shimmer or vanish after social compression; test at phone size",
+    "Placeholder word cannot be changed from a script",
+    "Glitch build feels off-tone for sombre news",
+    "Sits about two-thirds down the frame, not centred: check it against lower thirds and captions"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Lato Thin (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Title",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer"
+   ],
+   "status": "current",
+   "summary": "One-line title 'YOUR TITLE HERE' mixing Lato Thin, Heavy and Regular weights (the thin words are slanted); a white light-streak bar sweeps in and the title assembles from glitchy horizontal slices, holds centred (about 70% of frame width), then slices out; transparent background.",
+   "look": [
+    "glitch slices",
+    "mixed weights",
+    "minimal",
+    "tech",
+    "title card",
+    "white on transparent"
+   ],
+   "use_for": [
+    "Episode or chapter title on AI / tech explainers",
+    "Trailer title card with a digital feel",
+    "Section opener in a YouTube documentary"
+   ],
+   "avoid": [
+    "Weight contrast is baked in per word; long titles lose the effect",
+    "Placeholder text cannot be set from a script reliably",
+    "Latin-only font: no Hindi"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Lato (Thin / Regular / Heavy) (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Presents",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Small 'PRESENTS' in Bebas Neue caps between thin rules above and below; it scales up from a dot, holds centred (about 220 px wide on 1920) and shrinks away in the last ~0.4 s; transparent background.",
+   "look": [
+    "bold caps",
+    "condensed",
+    "minimal",
+    "scale-in",
+    "presents card",
+    "white"
+   ],
+   "use_for": [
+    "Credit beat before a bold title (pairs with Bold Title)",
+    "Channel intro on reels / explainers",
+    "Trailer opening 'presents' card"
+   ],
+   "avoid": [
+    "Very small at default: scale up",
+    "Placeholder word cannot be changed from a script"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 4.96 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 4.96 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Bebas Neue (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Title",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "TextLayer"
+   ],
+   "status": "current",
+   "summary": "Bebas Neue 'Your Title Here' (renders all caps) inside a white outline box that pops/scales in, with a smaller 'EPISODE' line appearing underneath; holds centred, then scales down out.",
+   "look": [
+    "boxed title",
+    "bold caps",
+    "condensed",
+    "outline frame",
+    "scale pop",
+    "white"
+   ],
+   "use_for": [
+    "Episode / chapter title in YouTube explainers and documentary series",
+    "Punchy title card in political explainers and reels",
+    "Series branding (title + episode line)"
+   ],
+   "avoid": [
+    "Box is sized for the placeholder; long titles may overflow without hand-editing",
+    "Two text layers but neither is scriptable reliably",
+    "Latin-only font: no Hindi"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Bebas Neue (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Logo Presents",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "LayerName",
+    "TextLayer"
+   ],
+   "status": "current",
+   "summary": "Placeholder logo of overlapping translucent blue circles marked 'LOGOTYPE' that blooms in from a blur, with small serif 'presents' fading in beneath; blurs out at the end.",
+   "look": [
+    "logo reveal",
+    "blue circles",
+    "soft blur",
+    "serif",
+    "presents card",
+    "corporate"
+   ],
+   "use_for": [
+    "Mock-up of a channel logo + 'presents' opener (replace the logo by hand)",
+    "Opening credit before a classic serif title (pairs with Classic Title)"
+   ],
+   "avoid": [
+    "Ships with a fake 'LOGOTYPE' placeholder: never publish it as is",
+    "Logo swap needs manual Essential Graphics work; not scriptable",
+    "Dated corporate look for social reels"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.09 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.09 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Roboto Slab (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Title",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "LayerName",
+    "LayerName",
+    "LayerName",
+    "LayerName",
+    "LayerName",
+    "LayerName",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Serif 'Your Title Here' with a smaller 'Episode Name' line over soft dark-blue bokeh circles that drift and fade in; calm, understated title card.",
+   "look": [
+    "serif",
+    "bokeh",
+    "soft blue",
+    "elegant",
+    "title card",
+    "calm"
+   ],
+   "use_for": [
+    "Documentary or interview-series title card",
+    "Calm chapter opener in long-form YouTube explainers",
+    "Feature / human-interest segment title"
+   ],
+   "avoid": [
+    "Low contrast and small text: weak on phones and in reels",
+    "Dark-blue bokeh cluster (about a quarter of the frame width) is baked in behind the text and cannot be recoloured or removed from a script",
+    "Text not scriptable; Latin-only fonts",
+    "Scripted text: this template is Premiere-authored, so pr_build cannot set its text or font ('no editable parameters'); measured 2026-10-13, both the Latin and the Devanagari run showed its own default Latin text"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone). Measured 2026-10-13 (5 s clip, 25 fps): visible from 0.40 s, in settles 1.08 s, out from 4.72 s, gone 4.96 s; Devanagari identical (same default text).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Roboto Slab (Light / Regular) (Adobe Fonts; substituted if not activated). Devanagari run 2026-10-13: No Devanagari could render because this Premiere-authored graphic ignores scripted text, so both runs show the same Latin placeholder with identical timing.",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/mogrts/020_lat_template_b.png",
+    "note": "Its own 'Your Title Here' with a smaller 'Episode Name' line (arriving after the title) sits over soft dark-blue bokeh circles that drift and fade in, but the text renders in a sans substitute because Roboto Slab is not active, so the serif look was not reproduced.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Presents",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer"
+   ],
+   "status": "current",
+   "summary": "Tiny, wide-tracked Trajan 'PRESENTS' (source text 'presents'; Trajan renders caps) that fades in, holds centred and blurs/fades out at the end; classic cinema credit style on a transparent background.",
+   "look": [
+    "cinematic serif",
+    "Trajan",
+    "fade",
+    "trailer credit",
+    "minimal",
+    "white"
+   ],
+   "use_for": [
+    "Trailer opening credit ('STUDIO presents')",
+    "Cinematic intro before a documentary title (pairs with Film Title)",
+    "Short-film credits"
+   ],
+   "avoid": [
+    "Trajan trailer look is a cliche if overused",
+    "Very small and thin at default: scale up",
+    "Placeholder not scriptable"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Trajan Pro 3 (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Title",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer",
+    "TextLayer"
+   ],
+   "status": "current",
+   "summary": "Blue anamorphic lens-flare streak expands across the centre, then Trajan 'YOUR TITLE HERE' and 'EPISODE NAME' resolve from blue to white with a slow push, and fade out.",
+   "look": [
+    "anamorphic flare",
+    "Trajan",
+    "cinematic",
+    "blue streak",
+    "trailer title",
+    "slow push"
+   ],
+   "use_for": [
+    "Trailer title card",
+    "Cinematic documentary title",
+    "Film-festival entry title"
+   ],
+   "avoid": [
+    "Trajan + blue flare reads as a stock movie-trailer cliche",
+    "Placeholder text not scriptable; Latin-only font"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: Trajan Pro 3 (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Presents",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Small cyan 'PRESENTS' in League Gothic framed by square brackets that open out to reveal it; it sits BELOW centre (about y 760-840 of 1080, centred horizontally), holds, and shrinks/fades out in the last ~0.4 s; transparent background.",
+   "look": [
+    "brackets",
+    "cyan",
+    "condensed",
+    "modern",
+    "presents card",
+    "tech"
+   ],
+   "use_for": [
+    "Credit beat before a modern bracketed title (pairs with Modern Title)",
+    "Tech / AI channel intro"
+   ],
+   "avoid": [
+    "Very small at default: scale up",
+    "Placeholder word cannot be changed from a script",
+    "Not centred: sits about three-quarters down the frame, where lower thirds and captions go; move it with Motion > Position if they collide"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: League Gothic (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Title",
+   "match": null,
+   "category": "Titles",
+   "origin": "premiere_bundled",
+   "folder": "Titles",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "status": "current",
+   "summary": "Cyan 'Your Title Here' in League Gothic between square brackets that open out from the centre, with a small WHITE tag holding cyan 'EPISODE' below; holds centred, then the whole graphic shrinks and fades out in the last ~0.4 s; transparent background.",
+   "look": [
+    "brackets",
+    "cyan",
+    "condensed",
+    "label tag",
+    "modern",
+    "tech"
+   ],
+   "use_for": [
+    "Episode title on AI-education / tech explainers",
+    "Segment title in YouTube videos",
+    "Series branding with episode tag"
+   ],
+   "avoid": [
+    "Cyan is fixed in the template; clashes with saffron/green party palettes",
+    "Text not scriptable reliably; Latin-only font"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 5.0 s (23.976 fps). No responsive-time protected regions (hasFrozenUnstretchableRegions false): animation keyframes sit at fixed times from the clip start, so trimming shorter cuts the outro; extending past 5.0 s is untested (expect the end state to hold or the graphic to be gone).",
+   "scripting": "Premiere-authored graphic template (definition.json authorApp 'ppro', 1920x1080, 23.976 fps). seq.importMGT(path, ticks, vTrack, aTrack) inserts it as a Graphic clip. The harvested params are 'TextLayer' (type 6 = an editable text layer of the graphic) and 'LayerName' (type 8, hidden = internal layer names): neither is a settable spec parameter. getMGTComponent() is expected to return null for Premiere-authored templates, so AdobeBridge pr_build warns 'no editable parameters (not an After Effects template)' and the placeholder words stay (not verified on this exact file). Changing the words means editing the clip's Text component 'Source Text' (recent builds expose it as JSON with textEditValue; setValue of edited JSON is unverified) or editing in the Essential Graphics panel by hand. Move/scale the whole graphic with the clip's Motion component (Position as frame fractions). Font: League Gothic (Adobe Fonts; substituted if not activated)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Fill Text Box 1 - Down",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Round Corners",
+    "Stroke Width",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in a white filled box with near-black Arial Bold text (#141414 on #FFFFFF; stroke width 0); the box unrolls downward from a thin bar with the text dropping in, holds centred on Position, and collapses back to a line on exit. Catalog render (one line '00 SAMPLE'): box about 480 x 115 px centred on Position.",
+   "look": [
+    "text box",
+    "label tag",
+    "white box",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Same controls as the house tag (mg.tag uses the '- Up' twin): brand / saffron fill via Container Fill"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Do not place over a speaker's face"
+   ],
+   "confidence": "high",
+   "duration_note": "Native length 2.4 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MISTER HORSE' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Fill Text Box 1 - Up",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Round Corners",
+    "Stroke Width",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in a white filled box with near-black Arial Bold text (#141414 on #FFFFFF; stroke width 0); the box opens upward from a thin bar with the text rising in, holds centred on Position, and collapses to a line on exit (the house tag template). Catalog render (one line '00 SAMPLE'): box about 480 x 115 px centred on Position.",
+   "look": [
+    "text box",
+    "label tag",
+    "white box",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "House 'tag' style (mg.tag): brand colour via Container Fill, Horizontal Padding 26"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Do not place over a speaker's face"
+   ],
+   "confidence": "high",
+   "duration_note": "Native length 2.4 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches. Measured 2026-10-13 (5 s clip, 25 fps): visible from 0.16 s, in settles 0.72 s, out from 4.44 s, gone 4.96 s (the 2.4 s template stretched only its hold); Devanagari identical.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MISTER HORSE' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper. Measured 2026-10-13 (pr_build): one text field only; a second spec 'text' entry (a second line) is dropped with the warning 'no text field 2'. Put two lines in one entry with '\\r', or use a two-field template. Devanagari run 2026-10-13: The Devanagari copy rendered correctly shaped as a whole block, with identical timing, with no per-character motion to split matras.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/mogrts/006_lat_template_c.png",
+    "note": "A white box with near-black bold text centred on Position (y 480-594) opens upward from a bar with the text rising in, and on exit collapses downward to a line with the text clipped.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Fill Text Box 2 - Left",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in a white filled box with near-black Arial Bold text (#141414 on #FFFFFF; stroke width 0); the box slides out of a vertical line at its left edge (text revealed from behind that edge), holds, then slides back into the line on exit. The left edge is anchored at about x 195 (10% of frame width, ~765 px left of Position) and the box grows rightward with text length (catalog render with a 9-character word: x 195-677, y 480-594 at default Position).",
+   "look": [
+    "text box",
+    "label tag",
+    "white box",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Left-side name strap beside an interviewee framed right",
+    "Left-aligned info label in a lower third"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Anchored ~765 px left of Position: default Position x 0.5 puts the box at the left margin; shifting Position x shifts that edge by the same amount, so long text can run past frame centre"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Fill Text Box 2 - Right",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in a white filled box with near-black Arial Bold text (#141414 on #FFFFFF; stroke width 0); the box slides out of a vertical line at its right edge (text revealed from behind that edge), holds, then slides back into the line on exit. The right edge is anchored at about x 1733 (90% of frame width, ~773 px right of Position) and the box grows leftward with text length (catalog render with a 9-character word: x 1251-1733, y 480-594 at default Position).",
+   "look": [
+    "text box",
+    "label tag",
+    "white box",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Right-side name strap beside an interviewee framed left",
+    "Right-aligned label in a lower third"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Anchored ~773 px right of Position: default Position x 0.5 puts the box at the right margin; shifting Position x shifts that edge by the same amount, so long text can run past frame centre"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Fill Text Box 3 - Left",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Animation",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in a white filled box with near-black Arial Bold text (#141414 on #FFFFFF; stroke width 0); typewriter build: the box grows with the text one character at a time, holds, then removes characters from the end on exit. The left edge is anchored at about x 195 (10% of frame width, ~765 px left of Position) and the box grows rightward with text length (catalog render with a 9-character word: x 195-677, y 480-594 at default Position).",
+   "look": [
+    "text box",
+    "label tag",
+    "white box",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Typed-out keyword / quote label in explainers",
+    "Left-side tag that reveals like typing"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "'Animation' checkbox (default off) changes the build in an unverified way: leave false unless tested",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animation splits dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi use a per-word or per-line template, or one that moves the whole line"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches. Measured 2026-10-13 (5 s clip, 25 fps): visible from 0.28 s, in settles 0.92 s, out from 4.24 s, gone 4.84 s (the 3.07 s template stretched only its hold); Devanagari identical.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400), 'Animation' (checkbox, true/false, default false; effect not verified). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper. Measured 2026-10-13 (pr_build): one text field only; a second spec 'text' entry (a second line) is dropped with the warning 'no text field 2'. Put two lines in one entry with '\\r', or use a two-field template. Devanagari run 2026-10-13: The Devanagari copy rendered correctly shaped with identical timing, and the typewriter steps by whole clusters (अ, अभि, अभिले, अभिलेख on the way in and back out), so no matra is left hanging.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/mogrts/002_lat_template_b.png",
+    "note": "A white box with near-black bold text keeps its left edge at x 195 and grows rightward as the text types on (y 480-594, x 195-789 for 'ARCHIVE 1947'), then removes characters from the end on exit.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Fill Text Box 3 - Right",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Animation",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in a white filled box with near-black Arial Bold text (#141414 on #FFFFFF; stroke width 0); typewriter build: the box grows with the text one character at a time (letters appear from the last one leftward), holds, then removes characters from the first one on exit. The right edge is anchored at about x 1733 (90% of frame width, ~773 px right of Position) and the box grows leftward with text length (catalog render with a 9-character word: x 1251-1733, y 480-594 at default Position).",
+   "look": [
+    "text box",
+    "label tag",
+    "white box",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Typed-out keyword label on the right of frame",
+    "Right-side tag that reveals like typing"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "'Animation' checkbox (default off) changes the build in an unverified way: leave false unless tested",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animation splits dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi use a per-word or per-line template, or one that moves the whole line"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400), 'Animation' (checkbox, true/false, default false; effect not verified). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Outline Text Box 1 - Down",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Round Corners",
+    "Stroke Width",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in an orange outline box (#FF9500, stroke 7, fill opacity 0) with white Arial Bold text; the frame unrolls downward with the text dropping in, holds centred on Position, and collapses on exit. Catalog render (one line '00 SAMPLE'): box about 480 x 115 px centred on Position.",
+   "look": [
+    "outline box",
+    "label tag",
+    "orange stroke",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Lighter-weight tag over busy footage where a solid box is too heavy"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Thin outline + white text needs a darker background for contrast"
+   ],
+   "confidence": "high",
+   "duration_note": "Native length 2.4 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MISTER HORSE' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Outline Text Box 1 - Up",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Round Corners",
+    "Stroke Width",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in an orange outline box (#FF9500, stroke 7, fill opacity 0) with white Arial Bold text; the frame opens upward with the text rising in, holds centred on Position, and collapses on exit (house mg.tag outline=True). Catalog render (one line '00 SAMPLE'): box about 480 x 115 px centred on Position.",
+   "look": [
+    "outline box",
+    "label tag",
+    "orange stroke",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "House outline tag (mg.tag outline=True) for secondary labels"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Thin outline + white text needs a darker background for contrast"
+   ],
+   "confidence": "high",
+   "duration_note": "Native length 2.4 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MISTER HORSE' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Outline Text Box 2 - Left",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in an orange outline box (#FF9500, stroke 7, fill opacity 0) with white Arial Bold text; the box slides out of a vertical line at its left edge (text revealed from behind that edge), holds, then slides back into the line on exit. The left edge is anchored at about x 188 (10% of frame width, ~772 px left of Position) and the box grows rightward with text length (catalog render with a 9-character word: x 188-684, y 472-601 at default Position).",
+   "look": [
+    "outline box",
+    "label tag",
+    "orange stroke",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Left-side secondary strap beside an interviewee framed right"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Anchored ~772 px left of Position: default Position x 0.5 puts the box at the left margin; shifting Position x shifts that edge by the same amount, so long text can run past frame centre"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Outline Text Box 2 - Right",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in an orange outline box (#FF9500, stroke 7, fill opacity 0) with white Arial Bold text; the box slides out of a vertical line at its right edge (text revealed from behind that edge), holds, then slides back into the line on exit. The right edge is anchored at about x 1741 (90% of frame width, ~781 px right of Position) and the box grows leftward with text length (catalog render with a 9-character word: x 1244-1741, y 472-601 at default Position).",
+   "look": [
+    "outline box",
+    "label tag",
+    "orange stroke",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Right-side secondary strap beside an interviewee framed left"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Anchored ~781 px right of Position: default Position x 0.5 puts the box at the right margin; shifting Position x shifts that edge by the same amount, so long text can run past frame centre"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Outline Text Box 3 - Left",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Animation",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in an orange outline box (#FF9500, stroke 7, fill opacity 0) with white Arial Bold text; typewriter build: the box grows with the text one character at a time, holds, then removes characters from the end on exit. The left edge is anchored at about x 188 (10% of frame width, ~772 px left of Position) and the box grows rightward with text length (catalog render with a 9-character word: x 188-681, y 472-601 at default Position).",
+   "look": [
+    "outline box",
+    "label tag",
+    "orange stroke",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Typed-out keyword label over dark footage"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "'Animation' checkbox (default off) effect unverified: leave false unless tested",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animation splits dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi use a per-word or per-line template, or one that moves the whole line"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400), 'Animation' (checkbox, true/false, default false; effect not verified). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "1-Line Outline Text Box 3 - Right",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Animation",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Stroke Width",
+    "Round Corners",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "One-line label in an orange outline box (#FF9500, stroke 7, fill opacity 0) with white Arial Bold text; typewriter build: the box grows with the text one character at a time (letters appear from the last one leftward), holds, then removes characters from the first one on exit. The right edge is anchored at about x 1741 (90% of frame width, ~781 px right of Position) and the box grows leftward with text length (catalog render with a 9-character word: x 1250-1741, y 472-601 at default Position).",
+   "look": [
+    "outline box",
+    "label tag",
+    "orange stroke",
+    "bold sans",
+    "clean",
+    "news strap"
+   ],
+   "use_for": [
+    "Name / place / date tag in news packages and political explainers",
+    "Key-word or stat label over B-roll in documentaries and reels",
+    "Typed-out keyword label on the right of frame over dark footage"
+   ],
+   "avoid": [
+    "Font size is locked: size with Scale, and keep labels short (one line)",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "'Animation' checkbox (default off) effect unverified: leave false unless tested",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animation splits dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi use a per-word or per-line template, or one that moves the whole line"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 3.07 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 75, placeholder text 'MOTION GRAPHICS' (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-300), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400), 'Animation' (checkbox, true/false, default false; effect not verified). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Multiline Fill Text Box - Left",
+   "match": null,
+   "category": "(1) Text Boxes",
+   "origin": "premiere_composer",
+   "folder": "(1) Text Boxes",
+   "params": [
+    "Transform",
+    "Position",
+    "Scale",
+    "Rotation",
+    "Skew",
+    "Text",
+    "Text",
+    "Line Distance",
+    "Position Correction",
+    "Tracking",
+    "Color",
+    "Text",
+    "Container Stroke",
+    "Container Fill",
+    "Container",
+    "Round Corners",
+    "Stroke Width",
+    "Stroke Opacity",
+    "Fill Opacity",
+    "Horizontal Padding",
+    "Vertical Padding"
+   ],
+   "status": "current",
+   "summary": "Multi-line paragraph block: near-black Arial Bold text (size 55, lines left-aligned) in a white filled box; the box unrolls downward from a thin line, the text types on character by character, holds, and both reverse on exit. At default Position it sits left of centre and above middle (catalog render with one line '12 SAMPLE': box x 479-928, y 349-520).",
+   "look": [
+    "text block",
+    "quote card",
+    "white box",
+    "bold sans",
+    "paragraph",
+    "clean"
+   ],
+   "use_for": [
+    "On-screen quote or statement excerpt in political explainers",
+    "Two-to-four-line fact or definition card in AI-education videos",
+    "Document / tweet text callout in news reels"
+   ],
+   "avoid": [
+    "Padding defaults to 0 but the box still keeps a built-in margin (catalog render: ~80 px each side, ~55 px top/bottom around one line); raise Horizontal / Vertical Padding only for a looser card, and check how the box grows with 3-4 lines (anchor not measured)",
+    "Font size locked: long paragraphs need Scale down and become small on phones",
+    "Default Arial Bold has no Devanagari: pass a Hindi-capable font (e.g. NirmalaUI-Bold) AND test-render, because the template's source info has enableMenaIndic=false (Latin text engine), so conjuncts and matras may not shape correctly",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animation splits dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi use a per-word or per-line template, or one that moves the whole line"
+   ],
+   "confidence": "medium",
+   "duration_note": "Native length 4.47 s (29.97 fps). Responsive time (hasFrozenUnstretchableRegions true): intro and outro are protected, so the clip can be set to any length and only the hold stretches. Measured 2026-10-13 (5 s clip, 25 fps): visible from 0.16 s, in settles 1.16 s (Devanagari 1.12 s), out from 3.96 s (Devanagari 4.00 s), gone 4.96 s; Devanagari within 0.04 s.",
+   "scripting": "AE-authored (aefx) Premiere Composer template by Mister Horse, 1920x1080, 29.97 fps, font Arial-BoldMT at size 55, placeholder text 'My mother always said, ...' (4 lines) (font editable, font SIZE locked: size with 'Scale'). seq.importMGT(path, ticks, vTrack, aTrack); mc = trackItem.getMGTComponent(). Text: the 2nd 'Text' row holds JSON: parse, set textEditValue (and fontTextRunLength=[len], fontEditValue=[font]), setValue(JSON.stringify(o), true). Colours by display name via setColorValue(255,r,g,b,true): 'Text' (the 3rd 'Text' row = text colour), 'Container Fill', 'Container Stroke' (AdobeBridge matches a '#RRGGBB' value only to colour rows). Numbers via setValue: 'Scale' (0-9999 %), 'Rotation' (deg), 'Skew' (-20..20), 'Tracking' (-50..400), 'Round Corners' (0-400), 'Stroke Width' (0-100), 'Stroke Opacity' / 'Fill Opacity' (0-100), 'Horizontal Padding' / 'Vertical Padding' (-100..400), 'Line Distance' (-50..100, line spacing offset, default 0). 'Position' is [x, y] in frame fractions (reads 0.5,0.5 by default); 'Position Correction' is a small nudge offset (default 0,0). Group rows 'Transform', the 1st 'Text', 'Color' and 'Container' hold GUID lists: never set them. AdobeBridge spec: {\"file\": <path>, \"start\", \"dur\", \"track\", \"text\": [{\"text\": \"...\", \"font\": \"Arial-BoldMT\"}], \"params\": {\"Position\": [0.5, 0.84], \"Scale\": 100, \"Text\": \"#141414\", \"Container Fill\": \"#FFFFFF\", \"Horizontal Padding\": 26}}. Verified pattern: probe dump of '1-Line Fill Text Box 1 - Up' and the house mg.tag() helper. Measured 2026-10-13 (pr_build): one text field only; a second spec 'text' entry (a second line) is dropped with the warning 'no text field 2'. Put two lines in one entry with '\\r', or use a two-field template. Devanagari run 2026-10-13: The Devanagari copy rendered correctly shaped within 0.04 s of the Latin timing, and the type-on keeps clusters whole in the sampled frames (अभिलेख at 0.5 s, अ at 4.7 s).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/mogrts/015_lat_template_a.png",
+    "note": "A white box unrolls downward from its top edge while near-black bold text types on (box x 480-1011, y 348-519 for 'ARCHIVE 1947'), holds, and rolls back up as the text is removed on exit.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     }
+    ]
+   }
+  }
+ ]
+}

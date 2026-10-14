@@ -1,0 +1,1700 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Infection",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Turns a solid into a dark-red organic texture: stretched Fractal Noise smeared by Directional Blur (90 deg, length 10), pushed by Levels (input black 4, white 168, gamma 1.15), embossed by Color Emboss (50% blend) and toned cream / blood red / near-black by Tritone. Over about 5 s it brightens, gains contrast and churns like spreading tissue.",
+   "look": [
+    "organic",
+    "blood red",
+    "veiny texture",
+    "embossed",
+    "biohazard",
+    "dark",
+    "animated noise"
+   ],
+   "use_for": [
+    "virus / disease / health-scare explainer background",
+    "crime or scandal story title bed",
+    "horror or thriller trailer title card",
+    "darkened background for a quote card"
+   ],
+   "avoid": [
+    "Busy bright texture fights white text: darken it or lower Tritone 'Highlights'",
+    "Gory feel is wrong for neutral political news",
+    "Freezes after about 5 s unless retimed"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Color Emboss",
+    "Directional Blur",
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Contrast 100->150, Brightness -20->30, Rotation 0->10 deg, Evolution 0->720 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*144 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. Tritone colours as shipped: Highlights #EEE4A7, Midtones #872823, Shadows #150B01. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Infection.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/040b.png",
+    "note": "Dark blood-red embossed veiny noise texture that is visibly brighter and busier at 1.4 s than at 0.5 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lightning Bend",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Thin, very high-contrast white-gold filaments on black (Fractal Noise at about 388 contrast, zoomed to 1000%, toned by Tritone) that writhe like bending electric arcs as rotation swings and complexity rises over about 5 s.",
+   "look": [
+    "electric",
+    "gold filaments",
+    "energy",
+    "black background",
+    "high contrast",
+    "abstract"
+   ],
+   "use_for": [
+    "power / electricity / energy policy explainer background",
+    "breaking-news or big-reveal title backdrop",
+    "Screen-blend energy overlay on footage",
+    "trailer title card"
+   ],
+   "avoid": [
+    "Thin bright lines shimmer and band after Instagram compression",
+    "Freezes after about 5 s unless retimed"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation 25->-25 deg, Complexity 10->15, Offset Turbulence and Sub Offset drift, Evolution 0->360 deg (Scale is also keyed but stays 1000). After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*72 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #FFFEEA, Midtones #E7B818, Shadows #000000. Set the layer to Screen/Add to use it as an overlay. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Lightning Bend.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/041b.png",
+    "note": "White-gold high-contrast filament on black, rendered as one bold frayed-edge arc that swings from the upper left (0.5 s) to a U across the bottom right (1.4 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Magma",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Molten-lava texture: Basic Fractal Noise toned cream / orange / dark brown-red by Tritone with Levels contrast. It slowly zooms in (Scale 100->300), turns and churns (Evolution 720 deg) over about 5 s.",
+   "look": [
+    "lava",
+    "molten",
+    "orange",
+    "fiery",
+    "warm",
+    "churning"
+   ],
+   "use_for": [
+    "heatwave / climate / fire story background",
+    "'hot topic' or controversy title bed",
+    "fiery trailer title card",
+    "inflation ('prices on fire') explainer background"
+   ],
+   "avoid": [
+    "Orange highlights compete with yellow or orange captions",
+    "Zoom and evolution stop after about 5 s"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation -10->10 deg, Scale 100->300, Evolution 0->720 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*144 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #FDECA6, Midtones #A8601E, Shadows #461A0F. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Magma.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/042b.png",
+    "note": "Churning orange-yellow lava blobs with black gaps over dark red; the texture shifts and grows between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Orb",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Dark cosmic background with a glowing rim: wide-stretched Fractal Noise is pushed through a huge Bulge lens (Horizontal / Vertical Radius 1600 x 900 px, Bulge Height 4 = maximum) and toned by CC Toner (near-black, indigo, periwinkle, lilac-white). In the 960x540 test render the whole frame sat deep inside that bulge, so 91-93% of it stayed near-black and only a thin periwinkle-to-lilac crescent glowed along the top-left edge (plus a sliver at the bottom), like a planet limb or eclipse, dimming to deep purple by 1.4 s; it did not read as a visible glowing sphere. The radii are fixed pixels sized for a 1920x1080 or larger frame, so a bigger comp should show more of the rim (not verified). Rotation, sub-rotation and evolution animate over about 5 s while the Bulge centre drifts sideways.",
+   "look": [
+    "mostly black",
+    "planet limb",
+    "eclipse rim",
+    "periwinkle",
+    "deep purple",
+    "space",
+    "minimal"
+   ],
+   "use_for": [
+    "dark space / sci-fi backdrop where the frame must stay mostly black",
+    "eclipse or planet-limb hint behind a title",
+    "dark bed under bright text or a logo",
+    "moody AI / tech intro background"
+   ],
+   "avoid": [
+    "The 'orb' is a 2D bulge, not a real 3D sphere: do not expect it to track or light anything",
+    "At 960x540 it was 91-93% black with only an edge crescent visible: Bulge radii are fixed at 1600 x 900 px, so in small comps lower 'Horizontal Radius' / 'Vertical Radius' (or move 'Bulge Center') to bring the glowing rim on screen, and check the framing at your comp size",
+    "Freezes after about 5 s unless retimed"
+   ],
+   "confidence": "low",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Bulge",
+    "CC Toner",
+    "Fractal Noise"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation 0->25 deg, Sub Rotation 0->-25 deg, Evolution 0->360 deg; Bulge 'Bulge Center' slides horizontally from about 1/3 to 2/3 of the frame width. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*72 (same speed, never stops). Recolour with CC Toner 'Highlights' / 'Brights' / 'Midtones' / 'Darktones' / 'Shadows' (\"#RRGGBB\"; CC Toner 'Tones' is 3 = Pentone, so all five are used); as shipped #F9EFFF / #8BA3FB / #243886 / #260245 / #010003. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Orb.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/043a.png",
+    "note": "Mostly near-black frame with a thin periwinkle-to-lilac crescent along the top-left edge (and a sliver at the bottom), dimming to deep purple by 1.4 s; no glowing sphere.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: black share is 91-93% (measured on 043a/043b), not about 95%; added that the Bulge radii are fixed at 1600 x 900 px (decoded from the .ffx), which is why a 960x540 frame shows only the dark middle, plus the radius fix in avoid"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Racing Rectangles",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Green digital bars: block-type Fractal Noise stretched 12x wide into rectangles that race sideways (Offset Turbulence animates), with Glow and a lime / green / black Tritone. Looks like a data stream or a matrix screen.",
+   "look": [
+    "digital",
+    "green",
+    "data bars",
+    "glow",
+    "tech",
+    "speed",
+    "matrix"
+   ],
+   "use_for": [
+    "cyber-crime / hacking / data-leak explainer background",
+    "Digital India / fintech / stock segment background",
+    "tech news bumper",
+    "background under a title wipe"
+   ],
+   "avoid": [
+    "Green fights skin tones and party colours: recolour via Tritone",
+    "Hard block edges plus glow band after social-media compression"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Glow",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation -10->10 deg, Offset Turbulence slides horizontally by about 1/3 of the layer width, Evolution 0->720 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*144 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #E2FF9E, Midtones #197233, Shadows #000702. Glow 'Glow Intensity' / 'Glow Radius' control the bloom. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Racing Rectangles.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/044b.png",
+    "note": "Green and lime slanted wide rectangles with glow on dark green, rearranged between frames like a data stream.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Red Speed",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Red horizontal speed streaks: Fractal Noise stretched 1000->2000% wide, smeared sideways by a 200 px horizontal Fast Box Blur, crushed by Levels (input black 151, white 224) and toned white / deep red / black. Fast evolution (1440 deg in about 5 s) with counter-rotating detail gives a rushing, urgent motion.",
+   "look": [
+    "red",
+    "speed streaks",
+    "urgent",
+    "breaking news",
+    "motion",
+    "dark"
+   ],
+   "use_for": [
+    "breaking-news / alert title background",
+    "countdown or 'top 5' reel background",
+    "sports or action trailer title card",
+    "attack-ad style lower-third background"
+   ],
+   "avoid": [
+    "Red text on it is unreadable: use white bold text with a shadow",
+    "Constant fast motion tires viewers in long segments"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fast Box Blur",
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation 25->-25 deg, Scale Width 1000->2000, Sub Rotation -25->25 deg, Evolution 0->1440 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*288 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #FFFFFF, Midtones #970000, Shadows #000000. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Red Speed.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/045b.png",
+    "note": "Red and white-hot horizontal speed streaks on black, thinning and moving between 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "River",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Calm blue flowing streaks, like light on moving water: wide-stretched Fractal Noise toned pale blue / ocean blue / navy with Levels, slowly rotating and evolving 360 deg over about 5 s.",
+   "look": [
+    "blue",
+    "water",
+    "flowing",
+    "calm",
+    "streaks",
+    "cool"
+   ],
+   "use_for": [
+    "rivers / monsoon / water-policy documentary background",
+    "calm corporate or explainer background",
+    "background for a voice-over-only stretch or quote card",
+    "government scheme info-card background"
+   ],
+   "avoid": [
+    "Slow motion can read as a still image on a phone",
+    "Freezes after about 5 s unless retimed"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation 0->-25 deg, Sub Rotation 0->25 deg, Evolution 0->360 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*72 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #C4DFEC, Midtones #146EA8, Shadows #041830. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/River.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/046b.png",
+    "note": "Pale-blue to navy horizontal flowing streaks like light on water, brightening slightly by 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rose Light",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Soft rose-and-crimson blurred texture: Fractal Noise zooming 200->400% is smeared by CC Radial Fast Blur (Amount 97, Zoom = Brightest, centre in the upper-left area), softened by Fast Box Blur and toned rose / crimson / near-black by Tritone. In the 960x540 test render it read as large out-of-focus pink and crimson blotches with only a faint radial smear, no distinct light rays and no near-black areas (the darkest patches are deep crimson, about #4C0C13); the blotches shift and the crimson deepens between 0.5 s and 1.4 s. Rotation and evolution animate over about 5 s.",
+   "look": [
+    "rose",
+    "pink-red",
+    "soft blur",
+    "blotchy",
+    "romantic",
+    "dreamy",
+    "warm"
+   ],
+   "use_for": [
+    "emotional / tribute / women-centred story background",
+    "celebration or Valentine reel background",
+    "award or achievement title card",
+    "soft background for testimonial quote cards"
+   ],
+   "avoid": [
+    "Too sentimental for hard news",
+    "Busy mid-tone pink: text needs a dark box or shadow to read on it",
+    "Do not count on visible light rays: the radial smear is faint (CC Radial Fast Blur 'Center' sits in the upper-left area)"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "CC Radial Fast Blur",
+    "Fast Box Blur",
+    "Fractal Noise",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation -10->10 deg, Scale 200->400, Evolution 0->720 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*144 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #E9A7A7, Midtones #9D2828, Shadows #280B0B. CC Radial Fast Blur 'Amount' (0-100) sets the ray length and 'Center' ([x, y] px) the ray origin. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Rose Light.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/047b.png",
+    "note": "Soft rose and crimson out-of-focus blotches with only a faint radial smear and no near-black areas; the crimson deepens by 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: summary said 'no dark areas', but 047b has deep crimson patches (darkest about #4C0C13); reworded to 'no near-black areas'. Rest agrees: no rays, rose/crimson blotches, Radial Fast Blur centre decoded at (0.205, 0.276) of the frame = upper left"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Silk",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Smooth flowing silk-fabric folds: wide-stretched Fractal Noise run through Find Edges and Curves into soft creased ridges, toned blush / mauve / plum by Tritone, gently swaying (rotation +-5 deg, evolution 360 deg) over about 5 s.",
+   "look": [
+    "silk",
+    "fabric folds",
+    "mauve",
+    "elegant",
+    "luxury",
+    "soft"
+   ],
+   "use_for": [
+    "fashion / beauty / lifestyle reels",
+    "elegant title or quote card background",
+    "wedding or festival greeting background",
+    "premium product-style explainer intro"
+   ],
+   "avoid": [
+    "The Curves shape is a custom property and cannot be changed from a spec",
+    "The pastel palette does not suit political news"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Curves",
+    "Find Edges",
+    "Fractal Noise",
+    "Tritone"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 4.97 s: Fractal Noise Rotation 5->-5 deg, Sub Rotation -5->5 deg, Evolution 0->360 deg. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119200/23976 s = 4.97 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*72.4 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #F1E3EB, Midtones #B3598A, Shadows #361B29. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Silk.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/048b.png",
+    "note": "Very pale blush-pink field with soft mauve horizontal fold lines that sway between frames (light, low-contrast silk).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Smoke Rising",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Grey rising smoke: Fractal Noise stretched 10x tall into wisps, bent by Wave Warp whose phase cycles 360 deg, and toned white / slate grey / black. The wisps waver and churn over about 5 s (Fractal Noise Cycle Evolution is on, 1 revolution).",
+   "look": [
+    "smoke",
+    "grey",
+    "wispy",
+    "moody",
+    "mysterious",
+    "rising"
+   ],
+   "use_for": [
+    "mystery / crime / thriller trailer title background",
+    "pollution / smog / stubble-burning story background",
+    "somber tribute or memorial cards",
+    "Screen-blend haze overlay on footage"
+   ],
+   "avoid": [
+    "On Normal blend it hides the footage: use Screen for haze",
+    "Rising motion stops after about 5 s unless retimed"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Tritone",
+    "Wave Warp"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Contrast 100->125, Evolution 0->360 deg; Wave Warp 'Phase' 0->360 deg. After that the noise freezes, but Wave Warp's own 'Wave Speed' (0.5) keeps the bends travelling.",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*72 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #FFFFFF, Midtones #70848F, Shadows #000000. Wave Warp 'Phase' also needs retiming for long shots. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Smoke Rising.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/049b.png",
+    "note": "Grey-white vertical smoke wisps on dark slate that waver and brighten between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sweeping Curves",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Abstract teal-green flowing bands: wide-stretched Fractal Noise bent into sweeping curves by Turbulent Displace, with Glow and a mint / teal / dark-green Tritone. The bands drift and evolve over about 5 s.",
+   "look": [
+    "teal",
+    "flowing curves",
+    "abstract waves",
+    "glow",
+    "corporate",
+    "smooth"
+   ],
+   "use_for": [
+    "corporate / finance / economy explainer background",
+    "YouTube intro or chapter title background",
+    "darkened backdrop behind charts and infographics",
+    "calm news lower-third panel"
+   ],
+   "avoid": [
+    "Glow can clip the highlights: lower 'Glow Intensity'",
+    "Freezes after about 5 s unless retimed",
+    "In the 960x540 test render a hard-edged black elliptical hole opened on the left at about 1.4 s (Turbulent Displace pulling in empty pixels from outside the layer): put a dark solid underneath, or try an edge-pinning 'Pinning' mode on Turbulent Displace"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Glow",
+    "Tritone",
+    "Turbulent Displace"
+   ],
+   "duration_note": "2 keyframes per animated property, at comp.time and comp.time + 5.0 s: Fractal Noise Rotation -10->10 deg, Evolution 0->720 deg; Turbulent Displace 'Offset (Turbulence)' drifts. After that the texture freezes (no loop).",
+   "scripting": "Not a generator on its own: first make a comp-size solid, e.g. comp.layers.addSolid([0,0,0], 'BG', comp.width, comp.height, comp.pixelAspect, comp.duration), set comp.time to the shot start, then apply the preset to the solid (Fractal Noise replaces the solid's pixels). Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Keyframes are a 2-key ramp of about 5 s (decoded from the .ffx: keys at 0 and 119880/23976 s). For a longer shot, move the second keys to the layer out point, or delete the Evolution keys and use an expression such as time*144 (same speed, never stops). Recolour with Tritone 'Highlights' / 'Midtones' / 'Shadows' (\"#RRGGBB\"); Tritone 'Blend With Original' 0-100. As shipped: Highlights #F0FECF, Midtones #276B65, Shadows #101D1C. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Backgrounds/Sweeping Curves.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/050a.png",
+    "note": "Teal-green glowing flowing bands on dark green as described, but at 1.4 s a hard-edged black elliptical hole opens on the left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Autoscroll - horizontal",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Makes the layer scroll sideways forever: Motion Tile repeats the layer and an expression moves 'Tile Center' at 'Speed (pixels/second)' (default 100), while 'Output Width' is set so the tiles always fill the comp width.",
+   "look": [
+    "endless scroll",
+    "ticker",
+    "seamless loop",
+    "horizontal motion",
+    "tiled"
+   ],
+   "use_for": [
+    "news ticker / headline crawl strip",
+    "seamless scrolling pattern or texture background",
+    "scrolling logo wall or photo strip in reels",
+    "marquee of quotes or numbers"
+   ],
+   "avoid": [
+    "Seams show if the artwork is not tileable: design a tileable strip or set Motion Tile 'Mirror Edges' to 1",
+    "Small layers make many tiles and render slowly"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Autoscroll - horizontal",
+    "Motion Tile"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. Moves at a constant speed from the layer in point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM AutoscrollHorizontal').property(1).setValue(v). The expression overwrites the target property's own animation. Control: property(1) = 'Speed (pixels/second)' (positive moves the content to the right, negative to the left). Also adds Motion Tile ('ADBE Tile'). Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Autoscroll - horizontal.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/051b.png",
+    "note": "Text slides right at about 100 px/s (x offset about +50 px at 0.5 s, +140 px at 1.4 s at 960 px).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Autoscroll - vertical",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Makes the layer scroll vertically forever: Motion Tile repeats the layer and 'Tile Center' moves at 'Speed (pixels/second)' (default -25, a slow credit-roll-like move), with 'Output Height' set so the tiles fill the comp height.",
+   "look": [
+    "vertical scroll",
+    "credit roll",
+    "seamless loop",
+    "tiled",
+    "endless"
+   ],
+   "use_for": [
+    "credits or long name lists",
+    "scrolling document / tweet / newspaper strip behind a host",
+    "endless vertical texture background for 9:16 reels",
+    "scrolling list of headlines"
+   ],
+   "avoid": [
+    "Seams show if the artwork is not tileable",
+    "Very slow default speed: raise it for reels"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Autoscroll - vertical",
+    "Motion Tile"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. Moves at a constant speed from the layer in point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM AutoscrollVertical').property(1).setValue(v). The expression overwrites the target property's own animation. Control: property(1) = 'Speed (pixels/second)'. Negative (the default -25) moves the content up like a credit roll, positive moves it down; verify once in a preview. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Autoscroll - vertical.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/052b.png",
+    "note": "Text creeps slowly upward (about 12 px at 0.5 s, 35 px at 1.4 s), matching the -25 px/s default.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blinking Opacity",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Pulses the layer's Opacity smoothly (sine wave) between 'Min Opacity' (0) and 'Max Opacity' (100) at 'Frequency (per Second)' (1 per second), with an 'Offset' slider (-0.25) to shift where the blink starts; at the default the layer starts at Min Opacity at its in point.",
+   "look": [
+    "pulse",
+    "blink",
+    "opacity",
+    "attention",
+    "live dot"
+   ],
+   "use_for": [
+    "blinking 'LIVE' / REC dot",
+    "pulsing call-to-action or subscribe arrow",
+    "attention pulse on a map pin or highlighted figure",
+    "warning / alert icon"
+   ],
+   "avoid": [
+    "Replaces any Opacity keyframes on the layer",
+    "High frequencies strobe: keep it at 2 Hz or less"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. Runs for the whole layer.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Adds 4 Slider Controls in this order: Max Opacity, Min Opacity, Frequency (per Second), Offset (names TAB-prefixed); the expression sits on the layer's own Transform > Opacity. Address the sliders by index from the end of the effect stack. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Blinking Opacity.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/053b.png",
+    "note": "Text at 100% opacity at 0.5 s and about 94% at 1.4 s, matching the 1 Hz sine that starts at Min at the in point.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 1,
+    "basis": "render: the default 1 Hz sine"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Drift Over Time",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Moves the layer in a straight line at a constant speed: a Transform effect's 'Position' is driven by 'Direction' (degrees, 0 = up, 90 = right; default 135 = down-right) and 'Speed (pixels/second)' (default 50).",
+   "look": [
+    "drift",
+    "slow pan",
+    "floating",
+    "linear motion",
+    "Ken Burns"
+   ],
+   "use_for": [
+    "slow drift on stills or archive photos",
+    "floating title or graphic",
+    "parallax layers moving at different speeds",
+    "slow cloud / smoke / particle plate movement"
+   ],
+   "avoid": [
+    "Layer edges come into view on full-frame stills: scale the layer up first",
+    "Never stops: long layers drift off screen"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Drift Over Time",
+    "Transform"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. Starts at the layer in point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM Throw').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Direction', property(2) = 'Speed (pixels/second)'. Also adds Transform ('ADBE Geometry2'). Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Drift Over Time.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/054b.png",
+    "note": "Text drifts down-right at 135 deg, about 25 px by 0.5 s and 70 px by 1.4 s (50 px/s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade In Over Layer Below",
+   "match": null,
+   "category": "Behaviors",
+   "status": "needs_input",
+   "summary": "Automatic crossfade: Solid Composite 'Source Opacity' ramps 0->100 from this layer's in point to the out point of the layer directly beneath it (index + 1). If nothing overlaps below, it stays at 100 (no fade).",
+   "look": [
+    "crossfade",
+    "dissolve",
+    "transition",
+    "auto timing"
+   ],
+   "use_for": [
+    "auto-dissolve between stacked shots or photo slides",
+    "crossfade from one graphic or lower third to the next",
+    "documentary montage dissolves that follow trims automatically"
+   ],
+   "avoid": [
+    "Depends on layer order: reordering layers breaks it",
+    "Linear ramp, no ease"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. The fade runs over the overlap with the layer below.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Needs another layer directly below (index + 1) whose out point is after this layer's in point. Adds Solid Composite with 'Opacity' 0 so no colour shows; nothing to set. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Fade In Over Layer Below.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/055b.png",
+    "note": "With the BG solid below, text is about 34% at 0.5 s and 91% at 1.4 s: a linear fade from the in point to the lower layer's out point.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade In+Out - frames",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Fades the layer in from 0 at its in point and out to 0 at its out point, using Solid Composite 'Source Opacity'. Durations are in frames: 'Fade In Duration (frames)' and 'Fade Out Duration (frames)', 15 each by default; 0 turns that fade off.",
+   "look": [
+    "fade in",
+    "fade out",
+    "opacity",
+    "auto timing",
+    "clean"
+   ],
+   "use_for": [
+    "fade titles, lower thirds and captions in and out",
+    "photo or B-roll fades that follow trims",
+    "end card fade-out",
+    "graphic overlays in explainers"
+   ],
+   "avoid": [
+    "A linear fade looks mechanical on big hero titles: keyframe an eased fade instead"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Fade In+Out - frames",
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. The fades follow the layer in and out points, so trimming the layer moves them.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM FadeInOutFrames').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Fade In Duration (frames)', property(2) = 'Fade Out Duration (frames)'. Also adds Solid Composite. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Fade In+Out - frames.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/056b.png",
+    "note": "Text about 90% at 0.5 s (end of the 15-frame fade-in) and 34% at 1.4 s (fading out toward the 1.6 s out point).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade In+Out - msec",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Fades the layer in from 0 at its in point and out to 0 at its out point, using Solid Composite 'Source Opacity'. Durations are in milliseconds: 'Fade In Duration (msec)' and 'Fade Out Duration (msec)', 500 each by default; 0 turns that fade off.",
+   "look": [
+    "fade in",
+    "fade out",
+    "opacity",
+    "auto timing",
+    "clean"
+   ],
+   "use_for": [
+    "fade titles, lower thirds and captions in and out",
+    "photo or B-roll fades that follow trims",
+    "end card fade-out",
+    "frame-rate-independent fades for mixed 25/30 fps projects"
+   ],
+   "avoid": [
+    "A linear fade looks mechanical on big hero titles: keyframe an eased fade instead"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Fade In+Out - msec",
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. The fades follow the layer in and out points.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM FadeInOutmsec').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Fade In Duration (msec)', property(2) = 'Fade Out Duration (msec)'. Also adds Solid Composite. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Fade In+Out - msec.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/057b.png",
+    "note": "Text 100% at 0.5 s and about 41% at 1.4 s, matching 500 ms fades at the in and out points.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade Out Over Layer Below",
+   "match": null,
+   "category": "Behaviors",
+   "status": "needs_input",
+   "summary": "Automatic crossfade out: Solid Composite 'Source Opacity' ramps 100->0 from the in point of the layer directly beneath (index + 1) to this layer's out point, revealing that layer. Without an overlapping layer below it stays at 100.",
+   "look": [
+    "crossfade",
+    "dissolve",
+    "transition",
+    "reveal",
+    "auto timing"
+   ],
+   "use_for": [
+    "dissolve from a shot into the next one stacked below",
+    "fade a title off as the next graphic starts",
+    "montage dissolves that follow trims automatically"
+   ],
+   "avoid": [
+    "Depends on layer order: reordering layers breaks it",
+    "Linear ramp, no ease"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. The fade runs over the overlap with the layer below.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Needs another layer directly below (index + 1) whose in point is before this layer's out point. Nothing to set. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Fade Out Over Layer Below.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/058b.png",
+    "note": "With the BG solid below, text is about 70% at 0.5 s and 12% at 1.4 s: a linear fade-out to this layer's out point.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lock Anchor Point",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Utility rig with no look of its own: it pins the layer's Anchor Point to one of 9 spots of its content box (sourceRectAtTime), so scale and rotation pivot from there even when the text changes. Choose the spot with the 'Lock Anchor Point To...' menu.",
+   "look": [
+    "anchor point",
+    "pivot",
+    "rig",
+    "text layout",
+    "utility"
+   ],
+   "use_for": [
+    "keep a title scaling from its centre when the wording changes",
+    "pivot a lower-third bar from its left edge",
+    "template text layers that get new text from a script"
+   ],
+   "avoid": [
+    "Moving the anchor without compensating Position shifts the layer on screen",
+    "'When to Sample' defaults to 12 s: set it to a time when the text is fully visible"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: expression on the layer's Anchor Point; the content box is sampled once, at the 'When to Sample' time (seconds).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('Pseudo/@@/TFyY0wHRuOmFCPFeBtaUw').property(1).setValue(v). The expression overwrites the target property's own animation. Menu 'Lock Anchor Point To...': 1 Middle Center, 2 Middle Left, 3 Middle Right, 4 Top Center, 5 Top Left, 6 Top Right, 7 Bottom Center, 8 Bottom Left, 9 Bottom Right. Plus a Slider 'When to Sample'. The expression is on the layer's Transform > Anchor Point. Works best on text and shape layers. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Lock Anchor Point.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/059b.png",
+    "note": "No visible change (pixel-identical to the plain text layer), as expected for a rig; default Middle Center matches the builder's already-centred anchor.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Opacity Flash - layer markers",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "The layer is invisible except for a quick flash to full opacity around each layer marker (an eased bump 'Flash Width (msec)' wide, default 500). Without markers it simply stays visible.",
+   "look": [
+    "flash",
+    "beat sync",
+    "strobe",
+    "pop",
+    "markers"
+   ],
+   "use_for": [
+    "flash a word, icon or logo on music beats",
+    "flash graphics on voice-over hits",
+    "hit flashes in trailers (white solid on Add)",
+    "rhythmic reveals in reels"
+   ],
+   "avoid": [
+    "Needs markers on the layer itself (not comp markers)",
+    "Layer is hidden between markers: intended, but surprising"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Opacity Flash - layer markers",
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer and timed by the layer markers (not by comp.time or keyframes). Flashes are centred on each layer marker.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM OpacityFlashMarkers').property(1).setValue(v). The expression overwrites the target property's own animation. Add layer markers first (layer.property('Marker').setValueAtTime(t, new MarkerValue(''))). Control: property(1) = 'Flash Width (msec)'. Also adds Solid Composite. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Opacity Flash - layer markers.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/060b.png",
+    "note": "No markers on the test layer and the text stays fully visible in every frame, as the card says.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 1,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 3 flashes, at most 1 in one second, over the 3% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 1 a second; with layer markers at 0.5, 1.5, 2.5 s it flashed once per marker, so the rate follows the marker spacing (keep markers 0.34 s or more apart)"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Opacity Flash - random",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Makes the layer flicker in and out irregularly: noise drives Solid Composite 'Source Opacity'. 'Chance of Flashing' (50) sets how often it is visible and 'Flash Nervousness' (50) sets how fast it changes.",
+   "look": [
+    "flicker",
+    "random",
+    "neon",
+    "unstable",
+    "glitch"
+   ],
+   "use_for": [
+    "flickering neon sign or broken tube light",
+    "horror / tension flicker on a title",
+    "unstable sci-fi interface element",
+    "attention-grabbing flicker of an alert icon"
+   ],
+   "avoid": [
+    "Noise is smooth, so this is a soft flicker, not hard on/off (use Random On-Off for hard cuts)",
+    "Too nervous reads as a render error"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Opacity Flash - random",
+    "Solid Composite"
+   ],
+   "duration_note": "No keyframes: expression-driven by noise(comp time x nervousness) for the whole layer; not tied to the in point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM OpacityFlashRandom').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Chance of Flashing', property(2) = 'Flash Nervousness'. Also adds Solid Composite. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Opacity Flash - random.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/061b.png",
+    "note": "Text invisible at 0.5 s and about 79% visible at 1.4 s: irregular noise-driven flicker.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 2,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 3 flashes, at most 2 in one second, over the 3% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 2 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Random Colors",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Fills the whole layer (keeping its alpha) with a colour that jumps randomly around a 'Base Color', with 'Hue Variance', 'Saturation Variance' and 'Lightness Variance' (30 each) and a new colour 'Update FPS' (4) times a second.",
+   "look": [
+    "colour cycling",
+    "random colours",
+    "playful",
+    "pop",
+    "flat fill"
+   ],
+   "use_for": [
+    "playful colour-cycling title or caption",
+    "disco / party colour changes on shapes",
+    "random colours for confetti or icon grids",
+    "meme-style kinetic text"
+   ],
+   "avoid": [
+    "Fill flattens footage to one solid colour: use on text or shapes only",
+    "Random colours break brand palettes"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Color Control",
+    "Fill",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: seeded random values that step at 'Update FPS' for the whole layer; change 'Random Seed' for another sequence.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Adds Fill (named 'Output Fill', expression on its 'Color'), a Color Control 'Base Color' (#4A18E8 violet-blue as shipped) and Sliders 'Hue Variance', 'Saturation Variance', 'Lightness Variance', 'Update FPS', 'Random Seed' (TAB-prefixed names). Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Random Colors.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/062b.png",
+    "note": "Text fill jumps from steel blue (0.5 s) to magenta (1.4 s), keeping the letter shapes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Random On-Off",
+   "match": null,
+   "category": "Behaviors",
+   "status": "needs_input",
+   "summary": "Meant as a hard random flicker: a Transform effect ('Random on/off') whose Opacity expression switches the layer between 0 and 100 'Update FPS' (6) times a second, 'Probability' (50) being the chance of staying visible and 'Random Seed' changing the pattern. In the AE 2026 test render it did nothing: the text stayed at 100% in all 40 frames (1.6 s). The cause is not pinned down. The missing ';' after 'var r = random(0,100)' is not enough to explain it, because Wave Value Generator's expression also relies on the same automatic semicolon at a line break and ran in the same render. The same posterizeTime / seedRandom / random header also works in Random Whole Numbers. Test a rewritten expression (see scripting) or use Opacity Flash - random, which did flicker in the same render.",
+   "look": [
+    "hard flicker",
+    "glitch",
+    "on-off",
+    "stutter",
+    "random"
+   ],
+   "use_for": [
+    "glitchy title or logo reveal",
+    "malfunctioning sign or 'signal lost' stutter",
+    "blinking UI elements in tech explainers",
+    "tension flicker in trailers"
+   ],
+   "avoid": [
+    "Hard cuts strobe: keep it short or lower Update FPS",
+    "Can be uncomfortable for photosensitive viewers",
+    "Unverified in the gallery: the 1.6 s gallery render never switched it off, but the 3.9 s flash render on the same host did (6 off-blinks, at most 2 in one second), so render-check it in your own comp"
+   ],
+   "confidence": "low",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "No keyframes: seeded random values that step at 'Update FPS' for the whole layer; the gallery render never switched off, the flash render did (see flash).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Adds Sliders 'Probability', 'Update FPS', 'Random Seed' (TAB-prefixed names) and a Transform effect whose 'Opacity' holds the expression. Untested workaround: replace the Transform effect's Opacity expression with a single ternary, e.g. posterizeTime(effect(\"\\tUpdate FPS\")(1)); seedRandom(effect(\"\\tRandom Seed\")(1), false); random(0,100) > effect(\"\\tProbability\")(1) ? 0 : 100, then render-check it. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Random On-Off.ffx",
+   "verified": {
+    "verdict": "broken",
+    "frame": "pve/gallery/presets/063b.png",
+    "note": "Text stays at 100% opacity in all 40 frames of the 1.6 s render; it never switches off.",
+    "rerender": false,
+    "second_opinion": "corrected: verdict broken agreed (063 text has the same pixel count in all 40 frames), but the 'missing semicolon' cause is not supported: Wave Value Generator's expression has the same missing ';' before a CR line break and ran in the same aerender batch, Inky Dissolve ships the same if/else form, and the stored expression is not disabled (same tdsb flags as Wave). Summary, avoid and scripting now say the cause is unknown, give an untested rewrite, and point to Opacity Flash - random",
+    "edited": "2026-10-13: flash field, avoid and duration_note updated from the flash render; the verdict still covers the gallery frame only"
+   },
+   "flash": {
+    "rate": 2,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 6 flashes, at most 2 in one second, over the 3% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 2 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Random Whole Numbers",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Turns a text layer into a random integer that changes 'Update FPS' (8) times a second, between 'Minimum Value' (0) and 'Maximum Value' (100); an 'Output' slider carries the same number for linking.",
+   "look": [
+    "number scramble",
+    "random digits",
+    "data",
+    "counter",
+    "tech"
+   ],
+   "use_for": [
+    "number scramble just before a statistic is revealed",
+    "slot-machine or hacker-style digit readout",
+    "busy data-screen digits in tech explainers",
+    "random scoreboard numbers"
+   ],
+   "avoid": [
+    "It replaces the typed text",
+    "Not a count-up: for 0 -> N counters use a keyframed expression or the Numbers effect",
+    "In the test render the digits came out in a large regular sans, not the layer's own font and size (Bebas Neue 75): restyle the text after applying"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: seeded random values that step at 'Update FPS' for the whole layer; change 'Random Seed' for another sequence.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Needs a text layer: the expression goes on Text > Source Text. Adds Sliders 'Minimum Value', 'Maximum Value', 'Update FPS', 'Random Seed', 'Output' (TAB-prefixed names). Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Random Whole Numbers.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/064b.png",
+    "note": "Text becomes a random integer (9 at 0.5 s, 33 at 1.4 s), but in a large regular sans font instead of the layer's Bebas Neue.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rotate Over Time",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Spins the layer continuously: a Transform effect's 'Rotation' = (time - inPoint) x 'Rotation (degrees/second)' (default 10). It pivots around the layer's own Anchor Point (converted to comp space for text and shape layers).",
+   "look": [
+    "spin",
+    "rotation",
+    "continuous",
+    "loop",
+    "badge"
+   ],
+   "use_for": [
+    "spinning badge, seal or 'NEW' sticker",
+    "slowly rotating sunburst or radial background",
+    "loading / refresh icon",
+    "rotating globe or logo graphic"
+   ],
+   "avoid": [
+    "Fast spins blur and strobe: stay under about 90 deg/s",
+    "Pivot is the layer's Anchor Point: if the content is off-centre (left-aligned text), centre the anchor first (e.g. Lock Anchor Point)"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Rotate Over Time",
+    "Transform"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. Starts at the layer in point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM Spin').property(1).setValue(v). The expression overwrites the target property's own animation. Control: property(1) = 'Rotation (degrees/second)'. Also adds Transform ('ADBE Geometry2'). Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Rotate Over Time.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/065b.png",
+    "note": "Text rotates clockwise about its own centre, about 5 deg at 0.5 s and 14 deg at 1.4 s (10 deg/s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale Bounce - layer markers",
+   "match": null,
+   "category": "Behaviors",
+   "status": "needs_input",
+   "summary": "Meant to pop the layer's scale (via a Transform effect that is re-centred with toComp(anchorPoint) on text and shape layers) to 'Target Scale Change' (default 200%) around each layer marker, over a window of 'Bounce Duration (msec)' (500) centred on the marker. The shape of the pop has never been rendered: the expression is easeIn(|time - nearest marker|, Bounce Duration / 2000, 0, Target, 100), a reversed time range, so it may be a hard jump to Target for 250 ms either side of the marker instead of a smooth swell, or even the inverse (Target between markers, 100% on the marker). Render-check with markers. Needs layer markers: with none (as in the test render) the expression's try/catch returns 100% and the layer does not change at all.",
+   "look": [
+    "pop",
+    "bounce",
+    "beat sync",
+    "punch",
+    "markers"
+   ],
+   "use_for": [
+    "pop words, icons or logos on music beats",
+    "emphasise a figure on a voice-over hit",
+    "beat-synced bounce in reels",
+    "punch-in on key words in captions"
+   ],
+   "avoid": [
+    "Default 200% is huge: use about 110-120 for a tasteful pop",
+    "Needs markers on the layer itself",
+    "Unverified with markers: the reversed easeIn range may give a hard step or an inverted pop; render-check before relying on it"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Scale Bounce - layer markers",
+    "Transform"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer and timed by the layer markers. Each pop window is centred on its marker (half of Bounce Duration either side). No markers = no motion.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM ScaleBounceMarkers').property(1).setValue(v). The expression overwrites the target property's own animation. Add layer markers first. Controls: property(1) = 'Bounce Duration (msec)', property(2) = 'Target Scale Change'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Scale Bounce - layer markers.ffx",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/presets/066b.png",
+    "note": "Frames identical to the plain text: the test layer had no markers, so the expression's catch returns 100% and nothing bounces.",
+    "rerender": false,
+    "second_opinion": "corrected: 'no markers -> catch returns 100%' agreed (066 identical to the plain text), but the kept claim of a smooth swell peaking on the marker was never rendered and the expression uses a reversed easeIn time range (bounceWidth -> 0); summary/avoid now flag that it may be a hard step or inverted, confidence high -> medium",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale Bounce - random",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Noise-driven random pulsing: a Transform effect's scale moves between 100% and 'Target Scale Change' (200) as 'Chance of Bouncing' (50) and 'Bounce Nervousness' (50) allow.",
+   "look": [
+    "bounce",
+    "random pulse",
+    "playful",
+    "jitter",
+    "scale"
+   ],
+   "use_for": [
+    "playful bouncing icons or stickers",
+    "fake audio-reactive pulse on a speaker graphic",
+    "nervous cartoon jitter on meme text"
+   ],
+   "avoid": [
+    "Default 200% is huge: lower 'Target Scale Change' to about 110-120",
+    "Looks childish in serious news",
+    "Scales through a Transform effect, so text above 100% is resampled from pixels and looks soft"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Scale Bounce - random",
+    "Transform"
+   ],
+   "duration_note": "No keyframes: expression-driven by noise(comp time x nervousness) for the whole layer; not tied to the in point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM ScaleBounceRandom').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Chance of Bouncing', property(2) = 'Bounce Nervousness', property(3) = 'Target Scale Change'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Scale Bounce - random.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/067b.png",
+    "note": "Text at 100% at 0.5 s and about 175% (centred, slightly soft) at 1.4 s: random scale pulse.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Separate XYZ Scale",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Rig with no visible change until used: adds 'X Scale', 'Y Scale' and 'Z Scale' sliders (default 0) that are added to the layer's own Scale, so each axis can be animated separately (squash and stretch).",
+   "look": [
+    "squash and stretch",
+    "scale",
+    "rig",
+    "per-axis",
+    "utility"
+   ],
+   "use_for": [
+    "grow a chart bar on one axis only",
+    "squash-and-stretch pop on logos or text",
+    "offset one axis on top of existing uniform scale keyframes"
+   ],
+   "avoid": [
+    "'Z Scale' only matters on 3D layers"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Separate XYZ Scale"
+   ],
+   "duration_note": "No keyframes and no time dependence: the sliders are added to Scale. Animate the sliders yourself.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE Separate XYZ Scale').property(1).setValue(v). The expression overwrites the target property's own animation. The expression on Transform > Scale is [X, Y, Z] + value. Controls: property(1) 'X Scale', property(2) 'Y Scale', property(3) 'Z Scale'. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Separate XYZ Scale.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/068b.png",
+    "note": "No visible change, as the card says for the rig at its 0 defaults.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Trim Paths - at layer in",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Shape layers only: adds 'Trim Paths 1' so the stroke draws on from nothing to complete over 'Trim In Duration (seconds)' (default 1) starting at the layer in point (eased). The 'Trim In Reverse Path Direction' checkbox flips the direction. Needs a shape layer with a stroked path; on a text or footage layer there are no shape contents to trim, so it does nothing.",
+   "look": [
+    "draw on",
+    "stroke",
+    "line animation",
+    "reveal",
+    "shape"
+   ],
+   "use_for": [
+    "draw-on underline, circle or arrow on a news clipping",
+    "map route or border line drawing on",
+    "line chart drawing on",
+    "animated frame or divider in lower thirds"
+   ],
+   "avoid": [
+    "Applied to a non-shape layer it has nothing to trim",
+    "Fills are trimmed too: use stroke-only shapes"
+   ],
+   "confidence": "high",
+   "applies_to": "shape layer",
+   "effects_used": [
+    "Checkbox Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. The draw-on runs from the layer in point for the set duration.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Needs a shape layer with a stroked path (the preset adds a Trim Paths operator to the root contents). Adds Slider 'Trim In Duration (seconds)' and Checkbox 'Trim In Reverse Path Direction' (TAB-prefixed names). Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Trim Paths - at layer in.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/069a.png",
+    "note": "On the stroked orange square the white stroke has drawn along the top and right edges at 0.5 s with the fill trimmed to a matching triangle, and the square is complete by 1.4 s.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Trim Paths - at layer out",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Shape layers only: adds 'Trim Paths 1' so the stroke wipes itself off over the last 'Trim Out Duration (seconds)' (default 1) before the layer out point (eased). 'Trim Out Reverse Path Direction' flips the direction. Needs a shape layer with a stroked path; on a text or footage layer there are no shape contents to trim, so it does nothing.",
+   "look": [
+    "draw off",
+    "stroke",
+    "line animation",
+    "wipe out",
+    "shape"
+   ],
+   "use_for": [
+    "wipe an underline, circle or arrow off at the end of a beat",
+    "erase a map route or connector line",
+    "lower-third frame lines leaving"
+   ],
+   "avoid": [
+    "Applied to a non-shape layer it has nothing to trim",
+    "Fills are trimmed too: use stroke-only shapes"
+   ],
+   "confidence": "high",
+   "applies_to": "shape layer",
+   "effects_used": [
+    "Checkbox Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer and timed from the layer out point (ease(time, outPoint - duration, outPoint)), not from comp.time. The draw-off runs over the last 'Trim Out Duration' seconds and ends at the out point.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). It adds stock effects (renamed, with names that start with a TAB character), so find them as the last effects in the layer's 'ADBE Effect Parade' and set them by index. The expression overwrites the target property's own animation. Needs a shape layer with a stroked path. Combine with 'Trim Paths - at layer in' for on and off (it may add a second Trim Paths operator: check the result). Adds Slider 'Trim Out Duration (seconds)' and Checkbox 'Trim Out Reverse Path Direction'. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Trim Paths - at layer out.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/070b.png",
+    "note": "The stroked orange square stays whole at 0.5 s, then from about 0.6 s (1 s before the 1.6 s out point) stroke and fill trim away, leaving only a short top-edge stroke at 1.4 s.",
+    "rerender": false,
+    "recheck": "re-rendered on shapeC"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wave Value Generator",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Rhythmic oscillation: by default it pulses the layer's scale (through a Transform effect, Uniform Scale) as a sine between about 40% and 100% with a 2 s period, starting at 70% at the in point, peaking at 0.5 s and bottoming at 1.5 s. The Transform effect's anchor/position are left at the layer centre, so on text (and shape) layers the pivot lands far from the content (near the comp's bottom-right corner in the test) and the text slides toward that corner as it shrinks. An 'Output' slider exposes the same wave so other properties can be linked to it.",
+   "look": [
+    "oscillation",
+    "pulse",
+    "sine wave",
+    "rhythmic",
+    "breathing"
+   ],
+   "use_for": [
+    "breathing pulse on icons or a call-to-action",
+    "hard two-size jump on a graphic (Waveform 2 = Square)",
+    "drive another property (opacity, position) from the 'Output' slider",
+    "looping motion-graphic elements"
+   ],
+   "avoid": [
+    "'Frequency' is really the period in seconds (bigger = slower)",
+    "The default shrinks to 40%: set 'Value Offset' to 0 and 'Amplitude' to about 5 for a subtle pulse",
+    "Preset maths quirk: for Triangle (3) 'Frequency' scales the height and the period stays 2 s; for Saw (4) the ramp height is 'Frequency'/2 x 'Amplitude'",
+    "On text and shape layers the scale pivots off the content (unlike Scale Bounce, the Transform effect is not re-centred): set the Transform 'Anchor Point' and 'Position' to toComp(anchorPoint), or use it on a precomp or solid"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "No keyframes: expression-driven for the whole layer, timed from the layer in point (time - inPoint), not from comp.time. The wave starts at the layer in point plus 'Time Offset'.",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('Pseudo/@@emgz74CrTpKBvhfTe4Q0pw').property(1).setValue(v). The expression overwrites the target property's own animation. Menu 'Waveform': 1 Sine, 2 Square, 3 Triangle, 4 Saw. The sliders are separate Slider Control effects (TAB-prefixed names, find them by index): 'Amplitude' (30), 'Frequency' (2), 'Time Offset' (0), 'Value Offset' (-30), 'Output'. The expression drives the Transform effect's scale with Uniform Scale on. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wave Value Generator.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/071b.png",
+    "note": "Text at full size in place at 0.5 s and shrunk to about 40% near the comp's bottom-right corner at 1.4 s (the pivot is not on the text).",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree: all 40 frames give 70% at 0 s, 100% at 0.5 s, 41% at 1.4 s, 40% at 1.5 s; fitted scale pivot (958, 539) = the comp's bottom-right corner. The toComp(anchorPoint) fix is the same re-centring Adobe ships in Scale Bounce and Grow In"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggle - gelatin",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Jelly wobble: a Transform effect's 'Skew' wiggles by 'Wiggle Amount' (20) and its 'Skew Axis' wanders randomly, at 'Wiggle Speed (wigs/sec)' (1). The layer looks rubbery.",
+   "look": [
+    "jelly",
+    "wobble",
+    "rubbery",
+    "cartoon",
+    "skew"
+   ],
+   "use_for": [
+    "playful wobbly text or logos",
+    "meme-style reaction captions",
+    "cartoon jelly or squishy objects"
+   ],
+   "avoid": [
+    "Looks childish in serious news",
+    "High amounts tear thin text"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Wiggle - gelatin"
+   ],
+   "duration_note": "No keyframes: wiggle() expressions driven by comp time for the whole layer (not tied to the in point).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM WiggleGelatin').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Wiggle Speed (wigs/sec)', property(2) = 'Wiggle Amount'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wiggle - gelatin.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/072b.png",
+    "note": "Text is skewed and warped differently in each frame, a rubbery jelly wobble.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggle - position",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Random wandering motion: a Transform effect's 'Position' wiggles up to 'Wiggle Amount (pixels)' (50) at 'Wiggle Speed (wigs/sec)' (1).",
+   "look": [
+    "shake",
+    "handheld",
+    "floating",
+    "random motion",
+    "jitter"
+   ],
+   "use_for": [
+    "subtle handheld feel on stills or graphics (5-15 px)",
+    "floating stickers or cards",
+    "nervous shaking text (raise the speed)",
+    "camera-shake hit on impact (short layer, high speed)"
+   ],
+   "avoid": [
+    "Full-frame footage shows its edges: scale it to about 105-110%",
+    "50 px default is a lot for subtle drift"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Wiggle - position"
+   ],
+   "duration_note": "No keyframes: wiggle() expressions driven by comp time for the whole layer (not tied to the in point).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM WigglePosition').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Wiggle Speed (wigs/sec)', property(2) = 'Wiggle Amount (pixels)'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wiggle - position.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/073b.png",
+    "note": "Text wanders off centre (down-right at 0.5 s, left at 1.4 s) by tens of pixels.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggle - rotation",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Random rocking: a Transform effect's 'Rotation' wiggles up to 'Wiggle Amount (degrees)' (30) at 'Wiggle Speed (wigs/sec)' (1).",
+   "look": [
+    "rocking",
+    "wobble",
+    "random rotation",
+    "swing",
+    "playful"
+   ],
+   "use_for": [
+    "swinging hanging sign or tag",
+    "wobbly icons or stickers in reels",
+    "dizzy / drunk feel on a graphic"
+   ],
+   "avoid": [
+    "30 deg default is large: use 2-5 for subtle life",
+    "Shows the edges of full-frame footage"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Wiggle - rotation"
+   ],
+   "duration_note": "No keyframes: wiggle() expressions driven by comp time for the whole layer (not tied to the in point).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM WiggleRotation').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Wiggle Speed (wigs/sec)', property(2) = 'Wiggle Amount (degrees)'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wiggle - rotation.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/074b.png",
+    "note": "Text rocks about its centre, about -5 deg at 0.5 s and +20 deg at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggle - scale",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Random breathing: a Transform effect's scale wiggles by 'Wiggle Amount' (10) at 'Wiggle Speed (wigs/sec)' (1); with 'Wiggle Width Separately?' on (default) the width wiggles on its own by 'Wiggle Width' (10), giving organic squish.",
+   "look": [
+    "breathing",
+    "pulse",
+    "organic",
+    "squish",
+    "scale"
+   ],
+   "use_for": [
+    "breathing logo or call-to-action",
+    "organic throb on icons or blobs",
+    "comic squish on meme text"
+   ],
+   "avoid": [
+    "Non-uniform squish distorts faces and logos: turn 'Wiggle Width Separately?' off",
+    "Too fast reads as a glitch"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Wiggle - scale"
+   ],
+   "duration_note": "No keyframes: wiggle() expressions driven by comp time for the whole layer (not tied to the in point).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM WiggleScale').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) 'Wiggle Speed (wigs/sec)', property(2) 'Wiggle Amount', property(3) 'Wiggle Width Separately?' (0/1), property(4) 'Wiggle Width'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wiggle - scale.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/075b.png",
+    "note": "Text breathes about its centre: slightly larger and wider at 0.5 s, narrower at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggle - shear",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "Random slanting: a Transform effect's 'Skew' wiggles up to 'Wiggle Amount' (20) at 'Wiggle Speed (wigs/sec)' (1).",
+   "look": [
+    "skew",
+    "shear",
+    "unstable",
+    "rubbery",
+    "jitter"
+   ],
+   "use_for": [
+    "unstable or glitchy text",
+    "rubbery cartoon motion",
+    "uneasy feel on titles in thrillers"
+   ],
+   "avoid": [
+    "High amounts look broken",
+    "Looks childish in serious news"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Wiggle - shear"
+   ],
+   "duration_note": "No keyframes: wiggle() expressions driven by comp time for the whole layer (not tied to the in point).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM WiggleShear').property(1).setValue(v). The expression overwrites the target property's own animation. Controls: property(1) = 'Wiggle Speed (wigs/sec)', property(2) = 'Wiggle Amount'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wiggle - shear.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/076b.png",
+    "note": "Text gains a visible forward italic slant at 1.4 s (slight at 0.5 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wigglerama",
+   "match": null,
+   "category": "Behaviors",
+   "status": "current",
+   "summary": "All-in-one random float: a Transform effect wiggles position ('Wiggle Position (pixels)' 25), rotation ('Wiggle Rotation (degrees)' 30) and scale ('Wiggle Scale' 15) together at 'Wiggle Speed (wigs/sec)' (1) with 'Wiggle Nervousness' (1, the wiggle octaves: higher adds jittery detail, not speed).",
+   "look": [
+    "float",
+    "organic",
+    "jitter",
+    "random motion",
+    "handheld"
+   ],
+   "use_for": [
+    "floating stickers, emoji and cards in reels",
+    "handheld feel on graphics",
+    "chaotic meme energy (raise speed)",
+    "idle motion on hero titles (low amounts)"
+   ],
+   "avoid": [
+    "Defaults are loud: divide the amounts by 3-5 for subtle life",
+    "Shows the edges of full-frame footage"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Transform",
+    "Wigglerama"
+   ],
+   "duration_note": "No keyframes: wiggle() expressions driven by comp time for the whole layer (not tied to the in point).",
+   "scripting": "Behaviors preset = expression rig, no keyframes, so comp.time does not matter. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). The added effect and its controls have display names that start with a TAB character (the expressions call effect(\"\\t...\")), so set controls by match name or index, e.g. layer.property('ADBE Effect Parade').property('ADBE CM Wigglerama').property(1).setValue(v). The expression overwrites the target property's own animation. Controls in order: 'Wiggle Speed (wigs/sec)', 'Wiggle Nervousness', 'Wiggle Position (pixels)', 'Wiggle Rotation (degrees)', 'Wiggle Scale', 'Wiggle Width Separately?', 'Wiggle Width'. Also adds Transform. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Behaviors/Wigglerama.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/077b.png",
+    "note": "Text moves, rotates and rescales together (tilted about -3 deg at 0.5 s, about +20 deg and smaller at 1.4 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bloom - brights+darks",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Soft diffusion bloom: Box Blur (radius 3) softens the layer, then two Calculations passes blend the layer's own sharp original back over it at 50% Second Layer Opacity: 'Calculations/brighten' in Screen (lifts and glows highlights) and 'Calculations/darken' in Overlay (restores contrast in the darks). Reads like a Pro-Mist filter.",
+   "look": [
+    "bloom",
+    "diffusion",
+    "dreamy",
+    "soft contrast",
+    "pro-mist",
+    "filmic"
+   ],
+   "use_for": [
+    "dreamy flashback or memory shots",
+    "soft cinematic look on interviews",
+    "nostalgic archive / tribute sequences",
+    "taming harsh digital sharpness in trailers"
+   ],
+   "avoid": [
+    "Radius 3 px is subtle at 1080p: raise 'Blur Radius' to 10-30",
+    "Softens on-screen text: apply under titles",
+    "Does nothing beyond the blur if 'Second Layer' does not point at the layer itself after applying: check it"
+   ],
+   "confidence": "low",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Fast Box Blur"
+   ],
+   "duration_note": "No keyframes: a static look for the whole layer.",
+   "scripting": "Static look, no keyframes: applyPreset at any comp.time. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Calculations 'Second Layer' is a layer parameter that is stored as 0 in the .ffx; after applying, check it points at the layer itself, or the bloom does nothing. The instances are renamed ('(Calculations)', or TAB-prefixed 'Calculations/brighten' and 'Calculations/darken'), so find them by match name: for each effect e in layer.property('ADBE Effect Parade') with e.matchName == 'ADBE Calculations', e.property('ADBE Calculations-0006').setValue(layer.index). The blur is the legacy 'ADBE Box Blur' (Box Blur, _Obsolete category, same controls as Fast Box Blur), not 'ADBE Box Blur2'. Apply to the footage or a precomp, not an adjustment layer. 'Second Layer Opacity' (0-1, 0.5 as shipped) sets the strength; 'Blending Mode' is 11 = Screen (brighten) and 15 = Overlay (darken), with menu separators counted; Fast Box Blur 'Blur Radius' sets the spread. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Creative/Bloom - brights+darks.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/078a.png",
+    "note": "Against the raw footage the frame is brighter, more saturated and contrastier, with softly glowing highlights while the darks stay deep.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bloom - brights",
+   "match": null,
+   "category": "Image - Creative",
+   "status": "current",
+   "summary": "Highlight bloom: Box Blur (radius 2) softens the layer, then one Calculations pass adds the layer's own sharp original back in Add mode at 25% Second Layer Opacity, so bright areas brighten and glow softly.",
+   "look": [
+    "bloom",
+    "highlight glow",
+    "soft",
+    "dreamy",
+    "filmic"
+   ],
+   "use_for": [
+    "glow on lights, windows and skies",
+    "soft beauty glow on interviews",
+    "dreamy B-roll in reels",
+    "cinematic polish on trailer shots"
+   ],
+   "avoid": [
+    "Radius 2 px is subtle at 1080p: raise 'Blur Radius' to 10-30",
+    "Add mode lifts the whole image: clipped highlights bloom into flat white blobs",
+    "Does nothing beyond the blur if 'Second Layer' does not point at the layer itself after applying: check it"
+   ],
+   "confidence": "low",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Fast Box Blur"
+   ],
+   "duration_note": "No keyframes: a static look for the whole layer.",
+   "scripting": "Static look, no keyframes: applyPreset at any comp.time. Apply with AdobeBridge ae_lib.jsx preset(layer, comp, file, time) (deselects other layers, selects the target, sets comp.time, calls layer.applyPreset(new File(file))). Calculations 'Second Layer' is a layer parameter that is stored as 0 in the .ffx; after applying, check it points at the layer itself, or the bloom does nothing. The instances are renamed ('(Calculations)', or TAB-prefixed 'Calculations/brighten' and 'Calculations/darken'), so find them by match name: for each effect e in layer.property('ADBE Effect Parade') with e.matchName == 'ADBE Calculations', e.property('ADBE Calculations-0006').setValue(layer.index). The blur is the legacy 'ADBE Box Blur' (Box Blur, _Obsolete category, same controls as Fast Box Blur), not 'ADBE Box Blur2'. Apply to the footage or a precomp, not an adjustment layer. 'Second Layer Opacity' (0-1, 0.25 as shipped) sets the strength; 'Blending Mode' is 9 = Add (menu separators counted); Fast Box Blur 'Blur Radius' sets the spread. Preset file: C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Image - Creative/Bloom - brights.ffx",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/079a.png",
+    "note": "Against the raw footage the frame is brighter with lifted, softly glowing highlights (stripes, walls, faces) and lower contrast than the brights+darks version.",
+    "rerender": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,1604 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom Forward",
+   "match": null,
+   "category": "Text/Scale",
+   "status": "current",
+   "summary": "Text EXIT, starting at once: characters blow up to 800 % and fade out in a quick left-to-right sweep, as if flying toward the camera; the line is gone after about 0.7 s.",
+   "look": [
+    "scale up",
+    "fade out",
+    "exit",
+    "fly toward camera",
+    "per-character"
+   ],
+   "use_for": [
+    "Title exit just before a hard cut",
+    "Trailer title blasting toward camera",
+    "Hook text clear-out in a reel"
+   ],
+   "avoid": [
+    "It is an exit, not an entrance: the text ends invisible",
+    "Letters grow 8x for a few frames and can sweep over faces",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "duration_note": "Exit: Ramp Down range selector, Offset -100 -> 100 over 0.73 s (+0.6 -> +1.33 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. The sweep starts at comp.time and the text is gone by about +0.68 s. Set comp.time = exit start.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator with a Range Selector (Shape Ramp Down, based on characters). Animator values (decoded): Scale 800 %, Opacity 0 %, Anchor Point Grouping = Line, so letters scale out from the line centre. No effects.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/554a.png",
+    "note": "The last characters blown up and fading at 0.5 s; empty at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Contract",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "Letters start spread (+31 tracking) and the spacing closes up to normal over about 1 s, sweeping from the end of the line back to the start.",
+   "look": [
+    "tracking",
+    "letters close up",
+    "contract",
+    "sweep"
+   ],
+   "use_for": [
+    "Title that tightens into place on a beat",
+    "Documentary chapter title settle",
+    "Lower-third headline entrance"
+   ],
+   "avoid": [
+    "Starts spread by +31 tracking at comp.time; long lines can touch the frame edges",
+    "Tracking on Hindi/Devanagari opens gaps in the shirorekha (top bar) and per-character selection can split conjuncts and matras: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Range Selector Offset 0 -> -100 over 1.0 s (+1.0 -> +2.0 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. Spread at comp.time, normal spacing from about +1.0 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator with a Square Range Selector (based on characters). Animator (decoded): Tracking Amount 31 (Before & After); Offset 0 -> -100 deselects the letters so the tracking is removed. Direction confirmed in render: the end of the line closes up first.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/555a.png",
+    "note": "The start of the line still spread with its end already tight at 0.5 s; normal spacing at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: avoid still said \"during the 1 s hold\" (no hold, spread at comp.time); scripting direction now confirmed in render (555a: 1947 tight, ARCHIVE spread)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Decrease Tracking",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "Letters start at wide spacing (+40 tracking) and the whole line's letter spacing tightens evenly to normal over 1 s.",
+   "look": [
+    "tracking",
+    "letters close in",
+    "cinematic title",
+    "subtle"
+   ],
+   "use_for": [
+    "Slow cinematic trailer title settle",
+    "Documentary chapter title",
+    "Clean news headline intro"
+   ],
+   "avoid": [
+    "Too fast reads as a glitch",
+    "Tracking on Hindi/Devanagari opens gaps in the shirorekha (top bar) and per-character selection can split conjuncts and matras: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "duration_note": "Tracking Amount 40 -> 0 over 1.0 s (+1.0 -> +2.0 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. Wide at comp.time, normal spacing from about +1.0 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator whose Tracking Amount is keyed 40 -> 0 directly; its Range Selector stays at full (0-100), so all letters move together.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/556a.png",
+    "note": "Wide, evenly spaced letters at 0.5 s; normal spacing at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: scripting still told you to move the first key to comp.time to drop a 1 s hold that AE already drops; sentence removed"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Extend",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "Letters spread apart (+54 tracking) in a sweep from the start of the line to the end over about 0.9 s, and stay extended.",
+   "look": [
+    "tracking",
+    "letters spread",
+    "extend",
+    "sweep"
+   ],
+   "use_for": [
+    "Title exit where letters drift apart before a cut",
+    "Trailer end title breathe",
+    "Emphasis on a quote"
+   ],
+   "avoid": [
+    "Ends +54 tracking wider: long lines can run off the frame edges",
+    "Tracking on Hindi/Devanagari opens gaps in the shirorekha (top bar) and per-character selection can split conjuncts and matras: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Range Selector Offset -100 -> 0 over 0.93 s (+1.07 -> +2.0 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. Fully extended from about +0.95 s and stays so.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator with a Square Range Selector (based on characters). Animator (decoded): Tracking Amount 54 (Before & After); Offset -100 -> 0 selects the letters start to end. Direction confirmed in render: the start of the line spreads first.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/557a.png",
+    "note": "The first word spread while the second is still tight at 0.5 s; all spread to the frame edges at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: scripting direction now confirmed in render (557a: ARCHIVE spread, 1947 tight; 557b runs to the frame edges)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Increase Tracking",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "The whole line's letter spacing widens evenly from normal to +40 tracking over 1 s and stays there.",
+   "look": [
+    "tracking",
+    "letters spread",
+    "slow drift",
+    "cinematic title"
+   ],
+   "use_for": [
+    "Slow trailer-style title drift",
+    "Documentary title card ending",
+    "Quote card breathing motion"
+   ],
+   "avoid": [
+    "Long lines can push out of frame",
+    "Tracking on Hindi/Devanagari opens gaps in the shirorekha (top bar) and per-character selection can split conjuncts and matras: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "duration_note": "Tracking Amount 0 -> 40 over 1.0 s (+1.0 -> +2.0 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. Fully widened from about +1.0 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator whose Tracking Amount is keyed 0 -> 40 directly; its Range Selector stays at full (0-100), so all letters move together.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/558a.png",
+    "note": "Spacing part-widened at 0.5 s and fully widened at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: scripting still told you to move the first key to comp.time to drop a 1 s hold that AE already drops; sentence removed"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Magnify",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "A narrow window (about 1/7 of the characters) of 300 %-scaled, +50-tracked letters travels left to right across the text like a magnifying glass; the text is normal before and after.",
+   "look": [
+    "magnifier",
+    "wave",
+    "bulge",
+    "playful type"
+   ],
+   "use_for": [
+    "Highlight sweep across a keyword in an explainer",
+    "Playful reel caption accent",
+    "AI-education title flourish"
+   ],
+   "avoid": [
+    "Line width jumps while it plays",
+    "Too playful for serious news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Range Selector (Start 0, End 14.3) Offset -15 -> 100 over 1.76 s (+0.67 -> +2.43 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. The bulge crosses the text from comp.time to about +1.76 s and the text ends normal.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator with a Square Range Selector (End 14.3 %, based on characters). Animator (decoded): Scale 300 %, Tracking Amount 50. Widen the bulge by raising the selector End.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/559a.png",
+    "note": "A 300 % magnified window sits on CH at 0.5 s and on 94 at 1.4 s, travelling left to right over normal text.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Shift In By Tracking",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "Text ENTRANCE: it starts very widely spaced (+97 tracking) and transparent, then the letters snap back to normal spacing from left to right while the layer fades up.",
+   "look": [
+    "slide in",
+    "tracking",
+    "fade in",
+    "headline intro"
+   ],
+   "use_for": [
+    "Headline entrance in news reels",
+    "Lower-third name intro",
+    "Explainer section title in"
+   ],
+   "avoid": [
+    "+97 tracking makes the line several times wider at the start; keep it to short lines",
+    "Tracking on Hindi/Devanagari opens gaps in the shirorekha (top bar) and per-character selection can split conjuncts and matras: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "duration_note": "Read from the .ffx: Range Selector Start 0 -> 100 from comp.time +0.0 s to +1.4 s; layer Opacity keyed 0 -> 100 % from +0.24 s to +1.24 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator (Tracking Amount 97, Square Range Selector based on characters) and also keyframes the layer's own Opacity, so it collides with existing opacity keys.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/560a.png",
+    "note": "Faint, very widely spaced letters running off the frame at 0.5 s; tight, fully opaque ARCHIVE 1947 at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Shift Out By Tracking",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "Text EXIT: letters spread to very wide spacing (+97 tracking) from the end of the line back to the start while the layer fades out.",
+   "look": [
+    "slide out",
+    "tracking",
+    "fade out",
+    "headline exit"
+   ],
+   "use_for": [
+    "Headline exit in news reels",
+    "Lower-third out",
+    "Explainer section title out"
+   ],
+   "avoid": [
+    "Apply about 1.4 s before the layer out point or the exit is cut off",
+    "Tracking on Hindi/Devanagari opens gaps in the shirorekha (top bar) and per-character selection can split conjuncts and matras: test on Hindi text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "duration_note": "Read from the .ffx: keyframes run from comp.time +0.0 s to +1.38 s (Range Selector Start 100 -> 0; layer Opacity keyed down from +0.25 s to +1.08 s). Set comp.time to about layer.outPoint - 1.4 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator (Tracking Amount 97, Square Range Selector based on characters) and also keyframes the layer's own Opacity, so it collides with existing opacity keys.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/561a.png",
+    "note": "At 0.5 s the dimmed text has 1947 widely spread while ARCHIVE is still tight (spread from the end backward); gone at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spasm",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "Letter spacing jitters randomly (a Wiggly Selector driving up to +/-102 tracking, about 6 wiggles per second), so the word twitches and shudders sideways for about 2 s, then calms back to normal.",
+   "look": [
+    "jitter",
+    "twitch",
+    "nervous",
+    "random spacing",
+    "shudder"
+   ],
+   "use_for": [
+    "Satire caption for a panicking or nervous beat",
+    "Horror or tension trailer word",
+    "Glitchy reel hook text"
+   ],
+   "avoid": [
+    "Hard to read if held long",
+    "Cheap on body text or serious news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "duration_note": "Wiggly Selector Max/Min Amount ramps 0 -> +/-100 over 0.23 s, holds, and returns to 0 (+0.27 -> +2.77 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. Jitter from comp.time, full by +0.23 s, calm again at about +2.5 s.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator with a Wiggly Selector only (no Range Selector): Tracking Amount 102, Wiggly Max/Min Amount keyed 0 -> +/-100 -> 0, Wiggles/Second 6, Correlation 50 %. The jitter is random; set the selector's Random Seed for a repeatable result.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/562a.png",
+    "note": "Letter spacing is irregular and different at both frames (letters bunched and overlapping in places), a random twitching jitter.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stretchy",
+   "match": null,
+   "category": "Text/Tracking",
+   "status": "current",
+   "summary": "A one-third-wide band of extra letter spacing (+62 tracking) travels left to right through the text, letters spreading as it arrives and closing after it passes; the text is normal before and after.",
+   "look": [
+    "elastic",
+    "stretch",
+    "wave",
+    "tracking",
+    "playful"
+   ],
+   "use_for": [
+    "Fun reel caption accent",
+    "Light explainer title",
+    "Meme punchline word"
+   ],
+   "avoid": [
+    "Too playful for serious documentary or news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Range Selector (Start 0, End 33.3) Offset -40 -> 100 over 1.43 s (+0.7 -> +2.13 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. The stretch passes from comp.time to about +1.43 s and the text ends normal.",
+   "scripting": "Text preset: the target must be a TextLayer. Set comp.time to the start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first). Keyframe times in duration_note are relative to comp.time (read from the .ffx); retime by moving those keys afterwards. Applying twice stacks a second animator. Adds one Text Animator with a Square Range Selector (End 33.3 %, based on characters). Animator (decoded): Tracking Amount 62.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/563a.png",
+    "note": "A band of extra spacing stretches ARCHI at 0.5 s and has reached 194 7 at 1.4 s, the rest at normal spacing.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Block Dissolve - digital",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears through random digital blocks: thin horizontal slivers (layer width/10 wide, 1 px tall) that grow taller as it resolves, like a corrupted video signal locking in.",
+   "look": [
+    "digital",
+    "blocky",
+    "pixel",
+    "data glitch",
+    "dissolve"
+   ],
+   "use_for": [
+    "Tech / AI explainer scene change",
+    "Screen-grab or data reveal in news",
+    "Cyber-themed reel transition"
+   ],
+   "avoid": [
+    "Big slow blocks look dated",
+    "Not for emotional documentary moments"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransDissolve has only 'Transition Completion' (ADBE CM TransDissolve-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Expressions (read from the .ffx): Block Dissolve completion = linear 100 -> 0; Block Width = layer width/10; Block Height eases from 1 px to layer height/3; Feather 0.5.",
+   "effects_used": [
+    "Block Dissolve",
+    "Dissolve Master Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/564a.png",
+    "note": "Footage half revealed through random black blocks at 0.5 s (thin horizontal slivers at 0.2 s in the render), fully clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Block Dissolve - random",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears as random rectangular blocks (layer width/20 x height/16, about 96 x 68 px on 1080p) pop in until it is fully visible.",
+   "look": [
+    "blocky",
+    "random blocks",
+    "digital",
+    "dissolve"
+   ],
+   "use_for": [
+    "Photo reveal in a news reel",
+    "Chart or graphic reveal in an explainer",
+    "Retro-tech transition"
+   ],
+   "avoid": [
+    "Reads as cheap if overused",
+    "Hard block edges flicker on fine detail"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Block Dissolve's transition completion keyed 100 -> 0 from comp.time +0 s to +1 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. No master control: Block Dissolve's own 'Transition Completion' (ADBE Block Dissolve-0001) is keyed 100 -> 0. For an OUT transition, swap the two keyframe values and place them at the layer end. Block size is set by expression from the layer size; Feather 0.5.",
+   "effects_used": [
+    "Block Dissolve"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/565a.png",
+    "note": "Footage showing through a dense field of small random black rectangles at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Block Dissolve - scanlines",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer resolves through 1 px tall horizontal line segments whose width grows from layer width/5 to full width, like the scan lines of a TV signal.",
+   "look": [
+    "scanlines",
+    "TV signal",
+    "retro",
+    "digital",
+    "dissolve"
+   ],
+   "use_for": [
+    "Archival / TV footage reveal in a documentary",
+    "Broadcast-news style transition",
+    "Retro VHS reel"
+   ],
+   "avoid": [
+    "Thin lines can alias under social-media compression"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransDissolve has only 'Transition Completion' (ADBE CM TransDissolve-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Expressions: Block Dissolve completion = linear 100 -> 0; Block Width = linear layer width/5 -> layer width; Block Height 1 px; Feather 1.",
+   "effects_used": [
+    "Block Dissolve",
+    "Dissolve Master Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/566a.png",
+    "note": "Footage resolving through 1 px horizontal scan-line segments at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dissolve - blobs",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears through large soft-edged blobs (Block Dissolve with layer width/4 x height/4 blocks and Soft Edges on) instead of a flat crossfade.",
+   "look": [
+    "organic",
+    "soft blobs",
+    "dissolve",
+    "dreamy"
+   ],
+   "use_for": [
+    "Memory / flashback transition in a documentary",
+    "Soft portrait reveal",
+    "Dreamy reel mood"
+   ],
+   "avoid": [
+    "Blobby edges look cheap on hard news"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Block Dissolve's transition completion keyed 100 -> 0 from comp.time +0 s to +1 s; it is an IN transition.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. No master control: Block Dissolve's own 'Transition Completion' (ADBE Block Dissolve-0001) is keyed 100 -> 0. Decoded: Block Width = layer width/4, Block Height = layer height/4 (expressions), Feather 0, Soft Edges (Best Quality) on. For an OUT transition, swap the two keyframe values.",
+   "effects_used": [
+    "Block Dissolve"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/567a.png",
+    "note": "Large soft-edged dark blobs still cover parts of the footage at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dissolve - dither",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears through a fine dithered noise pattern, like an old computer screen fading in.",
+   "look": [
+    "dither",
+    "noise",
+    "pixel grain",
+    "retro computer",
+    "dissolve"
+   ],
+   "use_for": [
+    "Retro-tech / AI history explainer",
+    "Glitchy reel transition",
+    "Screen-recording reveal"
+   ],
+   "avoid": [
+    "Fine noise compresses badly on Instagram"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; IN transition. First half: the layer fades up (Solid Composite source opacity 0 -> 100) under full per-pixel alpha noise; second half: the noise (Noise Alpha amount 100 -> 0, seed = time so it fizzes every frame) clears.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransDissolve has only 'Transition Completion' (ADBE CM TransDissolve-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Noise Alpha uses Uniform Random noise with Random Seed = time.",
+   "effects_used": [
+    "Dissolve Master Control",
+    "Noise Alpha",
+    "Solid Composite"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/568a.png",
+    "note": "Dimmed footage covered in fine per-pixel noise at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dissolve - ripple",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer fades in while rippling like water, the ripple calming as it finishes.",
+   "look": [
+    "ripple",
+    "water",
+    "wavy",
+    "dream",
+    "dissolve"
+   ],
+   "use_for": [
+    "Flashback / dream sequence entrance",
+    "Reveal over water or monsoon footage",
+    "Calm documentary transition"
+   ],
+   "avoid": [
+    "Cliched dream effect",
+    "Warps faces, avoid on leaders' faces in news"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key). Fade completes by 67 %, the ripple dies out over the second half.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransDissolve has only 'Transition Completion' (ADBE CM TransDissolve-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Ripple is centred on the layer; Wave Height = layer width/20 until 50 %, then dies to 0; the fade-up is done by 67 %.",
+   "effects_used": [
+    "Dissolve Master Control",
+    "Ripple",
+    "Solid Composite"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/569a.png",
+    "note": "Footage wavy and rippling with scalloped edges at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dissolve - sand",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears through single-pixel random grains (Block Dissolve with 1 x 1 px blocks, Soft Edges on), like sand settling.",
+   "look": [
+    "sand",
+    "grain",
+    "fine particles",
+    "dissolve"
+   ],
+   "use_for": [
+    "Desert / history documentary transition",
+    "Gentle photo reveal",
+    "Time-passing beat"
+   ],
+   "avoid": [
+    "Fine grain turns to mush under heavy compression"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Block Dissolve's transition completion keyed 100 -> 0 from comp.time +0 s to +1 s; it is an IN transition.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. No master control: Block Dissolve's own 'Transition Completion' (ADBE Block Dissolve-0001) is keyed 100 -> 0. Decoded: Block Width 1, Block Height 1, Feather 0, Soft Edges on. For an OUT transition, swap the two keyframe values.",
+   "effects_used": [
+    "Block Dissolve"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/570a.png",
+    "note": "Footage made of fine single-pixel grains over black at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dissolve - unmelt",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer forms out of a melting, turbulent liquid distortion that settles into the clean image.",
+   "look": [
+    "melt",
+    "liquid",
+    "turbulent",
+    "warp",
+    "dissolve"
+   ],
+   "use_for": [
+    "Surreal trailer reveal",
+    "Satire beat where a claim 'melts' into reality",
+    "Art / music reel transition"
+   ],
+   "avoid": [
+    "Distorts faces heavily during the move",
+    "Too stylised for straight news"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Here the master control is the pseudo effect '\\tDissolve - unmelt' (ADBE CM DissolveUnmelt): 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and 'Maximum Distortion' (-0002, 100; the Turbulent Displace amount eases from it to 0). No reverse checkbox. For an OUT transition, swap the two keyframe values and place them at the layer end. Turbulence size = layer width/5.",
+   "effects_used": [
+    "Dissolve - unmelt",
+    "Solid Composite",
+    "Turbulent Displace"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/571a.png",
+    "note": "Footage warped (foreground blocks tilted, figures smeared) at 0.5 s and strongly melted and dark at 0.2 s in the render, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dissolve - vapor",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer fades up out of a heavy blur (Fast Box Blur radius from layer height/3 to 0), like vapour condensing into the image.",
+   "look": [
+    "blur in",
+    "vapour",
+    "soft",
+    "dreamy",
+    "dissolve"
+   ],
+   "use_for": [
+    "Soft documentary scene entrance",
+    "Title or logo reveal",
+    "Calm explainer section opener"
+   ],
+   "avoid": [
+    "Heavy blur on text reads as out of focus"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransDissolve has only 'Transition Completion' (ADBE CM TransDissolve-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Blur radius = linear layer height/3 -> 0; the fade-up eases over the whole transition.",
+   "effects_used": [
+    "Dissolve Master Control",
+    "Fast Box Blur",
+    "Solid Composite"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/572a.png",
+    "note": "Frame is a fully blurred brown haze at 0.5 s and the sharp footage at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade - dip to black",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer comes in through black: over the first half it fades up as a black silhouette, over the second half the black lifts to reveal the image (a dip to black when the layer is full frame over the outgoing shot).",
+   "look": [
+    "fade",
+    "black",
+    "dip to black",
+    "classic",
+    "clean"
+   ],
+   "use_for": [
+    "Chapter break in a documentary",
+    "Trailer beat between title cards",
+    "Calm restart after a heavy moment"
+   ],
+   "avoid": [
+    "Too many dips slow a reel down"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key). First half fades in as black, second half lifts the black off the image.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransFade has only 'Transition Completion' (ADBE CM TransFade-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Tint maps to black (amount 100 -> 0 over 50-100 %); Solid Composite fades the layer up over 0-50 %. Reads as a dip only on a full-frame layer above the outgoing shot.",
+   "effects_used": [
+    "Fade Master Control",
+    "Solid Composite",
+    "Tint"
+   ],
+   "equivalent": "Premiere: Dip to Black transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/573a.png",
+    "note": "Pure black at 0.5 s (the black lifts from 0.6 s in the render), clean footage at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade - flash to white",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer comes in through white: over the first half it fades up as a white silhouette, over the second half the white clears to reveal the image (a dip to white when the layer is full frame over the outgoing shot).",
+   "look": [
+    "white flash",
+    "flash",
+    "impact",
+    "bright"
+   ],
+   "use_for": [
+    "Trailer hit / impact cut",
+    "Flashback or memory entrance",
+    "Camera-flash press moment in news"
+   ],
+   "avoid": [
+    "Repeated flashes are harsh and a photosensitivity risk"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key). First half fades in as white, second half clears the white off the image.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransFade has only 'Transition Completion' (ADBE CM TransFade-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Tint maps to white (amount 100 -> 0 over 50-100 %); Solid Composite fades the layer up over 0-50 %.",
+   "effects_used": [
+    "Fade Master Control",
+    "Solid Composite",
+    "Tint"
+   ],
+   "equivalent": "Premiere: Dip to White transition",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/574a.png",
+    "note": "Nearly white frame with a faint image at 0.5 s (grey to white over 0-0.4 s in the render), clean at 1.4 s.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 1,
+    "basis": "render: one fade through white over 1 s"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade - overexposed",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer fades in from a blown-out, overexposed look that settles to normal exposure.",
+   "look": [
+    "overexposed",
+    "burn",
+    "bright",
+    "film",
+    "glow"
+   ],
+   "use_for": [
+    "Dreamy or nostalgic documentary transition",
+    "Trailer reveal out of light",
+    "Celebration reel"
+   ],
+   "avoid": [
+    "Clips highlights hard on already bright footage"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key). First half fades in blown out, second half brings exposure back to normal.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransFade has only 'Transition Completion' (ADBE CM TransFade-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Calculations (self-blend) and a 50 % white Solid Composite 'burn' blow the image out, both easing off over 50-100 %; a second Solid Composite fades the layer up over 0-50 %.",
+   "effects_used": [
+    "Calculations",
+    "Fade Master Control",
+    "Solid Composite"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/575a.png",
+    "note": "Footage blown out to pale yellow-white at 0.5 s, normal exposure at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flickering Opacity - at layer in",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer flickers on like a faulty light as it appears, starting at the layer's in point.",
+   "look": [
+    "flicker",
+    "faulty light",
+    "glitch",
+    "horror",
+    "strobe"
+   ],
+   "use_for": [
+    "Neon sign or title flicker-on",
+    "Horror or tension trailer reveal",
+    "Glitchy reel hook text"
+   ],
+   "avoid": [
+    "Strobe flicker is a photosensitivity risk",
+    "Cheap if every element flickers"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Expression-driven and timed to the layer IN point, not comp.time: the flicker runs from inPoint for 'Animation In Duration' (seconds, default 1) and settles at 'Final Opacity' (default 100). No keyframes. Trim the layer start to move it.",
+   "scripting": "Deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)); comp.time does not matter (no keyframes). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Adds two Slider Controls ('\\tFinal Opacity', '\\tAnimation In Duration') and a Transform effect '\\tFlickering Opacity In' whose Opacity expression is random(rising ramp, Final Opacity), so it re-randomizes every frame. Set the sliders through their ADBE Slider Control-0001 property.",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/576a.png",
+    "note": "Footage at reduced opacity at 0.5 s; in the render the frame brightness jumps randomly from the in point to about 0.9 s, then holds steady; clean at 1.4 s.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 2,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 2 flashes, at most 2 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 5 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flickering Opacity - at layer out",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer flickers randomly in its last 'Animation Out Duration' seconds and is gone at its out point.",
+   "look": [
+    "flicker",
+    "faulty light",
+    "glitch",
+    "horror",
+    "strobe"
+   ],
+   "use_for": [
+    "Neon or title flicker-off",
+    "Horror trailer exit",
+    "Glitch exit of a graphic"
+   ],
+   "avoid": [
+    "Strobe flicker is a photosensitivity risk"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Expression-driven and timed to the layer OUT point, not comp.time: the flicker covers the last 'Animation Out Duration' seconds (default 1) before outPoint. No keyframes. Trim the layer end to move it.",
+   "scripting": "Deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)); comp.time does not matter (no keyframes). Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Adds a Slider Control '\\tAnimation Out Duration' and a Transform effect '\\tFlickering Opacity Out' whose Opacity = random(0, linear(time, outPoint, outPoint - duration, value, 0)). The time range is written reversed, so whether the flicker weakens or strengthens toward the out point was not verified in a render; check on first use.",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/577b.png",
+    "note": "Footage untouched at 0.5 s; from about 0.76 s it flickers and dims toward the out point and is near black at 1.4 s.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 6,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 6 flashes, at most 6 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 8 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inky Dissolve",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears through spreading ink-like fractal noise shapes, like ink bleeding into paper.",
+   "look": [
+    "ink",
+    "organic",
+    "fractal noise",
+    "ink bleed",
+    "dissolve"
+   ],
+   "use_for": [
+    "Historical / archival documentary reveal",
+    "Artistic trailer title transition",
+    "Poetic quote card entrance"
+   ],
+   "avoid": [
+    "Slow organic edges look muddy on busy footage",
+    "Heavy render (Fractal Noise)"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: 'Progress' slider keyed 0 -> 100 from comp.time +0 s to +3.33 s (slow). 'Reverse Transition' checkbox flips it to a dissolve-out.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Expression rig, no master control: Slider Control '\\tProgress' (keyed 0 -> 100) drives Fractal Noise brightness -110 -> 135 to grow the ink matte; Slider '\\tUndulation' (500) sets how far the noise Evolution turns during the transition (how much the ink churns); Checkbox '\\tReverse Transition' inverts the matte to make it an OUT transition. Shorten by moving the second Progress key.",
+   "effects_used": [
+    "CC Composite",
+    "Checkbox Control",
+    "Curves",
+    "Fractal Noise",
+    "Invert",
+    "Set Matte",
+    "Shift Channels",
+    "Slider Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/578b.png",
+    "note": "Footage revealed through smoky ink-like fractal shapes, faint at 0.5 s and about half revealed at 1.4 s (slow 3.3 s progress).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pixelated Dissolve",
+   "match": null,
+   "category": "Transitions - Dissolves",
+   "status": "current",
+   "summary": "The layer appears through blocky (60 px) pixelated noise patches, and the picture itself starts pixelated and sharpens over the last 60 % of the transition.",
+   "look": [
+    "pixelated",
+    "mosaic",
+    "digital",
+    "fractal noise",
+    "dissolve"
+   ],
+   "use_for": [
+    "AI / tech explainer reveal",
+    "Game-style or digital reel transition",
+    "Screen-grab reveal in news"
+   ],
+   "avoid": [
+    "Looks low-res if held long",
+    "Heavy render (Fractal Noise + Mosaic)"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: 'Progress' slider keyed 0 -> 100 from comp.time +0 s to +3.33 s (slow). 'Reverse Transition' checkbox flips it to a dissolve-out.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Expression rig, no master control: Slider '\\tProgress' (keyed 0 -> 100) drives the Fractal Noise matte, '\\tUndulation' (1500) its Evolution, '\\tBlock Size' (60 px) both Mosaic effects ('\\tTransition Mosaic' on the matte and '\\tImage Mosaic' on the picture, whose effect opacity eases 100 -> 0 between 40 and 100 % progress); Checkbox '\\tReverse Transition' makes it an OUT transition. Shorten by moving the second Progress key.",
+   "effects_used": [
+    "CC Composite",
+    "Checkbox Control",
+    "Curves",
+    "Fractal Noise",
+    "Invert",
+    "Mosaic",
+    "Set Matte",
+    "Shift Channels",
+    "Slider Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/579b.png",
+    "note": "Near black with a few dim mosaic blocks at 0.5 s; at 1.4 s the whole frame is a coarse pixelated mosaic of the footage, still dissolving.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Card Wipe - 2D fractured",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer flips on as a 12 x 9 grid of cards in random order (roughly bottom to top), the cards starting 3x oversized and jittering in depth, then settling into the clean image.",
+   "look": [
+    "cards",
+    "grid",
+    "fractured",
+    "flip",
+    "mosaic"
+   ],
+   "use_for": [
+    "Photo-wall or collage transition",
+    "News headline board flip",
+    "Explainer section change"
+   ],
+   "avoid": [
+    "Dated 2000s look if slow"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +2.0 s; IN transition. The card flip finishes at 33 % (about +0.67 s); the rest is the cards shrinking from 3x to 1x and the Z jitter dying out.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransCard has 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and a 'reverse direction' checkbox (-0002). For an OUT transition, swap the two keyframe values and place them at the layer end. Card Wipe's Back Layer is None, so card backs are empty and the layer flips on over whatever is beneath. 'reverse direction' switches the flip order to top-to-bottom.",
+   "effects_used": [
+    "Card Wipe",
+    "Card Wipe Master Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/580a.png",
+    "note": "Footage built from oversized, jittered card tiles at 0.5 s and smaller but still misaligned tiles at 1.4 s (settles by 2 s).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Card Wipe - 3D pixelstorm",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer builds from a 20 x 20 storm of small 3D cards that flip on from the bottom-left to the top-right while the virtual camera swings from a 75 degree side angle to face-on and the cards' jitter dies out.",
+   "look": [
+    "3D cards",
+    "pixel storm",
+    "scatter",
+    "particles",
+    "energetic"
+   ],
+   "use_for": [
+    "High-energy trailer reveal",
+    "Tech / AI reel transition",
+    "Logo build"
+   ],
+   "avoid": [
+    "Busy and slow to render",
+    "Cheap on serious news"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +2.0 s; IN transition. The flip finishes at 33 % (about +0.67 s); camera swing and position jitter settle by +2.0 s.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransCard has 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and a 'reverse direction' checkbox (-0002). For an OUT transition, swap the two keyframe values and place them at the layer end. Card Wipe's Back Layer is None, so card backs are empty and the layer flips on over whatever is beneath. 'reverse direction' flips from the bottom-right instead and swings the camera from the other side.",
+   "effects_used": [
+    "Card Wipe",
+    "Card Wipe Master Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/581a.png",
+    "note": "A storm of small angled 3D cards scattered in depth at 0.5 s, denser but still scattered at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Card Wipe - 3D swing",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer is cut into a 5 x 5 grid of large cards that flip over in 3D (random axis, corner-to-corner order) while the virtual camera pushes in and swings from a 60 degree angle to face-on.",
+   "look": [
+    "3D cards",
+    "swing",
+    "flip",
+    "panels"
+   ],
+   "use_for": [
+    "Headline board flip",
+    "Infographic panel reveal",
+    "Explainer chapter change"
+   ],
+   "avoid": [
+    "Dated if used repeatedly"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.5 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransCard has 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and a 'reverse direction' checkbox (-0002). For an OUT transition, swap the two keyframe values and place them at the layer end. Card Wipe's Back Layer is None, so card backs are empty and the layer flips on over whatever is beneath. 'reverse direction' swaps the corner the flips start from and the side the camera swings from.",
+   "effects_used": [
+    "Card Wipe",
+    "Card Wipe Master Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/582b.png",
+    "note": "Only a few large cards flipping in 3D at 0.5 s; at 1.4 s a 5 x 5 grid of cards almost settled into the image with visible seams.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pop and Wobble In",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer pops up from zero scale and wobbles in rotation from -45 degrees before settling upright.",
+   "look": [
+    "pop",
+    "wobble",
+    "overshoot",
+    "playful",
+    "spring"
+   ],
+   "use_for": [
+    "Icon or sticker pop-in in a reel",
+    "Emoji / meme element entrance",
+    "Explainer badge or bullet reveal"
+   ],
+   "avoid": [
+    "Too playful for serious news or documentary",
+    "Anchor point must be centred or it pops from a corner",
+    "Its Scale keys are absolute (ends at 100 %): a footage layer scaled to fit the comp ends zoomed in (a 1920x1080 clip in a 960x540 comp ends 2x), so pre-compose it or use it on layers already at 100 %"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Scale 0 -> 98 % -> 100 % from comp.time +0 s to +0.5 s; Rotation -45 deg wobbling to 0 by +0.92 s.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. No effects: it keyframes the layer's own Scale and Rotation, so it collides with any existing keys on those properties. Scale and rotation happen around the layer's anchor point.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/583b.png",
+    "note": "The layer pops up from nothing tilted (about -30 degrees at 0.04 s) and is upright by 1.4 s, but it ends at an absolute 100 % scale, so the fit-scaled 1920x1080 clip is left 2x zoomed in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Scale - Cardinal",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer scales up from zero to full size from a chosen anchor: a corner, an edge midpoint or the centre.",
+   "look": [
+    "scale in",
+    "directional",
+    "grow",
+    "clean"
+   ],
+   "use_for": [
+    "Bar or panel growing in for an infographic",
+    "Lower-third background build",
+    "Clean explainer graphic reveal"
+   ],
+   "avoid": [
+    "Scaling photos from a corner can look like a PowerPoint effect"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: 'Transition Completion' slider keyed 0 -> 100 from comp.time +0 s to +1 s; IN transition.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Expression rig: Slider Control '\\tTransition Completion' (keyed 0 -> 100) drives a Transform effect's uniform Scale 0 -> 100; Dropdown Menu Control '\\tStretch Origin' picks the fixed point (1-9: left column top/middle/bottom, centre column top/middle/bottom, right column top/middle/bottom; 5 = centre). It defaults to 1 = top-left corner, so set it before rendering.",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/584a.png",
+    "note": "Footage at about two-thirds size growing from the top-left corner at 0.5 s, full frame at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slide - drop",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer slides vertically into place, dropping in from one full layer-height above.",
+   "look": [
+    "slide",
+    "drop in",
+    "vertical",
+    "motion"
+   ],
+   "use_for": [
+    "Photo or card drop-in in a news reel",
+    "Quote card entrance",
+    "Explainer element landing on a beat"
+   ],
+   "avoid": [
+    "Overused slides feel template-like"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransSlide has 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and a 'reverse direction' checkbox (-0002), both read by a Transform effect's expressions. For an OUT transition, swap the two keyframe values and place them at the layer end. The Transform effect offsets the layer by one layer height: from above by default, from below with 'reverse direction'. Motion is linear.",
+   "effects_used": [
+    "Slide Master Control",
+    "Transform"
+   ],
+   "equivalent": "Premiere: Slide transition (Video Transitions > Slide)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/585a.png",
+    "note": "Footage shifted up by about a third with black below at 0.5 s, in place at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slide - straight",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer slides horizontally into place from one full layer-width to the side.",
+   "look": [
+    "slide",
+    "push in",
+    "horizontal",
+    "clean"
+   ],
+   "use_for": [
+    "Clean side-in of a graphic or photo",
+    "Split-screen panel entrance",
+    "Explainer panel change"
+   ],
+   "avoid": [
+    "Linear motion can look stiff"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransSlide has 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and a 'reverse direction' checkbox (-0002), both read by a Transform effect's expressions. For an OUT transition, swap the two keyframe values and place them at the layer end. The Transform effect offsets the layer by one layer width: from the left by default, from the right with 'reverse direction'. Motion is linear.",
+   "effects_used": [
+    "Slide Master Control",
+    "Transform"
+   ],
+   "equivalent": "Premiere: Slide or Push transition (Video Transitions > Slide)",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/586a.png",
+    "note": "Footage offset sideways with a black gap on the right at 0.5 s, in place at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slide - swoop",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer swoops in from the top-left corner (top-right with 'reverse direction'), growing from 0 to 100 % scale along a curved path that dips a little below centre before settling.",
+   "look": [
+    "swoop",
+    "arc",
+    "slide",
+    "dynamic"
+   ],
+   "use_for": [
+    "Energetic reel element entrance",
+    "Sports / celebration graphic",
+    "Trailer insert card"
+   ],
+   "avoid": [
+    "Too lively for sober news"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransSlide has 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and a 'reverse direction' checkbox (-0002), both read by a Transform effect's expressions. For an OUT transition, swap the two keyframe values and place them at the layer end. Transform effect expressions: Position runs from a top corner to the centre with a sine-shaped vertical offset, Scale 0 -> 100. Path read from the expressions, not checked in a render.",
+   "effects_used": [
+    "Slide Master Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/587a.png",
+    "note": "Footage at about two-thirds size low on the left of frame at 0.5 s (small at top-left at 0.2 s in the render), full frame at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stretch & Blur",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "A fast horizontal whip-in: the layer fades up while squashing from 500 % width (125 % height) back to normal, with a horizontal blur (layer width/10) clearing.",
+   "look": [
+    "stretch",
+    "blur",
+    "speed",
+    "whip"
+   ],
+   "use_for": [
+    "Fast reel transition into a new shot",
+    "Speedy title entrance",
+    "Trailer beat accent"
+   ],
+   "avoid": [
+    "Text is unreadable while blurred, keep it short"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Transition Completion keyed 0 -> 100 over 1.0 s (+0.17 -> +1.17 s in the .ffx). Verified in render: AE drops the leading hold, the first keyframe lands at comp.time. The whip-in starts at comp.time and the layer is clean from +1.0 s; IN transition.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransStretch has only 'Transition Completion' (ADBE CM TransStretch-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Transform effect (centred): Scale Width 500 -> 100, Scale Height 125 -> 100, Opacity eases 0 -> 100; Fast Box Blur (horizontal, 3 iterations) radius layer width/10 -> 0. The keys start at +0.17 s, so the layer is invisible for the first 4-5 frames after comp.time.",
+   "effects_used": [
+    "Fast Box Blur",
+    "Stretch Master Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/588a.png",
+    "note": "Footage smeared into a heavy horizontal stretch and blur at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stretch & Slide",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer fades up (in the first third) and contracts from a 20x horizontal smear: its right edge starts at frame centre and travels to the right edge as the width settles to 100 %, so it reads as a fast stretch-in from the left.",
+   "look": [
+    "stretch",
+    "slide",
+    "speed",
+    "elastic"
+   ],
+   "use_for": [
+    "Quick graphic entrance in reels",
+    "Caption box entrance",
+    "Upbeat explainer element"
+   ],
+   "avoid": [
+    "Stretched faces look odd, prefer graphics"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransStretch has only 'Transition Completion' (ADBE CM TransStretch-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Transform effect: Anchor Point moves from the layer's right edge to its centre while Position stays at the centre, Scale Width 2000 -> 100, Opacity 0 -> 100 over 0-33 %. Direction read from the expressions, not checked in a render.",
+   "effects_used": [
+    "Stretch Master Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/589a.png",
+    "note": "Footage stretched wide into a horizontal smear at 0.5 s, clean at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stretch - Edge",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer stretches out from one edge (left, right, top or bottom) to its full size.",
+   "look": [
+    "stretch",
+    "edge",
+    "grow",
+    "wipe-like"
+   ],
+   "use_for": [
+    "Bar or line graphic grow-on",
+    "Lower-third background build",
+    "Panel reveal in an explainer"
+   ],
+   "avoid": [
+    "Stretching photos or faces distorts them"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: 'Transition Completion' slider keyed 0 -> 100 from comp.time +0 s to +1 s; IN transition.",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Expression rig: Slider Control '\\tTransition Completion' (keyed 0 -> 100) drives a Transform effect; Dropdown Menu Control '\\tDropdown Menu Control' picks the edge it grows from (1 left, 2 right, 3 top, 4 bottom; default 1 = left). Left/right grow Scale Width 0 -> 100, top/bottom grow Scale Height 0 -> 100.",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/590a.png",
+    "note": "Footage squeezed to about two-thirds width from the left edge at 0.5 s, full width at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stretch Over - horizontal",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer unfolds horizontally from a vertical line at its centre (width 0 -> 100 %) while its height eases from 150 % back to 100 %.",
+   "look": [
+    "stretch",
+    "horizontal",
+    "unfold",
+    "graphic"
+   ],
+   "use_for": [
+    "Lower-third bar unfold",
+    "Banner entrance",
+    "Explainer panel reveal"
+   ],
+   "avoid": [
+    "Distorts photos and faces while moving"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransStretch has only 'Transition Completion' (ADBE CM TransStretch-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Transform effect (centred): Scale Width = Transition Completion (0 -> 100, linear), Scale Height eases 150 -> 100. Read from the expressions, not checked in a render.",
+   "effects_used": [
+    "Stretch Master Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/591a.png",
+    "note": "Footage narrowed to about two-thirds width around the centre with black sides at 0.5 s, full frame at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Stretch Over - vertical",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer unfolds vertically from a horizontal line at its centre (height 0 -> 100 %) while its width eases from 150 % back to 100 %.",
+   "look": [
+    "stretch",
+    "vertical",
+    "unfold",
+    "graphic"
+   ],
+   "use_for": [
+    "Chart column grow-in",
+    "Quote card unfold",
+    "Reel panel reveal"
+   ],
+   "avoid": [
+    "Distorts photos and faces while moving"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Master control ADBE CM TransStretch has only 'Transition Completion' (ADBE CM TransStretch-0001, keyed 0 -> 100 = layer arrives; there is no reverse checkbox). For an OUT transition, swap the two keyframe values (100 -> 0) and place them at the layer end. Transform effect (centred): Scale Height eases 0 -> 100, Scale Width eases 150 -> 100. Read from the expressions, not checked in a render.",
+   "effects_used": [
+    "Stretch Master Control",
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/592a.png",
+    "note": "Footage squashed in height with black bars top and bottom at 0.5 s, full frame at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Zoom - 2D spin",
+   "match": null,
+   "category": "Transitions - Movement",
+   "status": "current",
+   "summary": "The layer scales up from 0 to 100 % while rotating from -180 degrees (half a turn, set by Spin Amount) to upright, landing at full size.",
+   "look": [
+    "spin",
+    "zoom",
+    "twist",
+    "energetic",
+    "retro"
+   ],
+   "use_for": [
+    "Comedic / satire newspaper or photo spin-in",
+    "Meme-style reel insert",
+    "Retro TV-news reveal"
+   ],
+   "avoid": [
+    "Cheesy on serious content",
+    "Fast spin judders at 25/30 fps"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "Read from the .ffx: Transition Completion keyed 0 -> 100 from comp.time +0 s to +1.0 s; it is an IN transition (layer fully visible at the last key).",
+   "scripting": "Set comp.time to the transition start, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset acts on every selected layer, so isolate the target first); keyframe times are relative to comp.time. Effect and control names this preset creates start with a TAB character (e.g. '\\tTransition Completion'), and the rig's expressions reference those exact names: address them by match name or strip the leading tab when searching, and do not rename them. Here the master control is the pseudo effect '\\tZoom - 2D spin' (ADBE CM Zoom2DSpin): 'Transition Completion' (-0001, keyed 0 -> 100 = layer arrives) and 'Spin Amount' (-0002, 180 degrees; the layer starts rotated by minus this). No reverse checkbox. A Transform effect (centred) does uniform Scale 0 -> 100 and the rotation, both linear. For an OUT transition, swap the two keyframe values and place them at the layer end.",
+   "effects_used": [
+    "Transform",
+    "Zoom - 2D spin"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/593a.png",
+    "note": "Footage at about 70 % scale rotated well past 90 degrees at 0.5 s, upright and full size at 1.4 s.",
+    "rerender": false
+   }
+  }
+ ]
+}

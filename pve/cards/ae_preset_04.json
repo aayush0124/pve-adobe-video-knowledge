@@ -1,0 +1,1614 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flip",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Flips the layer upside down (vertical mirror) with a Transform effect: Scale Height -100, Uniform Scale off, Anchor Point and Position expression-locked to the layer centre, so the layer's own transform is untouched.",
+   "look": [
+    "mirror",
+    "upside down",
+    "vertical flip"
+   ],
+   "use_for": [
+    "Water / floor reflection composites (duplicate layer + Flip + lower opacity + blur)",
+    "Upside-down 'world turned over' gag in satire reels",
+    "With Flop (Flip + Flop = 180 degree rotation) to right phone footage recorded upside down"
+   ],
+   "avoid": [
+    "Text, signage and logos in the footage end up upside down and mirrored",
+    "Upside-down footage needs a 180 degree rotation (Flip + Flop, or layer Rotation 180) - Flip alone leaves it mirrored",
+    "Not a left-right mirror (that is Flop)"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Verified in the .ffx: Transform Scale Height = -100, Scale Width = 100, Uniform Scale off; Anchor Point and Position carry [thisLayer.width/2, thisLayer.height/2] expressions.",
+   "effects_used": [
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/120a.png",
+    "note": "Footage is turned upside down (vertical mirror) without left-right reversal, held identically at 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flop",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Mirrors the layer left-right (horizontal flip) with a Transform effect: Scale Width -100, Uniform Scale off, Anchor Point and Position expression-locked to the layer centre, so the layer's own transform is untouched.",
+   "look": [
+    "mirror",
+    "horizontal flip",
+    "reverse direction"
+   ],
+   "use_for": [
+    "Make a subject face/move toward the centre or toward the next shot (screen-direction fix)",
+    "Reuse the same B-roll shot a second time without it looking identical",
+    "Symmetric split-screen of one clip"
+   ],
+   "avoid": [
+    "Flips visible text, signage, number plates and party symbols - never on news footage with readable text or flags",
+    "Mirrored faces of well-known politicians look subtly wrong to viewers"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Verified in the .ffx: Transform Scale Width = -100, Scale Height = 100, Uniform Scale off; Anchor Point and Position carry [thisLayer.width/2, thisLayer.height/2] expressions.",
+   "effects_used": [
+    "Transform"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/121a.png",
+    "note": "Footage is mirrored left-right (the figures and stripes swap sides), static at both frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Invert Alpha",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Inverts the layer's transparency: a Levels pass sets the Alpha channel Output Black 1 / Output White 0, Set Matte re-applies the layer's own alpha, and a second Levels trims faint alpha (Alpha Input Black about 0.25). Formerly transparent areas become opaque - and black, because transparent pixels carry no colour.",
+   "look": [
+    "inverted matte",
+    "cut-out",
+    "knockout",
+    "hole"
+   ],
+   "use_for": [
+    "Punch a shape/text-shaped hole through a layer (knockout titles)",
+    "Invert a keyed matte to keep the background instead of the subject",
+    "Create a frame/border from a cut-out shape"
+   ],
+   "avoid": [
+    "On a fully opaque full-frame layer it simply makes the whole layer transparent",
+    "The newly opaque areas are black: add a Fill effect after it if the plate needs a colour",
+    "Alpha below about 25% is clipped away, so soft feathered edges get harder"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Only meaningful on layers that already have transparency (text, shapes, keyed or masked footage). Stack read from the .ffx: Levels (alpha inverted) -> Set Matte (Use For Matte: Alpha, own layer) -> Levels (alpha Input Black ~0.255).",
+   "effects_used": [
+    "Levels",
+    "Set Matte"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/122a.png",
+    "note": "On the fully opaque footage the whole layer turned transparent (frame shows only the black comp background), exactly the opaque-layer case the card's avoid list predicts.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Keying - blue blur",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Channel Blur on the blue channel only (Blue Blurriness 4, Blur Dimensions Horizontal, Repeat Edge Pixels on) to smooth the blocky, chroma-subsampled edges of DV / compressed blue-screen footage before keying; little visible change on its own; on ordinary footage the change is invisible (render differed from the source by well under 1/255 on average).",
+   "look": [
+    "key prep",
+    "channel blur",
+    "denoise blue"
+   ],
+   "use_for": [
+    "Pre-key cleanup on compressed / phone blue-screen footage",
+    "Reduce chattering edges before Keylight on a blue screen"
+   ],
+   "avoid": [
+    "Apply BEFORE the keyer in the effect stack, not after",
+    "Pointless on green-screen footage (use the green version)",
+    "Too much blur softens fine hair detail"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Then add or move the keyer below it in the effect stack. Values verified in the .ffx (ADBE Channel Blur: Blue Blurriness 4, Blur Dimensions 2 = Horizontal).",
+   "effects_used": [
+    "Channel Blur"
+   ],
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/123a.png",
+    "note": "Frame looks identical to the untouched footage; only a measurable blue-channel softening remains (mean pixel difference about 0.4/255), as the card's 'little visible change' says.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Keying - green blur",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Channel Blur on the green channel only (Green Blurriness 2, Blur Dimensions Horizontal, Repeat Edge Pixels on) to smooth the blocky, chroma-subsampled edges of DV / compressed green-screen footage before keying; little visible change on its own; on ordinary footage the change is invisible (render differed from the source by well under 1/255 on average).",
+   "look": [
+    "key prep",
+    "channel blur",
+    "denoise green"
+   ],
+   "use_for": [
+    "Pre-key cleanup on compressed / phone green-screen interviews",
+    "Reduce chattering edges before Keylight on a green screen"
+   ],
+   "avoid": [
+    "Apply BEFORE the keyer in the effect stack, not after",
+    "Pointless on blue-screen footage (use the blue version)",
+    "Slight green-channel softening can tint fine edges"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Then add or move the keyer below it in the effect stack. Values verified in the .ffx (ADBE Channel Blur: Green Blurriness 2, Blur Dimensions 2 = Horizontal).",
+   "effects_used": [
+    "Channel Blur"
+   ],
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/124a.png",
+    "note": "Frame looks identical to the untouched footage; only a measurable green-channel softening remains (mean pixel difference about 0.5/255), as the card's 'little visible change' says.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Keylight + Key Cleaner + Advanced Spill Suppressor",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "needs_input",
+   "summary": "Chroma-key stack: Keylight (1.2) with View set to Intermediate Result (keyed but not despilled), Key Cleaner (Additional Edge Radius 10, Strength 100) to recover edge detail, then Advanced Spill Suppressor (Standard method, Suppression 100) to remove screen-colour spill. Keylight's Screen Colour ships unset (black), so nothing is keyed until it is picked.",
+   "look": [
+    "green screen key",
+    "chroma key",
+    "clean edges",
+    "spill removal"
+   ],
+   "use_for": [
+    "Key a presenter / anchor shot on green screen to place over news graphics",
+    "Composite a talking head onto a virtual studio or B-roll",
+    "Cut out a subject for an explainer split layout"
+   ],
+   "avoid": [
+    "The screen colour must be picked in Keylight after applying or little/nothing is keyed",
+    "Uneven lighting or motion blur on the screen gives holes - fix the matte, do not crank settings",
+    "Not useful on footage that was not shot against a solid screen"
+   ],
+   "confidence": "high",
+   "applies_to": "green/blue-screen footage (after picking Keylight's Screen Colour)",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Afterwards set Keylight's Screen Colour (match name 'Keylight 906-0004', display name 'Screen Colour') to the screen colour sampled from the plate, e.g. a green like #2FB24A. Advanced Spill Suppressor's Key Color is expression-linked to that Screen Colour (it only matters in the Ultra method). Leave Keylight's View on Intermediate Result - the spill suppressor does the despill. Needs green/blue-screen footage to do anything.",
+   "effects_used": [
+    "Advanced Spill Suppressor",
+    "Key Cleaner",
+    "Keylight (1.2)"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/S_keypreset_stack_1.04.png",
+    "note": "As shipped the preset keys nothing on the green-screen plate (Screen Colour unset, frame identical to the plate); its three effects with Screen Colour #00B140 remove all screen green (0 % left, 84 % before) and keep the fine strands, as the card says.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/presets/125a.png",
+      "note": "Frame is pixel-identical to the untouched footage: Screen Colour ships unset and the test plate has no green/blue screen, so nothing is keyed; status set to needs_input (pick the screen colour on screen footage).",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Levels - computer to video",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Compresses full-range 0-255 levels into the 16-235 broadcast video range (Levels RGB Output Black 16/255, Output White 235/255), slightly lifting blacks and lowering whites.",
+   "look": [
+    "broadcast safe",
+    "legal range",
+    "lifted blacks",
+    "flatter"
+   ],
+   "use_for": [
+    "Make graphics/renders legal for TV broadcast deliverables",
+    "Match full-range graphics to limited-range broadcast footage"
+   ],
+   "avoid": [
+    "Do not use for social/web delivery - the image just looks washed out",
+    "Applying it twice (or to already-legal footage) flattens contrast"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first).",
+   "effects_used": [
+    "Levels"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/126a.png",
+    "note": "Image is slightly flatter: 1st/99th-percentile levels moved from 9/219 to 24/204, matching a 0-255 -> 16-235 compression.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Levels - Video to Computer",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Expands 16-235 video-range levels to full 0-255 (Levels RGB Input Black 16/255, Input White 235/255), deepening blacks and brightening whites.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast"
+   ],
+   "use_for": [
+    "Fix footage that looks washed out because it was interpreted as limited range",
+    "Restore contrast on broadcast-capture / TV-recorded clips used in explainers"
+   ],
+   "avoid": [
+    "Clips shadows and highlights on footage that is already full range",
+    "Not a creative grade - use Lumetri/Curves for looks"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "duration_note": "No keyframes expected: a static setting that holds for the whole layer, independent of comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first).",
+   "effects_used": [
+    "Levels"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/127a.png",
+    "note": "Image has deeper blacks and brighter whites: 1st/99th-percentile levels moved from 9/219 to 0/237, matching a 16-235 -> 0-255 expansion.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Magnify & Preserve Alpha",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "current",
+   "summary": "Magnifying loupe that keeps the rest of the layer: a Magnify effect named '(Magnify)' (Circle, Magnification 200, Size 250, Link None, Blending Mode None, Center at the layer centre) is limited through its Compositing Options to the Add-mode mask 'Magnify Mask', whose path, feather and opacity expressions follow the lens. Outside that mask the layer stays untouched and visible, so no duplicate is needed underneath. The mask path is built with fromComp(Center + offset), i.e. it treats the effect's layer-space Center as comp coordinates: the mask only sits on the lens when the layer's pixels line up with the comp (100% scale, centred). On a scaled layer the mask drifts and shows a black/transparent hole instead of the loupe.",
+   "look": [
+    "magnifying glass",
+    "loupe",
+    "zoom bubble",
+    "callout"
+   ],
+   "use_for": [
+    "Zoom into a line of a newspaper, document or tweet screenshot in an explainer (precomposed at comp size)",
+    "Highlight a detail in a map or chart",
+    "Moving loupe that tracks across a text document (animate Magnify Center; the mask follows)"
+   ],
+   "avoid": [
+    "Magnifies pixels - low-res sources get soft/blocky at high magnification",
+    "Scaled or moved layers break it: on 1920x1080 footage fitted at 50% into a 960x540 comp the mask landed at the bottom-right corner as a black quarter-disc and no loupe showed - precompose the source at comp size first"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer at 100% scale whose pixels line up with the comp (precompose scaled footage first)",
+   "duration_note": "No keyframes; animate the Magnify Center (ADBE Magnify-0001) yourself to move the loupe - the mask follows.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Keep the effect name '(Magnify)': the mask expressions call effect(\"(Magnify)\"). Change zoom/size through Magnification (ADBE Magnify-0003) and Size (ADBE Magnify-0002). No unmagnified copy underneath is needed: the effect only acts inside the mask. Keep the layer at 100% scale, centred in the comp (or precompose it): the mask path expression uses fromComp(Center + offset), so any layer scale/offset pushes the mask away from the lens. Verified by render: on a 50%-scaled layer the result was a black hole at the corner.",
+   "effects_used": [
+    "Magnify"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/128a.png",
+    "note": "The layer stays visible; the only change is a black quarter-disc at the comp's bottom-right corner, where the drifted mask lands on this scaled layer.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sample Image Expression",
+   "match": null,
+   "category": "Image - Utilities",
+   "status": "needs_input",
+   "summary": "Rig utility: adds a 'Sample Image' pseudo-effect (Center, Radius, Sampled Color Output) whose colour output is the expression sampleImage(Center, [Radius, Radius]) on this layer - the average colour at a point (default Radius 0.5 = one pixel). No visible change by itself.",
+   "look": [
+    "utility",
+    "colour picker rig",
+    "expression"
+   ],
+   "use_for": [
+    "Drive a title or shape colour from the footage colour at a point",
+    "Auto-match a lower-third accent colour to the shot",
+    "Trigger/brightness-driven animation (link opacity to sampled luminance)"
+   ],
+   "avoid": [
+    "Shows nothing until another property is linked to it",
+    "sampleImage is slow; many instances slow renders"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer (rig utility: link another property to its Sampled Color Output)",
+   "duration_note": "No keyframes; the expression evaluates every frame.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Link another property to the effect's 'Sampled Color Output' (3rd property) with an expression or pick-whip. Look the effect up by matchName 'ADBE Sample Image' and keep its name unchanged: the stored name carries an internal leading tab that the built-in expression references.",
+   "effects_used": [
+    "Sample Image"
+   ],
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/presets/129a.png",
+    "note": "Frame is pixel-identical to the untouched footage, as expected for a rig utility with nothing linked to its output; status set to needs_input.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "3D Lines Zoom In",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation, line by line: each line fades in from 300 px toward the camera (Position 3D z -300, Opacity 0) and settles into place while the line spacing closes from +60 px to normal; per-character 3D, range selector based on Lines (Ramp Up, offset -25 -> 100).",
+   "look": [
+    "3D text",
+    "zoom",
+    "line by line",
+    "fade in",
+    "depth"
+   ],
+   "use_for": [
+    "Trailer-style title reveal",
+    "Episode/series title in documentaries",
+    "Chapter cards in explainers"
+   ],
+   "avoid": [
+    "Dated 2000s look if left with defaults",
+    "Built for multi-line text - a single line just fades/zooms in at once",
+    "Per-character 3D is slow and can clip through a 3D camera"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Keys run 0 -> 3.0 s from comp.time (Range Offset and Line Spacing); shift/stretch them to fit the shot.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Animator 1 keys Line Spacing [0,60] -> [0,0]; animator 2 sets Position 3D [0,0,-300], Opacity 0, Anchor Point 3D x -80 through a Lines-based Ramp Up selector. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/130b.png",
+    "note": "On the text host the single line is invisible until about 0.7 s, then fades in while shrinking slightly from a closer-to-camera size and is nearly settled at full white by 1.4 s, matching the card (a single line zooms in all at once).",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "3D Rotate around Circle",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector; Text Path Options with a circular mask",
+   "summary": "Text carousel: puts the text on a circular mask (about 384 px across, mode None) with Perpendicular To Path and Reverse Path on, stands every character up (character X Rotation +90 on a layer with X Rotation -90) and animates First Margin 282 -> -602, so the letters travel about three-quarters of the way round a ring seen edge-on in perspective.",
+   "look": [
+    "text on circle",
+    "3D ring",
+    "carousel",
+    "orbit"
+   ],
+   "use_for": [
+    "Rotating badge/stamp text around a logo",
+    "Spinning ring of words around a central image in explainers"
+   ],
+   "avoid": [
+    "Adds its own circle mask about 384 px across - small on 1920x1080, scale the mask path",
+    "Sets the layer's X Rotation to -90 (per-character +90), so the text rides a ring seen edge-on and never reads as flat 2D text",
+    "Long text overlaps itself on the small circle",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "First Margin has 2 keys 3.0 s apart (stored at 4.2-7.2 s in the file); after applying read keyTime(1)/keyTime(2) to see where they landed and shift them to the shot.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Setting threeDLayer = true first is not needed: on a plain 2D text layer the gallery render still produced the ring (the preset sets the layer's X Rotation to -90 and per-character X Rotation +90). It adds its own circular mask and sets Path Options to it; scale the mask path for a 1920x1080 comp. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/131b.png",
+    "note": "On a 2D text host (3D switch not set beforehand) the letters ride a ring seen edge-on about 400 px across: squeezed letters enter at the right and leave squeezed at the left, so 'ARCHIVE 1947' travels round the carousel as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bars Blinky",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation: a wandering 35% band of random characters (Randomize Order, Smoothness 0) is stretched into faint full-height vertical bars (Scale [-300, 10000], Opacity 10%, Position x +50); the band's Offset runs wiggle(), so bars blink on and off continuously. Speed comes from the 'Wiggle_frequency' slider (default 8 = 0.8 wiggles/s; the expression divides by 10).",
+   "look": [
+    "blinking",
+    "random",
+    "stretch",
+    "techy",
+    "glitchy text"
+   ],
+   "use_for": [
+    "Techy/data-themed title flicker",
+    "Loading/processing text in AI explainers"
+   ],
+   "avoid": [
+    "Constant random motion hurts readability for long text",
+    "Looks dated if left with defaults",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "No keyframes: expression-driven from the layer's start for its whole length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Adds a Slider Control named 'Wiggle_frequency' (ADBE Slider Control) read by the selector-offset expression seedRandom(23); wiggle(slider/10, 150) - keep its name and find it by matchName. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/132b.png",
+    "note": "Nothing changes for the first ~0.7 s, then a random band of characters drops out of 'ARCHIVE 1947' into faint full-frame-height vertical bars that blink from frame to frame, as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blue Flash",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation: characters appear in random order, each dropping from 1000% scale and 0% opacity to normal size with a thick (Stroke Width 100) blue #004DFF stroke that thins away as it lands; Ramp Up selector based on Characters Excluding Spaces, offset -10 -> 100 over 1 s.",
+   "look": [
+    "flash",
+    "blue stroke",
+    "scale down",
+    "random order",
+    "outline"
+   ],
+   "use_for": [
+    "Punchy title hit on a beat in reels",
+    "Breaking-news keyword pop"
+   ],
+   "avoid": [
+    "Fixed blue stroke clashes with brand colours unless recoloured",
+    "The blue flash only shows if the text has a stroke applied - otherwise you get only the scale-down and fade",
+    "After Effects 2026's applyPreset rejects this file with 'The paste cannot be completed ... Variable font axis properties can only be pasted to other variable font axis properties of the same type' (the .ffx holds no variable-font data): use the equivalent",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "duration_note": "Range Offset keys 0 -> 1.0 s from comp.time; stretch the two keys to change the speed.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Animator stroke properties only render on text that has a stroke applied (TextDocument.applyStroke); set one before applying if the flash is wanted. Property values and key times were read from the .ffx file itself. In the 2026-10-04 gallery tests after Effects 2026's applyPreset rejects this file with 'The paste cannot be completed ... Variable font axis properties can only be pasted to other variable font axis properties of the same type' (the .ffx holds no variable-font data); wrap the call in try/catch, so the look above is unverified.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "broken",
+    "frame": null,
+    "note": "No frames: on the gallery's text host after Effects 2026's applyPreset rejects this file with 'The paste cannot be completed ... Variable font axis properties can only be pasted to other variable font axis properties of the same type' (the .ffx holds no variable-font data). Same error on every 2026-10-04 retry, alone in its own job. Caught at the call, AE carries on with the layer unchanged; the gallery job died only because its own error handler failed on that error object (listed in gallery/presets/failed.json). That handler bug is fixed (2026-10-04): the error now comes back as an AB_WARN and the job carries on with the layer unchanged.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - concentric NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN): five Add-mode masks fade the layer up - five concentric boxes from the centre outward: the four inner ones, each to 75% at completion 0-10, 20-30, 40-50 and 60-70, then the full outer box (648x486) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "concentric boxes",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 648x486) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/134b.png",
+    "note": "At 0.5 s only one centred box of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - concentric PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN): five Add-mode masks fade the layer up - five concentric boxes from the centre outward: the four inner ones, each to 75% at completion 0-10, 20-30, 40-50 and 60-70, then the full outer box (768x576) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "concentric boxes",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 768x576) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/135b.png",
+    "note": "At 0.5 s only one centred box of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - random 1 NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN), scattered-blocks variant 1: five Add-mode masks fade the layer up - four scattered boxes, each to 75% at completion 0-10, 20-30, 40-50 and 60-70, then the full outer box (648x486) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "random blocks",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 648x486) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/136b.png",
+    "note": "At 0.5 s only three scattered strips of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - random 1 PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN), scattered-blocks variant 1: five Add-mode masks fade the layer up - four scattered boxes, each to 75% at completion 0-10, 20-30, 40-50 and 60-70, then the full outer box (768x576) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "random blocks",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 768x576) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/137b.png",
+    "note": "At 0.5 s only three scattered strips of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - random 2 NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN), scattered-blocks variant 2: five Add-mode masks fade the layer up - four scattered boxes, each to 75% at completion 0-10, 20-30, 40-50 and 60-70, then the full outer box (648x486) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "random blocks",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 648x486) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/138b.png",
+    "note": "At 0.5 s only three scattered boxes of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - random 2 PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN), scattered-blocks variant 2: five Add-mode masks fade the layer up - four scattered boxes, each to 75% at completion 0-10, 20-30, 40-50 and 60-70, then the full outer box (768x576) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "random blocks",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 768x576) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/139b.png",
+    "note": "At 0.5 s only three scattered boxes of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - random 3 NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN), scattered-blocks variant 3: six Add-mode masks fade the layer up - five scattered boxes, each to 75% at completion 0-10, 15-25, 30-40, 45-55 and 60-70, then the full outer box (648x486) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "random blocks",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 648x486) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/140b.png",
+    "note": "At 0.5 s only four scattered boxes of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - random 3 PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Transitions - Wipes, or Linear/Venetian Blinds/Gradient Wipe effects on a 1920x1080 layer",
+   "summary": "Box reveal (transition IN), scattered-blocks variant 3: six Add-mode masks fade the layer up - five scattered boxes, each to 75% at completion 0-10, 15-25, 30-40, 45-55 and 60-70, then the full outer box (768x576) eases to 100% at 80-100 - driven by a 'Mask Fade Controls' Transition Completion keyed 0 -> 100 over 1 s.",
+   "look": [
+    "box wipe",
+    "random blocks",
+    "mask transition",
+    "retro"
+   ],
+   "use_for": [
+    "Retro TV-style box transition between B-roll shots",
+    "Block reveal of a photo or archival clip in a documentary"
+   ],
+   "avoid": [
+    "Masks are SD-sized (outer box 768x576) and stored centred on 0,0: on a 1920x1080 layer they never cover the full frame and the layer STAYS cropped to the boxes after the transition - rescale the masks or use a modern wipe",
+    "Looks like a 1990s broadcast wipe"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Mask Fade Controls' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time (a reveal). Reverse the two keys for an out-transition, or retime them for a different length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Expressions read the 'Mask Fade Controls' pseudo-effect (ADBE CM TransFadeMask): param 1 = Transition Completion drives each mask's opacity, param 2 = Feather drives every mask's feather; keep its name. Adds the masks (mode Add) to the layer; in the verification render they landed centred on the layer. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/141b.png",
+    "note": "At 0.5 s only four scattered boxes of footage show on black; at 1.4 s the layer stays cropped to the centred SD outer box (about a third of the frame width on the 1920x1080 layer), as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - stroked NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Shape-layer rectangles with Trim Paths, or Presets/Transitions - Wipes",
+   "summary": "Four scattered rectangles build on one after another: each Add-mode mask fades the layer in inside its box (completion 0-30, 23.3-53.3, 46.7-76.7, 70-100) while a Stroke effect (white, 1 px, All Masks, Stroke Sequentially) traces their outlines; driven by 'Fade Master Control' keyed 0 -> 100 over 2 s. The boxes sit in an SD-sized area (about 565x365 px).",
+   "look": [
+    "outline boxes",
+    "stroked rectangles",
+    "frame build",
+    "retro"
+   ],
+   "use_for": [
+    "Framing/highlight boxes building around a photo or document",
+    "Retro tech/HUD rectangle build-on in explainers"
+   ],
+   "avoid": [
+    "After the build the layer is visible ONLY inside the four boxes (masks are Add) - use it on a duplicate or a solid, not on the main shot",
+    "Masks are SD-sized and stored centred on 0,0: on 1920x1080 they cover a small area - rescale, or rebuild with shape layers + Trim Paths",
+    "A 1 px white stroke is nearly invisible at HD - raise the Stroke Brush Size"
+   ],
+   "confidence": "low",
+   "applies_to": "any layer",
+   "duration_note": "'Fade Master Control' Transition Completion is keyed 0 -> 100 over 2.0 s from comp.time; the boxes occupy 0-30, 23.3-53.3, 46.7-76.7 and 70-100 of it and the Stroke End follows 0-100.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Keep the 'Fade Master Control' (ADBE CM TransFade) effect name; the mask-opacity and Stroke End expressions reference it. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Fade Master Control",
+    "Stroke"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/142b.png",
+    "note": "Scattered rectangles of footage build on one after another (1 box at 0.5 s, 3 at 1.4 s) with a faint 1 px outline joining them; the rest of the frame is black.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Boxes - stroked PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Shape-layer rectangles with Trim Paths, or Presets/Transitions - Wipes",
+   "summary": "Four scattered rectangles build on one after another: each Add-mode mask fades the layer in inside its box (completion 0-30, 23.3-53.3, 46.7-76.7, 70-100) while a Stroke effect (white, 1 px, All Masks, Stroke Sequentially) traces their outlines; driven by 'Fade Master Control' keyed 0 -> 100 over 2 s. The boxes sit in an SD-sized area (about 670x430 px).",
+   "look": [
+    "outline boxes",
+    "stroked rectangles",
+    "frame build",
+    "retro"
+   ],
+   "use_for": [
+    "Framing/highlight boxes building around a photo or document",
+    "Retro tech/HUD rectangle build-on in explainers"
+   ],
+   "avoid": [
+    "After the build the layer is visible ONLY inside the four boxes (masks are Add) - use it on a duplicate or a solid, not on the main shot",
+    "Masks are SD-sized and stored centred on 0,0: on 1920x1080 they cover a small area - rescale, or rebuild with shape layers + Trim Paths",
+    "A 1 px white stroke is nearly invisible at HD - raise the Stroke Brush Size"
+   ],
+   "confidence": "low",
+   "applies_to": "any layer",
+   "duration_note": "'Fade Master Control' Transition Completion is keyed 0 -> 100 over 2.0 s from comp.time; the boxes occupy 0-30, 23.3-53.3, 46.7-76.7 and 70-100 of it and the Stroke End follows 0-100.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Keep the 'Fade Master Control' (ADBE CM TransFade) effect name; the mask-opacity and Stroke End expressions reference it. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Fade Master Control",
+    "Stroke"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/143b.png",
+    "note": "Scattered rectangles of footage build on one after another (1 box at 0.5 s, 3 at 1.4 s) with a faint 1 px outline joining them; the rest of the frame is black.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Centipede",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector; Text Path Options with an animated First Margin",
+   "summary": "Text-on-path crawl: replaces the text with the word 'centipede' (Myriad Pro Bold), lays it on a long wavy mask 'Centipede Path' (about 3,500 px, Perpendicular To Path on) and animates First Margin 1462 -> 4548 over 4 s (slowing in the last 0.8 s) while the path itself shifts, so the letters crawl along the wave.",
+   "look": [
+    "text on path",
+    "crawling text",
+    "wavy line",
+    "playful"
+   ],
+   "use_for": [
+    "Playful/satirical caption crawling across the frame",
+    "Text following a route line on a map-style explainer"
+   ],
+   "avoid": [
+    "Overwrites the layer's text and font with 'centipede' / Myriad Pro Bold - re-set them after applying",
+    "Its mask path is stored centred on 0,0 and was built for SD - check placement on 1920x1080",
+    "Hard to read for more than a few words"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "First Margin and mask-path keys run 0 -> 4.0 s from comp.time; shift/stretch them to fit the shot.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Adds the mask 'Centipede Path' (mode None) and sets Path Options to it. The preset's Source Text (not keyframed) is 'centipede' in Myriad Pro Bold, so set sourceText and font again after applying. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/144b.png",
+    "note": "The text is replaced with 'centipede' in a Myriad-style bold sans that crawls in from the left edge along a wavy path through the left half of the frame, as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Contract - Expand",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Demo text animation: replaces the text with five lines of 'contract' (Myriad Pro Regular) whose Source Text keyframes (0-1.8 s) switch each line to 'expand' in turn, while a Smooth range selector based on Lines (offset -50 -> 100, 0.67-2.17 s) shrinks each line to 0% scale at 50% opacity and grows it back as its word changes.",
+   "look": [
+    "contract",
+    "expand",
+    "line by line",
+    "word swap",
+    "scale pulse"
+   ],
+   "use_for": [
+    "Template for a line-by-line word swap (e.g. 'before' -> 'after') once the demo words are replaced",
+    "Rhythmic list reveal in music-led reels"
+   ],
+   "avoid": [
+    "Overwrites the layer's text with keyframed demo words",
+    "Lines collapse fully to 0% scale mid-animation - avoid on Devanagari where matras get squashed",
+    "The five demo lines stack upward from the layer's position (about 270 px at the preset's size): with the layer at frame centre in a 540 px tall comp the top line is cut off, so move the layer down"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Source Text keys 0 -> 1.8 s and Range Offset keys 0.67 -> 2.17 s from comp.time; about 2.2 s in all.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Applying REPLACES the layer's text: Source Text is keyframed (7 keys) with demo words. setValue on a keyframed property throws, so remove the keys first (while (p.numKeys) p.removeKey(1)) and then set sourceText/font - or keep the keys and setValueAtTime new words at each key time to keep the line-by-line swap. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/145b.png",
+    "note": "Five lines of 'contract' (top line cut off by the frame top with the layer at y 280); from about 0.8 s each line in turn shrinks to nothing and grows back as 'expand', lines 1-2 swapped by 1.4 s, as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "DialTone-US",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Apply the Tone effect directly (audio effect)",
+   "summary": "Audio: a Tone effect generating the US dial tone - sine waves at 350 Hz + 440 Hz mixed, Level 20%.",
+   "look": [
+    "dial tone",
+    "telephone",
+    "synth tone",
+    "sfx"
+   ],
+   "use_for": [
+    "Phone-call / hotline scene sound in explainers or dramatised reconstructions",
+    "Placeholder tone for audio sync tests"
+   ],
+   "avoid": [
+    "Indian viewers recognise a different dial tone - use a sourced SFX for Indian phone scenes",
+    "Continuous tone is annoying beyond 1-2 s; trim the layer"
+   ],
+   "confidence": "medium",
+   "applies_to": "audio layer",
+   "duration_note": "No animation: the tone sounds for the full length of the layer; trim the layer to set its duration.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Tone synthesizes its own sound (Waveform Sine, Frequency 1 = 350, Frequency 2 = 440, Level 20); if applyPreset fails on a layer without audio, use a layer that has an audio track. Which layer types AE 2026 accepts is untested.",
+   "effects_used": [
+    "Tone"
+   ],
+   "verified": {
+    "verdict": "untested:audio_only",
+    "frame": "pve/gallery/presets/146b.png",
+    "note": "Frames are pixel-identical to the untouched footage: the preset only generates audio (Tone), so a still frame cannot show it; card text unchanged, status left obsolete.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "it only makes sound; a still frame cannot show it"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Digital",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Backgrounds, or Fractal Noise + Mosaic + Tritone built directly",
+   "summary": "Animated background: Fractal Noise (Threads type, Soft Linear, Complexity 20) posterized to 2 levels, glowed, tinted by Tritone to green-on-black (shadows black, midtones #00D500, highlights #FAFFD5) and broken into 100 x 10 Mosaic blocks - a flickering green digital data / barcode texture.",
+   "look": [
+    "digital",
+    "pixel blocks",
+    "cyber",
+    "glow",
+    "tech background"
+   ],
+   "use_for": [
+    "Tech / AI-explainer background behind text",
+    "Data or cyber-security story backdrop",
+    "Transition texture between sections"
+   ],
+   "avoid": [
+    "Busy flicker under text hurts readability - darken or blur it",
+    "Green 'Matrix' palette by default; retint Tritone to the brand palette"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "duration_note": "Keys run 0 -> ~5.0 s from comp.time (Evolution 0->720, Sub Rotation 0->-720, Random Seed 0->25); after that the image freezes - extend the last keys or replace Evolution with a time expression for longer shots.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Apply to a full-comp 1920x1080 solid; Fractal Noise generates the whole image and ignores the solid's colour. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [
+    "Fractal Noise",
+    "Glow",
+    "Mosaic",
+    "Posterize",
+    "Tritone"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/147a.png",
+    "note": "Footage replaced by a flickering green-on-black block texture (about 10 rows of narrow mosaic columns), changing between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Drop Bounce",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation: characters land in random order by SCALE, not position - each starts at 2000% and 0% opacity, shrinks to normal size, then pops up again in smaller bounces (selectors 'Fall', 'Bounce 1-3' with 100/50/10/1% amounts, Round shape) before the 'Hold' selector settles it.",
+   "look": [
+    "bounce",
+    "drop in",
+    "scale pop",
+    "playful",
+    "cartoony"
+   ],
+   "use_for": [
+    "Fun title entry in reels or kids/education content",
+    "Satirical caption pop-in"
+   ],
+   "avoid": [
+    "Too playful for serious news or political documentary tone",
+    "Characters pass through huge 2000% scale and briefly fill the frame",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Range Offset keys are staggered from comp.time: 0-2.0, 0.23-2.23, 0.57-2.57, 0.87-2.87 and 1.07-3.07 s; about 3.1 s in all.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Animator 'Scale/Opacity' sets Scale 2000% and Opacity 0 through six selectors. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/148b.png",
+    "note": "Nothing shows for about 0.7 s, then characters land one at a time in random order ('A', then '4', '9') while the next ones pass through as huge faint glyphs filling the frame, as the card says; only 2-3 of 12 characters have landed by 1.4 s.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Embossed Multiple Exposure",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation: characters grow in left to right from 0% scale (Ramp Up selector, offset -100 -> 100 over 2 s, ease 50), brightening from black through grey to their own fill as they reach full size. On text without a stroke that is all it does: the animator's black fill / white 50 px stroke produced no outline or echo in the gallery render (with a stroke applied the outline is untested).",
+   "look": [
+    "grow in",
+    "scale up",
+    "left to right",
+    "build on"
+   ],
+   "use_for": [
+    "Simple left-to-right title build-on",
+    "Chapter or date card reveal"
+   ],
+   "avoid": [
+    "Despite the name, no emboss or multiple-exposure echo appears on stroke-less text - it is a plain grow-in (stroke look untested)",
+    "Busy, dated look - preview before using in a deliverable",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "duration_note": "Range Offset keys 0 -> 2.0 s from comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Values read from the .ffx (Scale 0, Fill Color black, Stroke Color white, Stroke Width 50 on one Ramp Up range selector); the look was checked on a gallery render of stroke-less text (plain grow-in, no outline).",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/149a.png",
+    "note": "Characters grow in left to right from tiny and dark (only the first two started at 0.5 s) to full white text at 1.4 s; no emboss or outline on this stroke-less text.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "recheck": "re-rendered on text"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Emerge",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation: characters in random order start with a heavy 12 px stroke that thins back to the text's own stroke (Ramp Up, offset -100 -> 100 over 3 s, ease 25/25), so letters emerge from bold blobs into clean type. Only the stroke width animates - no fade or move. On a text layer without a stroke it renders no change at all (gallery render).",
+   "look": [
+    "stroke reveal",
+    "emerge",
+    "outline",
+    "build on"
+   ],
+   "use_for": [
+    "Title reveal in documentaries",
+    "Quote or statistic reveal in explainers"
+   ],
+   "avoid": [
+    "Does nothing visible unless the text has a stroke applied in its text document",
+    "Thick strokes fill counters on small text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Range Offset keys 0 -> 3.0 s from comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Animator stroke properties only render on text that has a stroke applied (TextDocument.applyStroke); set one (and a stroke colour) before applying. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/presets/150b.png",
+    "note": "All 40 frames match the untouched text (max pixel difference 2): on text without a stroke this stroke-width-only preset shows nothing, as the card warns; untested with a stroke.",
+    "rerender": false,
+    "recheck": "re-rendered on text",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ethereal",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Backgrounds, or Wave World + Tritone built directly",
+   "summary": "Animated background: a Wave World height map (two wave producers, keyed for 5 s) smoothed by Median (radius 20) and tinted by Tritone to soft blue (midtones #3699C9, white highlights, black shadows) - a calm, rippling liquid-light texture.",
+   "look": [
+    "ethereal",
+    "soft waves",
+    "liquid",
+    "dreamy",
+    "background"
+   ],
+   "use_for": [
+    "Calm background for quotes or tributes",
+    "Spiritual/emotional documentary segments",
+    "Soft backdrop behind lower thirds"
+   ],
+   "avoid": [
+    "Retint Tritone; default colours can look dated",
+    "Slow to render (Wave World simulation)",
+    "In the first seconds the waves radiate from the top-left corner and most of a 1920x1080 frame stays black - move the Wave World producers to frame the ripples"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "duration_note": "Wave World producer keys (position, size, amplitude, frequency) run 0 -> ~5.0 s from comp.time; the wave simulation keeps rippling after that.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Apply to a full-comp 1920x1080 solid; Wave World generates the image itself.",
+   "effects_used": [
+    "Median (Legacy)",
+    "Tritone",
+    "Wave World"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/151b.png",
+    "note": "Footage replaced by soft blue/white wave ripples on black, radiating from the top-left corner and growing between 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fluctuate",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector with a Wiggly Selector",
+   "summary": "Text animation (continuous): a Wiggly Selector (0.5 Hz, correlation 100) intersected with a random selector swells the characters' stroke width up to 150 while fading stroke opacity, so the outline weight pulses slowly; a second animator ('Hide Last Char') fills the last ~10% of characters black. On a text layer without a stroke only the black last character shows (gallery render).",
+   "look": [
+    "flicker",
+    "random",
+    "wiggle",
+    "unstable"
+   ],
+   "use_for": [
+    "Unstable/uncertain mood title",
+    "Glitchy caption in tech reels"
+   ],
+   "avoid": [
+    "The pulse needs a text stroke to show",
+    "'Hide Last Char' only paints the last letters black - they vanish only on a black background",
+    "Constant motion is distracting under voice-over",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "duration_note": "No keyframes: the Wiggly Selector animates for the layer's whole length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Animator stroke properties only render on text that has a stroke applied (TextDocument.applyStroke); set one before applying. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/152b.png",
+    "note": "Static frames: only the 'Hide Last Char' animator shows (the final '7' painted black against the dark background); the stroke pulse needs a text stroke the host lacks, as the card warns.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fly to Inset",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Animate Scale/Position (or the Transform effect) to a corner box with Drop Shadow and Bevel Alpha",
+   "summary": "Picture-in-picture transition: a 'Fly to Inset' control (Transition Completion keyed 0 -> 100 over 1 s) drives a Transform effect that shrinks the layer to 33.3% and moves it to the Target Position; four Linear Wipes crop 5% off each edge and a Vegas frame (8 px, #E5E5E5), Bevel Alpha and Drop Shadow (67%) ramp on. Rendered on 1920x1080 footage the inset flew to the UPPER-LEFT (centre about [470, 128] layer px) with its top edge clipped by the top of the layer: the stored Target Position (fractions 0.733, 0.267) resolved as if on a 640x480 frame, not to the intended upper right. Set Target Position yourself after applying.",
+   "look": [
+    "picture in picture",
+    "inset box",
+    "bevel",
+    "drop shadow",
+    "news"
+   ],
+   "use_for": [
+    "News PiP: shrink a clip into a corner while the anchor or map plays behind",
+    "Show source footage as an inset while explaining it",
+    "Split attention between two clips in an explainer"
+   ],
+   "avoid": [
+    "Default Target Position lands the inset upper-left and partly off the top edge on 1920x1080 - always set Target Position (e.g. [1408, 289] for upper right)",
+    "Bevel + light-grey frame look very 1990s - set Frame Size to 0 or delete the Bevel Alpha",
+    "Crops 5% off every edge of the clip"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "duration_note": "'Fly to Inset' Transition Completion is keyed 0 -> 100 over 1.0 s from comp.time; retime or reverse the two keys.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Keep the 'Fly to Inset' effect name; the Transform, Linear Wipe, Vegas, Bevel and Shadow expressions read it. Steer it through that control: Target Scale (ADBE CM FlyToInset-0002), Target Position (-0003, pixels), Frame Size (-0004), Frame Color (-0005). Anchor and start position use layer width/height, but the default Target Position does not scale to HD (render: inset centre about [470, 128] px on a 1920x1080 layer) - set Target Position explicitly, e.g. [1408, 289] for the upper-right corner.",
+   "effects_used": [
+    "Bevel Alpha",
+    "Drop Shadow",
+    "Fly to Inset",
+    "Linear Wipe",
+    "Transform",
+    "Vegas"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/153b.png",
+    "note": "The picture shrinks to a framed inset that flies to the upper left with its top edge clipped (mid-move at 0.5 s, about a third size at 1.4 s).",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: frame 153b confirms the upper-left inset at about [470,128] layer px (= the stored 0.733/0.267 fractions of 640x480) and the [1408,289] HD fix; only reworded \"top edge cut off by the frame\" to say the layer edge clips it, since \"frame\" read as the Vegas border"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Frenzy",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector; Text Path Options with an animated mask path",
+   "summary": "Text-on-path: replaces the text with the word 'frenzy' (Myriad Pro Bold), lays it on a fixed zig-zag mask ('Zig-Zag Path', 243 points, SD-sized) and drives First Margin from -8780 to 11734 in 2 s, so the word races back and forth along the zig-zag.",
+   "look": [
+    "text on path",
+    "frantic",
+    "zig-zag",
+    "racing"
+   ],
+   "use_for": [
+    "Chaotic/panic mood text in satire reels",
+    "Energetic transition text"
+   ],
+   "avoid": [
+    "Overwrites the layer's text and font with 'frenzy' / Myriad Pro Bold - re-set them after applying",
+    "Hard to read; never for key information",
+    "Zig-zag path built for an SD frame (about 770x640 px) and stored centred on 0,0"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "First Margin keys at 0, 1.8 and 2.0 s from comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Adds the mask 'Zig-Zag Path' (mode None) and sets Path Options to it. The preset's Source Text (not keyframed) is 'frenzy' in Myriad Pro Bold, so set sourceText and font again after applying. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/154b.png",
+    "note": "The text is replaced with 'frenzy' in a Myriad-style bold sans that whips back and forth along a zig-zag in the upper-left quarter, often upside down, somewhere new every few frames, as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Front - Back",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Demo text animation: replaces the text with five lines of 'front' (Myriad Pro Bold) whose Source Text keyframes (0-1.8 s) switch each line to 'back' in turn, while a Smooth range selector based on Lines (offset -50 -> 100, 0.67-2.17 s) squashes each line's height to 0 at 50% opacity and back - a split-flap / card-turn word swap.",
+   "look": [
+    "flip",
+    "card turn",
+    "split flap",
+    "Y-scale",
+    "word swap"
+   ],
+   "use_for": [
+    "Line-by-line word swap (claim -> fact, before -> after) once the demo words are replaced",
+    "Text change between two statements"
+   ],
+   "avoid": [
+    "Overwrites the layer's text with keyframed demo words",
+    "Squashes letters flat mid-flip; poor for Devanagari"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Source Text keys 0 -> 1.8 s and Range Offset keys 0.67 -> 2.17 s from comp.time; about 2.2 s in all.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Applying REPLACES the layer's text: Source Text is keyframed (7 keys) with demo words. setValue on a keyframed property throws, so remove the keys first (while (p.numKeys) p.removeKey(1)) and then set sourceText/font - or keep the keys and setValueAtTime new words at each key time to keep the line-by-line swap. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/155b.png",
+    "note": "Five lines of 'front'; from about 0.8 s each line in turn squashes flat to a sliver and opens back as 'back' (lines 1-2 swapped by 1.4 s), as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Frontside - Backside",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Demo text animation: replaces the text with five lines of 'frontside' (Myriad Pro Bold) whose Source Text keyframes (0-1.7 s) switch each line to 'backside' in turn, while a Smooth character-based selector (offset -100 -> 100, 0.67-2.17 s, tracking -42) squeezes each character's width to 0 at 50% opacity and back - letters turn like cards on a vertical axis.",
+   "look": [
+    "flip",
+    "card turn",
+    "X-scale",
+    "word swap"
+   ],
+   "use_for": [
+    "Character-level turnover between two words once the demo words are replaced",
+    "Before/after text turnover in reels"
+   ],
+   "avoid": [
+    "Overwrites the layer's text with keyframed demo words",
+    "Width squeeze breaks Devanagari conjuncts and matras mid-turn",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Source Text keys 0 -> 1.7 s and Range Offset keys 0.67 -> 2.17 s from comp.time; about 2.2 s in all.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Applying REPLACES the layer's text: Source Text is keyframed (7 keys) with demo words. setValue on a keyframed property throws, so remove the keys first (while (p.numKeys) p.removeKey(1)) and then set sourceText/font - or keep the keys and setValueAtTime new words at each key time to keep the line-by-line swap. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/156b.png",
+    "note": "Five lines of 'frontside'; from about 0.9 s the characters squeeze to zero width one after another in reading order and open back as 'backside' (lines 1-2 swapped by 1.4 s), as the card says.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Green Dots",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector with Character Value and a Wiggly Selector",
+   "summary": "Text animation (continuous): a randomized 40% range wanders over the text via wiggle() (speed from the 'Wiggle Frequency' slider, default 1). In bursts, the characters it selects drop out of the word and large tilted translucent green squares (roughly 150-250 px across with 75 px text; the Character Value 183 middle-dot replacements drawn very large at low opacity, hue-shifted) flash over the text while the remaining letters tint pale green; a second animator hides some characters.",
+   "look": [
+    "glitch",
+    "green squares",
+    "flicker",
+    "letters drop out"
+   ],
+   "use_for": [
+    "Hacker/cyber/data story title",
+    "Decoding-style reveal in AI explainers"
+   ],
+   "avoid": [
+    "The 'dots' render as large translucent squares over and around the text, not small dots - preview before using",
+    "Matrix-style look is a cliche; use briefly",
+    "Character Value replacement breaks Devanagari and other non-Latin text",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "duration_note": "No keyframes: wiggle() on the selector offset runs for the layer's whole length.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Adds a Slider Control 'Wiggle Frequency' read by f = slider; wiggle(f, 200) on the 'Selector - Wiggle Offset' offset; the second animator copies that offset via text.animator('Animator - Char Value/Color').selector('Selector - Wiggle Offset').offset - keep the slider, animator and selector names. Values read from the .ffx; the look was checked on a gallery render (Bebas Neue text).",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/157b.png",
+    "note": "Steady text at 0.5 s; at 1.4 s letters have dropped out under two large tilted translucent green squares.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "recheck": "re-rendered on text"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Incoming",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector",
+   "summary": "Text animation, line by line: each line slides in from 650 px to the right (Ramp Up selector based on Lines, offset -46.7 -> 100 over 2 s) while a third animator unsqueezes the characters from 7% width with -36 tracking to normal (0.83-2.0 s). Nothing fades: lines are visible while offset.",
+   "look": [
+    "slide in",
+    "line by line",
+    "unsqueeze",
+    "clean"
+   ],
+   "use_for": [
+    "Lower-third name or title entry",
+    "Clean documentary title reveal",
+    "Key statistic slide-in"
+   ],
+   "avoid": [
+    "Lines wait 650 px to the right of their place and are visible there - start the text off-frame or add an opacity fade",
+    "Characters squeezed to 7% width read as a smear for most of the move",
+    "Built for multi-line text: a single line stays parked off to the right for about the first second (25 fps), then snaps into place in about 0.15 s instead of sliding steadily"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "duration_note": "Keys run 0 -> 2.0 s from comp.time.",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. Animators 'X-Pos/Tracking' (Position x +650), 'Opcaity (Reveal)' (Opacity left at 100%) and 'Scale/Tracking' (Scale [7,100], Tracking -36). Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/158b.png",
+    "note": "Nothing visible until about 1.05 s (the line is parked 650 px right, off the 960 px frame), then it snaps in from the right within about 0.15 s and its characters unsqueeze left to right, 'ARCHIVE' readable and '1947' still a squeezed sliver at 1.4 s, consistent with the card.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inflammation",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Presets/Text (Animate In / Animate Out / 3D Text categories) or a hand-built Text Animator with a Range Selector with a Wiggly Selector",
+   "summary": "Text animation: gives all characters a red #FF1212 stroke, then a Wiggly Selector (Lock Dimensions, correlation 95) shrinks characters and swells their stroke width (up to 100) in a wave that travels through the text as Spatial Phase is keyed 2520 -> 0 over 5 s; temporal frequency is 0, so the motion stops after 5 s.",
+   "look": [
+    "pulse",
+    "swell",
+    "red outline",
+    "aggressive"
+   ],
+   "use_for": [
+    "Angry/heated mood words in satire reels",
+    "Emphasis on a single shocking word"
+   ],
+   "avoid": [
+    "Paints its own red stroke even on text with no stroke applied - change the animator's Stroke Color for brand colours",
+    "Overused it looks amateur; thick strokes reduce legibility",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "duration_note": "Spatial Phase keys 0 -> 5.0 s from comp.time; after that the text holds its last state (Temporal Freq 0).",
+   "scripting": "Set comp.time to the start time, deselect all layers, set layer.selected = true, then layer.applyPreset(new File(<preset .ffx path>)) (applyPreset can act on the current selection, so isolate the target first). Target must be a TextLayer; on any other layer type it does nothing or errors. No applyStroke is needed: the gallery render on a text layer with no stroke showed the red stroke. Property values and key times were read from the .ffx file itself.",
+   "effects_used": [],
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/159b.png",
+    "note": "On text with NO stroke applied a red stroke swells through the characters in a travelling wave from the first frame, merging letters into solid red blocks and back, so the card's claim that it needs a text stroke was wrong and is removed.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  }
+ ]
+}

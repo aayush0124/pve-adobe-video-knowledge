@@ -1,0 +1,1712 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inset Video - framed",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Scale the layer down and add Layer Styles (Stroke, Bevel and Emboss, Drop Shadow) or the Drop Shadow / Bevel Alpha effects directly; crop with a mask or Linear Wipe",
+   "summary": "Turns the layer into a picture-in-picture inset: scales and positions it, crops the edges with four Linear Wipes, draws a coloured frame around it (Vegas), then adds a bevel and a drop shadow. An 'Inset Video - framed' control effect drives Crop Amount, Frame Size and Frame Color through expressions.",
+   "look": [
+    "picture-in-picture",
+    "framed inset",
+    "bevelled border",
+    "drop shadow",
+    "TV-in-TV",
+    "2000s broadcast"
+   ],
+   "use_for": [
+    "picture-in-picture of a second clip beside a presenter",
+    "news-style inset of an archival or viral clip",
+    "framing a screen recording inside an explainer"
+   ],
+   "avoid": [
+    "The bevel and Vegas frame look dated; a flat stroke with a soft shadow reads more modern",
+    "It sets Position and Scale, overwriting any transform you already set or keyframed"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Bevel Alpha",
+    "Drop Shadow",
+    "Inset Video - framed",
+    "Linear Wipe",
+    "Vegas"
+   ],
+   "duration_note": "No keyframes: a static, expression-linked look for the whole layer. Animate the inset in yourself.",
+   "scripting": "layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Inset Video - framed.ffx\")) on a footage layer; comp.time does not matter. Adjust the pseudo-effect 'Inset Video - framed' (match name ADBE CM InsetVideoFramed: Crop Amount, Frame Size, Frame Color). Values were authored for an SD 720x486/480 frame, so pixel positions need re-aiming in 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/160b.png",
+    "note": "Layer is scaled to a cropped inset with a thin pale frame on black; the SD-authored position puts it top-centre with its top edge cut off by the frame (bevel/shadow not readable on black).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inset Video - torn edges",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Roughen Edges + Drop Shadow effects on a scaled layer, with a mask or Linear Wipe for the crop",
+   "summary": "Picture-in-picture inset with ragged, torn-paper edges: scales and positions the layer, crops it with four Linear Wipes, roughens the border with Roughen Edges and adds a drop shadow. A control effect sets the crop amount.",
+   "look": [
+    "torn paper",
+    "ragged edge",
+    "picture-in-picture",
+    "drop shadow",
+    "scrapbook",
+    "collage"
+   ],
+   "use_for": [
+    "newspaper-clipping or scrapbook-style inset in a political explainer",
+    "collage of archival photos or clips in a documentary",
+    "cut-out inset of a viral clip in a social reel"
+   ],
+   "avoid": [
+    "The tear stays still unless you keyframe Roughen Edges Evolution",
+    "It sets Position and Scale, overwriting existing transform values"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Drop Shadow",
+    "Inset Video - torn edges",
+    "Linear Wipe",
+    "Roughen Edges"
+   ],
+   "duration_note": "No keyframes: static for the whole layer.",
+   "scripting": "layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Inset Video - torn edges.ffx\")); comp.time does not matter. The crop is controlled by the pseudo-effect 'Inset Video - torn edges' (match name ADBE CM InsetVideoTorn, property Crop Amount). Values were authored for an SD 720x486/480 frame, so pixel positions need re-aiming in 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/161b.png",
+    "note": "Layer becomes a scaled, cropped inset with visibly ragged torn edges, placed top-centre and clipped at the top by the SD-authored position.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Left Third - scoop mask NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Draw the panel as a shape layer or Pen-tool mask (or use a Premiere Essential Graphics panel); there is no modern preset",
+   "summary": "Adds four overlapping, partly transparent elliptical masks that cut the layer down to a tall vertical oval with soft, stepped edges; everything outside goes transparent. Applied to a 1920x1080 layer the shape sits in centre-right of the frame (about 37-75% of the width), running from just below the top to the bottom edge, not in the left third: the mask vertices were drawn for an SD frame. The mask paths are keyframed to morph very slowly (tens of seconds), so in a short shot the shape is static.",
+   "look": [
+    "tall vertical oval",
+    "oval cut-out",
+    "layered soft edge",
+    "vignette window",
+    "2000s TV"
+   ],
+   "use_for": [
+    "oval window on a photo or clip (re-position the masks first)",
+    "starting point for a curved left third panel on a solid after moving and scaling the masks",
+    "retro framed portrait next to text"
+   ],
+   "avoid": [
+    "Mask shapes were authored for an SD (NTSC/PAL) frame; check placement and scale in 1920x1080",
+    "The slow mask morph is usually unwanted: delete the Mask Path keyframes for a static panel"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "Mask Path keyframes on all four masks at the comp's current time, about 30 s later and about 60 s later. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to a solid: var s = comp.layers.addSolid([r,g,b], 'panel', 1920, 1080, 1); set comp.time; s.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Left Third - scoop mask NTSC.ffx\")). Masks only, no effects. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/162a.png",
+    "note": "Footage cut to a tall layered oval at about 37-75% of the width with black around it, static between the frames.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Left Third - scoop mask PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Draw the panel as a shape layer or Pen-tool mask (or use a Premiere Essential Graphics panel); there is no modern preset",
+   "summary": "Adds four overlapping, partly transparent elliptical masks that cut the layer down to a tall vertical oval with soft, stepped edges; everything outside goes transparent. Applied to a 1920x1080 layer the shape sits in the centre of the frame (about 35-80% of the width), full height, not in the left third: the mask vertices were drawn for an SD frame. The mask paths are keyframed to morph very slowly (tens of seconds), so in a short shot the shape is static.",
+   "look": [
+    "tall vertical oval",
+    "oval cut-out",
+    "layered soft edge",
+    "vignette window",
+    "2000s TV"
+   ],
+   "use_for": [
+    "oval window on a photo or clip (re-position the masks first)",
+    "starting point for a curved left third panel on a solid after moving and scaling the masks",
+    "retro framed portrait next to text"
+   ],
+   "avoid": [
+    "Mask shapes were authored for an SD (NTSC/PAL) frame; check placement and scale in 1920x1080",
+    "The slow mask morph is usually unwanted: delete the Mask Path keyframes for a static panel"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "Mask Path keyframes on all four masks at the comp's current time, about 30.5 s later and about 60 s later. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to a solid: var s = comp.layers.addSolid([r,g,b], 'panel', 1920, 1080, 1); set comp.time; s.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Left Third - scoop mask PAL.ffx\")). Masks only, no effects. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/163a.png",
+    "note": "Tall layered oval at about 35-80% of the width, full height, black around it.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lightning - Horizontal",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Advanced Lightning effect applied directly (match name ADBE Lightning 2)",
+   "summary": "Hides the layer's own picture (Composite on Original is off; it renders as black over the black test comp) and draws a green, glowing Advanced Lightning bolt that arcs horizontally from the left edge about a third of the way across, near the top of a 1920x1080 layer (the origin/direction points were set for an SD frame). Conductivity State is keyframed so the bolt crackles and changes shape.",
+   "look": [
+    "green lightning",
+    "electric arc",
+    "glow",
+    "black background",
+    "energy"
+   ],
+   "use_for": [
+    "electric arc between two title words in a trailer",
+    "'shock' or power metaphor in an explainer (power grid, breaking news)",
+    "storm accent on a thunder sound hit"
+   ],
+   "avoid": [
+    "Over plain footage it looks cheap: put it on a black solid in Add or Screen mode and add glow",
+    "Origin and Direction points were set for an SD frame and must be re-aimed in 1920x1080",
+    "Composite on Original is off, so the layer's own picture disappears and only the bolt remains: never apply it straight to footage you want to keep"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Advanced Lightning"
+   ],
+   "duration_note": "Conductivity State is keyframed from the comp's current time to about 5 s; the bolt stays but stops changing after that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Best on a black solid: set comp.time, then solid.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lightning - Horizontal.ffx\")). Or skip the preset and add ADBE Lightning 2 directly with your own Origin/Direction. Values were authored for an SD 720x486/480 frame, so pixel positions need re-aiming in 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/164b.png",
+    "note": "Black frame with a short glowing green bolt from the left edge to about a third of the way across, near the top; its shape changes between frames.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: bolt position and colour agree with 164a/b (left edge to about 36% across, 12-33% down, green); reworded 'replaced by black' to 'layer picture disappears' since the comp background is black and the frame cannot tell black from transparent"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lightning - Vertical",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Advanced Lightning effect applied directly (match name ADBE Lightning 2)",
+   "summary": "Applies Advanced Lightning striking vertically, with Origin, Conductivity State, Core Radius, Turbulence, Forking and Decay all keyframed, so the bolt moves, thickens and branches as it plays.",
+   "look": [
+    "lightning strike",
+    "vertical bolt",
+    "electric",
+    "storm",
+    "energy"
+   ],
+   "use_for": [
+    "lightning strike on a title or logo reveal in a trailer",
+    "dramatic 'impact' beat on a news reveal",
+    "storm or power-cut B-roll accent"
+   ],
+   "avoid": [
+    "Looks fake over daylight footage; composite on black with Add/Screen",
+    "Origin was set for an SD frame; re-aim it in 1920x1080",
+    "Composite on Original is off, so the layer's own image is replaced by black: never apply it straight to footage"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Advanced Lightning"
+   ],
+   "duration_note": "Six Advanced Lightning properties are keyframed from the comp's current time to about 5 s. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Best on a black solid: set comp.time, then solid.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lightning - Vertical.ffx\")). Values were authored for an SD 720x486/480 frame, so pixel positions need re-aiming in 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/165b.png",
+    "note": "A branching blue-violet bolt runs top to bottom at about 20% of the width and shifts shape between 0.5 s and 1.4 s; the footage itself is replaced by black.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lower Third - scoop mask NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Draw the panel as a shape layer or Pen-tool mask (or use a Premiere Essential Graphics panel); there is no modern preset",
+   "summary": "Adds four overlapping, partly transparent elliptical masks that cut the layer down to a wide horizontal oval with soft, stepped edges; everything outside goes transparent. Applied to a 1920x1080 layer the shape sits in the upper-middle of the frame (about 21-79% of the width, 8-67% of the height), not in the lower third: the mask vertices were drawn for an SD frame. The mask paths are keyframed to morph very slowly (tens of seconds), so in a short shot the shape is static.",
+   "look": [
+    "wide horizontal oval",
+    "oval cut-out",
+    "layered soft edge",
+    "vignette window",
+    "2000s TV"
+   ],
+   "use_for": [
+    "oval window on a photo or clip (re-position the masks first)",
+    "starting point for a curved lower third panel on a solid after moving and scaling the masks",
+    "retro framed portrait next to text"
+   ],
+   "avoid": [
+    "Mask shapes were authored for an SD (NTSC/PAL) frame; check placement and scale in 1920x1080",
+    "The slow mask morph is usually unwanted: delete the Mask Path keyframes for a static panel"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "Mask Path keyframes on all four masks at the comp's current time, about 30 s later and about 60 s later. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to a solid: var s = comp.layers.addSolid([r,g,b], 'panel', 1920, 1080, 1); set comp.time; s.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lower Third - scoop mask NTSC.ffx\")). Masks only, no effects. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/166a.png",
+    "note": "Wide layered oval in the upper middle (about 21-79% of the width, 8-67% of the height), black around it.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lower Third - scoop mask PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Draw the panel as a shape layer or Pen-tool mask (or use a Premiere Essential Graphics panel); there is no modern preset",
+   "summary": "Adds four overlapping, partly transparent elliptical masks that cut the layer down to a wide horizontal oval with soft, stepped edges; everything outside goes transparent. Applied to a 1920x1080 layer the shape sits in the upper-middle of the frame (about 16-84% of the width, top to 70% of the height), not in the lower third: the mask vertices were drawn for an SD frame. The mask paths are keyframed to morph very slowly (tens of seconds), so in a short shot the shape is static.",
+   "look": [
+    "wide horizontal oval",
+    "oval cut-out",
+    "layered soft edge",
+    "vignette window",
+    "2000s TV"
+   ],
+   "use_for": [
+    "oval window on a photo or clip (re-position the masks first)",
+    "starting point for a curved lower third panel on a solid after moving and scaling the masks",
+    "retro framed portrait next to text"
+   ],
+   "avoid": [
+    "Mask shapes were authored for an SD (NTSC/PAL) frame; check placement and scale in 1920x1080",
+    "The slow mask morph is usually unwanted: delete the Mask Path keyframes for a static panel"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [],
+   "duration_note": "Mask Path keyframes on all four masks at the comp's current time, about 30.5 s later and about 60 s later. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to a solid: var s = comp.layers.addSolid([r,g,b], 'panel', 1920, 1080, 1); set comp.time; s.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lower Third - scoop mask PAL.ffx\")). Masks only, no effects. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/167a.png",
+    "note": "Wide layered oval in the upper middle (about 16-84% of the width, top to 70% of the height), black around it.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lower Third Holdout - darken",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Gradient Ramp (or a Linear Gradient shape) on a solid or adjustment layer in Multiply mode",
+   "summary": "Darkens the bottom of the layer with a soft gradient: Gradient Ramp runs from 75% to 85% of the layer height (set by expressions) and Calculations blends it back over the footage, giving a dark band so lower-third text reads.",
+   "look": [
+    "dark bottom band",
+    "gradient scrim",
+    "lower third",
+    "readability",
+    "subtle vignette"
+   ],
+   "use_for": [
+    "scrim behind name supers and lower thirds in news or documentary",
+    "darkening bright B-roll under captions",
+    "making subtitles readable over busy footage"
+   ],
+   "avoid": [
+    "The band is fixed at 75-85% of the height; 9:16 reels place captions elsewhere, so edit the ramp points",
+    "Check the Calculations 'Second Layer' choice after applying; it may point at the wrong layer"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Gradient Ramp"
+   ],
+   "duration_note": "No keyframes: static. The ramp positions follow the layer height through expressions.",
+   "scripting": "layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lower Third Holdout - darken.ffx\")) on the footage layer; comp.time does not matter. Decoded from the .ffx: Gradient Ramp End Color is dark grey and Calculations Blending Mode is Overlay, so the footage above the band is near-unchanged and the band darkens. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/168b.png",
+    "note": "The bottom fifth of the footage is darkened by a soft gradient band while the upper frame is near-unchanged.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lower Third Holdout - saturate",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Gradient Ramp on an adjustment layer with a Saturation/Color blend mode, or a masked Hue/Saturation adjustment layer",
+   "summary": "Same gradient holdout as the darken version (Gradient Ramp at 75-85% of the layer height, blended back over the footage by Calculations), but the ramp ends in black instead of dark grey and Calculations uses Hard Light instead of Overlay (blend-mode indices decoded from the .ffx, look not checked in AE), so the lower band gets harsher contrast and stronger colour rather than a plain darkening.",
+   "look": [
+    "lower third band",
+    "saturation shift",
+    "gradient holdout",
+    "colour separation"
+   ],
+   "use_for": [
+    "separating the lower-third area from the picture without darkening it much",
+    "colour-graded band behind captions"
+   ],
+   "avoid": [
+    "The result depends on the footage; preview before using",
+    "Same fixed 75-85% band as the darken version"
+   ],
+   "confidence": "low",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Calculations",
+    "Gradient Ramp"
+   ],
+   "duration_note": "No keyframes: static.",
+   "scripting": "layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lower Third Holdout - saturate.ffx\")); comp.time does not matter. Decoded: Calculations Blending Mode = Hard Light (darken uses Overlay), Gradient Ramp End Color black. Look not checked in AE: preview a frame before using. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/169b.png",
+    "note": "The bottom band goes much darker with punchy, saturated highlights (flowers, foreground blocks) - harsher than the darken version, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lyrical",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Paths presets (e.g. Serpent, Rope Bridge) or Text > Organic",
+   "summary": "Puts the text on a curvy mask path ('Lyrical Path') and flows it along with line-by-line Range Selector offsets, using X-position/scale, Y-position and scale animators for a flowing, wave-like lyric movement.",
+   "look": [
+    "text on path",
+    "flowing",
+    "wavy",
+    "lyrical",
+    "elegant"
+   ],
+   "use_for": [
+    "poetic quote or lyric line in a documentary montage",
+    "flowing title in a soft, emotional reel",
+    "song-lyric text in music-driven reels"
+   ],
+   "avoid": [
+    "It replaces your Source Text and style with the preset's own",
+    "Path bending can break Devanagari conjunct spacing; test Hindi text"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Two Range Selector Offset keyframe pairs run from the comp's current time to about 3 s. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Lyrical.ffx\")); keyframes are laid down from comp.time. The preset stores its own Source Text, so applying it replaces your words and style: save layer.property('ADBE Text Properties').property('ADBE Text Document').value first and setValue() it back after applying. It adds a mask and points Path Options at it; the mask sits in layer space and was drawn for the preset's own frame, so check the text layer's position and scale the mask (or redraw) for 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/170b.png",
+    "note": "On the text layer it swaps in its own two-line 'lyrical' sample (its own font, not BebasNeue) whose letters stream in from tiny specks along a curved path and assemble line by line (first line set by about 0.7 s, second by 1.4 s); the 0.5 s frame is empty because the letters are still specks off the path.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Multi-Line Flip",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > 3D Text > 3D Flip In Rotate X, or the Text > Multi-Line presets",
+   "summary": "Multi-line text where one animator with a Range Selector sweeps through the text, flipping lines and characters in sequence.",
+   "look": [
+    "flip",
+    "multi-line",
+    "sequential",
+    "rotation"
+   ],
+   "use_for": [
+    "revealing a multi-line quote or list one line at a time",
+    "flipping in bullet points in an explainer"
+   ],
+   "avoid": [
+    "It replaces your Source Text with the preset's sample text",
+    "The slow sweep (about 10 s) is too long for reels; scale the keyframes in time",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Range Selector Offset is keyframed from the comp's current time to about 10 s. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Multi-Line Flip.ffx\")); keyframes are laid down from comp.time. The preset stores its own Source Text, so applying it replaces your words and style: save layer.property('ADBE Text Properties').property('ADBE Text Document').value first and setValue() it back after applying. The animator's exact properties were not read from the file, so preview it. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/171b.png",
+    "note": "On the text layer it swaps in its own stacked 'Multi-Line Flip' lines (the block runs off the bottom of the 960x540 frame) and flips them over on X one line at a time, top to bottom, into 'to New Words', about 0.4 s per line, three lines flipped by 1.4 s.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Organism",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Organic or Text > Paths presets",
+   "summary": "Text on a mask path ('Organism Path') that grows organically: characters scale up, First Margin slides the text along the curve, and scale/tracking animators make the letters breathe as they settle.",
+   "look": [
+    "text on path",
+    "organic",
+    "growing",
+    "breathing",
+    "curvy"
+   ],
+   "use_for": [
+    "nature or biology topic title in an AI-education or science explainer",
+    "soft animated title for a documentary chapter"
+   ],
+   "avoid": [
+    "It replaces your Source Text and style",
+    "Path text gets hard to read with long lines",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keyframes run from the comp's current time to about 5 s (scale in over the first 0.7 s, margin and offsets finishing around 4-5 s). Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Organism.ffx\")); keyframes are laid down from comp.time. The preset stores its own Source Text, so applying it replaces your words and style: save layer.property('ADBE Text Properties').property('ADBE Text Document').value first and setValue() it back after applying. It adds a mask and points Path Options at it; the mask sits in layer space and was drawn for the preset's own frame, so check the text layer's position and scale the mask (or redraw) for 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/172b.png",
+    "note": "On the text layer it swaps in its own 'organism' word, whose letters grow from specks and travel, scaling and tumbling, along a looping path that crosses the whole frame (off the top edge at 0.4 s, bottom right at 1.4 s), still moving when the 1.6 s render ends.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Outgoing - Incoming",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Animate In > Alternating Characters In with Text > Animate Out > Alternating Characters Out",
+   "summary": "An Expression Selector alternates every other line (textIndex % 2, based on lines): the preset's own five stacked 'outgoing' lines slide off sideways one after another, neighbouring lines in opposite directions, and an 'incoming' line slides in to replace each, cascading top to bottom like a headline swap.",
+   "look": [
+    "alternating slide",
+    "interleaved",
+    "shuffle",
+    "kinetic type"
+   ],
+   "use_for": [
+    "swapping one headline for another in a news reel",
+    "kinetic word reveal in an explainer hook"
+   ],
+   "avoid": [
+    "It replaces your Source Text with the preset's own",
+    "Each line slides fully off the side of the frame before its replacement enters, so keep the frame edges clear"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Offset keyframes start about 0.7 s after the comp's current time and end about 2.2 s after it. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Outgoing - Incoming.ffx\")); keyframes are laid down from comp.time. The preset stores its own Source Text, so applying it replaces your words and style: save layer.property('ADBE Text Properties').property('ADBE Text Document').value first and setValue() it back after applying. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/173b.png",
+    "note": "On the text layer it swaps in five stacked 'outgoing' lines; from about 0.8 s whole lines (not characters) slide off sideways one after another, alternate lines in opposite directions, each replaced by an 'incoming' line sliding in, cascading top to bottom (summary corrected from per-character to per-line).",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ovals - concentric NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Iris Wipe effect, or the Transitions - Wipes > Inky Iris Wipe preset",
+   "summary": "Transition reveal: small concentric ovals fade on one after another in the middle of the layer, then the final mask - a hard-edged rectangle the size of a square-pixel SD frame (about 648x486) centred on the layer - fades to full opacity. On a 1920x1080 layer the transition therefore ends with only a centred 648x486 window of the layer visible, not the full frame; scale the last mask up (about 250-300%) or work in an SD-sized precomp. A 'Mask Fade Controls' effect drives it: Transition Completion is keyframed 0 to 100 and Feather sets the mask feather.",
+   "look": [
+    "iris reveal",
+    "oval masks",
+    "concentric ovals",
+    "SD window",
+    "retro transition"
+   ],
+   "use_for": [
+    "retro iris-style reveal of a new scene in a light explainer",
+    "spotlight-style reveal of a photo in a satirical reel",
+    "comic transition between topics"
+   ],
+   "avoid": [
+    "Masks were drawn for an SD frame; in 1920x1080 they may not cover the whole frame at 100%, so check the last frame",
+    "Looks cheesy in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "duration_note": "Transition Completion goes from 0 to 100 over about 1 s from the comp's current time; each mask fades in during its own slice of that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to the incoming layer, placed above the outgoing one: set comp.time to the cut, then layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Ovals - concentric NTSC.ffx\")). Retime by moving the two Transition Completion keyframes on the 'Mask Fade Controls' effect (match name ADBE CM TransFadeMask). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/174b.png",
+    "note": "Small concentric ovals in the centre at 0.5 s; a centred SD-sized window (about 648 px wide) with black around it at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ovals - concentric PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Iris Wipe effect, or the Transitions - Wipes > Inky Iris Wipe preset",
+   "summary": "Transition reveal: small concentric ovals fade on one after another in the middle of the layer, then the final mask - a hard-edged rectangle the size of a square-pixel SD frame (about 768x576) centred on the layer - fades to full opacity. On a 1920x1080 layer the transition therefore ends with only a centred 768x576 window of the layer visible, not the full frame; scale the last mask up (about 250-300%) or work in an SD-sized precomp. A 'Mask Fade Controls' effect drives it: Transition Completion is keyframed 0 to 100 and Feather sets the mask feather.",
+   "look": [
+    "iris reveal",
+    "oval masks",
+    "concentric ovals",
+    "SD window",
+    "retro transition"
+   ],
+   "use_for": [
+    "retro iris-style reveal of a new scene in a light explainer",
+    "spotlight-style reveal of a photo in a satirical reel",
+    "comic transition between topics"
+   ],
+   "avoid": [
+    "Masks were drawn for an SD frame; in 1920x1080 they may not cover the whole frame at 100%, so check the last frame",
+    "Looks cheesy in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "duration_note": "Transition Completion goes from 0 to 100 over about 1 s from the comp's current time; each mask fades in during its own slice of that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to the incoming layer, placed above the outgoing one: set comp.time to the cut, then layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Ovals - concentric PAL.ffx\")). Retime by moving the two Transition Completion keyframes on the 'Mask Fade Controls' effect (match name ADBE CM TransFadeMask). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/175b.png",
+    "note": "Small concentric ovals in the centre at 0.5 s; a centred SD-sized window (about 768 px wide) with black around it at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ovals - random 1 NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Iris Wipe effect, or the Transitions - Wipes > Inky Iris Wipe preset",
+   "summary": "Transition reveal: small ovals at scattered positions fade on one after another in the middle of the layer, then the final mask - a hard-edged rectangle the size of a square-pixel SD frame (about 648x486) centred on the layer - fades to full opacity. On a 1920x1080 layer the transition therefore ends with only a centred 648x486 window of the layer visible (plus one or two of the earlier ovals still poking out past its edges), not the full frame; scale the last mask up (about 250-300%) or work in an SD-sized precomp. A 'Mask Fade Controls' effect drives it: Transition Completion is keyframed 0 to 100 and Feather sets the mask feather.",
+   "look": [
+    "iris reveal",
+    "oval masks",
+    "ovals at scattered positions",
+    "SD window",
+    "retro transition"
+   ],
+   "use_for": [
+    "retro iris-style reveal of a new scene in a light explainer",
+    "spotlight-style reveal of a photo in a satirical reel",
+    "comic transition between topics"
+   ],
+   "avoid": [
+    "Masks were drawn for an SD frame; in 1920x1080 they may not cover the whole frame at 100%, so check the last frame",
+    "Looks cheesy in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "duration_note": "Transition Completion goes from 0 to 100 over about 1 s from the comp's current time; each mask fades in during its own slice of that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to the incoming layer, placed above the outgoing one: set comp.time to the cut, then layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Ovals - random 1 NTSC.ffx\")). Retime by moving the two Transition Completion keyframes on the 'Mask Fade Controls' effect (match name ADBE CM TransFadeMask). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/176b.png",
+    "note": "Scattered small ovals at 0.5 s; at 1.4 s a centred ~648 px rectangle with two ovals poking past its edges.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: the end frame also shows one or two of the scattered ovals sticking out past the centred rectangle; added to summary and note"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ovals - random 1 PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Iris Wipe effect, or the Transitions - Wipes > Inky Iris Wipe preset",
+   "summary": "Transition reveal: small ovals at scattered positions fade on one after another in the middle of the layer, then the final mask - a hard-edged rectangle the size of a square-pixel SD frame (about 768x576) centred on the layer - fades to full opacity. On a 1920x1080 layer the transition therefore ends with only a centred 768x576 window of the layer visible (plus one or two of the earlier ovals still poking out past its edges), not the full frame; scale the last mask up (about 250-300%) or work in an SD-sized precomp. A 'Mask Fade Controls' effect drives it: Transition Completion is keyframed 0 to 100 and Feather sets the mask feather.",
+   "look": [
+    "iris reveal",
+    "oval masks",
+    "ovals at scattered positions",
+    "SD window",
+    "retro transition"
+   ],
+   "use_for": [
+    "retro iris-style reveal of a new scene in a light explainer",
+    "spotlight-style reveal of a photo in a satirical reel",
+    "comic transition between topics"
+   ],
+   "avoid": [
+    "Masks were drawn for an SD frame; in 1920x1080 they may not cover the whole frame at 100%, so check the last frame",
+    "Looks cheesy in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "duration_note": "Transition Completion goes from 0 to 100 over about 1 s from the comp's current time; each mask fades in during its own slice of that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to the incoming layer, placed above the outgoing one: set comp.time to the cut, then layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Ovals - random 1 PAL.ffx\")). Retime by moving the two Transition Completion keyframes on the 'Mask Fade Controls' effect (match name ADBE CM TransFadeMask). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/177b.png",
+    "note": "Scattered small ovals at 0.5 s; at 1.4 s a centred ~768 px rectangle with two ovals poking past its edges.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: the end frame also shows one or two of the scattered ovals sticking out past the centred rectangle; added to summary and note"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ovals - random 2 NTSC",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Iris Wipe effect, or the Transitions - Wipes > Inky Iris Wipe preset",
+   "summary": "Transition reveal: small ovals at scattered positions fade on one after another in the middle of the layer, then the final mask - a hard-edged rectangle the size of a square-pixel SD frame (about 648x486) centred on the layer - fades to full opacity. On a 1920x1080 layer the transition therefore ends with only a centred 648x486 window of the layer visible (plus one or two of the earlier ovals still poking out past its edges), not the full frame; scale the last mask up (about 250-300%) or work in an SD-sized precomp. A 'Mask Fade Controls' effect drives it: Transition Completion is keyframed 0 to 100 and Feather sets the mask feather.",
+   "look": [
+    "iris reveal",
+    "oval masks",
+    "ovals at scattered positions",
+    "SD window",
+    "retro transition"
+   ],
+   "use_for": [
+    "retro iris-style reveal of a new scene in a light explainer",
+    "spotlight-style reveal of a photo in a satirical reel",
+    "comic transition between topics"
+   ],
+   "avoid": [
+    "Masks were drawn for an SD frame; in 1920x1080 they may not cover the whole frame at 100%, so check the last frame",
+    "Looks cheesy in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "duration_note": "Transition Completion goes from 0 to 100 over about 1 s from the comp's current time; each mask fades in during its own slice of that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to the incoming layer, placed above the outgoing one: set comp.time to the cut, then layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Ovals - random 2 NTSC.ffx\")). Retime by moving the two Transition Completion keyframes on the 'Mask Fade Controls' effect (match name ADBE CM TransFadeMask). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/178b.png",
+    "note": "Scattered small ovals at 0.5 s; at 1.4 s a centred ~648 px rectangle with one oval poking past its top-right corner.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: the end frame also shows one or two of the scattered ovals sticking out past the centred rectangle; added to summary and note"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Ovals - random 2 PAL",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Iris Wipe effect, or the Transitions - Wipes > Inky Iris Wipe preset",
+   "summary": "Transition reveal: small ovals at scattered positions fade on one after another in the middle of the layer, then the final mask - a hard-edged rectangle the size of a square-pixel SD frame (about 768x576) centred on the layer - fades to full opacity. On a 1920x1080 layer the transition therefore ends with only a centred 768x576 window of the layer visible (plus one or two of the earlier ovals still poking out past its edges), not the full frame; scale the last mask up (about 250-300%) or work in an SD-sized precomp. A 'Mask Fade Controls' effect drives it: Transition Completion is keyframed 0 to 100 and Feather sets the mask feather.",
+   "look": [
+    "iris reveal",
+    "oval masks",
+    "ovals at scattered positions",
+    "SD window",
+    "retro transition"
+   ],
+   "use_for": [
+    "retro iris-style reveal of a new scene in a light explainer",
+    "spotlight-style reveal of a photo in a satirical reel",
+    "comic transition between topics"
+   ],
+   "avoid": [
+    "Masks were drawn for an SD frame; in 1920x1080 they may not cover the whole frame at 100%, so check the last frame",
+    "Looks cheesy in serious news or documentary"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Mask Fade Controls"
+   ],
+   "duration_note": "Transition Completion goes from 0 to 100 over about 1 s from the comp's current time; each mask fades in during its own slice of that. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Apply to the incoming layer, placed above the outgoing one: set comp.time to the cut, then layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Ovals - random 2 PAL.ffx\")). Retime by moving the two Transition Completion keyframes on the 'Mask Fade Controls' effect (match name ADBE CM TransFadeMask). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/179b.png",
+    "note": "Scattered small ovals at 0.5 s; at 1.4 s a centred ~768 px rectangle with one oval poking past its top-right corner.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: the end frame also shows one or two of the scattered ovals sticking out past the centred rectangle; added to summary and note"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Paper Clip",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Paths presets (e.g. Loop In and Out, 360 Loop)",
+   "summary": "Text on a looping, paper-clip-shaped mask path: First Margin carries the text around the loops while scale and tracking animators (with a ramp-down selector) shrink and tighten the characters as they travel.",
+   "look": [
+    "text on path",
+    "looping path",
+    "playful",
+    "kinetic type"
+   ],
+   "use_for": [
+    "playful title in a light explainer or kids' segment",
+    "fun 'tip' callout in a social reel"
+   ],
+   "avoid": [
+    "It replaces your Source Text and style",
+    "Unreadable while moving; it is decorative, not for information",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "First Margin, Scale and Tracking keyframes run from the comp's current time to about 3 s. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Paper Clip.ffx\")); keyframes are laid down from comp.time. The preset stores its own Source Text, so applying it replaces your words and style: save layer.property('ADBE Text Properties').property('ADBE Text Document').value first and setValue() it back after applying. It adds a mask and points Path Options at it; the mask sits in layer space and was drawn for the preset's own frame, so check the text layer's position and scale the mask (or redraw) for 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/180b.png",
+    "note": "On the text layer it swaps in its own 'paper clip' text, which travels round a looping path, curling, scaling and changing direction, and keeps moving through the whole 1.6 s render.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pinwheel",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Curves and Spins presets (e.g. Spiral In, Whirl In)",
+   "summary": "Characters orbit and rotate like a pinwheel: a looping position/rotation animator, a Y-scale animator and a position adjustment are swept across the text by an offset selector.",
+   "look": [
+    "spinning",
+    "orbit",
+    "pinwheel",
+    "playful",
+    "kinetic type"
+   ],
+   "use_for": [
+    "playful word reveal in a kids' or light explainer",
+    "attention-grabbing hook word in a reel"
+   ],
+   "avoid": [
+    "Distracting under narration",
+    "Characters lose readability while spinning",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Two Range Selector Offset keyframe pairs starting at the comp's current time; decoding suggests about 1 s, but the timing is uncertain.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Pinwheel.ffx\")); keyframes are laid down from comp.time. Animator values were not read; preview before use. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/181a.png",
+    "note": "Keeps the layer's 'ARCHIVE 1947': the characters start as long thin spokes radiating from a hub, spin like a pinwheel and collapse into the word, readable by about 1.0 s.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pulse Exposure",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Lights and Optical > Flicker Exposure, or Text > Fill and Stroke > Flicker Color",
+   "summary": "A fill and stroke colour animator driven by a Wiggly Selector makes characters randomly pulse and flicker in brightness or colour, continuously.",
+   "look": [
+    "flicker",
+    "pulse",
+    "glowing text",
+    "neon",
+    "unstable"
+   ],
+   "use_for": [
+    "flickering 'breaking' or 'alert' word in a news reel",
+    "neon-sign style title in a trailer",
+    "glitchy tech word in an AI explainer"
+   ],
+   "avoid": [
+    "Constant flicker tires viewers; keep it short",
+    "Fast flicker can be a photosensitivity risk",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: the Wiggly Selector animates it for the whole layer duration.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Apply with textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Pulse Exposure.ffx\")); it adds no keyframes, so comp.time does not matter. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/182b.png",
+    "note": "Keeps 'ARCHIVE 1947' and makes random characters slowly dim to grey or nearly the background colour and come back, a gentle continuous pulse rather than a fast flicker.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   },
+   "flash": {
+    "rate": 1,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 1 flashes, at most 1 in one second, over the 2% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 1 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Reduce DV blockiness",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "No modern built-in chroma-only fix: rebuild it with Channel Combiner (RGB to YUV) + Channel Blur + Channel Combiner (YUV to RGB), or use Remove Grain in AE for general noise; Premiere has no equivalent effect",
+   "summary": "Converts the layer to YUV with Channel Combiner, blurs only the colour (U/V) channels with Channel Blur, then converts back to RGB, smoothing the blocky chroma of DV footage while keeping detail sharp. On clean HD footage the result is invisible (render test: at most 7/255 change per RGB channel, under 1/255 on average); it only shows on footage that actually has blocky DV/low-bitrate colour.",
+   "look": [
+    "clean-up",
+    "chroma smoothing",
+    "archival restoration",
+    "no stylisation"
+   ],
+   "use_for": [
+    "cleaning old DV or MiniDV archival footage in a documentary",
+    "reducing colour blocking on low-bitrate archival news clips",
+    "softening colour fringes before keying old footage"
+   ],
+   "avoid": [
+    "It only blurs colour; brightness macroblocks remain",
+    "On clean modern footage it just softens colour edges"
+   ],
+   "confidence": "high",
+   "applies_to": "footage layer (DV / low-bitrate SD archival footage)",
+   "effects_used": [
+    "Channel Blur",
+    "Channel Combiner"
+   ],
+   "duration_note": "No keyframes: static correction for the whole layer.",
+   "scripting": "layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Reduce DV blockiness.ffx\")); comp.time does not matter. Adds three effects: Channel Combiner 1 (to YUV), Channel Blur (blur UV), Channel Combiner 2 (to RGB). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/set2/S_dv_1.04.png",
+    "note": "On the 640x480 plate with 4:1:1 chroma and 8x8 blocks the frame looks like the control: block-edge contrast is only 7 % lower (3.02 -> 2.80) and the luma blocks stay, as the card warns: the chroma smoothing is too faint to judge here.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "weak",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/presets/183a.png",
+      "note": "Frame is visually identical to the untouched footage (max 7/255 per RGB channel, mean 0.6/255, against the no-op render of the same frame), so the chroma smoothing cannot be judged on clean HD footage.",
+      "second_opinion": "corrected: verdict weak is right, but the measured change is up to 7/255 per RGB channel (4/255 only in YCbCr), fixed in summary and note"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Separate XYZ Position",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Built-in Separate Dimensions (right-click Position > Separate Dimensions; in script set the Position property's dimensionsSeparated = true)",
+   "summary": "Utility with no visible look: adds a 'Separate XYZ Position' control effect with X, Y and Z Position sliders and a Position expression (value + [X, Y, Z]), so each axis can be keyframed and eased separately.",
+   "look": [
+    "utility",
+    "no visual change",
+    "motion control"
+   ],
+   "use_for": [
+    "easing X and Y separately for a slide-in",
+    "bouncing on Y while sliding on X in a lower-third move"
+   ],
+   "avoid": [
+    "It adds offsets on top of the existing Position value, so the visible position is the sum",
+    "Z only matters on a 3D layer"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Separate XYZ Position"
+   ],
+   "duration_note": "No keyframes: it only adds the controls and the expression.",
+   "scripting": "layer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Separate XYZ Position.ffx\")); the control effect's match name is ADBE Separate XYZ Position (sliders 'X Position', 'Y Position', 'Z Position'). Simpler in script: layer.property('ADBE Transform Group').property('ADBE Position').dimensionsSeparated = true, then keyframe 'ADBE Position_0' / 'ADBE Position_1'. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/184b.png",
+    "note": "Frames are pixel-identical to the untouched footage, matching the card's no-visible-change utility.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Shadows",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Fill and Stroke > Pulsing Strokes or Wiggly Stroke Width By Line",
+   "summary": "Characters build on with jittery stroke width and tracking: an offset selector sweeps the text while a wiggle expression on the selector start makes the outline and spacing flicker, and the last character stays hidden until the end.",
+   "look": [
+    "flickering outline",
+    "jittery",
+    "shadowy",
+    "nervous",
+    "stroke"
+   ],
+   "use_for": [
+    "uneasy or mysterious title in a documentary or trailer",
+    "suspense text card"
+   ],
+   "avoid": [
+    "Needs a stroke-friendly font; thin fonts look broken",
+    "The jitter reads as a glitch in calm content",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Selector Offset keyframes from the comp's current time; decoding suggests about 4 s, but the timing is uncertain. The wiggle runs for the whole layer.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Shadows.ffx\")); keyframes are laid down from comp.time. Look inferred from the animator names only; preview before use. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/185b.png",
+    "note": "Keeps 'ARCHIVE 1947' and builds it on left to right: the unrevealed characters sit collapsed in a jittering pile at the leading edge with the last character (the 7) drawn black on top, and only 'ARCH' is out by 1.4 s.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Silhouettes",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Fill and Stroke > Pulsing Strokes, or Text > Lights and Optical > Flicker Exposure",
+   "summary": "A stroke animator with random and wiggly selectors switches characters between filled and outline-only (silhouette) at random, while the last character stays hidden.",
+   "look": [
+    "outline text",
+    "random flicker",
+    "silhouette",
+    "stroke"
+   ],
+   "use_for": [
+    "moody or mysterious title in a trailer",
+    "flickering outline accent on a single word"
+   ],
+   "avoid": [
+    "Random outline switching hurts readability for long text",
+    "On fill-only text it renders static: only the last character turns black and nothing switches to outline; the random silhouette look was not seen (untested with a stroke on the text or past 1.6 s)",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes found: the wiggly/random selectors animate it for the whole layer.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Apply with textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Silhouettes.ffx\")); it adds no keyframes, so comp.time does not matter. Look inferred from the animator and selector names only; preview before use. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/186b.png",
+    "note": "On plain white fill-only text the whole 1.6 s render is static: 'ARCHIVE 194' stays white and only the last character (the 7) turns black; no random switching to outline-only appears.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Sonar Ping",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Fill and Stroke > Chasing Stroke",
+   "summary": "An Expression Selector ((textIndex + time * Frequency) % 30) sends a repeating ramp of opacity and stroke across the characters, so a pulse sweeps through the text again and again like a sonar ping. A 'Frequency' slider sets the speed.",
+   "look": [
+    "sweeping pulse",
+    "scan",
+    "looping",
+    "tech",
+    "radar"
+   ],
+   "use_for": [
+    "scanning or 'radar' look on a tech or AI title",
+    "looping highlight on a word held on screen in a reel",
+    "surveillance or data theme in a news explainer"
+   ],
+   "avoid": [
+    "The pulse cycles every 30 character steps (period 30/Frequency seconds), so on a short word it crosses quickly and then nothing happens for most of the cycle; raise Frequency or use it on longer lines",
+    "Constant looping draws the eye: keep it to a held title, not under long narration",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: time-driven expression, loops for the whole layer.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Apply with textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Sonar Ping.ffx\")); it adds no keyframes, so comp.time does not matter. Speed: the Slider Control named 'Frequency' (property 'Slider'). Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/187b.png",
+    "note": "Keeps 'ARCHIVE 1947' and sends a repeating fade across it: characters dim out left to right and come back left to right, so a brightness pulse keeps sweeping the word through the render.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spin Flash",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Rotation > Spin In",
+   "summary": "A scale, rotation and opacity animator swept by character: each letter spins and flashes into place in turn.",
+   "look": [
+    "spin",
+    "flash",
+    "per-character",
+    "energetic"
+   ],
+   "use_for": [
+    "punchy title reveal in a trailer or reel hook",
+    "energetic word pop on a beat"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Range Selector Offset keyframes starting at the comp's current time; decoding suggests about 1 s, but the timing is uncertain.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Spin Flash.ffx\")); keyframes are laid down from comp.time. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/188a.png",
+    "note": "Keeps 'ARCHIVE 1947': each letter arrives large, faint and rotated, spins down into place and snaps to solid white, left to right, with the word complete by about 1.0 s.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spirograph",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Curves and Spins > Spiral In or Text > Rotation > Swirly Rotation",
+   "summary": "Characters swing around offset anchor points in looping circular orbits while rotating and fading, tracing spirograph-like curves before settling into the word.",
+   "look": [
+    "orbiting letters",
+    "spiral",
+    "looping",
+    "decorative"
+   ],
+   "use_for": [
+    "whimsical title in a kids' or culture segment",
+    "decorative intro text in a light explainer"
+   ],
+   "avoid": [
+    "Chaotic; unreadable until it settles",
+    "Too playful for news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Offset, Start and Rotation keyframes start at the comp's current time and run about 3 s (about 3.6 s at 25 fps): the render was still chaotic at 1.4 s, which rules out the 0.3 s reading.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Spirograph.ffx\")); keyframes are laid down from comp.time. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/189b.png",
+    "note": "Keeps the layer's text but turns its characters into huge stretched, translucent shards that rotate and orbit across the frame, fading up from nothing (empty for the first 0.2 s) to white; still chaotic at 1.4 s, so the settle is not in the 1.6 s render.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Twisty Ribbons 2",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > 3D Text > 3D Flip In Rotate X, or Text > Rotation > Flip Up",
+   "summary": "Two animators flip characters around the Y axis and then the X axis in rolling waves, so the text twists like a ribbon. An expression keeps the X-flip selector's random order in sync with the Y-flip one. The text starts with every character flipped upside down, and they turn upright in random order.",
+   "look": [
+    "flip",
+    "twisting ribbon",
+    "3D rotation",
+    "wave"
+   ],
+   "use_for": [
+    "decorative title that twists into place in a trailer or intro",
+    "transition text between chapters"
+   ],
+   "avoid": [
+    "Long: the keyframes run about 10 s",
+    "The flips make text unreadable mid-move",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Offset keyframes start at the comp's current time: the decoded 2.5 s lead-in is lost on apply (render: characters already flipped at 0 s and turning by 0.2 s); decoded end about 10-12 s, so expect roughly 10 s of motion, longer at 25 fps.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Twisty Ribbons 2.ffx\")); keyframes are laid down from comp.time. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/190b.png",
+    "note": "Keeps 'ARCHIVE 1947': at 0 s every character is flipped upside down and from about 0.2 s they turn upright one at a time in random order, about half upright by 1.4 s, so the stored 2.5 s lead-in did not survive applying.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Twisty Ribbons",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Rotation > Flip Up or Text > 3D Text presets",
+   "summary": "One animator with a shaped, eased Range Selector rolls a rotation and scale wave through the characters, so the line twists like a ribbon as the wave passes.",
+   "look": [
+    "twisting ribbon",
+    "wave",
+    "rotation",
+    "decorative"
+   ],
+   "use_for": [
+    "slow decorative title on a held shot in a documentary intro",
+    "looping text accent behind narration"
+   ],
+   "avoid": [
+    "Very long: the offset runs about 13 s",
+    "Readability drops while the wave passes",
+    "After Effects 2026's applyPreset rejects this file with 'The paste cannot be completed ... Variable font axis properties can only be pasted to other variable font axis properties of the same type' (the .ffx holds no variable-font data); use the equivalent",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Selector Offset keyframes from about 2 s to about 15 s after the comp's current time. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Twisty Ribbons.ffx\")); keyframes are laid down from comp.time. Legacy file (Presets\\Legacy), kept for old projects. Warning: after Effects 2026's applyPreset rejects this file with 'The paste cannot be completed ... Variable font axis properties can only be pasted to other variable font axis properties of the same type' (the .ffx holds no variable-font data), so wrap the call in try/catch; the look and timing above are decoded only.",
+   "verified": {
+    "verdict": "broken",
+    "frame": null,
+    "note": "No frames: on the gallery's text host after Effects 2026's applyPreset rejects this file with 'The paste cannot be completed ... Variable font axis properties can only be pasted to other variable font axis properties of the same type' (the .ffx holds no variable-font data). Same error on every 2026-10-04 retry, alone in its own job. Caught at the call, AE carries on with the layer unchanged; the gallery job died only because its own error handler failed on that error object (listed in gallery/presets/failed.json). That handler bug is fixed (2026-10-04): the error now comes back as an AB_WARN and the job carries on with the layer unchanged.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Walk Of Stars",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Paths > Conveyor Belt",
+   "summary": "Text on a star-shaped mask path whose First Margin is keyframed, so the words travel round the star.",
+   "look": [
+    "text on path",
+    "travelling text",
+    "marquee",
+    "simple"
+   ],
+   "use_for": [
+    "text travelling along a curve in an intro",
+    "path-following caption in a light explainer"
+   ],
+   "avoid": [
+    "It replaces your Source Text and style",
+    "The path shape is fixed; redraw the mask for your layout"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "First Margin keyframes run from the comp's current time to about 3.4 s. Keyframe times decoded from the .ffx file, not checked in AE. ",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Walk Of Stars.ffx\")); keyframes are laid down from comp.time. The preset stores its own Source Text, so applying it replaces your words and style: save layer.property('ADBE Text Properties').property('ADBE Text Document').value first and setValue() it back after applying. It adds a mask and points Path Options at it; the mask sits in layer space and was drawn for the preset's own frame, so check the text layer's position and scale the mask (or redraw) for 1920x1080. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/192b.png",
+    "note": "On the text layer it swaps in repeated 'WALK OF STARS' text running round a star-shaped path and travelling along it; the star's lower points run off the bottom of the 960x540 frame and letters bunch up and overlap at the inner corners.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "White Trim",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Fill and Stroke > Stroke Ease Down",
+   "summary": "Characters jitter into place with a wiggling position and rotation while scale and opacity settle and a stroke-width animator trims the outline, giving a twitchy white-outlined build.",
+   "look": [
+    "outline",
+    "white stroke",
+    "jitter",
+    "settle",
+    "build-on"
+   ],
+   "use_for": [
+    "edgy title build in a trailer",
+    "attention word in a social reel hook"
+   ],
+   "avoid": [
+    "Needs a stroke colour that contrasts with the fill and background",
+    "The jitter feels cheap on calm documentary titles",
+    "For at least the first 1.6 s the letters are scaled far past the frame and cover about two-thirds of it, unreadable; the settle into a readable outlined word has not been seen in a render",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Max Amount and Stroke Width keyframes start at the comp's current time and run about 3 s (about 3.6 s at 25 fps): the letters were still blown up at 1.4 s, which rules out the 0.3 s reading.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/White Trim.ffx\")); keyframes are laid down from comp.time. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/presets/193b.png",
+    "note": "Keeps the layer's text but blows the letters up far past frame size, translucent and jittering, so about two-thirds of the frame is white for the whole 1.6 s render; no outline and no settle into readable text is visible.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Word Flash",
+   "match": null,
+   "category": "Legacy",
+   "status": "obsolete",
+   "equivalent": "Text > Animate In > Pop Buzz Words or Fade Up Words",
+   "summary": "A scale, rotation and opacity animator swept by word: each word flashes and pops on one after another.",
+   "look": [
+    "word pop",
+    "flash",
+    "per-word",
+    "punchy"
+   ],
+   "use_for": [
+    "word-by-word hook text in a reel",
+    "quote reveal synced to narration",
+    "beat-synced title in a trailer"
+   ],
+   "avoid": [
+    "Default timing may not match your narration; retime the two offset keyframes"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Range Selector Offset keyframes start at the comp's current time and are short; decoding suggests about 0.3 s, but the timing is uncertain.",
+   "scripting": "Needs a text layer (comp.layers.addText(...)). Set comp.time to the intended start, then textLayer.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Legacy/Word Flash.ffx\")); keyframes are laid down from comp.time. Works per word, so it is safer than per-character presets for Devanagari. Legacy file (Presets\\Legacy), kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/194a.png",
+    "note": "Keeps 'ARCHIVE 1947': at about 0.08 s 'ARCHIVE' pops in as a cluster of large ghosted rotated copies, then '1947' does the same, and both words are settled by about 0.3 s, so the 0.5 s and 1.4 s frames show plain text.",
+    "rerender": false,
+    "recheck": "re-rendered on text"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Box Swarm",
+   "match": null,
+   "category": "Shapes/Backgrounds",
+   "status": "current",
+   "summary": "Creates a shape layer of about ten groups of rounded rectangles that drift, wiggle and change size, each coloured at random between two colours, as an abstract animated background.",
+   "look": [
+    "floating boxes",
+    "swarm",
+    "abstract",
+    "geometric",
+    "motion graphics"
+   ],
+   "use_for": [
+    "animated background behind titles in an AI or tech explainer",
+    "busy texture behind a quote card in a reel",
+    "loopable backdrop for a data segment"
+   ],
+   "avoid": [
+    "Heavy (many wiggle expressions): pre-render or precompose on long comps",
+    "The default colours rarely match a brand; set Color A and Color B"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control",
+    "Color Control"
+   ],
+   "duration_note": "No keyframes: wiggle expressions animate it for the whole layer duration.",
+   "scripting": "Create the shape layer first (var l = comp.layers.addShape(); l.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Shapes/Backgrounds/Box Swarm.ffx\"))); in the UI, applying with no layer selected creates a new shape layer. Expression-driven (seedRandom/wiggle), so it animates for the whole layer duration regardless of comp.time; tune it through the added control effects. Controls: 'Animated Shape Control' (Random Seed, Speed, Dimensions, Spread, Rounding) and Color Controls 'Color A'/'Color B'.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/195b.png",
+    "note": "Translucent magenta/purple/blue rectangles overlap and drift between frames; they cluster around the layer origin (top-left corner in this render) and the original orange square is gone.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Composition Border",
+   "match": null,
+   "category": "Shapes/Backgrounds",
+   "status": "current",
+   "summary": "Creates a shape layer with a rectangle sized to the comp (expressions cancel out the layer's scale) and a stroke, drawing a solid-colour border around the frame edge. Controls set the width in pixels, the offset and the colour.",
+   "look": [
+    "frame border",
+    "outline",
+    "clean",
+    "card",
+    "flat"
+   ],
+   "use_for": [
+    "branded border on a quote or news card",
+    "framing archival photos in a documentary",
+    "clean edge frame on vertical reels"
+   ],
+   "avoid": [
+    "In 9:16 the platform UI covers the edges; keep the border thin or inset it with Border Offset",
+    "Thick borders waste frame space"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Color Control",
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: static for the whole layer, and it resizes to the comp through expressions.",
+   "scripting": "Create the shape layer first (var l = comp.layers.addShape(); l.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Shapes/Backgrounds/Composition Border.ffx\"))); in the UI, applying with no layer selected creates a new shape layer. Static and expression-driven: the Rectangle Path size is thisComp.width/height divided by the layer's scale and the stroke width is compensated the same way, so it always hugs the comp edge whatever the layer scale; comp.time does not matter. Controls (layer effects): Slider Controls 'Border Width (Pixels)' and 'Border Offset', Color Control 'Border Color'; set them with layer.effect('Border Width (Pixels)')(1).setValue(px).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/196b.png",
+    "note": "A solid light-grey border is drawn around the whole frame edge; the existing square is untouched.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Kaleidoscopic",
+   "match": null,
+   "category": "Shapes/Backgrounds",
+   "status": "current",
+   "summary": "Creates a shape layer holding one large filled-and-stroked polystar bent by Pucker & Bloat; expressions wiggle its radii, roundness and pucker amount, so the star/flower pattern keeps morphing like a kaleidoscope. All controls sit on an 'Animated Shape Control' effect.",
+   "look": [
+    "kaleidoscope",
+    "morphing stars",
+    "psychedelic",
+    "abstract",
+    "symmetry"
+   ],
+   "use_for": [
+    "trippy background for a music or culture reel",
+    "abstract transition plate in a trailer",
+    "background behind a 'mind-blown' AI fact"
+   ],
+   "avoid": [
+    "Busy and loud: it fights with text, so dim, blur or darken it behind titles",
+    "Default fill and stroke colours rarely match a brand; recolour Fill 1 and Stroke 1 inside the shape contents"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control"
+   ],
+   "duration_note": "No keyframes: wiggle expressions animate it for the whole layer duration.",
+   "scripting": "Create the shape layer first (var l = comp.layers.addShape(); l.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Shapes/Backgrounds/Kaleidoscopic.ffx\"))); in the UI, applying with no layer selected creates a new shape layer. Expression-driven (seedRandom/wiggle), so it animates for the whole layer duration regardless of comp.time. Control: 'Animated Shape Control' (Speed, Dimensions, Rounding, Spread, Random Seed); Spread drives the Pucker & Bloat amount, Dimensions the polystar radii. One shape group only, so it is light to render.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/197b.png",
+    "note": "Huge teal-filled, purple/blue-stroked puckered star shapes fill the frame and morph clearly between 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Nerve Net - Circular",
+   "match": null,
+   "category": "Shapes/Backgrounds",
+   "status": "current",
+   "summary": "Creates a shape layer with one stroked (unfilled) polystar bent by Pucker & Bloat into looping circular strands; wiggle expressions keep its points, radii and bloat drifting and pulsing, and Radial Blur plus Calculations on the layer smear the strokes into a glowing, nerve-like web.",
+   "look": [
+    "neural network",
+    "organic web",
+    "radial blur",
+    "glow",
+    "abstract"
+   ],
+   "use_for": [
+    "'neural network' background for an AI explainer",
+    "science or brain topic backdrop in a documentary",
+    "techy ambient plate behind a title"
+   ],
+   "avoid": [
+    "Radial Blur is slow to render; pre-render or precompose on long comps",
+    "Recolour Stroke 1 for contrast with your title colour"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control",
+    "Calculations",
+    "Radial Blur"
+   ],
+   "duration_note": "No keyframes: wiggle expressions animate it for the whole layer duration.",
+   "scripting": "Create the shape layer first (var l = comp.layers.addShape(); l.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Shapes/Backgrounds/Nerve Net - Circular.ffx\"))); in the UI, applying with no layer selected creates a new shape layer. Expression-driven (seedRandom/wiggle), so it animates for the whole layer duration regardless of comp.time; tune it through the added control effects. Controls: 'Animated Shape Control' (Random Seed, Speed); Radial Blur and Calculations are added to the layer.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/198b.png",
+    "note": "Faint purple strands smeared outward by radial blur form a dim glowing web that shifts between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Nerve Net - Penta",
+   "match": null,
+   "category": "Shapes/Backgrounds",
+   "status": "current",
+   "summary": "Creates a shape layer with one stroked pentagon-style polystar bent by Pucker & Bloat and multiplied by a Repeater; wiggle expressions keep the copies shifting, and Fast Box Blur plus Calculations soften and blend them into a glowing geometric web.",
+   "look": [
+    "geometric web",
+    "pentagon",
+    "network",
+    "glow",
+    "abstract"
+   ],
+   "use_for": [
+    "network or connectivity backdrop for a tech or AI explainer",
+    "abstract title background in a trailer",
+    "data or cyber theme plate in a news explainer"
+   ],
+   "avoid": [
+    "Busy behind text; lower its opacity",
+    "Repeater plus blur is heavy on long comps"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a shape layer",
+   "effects_used": [
+    "Animated Shape Control",
+    "Calculations",
+    "Fast Box Blur"
+   ],
+   "duration_note": "No keyframes: wiggle expressions animate it for the whole layer duration.",
+   "scripting": "Create the shape layer first (var l = comp.layers.addShape(); l.applyPreset(new File(\"C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Shapes/Backgrounds/Nerve Net - Penta.ffx\"))); in the UI, applying with no layer selected creates a new shape layer. Expression-driven (seedRandom/wiggle), so it animates for the whole layer duration regardless of comp.time; tune it through the added control effects. Controls: 'Animated Shape Control' (Random Seed, Speed); Fast Box Blur and Calculations are added to the layer.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/199b.png",
+    "note": "Glowing orange straight strands radiate from near the top-left and criss-cross the frame, rearranging between frames.",
+    "rerender": false
+   }
+  }
+ ]
+}

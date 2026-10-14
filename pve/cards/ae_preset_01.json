@@ -1,0 +1,1623 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bungee In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Springs into place from a 200 px offset (not from off-screen) in the chosen Direction, overshooting and settling in 1-4 decaying bounces like on a bungee cord; opacity fades up over the first quarter of the Duration.",
+   "look": [
+    "bounce",
+    "elastic",
+    "overshoot",
+    "playful",
+    "kinetic"
+   ],
+   "use_for": [
+    "sticker or badge entrance in a social reel",
+    "lower-third or name tag that lands with energy",
+    "meme caption drop-in",
+    "logo bump at the start of an explainer"
+   ],
+   "avoid": [
+    "too bouncy for serious news or documentary tone",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the animation runs from thisLayer.inPoint to inPoint + the Duration slider (seconds); opacity finishes at Duration/4. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Bounces dropdown 1-4 [3], Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right = direction of travel) [2 = drops from 200 px above]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/000a.png",
+    "note": "Text sits ~9 px above rest at 0.5 s and is settled at 1.4 s; render frames 2-21 show it dropping in while fading up, then bouncing about +-50 px around rest with decaying swings.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Plain opacity fade from 0 to 100%, finishing at half the Duration, with the ease curve picked by Personality.",
+   "look": [
+    "fade",
+    "clean",
+    "subtle",
+    "minimal"
+   ],
+   "use_for": [
+    "documentary titles and captions",
+    "lower thirds on news packages",
+    "revealing a still or map overlay",
+    "quiet text cards in explainers"
+   ],
+   "avoid": [
+    "for a dissolve between two clips use a transition instead"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the animation runs from thisLayer.inPoint to inPoint + the Duration slider (seconds); opacity is done at Duration/2. The default Duration is 4 s (a 2 s fade), so set Duration for a quick caption fade. Trim or move the layer to move it; applying at any comp time gives the same result. In the default render the fade is ~55% at 0.5 s and looks complete by about 1.3 s; the rest of the curve is nearly flat.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [4, so the default fade takes 2 s], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [5]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/001a.png",
+    "note": "Text is at about 55% opacity at 0.5 s and full at 1.4 s, a plain fade with no movement; in the render it reads as fully faded in by about 1.3 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flicker In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Strobes the layer's opacity (3 dips toward 100 - Intensity %) over the first half of the Duration, then holds at full opacity. Its curve starts at 100%, so the layer is already visible on its first frame: it reads as a flicker-on, not a fade from black.",
+   "look": [
+    "flicker",
+    "strobe",
+    "neon",
+    "glitch",
+    "retro"
+   ],
+   "use_for": [
+    "neon-sign style title reveal",
+    "tech / AI explainer headline",
+    "trailer title card",
+    "glitchy breaking-news tag"
+   ],
+   "avoid": [
+    "rapid strobing is a photosensitivity risk: keep it short",
+    "looks gimmicky on long body captions"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the animation runs from thisLayer.inPoint to inPoint + the Duration slider (seconds); the flicker completes at Duration/2. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Intensity slider 0-100 = how low the flicker dips (opacity floor = 100 - Intensity) [100]. This preset has no dropdowns: only Slider Controls and the Transform effect. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/002a.png",
+    "note": "Both stills show the settled text; the render shows it visible on frames 0-2, then fully off on frames 3-5, 8 and 12 (3 blinks) and steady from 0.52 s, as described.",
+    "rerender": false
+   },
+   "flash": {
+    "per_use": 3,
+    "basis": "render: 3 blinks fully off (frames 3-5, 8 and 12 at 25 fps) at the default Duration 1 s"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grow In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Scales up from 0% to full size around the anchor point (comp-space anchor for text/shape layers) while fading in over the first half, eased by Personality.",
+   "look": [
+    "scale up",
+    "grow",
+    "pop",
+    "clean"
+   ],
+   "use_for": [
+    "stat or number reveal",
+    "icon or map-pin appearance",
+    "logo reveal",
+    "caption entrance in reels"
+   ],
+   "avoid": [
+    "scale grows from the layer anchor: centre the anchor first or it grows from a corner"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the animation runs from thisLayer.inPoint to inPoint + the Duration slider (seconds); the fade finishes at Duration/2. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/003a.png",
+    "note": "Text is about 78% size at 0.5 s and full size at 1.4 s, scaled around its centre; the render shows it growing from nothing while fading in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pop In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Grows from 0% with an overshoot bump past full size, then settles at 100% (Scale = Base Animation 0->100 + Bump 0->50->0 x Intensity); opacity fades up over the first half.",
+   "look": [
+    "pop",
+    "overshoot",
+    "bouncy",
+    "punchy",
+    "playful"
+   ],
+   "use_for": [
+    "emoji / sticker pops in reels",
+    "stat callouts in explainers",
+    "subscribe or follow button",
+    "meme caption punch-in"
+   ],
+   "avoid": [
+    "childish on serious political or documentary content",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: scale (base and bump) runs from thisLayer.inPoint over the full Duration slider (seconds, default 0.5); opacity finishes at Duration/2. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [0.5], Personality dropdown (1 Soft, 2 Strong, 3 Loud) [3], Intensity slider 0-100 = overshoot size [100]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Bump, Base Animation) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/004a.png",
+    "note": "Both stills show the settled text (Duration 0.5 s); the render shows it growing from small to about 143% at 0.34 s and settling back to 100% by 0.52 s while fading up.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Shrink In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Starts at 150% and shrinks down to 100% while fading in over the first half, like a slam or zoom-down landing, eased by Personality.",
+   "look": [
+    "slam",
+    "scale down",
+    "impact",
+    "zoom"
+   ],
+   "use_for": [
+    "title slam in a trailer",
+    "headline punch in a news reel",
+    "quote card landing",
+    "big number reveal"
+   ],
+   "avoid": [
+    "oversized start can show soft pixels on stills and raster logos",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the animation runs from thisLayer.inPoint to inPoint + the Duration slider (seconds); the fade finishes at Duration/2. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [5]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/005a.png",
+    "note": "Text is about 108% at 0.5 s and back to 100% at 1.4 s; the render shows it starting large (~134% on the first visible frame) and shrinking into place while fading in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slide In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Slides 200 px into its resting position along the chosen Direction (a short slide, not from off-screen) while fading in over the first half, eased by Personality.",
+   "look": [
+    "slide",
+    "push",
+    "clean",
+    "lower third"
+   ],
+   "use_for": [
+    "lower-third and name-strap entrance",
+    "bullet points in explainers",
+    "side labels and callouts",
+    "caption lines in reels"
+   ],
+   "avoid": [
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the animation runs from thisLayer.inPoint to inPoint + the Duration slider (seconds); opacity is done at Duration/2. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [5], Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right = direction of travel) [4 = enters from 200 px left]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/006a.png",
+    "note": "Text is ~27 px left of rest at 0.5 s and in place at 1.4 s; the render shows it sliding right from about 200 px left while fading in.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spin In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Starts rotated (30-360 deg, set by Intensity) and 200 px off along the Movement Direction, then unwinds to upright and slides into place while fading up; Rotation Direction picks the turning direction (1 Clockwise really turns clockwise here).",
+   "look": [
+    "spin",
+    "rotate",
+    "dynamic",
+    "playful"
+   ],
+   "use_for": [
+    "logo or badge entrance",
+    "icon reveal in explainers",
+    "playful sticker in reels"
+   ],
+   "avoid": [
+    "text is unreadable while spinning: keep Duration short",
+    "too playful for hard news",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the slide and spin run from thisLayer.inPoint over the full Duration slider (seconds); opacity finishes at Duration/2. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [5], Intensity slider 0-100 = starting angle 30-360 deg [50 = 195 deg], Movement Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right = direction of travel) [4], Rotation Direction dropdown (1 Clockwise, 2 Counter Clockwise) [1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/007a.png",
+    "note": "Text is tilted about 25 deg counter-clockwise and left of centre at 0.5 s, upright and centred at 1.4 s; the render shows it unwinding clockwise from a steep angle while sliding right.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Tumble In",
+   "match": null,
+   "category": "Adobe Express/In",
+   "status": "current",
+   "summary": "Bounces in sideways like a tossed object: it travels 250 px in the chosen Direction while dropping from 150 px up and landing in shrinking hops (75, 25, 12, 5 px), unrotating from the Rotation tilt to upright in the first ~45% of the move; opacity fades up over the first quarter.",
+   "look": [
+    "tumble",
+    "bounce",
+    "toss",
+    "cartoon",
+    "playful"
+   ],
+   "use_for": [
+    "sticker or emoji toss-in",
+    "playful edu explainer graphics",
+    "meme reel props"
+   ],
+   "avoid": [
+    "cartoonish: avoid for news and documentary",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed from the layer IN-POINT, not from comp.time: the move runs from thisLayer.inPoint over the full Duration slider (seconds, default 2); opacity finishes at Duration/4. Trim or move the layer to move it; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [2], Direction dropdown (1 Left, 2 Right = direction of travel; Left enters from 250 px right) [2], Rotation slider = starting tilt in degrees [90]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (X input, Y input, Rotation input) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/008a.png",
+    "note": "Text is tipped about 30 deg, high and left at 0.5 s and nearly settled at 1.4 s; the render shows it travelling right ~250 px, unrotating by ~0.9 s and landing in shrinking hops.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blinking Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Continuously blinks the layer's opacity between a lower value and 100%, with the blink shape set by Personality.",
+   "look": [
+    "blink",
+    "loop",
+    "attention",
+    "pulse"
+   ],
+   "use_for": [
+    "blinking LIVE / REC / BREAKING tag",
+    "call-to-action arrow or 'link in bio' prompt",
+    "alert icon on a map"
+   ],
+   "avoid": [
+    "do not use on body text or faces",
+    "the blink is a smooth opacity dip, never fully off (floor 20% at Intensity 100); for a hard on/off blink use Flicker Loop or hold keys"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. Speed/Intensity sliders set rate and amplitude; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1], Speed slider 0-100 = 1x-5x of a 2 s blink cycle [50 = 3x], Intensity slider 0-100 = opacity floor 80%-20% [50 = 50%]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Soft, Smooth, Strong, Energetic, Loud) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/009b.png",
+    "note": "Text is dimmed to about 75% at 0.5 s and 65% at 1.4 s; the render shows a smooth opacity dip to ~55% about every 0.67 s, no movement.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 1.5,
+    "basis": "render: one smooth dip to about 55% every 0.67 s"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bob Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Floats the layer up and down (always vertical) with a gentle rocking rotation, like something bobbing on water; a 2 s cycle at Speed 0.",
+   "look": [
+    "float",
+    "bob",
+    "hover",
+    "gentle",
+    "loop"
+   ],
+   "use_for": [
+    "floating icon or product shot in explainers",
+    "idle motion for a sticker or mascot",
+    "hovering map pin or callout"
+   ],
+   "avoid": [
+    "amplitude up to +-200 px at Intensity 100: keep it low for text",
+    "the Direction dropdown does nothing: do not rely on it for sideways motion (use Yoyo Loop)",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. Speed/Intensity sliders set rate and amplitude; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Speed slider 0-100 = 1x-3x of a 2 s cycle [0 = 1x], Intensity slider 0-100 = bob of +-0-200 px plus rock of +-0-45 deg [50 = +-100 px, +-22.5 deg]. There is also a Direction dropdown (Up/Down/Left/Right) [3], but no expression reads it: the bob is always vertical. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value, Rotation Value) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/010a.png",
+    "note": "Text is raised and rocked about 20 deg one way at 0.5 s and the other way at 1.4 s; the render shows a +-100 px vertical bob with rocking rotation on a 2 s cycle.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Breathe Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Slowly scales the layer up and down around 100% in a continuous breathing rhythm, shape set by Personality.",
+   "look": [
+    "breathe",
+    "scale pulse",
+    "calm",
+    "loop"
+   ],
+   "use_for": [
+    "idle life on a logo or end card",
+    "subtle emphasis on a key number",
+    "calm motion on a still in a documentary"
+   ],
+   "avoid": [
+    "high Intensity (up to +-50% scale) looks cheap on text",
+    "scaling a raster still above 100% softens it",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. Speed/Intensity sliders set rate and amplitude; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1], Speed slider 0-100 = 1x-4x of a 2 s cycle [50 = 2.5x], Intensity slider 0-100 = scale swing of +-10% to +-50% [50 = +-30%]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Soft, Smooth, Strong, Energetic, Loud) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/011b.png",
+    "note": "Text is about 75% size at 0.5 s and about 125% at 1.4 s; the render shows a smooth scale swing between ~70% and ~130% every 0.8 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flicker Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Keeps the layer's opacity flickering in an irregular pattern (5 dips per 2.3 s at 1x), like a failing light or a neon tube; Intensity sets how dark the dips go.",
+   "look": [
+    "flicker",
+    "neon",
+    "unstable",
+    "horror",
+    "loop"
+   ],
+   "use_for": [
+    "neon sign text",
+    "eerie / mystery explainer title",
+    "glitchy tech overlay"
+   ],
+   "avoid": [
+    "photosensitivity risk at high Speed with high Intensity (about 5 full-depth flashes per second at Speed 100)",
+    "annoying on anything the viewer must read for long",
+    "the Direction dropdown does nothing"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. Speed/Intensity sliders set rate and amplitude; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Speed slider 0-100 = 0.25x-2.5x of the built-in 2.3 s flicker pattern (5 dips) [50 = about 1.4x], Intensity slider 0-100 = dip depth (opacity floor = 100 - Intensity) [50]. There is also a Direction dropdown (Up/Down/Left/Right) [3], but no expression reads it. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Value) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/012a.png",
+    "note": "Both stills land on full-opacity frames; the render shows single-frame dips to ~55% opacity at irregular intervals (frames 10, 19, 22-23, 37, 41), an irregular flicker.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 4,
+    "basis": "render at the default Speed: dips to about 55% at frames 10, 19, 22-23, 37 and 41 (25 fps), four of them inside one second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Jitter Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Adds a nervous, choppy jitter: a wiggle(50 Hz) whose sample rate is stepped down by Speed, giving a stop-motion shake.",
+   "look": [
+    "jitter",
+    "shake",
+    "nervous",
+    "stop motion",
+    "glitch"
+   ],
+   "use_for": [
+    "tension or panic text in a reel",
+    "comedic shaking emoji",
+    "earthquake / alarm emphasis"
+   ],
+   "avoid": [
+    "Intensity is the raw wiggle amplitude in pixels: large values throw the layer around",
+    "hard to read text while jittering",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. The wiggle frequency is fixed at 50 Hz; Speed only sets how often a new position is sampled (posterizeTime) and Intensity the amplitude in pixels.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Speed slider 0-100 = posterized sample rate of 1%-100% of the comp frame rate [25 = about 26%], Intensity slider = wiggle amplitude in pixels [50]. This preset has no dropdowns: only Slider Controls and the Transform effect. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). It has no keyframes: everything is driven by expressions. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/013a.png",
+    "note": "Text is offset a few px from centre in both stills; the render shows it jumping to a new position every 4 frames (up to ~50 px), a choppy stop-motion jitter.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pulse Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Repeatedly pops the layer up in scale and back to 100% like a heartbeat, shape set by Personality.",
+   "look": [
+    "pulse",
+    "heartbeat",
+    "attention",
+    "loop"
+   ],
+   "use_for": [
+    "pulsing subscribe / CTA button",
+    "highlighting a key number or map marker",
+    "beat-synced sticker"
+   ],
+   "avoid": [
+    "up to 200% scale at Intensity 100: keep it lower",
+    "raster logos soften when scaled up",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. Speed/Intensity sliders set rate and amplitude; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1], Speed slider 0-100 = 1x-5x of a 2 s cycle [50 = 3x], Intensity slider 0-100 = peak scale 100%-200% [50 = 150%]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Soft, Smooth, Strong, Energetic, Loud) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/014b.png",
+    "note": "Text is about 125% at 0.5 s and 135% at 1.4 s; the render shows a repeated swell from 100% to ~150% and back about every 0.67 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spin Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Spins the layer continuously, one eased turn after another (ease set by Personality), clockwise or counter-clockwise.",
+   "look": [
+    "spin",
+    "rotate",
+    "loop",
+    "loader"
+   ],
+   "use_for": [
+    "rotating badge or seal",
+    "loading / processing icon",
+    "spinning coin or record graphic"
+   ],
+   "avoid": [
+    "never on text you need read",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. There is no Speed slider: Intensity sets the spin rate; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [3], Direction dropdown (1 Clockwise, 2 Counter Clockwise) [2], Intensity slider 0-100 = spin rate of about 0.2-2 turns per second [50 = about 1.1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Soft, Smooth, Strong, Energetic, Loud) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/015a.png",
+    "note": "Text is turned to vertical at 0.5 s and tilted about 40 deg at 1.4 s; the render shows eased full counter-clockwise turns of about 0.9 s with brief upright holds.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Wiggle Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Wobbles the layer's rotation randomly (5-45 degrees by Intensity) with a stepped, hand-made feel from posterized time.",
+   "look": [
+    "wiggle",
+    "wobble",
+    "handmade",
+    "cartoon",
+    "loop"
+   ],
+   "use_for": [
+    "cartoon-style emphasis on a sticker",
+    "playful caption in reels",
+    "doodle / hand-drawn explainer look"
+   ],
+   "avoid": [
+    "silly on serious news",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. The wiggle frequency is fixed at 50 Hz; Speed only sets how often a new angle is sampled (posterizeTime) and Intensity the angle (5-45 deg).",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Speed slider 0-100 = posterized sample rate of 1%-100% of the comp frame rate [25], Intensity slider 0-100 = rotation wobble of 5-45 deg [25 = 15 deg]. This preset has no dropdowns: only Slider Controls and the Transform effect. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). It has no keyframes: everything is driven by expressions. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/016a.png",
+    "note": "Text is tilted about 10-15 deg in both stills; the render shows the rotation jumping to a new random angle every 4 frames, up to about 15 deg.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Yoyo Loop",
+   "match": null,
+   "category": "Adobe Express/Looping",
+   "status": "current",
+   "summary": "Moves the layer back and forth along the chosen direction in a smooth yo-yo oscillation.",
+   "look": [
+    "oscillate",
+    "yoyo",
+    "float",
+    "loop"
+   ],
+   "use_for": [
+    "pointing arrow nudging toward a detail",
+    "swaying label or tag",
+    "idle motion on a callout"
+   ],
+   "avoid": [
+    "Intensity up to 200 px of travel: keep it small",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven loop with no end: it runs for the whole life of the layer, phased from comp time 0 (uses time, not time - inPoint), so it is already moving on the layer's first frame. Speed/Intensity sliders set rate and amplitude; applying at any comp time gives the same result.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right: sets the axis and which side it starts on) [2], Speed slider 0-100 = 1x-5x of a 2 s cycle [50 = 3x], Intensity slider 0-100 = travel of +-0-200 px [50 = +-100 px]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) alone: their keyframes are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/017b.png",
+    "note": "Text is ~30 px above rest at 0.5 s and ~35 px below at 1.4 s; the render shows a smooth vertical +-100 px oscillation about every 0.67 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bungee Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Winds up with 1-4 growing wobbles around its position, then is flung 200 px in the chosen Direction (not off-screen) while fading out over the last quarter of the Duration.",
+   "look": [
+    "bounce",
+    "elastic",
+    "playful",
+    "exit"
+   ],
+   "use_for": [
+    "sticker or badge exit in a social reel",
+    "playful lower-third exit",
+    "meme caption bouncing away",
+    "clearing a logo before the next beat"
+   ],
+   "avoid": [
+    "too bouncy for serious news or documentary tone",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); opacity runs over the last Duration/4 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Bounces dropdown 1-4 [2], Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right = direction of travel) [1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/018b.png",
+    "note": "Text is at rest at 0.5 s and wobbling vertically at 1.4 s; the render shows two growing up/down wobbles from 1.0 s, then an upward fling while fading out over the last ~0.2 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fade Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Plain opacity fade from 100 to 0%, over the last half of the Duration, ease curve set by Personality.",
+   "look": [
+    "fade",
+    "clean",
+    "subtle",
+    "exit"
+   ],
+   "use_for": [
+    "documentary titles and captions leaving",
+    "lower thirds on news packages",
+    "removing a still or map overlay",
+    "end of a text card in explainers"
+   ],
+   "avoid": [
+    "for a dissolve between two clips use a transition instead"
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); the opacity part spans only the last Duration/2 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [4]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/019b.png",
+    "note": "Both stills show full, unmoved text because the fade only starts at 1.5 s; the render shows a plain opacity fade from 1.55 s to nothing at the 2 s out-point.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flicker Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Strobes the layer's opacity (3 dips toward 100 - Intensity %) over the last half of the Duration, and the third dip lands on the last frames before the out-point, so at the default Intensity 100 the layer is already dark when it ends: it reads as a flicker-off, not a fade.",
+   "look": [
+    "flicker",
+    "strobe",
+    "glitch",
+    "exit"
+   ],
+   "use_for": [
+    "neon-sign title switching off",
+    "glitchy exit for a tech / AI headline",
+    "trailer title card cut-off",
+    "'signal lost' moment"
+   ],
+   "avoid": [
+    "rapid strobing is a photosensitivity risk: keep it short",
+    "gimmicky on long body captions"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); the flicker spans the last Duration/2 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Intensity slider 0-100 = how low the flicker dips (opacity floor = 100 - Intensity) [100]. This preset has no dropdowns: only Slider Controls and the Transform effect. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/020b.png",
+    "note": "Stills at 0.5 / 1.4 s show untouched text; the 1.6 s render (G020.mp4) blinks fully off on frames 29-31, 33-34 and 38-39 at 25 fps, so the third dip lands on the last frames and the layer ends dark.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   },
+   "flash": {
+    "per_use": 3,
+    "basis": "render (1.6 s layer, 25 fps): 3 blinks fully off on frames 29-31, 33-34 and 38-39, the last on the final frames, at the default Duration 1 s"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Grow Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Scales the layer from 100% up to 200% around its anchor while fading it out over the last half, as if it blows toward the camera and vanishes.",
+   "look": [
+    "scale up",
+    "zoom",
+    "exit",
+    "clean"
+   ],
+   "use_for": [
+    "stat or icon clearing toward camera",
+    "title blowing out before a cut",
+    "transition beat where text zooms past the viewer"
+   ],
+   "avoid": [
+    "grows from the layer anchor: centre the anchor first",
+    "raster stills soften as they scale up",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); the fade spans the last Duration/2 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/021b.png",
+    "note": "Text is at rest at 0.5 s and about 127% at 1.4 s; the render shows it growing to ~180% while fading out over the last 0.5 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Pop Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Pops away like a bubble: Scale = Base Animation (100->200) minus Bump (0->50->0) x Intensity, so it first holds or squeezes slightly, then swells to 200% while fading out over the last half. It does not shrink to nothing.",
+   "look": [
+    "pop",
+    "burst",
+    "swell",
+    "punchy",
+    "exit"
+   ],
+   "use_for": [
+    "emoji / sticker bursting away in reels",
+    "stat callout exit in explainers",
+    "subscribe button exit",
+    "meme caption pop-off"
+   ],
+   "avoid": [
+    "childish on serious political or documentary content",
+    "raster logos soften as they swell to 200%",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds, default 0.5); scale runs over the whole Duration and opacity over the last Duration/2, finishing exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [0.5], Personality dropdown (1 Soft, 2 Strong, 3 Loud) [1], Intensity slider 0-100 = how much the bump holds back / squeezes the scale before it swells [100]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Bump, Base Animation) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/022b.png",
+    "note": "Both stills show the resting text (Duration 0.5 s, starts at 1.5 s); the render shows a squeeze to ~89% then a swell to ~180% while fading out, never shrinking away.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Shrink Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Shrinks the layer from 100% to 50% around its anchor while fading it out over the last half; it fades away rather than collapsing to a point.",
+   "look": [
+    "shrink",
+    "scale down",
+    "exit",
+    "clean"
+   ],
+   "use_for": [
+    "title receding at the end of a card",
+    "icon or stat shrinking away",
+    "clearing a callout before the next one"
+   ],
+   "avoid": [
+    "shrinks toward the anchor: centre it first or it drifts toward a corner"
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); the fade spans the last Duration/2 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/023b.png",
+    "note": "Text is at rest at 0.5 s and about 87% at 1.4 s; the render shows it shrinking to ~55% while fading out over the last 0.5 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Slide Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Slides the layer 200 px away from its position in the chosen Direction (a short slide, not off-screen) while fading out over the last half, eased by Personality.",
+   "look": [
+    "slide",
+    "push",
+    "exit",
+    "lower third"
+   ],
+   "use_for": [
+    "lower-third and name-strap exit",
+    "bullet points leaving in explainers",
+    "side labels and callouts clearing",
+    "caption lines in reels"
+   ],
+   "avoid": [
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "high",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); the fade spans the last Duration/2 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [5], Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right = direction of travel) [1]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/024b.png",
+    "note": "Text is at rest at 0.5 s and ~30 px higher at 1.4 s; the render shows it sliding up ~120 px while fading out over the last 0.5 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spin Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Rotates the layer away (30-360 deg by Intensity) while sliding 200 px in the Movement Direction and fading out over the last half. The Rotation Direction labels are reversed here (2 'Counter Clockwise', the default, actually turns clockwise).",
+   "look": [
+    "spin",
+    "rotate",
+    "exit",
+    "playful"
+   ],
+   "use_for": [
+    "logo or badge spinning away",
+    "icon exit in explainers",
+    "playful sticker exit in reels"
+   ],
+   "avoid": [
+    "text is unreadable while spinning: keep Duration short",
+    "too playful for hard news",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); the slide and spin run over the whole Duration, opacity over the last Duration/2, finishing exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Personality dropdown (1 Soft, 2 Smooth, 3 Strong, 4 Energetic, 5 Loud) [1], Intensity slider 0-100 = end angle 30-360 deg [50 = 195 deg], Movement Direction dropdown (1 Up, 2 Down, 3 Left, 4 Right = direction of travel) [4], Rotation Direction dropdown [2]. The Rotation Direction labels are reversed in this Out preset: the expression gives 1 'Clockwise' a negative (counter-clockwise) turn and 2 'Counter Clockwise' a positive (clockwise) turn, which the gallery frame confirms. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (Displacement Value) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/025b.png",
+    "note": "Text is at rest at 0.5 s and turned about 30 deg clockwise and shifted right at 1.4 s, confirming the default 'Counter Clockwise' setting turns clockwise.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Tumble Out",
+   "match": null,
+   "category": "Adobe Express/Out",
+   "status": "current",
+   "summary": "Hops away sideways: it travels 250 px in the chosen Direction with growing hops (5 px up to 150 px), tipping over by the Rotation angle in the second half and fading out over the last quarter. It does not leave the frame; the fade hides it.",
+   "look": [
+    "tumble",
+    "hop",
+    "bounce",
+    "cartoon",
+    "exit"
+   ],
+   "use_for": [
+    "sticker or emoji bouncing away",
+    "playful edu explainer graphics leaving",
+    "meme reel props hopping off"
+   ],
+   "avoid": [
+    "cartoonish: avoid for news and documentary",
+    "On a footage/still layer the Transform effect clips at the layer's own bounds, so content pushed past them (moved, scaled above 100% or rotated corners) is cut off; precompose a small logo/still to comp size first. Text and shape layers are not affected."
+   ],
+   "confidence": "medium",
+   "applies_to": "any layer",
+   "effects_used": [
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and timed to the layer OUT-POINT, not comp.time: it starts at thisLayer.outPoint - the Duration slider (seconds); opacity spans the last Duration/4 and finishes exactly at the out-point. Trim the layer end to move it; 'at' does not matter.",
+   "scripting": "Apply with ae_lib preset(l, comp, file, t) (spec: layer \"presets\": [{\"file\": <ffx>, \"at\": 0}]), i.e. select the layer, set comp.time, layer.applyPreset(new File(file)). Works on any layer (footage, still, solid, text, shape); it adds expression-control effects plus one Transform effect, and does not touch the layer's own Transform group, so your own position/scale keys still work. User controls [default]: Duration slider in seconds [1], Direction dropdown (1 Left, 2 Right = direction of travel) [2], Rotation slider = end tilt in degrees [45]. The dropdowns are Dropdown Menu Control pseudo-effects (match names Pseudo/@@...), which effects_used does not list. Control names begin with a TAB character (e.g. \"\\tDuration\"), so l.effect(\"Duration\") fails: find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\"); sliders are property \"Slider\", dropdowns \"Menu\" (1-based). Leave the internal driver sliders (X input, Y input, Rotation input) and the keyframes inside the Transform effect alone: they are the reference curves the expressions read. The control names are the same in every Adobe Express preset, so a second preset on the same layer (e.g. an In plus an Out) gets renamed duplicates while its expressions still look up the first preset's controls by name. This cross-wiring is expected from how AE names effects but has not been tested here: check a render, or put the In and Out on separate layers or precomps.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/026b.png",
+    "note": "Text is at rest at 0.5 s and moved right and up at 1.4 s; the render shows it hopping right ~220 px in growing hops, tipping in the second half and fading in the last quarter.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Anime Radial",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Black-on-white manga focus lines: jagged black streaks radiating from the Center toward the frame edges around a clean white central circle, re-randomised on stepped frames (Posterize Time). Fully opaque.",
+   "look": [
+    "anime",
+    "manga",
+    "focus lines",
+    "radial speed lines",
+    "comic",
+    "black and white"
+   ],
+   "use_for": [
+    "comic-style emphasis behind a face or object in a reel",
+    "'shock' moment in a meme or satire edit",
+    "punchy reveal in an AI-education short",
+    "framing a key quote or number"
+   ],
+   "avoid": [
+    "opaque white background: to put the lines over footage use the Multiply blend mode (white drops out) or Luma-key it",
+    "on a person, move Center onto the face, not the frame centre (Center is an offset from comp centre)"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "CC Radial Fast Blur",
+    "Circle",
+    "Fractal Noise",
+    "Invert",
+    "Levels",
+    "Point Control",
+    "Posterize Time",
+    "Slider Control",
+    "Threshold"
+   ],
+   "duration_note": "Expression-driven and endless (Fractal Noise Evolution = time x Speed, a sine wobble on the circle radius, Posterize Time stepping), so it animates for the whole layer regardless of comp.time when applied.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. User controls (names begin with a TAB, e.g. \"\\tSize\"; find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\")): Speed slider [100] (evolution and wobble speed), Center point control [0, 0], Size slider [100] (% scale of the clear centre circle and the noise). Center is an OFFSET from comp centre, not a comp position: its own expression adds [comp.width/2, comp.height/2], so [0, 0] = centre and a face at comp point p needs Center = p - [comp.width/2, comp.height/2]. Effect order: Fractal Noise, Circle, Threshold, CC Radial Fast Blur, Levels, Invert, Posterize Time. Look checked against the gallery frame pve/gallery/presets/027b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/027a.png",
+    "note": "Opaque black jagged manga streaks radiate toward the edges around a clean white centre; the streak pattern changes between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Anime Speed Lines",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Anime speed lines: magenta / violet streaks with orange-white hot cores on near-black, scrolling sideways, tapered by CC Power Pin so they converge toward the left, coloured by CC Toner and stepped with Posterize Time. Horizontal by default.",
+   "look": [
+    "anime",
+    "speed lines",
+    "motion streaks",
+    "action",
+    "comic"
+   ],
+   "use_for": [
+    "action / chase emphasis behind a subject in a reel",
+    "fast-transition background for a title",
+    "comic energy in a satire or meme edit",
+    "rocket / launch / speed explainer beats"
+   ],
+   "avoid": [
+    "needs a cut-out subject or text on top: alone it is just a background",
+    "can feel juvenile in serious news",
+    "changing Angle away from -90 / 90 rotates the 16:9 frame inside the Transform effect and leaves empty corners: scale the layer up to cover"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Angle Control",
+    "CC Power Pin",
+    "CC Toner",
+    "Fractal Noise",
+    "Gaussian Blur",
+    "Levels",
+    "Posterize Time",
+    "Slider Control",
+    "Transform"
+   ],
+   "duration_note": "Expression-driven and endless (offset = time * Speed), so it keeps scrolling for the whole layer regardless of comp.time when applied.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. User controls (names begin with a TAB, e.g. \"\\tSpeed\"; find them by iterating l.property(\"ADBE Effect Parade\") and comparing name.replace(/^\\s+/, \"\")): Speed slider [100] (scroll and evolution speed), Angle control [-90] (line direction: the internal Transform Rotation = Angle + 90, so -90 = horizontal lines), Pinch slider 0-100 [66] (CC Power Pin squeezes the left edge and widens the right edge by up to half the layer height, so the lines converge toward the left). Recolour with CC Toner (match name \"CC Toner\"). Look checked against the gallery frame pve/gallery/presets/028b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/028a.png",
+    "note": "Magenta/violet streaks with orange-white hot cores on near-black, tapering to converge toward the left; the pattern shifts between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Apparition",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Vertical streaks of sepia / cream light on black (Fractal Noise stretched tall, coloured by Tritone) that flicker erratically: keyframed Fast Box Blur and Dust & Scratches jump between sharp and heavily blurred every few frames, like a haunted, failing projector beam.",
+   "look": [
+    "light streaks",
+    "ghostly",
+    "flicker",
+    "sepia",
+    "eerie"
+   ],
+   "use_for": [
+    "mystery or crime documentary title backdrop",
+    "ghost / history-legend explainer",
+    "dreamlike background behind a quote"
+   ],
+   "avoid": [
+    "the blur flicker is constant and jumpy: too restless under long text",
+    "sepia/cream on black: recolour Tritone for brand palettes"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Dust & Scratches",
+    "Fast Box Blur",
+    "Fractal Noise",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise scale and Evolution (0 to 720 deg) plus flicker keys on Fast Box Blur and Dust & Scratches span about 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*144 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/029b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/029a.png",
+    "note": "Sepia/cream vertical streaks on black: sharp, blotchy and dusty at 0.5 s, heavily blurred soft beams at 1.4 s, as described.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 0,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 0 flashes, at most 0 in one second, over the 100% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 4 a second"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blocks",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Large flat colour blocks (navy, indigo, purple and pink) made by squaring Fractal Noise off with Minimax and colouring it with Tritone; over about 5 s the blocks morph from tall to wide as the noise scale keys swap.",
+   "look": [
+    "blocks",
+    "colour block",
+    "geometric",
+    "flat",
+    "retro digital"
+   ],
+   "use_for": [
+    "tech / data explainer backdrop",
+    "digital or crypto topic background",
+    "texture behind on-screen stats"
+   ],
+   "avoid": [
+    "busy pattern competes with text: lower contrast or blur it"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Minimax",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Scale Width 200 to 1000, Scale Height 1000 to 200 and Evolution 0 to 360 deg span about 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*72 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/030b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/030a.png",
+    "note": "Flat navy, indigo, purple and pink rectangular blocks fill the frame and rearrange between 0.5 s and 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Cinders",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Glowing orange-yellow ember specks and clusters on black: two Fractal Noise layers evolving in opposite directions, a Glow pass and warm Tritone colouring, like drifting cinders.",
+   "look": [
+    "embers",
+    "fire",
+    "glow",
+    "warm",
+    "particles"
+   ],
+   "use_for": [
+    "trailer title background",
+    "war, protest or fire-related documentary titles",
+    "dramatic political explainer intro"
+   ],
+   "avoid": [
+    "Glow over Fractal Noise renders slowly at 4K"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Glow",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: the two Fractal Noise Evolution keys (0 to 720 deg and 720 to 0 deg) span about 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*144 on the first and 720-time*144 on the second (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/031b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/031b.png",
+    "note": "Glowing orange-yellow ember specks and clusters on black, denser at 1.4 s than at 0.5 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Circuit",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Thin green rectangular outlines on black (Fractal Noise traced by Find Edges, coloured green by Tritone), overlapping like a circuit-board or tech grid, slowly zooming in and evolving.",
+   "look": [
+    "circuit",
+    "tech",
+    "grid lines",
+    "green",
+    "digital"
+   ],
+   "use_for": [
+    "AI / tech explainer title backdrop",
+    "cyber-security or data story background",
+    "texture for a tech lower-third panel"
+   ],
+   "avoid": [
+    "fine 1-2 px lines shimmer or alias when scaled down for mobile",
+    "green-on-black reads as 'hacker' cliche: recolour Tritone for a brand palette"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Find Edges",
+    "Fractal Noise",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed (plus one static helper expression): Fractal Noise Scale 1000 to 2000 and Evolution 0 to 360 deg span 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*72 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/032b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/032a.png",
+    "note": "Thin green rectangular outlines on black like a circuit grid; the rectangles are larger at 1.4 s (zooming in).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Cosmic Power",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Electric blue-and-white plasma: contrasty Fractal Noise shaped by Levels and coloured by Tritone into glowing energy veins on black, brightening and gaining contrast over its run.",
+   "look": [
+    "plasma",
+    "energy",
+    "electric blue",
+    "space",
+    "glow"
+   ],
+   "use_for": [
+    "space or science explainer background",
+    "epic trailer title card",
+    "power / energy themed title"
+   ],
+   "avoid": [
+    "very bright white cores fight with white text: darken it or use dark text panels",
+    "cheesy if paired with heavy bevelled text"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Contrast 100 to 150, Brightness -20 to 30, Rotation 0 to 10 deg and Evolution 0 to 720 deg run from about 0.9 s to about 5.9 s after the apply time. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*144 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/033b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/033b.png",
+    "note": "Blue-and-white plasma veins on black: dim and sparse at 0.5 s, much brighter and more contrasty at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Creepy",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Sparse amber / sepia specks and clumps on black that churn fast (Evolution 0 to 1800 deg) and get randomly smeared by Directional Blur whose direction and length are re-keyed about every 0.1 s, like crawling bugs or flickering film dirt.",
+   "look": [
+    "creepy",
+    "specks",
+    "crawling",
+    "dark",
+    "grunge"
+   ],
+   "use_for": [
+    "true-crime or scam-exposé title backdrop",
+    "horror-style trailer card",
+    "dark investigative explainer segment"
+   ],
+   "avoid": [
+    "jittery random smear is restless under long text",
+    "too gloomy for neutral news"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Directional Blur",
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Evolution (0 to 1800 deg) and the random Directional Blur keys span about 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*360 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/034b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/034a.png",
+    "note": "Sparse amber/sepia specks and clumps on black, some smeared, with a different arrangement at 1.4 s.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Curtain",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "A deep crimson velvet stage curtain: Fractal Noise stretched into vertical folds and coloured red by Tritone, slowly rippling.",
+   "look": [
+    "curtain",
+    "stage",
+    "theatrical",
+    "folds",
+    "fabric"
+   ],
+   "use_for": [
+    "'show begins' title or award-style intro",
+    "theatrical satire segment opener",
+    "backdrop behind a reveal"
+   ],
+   "avoid": [
+    "reads strongly as 'theatre': wrong for neutral news backdrops"
+   ],
+   "confidence": "high",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Evolution 0 to 360 deg spans about 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*72 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/035b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/035a.png",
+    "note": "Deep crimson vertical velvet folds with lighter highlights fill the frame, shifting slightly between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Deep Tissue",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Magenta / plum cell-like blobs separated by white glowing veins (Fractal Noise with Glow and Tritone), slowly zooming and morphing, like living tissue under a microscope.",
+   "look": [
+    "organic",
+    "biological",
+    "cells",
+    "magenta",
+    "glow"
+   ],
+   "use_for": [
+    "health or medical explainer background",
+    "biology / science topic title",
+    "abstract organic texture"
+   ],
+   "avoid": [
+    "looks visceral: keep it to health / biology topics",
+    "white glow hot spots can clip behind white text"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Glow",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Rotation, Scale 200 to 400, Complexity, Sub settings and Glow Threshold / Radius / Intensity span about 5 s (there are no Evolution keys). Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot add an Evolution expression such as time*72 or stretch the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/036b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/036a.png",
+    "note": "Magenta/plum cell blobs separated by white glowing veins fill the frame and morph between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fog Lights",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Slate blue-grey drifting fog / cloud texture with lighter patches (Fractal Noise shaped by Levels and coloured by Tritone): a soft, moody haze.",
+   "look": [
+    "fog",
+    "haze",
+    "clouds",
+    "blue-grey",
+    "moody"
+   ],
+   "use_for": [
+    "moody documentary title backdrop",
+    "night / mystery explainer segment",
+    "atmospheric layer screened over a still"
+   ],
+   "avoid": [
+    "at full strength it reads as generic stock: lower opacity and use Screen over footage"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Evolution 0 to 720 deg, Rotation and the turbulence / sub offsets span about 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*144 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/037b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/037a.png",
+    "note": "Slate blue-grey cloudy fog with lighter patches and darker areas drifts between frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Green Crystals",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Glowing green block-like shards streaking outward from a dark centre (Fractal Noise blasted by CC Radial Fast Blur, softened, glowed and coloured green by Tritone), like flying through a tunnel of green crystal cubes.",
+   "look": [
+    "crystals",
+    "radial",
+    "tunnel",
+    "green",
+    "sci-fi"
+   ],
+   "use_for": [
+    "sci-fi or gaming themed title",
+    "radial burst behind a reveal",
+    "energy/tech explainer opener"
+   ],
+   "avoid": [
+    "green is very loud: recolour with Tritone for brand palettes",
+    "radial blur plus glow is slow to render"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "CC Radial Fast Blur",
+    "Fast Box Blur",
+    "Fractal Noise",
+    "Glow",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed (plus one static helper expression): Fractal Noise Rotation -10 to 10 deg, Scale 200 to 400 and Evolution 0 to 720 deg span 5 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*144 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/038b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/038a.png",
+    "note": "Glowing green block-like shards streak outward from a dark centre like a crystal tunnel.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Indigestion",
+   "match": null,
+   "category": "Backgrounds",
+   "status": "current",
+   "summary": "Dusty-red / pink bubbly cells with dark membranes (Fractal Noise shaped by Levels and coloured by Tritone), slowly churning, like stomach lining or blood cells.",
+   "look": [
+    "organic",
+    "cells",
+    "churning",
+    "red",
+    "biological"
+   ],
+   "use_for": [
+    "health or digestion explainer background",
+    "comic / satire background for an 'upset stomach' style joke",
+    "biology topic title"
+   ],
+   "avoid": [
+    "visceral, slightly gross: not a general backdrop"
+   ],
+   "confidence": "medium",
+   "applies_to": "creates a solid/background",
+   "effects_used": [
+    "Fractal Noise",
+    "Levels",
+    "Tritone"
+   ],
+   "duration_note": "Keyframed, no expressions: Fractal Noise Evolution 0 to 1080 deg, Rotation and turbulence / sub offsets span about 10 s. Keys are laid down from the comp time at which the preset is applied (use 'at': 0 for the layer start); after the last key the texture freezes. For a longer shot delete the Fractal Noise Evolution keys and use an expression such as time*108 (same speed as the preset), or loop the keys.",
+   "scripting": "Apply to a comp-size solid: l = comp.layers.addSolid([0,0,0], name, comp.width, comp.height, comp.pixelAspect, dur), then ae_lib preset(l, comp, file, t) (layer.applyPreset(new File(file)) with the layer selected and comp.time set). The effects replace the solid's pixels, so the solid colour does not matter; put text above it. Recolour with the Tritone effect (find it by match name: l.property(\"ADBE Effect Parade\").property(\"ADBE Tritone\"), then set Highlights / Midtones / Shadows). Look checked against the gallery frame pve/gallery/presets/039b.png.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/039a.png",
+    "note": "Dusty red/pink bubbly cells with dark membranes fill the frame and churn slowly between frames.",
+    "rerender": false
+   }
+  }
+ ]
+}

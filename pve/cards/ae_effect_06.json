@@ -1,0 +1,1329 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Kernel",
+   "match": "CS Kernel",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Applies a custom 3x3 convolution kernel: every pixel becomes a weighted sum of itself and its eight neighbours. Depending on the nine weights it sharpens, softens, embosses or edge-detects the image.",
+   "look": [
+    "sharpen",
+    "emboss",
+    "edge detect",
+    "relief",
+    "crunchy detail",
+    "convolution"
+   ],
+   "use_for": [
+    "subtle sharpening of soft archival or upscaled news footage",
+    "emboss / relief texture on maps, logos or currency for explainer backgrounds",
+    "edge-detect line-art look for stylised documentary transitions",
+    "gritty hyper-detailed look on trailer stills"
+   ],
+   "avoid": [
+    "weights that do not sum to the Divider brighten or darken the whole frame",
+    "strong sharpen kernels amplify compression noise and halos on low-bitrate social clips"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "2 - L2",
+     "does": "centre weight (column 2, row 2); default 1 with all others 0 = no change",
+     "typical": "5 for sharpen (with -1 on the four neighbours), 8 for edge detect (with -1 all round)"
+    },
+    {
+     "name": "1 - L2",
+     "does": "left neighbour weight",
+     "typical": "-1 for sharpen / edge detect"
+    },
+    {
+     "name": "3 - L2",
+     "does": "right neighbour weight",
+     "typical": "-1 for sharpen / edge detect"
+    },
+    {
+     "name": "2 - L1",
+     "does": "top neighbour weight",
+     "typical": "-1 for sharpen / edge detect"
+    },
+    {
+     "name": "2 - L3",
+     "does": "bottom neighbour weight",
+     "typical": "-1 for sharpen / edge detect"
+    },
+    {
+     "name": "Divider",
+     "does": "the weighted sum is divided by this; set to the sum of all weights to keep brightness",
+     "typical": "1 for sharpen/emboss, 9 for a 3x3 box blur of all 1s"
+    },
+    {
+     "name": "Absolute Values",
+     "does": "0/1 checkbox: uses absolute results so negative edges also show bright",
+     "typical": "1 for edge detect, 0 otherwise"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mixes the original back in (0-100)",
+     "typical": "30-70 to tame sharpen or emboss"
+    }
+   ],
+   "demo_settings": {
+    "1 - L1": -4,
+    "2 - L1": -2,
+    "3 - L1": 0,
+    "1 - L2": -2,
+    "2 - L2": 1,
+    "3 - L2": 2,
+    "1 - L3": 0,
+    "2 - L3": 2,
+    "3 - L3": 4,
+    "Divider": 1,
+    "Absolute Values": 0,
+    "Blend w. Original": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Sharpen (fixed kernel only; Find Edges and Color Emboss cover edge/emboss; Premiere 2026 has no custom-kernel effect)",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Levels",
+    "Hue/Saturation",
+    "CC Toner"
+   ],
+   "scripting": "Match name is 'CS Kernel' (not 'CC Kernel'). Weights are named '<column> - L<row>': '1 - L1' = top-left, '2 - L2' = centre, '3 - L3' = bottom-right; all -100..100. Absolute Values is a checkbox written as 0/1 (number, not boolean). Blend w. Original runs 0-100 here. Divider min is 0.01; a zero-sum kernel (edge detect) needs Divider 1 and renders mostly black with bright edges. Demo is an emboss kernel (weights sum to 1). Render-checked: the unit emboss (-2..2) only shows as a faint relief halo on 1080p footage viewed small, so the demo doubles every off-centre weight (-4..4).",
+   "recipe": {
+    "Blend w. Original": [
+     [
+      0,
+      100
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/034.png",
+    "note": "Doubled emboss kernel (-4..4) now reads as a clear colour relief at thumbnail size: bright rim on the lower-right and dark rim on the upper-left of the figures, stripes and a small round motif plus crunchy embossed texture on faces and flowers, much stronger than the old faint halo render.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Toner",
+   "match": "CC Toner",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Remaps the image's luminance onto a ramp of user-chosen colours (duotone / tritone / pentone), like a darkroom toner. Shadows, midtones and highlights each take their own colour.",
+   "look": [
+    "duotone",
+    "tritone",
+    "sepia",
+    "monochrome tint",
+    "brand tint",
+    "archival"
+   ],
+   "use_for": [
+    "sepia or archival tint for historical flashback sections in documentaries",
+    "brand- or party-colour duotone backgrounds behind titles and lower-thirds",
+    "cold blue monotone for tension or investigation beats in explainers",
+    "stylised reel covers and trailer title cards"
+   ],
+   "avoid": [
+    "full-strength toning flattens skin tones on talking heads; use Blend w. Original for a subtle tint",
+    "highly saturated midtone colours read as a cheap filter on serious news footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Tones",
+     "does": "1-based dropdown choosing how many colour wells are used; default 2 = tritone (Highlights / Midtones / Shadows)",
+     "typical": "2"
+    },
+    {
+     "name": "Highlights",
+     "does": "colour given to the brightest tones",
+     "typical": "#F2E8D5 (warm white) or #FFFFFF"
+    },
+    {
+     "name": "Midtones",
+     "does": "main tint colour",
+     "typical": "#8C6A45 sepia, #1F6F8B teal, or a brand colour"
+    },
+    {
+     "name": "Shadows",
+     "does": "colour given to the darkest tones",
+     "typical": "#000000 to #101828"
+    },
+    {
+     "name": "Brights",
+     "does": "upper-mid colour, only used in the five-tone mode",
+     "typical": "#C0AA78"
+    },
+    {
+     "name": "Darktones",
+     "does": "lower-mid colour, only used in the five-tone mode",
+     "typical": "#40320A"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mixes the original colour back in (0-1 in this build)",
+     "typical": "0.3-0.6 for a subtle tint, 0 for a full graphic look"
+    }
+   ],
+   "demo_settings": {
+    "Tones": 2,
+    "Highlights": "#F4E9D0",
+    "Midtones": "#1F6F8B",
+    "Shadows": "#0A0F1E",
+    "Blend w. Original": 0
+   },
+   "enum_labels": {
+    "Tones": {
+     "1": "Duotone",
+     "2": "Tritone",
+     "3": "Pentone",
+     "4": "(separator)",
+     "5": "Solid"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Tint (two colours only); Lumetri Color creative tint for subtler work",
+   "pairs_with": [
+    "Curves",
+    "Noise",
+    "CC Vignette",
+    "Levels"
+   ],
+   "scripting": "Colour wells take '#RRGGBB'. Tones is a 1-based dropdown (1-5, default 2 = Tritone: Highlights/Midtones/Shadows). 1 = Duotone (Highlights + Shadows), 3 = Pentone (all five wells). 4 is a separator and 5 is Solid (read from After Effects 26.0); Solid has not been rendered. Blend w. Original is a 0-1 fraction in this build (harvested max 1), unlike CC Kernel's 0-100.",
+   "recipe": {
+    "Blend w. Original": [
+     [
+      0,
+      1
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/035.png",
+    "note": "Whole frame remapped to a cream / teal / navy tritone, a clear duotone-style toner look",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Change Color",
+   "match": "ADBE Change Color",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Shifts the hue, lightness and saturation of one selected colour range while leaving the rest of the image alone. Used to recolour or mute a single object such as a shirt, banner or flag stripe.",
+   "look": [
+    "selective recolour",
+    "hue shift",
+    "colour swap",
+    "selective desaturation"
+   ],
+   "use_for": [
+    "shift a backdrop, banner or clothing colour toward the channel palette",
+    "desaturate one distracting bright colour behind an interviewee",
+    "quick colour-swap gags in satire reels",
+    "recolour a stock graphic element to match the explainer palette"
+   ],
+   "avoid": [
+    "wide tolerance on reds/oranges bleeds into skin tones",
+    "hard, chattering edges on compressed footage; raise Matching Softness",
+    "for precise isolation Lumetri HSL Secondary or a masked layer is cleaner"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Color To Change",
+     "does": "the source colour to select",
+     "typical": "pick from the frame, e.g. #C83228 red"
+    },
+    {
+     "name": "Hue Transform",
+     "does": "hue rotation in degrees for the selected colour",
+     "typical": "30-180 (negative rotates the other way)"
+    },
+    {
+     "name": "Saturation Transform",
+     "does": "saturation change of the selected colour",
+     "typical": "-100 to fully desaturate it, +20 to boost"
+    },
+    {
+     "name": "Lightness Transform",
+     "does": "lightness change of the selected colour",
+     "typical": "-30..+30"
+    },
+    {
+     "name": "Matching Tolerance",
+     "does": "how far from the colour a pixel can be and still change (percent)",
+     "typical": "15-35"
+    },
+    {
+     "name": "Matching Softness",
+     "does": "feathers the selection edge (percent)",
+     "typical": "5-20"
+    },
+    {
+     "name": "Match Colors",
+     "does": "colour space used for matching",
+     "typical": "2 (Using Hue) for live action"
+    },
+    {
+     "name": "View",
+     "does": "1 = corrected image, 2 = grey mask of what is selected",
+     "typical": "2 while tuning, 1 to render"
+    }
+   ],
+   "demo_settings": {
+    "View": 1,
+    "Color To Change": "#C83228",
+    "Hue Transform": 140,
+    "Saturation Transform": 20,
+    "Matching Tolerance": 35,
+    "Matching Softness": 15,
+    "Match Colors": 2
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Corrected Layer",
+     "2": "Color Correction Mask"
+    },
+    "Match Colors": {
+     "1": "Using RGB",
+     "2": "Using Hue",
+     "3": "Using Chroma"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color (HSL Secondary; Premiere 2026 has no Change Color effect)",
+   "pairs_with": [
+    "Change to Color",
+    "Hue/Saturation",
+    "Lumetri Color",
+    "masks"
+   ],
+   "scripting": "Color To Change is '#RRGGBB'. Hue Transform is degrees (-1800..1800). Tolerance and Softness are 0-100 percent. Invert Color Correction Mask (0/1) changes everything EXCEPT the picked colour. Always leave View at 1 for the final render. Demo targets reds/oranges (red stripes, skin) so the change is obvious.",
+   "recipe": {
+    "Hue Transform": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      140
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/036.png",
+    "note": "Reds and oranges (red stripes, foreground-block fronts, flowers, also skin) rotated to green while the rest stays put",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Change to Color",
+   "match": "ADBE Change To Color",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Replaces one chosen colour ('From') with a specific target colour ('To'), with tolerance and softness controls for how wide the match is. Unlike Change Color, the output is an exact colour rather than a relative shift.",
+   "look": [
+    "colour replacement",
+    "selective recolour",
+    "brand colour swap",
+    "hue swap"
+   ],
+   "use_for": [
+    "turn a red banner, shirt or graphic into an exact brand / party hex colour",
+    "match backdrop colours between shots in a multi-cam explainer",
+    "recolour a stock icon or lower-third to the channel palette",
+    "colour-coded comparison shots (side A blue vs side B saffron)"
+   ],
+   "avoid": [
+    "Change = Hue keeps the original lightness, so a dark source never reaches a bright target; use option 4 for an exact match",
+    "too much Hue tolerance recolours skin and wood tones"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "From",
+     "does": "colour to replace",
+     "typical": "pick from the frame"
+    },
+    {
+     "name": "To",
+     "does": "replacement colour",
+     "typical": "brand hex, e.g. #1E64DC"
+    },
+    {
+     "name": "Change",
+     "does": "which components are replaced (dropdown)",
+     "typical": "1 (Hue) for natural results, 4 for an exact colour"
+    },
+    {
+     "name": "Change By",
+     "does": "1 sets pixels to the target, 2 transforms them toward it (smoother)",
+     "typical": "1"
+    },
+    {
+     "name": "Hue",
+     "does": "hue tolerance (Tolerance group), raw 0-2 units (default 0.1)",
+     "typical": "0.1-0.3"
+    },
+    {
+     "name": "Lightness",
+     "does": "lightness tolerance (Tolerance group)",
+     "typical": "0.5-1"
+    },
+    {
+     "name": "Saturation",
+     "does": "saturation tolerance (Tolerance group)",
+     "typical": "0.5-1"
+    },
+    {
+     "name": "Softness",
+     "does": "feathers the matte edge, 0-1",
+     "typical": "0.3-0.6"
+    }
+   ],
+   "demo_settings": {
+    "From": "#C83228",
+    "To": "#1E64DC",
+    "Change": 1,
+    "Change By": 1,
+    "Hue": 0.2,
+    "Lightness": 1,
+    "Saturation": 1,
+    "Softness": 0.5,
+    "View Correction Matte": 0
+   },
+   "enum_labels": {
+    "Change": {
+     "1": "Hue",
+     "2": "Hue & Lightness",
+     "3": "Hue & Saturation",
+     "4": "Hue, Lightness & Saturation"
+    },
+    "Change By": {
+     "1": "Setting To Color",
+     "2": "Transforming To Color"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Replace (Target Color -> Replace Color, with Similarity) / Lumetri Color HSL Secondary",
+   "pairs_with": [
+    "Change Color",
+    "Hue/Saturation",
+    "Lumetri Color"
+   ],
+   "scripting": "Hue, Lightness and Saturation sit under the Tolerance header but are flat properties, addressed by their plain names ('Tolerance/Hue' also resolves). Values are raw 0-2 units (defaults Hue 0.1, Lightness 1, Saturation 1); how they map to the % shown in the UI is not verified, so reason in raw values. The harvest shows a second header row also named 'Saturation' (the group end); a by-name lookup hits the real slider first. Softness is 0-1. View Correction Matte (0/1) shows the selection matte; keep 0 for render. Colours are '#RRGGBB'.",
+   "recipe": {
+    "To": [
+     [
+      0,
+      "#C83228"
+     ],
+     [
+      1.0,
+      "#1E64DC"
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/037.png",
+    "note": "Red stripes, foreground blocks and flowers swapped to blue and skin went blue-grey, other colours unchanged",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Channel Mixer",
+   "match": "ADBE CHANNEL MIXER",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Rebuilds each output colour channel as a percentage mix of the input red, green and blue plus a constant. Used for channel swaps, custom black-and-white conversions and strong stylised colour casts.",
+   "look": [
+    "channel swap",
+    "custom black and white",
+    "infrared",
+    "false colour",
+    "colour cast"
+   ],
+   "use_for": [
+    "custom-weighted black and white for archival or flashback segments (Monochrome on)",
+    "surreal channel-swapped looks for glitch transitions in reels",
+    "faux infrared / alien tones for trailer moments",
+    "pull a colour cast out of badly white-balanced event footage"
+   ],
+   "avoid": [
+    "rows summing well above 100 clip the highlights; keep each output row near 100 total",
+    "channel swaps on faces read as an error in serious news content"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Red-Red",
+     "does": "share of input red in output red (identity = 100)",
+     "typical": "0-100"
+    },
+    {
+     "name": "Red-Green",
+     "does": "share of input green in output red",
+     "typical": "0-40"
+    },
+    {
+     "name": "Red-Blue",
+     "does": "share of input blue in output red",
+     "typical": "0-100 (100 with Red-Red 0 swaps red/blue)"
+    },
+    {
+     "name": "Blue-Red",
+     "does": "share of input red in output blue",
+     "typical": "0-100"
+    },
+    {
+     "name": "Blue-Blue",
+     "does": "share of input blue in output blue (identity = 100)",
+     "typical": "0-100"
+    },
+    {
+     "name": "Green-Green",
+     "does": "share of input green in output green (identity = 100)",
+     "typical": "80-120"
+    },
+    {
+     "name": "Red-Const",
+     "does": "flat offset added to output red (percent of full)",
+     "typical": "-10..+10 for a cast"
+    },
+    {
+     "name": "Monochrome",
+     "does": "0/1: output a greyscale image built from the Red-* row",
+     "typical": "1 with Red-Red 40, Red-Green 40, Red-Blue 20"
+    }
+   ],
+   "demo_settings": {
+    "Red-Red": 0,
+    "Red-Blue": 100,
+    "Blue-Red": 100,
+    "Blue-Blue": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Channel Mix (approximate: per-channel gain/invert only, no cross-channel matrix; Premiere 2026 has no Channel Mixer video effect)",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Hue/Saturation",
+    "Noise"
+   ],
+   "scripting": "Names read '<Output>-<Input>': 'Red-Blue' = how much input blue goes into output red; all -200..200 percent. Defaults are identity (Red-Red, Green-Green, Blue-Blue = 100, rest 0). '-Const' rows add a flat offset. Monochrome is 0/1 (number); when on, the red output row (Red-*) is copied to all three channels for the grey result. Demo swaps red and blue so skin turns blue.",
+   "recipe": {
+    "Red-Red": [
+     [
+      0,
+      100
+     ],
+     [
+      0.5,
+      0
+     ]
+    ],
+    "Red-Blue": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ],
+    "Blue-Red": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ],
+    "Blue-Blue": [
+     [
+      0,
+      100
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/038.png",
+    "note": "Red and blue swapped: red stripes and flowers blue, foreground blocks purple, navy areas brown, skin cool lavender",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Balance",
+   "match": "ADBE Color Balance 2",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Shifts the red, green and blue balance separately in the shadows, midtones and highlights, like three-way colour wheels driven by sliders. Used to warm, cool, split-tone or neutralise an image.",
+   "look": [
+    "split toning",
+    "teal-orange",
+    "warm grade",
+    "cool grade",
+    "cast correction"
+   ],
+   "use_for": [
+    "teal shadows / orange highlights for trailer and reel-hook looks",
+    "neutralise a green or magenta cast in news or event footage",
+    "warm up interview shots in documentaries",
+    "cold blue grade for crime or investigation explainers"
+   ],
+   "avoid": [
+    "values beyond about 50 produce ugly casts in skin",
+    "with Preserve Luminosity off, colour shifts also change brightness"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Shadow Blue Balance",
+     "does": "blue vs yellow in the shadows",
+     "typical": "+15..+40 for teal shadows"
+    },
+    {
+     "name": "Shadow Red Balance",
+     "does": "red vs cyan in the shadows",
+     "typical": "-15..-40 for teal shadows"
+    },
+    {
+     "name": "Midtone Red Balance",
+     "does": "red vs cyan in the midtones",
+     "typical": "+5..+15 to warm skin"
+    },
+    {
+     "name": "Midtone Blue Balance",
+     "does": "blue vs yellow in the midtones",
+     "typical": "-5..-15 to warm"
+    },
+    {
+     "name": "Highlight Red Balance",
+     "does": "red vs cyan in the highlights",
+     "typical": "+15..+40 for orange highlights"
+    },
+    {
+     "name": "Highlight Blue Balance",
+     "does": "blue vs yellow in the highlights",
+     "typical": "-15..-40 for orange highlights"
+    },
+    {
+     "name": "Preserve Luminosity",
+     "does": "0/1: keeps overall brightness while shifting colour",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Shadow Red Balance": -40,
+    "Shadow Green Balance": 0,
+    "Shadow Blue Balance": 40,
+    "Highlight Red Balance": 40,
+    "Highlight Green Balance": 0,
+    "Highlight Blue Balance": -40,
+    "Preserve Luminosity": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color (Color Wheels); Color Balance (RGB) only for a single global cast",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Hue/Saturation",
+    "Vibrance"
+   ],
+   "scripting": "Nine sliders, each -100..100 (0 = neutral). Negative red = cyan, negative green = magenta, negative blue = yellow. Preserve Luminosity is 0/1 (number). Match name ends in ' 2' (current version).",
+   "recipe": {
+    "Shadow Blue Balance": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      40
+     ]
+    ],
+    "Highlight Red Balance": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      40
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/039.png",
+    "note": "Clear split tone: warm orange-pink highlights and background with deeper, cooler shadows and higher contrast",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Balance (HLS)",
+   "match": "ADBE Color Balance (HLS)",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Rotates the hue of the whole image and adjusts overall lightness and saturation with three simple controls. A basic, older form of Hue/Saturation's master controls.",
+   "look": [
+    "hue shift",
+    "desaturate",
+    "oversaturate",
+    "colour rotate"
+   ],
+   "use_for": [
+    "quick global desaturation for muted documentary B-roll",
+    "animated hue rotation for psychedelic or glitch reel moments",
+    "saturation boost on flat stock footage"
+   ],
+   "avoid": [
+    "global hue rotation turns skin green or blue; only for stylised moments",
+    "Hue/Saturation or Lumetri give finer control for real grading"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Hue",
+     "does": "rotates all hues, in degrees (no limit, 360 = full turn)",
+     "typical": "+-5..15 for tweaks; 0-360 animated for a cycle"
+    },
+    {
+     "name": "Saturation",
+     "does": "overall saturation; -100 = greyscale",
+     "typical": "-60 for muted docu, +20..+40 for punch"
+    },
+    {
+     "name": "Lightness",
+     "does": "overall lightness",
+     "typical": "-15..+15"
+    }
+   ],
+   "demo_settings": {
+    "Hue": 90,
+    "Lightness": 0,
+    "Saturation": 30
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Color Balance (HLS) (Premiere) / Lumetri Color",
+   "pairs_with": [
+    "Curves",
+    "Levels",
+    "Gaussian Blur",
+    "Glow"
+   ],
+   "scripting": "Hue is an angle in degrees with no harvested min/max (values wrap every 360). Lightness and Saturation are -100..100. Hue/Saturation (ADBE HUE SATURATION) supersedes it for most work.",
+   "recipe": {
+    "Hue": [
+     [
+      0,
+      0
+     ],
+     [
+      2.0,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/040.png",
+    "note": "Global 90 degree hue rotation: reds turned green, the cool background magenta, saturation pushed up",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Link",
+   "match": "ADBE Color Link",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Fills the layer with a single colour sampled from a source layer (its average, median, brightest or darkest pixel and similar), blended over the original. Used to make graphics automatically pick up the colour of footage.",
+   "look": [
+    "flat colour fill",
+    "colour wash",
+    "auto tint",
+    "colour match"
+   ],
+   "use_for": [
+    "auto-tint a lower-third bar or shape to the dominant colour of the clip behind it",
+    "unifying colour wash over a B-roll montage",
+    "make glow or light-wrap layers pick up the background colour in composites"
+   ],
+   "avoid": [
+    "at 100% Normal it replaces the image with one flat colour",
+    "the sampled colour flickers on fast-changing footage; lower Opacity or sample a calmer layer"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Source Layer",
+     "does": "layer whose colour is sampled (layer reference)",
+     "typical": "index of the footage layer; default samples the layer itself"
+    },
+    {
+     "name": "Sample",
+     "does": "how the colour is derived (1-based dropdown, 11 entries)",
+     "typical": "1 (Average)"
+    },
+    {
+     "name": "Clip (%)",
+     "does": "ignores this percentage of extreme pixels when sampling",
+     "typical": "5-10"
+    },
+    {
+     "name": "Stencil Original Alpha",
+     "does": "0/1: keep the target layer's alpha so text/shapes stay shaped",
+     "typical": "1 on text and shapes"
+    },
+    {
+     "name": "Opacity",
+     "does": "strength of the fill (0-100)",
+     "typical": "30-60 for a wash, 100 for solid graphics"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "how the fill combines with the layer (1-based list of 21)",
+     "typical": "1 (Normal)"
+    }
+   ],
+   "demo_settings": {
+    "Sample": 1,
+    "Clip (%)": 5,
+    "Opacity": 60
+   },
+   "enum_labels": {
+    "Sample": {
+     "1": "Average",
+     "2": "Median",
+     "3": "Brightest",
+     "4": "Darkest",
+     "5": "Max RGB",
+     "6": "Min RGB",
+     "7": "(separator)",
+     "8": "Average Alpha",
+     "9": "Median Alpha",
+     "10": "Max Alpha",
+     "11": "Min Alpha"
+    },
+    "Blending Mode": {
+     "1": "Normal",
+     "2": "(separator)",
+     "3": "Add",
+     "4": "Multiply",
+     "5": "Screen",
+     "6": "Overlay",
+     "7": "Soft Light",
+     "8": "Hard Light",
+     "9": "(separator)",
+     "10": "Color Dodge",
+     "11": "Color Burn",
+     "12": "(separator)",
+     "13": "Darken",
+     "14": "Lighten",
+     "15": "Difference",
+     "16": "Exclusion",
+     "17": "(separator)",
+     "18": "Hue",
+     "19": "Saturation",
+     "20": "Color",
+     "21": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Tint",
+    "Set Matte",
+    "Glow"
+   ],
+   "scripting": "Source Layer is a layer reference: a script sets it with the source layer's comp index (0 = none); specs and demo_settings cannot set it, so the demo relies on the default (the layer itself, giving a 60% wash of its own average colour). Sample: 1 Average, 2 Median, 3 Brightest, 4 Darkest, 5 Max RGB, 6 Min RGB, 7 a separator, 8-11 Average / Median / Max / Min Alpha. Blending Mode is 1-21 with separators at 2, 9, 12 and 17 (1 Normal, 3 Add, 4 Multiply, 5 Screen, 6 Overlay ...; enum_labels). Both read from After Effects 26.0. Stencil Original Alpha is 0/1.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/041.png",
+    "note": "A 60 percent wash of the frame average colour flattens contrast into a pale beige-grey veil",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Stabilizer",
+   "match": "ADBE Deflicker",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Removes flicker and brightness or colour drift over time by locking the colour at one, two or three sampled points (black, mid, white) to their values on a reference frame. Only has a visible effect on footage whose exposure or colour changes over time.",
+   "look": [
+    "deflicker",
+    "exposure stabilise",
+    "colour drift fix"
+   ],
+   "use_for": [
+    "remove flicker from time-lapses (city, crowd or rally time-lapse B-roll)",
+    "steady auto-exposure pumping in phone-recorded event footage",
+    "even out brightness drift in old archival clips"
+   ],
+   "avoid": [
+    "sample points must sit on static areas; a subject moving over a point causes pumping",
+    "does nothing on a still image or a single frame"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Stabilize",
+     "does": "1 Brightness (one point, the Mid Point; medium confidence), 2 Levels (Black + White points), 3 Curves (all three points)",
+     "typical": "1 for simple flicker, 2 default"
+    },
+    {
+     "name": "Black Point",
+     "does": "[x, y] layer pixel of a dark, static area to hold",
+     "typical": "a shadow area that never moves"
+    },
+    {
+     "name": "Mid Point",
+     "does": "[x, y] layer pixel of a mid-grey static area",
+     "typical": "a wall or sky patch"
+    },
+    {
+     "name": "White Point",
+     "does": "[x, y] layer pixel of a bright static area",
+     "typical": "a bright static highlight"
+    },
+    {
+     "name": "Sample Size",
+     "does": "radius in pixels averaged around each point",
+     "typical": "3-10"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Stabilize": {
+     "1": "Brightness",
+     "2": "Levels",
+     "3": "Curves"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Levels",
+    "Curves",
+    "Exposure"
+   ],
+   "scripting": "Match name is 'ADBE Deflicker'. needs_input: it needs footage that changes brightness over time; on a single still frame it shows nothing, so there is no demo. Points are [x, y] layer pixels (defaults sit on the centre line at 20/50/80% width of a 1920 layer). The reference frame is chosen in the AE UI (the frame where it is set up); the harvest exposes no reference-frame property, so verify a scripted use with a test render (low confidence on that part).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Colorama",
+   "match": "APC Colorama",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Turns an attribute of each pixel (intensity, a channel, hue and so on) into a phase and maps it through a colour wheel (the Output Cycle), giving gradient maps, rainbow cycles, thermal-camera looks or animated colour cycling.",
+   "look": [
+    "gradient map",
+    "psychedelic rainbow",
+    "thermal camera",
+    "false colour",
+    "colour cycling"
+   ],
+   "use_for": [
+    "false-colour / heat-map look for surveillance or 'intelligence' segments in explainers (a true thermal palette needs an .ffx preset; the default wheel gives rainbow false colour)",
+    "animated rainbow colour cycle on text or shapes for reel hooks (animate Phase Shift)",
+    "abstract animated backgrounds from Fractal Noise",
+    "psychedelic satire beats in political reels"
+   ],
+   "avoid": [
+    "the default rainbow on faces looks like a cheap 2000s filter",
+    "the Output Cycle wheel cannot be set from a spec; whether a scripted Use Preset Palette index reloads the wheel is untested, so rely on the default wheel or an .ffx preset"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Get Phase From",
+     "does": "which pixel attribute drives the colour mapping (1-based dropdown, 10 entries)",
+     "typical": "1 (Intensity)"
+    },
+    {
+     "name": "Phase Shift",
+     "does": "rotates the mapping around the colour wheel, in degrees",
+     "typical": "animate 0 -> 360 for cycling"
+    },
+    {
+     "name": "Use Preset Palette",
+     "does": "loads one of 35 built-in output cycles",
+     "typical": "leave default unless a specific palette is verified"
+    },
+    {
+     "name": "Cycle Repetitions",
+     "does": "how many times the wheel repeats across the input range",
+     "typical": "1-3 (higher = banded psychedelia)"
+    },
+    {
+     "name": "Interpolate Palette",
+     "does": "0/1: smooth blend between palette colours (0 = posterised bands)",
+     "typical": "1"
+    },
+    {
+     "name": "Matching Mode",
+     "does": "restrict the effect to pixels near Matching Color",
+     "typical": "1 (Off)"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mixes the original image back in (0-100)",
+     "typical": "20-60 for a usable look"
+    }
+   ],
+   "demo_settings": {
+    "Get Phase From": 1,
+    "Phase Shift": 0,
+    "Cycle Repetitions": 1,
+    "Interpolate Palette": 1,
+    "Blend With Original": 25
+   },
+   "enum_labels": {
+    "Get Phase From": {
+     "1": "Intensity",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Hue",
+     "6": "Lightness",
+     "7": "Saturation",
+     "8": "Value",
+     "9": "Alpha",
+     "10": "Zero"
+    },
+    "Add Phase From": {
+     "1": "Intensity",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Hue",
+     "6": "Lightness",
+     "7": "Saturation",
+     "8": "Value",
+     "9": "Alpha",
+     "10": "Zero"
+    },
+    "Add Mode": {
+     "1": "Wrap",
+     "2": "Clamp",
+     "3": "Average",
+     "4": "Screen"
+    },
+    "Use Preset Palette": {
+     "1": "[none]",
+     "2": "Alpha Ramp",
+     "3": "Hue Cycle",
+     "4": "Negative",
+     "5": "Ramp Red",
+     "6": "Ramp Green",
+     "7": "Ramp Blue",
+     "8": "Ramp Grey",
+     "9": "RGB",
+     "10": "Saturation Ramp",
+     "11": "Solarize Red",
+     "12": "Solarize Green",
+     "13": "Solarize Blue",
+     "14": "Solarize Grey",
+     "15": "(separator)",
+     "16": "Carribean",
+     "17": "Clay",
+     "18": "Copper",
+     "19": "Deep Ocean",
+     "20": "Earthenware",
+     "21": "Fire",
+     "22": "Fire And Smoke",
+     "23": "Golden 1",
+     "24": "Golden 2",
+     "25": "Granite",
+     "26": "Horizon",
+     "27": "Leather",
+     "28": "Moldy",
+     "29": "Mossy",
+     "30": "Old Glory",
+     "31": "Rusty",
+     "32": "Sepia 1",
+     "33": "Sepia 2",
+     "34": "Skink",
+     "35": "Sunset"
+    },
+    "Modify#2": {
+     "1": "All",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "RG",
+     "6": "GB",
+     "7": "RB",
+     "8": "Hue",
+     "9": "Lightness",
+     "10": "Saturation",
+     "11": "HL",
+     "12": "LS",
+     "13": "HS",
+     "14": "None"
+    },
+    "Matching Mode": {
+     "1": "Off",
+     "2": "RGB",
+     "3": "Hue",
+     "4": "Chroma"
+    },
+    "Masking Mode": {
+     "1": "Off",
+     "2": "Intensity",
+     "3": "Alpha",
+     "4": "Inverted Intensity",
+     "5": "Inverted Alpha"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise",
+    "Gaussian Blur",
+    "Glow",
+    "Hue/Saturation"
+   ],
+   "scripting": "Output Cycle is a custom property: not settable from a spec; 'Use Preset Palette' (1-35: 1 [none], 2 Alpha Ramp, 3 Hue Cycle ... 15 a separator, 16 Carribean ... 35 Sunset, enum_labels; whether a scripted change reloads the wheel is unverified, low confidence) or an .ffx preset for a specific gradient. Name collisions: the 'Modify' dropdown and the 'Output Cycle' custom value each follow a header with the SAME name, and a by-name lookup returns the header first, so set the Modify dropdown by its match name 'APC Colorama-0016' in a script, not by 'Modify'. 'Add Phase' and 'Mask Layer' are layer references (comp index, 0 = none) set by script only. Phase Shift is an angle in degrees with no limit (360 = one full cycle). Get Phase From: 1 Intensity, 2 Red, 3 Green, 4 Blue, 5 Hue, 6 Lightness, 7 Saturation, 8 Value, 9 Alpha, 10 Zero (read from After Effects 26.0). Checkboxes (Modify Alpha, Change Empty Pixels, Interpolate Palette, Composite Over Layer) are 0/1 numbers.",
+   "recipe": {
+    "Phase Shift": [
+     [
+      0,
+      0
+     ],
+     [
+      2.0,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/042.png",
+    "note": "Intensity mapped through the rainbow output cycle: strong magenta / green / cyan false-colour image",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Curves",
+   "match": "ADBE CurvesCustom",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Adjusts tone and contrast through a drawn tone curve for the combined RGB or each colour channel (and alpha). The standard tool for S-curve contrast, lifted blacks and per-channel colour tweaks.",
+   "look": [
+    "S-curve contrast",
+    "lifted blacks",
+    "faded film",
+    "crushed shadows",
+    "colour grade"
+   ],
+   "use_for": [
+    "S-curve contrast punch on flat phone or log footage",
+    "faded / matte look (lifted blacks) for nostalgic documentary sections",
+    "per-channel tweaks for teal shadows and warm highlights",
+    "matching exposure between interview cameras"
+   ],
+   "avoid": [
+    "the curve cannot be set from a spec: applied alone it changes nothing",
+    "steep curves cause banding in skies and gradients on 8-bit footage"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Channel:",
+     "does": "which curve the UI shows and edits (RGB, Red, Green, Blue, Alpha); does not change the image by itself",
+     "typical": "1 (RGB)"
+    },
+    {
+     "name": "Curves",
+     "does": "the curve data for all channels (custom binary value)",
+     "typical": "set through an .ffx preset, not a value"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Channel:": {
+     "1": "RGB",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Alpha"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Lumetri Color (Curves section; RGB Curves is not in Premiere 2026)",
+   "pairs_with": [
+    "Levels",
+    "Hue/Saturation",
+    "Color Balance",
+    "Unsharp Mask"
+   ],
+   "scripting": "needs_input: the curve lives in the custom 'Curves' property, which ExtendScript cannot set; a spec can only set 'Channel:' (note the trailing colon), which alters nothing, so there is no demo. To use it from AdobeBridge, save the wanted curve as an .ffx animation preset in AE and apply it through the presets list (ae_lib preset()); for spec-driven tone changes use Levels, Brightness & Contrast or Lumetri Color instead. GPU support is medium confidence.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Equalize",
+   "match": "ADBE Equalize",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Redistributes brightness or colour values so they spread evenly across the full range (histogram equalisation). Pulls detail out of flat or dark images and gives a harsh, high-detail look at full strength.",
+   "look": [
+    "histogram equalised",
+    "auto contrast",
+    "harsh detail",
+    "gritty",
+    "washed highlights"
+   ],
+   "use_for": [
+    "rescue very dark or flat archival / CCTV footage so detail shows",
+    "gritty high-detail look on trailer stills",
+    "quick auto-levels pass before a manual grade"
+   ],
+   "avoid": [
+    "full strength looks harsh and noisy on normally exposed footage; lower Amount to Equalize",
+    "it re-evaluates every frame, so brightness can pump on moving footage"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Equalize",
+     "does": "1 RGB (per channel, shifts colour), 2 Brightness (luminance only), 3 Photoshop Style (default)",
+     "typical": "2 or 3 for natural results, 1 for a stylised colour shift"
+    },
+    {
+     "name": "Amount to Equalize",
+     "does": "strength of the redistribution (0-100)",
+     "typical": "30-60"
+    }
+   ],
+   "demo_settings": {
+    "Equalize": 1,
+    "Amount to Equalize": 100
+   },
+   "enum_labels": {
+    "Equalize": {
+     "1": "RGB",
+     "2": "Brightness",
+     "3": "Photoshop Style"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color (Basic Correction Auto) - approximate",
+   "pairs_with": [
+    "Levels",
+    "Color Stabilizer",
+    "Remove Grain",
+    "Curves"
+   ],
+   "scripting": "Equalize is a 1-based dropdown (default 3 = Photoshop Style). Amount to Equalize 0-100. Results depend on each frame's histogram, so expect frame-to-frame variation on moving footage.",
+   "recipe": {
+    "Amount to Equalize": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/043.png",
+    "note": "Per-channel histogram stretch darkens and punches the frame: deeper darks, more saturated stripes and higher contrast",
+    "rerender": false
+   }
+  }
+ ]
+}

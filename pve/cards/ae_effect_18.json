@@ -1,0 +1,966 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Key",
+   "match": "ADBE Color Key",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Old one-colour keyer: makes every pixel close to the Key Color transparent, with a hard tolerance and simple edge thin/feather. Produces crunchy, aliased edges compared with modern keyers.",
+   "look": [
+    "hard key",
+    "cut-out",
+    "transparent background",
+    "aliased edges",
+    "flat colour removal"
+   ],
+   "use_for": [
+    "quick removal of a flat, evenly lit solid-colour background on a graphic or logo",
+    "knocking out a pure green/blue plate on low-stakes social reel overlays",
+    "legacy projects that already use it"
+   ],
+   "avoid": [
+    "real green-screen interviews or presenters (use Keylight 1.2 instead)",
+    "hair, motion blur or semi-transparent edges (no soft matte, edges chatter)",
+    "live-action press photos: the key colour also appears in flags and clothes and punches holes"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Key Color",
+     "does": "Colour to make transparent",
+     "typical": "#00B140 for green screen, #0047BB for blue screen (sample the actual plate)"
+    },
+    {
+     "name": "Color Tolerance",
+     "does": "How far from the key colour a pixel can be and still be removed (0-255)",
+     "typical": "20-60"
+    },
+    {
+     "name": "Edge Thin",
+     "does": "Shrinks (+) or grows (-) the matte edge in pixels",
+     "typical": "1-2 to eat a fringe"
+    },
+    {
+     "name": "Edge Feather",
+     "does": "Softens the matte edge",
+     "typical": "1-4"
+    }
+   ],
+   "demo_settings": {
+    "Key Color": "#A88A53",
+    "Color Tolerance": 45,
+    "Edge Feather": 2
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Color Key",
+   "pairs_with": [
+    "Spill Suppressor",
+    "Advanced Spill Suppressor",
+    "Simple Choker",
+    "Matte Choker"
+   ],
+   "scripting": "Obsolete: prefer Keylight (1.2) (match name 'Keylight 906') or Linear Color Key. Premiere 2026 still has the same legacy Color Key (Keying); Ultra Key is the better Premiere keyer. Key Color is set as \"#RRGGBB\"; the harvested default is pure blue and Color Tolerance defaults to 0, so applying it with no props removes nothing. Tolerance is in 0-255 units, not percent. The gallery demo (Key Color #A88A53, Color Tolerance 45) does not remove the beige wall cleanly: verified 2026-10-04 it punches scattered hard-edged black/transparent holes in skin shadows, the flowers, a tan clothing patch and patches of the wall, which is exactly the live-footage 'avoid' case.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/147.png",
+    "note": "Scattered hard, aliased black (transparent) holes appear wherever pixels match the tan key colour (eyes and skin shadows, flowers, wall patches, a clothing patch), so the one-colour keying is clearly visible.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Gaussian Blur (Legacy)",
+   "match": "ADBE Gaussian Blur",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "The older Gaussian Blur implementation, kept in Obsolete for old projects: softens the whole layer evenly in both directions or only horizontally/vertically. Same look as the current Gaussian Blur, but it has no Repeat Edge Pixels option and is slower at large radii.",
+   "look": [
+    "soft focus",
+    "defocus",
+    "blur",
+    "dreamy",
+    "background soften"
+   ],
+   "use_for": [
+    "opening old project templates that already contain it",
+    "blur-in / blur-out transitions on titles in legacy comps",
+    "soft background plate behind a lower third"
+   ],
+   "avoid": [
+    "new work: use Gaussian Blur (ADBE Gaussian Blur 2), which is GPU accelerated and handles edges better",
+    "large blurs on full-frame footage: edges go dark/transparent because there is no Repeat Edge Pixels"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blurriness",
+     "does": "Blur radius in pixels",
+     "typical": "5-20 for a soft background, 40-100 for a blur transition"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "Direction of the blur",
+     "typical": "1 (Horizontal and Vertical)"
+    }
+   ],
+   "demo_settings": {
+    "Blurriness": 25,
+    "Blur Dimensions": 1
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Gaussian Blur",
+   "pairs_with": [
+    "Transform",
+    "Exposure",
+    "Levels"
+   ],
+   "scripting": "Obsolete: apply 'ADBE Gaussian Blur 2' (Gaussian Blur) instead; its Blurriness and Blur Dimensions behave the same and it adds Repeat Edge Pixels. Premiere equivalent: Gaussian Blur. Keyframe Blurriness for blur-in/out.",
+   "recipe": {
+    "Blurriness": [
+     [
+      0,
+      60
+     ],
+     [
+      0.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/148.png",
+    "note": "The whole frame is evenly defocused at Blurriness 25: faces, stripes, foreground blocks and flowers all lose detail in both directions.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Lightning",
+   "match": "ADBE Lightning",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Old Lightning generator: draws an electric bolt between a Start point and an End point over the layer, with zig-zag, side branches, an outside glow colour and an inside core colour; the bolt shape changes over time (Speed, Stability). Superseded in AE by Advanced Lightning.",
+   "look": [
+    "electric bolt",
+    "lightning",
+    "energy arc",
+    "sci-fi",
+    "glow"
+   ],
+   "use_for": [
+    "a quick electric arc between two words or icons in an explainer",
+    "zap accent on a 'shock' moment in a satire reel",
+    "energy link between two map points in a trailer graphic"
+   ],
+   "avoid": [
+    "realistic storm shots (looks like a cheap 2D overlay; use stock lightning footage)",
+    "switching Blending Mode to Normal over footage (hard-edged opaque line)",
+    "new AE work where Advanced Lightning is available (better glow, obstacles, alpha interaction)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Start point",
+     "does": "Where the bolt starts, comp pixels",
+     "typical": "[480, 540]"
+    },
+    {
+     "name": "End point",
+     "does": "Where the bolt ends, comp pixels",
+     "typical": "[1440, 540]"
+    },
+    {
+     "name": "Amplitude",
+     "does": "How far the bolt zig-zags from the straight line",
+     "typical": "10-25"
+    },
+    {
+     "name": "Branching",
+     "does": "Amount of side branches",
+     "typical": "0.2-0.5"
+    },
+    {
+     "name": "Width",
+     "does": "Bolt thickness",
+     "typical": "8-20"
+    },
+    {
+     "name": "Outside Color",
+     "does": "Glow colour around the core",
+     "typical": "#3A6BFF electric blue"
+    },
+    {
+     "name": "Inside Color",
+     "does": "Core colour",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Speed",
+     "does": "How fast the bolt shape changes",
+     "typical": "10-15"
+    }
+   ],
+   "demo_settings": {
+    "Amplitude": 20,
+    "Width": 15,
+    "Outside Color": "#3A6BFF",
+    "Inside Color": "#FFFFFF"
+   },
+   "enum_labels": {
+    "Blending Mode": {
+     "1": "Normal",
+     "2": "Add",
+     "3": "Screen"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Lightning",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur",
+    "Exposure"
+   ],
+   "scripting": "Obsolete in AE: use Advanced Lightning ('ADBE Lightning 2') for new work. Premiere 2026 has the same legacy Lightning effect (match 'AE.ADBE Lightning'). It composites over the layer it is applied to (default Blending Mode 2 = Add, not 1 Normal), or put it on a black solid set to Add/Screen layer mode. Start/End point are comp pixels [x, y]. Verified 2026-10-04: over the bright test clip the default blend renders the bolt as a near-white zig-zag line and the blue Outside Color glow barely shows; use a darker plate or add Glow for a coloured arc. Blending Mode: 1 Normal, 2 Add, 3 Screen (read from After Effects 26.0). 'Simulation' (0/1) is believed to be the 'Rerun at each frame' checkbox; 'Fixed Endpoint' is 0/1.",
+   "recipe": {
+    "End point": [
+     [
+      0,
+      [
+       480,
+       540
+      ]
+     ],
+     [
+      0.3,
+      [
+       1440,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/149.png",
+    "note": "A white zig-zag bolt with a small side branch runs from (480,540) to (1440,540) across the centre of the untouched clip; the blue outside glow barely reads against the bright background.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Luma Key",
+   "match": "ADBE Luma Key",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Old luminance keyer: removes all pixels brighter or darker than a threshold (or near/far from it), with edge thin and feather. Used to drop black or white backgrounds.",
+   "look": [
+    "luma key",
+    "black removed",
+    "white removed",
+    "cut-out",
+    "high contrast"
+   ],
+   "use_for": [
+    "drop the black background of a fire, spark or light-leak stock clip",
+    "remove a white page background from a scanned document or newspaper clipping",
+    "knock out a black backdrop behind a logo sting"
+   ],
+   "avoid": [
+    "live-action shots with mid-tones near the threshold (holes in faces and suits)",
+    "soft glows: hard threshold clips the falloff (use Screen/Add blend mode or Extract instead)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Key Type",
+     "does": "Which side of the threshold is removed",
+     "typical": "2 (Key Out Darker) for black backgrounds, 1 (Key Out Brighter) for white"
+    },
+    {
+     "name": "Threshold",
+     "does": "Luminance level of the cut (0-255)",
+     "typical": "20-40 for black, 220-240 for white"
+    },
+    {
+     "name": "Tolerance",
+     "does": "Range around the threshold for Similar/Dissimilar types",
+     "typical": "10-30"
+    },
+    {
+     "name": "Edge Feather",
+     "does": "Softens the matte edge",
+     "typical": "2-6"
+    }
+   ],
+   "demo_settings": {
+    "Key Type": 1,
+    "Threshold": 130,
+    "Edge Feather": 2
+   },
+   "enum_labels": {
+    "Key Type": {
+     "1": "Key Out Brighter",
+     "2": "Key Out Darker",
+     "3": "Key Out Similar",
+     "4": "Key Out Dissimilar"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Luma Key",
+   "pairs_with": [
+    "Simple Choker",
+    "Levels",
+    "Unmult (third-party)"
+   ],
+   "scripting": "Obsolete: prefer Extract ('ADBE Extract') or simply a Screen/Add layer blend mode for black-background elements. Premiere 2026 has its own Luma Key (match 'AE.ADBE Legacy Key Luma'). Threshold/Tolerance are 0-255 units; with the defaults (Threshold 0) it removes nothing. Key Type: 1 Key Out Brighter, 2 Key Out Darker (default), 3 Key Out Similar, 4 Key Out Dissimilar (read from After Effects 26.0); the 2026-10-04 gallery render shows 1 removing the bright wall.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/150.png",
+    "note": "Everything brighter than Threshold 130 (wall, white stripes, highlights) is keyed to black, leaving a ragged high-contrast cut-out of the darker clothing, foreground blocks and red stripes, which confirms Key Type 1 = Key Out Brighter.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Path Text",
+   "match": "ADBE Path Text",
+   "category": "Obsolete",
+   "status": "unusable",
+   "summary": "Legacy text generator that draws characters along a Bezier path, circle or line, with per-character jitter and fill/stroke options. Replaced by native text layers with Path Options.",
+   "look": [
+    "text on path",
+    "curved text",
+    "circular text",
+    "legacy type"
+   ],
+   "use_for": [
+    "opening old templates that already contain it",
+    "text running around a circle badge in a legacy explainer comp"
+   ],
+   "avoid": [
+    "new work: use a text layer with a mask and Path Options > Path",
+    "anything needing Hindi/Devanagari: the old renderer does not shape complex scripts"
+   ],
+   "confidence": "medium",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Text layer Path Options",
+   "pairs_with": [
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "The harvest failed on this effect (\"TypeError: null is not an object\"), so no property names are known and none can be set from a spec. The text itself is entered in a modal Edit Text dialog that scripts cannot drive (applying it may raise that dialog). Status unusable for the pipeline; it is also obsolete. Use a text layer instead: add a mask, then set textLayer.property('ADBE Text Properties').property('ADBE Text Path Options').property('ADBE Text Path').setValue(maskIndex). No Premiere equivalent (Essential Graphics text cannot follow a path).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is unusable (the harvest failed and the text is entered only in a modal dialog), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree: ground truth has the harvest error 'TypeError: null is not an object' and no props, so nothing can be set; unusable keeps it out of the gallery (no index entry, no frame)."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Reduce Interlace Flicker",
+   "match": "ADBE Reduce Interlace Flicker",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Applies a slight vertical blur to stop thin horizontal lines and fine detail from flickering on interlaced broadcast displays. On progressive 1080p work it just softens the image vertically.",
+   "look": [
+    "vertical soften",
+    "anti-flicker",
+    "broadcast safe",
+    "slight blur"
+   ],
+   "use_for": [
+    "tame twitter on thin horizontal lines in a ticker or lower-third for an interlaced TV deliverable",
+    "soften fine text or pinstripe graphics that shimmer when scaled down"
+   ],
+   "avoid": [
+    "progressive web/social deliverables (it only blurs)",
+    "large Softness values: text turns visibly mushy"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Softness",
+     "does": "Amount of vertical softening",
+     "typical": "1-3"
+    }
+   ],
+   "demo_settings": {
+    "Softness": 25
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Reduce Interlace Flicker",
+   "pairs_with": [
+    "Broadcast Colors"
+   ],
+   "scripting": "Obsolete in AE: replace with Gaussian Blur set to Blur Dimensions = Vertical and Blurriness 1-2. Premiere 2026 still lists the same Reduce Interlace Flicker effect (match 'AE.ADBE Reduce Interlace Flicker'); the clip's Field Options > Flicker Removal does a similar job. Softness range 0-1000. Measured 2026-10-04 at 1920x1080: Softness 10 matches a vertical-only Gaussian blur of about 4 px sigma, which on the already-soft test clip is invisible at preview size; if it scales linearly, 50 is about 20 px and smears faces into streaks. The gallery demo uses 25 (about 10 px) so the vertical softening shows without wrecking the picture.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/151.png",
+    "note": "At Softness 25 the frame is now plainly softened vertically only: block tops, stripes and the centre detail smear up and down while the thin poles and block posts keep their side edges and the faces stay readable, where the old Softness 10 render looked identical to the untouched clip (vertical edge contrast now 33% below the reference against 7% before).",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Spill Suppressor",
+   "match": "ADBE Spill Suppressor",
+   "category": "Obsolete",
+   "status": "obsolete",
+   "summary": "Removes green or blue colour spill (reflected screen colour) from the edges and skin of a keyed subject by desaturating the chosen colour. Suppression above 100 over-corrects: the chosen colour is pushed past neutral toward its complement (red turns green).",
+   "look": [
+    "despill",
+    "clean key edges",
+    "neutral skin",
+    "corrective"
+   ],
+   "use_for": [
+    "clean green fringe on a keyed presenter or interviewee",
+    "remove blue cast on hair after a blue-screen key in a legacy comp"
+   ],
+   "avoid": [
+    "new work: Advanced Spill Suppressor or Keylight's own despill are better",
+    "footage with real green/blue objects (shirts, flags, logos lose their colour)",
+    "Suppression above ~100: the suppressed colour flips to its complement (red areas and skin turned green at 200)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Color To Suppress",
+     "does": "Spill colour to neutralise",
+     "typical": "#00B140 green or #0047BB blue (match the screen)"
+    },
+    {
+     "name": "Suppression",
+     "does": "Strength of the despill (0-200)",
+     "typical": "80-120"
+    }
+   ],
+   "demo_settings": {
+    "Color To Suppress": "#C83C32",
+    "Suppression": 100
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Ultra Key",
+   "pairs_with": [
+    "Color Key",
+    "Keylight (1.2)",
+    "Simple Choker"
+   ],
+   "scripting": "Obsolete: apply Advanced Spill Suppressor instead (or Keylight's built-in despill). Place after the keyer in the stack. Premiere has no standalone spill effect; use Ultra Key's Spill Suppression section. Color To Suppress is \"#RRGGBB\"; harvested default is pure blue. The gallery demo suppresses red (red stripes, foreground blocks) only because the test clip has no green screen. Verified 2026-10-04: at Suppression 200 the red stripes, foreground blocks, flowers and faces flipped to green/teal instead of grey, so the demo now uses 100; the re-render confirmed red goes to neutral grey (faces keep a slight grey-green cast).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/152.png",
+    "note": "At Suppression 100 the red stripes, saffron, foreground blocks and flowers now go to a neutral grey (red-area chroma 81 down to 17) while real greens stay green, where the old 200 render overshot them to green/teal; faces keep a slight grey-green cast.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "mocha shape",
+   "match": "ISL MochaShapeImporter",
+   "category": "Obsolete",
+   "status": "needs_input",
+   "summary": "Obsolete Imagineer Systems (mocha for AE) importer: renders a tracked spline shape pasted from mocha as a matte, cut-out or filled colour shape on the layer. Nothing happens until mocha shape data is pasted into it, which a script cannot do.",
+   "look": [
+    "tracked mask",
+    "roto matte",
+    "planar track",
+    "shape fill"
+   ],
+   "use_for": [
+    "legacy projects that already contain mocha shape data (blurring a tracked face or number plate)",
+    "re-rendering an old tracked screen-replacement matte"
+   ],
+   "avoid": [
+    "new work: use Boris FX Mocha AE or AE's built-in mask tracking",
+    "applying it without pasted mocha data (renders nothing useful)"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Blend mode",
+     "does": "How the shape combines with the layer's alpha",
+     "typical": "1 Add (default); 2 Subtract, 3 Multiply"
+    },
+    {
+     "name": "Invert",
+     "does": "Inverts the matte (0/1)",
+     "typical": "0"
+    },
+    {
+     "name": "Render type",
+     "does": "Matte vs coloured shape output",
+     "typical": "1 Shape cutout (default); 2 Color composite, 3 Color shape cutout"
+    },
+    {
+     "name": "Render edge width",
+     "does": "Whether mocha's feathered edge width is rendered (0/1)",
+     "typical": "1"
+    },
+    {
+     "name": "Shape colour",
+     "does": "Fill colour when rendering a coloured shape",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Opacity",
+     "does": "Shape opacity percent",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Blend mode": {
+     "1": "Add",
+     "2": "Subtract",
+     "3": "Multiply"
+    },
+    "Render type": {
+     "1": "Shape cutout",
+     "2": "Color composite",
+     "3": "Color shape cutout"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Mosaic",
+    "Track Matte"
+   ],
+   "scripting": "Needs custom 'Shape data' pasted from mocha (custom type, cannot be set from a spec), and 'Layer name' is also custom, so status needs_input; it is also obsolete. Translation/Scale/Shear/Perspective are written by mocha's export, do not hand-edit. Blend mode: 1 Add, 2 Subtract, 3 Multiply; Render type: 1 Shape cutout, 2 Color composite, 3 Color shape cutout (read from After Effects 26.0). Use Mocha AE (Boris FX, in AE) for new tracking. No Premiere equivalent (use Premiere mask tracking). Confidence low.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs mocha Shape data pasted into a custom property scripts cannot set), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree: ground truth has 'Shape data' and 'Layer name' as custom properties, so without pasted mocha data it renders nothing useful; needs_input, no gallery entry, param ranges on the card match the harvest."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "3D Camera Tracker",
+   "match": "ADBE 3D Tracker",
+   "category": "Perspective",
+   "status": "needs_input",
+   "summary": "Analyses moving footage, solves the real camera's 3D motion and lets you create an AE camera plus null/solid/text anchors that stick to surfaces in the shot. It does not change the picture itself; only coloured track points show. Until the background solve finishes, renders carry AE's blue 'Analyzing in background' banner.",
+   "look": [
+    "matchmoved",
+    "3D text in scene",
+    "tracked graphics",
+    "camera solve",
+    "track points"
+   ],
+   "use_for": [
+    "pin a 3D title or statistic onto a road, wall or stage in drone/handheld B-roll",
+    "place a party flag or location label that sticks to a building in a documentary establishing shot",
+    "add tracked callouts to a walking-crowd shot in a news reel",
+    "screen replacement on a billboard with parallax"
+   ],
+   "avoid": [
+    "still images or tripod-locked shots: no parallax, the solve fails (use Tripod Pan only for pure pans)",
+    "shots dominated by moving people or crowds (bad solve; mask them out)",
+    "forgetting to make the attached layers 3D and to create the camera"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Shot Type",
+     "does": "Lens model for the solve",
+     "typical": "1 (Fixed Angle of View) for most footage; zoom shots need the variable-zoom option"
+    },
+    {
+     "name": "Horizontal Angle of View",
+     "does": "Known lens FOV in degrees, used only when the shot type is 'Specify Angle of View'",
+     "typical": "40-70"
+    },
+    {
+     "name": "Solve Method",
+     "does": "Scene assumption for the solve (Auto / Typical / Mostly Flat / Tripod Pan...)",
+     "typical": "1 (Auto Detect)"
+    },
+    {
+     "name": "Render Track Points",
+     "does": "Burns the track points into the render (0/1)",
+     "typical": "0 for output, 1 only to debug"
+    },
+    {
+     "name": "Track Point Size",
+     "does": "Display size of the track points, percent",
+     "typical": "100-200"
+    },
+    {
+     "name": "Target Size",
+     "does": "Size of the placement target, percent",
+     "typical": "100-300"
+    },
+    {
+     "name": "Detailed Analysis",
+     "does": "Slower, more thorough analysis (0/1)",
+     "typical": "0; 1 if the solve error is high"
+    },
+    {
+     "name": "Auto-delete Points Across Time",
+     "does": "When you delete track points in one frame, the matching points on the same feature are deleted at other times too (0/1)",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {
+    "Shot Type": 1,
+    "Render Track Points": 1,
+    "Track Point Size": 300,
+    "Target Size": 300
+   },
+   "enum_labels": {
+    "Shot Type": {
+     "1": "Fixed Angle of View",
+     "2": "Variable Zoom",
+     "3": "(separator)",
+     "4": "Specify Angle of View"
+    },
+    "Show Track Points": {
+     "1": "2D Source",
+     "2": "3D Solved"
+    },
+    "Solve Method": {
+     "1": "Auto Detect",
+     "2": "(separator)",
+     "3": "Typical",
+     "4": "Mostly Flat Scene",
+     "5": "Tripod Pan"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Camera layer",
+    "Null object",
+    "Text layer (3D)",
+    "Warp Stabilizer",
+    "Rolling Shutter Repair"
+   ],
+   "scripting": "Analysis starts automatically in the background after the effect is applied and needs real camera motion with parallax; on a still photo it fails. Verified 2026-10-04: an aerender of a freshly applied instance shows the blue 'Analyzing in background (step 1 of 2)' banner burned across the middle of an otherwise untouched frame and no track points, so let the analysis finish inside AE and save the project before rendering (the harvested 'Hide Warning Banner' 0/1 property may hide it; unverified). Status needs_input: needs moving footage with parallax and a completed, saved solve. Creating the camera/anchors is a UI action on selected track points; scripts cannot pick points, so script-side use is limited to applying it and waiting, or reading the camera it created. Apply it to a plain footage layer; if the layer is time-remapped, a different size from the comp, or has other effects before it, precompose first (same rule as Warp Stabilizer). Shot Type: 1 Fixed Angle of View, 2 Variable Zoom, 3 a separator, 4 Specify Angle of View; Show Track Points: 1 2D Source, 2 3D Solved; Solve Method: 1 Auto Detect, 2 a separator, 3 Typical, 4 Mostly Flat Scene, 5 Tripod Pan (read from After Effects 26.0). No Premiere equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "untested:needs_analysis",
+    "frame": "pve/gallery/ae/153.png",
+    "note": "Frame is the untouched clip with AE's blue 'Analyzing in background (step 1 of 2)' banner across the middle and no track points: aerender rendered before the background analysis ran, which no demo value can fix, so status is now needs_input (needs moving footage and a completed solve).",
+    "rerender": false,
+    "second_opinion": "agree: 153.png is the untouched clip with the blue 'Analyzing in background (step 1 of 2)' banner and no track points, same failure as Warp Stabilizer 089.png; needs_input matches that precedent and rerender false is right since the gallery skips needs_input.",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "aerender rendered before the background analysis ran: a harness limit, not an effect fault"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "3D Glasses",
+   "match": "ADBE 3D Glasses2",
+   "category": "Perspective",
+   "status": "needs_input",
+   "summary": "Combines a left-eye and a right-eye layer into a stereoscopic image: red/cyan style anaglyph, side-by-side, over-under, interlaced or difference views, with convergence and vertical alignment.",
+   "look": [
+    "anaglyph",
+    "red-cyan 3D",
+    "stereo",
+    "double image",
+    "retro 3D"
+   ],
+   "use_for": [
+    "retro red/blue anaglyph look for a '3D cinema' themed reel title",
+    "stereo deliverable from two rendered eye views",
+    "checking stereo alignment with the Difference view"
+   ],
+   "avoid": [
+    "using it as a simple RGB-split / chromatic-aberration glitch: VR Chromatic Aberrations or three Shift Channels copies offset in Position are easier",
+    "large convergence offsets on text (eye strain, unreadable)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scene Convergence",
+     "does": "Horizontal offset between the two views (sets where the image sits in depth)",
+     "typical": "-20 to 20"
+    },
+    {
+     "name": "Vertical Alignment",
+     "does": "Vertical offset between the views",
+     "typical": "0"
+    },
+    {
+     "name": "Units",
+     "does": "Units for the offsets",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Swap Left-Right",
+     "does": "Swaps the two eyes (0/1)",
+     "typical": "0"
+    },
+    {
+     "name": "3D View",
+     "does": "Output format: stereo pair, over-under, interlace, coloured anaglyphs, difference",
+     "typical": "6 Red Green LR or 7 Red Blue LR for the retro anaglyph"
+    },
+    {
+     "name": "Balance",
+     "does": "Colour balance for the balanced anaglyph modes",
+     "typical": "8 (default)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Units": {
+     "1": "Pixels",
+     "2": "% of Source"
+    },
+    "3D View": {
+     "1": "Stereo Pair (Side by Side)",
+     "2": "Over Under",
+     "3": "Interlace Upper L Lower R",
+     "4": "Difference",
+     "5": "(separator)",
+     "6": "Red Green LR",
+     "7": "Red Blue LR",
+     "8": "(separator)",
+     "9": "Balanced Red Green LR",
+     "10": "Balanced Red Blue LR",
+     "11": "(separator)",
+     "12": "Balanced Colored Red Blue"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Camera layer",
+    "Channel Combiner",
+    "Shift Channels"
+   ],
+   "scripting": "Left View and Right View are layer-reference properties: the spec system cannot set them; in ExtendScript use eff.property('Left View').setValue(leftLayer.index) (0 = None). With both set to None it may use the layer itself, which only gives an offset tint, not true stereo (unverified). 3D View (read from After Effects 26.0): 1 Stereo Pair (Side by Side), 2 Over Under, 3 Interlace Upper L Lower R, 4 Difference, 6 Red Green LR, 7 Red Blue LR, 9 Balanced Red Green LR, 10 Balanced Red Blue LR, 12 Balanced Colored Red Blue (5, 8, 11 are separators). No Premiere equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (Left View/Right View are layer references a spec cannot set), so no gallery frame was rendered; gallery 231 is the different obsolete 'ADBE 3D Glasses' effect.",
+    "rerender": false,
+    "second_opinion": "agree: Left View/Right View are layer-reference properties (ground truth type 'layer'), the same reason Blend, Set Matte and Difference Matte are needs_input; gallery index 231 is 'ADBE 3D Glasses' (the obsolete card in ae_effect_25), not this 'ADBE 3D Glasses2'."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bevel Alpha",
+   "match": "ADBE Bevel Alpha",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Adds a chiselled, lit bevel along the alpha edges of a layer, giving text, logos and cut-outs a raised embossed look. On a full-frame clip it only bevels the outer frame edge.",
+   "look": [
+    "bevel",
+    "embossed",
+    "raised edge",
+    "chiselled",
+    "3D button",
+    "retro logo"
+   ],
+   "use_for": [
+    "raised look on a party logo or channel bug",
+    "embossed title text for a documentary chapter card",
+    "give a cut-out photo of a leader a picture-frame edge in an explainer",
+    "button-like lower-third plates"
+   ],
+   "avoid": [
+    "thick edges with high intensity (dated 2000s WordArt look)",
+    "thin or Devanagari text at small sizes (bevel fills the strokes)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Edge Thickness",
+     "does": "Width of the bevel in pixels",
+     "typical": "2-6 on text, 10-30 on large cut-outs"
+    },
+    {
+     "name": "Light Angle",
+     "does": "Direction the light comes from, degrees",
+     "typical": "-60 (default) to -45"
+    },
+    {
+     "name": "Light Color",
+     "does": "Colour of the highlight",
+     "typical": "#FFFFFF or a warm #FFE7C2"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "Strength of the highlight/shadow (0-1)",
+     "typical": "0.3-0.6"
+    }
+   ],
+   "demo_settings": {
+    "Edge Thickness": 40,
+    "Light Angle": -45,
+    "Light Color": "#FFFFFF",
+    "Light Intensity": 0.9
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Gradient Ramp",
+    "Glow",
+    "Stroke"
+   ],
+   "scripting": "Works on the alpha channel, so on an opaque full-frame clip the bevel only appears at the 1920x1080 frame border (the demo shows a framed border, not a change in the picture). Best on text, shape layers, logos with alpha or masked cut-outs. Light Angle has no harvested range: raw degrees. Not in the Premiere 2026 effect list (no equivalent); in Premiere build the bevel in AE and bring it in via Dynamic Link.",
+   "recipe": {
+    "Light Angle": [
+     [
+      0,
+      -90
+     ],
+     [
+      2,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/154.png",
+    "note": "On the opaque full-frame clip only the frame border is bevelled: a white lit edge along the top/left and a dark shaded edge on the right/bottom, with the picture unchanged inside, as the scripting note says.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Bevel Edges",
+   "match": "ADBE Bevel Edges",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Gives the layer's rectangular bounds a hard, lit 3D bevel, like a tile or a raised picture frame. Unlike Bevel Alpha it uses the layer edges, not the alpha shape.",
+   "look": [
+    "bevelled frame",
+    "tile",
+    "raised photo",
+    "button",
+    "retro 3D"
+   ],
+   "use_for": [
+    "framed photo / archival picture inset in a documentary",
+    "tile look for a split-screen grid of leaders in a political explainer",
+    "button-style plates behind numbers or stats"
+   ],
+   "avoid": [
+    "thickness above ~0.2 (looks like a 90s screensaver)",
+    "using it on text or irregular cut-outs (bevels the box, not the shape: use Bevel Alpha)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Edge Thickness",
+     "does": "Bevel width as a fraction of the layer size (0-0.5)",
+     "typical": "0.02-0.08"
+    },
+    {
+     "name": "Light Angle",
+     "does": "Direction of the light, degrees",
+     "typical": "-60 (default) to -45"
+    },
+    {
+     "name": "Light Color",
+     "does": "Highlight colour",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "Strength of light/shade on the bevel (0-1)",
+     "typical": "0.3-0.6"
+    }
+   ],
+   "demo_settings": {
+    "Edge Thickness": 0.08,
+    "Light Angle": -45,
+    "Light Color": "#FFFFFF",
+    "Light Intensity": 0.8
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "Radial Shadow"
+   ],
+   "scripting": "Edge Thickness is a fraction of the layer size, not pixels (0.1 on a 1920 layer is a thick ~100 px bevel). Scale the layer down (e.g. 70%) so the bevelled tile reads against a background. Light Angle has no harvested range: raw degrees. Not in the Premiere 2026 effect list (no equivalent).",
+   "recipe": {
+    "Edge Thickness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      0.05
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/155.png",
+    "note": "A thick tile bevel frames the layer bounds: bright white top/left faces and dark right/bottom faces with mitred corners, the picture inset like a raised panel.",
+    "rerender": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,224 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "infographics",
+   "app": "AE",
+   "name": "Shape-layer charts from data (technique)",
+   "summary": "How PVE's chart recipes turn numbers into shape layers: one value = one shape whose geometry is computed from the data (bar height, line vertex, ring trim percentage, wedge angle), grown with scale from a baseline origin or drawn on with Trim Paths, labelled with counter text. Data can be typed into the scene or read from a JSON/CSV footage item by expression.",
+   "use_for": [
+    "bar, line, donut, pie, ring, progress and timeline charts in explainers",
+    "turning a spreadsheet into an animated chart"
+   ],
+   "how": "Map data to pixels once: y = baseline - value x px_per_unit; x spacing = plot width / (n - 1) for lines, (bar width + gap) for bars. Bars: rectangle with its ORIGIN at the bottom centre, scale [100, 0] -> [100, 100]. Lines: one open path, Trim Paths End 0 -> 100 (linear if markers must hit the points: time at point k = start + duration x path length to k / total length). Rings: circle path, Trim End = percent. Pies: filled wedge polygons. Labels: counter layers (Source Text easeOut(time, t0, t1, from, to)). Live data: footage('data.json').sourceData or footage('data.csv').dataValue([column, row]) in expressions (PVE 'Data-driven animation' card), which keeps a template's numbers editable without rebuilding it.",
+   "scriptable": "yes",
+   "script_api": "vfx.py scenes: shape layers with paths / fill / stroke / trim, segs on scale / trim / trim_start, counter layers; raw AE: ShapeLayer > 'ADBE Root Vectors Group' > 'ADBE Vector Group' > 'ADBE Vector Shape - Group', 'ADBE Vector Filter - Trim' (PVE shape-layer cards)",
+   "limits": "Shape paths from vfx scenes are vertex-only (no tangents): circles are 72-vertex polygons, fine at stroke widths used here. Strokes always get round caps there, which matters for wedges and short segments. Counter formatting is Latin digits with thousands commas (no lakh/crore grouping). Choose the chart honestly: bars start at zero.",
+   "status": "current",
+   "sources": [
+    "https://ae-expressions.docsforadobe.dev/objects/footage/",
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "infographics",
+   "app": "AE",
+   "name": "Gradient fills on shapes without scripting the gradient stops",
+   "summary": "Shape-layer Gradient Fill colours ('ADBE Vector Grad Colors') are a custom property that scripts cannot set, so gradient bars and backgrounds need a workaround: a solid with the Gradient Ramp (or 4-Color Gradient) effect matted by the shape, or a saved .ffx that already carries the gradient.",
+   "use_for": [
+    "gradient bars in charts",
+    "gradient lower-third plates and bands",
+    "scripted templates that need brand gradients"
+   ],
+   "how": "Route 1 (scriptable end to end): a solid above the shape layer with Gradient Ramp (ADBE Ramp: Start of Ramp, Start Color, End of Ramp, End Color, Ramp Shape 1 linear / 2 radial) and the shape as its alpha track matte (layer.setTrackMatte(shapeLayer, TrackMatteType.ALPHA)); the shape keeps the animation, the solid the colour. Route 2: build the gradient by hand once, save the shape (or the layer's contents) as an .ffx animation preset, and applyPreset it in scripts (preset values carry the stops). Route 3: Gradient Overlay layer style (UI).",
+   "scriptable": "partial",
+   "script_api": "Gradient Ramp props are ordinary (points, colours, 1-based Ramp Shape); setTrackMatte (AE 23.0+); Layer.applyPreset(File)",
+   "limits": "Gradient Ramp points are in the solid's own pixels. Layer styles have weak scripting support (PVE Layer styles card). The .ffx route ties the template to a preset file that must ship with it (your own preset, never an Adobe one).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/matchnames/layer/shapelayer/",
+    "https://ae-scripting.docsforadobe.dev/layer/avlayer/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "layout",
+   "app": "both",
+   "name": "Multi-box layout geometry (margins, gaps, scale)",
+   "summary": "The arithmetic behind two-way, three-up and picture-in-picture layouts: box width from frame width, margins and gaps; scale = box width / frame width for same-aspect sources; centre positions; and how those become After Effects Transform positions (source pixels) and Premiere ones (frame fractions) for bridge-built clips.",
+   "use_for": [
+    "news two-ways and debates",
+    "vox-pop three-ups",
+    "presenter + document or screen layouts"
+   ],
+   "how": "n boxes in a row: w = (W - 2m - (n - 1)g) / n, h = w x 9/16 for 16:9 sources; centre x_i = m + w/2 + i(w + g). Bridge clips are cover-fitted first, so the Transform effect scale is w / (source width x cover scale) x 100 and its After Effects Position is in the source's own pixels: (comp point - comp centre) / cover scale + source centre (just comp point / cover scale for a source with the frame's aspect); Premiere Position is a frame fraction. Working defaults at 1920x1080: outer margin 72 px (keeps boxes inside the 93% action-safe area), gap 36-48 px, drop shadow distance 14 / softness 36 / opacity 140 of 255; 9:16: keep boxes and their captions out of the platform UI bands.",
+   "scriptable": "yes",
+   "script_api": "Bridge spec: clips on tracks 2.. with effects [{name: 'ADBE Geometry2', pr_name: 'Transform', props: {Scale Height/Width, Position}, pr_props: {...}}, Drop Shadow]; raw Premiere: Motion Scale/Position via ComponentParam",
+   "limits": "Margins, gaps and shadow values are working defaults, not a broadcast standard. Premiere's point fractions are assumed to be fractions of the clip's own frame; for a clip whose aspect differs from the sequence that reading is unverified off-centre on the axis it overflows (see 'Ken Burns pan and zoom on a still'). Bridge 'texts' are centred horizontally, so per-box captions need mgts or AE titles.",
+   "status": "current",
+   "sources": [
+    "pve/cards/recipe_layouts.json",
+    "https://ppro-scripting.docsforadobe.dev/sequence/componentparam/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "documents",
+   "app": "both",
+   "name": "Document treatments (screenshots, paper, redaction)",
+   "summary": "How to show documents, posts and articles on screen so they read and stay honest: capture sharp, frame on a neutral 'desk', push in on the line the VO quotes, mark it (highlighter, underline, circle), and redact in the pixels, not with an overlay, when the information must not survive.",
+   "use_for": [
+    "quoting a post, headline, report or court order",
+    "evidence beats in explainers and documentaries",
+    "hiding personal data in a shown document"
+   ],
+   "how": "Capture: screenshots at 2x display scaling or more (a 2x capture survives a 190% push-in at 1080p); a PDF page exported at 200-300 dpi (working defaults). Framing: contain-fit the page on a dark or paper-toned desk with a soft shadow; push in with the 2D CAM null (vfx scene 'cam') or a Ken Burns move, then mark the line AFTER the push settles. Marking: highlighter = wide stroke, blend Multiply, on top of raster text (behind live text); underline = 6-10 px stroke drawn on with Trim Paths. Redaction: black-fill the region in the image itself before import whenever it is legally sensitive; an animated bar is a look, the pixels under it remain in the project. Show the source and date on screen.",
+   "scriptable": "partial",
+   "script_api": "vfx.py scenes: footage layer (zoom = contain / cover), shape strokes with blend 'MULTIPLY' and trim segs, CAM zoom segs; recipes 'Screenshot zoom with highlighter', 'Paper drop-in', 'Redaction bars wipe on'",
+   "limits": "Capture sizes and timings are working defaults. Do not recreate or alter a real post: show the real capture.",
+   "status": "current",
+   "sources": [
+    "pve/cards/recipe_documents.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "credits",
+   "app": "AE",
+   "name": "Scrolling credits and crawls in After Effects",
+   "summary": "End rolls and horizontal crawls built in After Effects: a box-text (or several text) layer moved by linear Position keys or a Position expression at a whole number of pixels per frame, which keeps the motion smooth.",
+   "use_for": [
+    "documentary end credits",
+    "news tickers and crawls",
+    "source and acknowledgement lists"
+   ],
+   "how": "Roll: box text containing every line, Position keyframed linearly from just below the frame to just above it; speed = distance / time, chosen so that speed / fps is a whole number of pixels (100 px/s at 25 fps = 4 px/frame). Expression form (no keyframes): value - [0, (time - inPoint) * 100]. Crawl: a single-line text layer with x = start - ((time - inPoint) * speed) % (width of one repeat) and the headline string repeated so the loop is seamless ('News ticker crawl' recipe). Clip a crawl to its band with an alpha track matte.",
+   "scriptable": "yes",
+   "script_api": "Property.setValueAtTime on Position (linear: setInterpolationTypeAtKey LINEAR) or prop.expression; LayerCollection.addBoxText([w, h], text); setTrackMatte (23.0+)",
+   "limits": "Whole-pixels-per-frame and 3-4 px/frame are working practice, not a standard. Thin (1 px) horizontal strokes flicker on interlaced deliveries: use 2 px or more. Box text clips anything that does not fit the box. Very long rolls are easier as several text layers in sequence.",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/layer/layercollection/",
+    "https://ae-expressions.docsforadobe.dev/objects/property/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "credits",
+   "app": "PR",
+   "name": "Rolling credits and crawls in Premiere",
+   "summary": "Premiere 2026 makes credit rolls in the Properties panel: tick Roll on a graphic, set Preroll, Postroll, Ease in and Ease out, and choose whether the text starts and ends off screen. Only vertical rolls exist: the Legacy Titler (which had crawls) was removed in Premiere 23.0, so horizontal crawls need keyframed Position or After Effects.",
+   "use_for": [
+    "end credits in a Premiere-only edit",
+    "source lists at the end of an explainer"
+   ],
+   "how": "Type tool: one text layer with every line (or several layers in one graphic); select the graphic clip > Properties > Roll; Preroll / Postroll / Ease in / Ease out in timecode; start / end off screen; the clip length sets the speed. Crawl: keyframe the graphic's Position linearly, or build it in After Effects ('Scrolling credits and crawls in After Effects', 'News ticker crawl (looping)').",
+   "scriptable": "no",
+   "script_api": "No scripting call for Roll was found; scripted routes: a .mogrt whose roll is built in (importMGT), or an AE comp (Dynamic Link, or rendered with alpha).",
+   "limits": "Speed is not set directly: it follows the clip duration and the height of the text block. The exact labels of the off-screen options were not quoted on Adobe's page.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-images-and-graphics/create-credit-rolls.html",
+    "https://blog.adobe.com/en/publish/2022/09/27/modernize-your-titles-workflow-in-premiere-pro"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "layout",
+   "app": "both",
+   "name": "Broadcast safe areas (action and title safe)",
+   "summary": "The safe areas for HD broadcast as numbers: SMPTE ST 2046-1 puts Safe Action at 93% and Safe Title at 90% of the frame's width and height (1920x1080: 1786x1004 and 1728x972; 1280x720: 1190x670 and 1152x648). EBU R 95 says the same as margins: 3.5% (action) and 5% (graphics) on every side. Netflix recommends these values.",
+   "use_for": [
+    "placing titles, lower thirds, tickers and logos for TV",
+    "checking a graphics template before delivery",
+    "deciding margins for any 16:9 layout"
+   ],
+   "how": "At 1920x1080 keep essential action inside x 67..1853, y 38..1042 and all text inside x 96..1824, y 54..1026 (computed from the 93% / 90% boxes). At 3840x2160 the same percentages give about 3571x2009 and 3456x1944 (computed). Set the app guides to match: 'Premiere Safe Margins and After Effects safe guides'.",
+   "scriptable": "partial",
+   "script_api": "No Premiere overlay API; After Effects guides are preferences (UI). Check positions in code instead: a layout is safe when every text box lies inside the title-safe rectangle above.",
+   "limits": "The 2017 EBU R 95 covers only 16:9 full-screen presentation: its 4:3 and 14:9 centre-cut protection areas were in earlier versions. SD (720x480) used other values (SMPTE RP 218: 90% / 80%). Web platforms add their own UI bands on top ('Platform UI safe zones (1080x1920)').",
+   "status": "current",
+   "sources": [
+    "https://pub.smpte.org/doc/st2046-1/20091123-pub/st2046-1-2009.pdf",
+    "https://tech.ebu.ch/docs/r/r095.pdf",
+    "https://studiopartner.netflix.net/studio/title-safe-and-safe-action"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "layout",
+   "app": "both",
+   "name": "Premiere Safe Margins and After Effects safe guides (their defaults)",
+   "summary": "Both apps draw safe-area guides, but their defaults are the old SD values: Premiere's standard action and title safe margins are 10% and 20%, After Effects' Grids & Guides default to Action-Safe 10% and Title-Safe 20% (and center-cut 32.5% / 40%). Read as total insets, those are 90% / 80% boxes, not the 93% / 90% of SMPTE ST 2046-1.",
+   "use_for": [
+    "turning on guides that match the HD broadcast numbers",
+    "explaining why a title inside Premiere's guides is further in than it needs to be"
+   ],
+   "how": "Premiere: Program Monitor > Settings (wrench) > Safe Margins to show them; the values are changed in Project Settings per one Adobe page, or in Overlay Settings (Horizontal / Vertical control, 'Include 4:3 Safe Margin') per another. After Effects: Preferences > Grids & Guides > Safe Margins; toggle with the Title/Action Safe button. To match SMPTE ST 2046-1, set action safe 7% and title safe 10% (assuming, as the 90% / 80% reading above does, that the values are total insets split over both sides).",
+   "scriptable": "no",
+   "script_api": "No scripting surface for the guides found (they are preferences / overlay settings).",
+   "limits": "That Adobe's percentages are TOTAL insets (5% per side for 10%) is an inference from the numbers, not a statement on Adobe's pages. Adobe's two Premiere pages disagree on where the values are set.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/get-started/source-and-program-monitor-adjustments/view-safe-zones-in-the-monitors.html",
+    "https://helpx.adobe.com/premiere/desktop/organize-media/edit-metadata/overlay-settings-reference.html",
+    "https://helpx.adobe.com/after-effects/desktop/get-started/preferences-and-settings/preferences.html",
+    "https://pub.smpte.org/doc/st2046-1/20091123-pub/st2046-1-2009.pdf"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "layout",
+   "app": "both",
+   "name": "Platform UI safe zones (1080x1920 Reels, Shorts, TikTok)",
+   "summary": "Where the app's own interface covers a vertical video: Meta asks Reels ads to leave 14% at the top, 35% at the bottom and 6% on each side free of text and logos (1080x1920: about 269, 672 and 65 px). TikTok publishes templates rather than numbers, and Google publishes no Shorts safe zone; a vendor estimate for Shorts is 288 px top, 672 bottom, 48 left, 192 right.",
+   "use_for": [
+    "placing captions, titles, logos and CTAs in reels",
+    "one layout that survives Reels, Shorts and TikTok",
+    "checking a vertical template before posting"
+   ],
+   "how": "Working default for all three (the union of the numbers above, not a platform rule): keep text and faces inside x 65..888, y 288..1248 of a 1080x1920 frame; big hook text in the upper half (y 288..900); nothing essential in the bottom 672 px (captions, music, buttons) or the right 192 px (like / comment / share column). For 1440x2560 scale by 4/3.",
+   "scriptable": "partial",
+   "script_api": "Check positions in code (every text box inside the box above); no app API.",
+   "limits": "Only Meta's percentages were read on an official page (an ads guide; organic Reels may differ). TikTok's safe-zone pixel figures in third-party guides disagree (bottom 350-560 px, right 120-140 px) and its official pages say the safe zone shrinks as the caption grows. The Shorts numbers are a vendor estimate. Re-check when the apps redesign.",
+   "status": "current",
+   "sources": [
+    "https://www.facebook.com/business/ads-guide/update/video/instagram-reels?locale=en_US",
+    "https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads",
+    "https://www.aicarousels.com/free-tools/youtube-safe-zone-checker"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "layout",
+   "app": "both",
+   "name": "Text placement around faces (layout rule)",
+   "summary": "The house rule as a layout procedure: never put on-screen text over a face. Decide where faces are in each shot before placing text, and move the text band (or reframe) instead of covering a face.",
+   "use_for": [
+    "captions and hook text in reels",
+    "lower thirds in interviews",
+    "auto-placed titles in a scripted edit"
+   ],
+   "how": "Per shot: find the face boxes (Premiere's Auto Reframe follows the subject; After Effects Face Tracking; or an offline face detector on a few frames), take the largest empty band inside the safe area (title safe, or the platform UI-free box for 9:16) and place the text there with a margin (working default: 40 px clear of any face box). If no band is free, shrink the text, move it to the other half, or reframe the shot (Transform position / blur-fill layout).",
+   "scriptable": "partial",
+   "script_api": "Text position in the bridge: texts[].y (fraction, texts are centred horizontally); AE: layer Position; face boxes from your own detector or AE Face Tracking masks.",
+   "limits": "The 40 px margin is a working default. Faces move: check the whole text duration, not one frame.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/get-started/source-and-program-monitor-adjustments/view-safe-zones-in-the-monitors.html",
+    "pve/cards/tools_ae_tools.json (Mask tracking and Face Tracking)"
+   ],
+   "confidence": "medium"
+  }
+ ]
+}

@@ -1,0 +1,953 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Brightness & Contrast",
+   "match": "AE.ADBE Brightness & Contrast 2",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Simple global brightness and contrast adjustment for the whole clip. Quick fix or stylised punch, without Lumetri's curves and wheels.",
+   "look": [
+    "brighter",
+    "darker",
+    "punchy",
+    "flat",
+    "high contrast",
+    "washed out"
+   ],
+   "use_for": [
+    "Lift a slightly underexposed press or archive photo before it goes into an explainer",
+    "Add punch to flat stock B-roll in a news reel",
+    "Quick white flash on a beat (keyframe Brightness up and back)",
+    "Darken a background clip so a lower third or caption reads better"
+   ],
+   "avoid": [
+    "Large Contrast values clip highlights and crush shadows: faces and white kurtas lose detail",
+    "Using it as the main grade: Lumetri Color gives far more control at the same cost"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Brightness",
+     "does": "Shifts all tones up or down",
+     "typical": "-20..20 for correction, 50+ for a flash"
+    },
+    {
+     "name": "Contrast",
+     "does": "Expands or compresses the tonal range around mid-grey",
+     "typical": "10..30 for punch, negative for a faded look"
+    }
+   ],
+   "demo_settings": {
+    "Brightness": 35,
+    "Contrast": 45
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Brightness & Contrast",
+   "pairs_with": [
+    "Lumetri Color",
+    "Unsharp Mask",
+    "Vignette",
+    "Black & White"
+   ],
+   "scripting": "Both properties are plain numbers -100..100, 0 = no change. Keyframeable. Stacking order matters: put it after any effect that changes colour (e.g. Black & White) if you want to punch the result. Measured 2026-10-13 (live wave 2, the layout recipes' blurred backplates): at the same values (Brightness -35 / -45, Contrast -10) Premiere's Brightness & Contrast renders 10-27 levels darker than After Effects' (ADBE Brightness & Contrast 2): 9:16 blur-fill mean RGB 104/103/105 in Premiere against 126/115/127 in After Effects. The two scales are not the same: do not copy values across apps without a check.",
+   "recipe": {
+    "Brightness": [
+     [
+      0,
+      0
+     ],
+     [
+      0.06,
+      70
+     ],
+     [
+      0.35,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/010.png",
+    "note": "Whole frame clearly brighter and punchier (mean luma 98 -> 133, contrast up): cream wall lifts toward white, dark clothing stays dark.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Basic 3D",
+   "match": "AE.ADBE Basic 3D",
+   "category": "Perspective",
+   "status": "current",
+   "summary": "Rotates the clip in simple 3D space (swivel around the vertical axis, tilt around the horizontal axis) and moves it nearer or farther, like a flat card in perspective.",
+   "look": [
+    "3D card",
+    "perspective tilt",
+    "swing in",
+    "floating screen",
+    "specular glint"
+   ],
+   "use_for": [
+    "Swing a screenshot, document or tweet card into frame in an explainer",
+    "Tilt a press photo into a 3D 'floating evidence' panel for a political explainer",
+    "Card flip between two shots (swivel 0 to 90 on the out clip, -90 to 0 on the in clip)",
+    "Give a picture-in-picture a subtle angled TV-screen look in a news package"
+   ],
+   "avoid": [
+    "Large swivel on full-frame footage exposes black edges; scale the clip down or put a background track under it",
+    "Show Specular Highlight looks dated (early-2000s glint) if left on",
+    "Draw Preview Wireframe is only a draft aid; never leave it on for export"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Swivel",
+     "does": "Rotation around the vertical (Y) axis in degrees",
+     "typical": "-45..45; 90 = edge-on"
+    },
+    {
+     "name": "Tilt",
+     "does": "Rotation around the horizontal (X) axis in degrees",
+     "typical": "-30..30"
+    },
+    {
+     "name": "Distance to Image",
+     "does": "Moves the card away (positive, smaller) or toward the camera (negative, larger)",
+     "typical": "0..50 to push back, -20..0 to bring closer"
+    },
+    {
+     "name": "Show Specular Highlight",
+     "does": "Adds a light glint reflecting off the rotated surface",
+     "typical": "false"
+    },
+    {
+     "name": "Draw Preview Wireframe",
+     "does": "Shows a wireframe outline in draft previews only",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Swivel": 35,
+    "Tilt": 15,
+    "Distance to Image": 25
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Basic 3D (in AE's Obsolete folder; a 3D layer with a camera is the modern AE route)",
+   "pairs_with": [
+    "Drop Shadow",
+    "Transform",
+    "Motion",
+    "Crop"
+   ],
+   "scripting": "Swivel and Tilt are degrees (harvested clamp -32768..32767, so full turns are possible). Distance to Image clamps -30000..30000; values beyond about 100 make the clip tiny. The two booleans are true/false. For a card flip, keyframe Swivel on both clips and cut at the 90-degree point.",
+   "recipe": {
+    "Swivel": [
+     [
+      0,
+      -80
+     ],
+     [
+      0.6,
+      0
+     ]
+    ],
+    "Distance to Image": [
+     [
+      0,
+      40
+     ],
+     [
+      0.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/011.png",
+    "note": "Picture is swivelled and tilted into a smaller perspective card floating on black, the 3D-card look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Black & White",
+   "match": "AE.ADBE Black & White",
+   "category": "Image Control",
+   "status": "current",
+   "summary": "Converts the clip to greyscale with no controls. One-click monochrome.",
+   "look": [
+    "monochrome",
+    "greyscale",
+    "archival",
+    "flashback",
+    "sombre"
+   ],
+   "use_for": [
+    "Flashback or 'then' half of a then-vs-now comparison in a documentary",
+    "Archival feel for historical segments in a political explainer",
+    "Freeze-frame callout: drop the frame to black and white while a highlighted subject stays in colour on a track above",
+    "Sombre tone for tribute or condolence news reels"
+   ],
+   "avoid": [
+    "On its own it can look flat and grey; add contrast after it",
+    "No controls and not keyframeable: for a gradual fade to mono use Lumetri Color Saturation keyframes instead"
+   ],
+   "confidence": "high",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Black & White (AE's version adds per-colour sliders and a tint option; Premiere's has none)",
+   "pairs_with": [
+    "Brightness & Contrast",
+    "Noise",
+    "Vignette",
+    "Tint"
+   ],
+   "scripting": "The effect has no properties: apply it with {\"name\": \"Black & White\", \"pr_props\": {}}. demo_settings is empty by design, because applying it IS the demo and makes the frame fully greyscale. Toggle it on/off rather than keyframing; for an animated colour-to-mono transition use Lumetri Color Saturation or cross-dissolve to a duplicate clip with this effect.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/012.png",
+    "note": "Frame is fully greyscale (zero chroma) with tones preserved, clean one-click monochrome.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Block Dissolve",
+   "match": "AE.ADBE Block Dissolve",
+   "category": "Transition",
+   "status": "current",
+   "summary": "Makes the clip disappear in random rectangular blocks as Transition Completion rises, revealing what is on the track below (or black).",
+   "look": [
+    "pixel blocks",
+    "digital breakup",
+    "random squares",
+    "glitchy reveal",
+    "retro computer"
+   ],
+   "use_for": [
+    "Digital/data-themed reveal between two shots in an AI or tech explainer",
+    "Break a screenshot or graphic apart to reveal the next visual",
+    "Transition into a 'hacked' or 'leaked document' segment in a news reel",
+    "Blocky disintegrate of a title card"
+   ],
+   "avoid": [
+    "Tiny blocks (1-4 px) look like noise rather than a deliberate transition",
+    "Without a clip on the track below it dissolves to black, which may look like a dropout"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "Percent of the clip that has dissolved away",
+     "typical": "keyframe 0 to 100 over 0.5-1 s"
+    },
+    {
+     "name": "Block Width",
+     "does": "Width of each block in pixels",
+     "typical": "20..80 for 1080p"
+    },
+    {
+     "name": "Block Height",
+     "does": "Height of each block in pixels",
+     "typical": "20..80; match Block Width for squares"
+    },
+    {
+     "name": "Feather",
+     "does": "Softens block edges",
+     "typical": "0 for hard pixels, 5..20 for soft"
+    },
+    {
+     "name": "Soft Edges (Best Quality)",
+     "does": "Anti-aliased block edges",
+     "typical": "true"
+    }
+   ],
+   "demo_settings": {
+    "Transition Completion": 50,
+    "Block Width": 40,
+    "Block Height": 40,
+    "Feather": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Block Dissolve",
+   "pairs_with": [
+    "Mosaic",
+    "RGB Split",
+    "Noise",
+    "Tint"
+   ],
+   "scripting": "It is an effect, not a transition: apply it to the outgoing clip on the upper track, overlap the incoming clip below, and keyframe Transition Completion 0 to 100. There is no seed property, so the block order cannot be changed from a spec. Block sizes are pixels (1..32000; the default 1 x 1 reads as noise, so always set them).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/013.png",
+    "note": "About half the picture is knocked out in random hard-edged rectangular blocks of black, a clear digital block breakup.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Blue Screen Key",
+   "match": "AE.ADBE Legacy Key BlueScreen",
+   "category": "Keying",
+   "status": "obsolete",
+   "summary": "Legacy keyer that makes blue-screen pixels transparent using a threshold and cutoff. Superseded by Ultra Key. On footage without a blue screen it cuts no matte: lowering Threshold just fades the whole picture semi-transparent.",
+   "look": [
+    "blue screen removed",
+    "transparent background",
+    "whole-clip semi-transparent fade"
+   ],
+   "use_for": [
+    "Opening old projects that already use it",
+    "Rough key of a well-lit blue screen anchor shot when Ultra Key is not wanted"
+   ],
+   "avoid": [
+    "Edges and spill handling are much worse than Ultra Key; hair and motion blur fringe badly",
+    "Only keys blue; useless on green screen",
+    "On footage with no real blue screen a low Threshold fades the entire clip instead of keying anything"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold",
+     "does": "How much blue counts as background (lower = more keyed)",
+     "typical": "30..60"
+    },
+    {
+     "name": "Cutoff",
+     "does": "Pushes the matte so semi-transparent areas become more opaque",
+     "typical": "0..20"
+    },
+    {
+     "name": "Smoothing",
+     "does": "Anti-aliasing of the matte edge (dropdown)",
+     "typical": "1 (Low)"
+    }
+   ],
+   "demo_settings": {
+    "Threshold": 40,
+    "Smoothing": 1
+   },
+   "enum_labels": {
+    "Smoothing": {
+     "0": "None",
+     "1": "Low",
+     "2": "High"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Ultra Key",
+   "pairs_with": [
+    "Four-Point Garbage Matte",
+    "Ultra Key"
+   ],
+   "scripting": "Legacy (match name 'Legacy Key'): use Ultra Key for new work. The unnamed boolean row is Mask Only and cannot be addressed by name. Threshold default 100 keys nothing; lower it to start keying. Render-verified 2026-10-03 on the warm PVE test clip: Threshold 40 (Smoothing Low) made the whole frame about 25% transparent with no holes, because there is no blue to key; the fade is not uniform (about 10% on warm skin and red areas, up to about 30% on neutral areas), so below 100 Threshold acts as a weak, colour-dependent transparency lever, not a clean global fade. Judge it only on real blue-screen footage.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/014.png",
+    "note": "No blue in the shot so no matte is cut: the whole picture fades to about 75% opacity over black (warm skin/red areas fade less), exactly the semi-transparent fade the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Broadcast Colors",
+   "match": "AE.ADBE Broadcast Colors",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Clamps or keys out pixels whose luminance or saturation exceeds broadcast-legal limits (NTSC/PAL IRE), for TV delivery.",
+   "look": [
+    "broadcast safe",
+    "tamed saturation",
+    "clipped highlights",
+    "keyed hot colours"
+   ],
+   "use_for": [
+    "Make a news package or documentary legal for a TV channel's QC",
+    "Tame over-saturated saffron/green flag colours and graphics before broadcast",
+    "Show which areas are illegal (Key Out Unsafe) while grading"
+   ],
+   "avoid": [
+    "Not needed for Instagram/YouTube-only delivery",
+    "Reduce Luminance on bright scenes can look dull; fix the grade in Lumetri first and use this only as a final safety",
+    "Leaving a Key Out mode on for export punches holes in the picture"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Broadcast Locale",
+     "does": "Standard to measure against",
+     "typical": "1 (PAL) for Indian broadcast"
+    },
+    {
+     "name": "How to Make Color Safe",
+     "does": "Method: reduce luminance, reduce saturation, or key out unsafe/safe pixels",
+     "typical": "1 (Reduce Saturation) for final safety"
+    },
+    {
+     "name": "Maximum Signal Amplitude (IRE)",
+     "does": "Highest allowed signal level",
+     "typical": "100 for strict broadcast, 110 default"
+    }
+   ],
+   "demo_settings": {
+    "How to Make Color Safe": 3,
+    "Maximum Signal Amplitude (IRE)": 90
+   },
+   "enum_labels": {
+    "Broadcast Locale": {
+     "0": "NTSC",
+     "1": "PAL"
+    },
+    "How to Make Color Safe": {
+     "0": "Reduce Luminance",
+     "1": "Reduce Saturation",
+     "2": "(menu separator)",
+     "3": "Key Out Unsafe",
+     "4": "Key Out Safe"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Broadcast Colors (AE); Premiere's Video Limiter is the more modern route",
+   "pairs_with": [
+    "Lumetri Color",
+    "Video Limiter"
+   ],
+   "scripting": "How to Make Color Safe clamps 0..4 with a separator in slot 2: 0 Reduce Luminance, 1 Reduce Saturation, 2 separator, 3 Key Out Unsafe, 4 Key Out Safe. Render-verified 2026-10-03: 3 at 90 IRE keys the bright wall, desk lights and hot highlights to transparent (black over an empty track), so 3 is Key Out Unsafe. Its Effects-panel folder in Premiere 2026 is not verified (may sit in Obsolete); Video Limiter supersedes it for delivery work.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/015.png",
+    "note": "Key Out Unsafe drops the bright wall, desk lights and hot highlights to black in ragged patches while the rest of the picture stays.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Brush Strokes",
+   "match": "AE.ADBE Brush Strokes",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Repaints the image as directional brush strokes, giving a rough painted look.",
+   "look": [
+    "painterly",
+    "oil paint",
+    "textured",
+    "artistic",
+    "impressionist"
+   ],
+   "use_for": [
+    "Painted look for historical recreation or 'freedom struggle' segments in a documentary",
+    "Stylised background plate behind a quote card",
+    "Dreamy/memory transition by keyframing in strokes over a still"
+   ],
+   "avoid": [
+    "Heavy and slow on 1080p/4K timelines; render previews",
+    "Looks cheap on faces of recognisable leaders; keep it to backgrounds or wide shots",
+    "Strokes shimmer frame to frame on moving footage; works best on stills or slow shots"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Stroke Angle",
+     "does": "Direction of the strokes in degrees",
+     "typical": "45..135"
+    },
+    {
+     "name": "Brush Size",
+     "does": "Width of each stroke",
+     "typical": "2..4"
+    },
+    {
+     "name": "Stroke Length",
+     "does": "Length of each stroke",
+     "typical": "8..25"
+    },
+    {
+     "name": "Stroke Density",
+     "does": "How many strokes are drawn",
+     "typical": "1..2"
+    },
+    {
+     "name": "Stroke Randomness",
+     "does": "Variation in stroke direction and length",
+     "typical": "0.5..1.5"
+    },
+    {
+     "name": "Paint Surface",
+     "does": "What the strokes are painted on (dropdown)",
+     "typical": "0 (original image)"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix back the unpainted image",
+     "typical": "0 for full effect"
+    }
+   ],
+   "demo_settings": {
+    "Stroke Angle": 135,
+    "Brush Size": 4,
+    "Stroke Length": 22,
+    "Stroke Density": 1.6,
+    "Stroke Randomness": 1.2,
+    "Paint Surface": 0,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Paint Surface": {
+     "0": "Paint On Original Image",
+     "1": "Paint On Transparent",
+     "2": "Paint On White",
+     "3": "Paint On Black"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "Brush Strokes",
+   "pairs_with": [
+    "Posterize",
+    "Find Edges",
+    "Vignette",
+    "Brightness & Contrast"
+   ],
+   "scripting": "Blend With Original is harvested as 0..1 (a fraction, not AE's 0-100 percent): use 0.5 for 50 percent. Brush Size clamps 0..5, Stroke Length 0..40, Density and Randomness 0..2. Paint Surface labels follow AE's popup order.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      1
+     ],
+     [
+      1.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/016.png",
+    "note": "Image is repainted with visible diagonal daubs over the wall, stripes and faces, a rough painterly look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Camera Blur",
+   "match": "AE.ADBE Camera Blur",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Simulates an out-of-focus camera lens with a single Percent Blur control.",
+   "look": [
+    "defocus",
+    "soft focus",
+    "out of focus",
+    "dreamy"
+   ],
+   "use_for": [
+    "Defocus a background clip behind a quote card or lower-third text",
+    "Fake rack focus into a shot at the start of a documentary scene",
+    "Blur-in/blur-out bookends on B-roll in a reel"
+   ],
+   "avoid": [
+    "CPU-only and slow at high values; Gaussian Blur is faster on GPU, and the newer Bokeh Blur / Focus Blur effects give a more lens-like defocus",
+    "Strong values soften and darken the frame edges; scale the clip up a few percent, or use Gaussian Blur (Legacy) with Repeat Edge Pixels for a clean edge"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Percent Blur",
+     "does": "Amount of defocus",
+     "typical": "10..30 subtle, 50+ strong"
+    }
+   ],
+   "demo_settings": {
+    "Percent Blur": 60
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Camera Lens Blur",
+   "pairs_with": [
+    "Vignette",
+    "Brightness & Contrast",
+    "Gaussian Blur"
+   ],
+   "scripting": "Single number 0..100 (default 25, so applying it blurs immediately). Keyframeable. Its folder in Premiere 2026 is not verified (older builds: Blur & Sharpen); prefer Gaussian Blur when GPU speed matters.",
+   "recipe": {
+    "Percent Blur": [
+     [
+      0,
+      60
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/017.png",
+    "note": "Whole frame is defocused into soft colour blobs with no readable detail, an obvious out-of-focus lens.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Chroma Key",
+   "match": "AE.ADBE Legacy Key Chroma",
+   "category": "Keying",
+   "status": "obsolete",
+   "summary": "Legacy keyer that makes a chosen colour and similar colours transparent. Superseded by Ultra Key.",
+   "look": [
+    "colour removed",
+    "transparent background",
+    "hard matte"
+   ],
+   "use_for": [
+    "Opening old projects that already use it",
+    "Quick key of a flat-coloured graphic background when Ultra Key is not wanted"
+   ],
+   "avoid": [
+    "Poor spill suppression and edge quality compared to Ultra Key",
+    "Unevenly lit green screens leave blotches",
+    "A key colour near skin tone (beige or tan walls) also keys out faces and hands"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color",
+     "does": "The key colour to remove",
+     "typical": "#00B140 for green screen"
+    },
+    {
+     "name": "Similarity",
+     "does": "Range of colours around the key colour to remove",
+     "typical": "20..40"
+    },
+    {
+     "name": "Blend",
+     "does": "Blends the keyed clip with the clip below",
+     "typical": "0..20"
+    },
+    {
+     "name": "Threshold",
+     "does": "Shadow retention in keyed areas",
+     "typical": "0..30"
+    },
+    {
+     "name": "Cutoff",
+     "does": "Darkens or lightens shadows kept by Threshold",
+     "typical": "0..20"
+    },
+    {
+     "name": "Smoothing",
+     "does": "Anti-aliasing of the matte edge (dropdown)",
+     "typical": "1 (Low)"
+    }
+   ],
+   "demo_settings": {
+    "Color": "#C2A468",
+    "Similarity": 15
+   },
+   "enum_labels": {
+    "Smoothing": {
+     "0": "None",
+     "1": "Low",
+     "2": "High"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "Ultra Key",
+   "pairs_with": [
+    "Four-Point Garbage Matte",
+    "Ultra Key"
+   ],
+   "scripting": "Legacy (match name 'Legacy Key'): use Ultra Key for new work. Color is set as \"#RRGGBB\"; the harvested default is a packed 64-bit value (about 0xFF00FF00FF00FF00, i.e. probably white if read as 16-bit ARGB; low bits were lost in the harvest). The unnamed boolean row is Mask Only and cannot be addressed by name. Similarity 0 (default) keys nothing. Render-verified 2026-10-03: the demo (#C2A468, Similarity 15) keys out the beige wall of the PVE test clip and also most skin tones (skin goes black over an empty track); dark clothing, stripes and flowers stay.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/018.png",
+    "note": "The beige wall and skin tones key out to black while dark clothing, stripes and flowers keep their original colours, a clear colour key.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Cineon Converter",
+   "match": "AE.ADBE Cineon Converter",
+   "category": "Utility",
+   "status": "current",
+   "summary": "Converts between logarithmic Cineon/DPX film-scan encoding and linear video, with black/white points, gamma and highlight rolloff.",
+   "look": [
+    "log to linear",
+    "flat log look",
+    "film scan conversion",
+    "contrast restore"
+   ],
+   "use_for": [
+    "Normalise Cineon/DPX film scans used as archival footage in a documentary",
+    "Deliberately flatten a shot (Linear to Log) for a 'raw camera log' look in a filmmaking explainer",
+    "Rough-convert log-encoded stock footage before grading"
+   ],
+   "avoid": [
+    "On normal Rec.709 footage the default Log to Linear makes it overly contrasty and dark",
+    "For modern camera log (S-Log, LogC, V-Log) use Lumetri input LUTs or Color Space Transform instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Conversion Type",
+     "does": "Direction of conversion (dropdown)",
+     "typical": "1 (Log to Linear) for Cineon scans"
+    },
+    {
+     "name": "10 Bit Black Point",
+     "does": "10-bit code value treated as black",
+     "typical": "95"
+    },
+    {
+     "name": "10 Bit White Point",
+     "does": "10-bit code value treated as white",
+     "typical": "685"
+    },
+    {
+     "name": "Gamma",
+     "does": "Target gamma of the conversion",
+     "typical": "1.7"
+    },
+    {
+     "name": "Highlight Rolloff",
+     "does": "Compresses bright highlights to avoid hard clipping",
+     "typical": "20..40"
+    }
+   ],
+   "demo_settings": {
+    "Conversion Type": 0
+   },
+   "enum_labels": {
+    "Conversion Type": {
+     "0": "Linear to Log",
+     "1": "Log to Linear",
+     "2": "Log to Log"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Cineon Converter",
+   "pairs_with": [
+    "Lumetri Color",
+    "Color Space Transform"
+   ],
+   "scripting": "Conversion Type default 1 = Log to Linear (matches AE's default and the harvest). Internal Black/White Point are 0..1 fractions; 10 Bit points are 0..1023 code values. Demo uses 0 (Linear to Log), which makes ordinary footage visibly flat and milky.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/019.png",
+    "note": "Linear to Log flattens the shot: lifted milky blacks, low contrast and muted colour, the expected flat log look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Clip Name",
+   "match": "AE.ADBE PPro ClipName",
+   "category": "Video",
+   "status": "current",
+   "summary": "Burns the clip's name as text over the picture on a semi-transparent box, for review copies.",
+   "look": [
+    "burn-in",
+    "text label",
+    "review overlay",
+    "slate"
+   ],
+   "use_for": [
+    "Rough-cut review exports so the producer can reference shots by name",
+    "Footage logging and selects reels for a documentary",
+    "Checking which stock or AI-generated clip version is in the edit"
+   ],
+   "avoid": [
+    "Never leave it on for the final export",
+    "Long file names overflow the frame at large Size"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Where the label sits, as frame fractions",
+     "typical": "[0.5, 0.9] bottom centre"
+    },
+    {
+     "name": "Justification",
+     "does": "Text alignment (dropdown)",
+     "typical": "1 (centre)"
+    },
+    {
+     "name": "Size",
+     "does": "Text size",
+     "typical": "40..80"
+    },
+    {
+     "name": "Opacity",
+     "does": "Opacity of the background box behind the text",
+     "typical": "40..70"
+    },
+    {
+     "name": "Display",
+     "does": "Which name to show (dropdown)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Position": [
+     0.5,
+     0.88
+    ],
+    "Justification": 1,
+    "Size": 90,
+    "Opacity": 70
+   },
+   "enum_labels": {
+    "Justification": {
+     "0": "Left",
+     "1": "Center",
+     "2": "Right"
+    },
+    "Display": {
+     "0": "Sequence Clip Name",
+     "1": "Project Clip Name",
+     "2": "File Name"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "none (in AE use a text layer whose Source Text expression reads the layer name)",
+   "pairs_with": [
+    "Timecode",
+    "Metadata & Timecode Burn-in"
+   ],
+   "scripting": "Ignore the internal rows '', 'Version2' and 'Source Track' (Source Track's harvested range is nonsense). Display is a 0..2 dropdown, probably Sequence Clip Name / Project Clip Name / File Name, but order is unverified. Apply on an adjustment layer to label every clip below only if Source Track is set in the UI; per-clip application is the reliable route.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/020.png",
+    "note": "The clip name 'test_a.mp4' is burned in large white text on a dark semi-transparent box at bottom centre.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Space Transform",
+   "match": "AE.ADBE Color Space Transform",
+   "category": "Color Correction",
+   "status": "needs_input",
+   "summary": "Converts the clip from one colour space / transfer function to another (e.g. camera log or HDR to Rec.709), with tone mapping and gamut compression options. Part of Premiere's newer colour-management toolset.",
+   "look": [
+    "log to Rec.709",
+    "HDR to SDR",
+    "colour space conversion",
+    "tone mapped"
+   ],
+   "use_for": [
+    "Convert camera log footage (S-Log3, LogC, V-Log, Apple Log) to Rec.709 before grading a documentary",
+    "Tone-map HDR phone or drone clips to SDR for an Instagram reel",
+    "Match mixed-source interview footage into one working space"
+   ],
+   "avoid": [
+    "Wrong source space gives crushed, over-saturated or milky pictures; confirm the camera's log format first",
+    "Double conversion if Premiere's clip colour management already transforms the footage"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "SCS",
+     "does": "Source colour space (dropdown, 0..31)",
+     "typical": "the camera's log/HDR space"
+    },
+    {
+     "name": "TCS",
+     "does": "Target colour space (dropdown, 0..31)",
+     "typical": "Rec.709"
+    },
+    {
+     "name": "Tone Map Method",
+     "does": "How out-of-range highlights are compressed (dropdown 0..3)",
+     "typical": "0 default"
+    },
+    {
+     "name": "Gain",
+     "does": "Exposure gain applied in tone mapping",
+     "typical": "1"
+    },
+    {
+     "name": "Desaturation",
+     "does": "Highlight desaturation during tone mapping",
+     "typical": "1"
+    },
+    {
+     "name": "GC Methods",
+     "does": "Gamut compression method (dropdown 0..2)",
+     "typical": "0 default"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "OCIO Color Space Transform (AE)",
+   "pairs_with": [
+    "Lumetri Color",
+    "SDR Conform",
+    "Cineon Converter"
+   ],
+   "scripting": "SCS/TCS index-to-colour-space mapping was not harvested. Render check 2026-10-03: SCS 15 against TCS 0 produced no visible change on Rec.709 footage (max pixel difference 11/255, encoding noise), so writing the SCS index from a script does not select a colour space, most likely because the real choice lives in the unsettable 'SCS Arb Data' / 'TCS Arb Data' blobs. NEEDS INPUT: a person must pick source and target spaces in Effect Controls (and save a preset) and re-harvest the index/arb-data pairing before this can be scripted or demoed; demo_settings are left empty until then (SCS/TCS indices alone are a no-op). Folder unverified (Color Correction or Utility).",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Status needs_input, so it is not in this gallery run (no frame in index.json); an earlier render showed SCS/TCS index changes alone are a no-op without the arb-data blobs.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

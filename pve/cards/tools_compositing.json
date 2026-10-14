@@ -1,0 +1,45 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "compositing",
+   "app": "both",
+   "name": "Compositing finish order: key, despill, edge, grade-match",
+   "summary": "The order that makes a green-screen composite sit in its plate: pull the key, clean the matte, suppress spill, then match black level, white level, colour cast, softness and grain to the background, and only then add light wrap. Most bad composites skip the match, not the key.",
+   "use_for": [
+    "presenters on green into virtual sets or graphics",
+    "product shots on green",
+    "fixing a composite that 'looks pasted on'"
+   ],
+   "how": "1 Key: Keylight (AE) or Ultra Key (Premiere), screen colour sampled from the plate, judged on the matte view. 2 Matte: Key Cleaner / Refine Soft Matte for hair, a light Matte Choker; never choke to hide spill. 3 Spill: Advanced Spill Suppressor (AE) or Ultra Key's Spill group. 4 Match: with Lumetri Scopes (RGB Parade) put the foreground's blacks and whites at the plate's levels, neutralise or copy its cast (Lumetri Temperature / Tint, or Premiere Color Match against a plate frame), blur the foreground slightly if the plate is soft, add matching grain (Add Grain / Match Grain). 5 Light wrap ('Light wrap (built from layers)'), then shadows and a final grade over both on an adjustment layer.",
+   "scriptable": "partial",
+   "script_api": "All effects in steps 1-4 are settable from a spec or script; Premiere Color Match and AE Match Grain's source layer are UI or layer-reference steps.",
+   "limits": "The order is working practice, not an Adobe rule. Values depend on each plate: the recipe's numbers are starting points.",
+   "status": "current",
+   "sources": [
+    "pve/cards/recipe_compositing.json"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "compositing",
+   "app": "AE",
+   "name": "Light wrap (built from layers)",
+   "summary": "After Effects has no light-wrap effect: it is built by letting a blurred copy of the background bleed a few pixels into the foreground's edge, so the subject picks up the plate's light. Built from a blurred background copy, two Set Matte passes and a Screen blend.",
+   "use_for": [
+    "green-screen presenters over bright or coloured backgrounds",
+    "integrating cut-outs and product shots"
+   ],
+   "how": "Above the keyed foreground (precompose it first): duplicate the background; Fast Box Blur 20-40; Set Matte (Take Matte From Layer = the foreground precomp, Use For Matte = Alpha, Invert Matte on) so only the background outside the subject remains; Channel Blur on Alpha 10-25 to spread that matte inwards; second Set Matte from the foreground alpha (not inverted) so only the band inside the subject's edge survives; blend mode Screen (or Add), opacity 30-60%. Working defaults; judge on the edges against the brightest part of the plate.",
+   "scriptable": "partial",
+   "script_api": "Fast Box Blur and Channel Blur are settable; Set Matte's 'Take Matte From Layer' is a layer property (type layer), which PVE specs and vfx scenes cannot set: a script must set it by layer index (property.setValue(index)).",
+   "limits": "Every number here is a working default; the technique is common practice, not an Adobe-documented feature. Too much wrap makes the subject look transparent. The bridge cannot build it (layer-reference properties).",
+   "status": "current",
+   "sources": [
+    "https://ae-scripting.docsforadobe.dev/property/property/"
+   ],
+   "confidence": "low"
+  }
+ ]
+}

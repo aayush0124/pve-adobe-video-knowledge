@@ -1,0 +1,645 @@
+{
+ "cards": [
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Doors",
+   "match": null,
+   "category": "3D Motion (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The incoming clip arrives as two door panels that swing in from the left and right edges in fake 3D and close over the outgoing clip.",
+   "look": [
+    "3D doors",
+    "hinged panels",
+    "swing shut",
+    "perspective",
+    "dated",
+    "corporate 2000s"
+   ],
+   "use_for": [
+    "Ironic or retro 'old TV news' parody beat in satire reels",
+    "Scene reveal 'behind closed doors' gag in political explainers",
+    "Deliberately cheap throwback segment where the kitsch is the joke"
+   ],
+   "avoid": [
+    "Serious documentary or news: reads as wedding-video 2005",
+    "Faces near frame centre get squashed by the perspective panels",
+    "Stacking with other 3D gimmicks in the same edit"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "cheap 2000s, theatrical",
+   "duration_typical": "0.6-1.0",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Barn Doors (Wipe) for a flat centre split, or Flip Motion / 3D Spin (new GPU 3D transitions in this build) for a modern 3D move. (Cube Spin and Flip Over are not in the v26 transition list.) AE: precomp clip B, duplicate it, mask left and right halves, make both 3D layers with anchor points on the outer frame edges and animate Y Rotation from +/-90 to 0 (add a camera for perspective).",
+   "scripting": "Applied by name via QE addTransition; harvest placed a 1 s centred instance at 65.52-66.52 s around a cut at 66.0 s (start 0.48 s before, end 0.52 s after: one-frame rounding). Centred needs handles on both clips. Hidden legacy items have no Effects-panel entry, so a planner should prefer Barn Doors unless the retro look is intended.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/016b.png",
+    "note": "B arrives as two perspective door panels hinged at the left and right edges, swinging in over A and nearly closed by 0.3 s after the cut.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Film Dissolve (Legacy)",
+   "match": null,
+   "category": "Dissolve",
+   "status": "obsolete",
+   "summary": "Older version of Film Dissolve: a cross-fade blended in linear light so bright areas bleed through first, like an optical film dissolve rather than a flat video mix.",
+   "look": [
+    "linear-light dissolve",
+    "filmic blend",
+    "highlight bleed",
+    "soft",
+    "classic",
+    "cinematic"
+   ],
+   "use_for": [
+    "Time-passing dissolves in documentaries",
+    "Soft memorial or archival photo sequences",
+    "Slow trailer beats between wide landscape shots",
+    "Montage of archival news footage"
+   ],
+   "avoid": [
+    "Fast social reels: a long dissolve kills pace",
+    "Dark to bright shots can flash the highlights earlier than expected",
+    "Use the current Film Dissolve for new edits instead of this legacy copy"
+   ],
+   "confidence": "medium",
+   "family": "dissolve",
+   "feel": "soft filmic, nostalgic",
+   "duration_typical": "0.8-2.0",
+   "sfx": "none",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Film Dissolve (current version, same Dissolve folder). AE: overlap the layers and fade the top layer's Opacity 100->0 with Project Settings > Blend Colors Using 1.0 Gamma (or a linearized working space) for the same linear-light mix.",
+   "scripting": "Harvest placed it 1 s centred at 69.52-70.52 s around the cut at 70.0 s. Centred needs handles on both clips; single-sided at a clip start or end it fades from or to transparency (black when nothing is below). Prefer the name 'Film Dissolve' for new work; the legacy item is kept for old projects.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/017b.png",
+    "note": "Cross-fade where B's bright pale areas bleed through A first, giving a filmic highlight-led mix rather than a flat 50/50 blend.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Fold Up",
+   "match": null,
+   "category": "3D Motion (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The outgoing clip folds in half like a sheet of paper (the right half folds onto the left, then the remaining panel folds again, showing its mirrored back), shrinking panel by panel until it disappears and reveals the incoming clip behind it.",
+   "look": [
+    "paper fold",
+    "origami",
+    "shrinking panels",
+    "3D crease",
+    "dated",
+    "playful"
+   ],
+   "use_for": [
+    "Ironic 'case closed' or 'file folded away' gag in satire reels",
+    "Kids or education explainers with a paper/craft theme",
+    "Retro parody of old news packages"
+   ],
+   "avoid": [
+    "Serious news or documentary: reads as a cheap preset",
+    "Long durations make the folding look slow and clunky"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "playful, cheap 2000s",
+   "duration_typical": "0.6-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Page Peel or Flip Motion (new GPU transitions; Flip Over is not in the v26 list). AE: split clip A into halves as 3D precomps and rotate one half 180 deg on the crease, nesting the result and repeating per fold; or approximate with CC Page Turn (small Fold Radius) keyed in steps.",
+   "scripting": "Harvest placed it 1 s centred at 73.52-74.52 s around the cut at 74.0 s. Centred needs handles on both clips. Works single-sided at a clip end (folds away to black or the track below). Hidden legacy item, no Effects-panel entry.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/018b.png",
+    "note": "A shrinks panel by panel as it folds: right half gone 0.3 s before, then a quarter-size mirrored panel at the cut, then a small panel, revealing B behind.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Cross",
+   "match": null,
+   "category": "Iris",
+   "status": "current",
+   "summary": "The incoming clip appears as a plus-shaped cross whose arms run edge to edge and widen, squeezing the outgoing clip into four shrinking corner rectangles until the incoming clip fills the frame.",
+   "look": [
+    "plus-shape iris",
+    "geometric",
+    "hard edge",
+    "centre reveal",
+    "graphic",
+    "retro broadcast"
+   ],
+   "use_for": [
+    "Hospital, aid or Red-Cross themed explainer beats",
+    "Graphic section break in a political explainer",
+    "Retro TV-style bumper in satire content"
+   ],
+   "avoid": [
+    "Reads as dated in cinematic trailers",
+    "The cross arms cut straight through a centred face or lower-third text early in the transition"
+   ],
+   "confidence": "high",
+   "family": "iris/shape",
+   "feel": "graphic, retro broadcast",
+   "duration_typical": "0.5-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: two rectangle shape layers on one shape layer (a full-width horizontal bar and a full-height vertical bar crossing at the centre), keyframe both bar thicknesses from 0 to full frame, and use it as an Alpha Matte for clip B over clip A.",
+   "scripting": "Harvest placed it 1 s centred at 77.52-78.52 s around the cut at 78.0 s. Centred needs handles on both clips. Effect Controls offer border width/colour, reverse, anti-alias and centre position, but the bridge applies defaults (centre of frame, no border).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/019b.png",
+    "note": "B shows as a widening edge-to-edge plus shape, squeezing A into four shrinking corner rectangles.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Diamond",
+   "match": null,
+   "category": "Iris",
+   "status": "current",
+   "summary": "The incoming clip opens from the centre in an expanding diamond-shaped iris until it covers the frame.",
+   "look": [
+    "diamond iris",
+    "geometric",
+    "hard edge",
+    "centre reveal",
+    "graphic",
+    "retro"
+   ],
+   "use_for": [
+    "Graphic chapter break in explainers",
+    "Retro game-show style reveal in satire reels",
+    "Title card reveal over a background plate"
+   ],
+   "avoid": [
+    "Looks cheap in cinematic or serious documentary work",
+    "Long durations make the expanding shape feel sluggish"
+   ],
+   "confidence": "high",
+   "family": "iris/shape",
+   "feel": "graphic, retro",
+   "duration_typical": "0.4-0.8",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "AE: a square shape layer rotated 45 deg and scaled non-uniformly to the frame aspect, scaling from 0 until its edges pass the frame corners, used as an Alpha Matte for clip B. (Transition > Iris Wipe cannot make a diamond: its Iris Points minimum is 6.)",
+   "scripting": "Harvest placed it 1 s centred at 81.52-82.52 s around the cut at 82.0 s. Centred needs handles on both clips. Border, reverse and centre controls exist in Effect Controls; the bridge applies defaults.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/020b.png",
+    "note": "B opens from the centre as a growing hard-edged diamond until only A's corner triangles remain.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Points",
+   "match": null,
+   "category": "Iris (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The incoming clip pushes in from all four frame edges as four triangles (points), squeezing the outgoing clip into a shrinking diagonal X shape.",
+   "look": [
+    "four triangles",
+    "diagonal X",
+    "edges inward",
+    "geometric",
+    "hard edge",
+    "dated"
+   ],
+   "use_for": [
+    "Retro parody or meme segment in satire reels",
+    "Abstract graphic break when an X / 'cancelled' feel is wanted"
+   ],
+   "avoid": [
+    "Serious news or documentary: reads as old preset",
+    "The X shape cuts across faces at the frame centre"
+   ],
+   "confidence": "medium",
+   "family": "iris/shape",
+   "feel": "cheap 2000s, graphic",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Iris Cross (current Iris folder) for a similar geometric reveal. AE: four triangle shape layers animated in from the edges, merged and used as an Alpha Matte for clip B.",
+   "scripting": "Harvest placed it 1 s centred at 85.52-86.52 s around the cut at 86.0 s. Centred needs handles on both clips. Hidden legacy item, no Effects-panel entry.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/021b.png",
+    "note": "B pushes in from all four edges as triangles, leaving A as a thinning diagonal X.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Round",
+   "match": null,
+   "category": "Iris",
+   "status": "current",
+   "summary": "The incoming clip opens from the centre in an expanding circle until it fills the frame: the classic iris-out.",
+   "look": [
+    "circle iris",
+    "spotlight reveal",
+    "hard edge",
+    "vintage cartoon",
+    "focus",
+    "aperture"
+   ],
+   "use_for": [
+    "Reveal a subject or location from the frame centre in explainers",
+    "Spotlight reveal of a key document, headline or portrait centred in frame",
+    "Comic cartoon iris-close in satire reels: use Shape Flow instead (it closes a circle to a point over black, then opens on the next clip); Iris Round's default cannot do this"
+   ],
+   "avoid": [
+    "Default centre misses an off-centre subject; the bridge cannot move it",
+    "Too slow reads as amateur in trailers",
+    "Expecting a 'That's all folks' close at a clip end: the default is the opposite (a black hole grows from the centre)"
+   ],
+   "confidence": "high",
+   "family": "iris/shape",
+   "feel": "vintage, playful",
+   "duration_typical": "0.4-0.8",
+   "sfx": "air",
+   "single_sided_ok": true,
+   "equivalent": "PR: Shape Flow (new transition) for a circle that closes on A and reopens on B through black. AE: ellipse shape layer (or mask) as an Alpha Matte for clip B, scaling from 0 past the frame diagonal with ease; or Transition > Iris Wipe with Iris Points 32 (near-circle) animating Outer Radius.",
+   "scripting": "Harvest placed it 1 s centred at 89.52-90.52 s around the cut at 90.0 s. Centred needs handles on both clips. Single-sided at a clip end, the default (Reverse off) grows a black or track-below disc from the centre outward; it is not an iris-close. Reverse, centre position, border width/colour and anti-aliasing are Effect Controls settings the bridge does not set: defaults only (frame centre, no border).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/022b.png",
+    "note": "B opens from the centre as a growing hard-edged circle, almost frame-filling 0.3 s after the cut.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Shapes",
+   "match": null,
+   "category": "Iris (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The incoming clip opens through several small shapes that grow until they merge and fill the frame; the default seen in the harvest is a row of three diamonds across the middle (shape type and rows/columns are Custom settings).",
+   "look": [
+    "multiple diamonds",
+    "patterned iris",
+    "grid of shapes",
+    "geometric",
+    "hard edge",
+    "dated"
+   ],
+   "use_for": [
+    "Retro pattern break in satire or meme reels",
+    "Playful education explainer section change"
+   ],
+   "avoid": [
+    "Busy and cheap in news or documentary",
+    "Shape type and grid count are Custom settings the bridge cannot set"
+   ],
+   "confidence": "medium",
+   "family": "iris/shape",
+   "feel": "cheap 2000s, busy",
+   "duration_typical": "0.5-0.8",
+   "sfx": "shutter",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Iris Diamond / Iris Box for a single shape. AE: Transition > CC Grid Wipe (Shape: Doors/Radial/Rectangular) or a repeated shape layer (Repeater) scaling up as an Alpha Matte.",
+   "scripting": "Harvest placed it 1 s centred at 93.52-94.52 s around the cut at 94.0 s. Centred needs handles on both clips. The shape type and count live in the transition's Custom dialog, which scripts cannot reach: defaults only. Hidden legacy item.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/023b.png",
+    "note": "B opens through a row of three diamonds across the middle that grow and merge until they cover A.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Box",
+   "match": null,
+   "category": "Iris",
+   "status": "current",
+   "summary": "The incoming clip opens from the centre in an expanding rectangle (keeping the frame's aspect) until it fills the frame.",
+   "look": [
+    "box iris",
+    "rectangle reveal",
+    "hard edge",
+    "picture-in-picture grow",
+    "clean",
+    "graphic"
+   ],
+   "use_for": [
+    "Mimic a news 'window' growing to full screen in reels",
+    "Explainer reveal from a centre box",
+    "Hard graphic chapter break"
+   ],
+   "avoid": [
+    "Can look like a clumsy PiP if the duration is long",
+    "Hard edge without a border looks unfinished on busy footage"
+   ],
+   "confidence": "high",
+   "family": "iris/shape",
+   "feel": "clean graphic, broadcast",
+   "duration_typical": "0.3-0.6",
+   "sfx": "shutter",
+   "single_sided_ok": true,
+   "equivalent": "AE: rectangle mask or rectangle shape layer at frame aspect, centred, scaling from 0 to 100% as an Alpha Matte for clip B (B's picture stays fixed while the window grows). Scaling clip B itself up from 0% is a different look (zoom-from-point), not an iris.",
+   "scripting": "Harvest placed it 1 s centred at 97.52-98.52 s around the cut at 98.0 s. Centred needs handles on both clips. Border, reverse and centre controls exist in Effect Controls; the bridge applies defaults.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/024b.png",
+    "note": "B opens from the centre as a growing frame-aspect rectangle over A.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Iris Star",
+   "match": null,
+   "category": "Iris (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The incoming clip opens from the centre in an expanding five-point star until it fills the frame: the notorious star wipe.",
+   "look": [
+    "star wipe",
+    "five-point star",
+    "kitsch",
+    "hard edge",
+    "comedic",
+    "cheesy"
+   ],
+   "use_for": [
+    "Intentional comedy beat in satire reels (the star wipe is a meme)",
+    "Mock 'award' or 'celebrity' reveal in political roast content"
+   ],
+   "avoid": [
+    "Any serious news, documentary or trailer use",
+    "Overuse kills the joke: once per video at most"
+   ],
+   "confidence": "medium",
+   "family": "iris/shape",
+   "feel": "kitsch, comedic, cheap",
+   "duration_typical": "0.4-0.7",
+   "sfx": "hit",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Star Wipe (new transition in this build; harvest frames show the same centre star reveal). AE: a Star shape layer (Polystar, 5 points) scaling from 0 past the frame corners as an Alpha Matte for clip B; Transition > Iris Wipe with Use Inner Radius on can also make a star, but its Iris Points minimum is 6 and the setting for a 5-point star (likely 10, counting inner vertices) is unverified.",
+   "scripting": "Harvest placed it 1 s centred at 101.52-102.52 s around the cut at 102.0 s. Centred needs handles on both clips. Hidden legacy item; prefer 'Star Wipe' (present in the harvested transition list).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/025b.png",
+    "note": "B opens from the centre as a growing five-point star until only slivers of A remain at the edges.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Luminance Map",
+   "match": null,
+   "category": "Map (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "Blends the two clips by brightness: during the transition the picture turns into a harsh, near-monochrome high-contrast mix where one clip's luminance drives the other, then resolves into the incoming clip.",
+   "look": [
+    "monochrome",
+    "high contrast",
+    "posterized",
+    "luma blend",
+    "harsh",
+    "psychedelic"
+   ],
+   "use_for": [
+    "Dark, unsettling transition in a crime or conspiracy segment",
+    "Abstract music-video style beat in reels",
+    "Flash-of-memory moment in a trailer"
+   ],
+   "avoid": [
+    "Colour drops to near black-and-white mid-transition, a jarring break in a graded edit",
+    "Unpredictable: the result depends entirely on the brightness of both shots",
+    "Serious news use"
+   ],
+   "confidence": "low",
+   "family": "stylized",
+   "feel": "harsh, abstract, unsettling",
+   "duration_typical": "0.4-0.8",
+   "sfx": "glitch",
+   "single_sided_ok": false,
+   "equivalent": "PR replacement: Luma Fade (new transition: a cleaner brightness-driven dissolve that keeps colour). Gradient Wipe exists in v26 only as a video effect, not a transition. AE: Transition > Gradient Wipe with Gradient Layer set to the outgoing clip itself (luma-driven reveal), optionally with Hue/Saturation desaturation and Levels contrast keyed over the overlap for the harsh mono look.",
+   "scripting": "Harvest placed it 1 s centred at 105.52-106.52 s around the cut at 106.0 s; the gallery frames show a grayscale, high-contrast mix mid-transition. Exact blend maths is not documented here, hence low confidence. Centred needs handles on both clips; single-sided behaviour against black/transparency is untested, so avoid it.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/026b.png",
+    "note": "Both clips collapse into a harsh near-monochrome high-contrast luma mix with blown white patches, still mixed 0.3 s after the cut.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Multi-Spin",
+   "match": null,
+   "category": "Slide (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The incoming clip appears as a grid of small rotated tiles scattered over the outgoing clip; the tiles spin and grow until they join into the full frame.",
+   "look": [
+    "spinning tiles",
+    "grid",
+    "shattered pieces",
+    "busy",
+    "dated",
+    "energetic"
+   ],
+   "use_for": [
+    "Retro 'breaking news' parody in satire reels",
+    "Energetic collage break in a meme compilation"
+   ],
+   "avoid": [
+    "Very busy: hides faces and text during the transition",
+    "Reads as early-2000s preset in any serious edit"
+   ],
+   "confidence": "medium",
+   "family": "motion",
+   "feel": "busy, cheap 2000s",
+   "duration_typical": "0.6-1.0",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: none direct; 3D Spin or Cross Zoom (new transitions) for energy. (Cube Spin is not in the v26 list.) AE: Transition > Card Wipe (Flip Axis and Flip Direction Random, about 4x4 rows/columns) or CC Grid Wipe; for a true match, a grid of precomp tiles with Rotation and Scale keyframes offset in time.",
+   "scripting": "Harvest placed it 1 s centred at 109.52-110.52 s around the cut at 110.0 s. Centred needs handles on both clips. The tile grid count is a Custom setting scripts cannot set. Hidden legacy item.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/027b.png",
+    "note": "B appears as a 4x3 grid of small rotated tiles over A that spin and grow toward joining into the full frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Page Turn",
+   "match": null,
+   "category": "Page Peel",
+   "status": "current",
+   "summary": "The outgoing clip folds away from the top-left corner along a straight diagonal crease, like a book page turned flat; the folded-over flap shows the clip mirrored, and the incoming clip is revealed underneath. No curl or shading (that is Page Peel).",
+   "look": [
+    "page fold",
+    "diagonal crease",
+    "mirrored back",
+    "flat flap",
+    "storybook",
+    "retro"
+   ],
+   "use_for": [
+    "Storybook or history chapter turn in documentaries",
+    "Turning from one document or newspaper clipping to the next in explainers",
+    "Ironic 'next page of the scandal' beat in satire reels"
+   ],
+   "avoid": [
+    "The mirrored flap shows reversed text and upside-down faces mid-transition",
+    "Feels dated in cinematic trailers",
+    "Too short and the fold becomes an unreadable flicker"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "storybook, retro",
+   "duration_typical": "0.6-1.2",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR: Page Peel (new transition) for a shaded curl instead of a flat fold. AE: Distort > CC Page Turn on clip A with a small Fold Radius (min 4) for a crisp flat fold, animating Fold Position from the top-left corner across the frame; Back Page can be the layer itself; clip B underneath.",
+   "scripting": "Harvest placed it 1 s centred at 113.52-114.52 s around the cut at 114.0 s. Centred needs handles on both clips. Single-sided at a clip end the page turns away to black or the track below. Corner/direction is an Effect Controls setting the bridge does not set: default top-left corner.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/028b.png",
+    "note": "A folds away from the top-left corner along a straight diagonal crease, the flat flap showing A mirrored, revealing B underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Paint Splatter",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "The incoming clip is revealed through irregular paint-splash blobs that spread until they cover the frame.",
+   "look": [
+    "paint splats",
+    "organic blobs",
+    "grunge",
+    "hand-made",
+    "messy",
+    "graffiti"
+   ],
+   "use_for": [
+    "Street, protest or graffiti themed reels",
+    "Energetic opener for a youth or campus segment",
+    "Satire beat where something gets 'splattered'"
+   ],
+   "avoid": [
+    "Default splats are flat hard-edged shapes; cheap on cinematic footage",
+    "Serious news or documentary"
+   ],
+   "confidence": "high",
+   "family": "wipe",
+   "feel": "messy energetic, playful",
+   "duration_typical": "0.5-0.8",
+   "sfx": "hit",
+   "single_sided_ok": true,
+   "equivalent": "AE: Transition > Gradient Wipe with a splatter texture as the Gradient Layer, or an animated ink/paint splatter matte clip used as a Luma Matte for clip B.",
+   "scripting": "Harvest placed it 1 s centred at 117.52-118.52 s around the cut at 118.0 s. Centred needs handles on both clips. Splatter pattern is fixed; only border and reverse-type controls exist.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/029b.png",
+    "note": "B is revealed through irregular paint-splash blobs that spread until only small A fragments remain.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Peel Back",
+   "match": null,
+   "category": "Page Peel (hidden legacy item; not listed in the current Effects panel, reachable by name through QE)",
+   "status": "obsolete",
+   "summary": "The outgoing clip splits into four quarters at the centre and the quarters peel off one after another (top-left, top-right, bottom-right, then bottom-left in the harvest frames), each curling from the centre toward its outer corner, revealing the incoming clip.",
+   "look": [
+    "four-way peel",
+    "sequential quarters",
+    "paper curl",
+    "3D curl",
+    "dated",
+    "busy"
+   ],
+   "use_for": [
+    "Retro 'unwrap the reveal' gag in satire reels",
+    "Kids or education explainer with a paper theme"
+   ],
+   "avoid": [
+    "Serious news, documentary or trailer work",
+    "Faces at the frame centre are split first"
+   ],
+   "confidence": "medium",
+   "family": "3D",
+   "feel": "cheap 2000s, playful",
+   "duration_typical": "0.6-1.0",
+   "sfx": "swoosh_tr",
+   "single_sided_ok": true,
+   "equivalent": "PR replacement: Page Peel (current version). AE: split clip A into four masked quadrant precomps and apply Distort > CC Page Turn to each, folding toward its outer corner.",
+   "scripting": "Harvest placed it 1 s centred at 121.52-122.52 s around the cut at 122.0 s. Centred needs handles on both clips. Hidden legacy item, no Effects-panel entry.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/030b.png",
+    "note": "A splits into quarters that peel off in turn (top-left, top-right, bottom-right, then bottom-left curling), revealing B.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_transition",
+   "app": "PR",
+   "name": "Pinwheel",
+   "match": null,
+   "category": "Wipe",
+   "status": "current",
+   "summary": "The incoming clip is revealed by many rotating wedge blades sweeping round the centre like a pinwheel until they fill the frame.",
+   "look": [
+    "rotating blades",
+    "radial wedges",
+    "spin",
+    "geometric",
+    "busy",
+    "retro"
+   ],
+   "use_for": [
+    "Retro game-show or quiz segment in explainers",
+    "Playful satire reel beat",
+    "Kids education content"
+   ],
+   "avoid": [
+    "Flickery and busy on detailed footage",
+    "Reads as cheap in news, documentary and trailers"
+   ],
+   "confidence": "high",
+   "family": "wipe",
+   "feel": "busy, retro playful",
+   "duration_typical": "0.5-0.8",
+   "sfx": "whoosh",
+   "single_sided_ok": true,
+   "equivalent": "AE: shape layer of N wedge paths (Polystar or a Repeater around the centre) animated in Start/End angle or rotation, used as an Alpha Matte for clip B; Radial Wipe only gives a single blade.",
+   "scripting": "Harvest placed it 1 s centred at 125.52-126.52 s around the cut at 126.0 s. Centred needs handles on both clips. Blade count is a Custom setting scripts cannot set; defaults only.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/tr/031b.png",
+    "note": "B is revealed by many radial wedge blades rotating around the centre, alternating with A wedges.",
+    "rerender": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,1206 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Rolling Shutter Repair",
+   "match": "ADBE Rolling Shutter",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Analyses moving CMOS footage and removes rolling-shutter skew and wobble (leaning verticals, jello) caused by fast pans or vibration. Corrective only: on a static or still frame there is no visible change.",
+   "look": [
+    "clean",
+    "corrective",
+    "straight verticals",
+    "no jello",
+    "invisible fix"
+   ],
+   "use_for": [
+    "fix leaning buildings / poles in fast phone or DSLR pans of rally crowds",
+    "remove jello from drone or vehicle-mounted news footage",
+    "clean whip pans before speed-ramping them in a trailer",
+    "repair handheld B-roll before Warp Stabilizer"
+   ],
+   "avoid": [
+    "expecting any change on still photos or locked-off shots",
+    "using it on footage without rolling shutter (adds warping artefacts)",
+    "stacking with Warp Stabilizer's own Enhanced Reduction on the same clip (double correction)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Rolling Shutter Rate",
+     "does": "Percentage of the frame time spent scanning; how strongly skew is corrected",
+     "typical": "50 (default); Adobe guidance: DSLRs roughly 50-70, phones closer to 100. Raise if verticals still lean, lower if it over-corrects"
+    },
+    {
+     "name": "Scan Direction",
+     "does": "Direction the sensor reads out",
+     "typical": "1 (Top -> Bottom) for normal landscape footage; try 3/4 for footage shot with the camera/phone rotated 90 degrees (e.g. vertical phone video), check visually"
+    },
+    {
+     "name": "Method",
+     "does": "Correction algorithm",
+     "typical": "1 (Warp) normally; 2 (Pixel Motion) for complex motion, slower"
+    },
+    {
+     "name": "Detailed Analysis",
+     "does": "More thorough analysis pass for the Warp method",
+     "typical": "0; 1 only if artefacts remain"
+    },
+    {
+     "name": "Pixel Motion Detail",
+     "does": "Detail of the optical-flow field when Method = Pixel Motion",
+     "typical": "20 (default); 30-50 for fine detail, slower"
+    }
+   ],
+   "demo_settings": {
+    "Rolling Shutter Rate": 80,
+    "Scan Direction": 1,
+    "Method": 1
+   },
+   "enum_labels": {
+    "Scan Direction": {
+     "1": "Top -> Bottom",
+     "2": "Bottom -> Top",
+     "3": "Left -> Right",
+     "4": "Right -> Left"
+    },
+    "Method": {
+     "1": "Warp",
+     "2": "Pixel Motion"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Rolling Shutter Repair",
+   "pairs_with": [
+    "Warp Stabilizer",
+    "Transform"
+   ],
+   "scripting": "Needs real camera motion; demo_settings will look unchanged on a still photo or a locked-off clip (that is expected, not a failure). Pixel Motion Detail only matters when Method = 2. Apply before stabilising, scaling or speed changes. Verified 2026-10-04: an aerender of a freshly applied instance on the locked-off test plate A showed no 'Analyzing' banner (unlike Warp Stabilizer) and differed from an untouched render only by a warp of at most 1 px (mean 1.5/255), so the effect runs at render time but had no skew to fix; a visible demo needs real rolling-shutter pan footage. Whether it also runs a background analysis worth waiting for is unverified (low confidence): check the output before relying on it. Measured on a 300 px/s pan with a synthetic 48 px skew (live wave 3): the correction is about Rolling Shutter Rate % of one frame of pan motion (Rate 80: 9.5 px of 1920, Rate 100: 10-12 px), which is all a real sensor can skew (readout time <= one frame); the test plate's extra skew stayed, as it should.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/set2/S_rsr_1.04.png",
+    "note": "On the skewed pan the vertical bars stand visibly straighter than in the control frame (bottom-to-top skew down from 37 to 28 px of 1920 on average), i.e. it removes rolling-shutter skew, by the share Rolling Shutter Rate 80 allows.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the test footage has nothing for it to act on (see note), so the render could not show it doing its job"
+     },
+     {
+      "verdict": "untested:no_suitable_footage",
+      "changed": "2026-10-14",
+      "why": "judged on the live wave 3 re-render on the second (synthetic) footage set, which has what the card acts on",
+      "frame": "pve/gallery/ae/083.png",
+      "note": "Frame equals an untouched render of the clip at the same instant except for a warp of at most 1 px (mean 1.5/255 vs no-op gallery renders, which are bit-identical to each other; no banner): the effect ran, but the locked-off clip has no rolling-shutter skew (its frame-to-frame jumps are exposure flashes, not motion), so no demo value can make it visible; status is now needs_input (needs skewed phone/DSLR pan footage).",
+      "second_opinion": "corrected: agree with needs_input, but the frame is not identical/encode noise: it differs from bit-identical no-op renders by a real <=1 px warp with no banner, so the note and scripting now say the effect ran with nothing to fix, and the unverified 'render only after background analysis finishes' claim was softened"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Smear",
+   "match": "ADBE SCHMEAR",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Moves the image area inside a source mask to a new position and smears the surrounding pixels within a boundary mask, like pushing wet paint. Shows nothing until two masks exist on the layer.",
+   "look": [
+    "smear",
+    "liquid stretch",
+    "warp",
+    "rubbery",
+    "distortion"
+   ],
+   "use_for": [
+    "comic stretch of an object or a clearly-labelled satire caricature",
+    "pull a logo or element out of place for a gooey transition",
+    "subtle reshaping of a region (prefer Puppet / Liquify today)"
+   ],
+   "avoid": [
+    "distorting a real politician's or reporter's face in news/explainer content (reads as manipulated media)",
+    "legacy effect: Liquify, Puppet Tool or Mesh Warp usually look cleaner",
+    "large Mask Offset values tear and stretch pixels visibly",
+    "masks that are open or overlap the layer edge"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Source Mask",
+     "does": "Mask whose contents are moved",
+     "typical": "a small closed mask around the feature to push"
+    },
+    {
+     "name": "Boundary Mask",
+     "does": "Mask limiting the area that may distort",
+     "typical": "a larger closed mask enclosing the source mask"
+    },
+    {
+     "name": "Mask Offset",
+     "does": "Where the source mask content is moved to (layer pixels)",
+     "typical": "2D point in layer pixels (default [1056, 540]); move it 20-120 px from the default to push the source area that far"
+    },
+    {
+     "name": "Percent",
+     "does": "How much of the smear is applied",
+     "typical": "0 -> 100 animated"
+    },
+    {
+     "name": "Mask Scale",
+     "does": "Scales the moved source area",
+     "typical": "0.8-1.3"
+    },
+    {
+     "name": "Elasticity",
+     "does": "Popup: how stiff or fluid the surrounding image behaves",
+     "typical": "1 Stiff (default); 4 Normal; 7-9 Loose / Liquid / Super Fluid"
+    },
+    {
+     "name": "Mask Rotation",
+     "does": "Rotates the moved source area (degrees)",
+     "typical": "0; 5-30 for a twisting smear"
+    },
+    {
+     "name": "Interpolation Method",
+     "does": "How the smear is interpolated over time",
+     "typical": "2 (default)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Elasticity": {
+     "1": "Stiff",
+     "2": "Less Stiff",
+     "3": "Below Normal",
+     "4": "Normal",
+     "5": "Absolutely Normal",
+     "6": "Above Average",
+     "7": "Loose",
+     "8": "Liquid",
+     "9": "Super Fluid"
+    },
+    "Interpolation Method": {
+     "1": "Discrete",
+     "2": "Linear",
+     "3": "Smooth"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Liquify",
+    "Mesh Warp",
+    "Reshape"
+   ],
+   "scripting": "Source Mask and Boundary Mask are mask references (indices of masks on the same layer) and cannot be set from a spec; create two closed masks first, then pick them in the effect. Mask Offset is in layer pixel space. Percent defaults to 0, so nothing moves until Percent is raised. Interpolation Method: 1 Discrete, 2 Linear (default), 3 Smooth; Elasticity: 1 Stiff ... 9 Super Fluid (enum_labels, read from After Effects 26.0).",
+   "recipe": {
+    "Percent": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs two masks on the layer), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Spherize",
+   "match": "ADBE Spherize",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Wraps a circular area of the layer around a sphere so the centre bulges toward the viewer, like a fisheye or magnifying glass. Bulge only; it cannot pinch.",
+   "look": [
+    "bulge",
+    "fisheye",
+    "magnifier",
+    "lens distortion",
+    "comic"
+   ],
+   "use_for": [
+    "comic big-head / bulging face punch in satire reels",
+    "magnifier highlight on a document or headline",
+    "bulge-pop transition on a beat",
+    "fisheye skate-video style on reel B-roll"
+   ],
+   "avoid": [
+    "leaving it on a serious news face (looks mocking)",
+    "radius much larger than half the frame: the whole picture warps and the bulge stops reading as a highlight",
+    "using it for pinch (min radius 0; use Bulge with negative height)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "Radius of the sphere in pixels; 0 = off",
+     "typical": "250-600 on 1080p; animate 0 -> 500 -> 0 for a pop"
+    },
+    {
+     "name": "Center of Sphere",
+     "does": "Centre of the bulge (layer pixels)",
+     "typical": "on the face or object to emphasise, e.g. [960, 540]"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 450,
+    "Center of Sphere": [
+     960,
+     500
+    ]
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Spherize",
+   "pairs_with": [
+    "Bulge",
+    "Optics Compensation",
+    "Transform",
+    "Directional Blur"
+   ],
+   "scripting": "Center of Sphere is in layer pixels (same as comp pixels for a full-frame 1920x1080 layer). Radius 0 disables it, so it is safe to keyframe from 0.",
+   "recipe": {
+    "Radius": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      500
+     ],
+     [
+      0.45,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/084.png",
+    "note": "Clear magnifier bulge centred on the middle of the frame: the stripes curve outward and the figures bow around the centre while the frame edges stay put.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Transform",
+   "match": "ADBE Geometry2",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Applies position, scale, skew, rotation and opacity inside the effect stack, with its own shutter angle so animated moves get motion blur without the layer motion-blur switch. The workhorse for punch-ins, shakes and whip moves.",
+   "look": [
+    "punch-in",
+    "zoom",
+    "motion blur",
+    "whip",
+    "rotation",
+    "camera shake"
+   ],
+   "use_for": [
+    "motion-blurred punch-in zoom on a quote or reaction beat",
+    "whip-pan / slide transitions with built-in blur",
+    "beat-synced scale bumps in reels",
+    "re-frame or tilt a shot after other effects in the stack",
+    "skewed newsy slide-in for lower thirds"
+   ],
+   "avoid": [
+    "scaling a 1080p shot above ~130% (visible softness)",
+    "forgetting Use Composition’s Shutter Angle = 0 when you want its own blur",
+    "rotating or skewing without scaling up enough: black corners appear (125% scale with 8 degrees rotation and 10 skew still shows black wedges)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Moves the image (layer pixels)",
+     "typical": "[960, 540] centre; offset 1920 px for a whip slide"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Checkbox: 1 = one scale value, 0 = separate width/height",
+     "typical": "1"
+    },
+    {
+     "name": "Scale Height",
+     "does": "Vertical scale %; acts as the single Scale value when Uniform Scale = 1",
+     "typical": "100-120 for punch-ins"
+    },
+    {
+     "name": "Scale Width",
+     "does": "Horizontal scale %, only used when Uniform Scale = 0",
+     "typical": "100-120"
+    },
+    {
+     "name": "Rotation",
+     "does": "Rotation in degrees",
+     "typical": "-5 to 5 for tilt or shake; 90-360 for spins"
+    },
+    {
+     "name": "Skew",
+     "does": "Skew amount (-70..70)",
+     "typical": "5-20 for a dynamic slide-in"
+    },
+    {
+     "name": "Use Composition’s Shutter Angle",
+     "does": "1 = use comp motion-blur settings, 0 = use the effect's own Shutter Angle",
+     "typical": "0"
+    },
+    {
+     "name": "Shutter Angle",
+     "does": "Motion blur amount for animated transform values (0-360)",
+     "typical": "180-270 for punch-ins and whips"
+    }
+   ],
+   "demo_settings": {
+    "Uniform Scale": 1,
+    "Scale Height": 125,
+    "Rotation": 8,
+    "Skew": 10
+   },
+   "enum_labels": {
+    "Sampling": {
+     "1": "Bilinear",
+     "2": "Bicubic"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Transform",
+   "pairs_with": [
+    "Directional Blur",
+    "Motion Tile",
+    "Camera-Shake Deblur",
+    "Turbulent Displace",
+    "Wave Warp"
+   ],
+   "scripting": "Scale and position are layer-space pixels. With Uniform Scale = 1 the visible 'Scale' control is the Scale Height property; set Scale Height, not Scale Width. The property name contains a curly apostrophe (U+2019): 'Use Composition’s Shutter Angle'. Motion blur only appears when a transform property is animated and Shutter Angle > 0 with that checkbox = 0. Order matters: effects below Transform see the transformed image. For the punch-in recipe set static Uniform Scale = 1, Use Composition’s Shutter Angle = 0 and Shutter Angle = 180 first.",
+   "recipe": {
+    "Scale Height": [
+     [
+      0,
+      100
+     ],
+     [
+      0.15,
+      115
+     ],
+     [
+      0.6,
+      112
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/085.png",
+    "note": "Image is scaled up, rotated about 8 degrees and skewed, with black wedges in the top-right and bottom-left corners where the tilted layer no longer covers the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Turbulent Displace",
+   "match": "ADBE Turbulent Displace",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Displaces pixels with fractal noise so the image ripples, melts or wobbles organically, from subtle heat haze to heavy liquid warping.",
+   "look": [
+    "heat haze",
+    "liquid",
+    "wobble",
+    "organic distortion",
+    "dreamy",
+    "melt"
+   ],
+   "use_for": [
+    "heat-haze shimmer over a desert or rally ground shot",
+    "dream / memory flashback transition",
+    "liquid distortion transition between two shots in a trailer",
+    "wavy flag or banner on a still image",
+    "glitchy organic distortion on titles"
+   ],
+   "avoid": [
+    "high Amount on faces in serious news (looks grotesque)",
+    "setting Pinning to an unpinned option on full-frame footage (edges pull in transparency; keep the default or scale the layer up)",
+    "static Evolution on video makes it look frozen"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Displacement",
+     "does": "Type of noise displacement (turbulent, bulge, twist, smoother variants, horizontal/vertical/cross)",
+     "typical": "1 (Turbulent) default"
+    },
+    {
+     "name": "Amount",
+     "does": "Strength of displacement",
+     "typical": "5-20 subtle haze, 50-150 strong melt"
+    },
+    {
+     "name": "Size",
+     "does": "Scale of the noise pattern",
+     "typical": "50-200"
+    },
+    {
+     "name": "Complexity",
+     "does": "Number of noise detail layers",
+     "typical": "1-3"
+    },
+    {
+     "name": "Evolution",
+     "does": "Evolves the noise (degrees; 360 = one revolution)",
+     "typical": "animate 0 -> 360 over 2-4 s, or expression time*90"
+    },
+    {
+     "name": "Offset (Turbulence)",
+     "does": "Moves the noise field (pixels)",
+     "typical": "animate for drifting heat haze"
+    },
+    {
+     "name": "Pinning",
+     "does": "Which edges stay fixed",
+     "typical": "3 (default, believed to be Pin All) keeps the frame edges fixed on full-frame footage; other indices include separators, verify before use"
+    },
+    {
+     "name": "Random Seed",
+     "does": "Variation of the noise",
+     "typical": "any integer"
+    }
+   ],
+   "demo_settings": {
+    "Displacement": 1,
+    "Amount": 80,
+    "Size": 120,
+    "Complexity": 2
+   },
+   "enum_labels": {
+    "Displacement": {
+     "1": "Turbulent",
+     "2": "Bulge",
+     "3": "Twist",
+     "4": "(separator)",
+     "5": "Turbulent Smoother",
+     "6": "Bulge Smoother",
+     "7": "Twist Smoother",
+     "8": "(separator)",
+     "9": "Vertical Displacement",
+     "10": "Horizontal Displacement",
+     "11": "Cross Displacement"
+    },
+    "Pinning": {
+     "1": "None",
+     "2": "(separator)",
+     "3": "Pin All",
+     "4": "Pin Horizontal",
+     "5": "Pin Vertical",
+     "6": "Pin Left",
+     "7": "Pin Right",
+     "8": "Pin Top",
+     "9": "Pin Bottom",
+     "10": "(separator)",
+     "11": "Pin All Locked",
+     "12": "Pin Horizontal Locked",
+     "13": "Pin Vertical Locked",
+     "14": "Pin Left Locked",
+     "15": "Pin Right Locked",
+     "16": "Pin Top Locked",
+     "17": "Pin Bottom Locked"
+    },
+    "Antialiasing for Best Quality": {
+     "1": "Low",
+     "2": "High"
+    }
+   },
+   "cost": "medium",
+   "gpu": "yes",
+   "equivalent": "Turbulent Displace",
+   "pairs_with": [
+    "Fractal Noise",
+    "Gaussian Blur",
+    "Transform",
+    "Displacement Map",
+    "CC Lens"
+   ],
+   "scripting": "Displacement and Pinning popups include separator entries in their index range (max 11 / 17 for ~9 real choices), so only use indices you have verified; 1 = Turbulent is safe. Evolution is an angle in degrees. Offset is in layer pixels. Resize Layer = 1 lets displacement extend past layer bounds.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      150
+     ],
+     [
+      0.6,
+      0
+     ]
+    ],
+    "Evolution": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      180
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/086.png",
+    "note": "Strong organic liquid warping across the whole frame (stripes, foreground blocks and figures melt and ripple) while the frame edges stay pinned.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Twirl",
+   "match": "ADBE Twirl",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Rotates the image around a centre point, twisting more at the centre than at the edge, producing a whirlpool swirl.",
+   "look": [
+    "swirl",
+    "whirlpool",
+    "spin",
+    "hypnotic",
+    "dizzy"
+   ],
+   "use_for": [
+    "swirl transition: twist out of one shot, untwist into the next",
+    "dizzy / confused comic moment in a satire reel",
+    "hypnosis or propaganda-spin gag",
+    "swirl-in logo reveal"
+   ],
+   "avoid": [
+    "leaving a static twirl on a face (cheap 2000s look)",
+    "Twirl Radius above ~28 on 16:9 full-frame footage (radius is a percent of the width, so the swirl passes the top/bottom edges and pulls in black transparent wedges, very visible at 50); scale the layer up or precompose with padding",
+    "using it in serious documentary sections"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Angle",
+     "does": "Amount of twist in degrees",
+     "typical": "90-720; animate for transitions"
+    },
+    {
+     "name": "Twirl Radius",
+     "does": "Size of the twisted area as a percent of the layer",
+     "typical": "25-30 to stay inside a 16:9 frame; 50 reaches the left/right edges and pulls transparency in at top/bottom"
+    },
+    {
+     "name": "Twirl Center",
+     "does": "Centre of the swirl (layer pixels)",
+     "typical": "[960, 540]"
+    }
+   ],
+   "demo_settings": {
+    "Angle": 180,
+    "Twirl Radius": 50,
+    "Twirl Center": [
+     960,
+     540
+    ]
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Twirl",
+   "pairs_with": [
+    "Radial Blur",
+    "Transform",
+    "Spherize"
+   ],
+   "scripting": "Angle is unbounded degrees. Twirl Radius is 0-100 percent of the larger layer dimension, not pixels; 50 makes the twirl reach the left/right edges of a 16:9 layer and pass the top/bottom edges, pulling transparent wedges into the swirl (verified in the gallery render). For a transition, keyframe the outgoing clip 0 -> 720 and the incoming clip -720 -> 0 around the cut.",
+   "recipe": {
+    "Angle": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      720
+     ]
+    ],
+    "Twirl Radius": [
+     [
+      0,
+      60
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/087.png",
+    "note": "Whole frame is a strong whirlpool swirl; at Twirl Radius 50 on the 16:9 layer the swirl passes the top and bottom edges and pulls in large black transparent wedges.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Warp",
+   "match": "ADBE WRPMESH",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Bends the whole layer into one of Photoshop's warp-text shapes (arc, arch, bulge, flag, wave, fisheye, squeeze, twist and more).",
+   "look": [
+    "arc",
+    "flag wave",
+    "bulge",
+    "squeeze",
+    "retro type",
+    "warped text"
+   ],
+   "use_for": [
+    "arched or bulging headline text in reels and thumbnails",
+    "flag-wave on a logo or party symbol layer",
+    "squeeze / inflate comic emphasis on a word",
+    "retro poster type for trailer title cards"
+   ],
+   "avoid": [
+    "on full-frame live action (distorts the whole picture cheaply)",
+    "high Bend on small text (illegible)",
+    "warping text whose edges touch layer bounds (cropping)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Warp Style",
+     "does": "Shape preset (Photoshop warp styles)",
+     "typical": "1 Arc, 5 Bulge, 8 Flag, 9 Wave"
+    },
+    {
+     "name": "Warp Axis",
+     "does": "Horizontal or vertical warp",
+     "typical": "1 (Horizontal)"
+    },
+    {
+     "name": "Bend",
+     "does": "Strength and direction of the warp",
+     "typical": "20-50 or -20..-50"
+    },
+    {
+     "name": "Horizontal Distortion",
+     "does": "Perspective-like horizontal distortion",
+     "typical": "0-30"
+    },
+    {
+     "name": "Vertical Distortion",
+     "does": "Perspective-like vertical distortion",
+     "typical": "0-30"
+    }
+   ],
+   "demo_settings": {
+    "Warp Style": 5,
+    "Warp Axis": 1,
+    "Bend": 50
+   },
+   "enum_labels": {
+    "Warp Style": {
+     "1": "Arc",
+     "2": "Arc Lower",
+     "3": "Arc Upper",
+     "4": "Arch",
+     "5": "Bulge",
+     "6": "Shell Lower",
+     "7": "Shell Upper",
+     "8": "Flag",
+     "9": "Wave",
+     "10": "Fish",
+     "11": "Rise",
+     "12": "FishEye",
+     "13": "Inflate",
+     "14": "Twist",
+     "15": "Squeeze"
+    },
+    "Warp Axis": {
+     "1": "Horizontal",
+     "2": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Wave Warp",
+    "Bezier Warp",
+    "Drop Shadow"
+   ],
+   "scripting": "Warp Style labels are read from After Effects 26.0 (15 entries; 14 is Twist and 15 Squeeze). Best applied to text or logo layers, or a precomp with padding so the warp is not clipped. Premiere has no direct equivalent; render it from AE (or build a MOGRT) or approximate with Wave Warp / Spherize.",
+   "recipe": {
+    "Bend": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      50
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/088.png",
+    "note": "Bulge style stretches the middle of the frame vertically (upper detail pushed toward the top, centre detail pushed down) while the left and right edges stay closer to the original.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Warp Stabilizer",
+   "match": "ADBE SubspaceStabilizer",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Analyses shaky footage and smooths or locks the camera move, warping and cropping the frame to hide the correction. Corrective; on a still or locked-off shot there is nothing to stabilise.",
+   "look": [
+    "smooth",
+    "locked-off",
+    "gimbal-like",
+    "stable",
+    "corrective"
+   ],
+   "use_for": [
+    "smooth shaky handheld rally / ground-report footage",
+    "turn a handheld shot into a locked-off tripod look (No Motion)",
+    "steady phone footage in user-generated news clips",
+    "steady drone or vehicle B-roll before speed ramps"
+   ],
+   "avoid": [
+    "Smoothness too high on walking shots: jelly warping and big crop",
+    "time-stretched or time-remapped layers (precompose first; in Premiere the clip must also match the sequence frame size)",
+    "fast action or heavy occlusion: Subspace Warp wobbles; switch Method to Position, Scale, Rotation"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Result",
+     "does": "Smooth the motion or remove it entirely",
+     "typical": "1 (Smooth Motion); 2 (No Motion) for tripod look"
+    },
+    {
+     "name": "Smoothness",
+     "does": "How much of the original camera move is smoothed (%)",
+     "typical": "5-25 natural handheld, 50 default"
+    },
+    {
+     "name": "Method",
+     "does": "Stabilisation model",
+     "typical": "4 (Subspace Warp) default; 2 (Position, Scale, Rotation) if it wobbles"
+    },
+    {
+     "name": "Framing",
+     "does": "How edges are handled (crop, auto-scale, synthesize)",
+     "typical": "3 (Stabilize, Crop, Auto-scale)"
+    },
+    {
+     "name": "Maximum Scale",
+     "does": "Limit for auto-scale (%)",
+     "typical": "110-125"
+    },
+    {
+     "name": "Additional Scale",
+     "does": "Extra scale applied after stabilisation (%)",
+     "typical": "100-110"
+    },
+    {
+     "name": "Rolling Shutter Ripple",
+     "does": "Rolling-shutter correction strength",
+     "typical": "1 (Automatic Reduction); 2 for CMOS jello"
+    },
+    {
+     "name": "Crop Less <-> Smooth More",
+     "does": "Trade-off between crop and smoothness; only used by the cropping Framing modes",
+     "typical": "30-60"
+    }
+   ],
+   "demo_settings": {
+    "Result": 1,
+    "Smoothness": 30,
+    "Method": 4,
+    "Framing": 3,
+    "Additional Scale": 110
+   },
+   "enum_labels": {
+    "Result": {
+     "1": "Smooth Motion",
+     "2": "No Motion"
+    },
+    "Method": {
+     "1": "Position",
+     "2": "Position, Scale, Rotation",
+     "3": "Perspective",
+     "4": "Subspace Warp"
+    },
+    "Framing": {
+     "1": "Stabilize Only",
+     "2": "Stabilize, Crop",
+     "3": "Stabilize, Crop, Auto-scale",
+     "4": "Stabilize, Synthesize Edges"
+    },
+    "Rolling Shutter Ripple": {
+     "1": "Automatic Reduction",
+     "2": "Enhanced Reduction"
+    },
+    "Objective": {
+     "1": "Stabilize",
+     "2": "(separator)",
+     "3": "Reversible Stabilization",
+     "4": "Reverse Stabilization",
+     "5": "Apply Motion to Target",
+     "6": "Apply Motion to Target Over Original"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Warp Stabilizer",
+   "pairs_with": [
+    "Rolling Shutter Repair",
+    "Transform",
+    "Lumetri Color"
+   ],
+   "scripting": "Needs moving footage plus a background analysis that starts after the effect is applied; rendering before analysis finishes shows an 'Analyzing' banner or an unchanged frame (there is no documented ExtendScript call to wait for it, low confidence; check the banner before rendering). Verified 2026-10-04: an aerender of a freshly applied instance shows the 'Analyzing in background (step 1 of 2)' banner over an otherwise untouched frame, without even the Additional Scale; let the analysis finish inside AE and save the project before rendering. Time-stretched or time-remapped layers must be precomposed first (whether AE also requires layer size = comp size is unverified, low confidence; precomposing to comp size is the safe route). Objective (1-6) and Target Layer are for reverse-stabilisation / applying motion to another layer; Target Layer is a layer reference and cannot be set from a spec. Changing Method or Detailed Analysis re-triggers analysis.",
+   "recipe": {},
+   "verified": {
+    "verdict": "untested:needs_analysis",
+    "frame": "pve/gallery/ae/089.png",
+    "note": "Frame is the untouched clip with AE's blue 'Analyzing in background (step 1 of 2)' banner across the middle and no 110% scale: aerender rendered before the background analysis ran, which no demo value can fix, so status is now needs_input (needs analysis completed and saved in the project, on shaky footage).",
+    "rerender": false,
+    "second_opinion": "agree",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "aerender rendered before the background analysis ran: a harness limit, not an effect fault"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wave Warp",
+   "match": "ADBE Wave Warp",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Pushes the image into travelling waves (sine, square, triangle, noise, etc.) that animate on their own via Wave Speed, from gentle flag ripples to harsh glitch slicing.",
+   "look": [
+    "wave",
+    "ripple",
+    "underwater",
+    "wobble",
+    "glitch lines",
+    "retro VHS"
+   ],
+   "use_for": [
+    "flag ripple on a still flag or banner graphic",
+    "underwater / dream / drunk wobble on a shot",
+    "short glitch hit with Square waves on a cut",
+    "heat-wave shimmer on a title",
+    "retro VHS wobble on archive footage"
+   ],
+   "avoid": [
+    "large Wave Height on faces in serious content",
+    "edges revealing transparency: use Pinning or scale the layer up",
+    "forgetting it animates even without keyframes (set Wave Speed 0 for a static warp)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Wave Type",
+     "does": "Wave shape",
+     "typical": "1 Sine for ripples, 2 Square for glitch, 9 Smooth Noise for organic"
+    },
+    {
+     "name": "Wave Height",
+     "does": "Wave amplitude in pixels",
+     "typical": "5-15 subtle, 30-60 strong"
+    },
+    {
+     "name": "Wave Width",
+     "does": "Wavelength in pixels",
+     "typical": "60-300"
+    },
+    {
+     "name": "Direction",
+     "does": "Direction the waves travel (degrees)",
+     "typical": "90 (default) horizontal travel, 0/180 vertical"
+    },
+    {
+     "name": "Wave Speed",
+     "does": "Waves per second; animates without keyframes",
+     "typical": "0.5-2; 0 for static"
+    },
+    {
+     "name": "Pinning",
+     "does": "Which edges stay unmoved",
+     "typical": "1 (None) or an edge option"
+    },
+    {
+     "name": "Phase",
+     "does": "Starting point of the wave cycle (degrees)",
+     "typical": "0; keyframe instead of speed for exact control"
+    }
+   ],
+   "demo_settings": {
+    "Wave Type": 1,
+    "Wave Height": 25,
+    "Wave Width": 120,
+    "Wave Speed": 1
+   },
+   "enum_labels": {
+    "Wave Type": {
+     "1": "Sine",
+     "2": "Square",
+     "3": "Triangle",
+     "4": "Sawtooth",
+     "5": "Circle",
+     "6": "Semicircle",
+     "7": "Uncircle",
+     "8": "Noise",
+     "9": "Smooth Noise"
+    },
+    "Pinning": {
+     "1": "None",
+     "2": "All Edges",
+     "3": "Center",
+     "4": "(separator)",
+     "5": "Left Edge",
+     "6": "Top Edge",
+     "7": "Right Edge",
+     "8": "Bottom Edge",
+     "9": "(separator)",
+     "10": "Horizontal Edges",
+     "11": "Vertical Edges"
+    },
+    "Antialiasing (Best Quality)": {
+     "1": "Low",
+     "2": "Medium",
+     "3": "High"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Wave Warp",
+   "pairs_with": [
+    "Turbulent Displace",
+    "Transform",
+    "Displacement Map",
+    "Noise"
+   ],
+   "scripting": "Pinning has 11 indices but includes separator entries; 1 = None is safe, verify others before use. Direction and Phase are degrees. Wave Height/Width are pixels. Wave Speed drives motion over time, so the same frame differs at different times.",
+   "recipe": {
+    "Wave Height": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      40
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/090.png",
+    "note": "Clear sine-wave ripples bend verticals and block edges across the frame, with scalloped black transparent edges along the top and bottom.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "3D Point Control",
+   "match": "ADBE Point3D Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "Adds an [x, y, z] point value to a layer that expressions on other properties can read. Renders nothing by itself.",
+   "look": [
+    "rig",
+    "control",
+    "invisible",
+    "expression"
+   ],
+   "use_for": [
+    "single control for a 3D camera target or light position in explainer scenes",
+    "master position for several 3D layers (map pins, floating cards)",
+    "template rig on a control null in a reusable trailer/explainer project"
+   ],
+   "avoid": [
+    "expecting any visible change without expressions",
+    "renaming the effect by script or building names into strings after expressions reference it (UI renames usually update simple references, scripted ones may not)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "3D Point",
+     "does": "The [x, y, z] value read by expressions",
+     "typical": "comp coordinates, e.g. [960, 540, 0]"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Point Control",
+    "Slider Control",
+    "Angle Control",
+    "Layer Control"
+   ],
+   "scripting": "Value is a 3-element array [x, y, z] in pixels. Usually added to a null; read with thisComp.layer(\"Controls\").effect(\"3D Point Control\")(\"3D Point\"). Name the effect instance before writing expressions. Mostly for 3D layers, cameras and lights; for 2D values use Point Control.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (expression control, renders nothing by itself), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Angle Control",
+   "match": "ADBE Angle Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "Adds an angle dial (degrees, with revolutions) to a layer for expressions to read. Renders nothing by itself.",
+   "look": [
+    "rig",
+    "control",
+    "rotation",
+    "invisible",
+    "expression"
+   ],
+   "use_for": [
+    "one dial driving rotation of several layers (clock hands, map arrows, gears)",
+    "exposed angle control for a MOGRT / Essential Graphics template",
+    "driving Directional Blur or gradient direction from a single control"
+   ],
+   "avoid": [
+    "expecting a visible change without expressions",
+    "renaming the effect by script after expressions reference it (scripted renames may not update expression links)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Angle",
+     "does": "Angle value in degrees read by expressions",
+     "typical": "0-360; keyframe for spins"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Checkbox Control",
+    "Point Control"
+   ],
+   "scripting": "Value is degrees (unbounded; 360 = one revolution). Read with effect(\"Angle Control\")(\"Angle\"). Add to a control null, name it, then link expressions.",
+   "recipe": {
+    "Angle": [
+     [
+      0,
+      0
+     ],
+     [
+      2,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (expression control, renders nothing by itself), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Checkbox Control",
+   "match": "ADBE Checkbox Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "Adds an on/off checkbox (0 or 1) to a layer for expressions to read. Renders nothing by itself.",
+   "look": [
+    "rig",
+    "toggle",
+    "control",
+    "invisible",
+    "expression"
+   ],
+   "use_for": [
+    "toggle a layer, logo or watermark on/off via an opacity expression",
+    "switch between two versions (Hindi / English text) in a template",
+    "exposed on/off option in a Premiere MOGRT via Essential Graphics"
+   ],
+   "avoid": [
+    "expecting a visible change without expressions",
+    "expecting smooth fades from it: checkbox keyframes are hold-only, use a Slider Control for fades"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Checkbox",
+     "does": "0 = off, 1 = on, read by expressions",
+     "typical": "0 or 1"
+    }
+   ],
+   "demo_settings": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Slider Control",
+    "Dropdown Menu Control",
+    "Angle Control"
+   ],
+   "scripting": "Set as a number 0 or 1, not true/false. Typical expression on Opacity: effect(\"Checkbox Control\")(\"Checkbox\") == 1 ? 100 : 0. Add to a control null, name it, then link.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (expression control, renders nothing by itself), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

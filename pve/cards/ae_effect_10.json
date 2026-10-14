@@ -1,0 +1,1290 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Corner Pin",
+   "match": "ADBE Corner Pin",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Moves the four corners of a layer independently, so a flat image is skewed into perspective. The standard tool for putting footage onto a screen, sign or document in the shot.",
+   "look": [
+    "perspective",
+    "screen replacement",
+    "skew",
+    "tilted card",
+    "3D-ish plane"
+   ],
+   "use_for": [
+    "replace a TV / phone / billboard screen with a news clip",
+    "lay a document or newspaper scan onto a desk plate",
+    "tilt a quote card or photo into perspective for an explainer",
+    "fake a 3D panel flying in on a reel"
+   ],
+   "avoid": [
+    "crossing two pins makes a bow-tie fold that looks broken",
+    "a static pin on a moving shot slides; track it (Mocha / Track Motion > Perspective Corner Pin)",
+    "extreme pins soften the image; start from a high-res source"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Upper Left",
+     "does": "position of the top-left corner (layer pixels)",
+     "typical": "[0, 0] default; pull inward 100-300 px for a tilt"
+    },
+    {
+     "name": "Upper Right",
+     "does": "position of the top-right corner",
+     "typical": "[1920, 0] default"
+    },
+    {
+     "name": "Lower Left",
+     "does": "position of the bottom-left corner",
+     "typical": "[0, 1080] default"
+    },
+    {
+     "name": "Lower Right",
+     "does": "position of the bottom-right corner",
+     "typical": "[1920, 1080] default"
+    }
+   ],
+   "demo_settings": {
+    "Upper Left": [
+     260,
+     140
+    ],
+    "Upper Right": [
+     1660,
+     20
+    ],
+    "Lower Left": [
+     360,
+     980
+    ],
+    "Lower Right": [
+     1820,
+     1060
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Corner Pin",
+   "pairs_with": [
+    "Track Motion (Perspective Corner Pin)",
+    "Drop Shadow",
+    "Fast Box Blur",
+    "Glow"
+   ],
+   "scripting": "Points are in the LAYER's own pixel space, not comp space; for a 1920x1080 layer they match the comp. Keyframe all four corners together. The layer bounds grow to the pinned shape, so anything outside the quad is transparent.",
+   "recipe": {
+    "Upper Left": [
+     [
+      0,
+      [
+       0,
+       0
+      ]
+     ],
+     [
+      0.6,
+      [
+       260,
+       140
+      ]
+     ]
+    ],
+    "Upper Right": [
+     [
+      0,
+      [
+       1920,
+       0
+      ]
+     ],
+     [
+      0.6,
+      [
+       1660,
+       20
+      ]
+     ]
+    ],
+    "Lower Left": [
+     [
+      0,
+      [
+       0,
+       1080
+      ]
+     ],
+     [
+      0.6,
+      [
+       360,
+       980
+      ]
+     ]
+    ],
+    "Lower Right": [
+     [
+      0,
+      [
+       1920,
+       1080
+      ]
+     ],
+     [
+      0.6,
+      [
+       1820,
+       1060
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/074.png",
+    "note": "The whole photo is pinned into a tilted quad with black (transparent) margins, a clear perspective skew.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Detail-preserving Upscale",
+   "match": "ADBE Upscale",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Enlarges a layer while keeping edges sharper than a plain transform scale. Meant for blowing up low-res stills and archival footage to fill the frame.",
+   "look": [
+    "upscale",
+    "sharpened enlargement",
+    "punch-in",
+    "archival restore"
+   ],
+   "use_for": [
+    "fill a 1920 frame with a 640/720p archival clip or a low-res press photo",
+    "clean punch-in on an interview without the blur of Scale > 100%",
+    "upscale a screenshot for an explainer zoom"
+   ],
+   "avoid": [
+    "high Detail on compressed (WhatsApp / YouTube) sources exaggerates block artefacts",
+    "slow on long clips; pre-render or upscale once",
+    "do not also scale the layer transform above 100% (double softening)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scale",
+     "does": "enlargement in percent of the source size",
+     "typical": "150-300"
+    },
+    {
+     "name": "Detail",
+     "does": "how much edge detail is reconstructed / sharpened",
+     "typical": "40-70"
+    },
+    {
+     "name": "Reduce Noise",
+     "does": "smooths noise before enlarging",
+     "typical": "0-30 (raise on noisy archival)"
+    },
+    {
+     "name": "Alpha",
+     "does": "method used for the alpha channel (2-item popup)",
+     "typical": "leave default 2"
+    }
+   ],
+   "demo_settings": {
+    "Scale": 200,
+    "Detail": 70,
+    "Reduce Noise": 20
+   },
+   "enum_labels": {
+    "Alpha": {
+     "1": "Detail-preserving",
+     "2": "Bicubic"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "Motion > Scale (no detail-preserving effect in Premiere)",
+   "pairs_with": [
+    "Unsharp Mask",
+    "Remove Grain",
+    "Add Grain"
+   ],
+   "scripting": "Designed for a small source layer scaled to comp size; the two unnamed header items are the 'Fit to Comp Width/Height' buttons and cannot be set from a spec. Scale enlarges the layer's own pixels (bounds grow), so on a full 1920x1080 layer Scale 200 shows as a 2x crop-in. Alpha popup: 1 Detail-preserving, 2 Bicubic (the default) (read from After Effects 26.0); leave it at default.",
+   "recipe": {
+    "Scale": [
+     [
+      0,
+      100
+     ],
+     [
+      4,
+      130
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/075.png",
+    "note": "Scale 200 on the full-size layer shows as a 2x crop-in on the frame centre, soft but clean, as the scripting note says.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Displacement Map",
+   "match": "ADBE Displacement Map",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Pushes pixels horizontally and vertically according to the colour or brightness of a map layer. Used for heat-haze, liquid, glitch and 'image wraps onto a surface' looks.",
+   "look": [
+    "warp",
+    "heat haze",
+    "liquid distortion",
+    "glitch displacement",
+    "surface wrap"
+   ],
+   "use_for": [
+    "glitch transition driven by a noise / blocky precomp",
+    "heat-haze or water wobble over a shot",
+    "wrap a flag or logo onto cloth / texture",
+    "subtle shimmer on a trailer title"
+   ],
+   "avoid": [
+    "large values with a sharp map tear the image into stair-steps",
+    "forgetting Wrap Pixels Around leaves transparent edges",
+    "a map layer left visible on top shows in the render (turn its video off)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Displacement Map Layer",
+     "does": "layer whose pixels drive the displacement (defaults to the layer itself)",
+     "typical": "a hidden Fractal Noise / Turbulent Noise precomp"
+    },
+    {
+     "name": "Use For Horizontal Displacement",
+     "does": "map channel used for X shift",
+     "typical": "1 Red or 5 Luminance"
+    },
+    {
+     "name": "Max Horizontal Displacement",
+     "does": "maximum X shift in pixels (sign flips direction)",
+     "typical": "10-80"
+    },
+    {
+     "name": "Use For Vertical Displacement",
+     "does": "map channel used for Y shift",
+     "typical": "2 Green or 5 Luminance"
+    },
+    {
+     "name": "Max Vertical Displacement",
+     "does": "maximum Y shift in pixels",
+     "typical": "10-80"
+    },
+    {
+     "name": "Displacement Map Behavior",
+     "does": "how a map of a different size is placed",
+     "typical": "2 Stretch Map to Fit"
+    },
+    {
+     "name": "Edge Behavior",
+     "does": "Wrap Pixels Around checkbox",
+     "typical": "1 (on) to avoid empty edges"
+    },
+    {
+     "name": "Expand Output",
+     "does": "checkbox: lets displaced pixels spread past the layer bounds",
+     "typical": "1 default; 0 to keep the result inside the frame"
+    }
+   ],
+   "demo_settings": {
+    "Use For Horizontal Displacement": 5,
+    "Max Horizontal Displacement": 60,
+    "Use For Vertical Displacement": 5,
+    "Max Vertical Displacement": 60,
+    "Edge Behavior": 1
+   },
+   "enum_labels": {
+    "Use For Horizontal Displacement": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Half",
+     "11": "Off"
+    },
+    "Use For Vertical Displacement": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Hue",
+     "7": "Lightness",
+     "8": "Saturation",
+     "9": "Full",
+     "10": "Half",
+     "11": "Off"
+    },
+    "Displacement Map Behavior": {
+     "1": "Center Map",
+     "2": "Stretch Map to Fit",
+     "3": "Tile Map"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Turbulent Displace (closest; Premiere has no map-layer displacement)",
+   "pairs_with": [
+    "Fractal Noise",
+    "Turbulent Noise",
+    "Gaussian Blur",
+    "Wave Warp"
+   ],
+   "scripting": "'Displacement Map Layer' is a layer reference: set it by layer index in the script, not via demo_settings. It defaults to the layer itself, so the demo values warp the shot by its own luminance. The map is read from the map layer's SOURCE (before its effects/masks); precompose the map to include its effects. Max displacement values are pixels and may be negative. Map value 50% grey = no shift; black pushes the full negative amount, white the full positive amount, so a map with no mid-grey shifts the whole image.",
+   "recipe": {
+    "Max Horizontal Displacement": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      120
+     ],
+     [
+      0.3,
+      0
+     ]
+    ],
+    "Max Vertical Displacement": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      40
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/076.png",
+    "note": "The shot is warped by its own luminance into a liquid, smeared distortion (stripes, faces and foreground blocks wobble and tear).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Liquify",
+   "match": "ADBE LIQUIFY",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Brush-based push, twirl, pucker and bloat distortion painted by hand in the Composition panel. Nothing changes until strokes are painted into its distortion mesh.",
+   "look": [
+    "hand-painted warp",
+    "bulge",
+    "pinch",
+    "twirl",
+    "melt"
+   ],
+   "use_for": [
+    "caricature / meme distortion on a satire reel (non-news)",
+    "melt or smear transition on an abstract element",
+    "small cosmetic fixes on product or object shots"
+   ],
+   "avoid": [
+    "never reshape a real politician's or person's face in news / documentary work: reads as manipulated media",
+    "strokes cannot be authored by script, so it cannot be fully automated",
+    "large distortions smear texture and look cheap"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Distortion Percentage",
+     "does": "scales the painted distortion (0 = none, 100 = as painted)",
+     "typical": "keyframe 0 -> 100 to reveal a painted warp"
+    },
+    {
+     "name": "Brush Size",
+     "does": "brush radius for painting strokes (UI only)",
+     "typical": "64-200"
+    },
+    {
+     "name": "Brush Pressure",
+     "does": "brush strength for painting strokes (UI only)",
+     "typical": "30-60"
+    },
+    {
+     "name": "Turbulent Jitter",
+     "does": "randomness of the Turbulence tool",
+     "typical": "50-70"
+    },
+    {
+     "name": "Reconstruction Mode",
+     "does": "how the Reconstruction tool restores the mesh",
+     "typical": "1 Revert"
+    },
+    {
+     "name": "Freeze Area Mask",
+     "does": "mask whose area is protected from distortion",
+     "typical": "a mask around faces / text"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Reconstruction Mode": {
+     "1": "Revert",
+     "2": "Displace",
+     "3": "Amplitwist",
+     "4": "Affine"
+    },
+    "Mesh Size": {
+     "1": "Small",
+     "2": "Medium",
+     "3": "Large"
+    },
+    "Mesh Color": {
+     "1": "Red",
+     "2": "Yellow",
+     "3": "Green",
+     "4": "Cyan",
+     "5": "Blue",
+     "6": "Magenta",
+     "7": "Gray"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Turbulent Displace",
+    "Mesh Warp"
+   ],
+   "scripting": "The distortion lives in 'Distortion Mesh' (custom type), which a script cannot create; only a manually painted Liquify can be animated afterwards via 'Distortion Percentage' or 'Distortion Mesh Offset'. Brush/tool settings do not render on their own. For automated warps use Turbulent Displace, Bulge or Twirl instead.",
+   "recipe": {
+    "Distortion Percentage": [
+     [
+      0,
+      0
+     ],
+     [
+      0.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (the distortion mesh must be painted by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Magnify",
+   "match": "ADBE Magnify",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Shows an enlarged circle or square of the image, like a magnifying glass, over the rest of the frame.",
+   "look": [
+    "magnifying glass",
+    "loupe",
+    "zoom callout",
+    "detail inset"
+   ],
+   "use_for": [
+    "magnify a line in a document, headline or tweet in an explainer",
+    "call out a detail in a press photo (badge, sign, number)",
+    "magnifier that slides along a map or chart"
+   ],
+   "avoid": [
+    "small Size with high Magnification shows pixels; magnify a high-res source",
+    "no border by default, so add a Stroke / ring layer or it reads as a glitch",
+    "magnifying faces of real people looks like mockery in news"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Center",
+     "does": "centre of the magnified area (pixels)",
+     "typical": "the detail to call out"
+    },
+    {
+     "name": "Magnification",
+     "does": "zoom amount in percent",
+     "typical": "180-300"
+    },
+    {
+     "name": "Size",
+     "does": "radius / half-size of the lens in pixels",
+     "typical": "180-350"
+    },
+    {
+     "name": "Shape",
+     "does": "lens shape",
+     "typical": "1 Circle"
+    },
+    {
+     "name": "Feather",
+     "does": "soft edge of the lens in pixels",
+     "typical": "0-20"
+    },
+    {
+     "name": "Link",
+     "does": "ties size/feather to magnification",
+     "typical": "1 None"
+    },
+    {
+     "name": "Scaling",
+     "does": "resampling method for the enlarged pixels",
+     "typical": "1 Standard"
+    },
+    {
+     "name": "Opacity",
+     "does": "opacity of the magnified area",
+     "typical": "100"
+    }
+   ],
+   "demo_settings": {
+    "Shape": 1,
+    "Center": [
+     915,
+     735
+    ],
+    "Magnification": 250,
+    "Size": 320,
+    "Feather": 15
+   },
+   "enum_labels": {
+    "Shape": {
+     "1": "Circle",
+     "2": "Square"
+    },
+    "Link": {
+     "1": "None",
+     "2": "Size To Magnification",
+     "3": "Size & Feather To Magnification"
+    },
+    "Scaling": {
+     "1": "Standard",
+     "2": "Soft",
+     "3": "Scatter"
+    },
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "(separator)",
+     "4": "Add",
+     "5": "Multiply",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "(separator)",
+     "11": "Color Dodge",
+     "12": "Color Burn",
+     "13": "(separator)",
+     "14": "Darken",
+     "15": "Lighten",
+     "16": "Difference",
+     "17": "Exclusion",
+     "18": "(separator)",
+     "19": "Hue",
+     "20": "Saturation",
+     "21": "Color",
+     "22": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Magnify",
+   "pairs_with": [
+    "Drop Shadow",
+    "Stroke (shape-layer ring)",
+    "Vignette"
+   ],
+   "scripting": "Center is in layer pixels. Blending Mode is a 22-item popup (1 None, 2 Normal (default), 4 Add, 5 Multiply, 6 Screen ...; separators at 3, 10, 13, 18; enum_labels (read from After Effects 26.0)). Resize Layer (checkbox) lets the lens extend past layer bounds; it only works while Link is 1 None. Size is the lens radius in pixels, so Size 320 = a 640 px lens.",
+   "recipe": {
+    "Center": [
+     [
+      0,
+      [
+       500,
+       540
+      ]
+     ],
+     [
+      1.5,
+      [
+       1400,
+       540
+      ]
+     ]
+    ],
+    "Magnification": [
+     [
+      0,
+      100
+     ],
+     [
+      0.4,
+      250
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/077.png",
+    "note": "The feathered lens now sits on the frame centre and shows the dark mid-frame detail enlarged over the flowers, where the old render only magnified plain grey wall into a featureless ball; detail is soft because the source is low-res and there is no ring, both already in avoid.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mesh Warp",
+   "match": "ADBE MESH WARP",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Overlays a grid of Bezier points that are dragged by hand to bend the image. It shows nothing until the mesh is edited in the Composition panel.",
+   "look": [
+    "grid warp",
+    "bend",
+    "bulge",
+    "organic distortion"
+   ],
+   "use_for": [
+    "bend a flat graphic onto a curved surface (pillar, flag, page curl)",
+    "subtle breathing / wobble on an illustration",
+    "fix a slightly curved horizon on a still"
+   ],
+   "avoid": [
+    "mesh cannot be built by script, so it is not automatable",
+    "many rows/columns with low Quality look jagged"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Rows",
+     "does": "number of mesh rows (set before editing the mesh)",
+     "typical": "3-7"
+    },
+    {
+     "name": "Columns",
+     "does": "number of mesh columns (set before editing the mesh)",
+     "typical": "3-7"
+    },
+    {
+     "name": "Quality",
+     "does": "render smoothness of the warp",
+     "typical": "8-10"
+    },
+    {
+     "name": "Distortion Mesh",
+     "does": "the edited grid itself (custom data)",
+     "typical": "authored in the UI only"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Corner Pin",
+    "Bezier Warp"
+   ],
+   "scripting": "'Distortion Mesh' is custom data and cannot be set from a spec; changing Rows/Columns resets an existing mesh. For a scripted bend use Bezier Warp, Bulge or Turbulent Displace instead.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (the mesh must be edited by hand), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Mirror",
+   "match": "ADBE Mirror",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Splits the image along a line and reflects one side onto the other, giving a symmetric, kaleidoscope-like picture.",
+   "look": [
+    "symmetry",
+    "mirror split",
+    "kaleidoscope",
+    "reflection"
+   ],
+   "use_for": [
+    "symmetric abstract background for a reel or title card",
+    "mirror-world look on architecture / corridor / skyline b-roll for a trailer",
+    "animated mirror-line sweep as a stylised transition (keyframe Reflection Center)"
+   ],
+   "avoid": [
+    "mirrored text, logos, party symbols and flags read backwards: wrong and embarrassing in political content",
+    "a mirror line through a real person's face makes a fake symmetric face: manipulated media in news",
+    "it does not extend a narrow plate (the layer size stays the same); use Motion Tile with Mirror Edges for that"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Reflection Center",
+     "does": "point the mirror line passes through (pixels)",
+     "typical": "[960, 540] for a centre split"
+    },
+    {
+     "name": "Reflection Angle",
+     "does": "angle of the mirror line in degrees",
+     "typical": "0 vertical split, 90 horizontal split"
+    }
+   ],
+   "demo_settings": {
+    "Reflection Center": [
+     960,
+     540
+    ],
+    "Reflection Angle": 0
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Mirror",
+   "pairs_with": [
+    "Offset",
+    "Motion Tile",
+    "CC Kaleida"
+   ],
+   "scripting": "Default centre [1920, 540] sits on the right edge, so the default shows no change; move the centre inward. Reflection Angle has no harvested limits (degrees). At 0 the line is vertical and the left side is reflected onto the right; 90 reflects the top onto the bottom; 180 keeps the right side. Verify the kept side on a frame.",
+   "recipe": {
+    "Reflection Center": [
+     [
+      0,
+      [
+       1920,
+       540
+      ]
+     ],
+     [
+      0.8,
+      [
+       960,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/078.png",
+    "note": "The left half is reflected onto the right around a vertical centre line, giving a symmetric twin of the left half of the frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Offset",
+   "match": "ADBE Offset",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Slides the image inside the layer and wraps whatever leaves one edge back in on the opposite edge, like a tiled pattern.",
+   "look": [
+    "wrap-around pan",
+    "tile shift",
+    "seamless scroll",
+    "glitch slip"
+   ],
+   "use_for": [
+    "endless scrolling texture or pattern background",
+    "check / build seamless loops",
+    "quick slip-glitch on a transition frame",
+    "scroll a ticker-like strip"
+   ],
+   "avoid": [
+    "on live action the wrap seam is obvious unless hidden by a glitch or motion blur"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Shift Center To",
+     "does": "where the original centre is moved to (pixels); content wraps",
+     "typical": "animate X by the layer width for a seamless loop"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mix back the unshifted image (raw 0-1 = 0-100%)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Shift Center To": [
+     1440,
+     270
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Offset",
+   "pairs_with": [
+    "Motion Tile",
+    "Directional Blur",
+    "Displacement Map"
+   ],
+   "scripting": "Blend With Original is harvested as 0-1 (shown as % in the UI), so 0.5 = 50%. Default [960, 540] = no shift on a 1920x1080 layer. A shift of exactly one layer width returns to the start, good for loops.",
+   "recipe": {
+    "Shift Center To": [
+     [
+      0,
+      [
+       960,
+       540
+      ]
+     ],
+     [
+      4,
+      [
+       2880,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/079.png",
+    "note": "The image is shifted right and up with wrap-around, showing hard tile seams where the edges re-enter.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Optics Compensation",
+   "match": "ADBE Optics Compensation",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Adds or removes wide-angle lens distortion: bulges the image like a fisheye, or with Reverse on, straightens barrel-distorted action-cam footage.",
+   "look": [
+    "fisheye",
+    "barrel distortion",
+    "lens warp",
+    "wide-angle"
+   ],
+   "use_for": [
+    "fisheye punch-in / whip transition on a reel hook",
+    "remove GoPro / phone wide-lens bulge (Reverse Lens Distortion on)",
+    "match graphics to a wide lens in a trailer"
+   ],
+   "avoid": [
+    "adding distortion (Reverse off) curves the frame edges inward and leaves transparent corners; fill them with Motion Tile (Mirror Edges) before it, or scale up",
+    "straightening (Reverse on) pushes the edges past the frame and crops them; Resize keeps them but the layer must then be scaled down",
+    "heavy fisheye on interviews distorts faces"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Field Of View (FOV)",
+     "does": "strength of the lens distortion in degrees",
+     "typical": "20-60 subtle, 90+ fisheye"
+    },
+    {
+     "name": "Reverse Lens Distortion",
+     "does": "checkbox: remove instead of add distortion",
+     "typical": "0 to add, 1 to correct"
+    },
+    {
+     "name": "FOV Orientation",
+     "does": "which frame axis the FOV is measured on",
+     "typical": "1 Horizontal"
+    },
+    {
+     "name": "View Center",
+     "does": "optical centre of the distortion (pixels)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Resize",
+     "does": "lets the layer grow to keep corners when reversing",
+     "typical": "2 Max 2X when correcting"
+    },
+    {
+     "name": "Optimal Pixels (Invalidates Reversal)",
+     "does": "checkbox: better edge pixels but result cannot be reversed exactly",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Field Of View (FOV)": 90
+   },
+   "enum_labels": {
+    "FOV Orientation": {
+     "1": "Horizontal",
+     "2": "Vertical",
+     "3": "Diagonal"
+    },
+    "Resize": {
+     "1": "Off",
+     "2": "Max 2X",
+     "3": "Max 4X",
+     "4": "Unlimited"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Lens Distortion",
+   "pairs_with": [
+    "Transform (scale + shutter angle)",
+    "Directional Blur",
+    "Motion Tile",
+    "Chromatic aberration (Shift Channels)"
+   ],
+   "scripting": "Checkboxes are 0/1 numbers. For a fisheye transition, keyframe FOV on an adjustment layer together with a scale ramp; add Motion Tile with Mirror Edges first so the bulged edges are not empty. Rendered check: Reverse off at FOV 90 shrinks the picture into a barrel-shaped pillow with transparent margins on all four sides (widest at the corners); the Reverse-on crop behaviour is still from memory.",
+   "recipe": {
+    "Field Of View (FOV)": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      110
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/080.png",
+    "note": "FOV 90 with Reverse off bulges the picture into a barrel-shaped pillow with transparent margins on all sides, largest at the corners.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Polar Coordinates",
+   "match": "ADBE Polar Coordinates",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Converts the image between rectangular and polar coordinates, curling a flat picture into a ring or 'tiny planet', or unrolling a circle into a strip.",
+   "look": [
+    "tiny planet",
+    "circular warp",
+    "radial",
+    "tunnel",
+    "abstract"
+   ],
+   "use_for": [
+    "tiny-planet look on a skyline or rally crowd for a reel opener",
+    "radial burst / tunnel background from simple stripes",
+    "circular loader or ring graphic from a straight bar"
+   ],
+   "avoid": [
+    "produces a visible seam where left and right edges meet unless the source is seamless",
+    "unreadable on text or faces"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Interpolation",
+     "does": "how much of the conversion is applied (raw 0-1 = 0-100%)",
+     "typical": "1 (full) or animate 0 -> 1"
+    },
+    {
+     "name": "Type of Conversion",
+     "does": "direction of the conversion",
+     "typical": "1 Rect to Polar"
+    }
+   ],
+   "demo_settings": {
+    "Interpolation": 1,
+    "Type of Conversion": 1
+   },
+   "enum_labels": {
+    "Type of Conversion": {
+     "1": "Rect to Polar",
+     "2": "Polar to Rect"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Offset",
+    "Motion Tile",
+    "Mirror",
+    "Glow"
+   ],
+   "scripting": "Interpolation is harvested 0-1 although the UI shows a percentage; 1 = 100%. Default Interpolation 0 shows no change, and the default conversion is 2 Polar to Rect, so set 1 explicitly for a planet. Rect to Polar puts the TOP of the image in the centre: unflipped the sky lands in the middle (tunnel); for a tiny planet flip the source vertically first, inside a precomp or with a Transform effect above this one (the layer's own Scale is applied after effects, so it does not work). Rendered check: on a 16:9 layer the result is a circle as tall as the frame with transparent sides, so add a background or precompose into a square comp to fill the frame.",
+   "recipe": {
+    "Interpolation": [
+     [
+      0,
+      0
+     ],
+     [
+      1.2,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/081.png",
+    "note": "Rect to Polar curls the photo into a round tunnel with the top of the image in the centre and the people upside-down in the lower half; the circle fits the frame height with black sides (not an oval).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Reshape",
+   "match": "ADBE RESHAPE",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Morphs the area inside one mask into the shape of another mask on the same layer, optionally limited by a boundary mask.",
+   "look": [
+    "shape morph",
+    "mask morph",
+    "warp to shape"
+   ],
+   "use_for": [
+    "morph a logo or shape graphic into another outline",
+    "stretch an object to a new silhouette in a motion-graphic"
+   ],
+   "avoid": [
+    "needs two or three hand-drawn masks; nothing happens without them",
+    "reshaping real people's features is manipulated media in news",
+    "slow at high elasticity"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Source Mask",
+     "does": "mask outlining the area to move",
+     "typical": "mask 1"
+    },
+    {
+     "name": "Destination Mask",
+     "does": "mask outlining the target shape",
+     "typical": "mask 2"
+    },
+    {
+     "name": "Boundary Mask",
+     "does": "optional mask limiting the affected area",
+     "typical": "mask 3 or none"
+    },
+    {
+     "name": "Percent",
+     "does": "how far the morph has progressed",
+     "typical": "animate 0 -> 100"
+    },
+    {
+     "name": "Elasticity",
+     "does": "how loosely the image follows the masks (popup)",
+     "typical": "default"
+    },
+    {
+     "name": "Interpolation Method",
+     "does": "how in-between frames are computed (popup)",
+     "typical": "default"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Elasticity": {
+     "1": "Stiff",
+     "2": "Less Stiff",
+     "3": "Below Normal",
+     "4": "Normal",
+     "5": "Absolutely Normal",
+     "6": "Above Average",
+     "7": "Loose",
+     "8": "Liquid",
+     "9": "Super Fluid"
+    },
+    "Interpolation Method": {
+     "1": "Discrete",
+     "2": "Linear",
+     "3": "Smooth"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Mesh Warp",
+    "Liquify"
+   ],
+   "scripting": "Source/Destination/Boundary Mask are mask references and must be set by mask index after the masks exist on the layer; Correspondence Points are custom data (not scriptable from a spec). Set the three masks' mode to None so they only drive the effect and do not cut out the layer; masks must be closed. Elasticity: 1 Stiff (default), 2 Less Stiff, 3 Below Normal, 4 Normal, 5 Absolutely Normal, 6 Above Average, 7 Loose, 8 Liquid, 9 Super Fluid (looser = slower); Interpolation Method: 1 Discrete (default), 2 Linear, 3 Smooth (read from After Effects 26.0).",
+   "recipe": {
+    "Percent": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs hand-drawn source and destination masks), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Ripple",
+   "match": "ADBE Ripple",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Creates concentric water-like ripples spreading out from a centre point; the waves move on their own over time.",
+   "look": [
+    "water ripple",
+    "shockwave",
+    "pond ring",
+    "dreamy wobble"
+   ],
+   "use_for": [
+    "drop-in-water reveal on a title or logo",
+    "shockwave pulse on an impact beat in a trailer",
+    "dream / flashback wobble on a memory shot"
+   ],
+   "avoid": [
+    "large Wave Height on live action looks cheap and smeary",
+    "radius too small shows a hard ring edge"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "size of the rippled area as percent of the layer",
+     "typical": "40-80"
+    },
+    {
+     "name": "Center of Ripple",
+     "does": "origin of the waves (pixels)",
+     "typical": "point of impact"
+    },
+    {
+     "name": "Wave Height",
+     "does": "strength of the distortion",
+     "typical": "20-80"
+    },
+    {
+     "name": "Wave Width",
+     "does": "distance between wave crests",
+     "typical": "20-50"
+    },
+    {
+     "name": "Wave Speed",
+     "does": "how fast the waves travel; animates on its own without keyframes (negative = inward)",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Type of Conversion",
+     "does": "wave shape",
+     "typical": "1 Asymmetric (more realistic)"
+    },
+    {
+     "name": "Ripple Phase",
+     "does": "wave phase in degrees, for static or hand-timed ripples",
+     "typical": "0; animate when Wave Speed is 0"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 60,
+    "Center of Ripple": [
+     960,
+     540
+    ],
+    "Wave Width": 40,
+    "Wave Height": 80,
+    "Wave Speed": 1
+   },
+   "enum_labels": {
+    "Type of Conversion": {
+     "1": "Asymmetric",
+     "2": "Symmetric"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "Wave Warp (closest; Premiere has no radial ripple)",
+   "pairs_with": [
+    "Glow",
+    "CC Lens",
+    "Fast Box Blur",
+    "Optics Compensation"
+   ],
+   "scripting": "Radius default 0 means no visible effect; set Radius. Wave Speed animates by itself, so a still frame at t=0 may look weaker than mid-clip. Ripple Phase has no harvested limits.",
+   "recipe": {
+    "Wave Height": [
+     [
+      0,
+      120
+     ],
+     [
+      1.2,
+      0
+     ]
+    ],
+    "Radius": [
+     [
+      0,
+      20
+     ],
+     [
+      1.2,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/082.png",
+    "note": "Strong water-like wave distortion spreads over the whole frame from the centre, with scalloped top and bottom edges.",
+    "rerender": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,2471 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Drifting fog / smoke haze",
+   "summary": "A slow grey fractal fog drifts across the shot at low opacity while the grade lifts the blacks, so the scene reads as smoky or misty.",
+   "use_for": [
+    "war, riot or fire aftermath shots in a documentary",
+    "mysterious or ominous establishing shot",
+    "dawn or monsoon atmosphere over a skyline",
+    "background plate under a chapter card"
+   ],
+   "avoid": [
+    "faces in close-up: the fog sits on top of them and greys the skin",
+    "fog opacity above ~45: the picture turns into a flat grey wash",
+    "news footage that must read as unaltered evidence"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "VR Fractal Noise",
+     "pr_props": {
+      "Fractal Type": 0,
+      "Contrast": 140,
+      "Brightness": -10,
+      "Complexity": 6,
+      "Scale": 6,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        240
+       ]
+      ],
+      "Pan (Y axis)": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        25
+       ]
+      ],
+      "Opacity": 32
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": -15,
+      "Faded Film": 25,
+      "Saturation": 85
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Contrast": 140,
+      "Brightness": -10,
+      "Scale": 400,
+      "Complexity": 6,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        240
+       ]
+      ],
+      "Offset Turbulence": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        10,
+        [
+         1260,
+         520
+        ]
+       ]
+      ],
+      "Opacity": 35
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": -15,
+      "Faded Film": 25,
+      "Saturation": 85
+     }
+    }
+   ],
+   "sfx": [
+    "amb_drone"
+   ],
+   "keyframes_note": "Static look; the drift is the Evolution ramp (240 deg per 10 s) plus a slow pan (Premiere 'Pan (Y axis)' 25 deg, After Effects 'Offset Turbulence' 300 px over 10 s). Extend both ramps proportionally for longer clips. Fade it in by keyframing Opacity 0 -> 32 over the first 1 s if the fog must arrive. Premiere's VR noise wraps seamlessly left-right, which is harmless on flat footage. AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "VR Fractal Noise",
+    "Lumetri Color",
+    "Fractal Noise"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/089b.png",
+    "note": "Grey fractal fog drifts over the whole shot with lifted blacks; it reads as smoky and the people stay legible.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/118b.png",
+     "note": "A grey fractal haze drifts over the whole frame with lifted blacks and colour muted to about half its saturation, reading clearly as smoke or mist while the scene stays legible; vs Premiere: close match to Premiere's fog; the AE haze is slightly more even and less patchy.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Heat haze shimmer",
+   "summary": "Low-amplitude turbulent displacement makes the whole frame ripple like air over hot tarmac, with a slight warm push.",
+   "use_for": [
+    "summer heatwave or drought story",
+    "desert, highway or runway shots",
+    "jet exhaust or fire-adjacent shots",
+    "dream / delirium beat"
+   ],
+   "avoid": [
+    "Amount above ~35: it stops reading as heat and becomes a liquid warp",
+    "text or graphics on the same clip (they ripple too: put titles on their own track)",
+    "talking heads: wobbling faces look like a glitch"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Turbulent Displace",
+     "pr_props": {
+      "Displacement": 0,
+      "Amount": 18,
+      "Size": 45,
+      "Complexity": 2,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        4,
+        1080
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 25,
+      "Saturation": 110
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Turbulent Displace",
+     "props": {
+      "Displacement": 1,
+      "Amount": 18,
+      "Size": 45,
+      "Complexity": 2,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        4,
+        1080
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 25,
+      "Saturation": 110
+     }
+    }
+   ],
+   "keyframes_note": "Keep Evolution moving fast (about 270 deg per second) so the shimmer boils; extend the ramp for long clips. Leave Pinning at its default (Pin All) so the frame edges do not pull in. For haze only near the ground, use it on a duplicate of the clip cropped to the lower third on the track above.",
+   "built_from": [
+    "Turbulent Displace",
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/090b.png",
+    "note": "Wall mouldings, stripe edges and a small round motif carry a fine wavy displacement plus a warm push, readable at full size as heat shimmer.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/119b.png",
+     "note": "The wall mouldings and stripe edges carry a fine wavy displacement under a warm, slightly more saturated push, readable at full size as heat shimmer; vs Premiere: same strength and warmth as Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Rising embers",
+   "summary": "Small glowing orange-yellow sparks drift upward from the bottom of frame and fade out, with a soft glow on them.",
+   "use_for": [
+    "burning building, riot or war footage",
+    "trailer title card background",
+    "Diwali / festival night shots",
+    "anger or 'fire' beats in a political explainer"
+   ],
+   "avoid": [
+    "Premiere: it has no particle generator, so this look is After Effects only (use 'Firelight glow flicker' in Premiere)",
+    "dense Birth Rate: it turns into a snowstorm of orange dots",
+    "calm or factual news segments"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "CC Particle World",
+     "props": {
+      "Birth Rate": 1.5,
+      "Longevity (sec)": 3,
+      "Position Y": 0.35,
+      "Radius X": 0.6,
+      "Radius Y": 0.05,
+      "Radius Z": 0.3,
+      "Velocity": 0.25,
+      "Gravity": -0.15,
+      "Extra": 0.6,
+      "Particle Type": 5,
+      "Birth Size": 0.1,
+      "Death Size": 0.04,
+      "Size Variation": 60,
+      "Max Opacity": 90,
+      "Birth Color": "#FFD27A",
+      "Death Color": "#FF4A10",
+      "Composite With Original": 1
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Threshold": 240,
+      "Glow Radius": 25,
+      "Glow Intensity": 1.2
+     }
+    }
+   ],
+   "sfx": [
+    "amb_fire",
+    "amb_crackle"
+   ],
+   "keyframes_note": "The simulation runs from the layer's start, so pre-roll: start the layer about 1 s before it is seen (or keyframe Birth Rate [[0, 8], [0.5, 1.5]] for an initial burst) and QC frames at least 1 s in. Negative Gravity makes them rise; Particle Type 5 = Faded Sphere. Glow also blooms the footage's own highlights above threshold 170; raise it if the shot is bright. Cleaner variant: put both effects on a black solid in Add/Screen mode with Composite With Original 0.",
+   "built_from": [
+    "CC Particle World",
+    "Glow"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/recipes_ae/120b.png",
+    "note": "Only a few tiny orange specks rise in the lower half while the Glow at threshold 170 blooms the bright wall, foreground blocks and flowers into saturated orange-yellow, so the frame reads as an over-glowed grade rather than embers.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "after_effects changed: On this footage about a quarter of the pixels have a red channel above 170, so the Glow tints the whole wall; at 240 only the lamps, the hottest flowers and the embers themselves (red channel 255) still glow.; not rendered again",
+      "frame": "pve/gallery/recipes_ae/120b.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Firelight glow flicker",
+   "summary": "A warm orange grade with an amber spotlight pool whose intensity flickers irregularly and amber-bloomed highlights, giving a torch- or fire-lit feel; in the Premiere render the pool landed upper left rather than low in frame, so check where it falls.",
+   "use_for": [
+    "night protest, vigil or torch march",
+    "campfire / village night scenes",
+    "pairs with Rising embers (AE) for fire scenes",
+    "dramatic reconstruction of a historic event"
+   ],
+   "avoid": [
+    "daylight exteriors: a warm flicker with no visible fire source reads as a fault",
+    "fast regular flicker: real firelight is irregular, keep the keyframe gaps uneven",
+    "Lighting Effects Intensity above ~60: the hotspot blows out"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 45,
+      "Tint": 8,
+      "Saturation": 115,
+      "Contrast": 10
+     }
+    },
+    {
+     "name": "Lighting Effects",
+     "pr_props": {
+      "Light Type": 3,
+      "Light Color": "#FF8A3D",
+      "Center": [
+       0.5,
+       0.8
+      ],
+      "Major Radius": 38,
+      "Minor Radius": 30,
+      "Intensity": [
+       [
+        0,
+        32
+       ],
+       [
+        0.15,
+        44
+       ],
+       [
+        0.3,
+        30
+       ],
+       [
+        0.5,
+        46
+       ],
+       [
+        0.7,
+        33
+       ],
+       [
+        0.9,
+        42
+       ],
+       [
+        1.1,
+        30
+       ],
+       [
+        1.3,
+        45
+       ],
+       [
+        1.5,
+        32
+       ]
+      ],
+      "Focus": 30,
+      "Ambience Intensity": 25
+     }
+    },
+    {
+     "name": "Wonder Glow",
+     "pr_props": {
+      "Intensity": 40,
+      "Highlights Only": 60,
+      "Size": 80,
+      "Color": "#FF9A40",
+      "Colorize": 50
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 45,
+      "Tint": 8,
+      "Saturation": 115,
+      "Contrast": 10
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        0
+       ],
+       [
+        0.15,
+        0.25
+       ],
+       [
+        0.3,
+        -0.1
+       ],
+       [
+        0.5,
+        0.3
+       ],
+       [
+        0.7,
+        0
+       ],
+       [
+        0.9,
+        0.2
+       ],
+       [
+        1.1,
+        -0.05
+       ],
+       [
+        1.3,
+        0.25
+       ],
+       [
+        1.5,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Threshold": 175,
+      "Glow Radius": 50,
+      "Glow Intensity": 1
+     }
+    }
+   ],
+   "sfx": [
+    "amb_fire"
+   ],
+   "keyframes_note": "The flicker keyframes cover 1.5 s; repeat the same uneven pattern (shift by 1.5 s) to the clip length. Premiere flickers the light's Intensity (30-46), After Effects flickers Exposure (-0.1..+0.3 stops). Move the light Center toward where the fire would be (frame fractions in Premiere). Keep Major/Minor Radius under ~40: the gallery render at 60/45 lit most of the frame and blew out the top-left wall instead of reading as a pool low in frame. Render check at Center [0.5, 0.8], radius 38/30, Focus 30: the pool landed upper left (around [0.3, 0.35]) instead of at Center, while a radius-20 spot with Focus 60 (the spotlight pulse recipe) did land on its Center, so check the pool position on a frame before relying on Center with a large, low spot.",
+   "built_from": [
+    "Lumetri Color",
+    "Lighting Effects",
+    "Wonder Glow",
+    "Exposure",
+    "Glow"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/091b.png",
+    "note": "Re-render: the top-left wall no longer blows out (0.1% near white) and the light flickers unevenly (frame luma swings about 10/255 on the keyed beats), but the whole frame is still graded orange and the round pool landed upper left of the frame instead of low at Center [0.5, 0.8], so it reads as a flickering warm spotlight rather than a fire below; summary rewritten.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/121b.png",
+     "note": "The whole frame goes strongly orange with the bright wall bloomed amber and the top right close to blown yellow, a torch-lit feel, though the uneven Exposure flicker cannot be judged from two frames; vs Premiere: AE has no light pool, so it warms and blooms the whole frame evenly where Premiere puts a round amber pool upper left.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Snowfall",
+   "summary": "Procedural snow falls over the shot in two depth layers (fine distant flakes plus a few large near flakes) under a cool grade.",
+   "use_for": [
+    "winter, Kashmir or Himalayan stories",
+    "Christmas / year-end reels",
+    "cold, bleak or lonely mood beats",
+    "background for a quote card"
+   ],
+   "avoid": [
+    "Premiere: no snow generator, After Effects only",
+    "summer or indoor footage",
+    "snow added to real news footage presented as real (misleading): keep it on titles, graphics or clearly stylised shots",
+    "raising both Flakes and Size far past these values: it becomes a white sheet"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "CSSnowfall",
+     "props": {
+      "Flakes": 15000,
+      "Size": 8,
+      "Variation % (Size)": 40,
+      "Scene Depth": 3000,
+      "Speed": 220,
+      "Wind": 60,
+      "Opacity": 95,
+      "Color": "#FFFFFF"
+     }
+    },
+    {
+     "name": "CSSnowfall",
+     "props": {
+      "Flakes": 1500,
+      "Size": 13,
+      "Scene Depth": 1500,
+      "Speed": 380,
+      "Wind": 90,
+      "Opacity": 90,
+      "Color": "#FFFFFF",
+      "Random Seed": 7
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": -30,
+      "Saturation": 85,
+      "Contrast": -10
+     }
+    }
+   ],
+   "keyframes_note": "No keyframes needed: CC Snowfall animates on its own and covers the frame from the first frame. The two instances differ in Size, Scene Depth, Speed and Random Seed to give depth. The render check found Size 3-5 / Opacity 50-85 reads as faint 1-2 px specks on a full frame, hence Size 8 and 13 at Opacity 90-95. Composite With Original stays at its default 1 (snow over the image).",
+   "built_from": [
+    "CC Snowfall",
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes_ae/122b.png",
+    "note": "Dense fine white flakes plus scattered larger flakes cover the whole frame under a cooler, desaturated grade, reading clearly as snow falling in depth.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Rainstorm",
+   "summary": "Fast slanted rain streaks over a darker, cooler, desaturated grade for a stormy monsoon feel.",
+   "use_for": [
+    "monsoon, flood or cyclone coverage",
+    "grim or tense dramatic beats",
+    "noir reconstruction",
+    "pairs with 'Lightning strike flash'"
+   ],
+   "avoid": [
+    "Premiere: no rain generator, After Effects only",
+    "footage that is visibly sunny or dry",
+    "rain added to real news footage presented as real (misleading): keep it to reconstructions, titles or stylised shots",
+    "Drops above ~100k: slow renders for no visible gain"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "CSRainfall",
+     "props": {
+      "Drops": 15000,
+      "Size": 4,
+      "Scene Depth": 5000,
+      "Speed": 5000,
+      "Wind": 350,
+      "Spread": 8,
+      "Opacity": 60,
+      "Color": "#DDE6EE"
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": -25,
+      "Saturation": 75,
+      "Contrast": 10,
+      "Exposure": -0.4
+     }
+    }
+   ],
+   "keyframes_note": "No keyframes needed; drops cover the frame from the first frame. Wind 300 slants the streaks; set Wind negative to slant the other way. Change Random Seed on a second copy for heavier rain. After Effects: at Speed 5000 the Wind 350 streaks rendered almost vertical, so raise Wind (or lower Speed) if the slant must read.",
+   "built_from": [
+    "CC Rainfall",
+    "Lumetri Color"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes_ae/123b.png",
+    "note": "Dense thin pale streaks cover the frame over a slightly darker, cooler and much less saturated grade, reading as heavy rain, though the streaks fall almost vertically rather than visibly slanted.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Lightning strike flash",
+   "summary": "A branching white-blue bolt hits the frame while the exposure double-flashes and decays, like a close lightning strike.",
+   "use_for": [
+    "storm or cyclone coverage",
+    "shock reveal or 'thunderbolt' moment in a political explainer",
+    "trailer hit on a beat",
+    "pairs with Rainstorm"
+   ],
+   "avoid": [
+    "holding the bolt on screen longer than ~0.4 s: it looks drawn on",
+    "factual news footage",
+    "flashing more than ~3 times per second (photosensitivity)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lightning",
+     "pr_props": {
+      "Start point": [
+       0.55,
+       0.0
+      ],
+      "End point": [
+       0.42,
+       0.8
+      ],
+      "Segments": 12,
+      "Amplitude": 22,
+      "Detail Level": 4,
+      "Branching": 0.4,
+      "Speed": 10,
+      "Width": [
+       [
+        0,
+        30
+       ],
+       [
+        0.12,
+        14
+       ],
+       [
+        0.3,
+        3
+       ]
+      ],
+      "Inside Color": "#FFFFFF"
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": -20,
+      "Exposure": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        2.2
+       ],
+       [
+        0.12,
+        0.3
+       ],
+       [
+        0.2,
+        1.4
+       ],
+       [
+        0.4,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        0
+       ],
+       [
+        0.04,
+        2.5
+       ],
+       [
+        0.12,
+        0.3
+       ],
+       [
+        0.2,
+        1.5
+       ],
+       [
+        0.4,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Lightning 2",
+     "props": {
+      "Lightning Type": 2,
+      "Origin": [
+       1056,
+       0
+      ],
+      "Contextual Control": [
+       806,
+       864
+      ],
+      "Core Radius": 4,
+      "Core Opacity": [
+       [
+        0,
+        95
+       ],
+       [
+        0.25,
+        95
+       ],
+       [
+        0.35,
+        0
+       ]
+      ],
+      "Glow Radius": 80,
+      "Glow Opacity": [
+       [
+        0,
+        70
+       ],
+       [
+        0.25,
+        70
+       ],
+       [
+        0.35,
+        0
+       ]
+      ],
+      "Glow Color": "#7FB8FF",
+      "Turbulence": 1.5,
+      "Forking": 0.35,
+      "Conductivity State": [
+       [
+        0,
+        0
+       ],
+       [
+        0.35,
+        12
+       ]
+      ],
+      "Composite on Original": 1
+     }
+    }
+   ],
+   "sfx": [
+    "boom"
+   ],
+   "keyframes_note": "Times are from the strike. Premiere's bolt cannot be faded to nothing (Width minimum 1), so split the clip and put both effects on a 0.35-0.4 s slice that starts at the strike. After Effects fades the bolt with Core/Glow Opacity instead, so it can sit on the whole clip with the keyframes offset to the strike. AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "Lightning",
+    "Lumetri Color",
+    "Advanced Lightning",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/092a.png",
+    "note": "A thin branching blue-white bolt crosses the frame while the exposure flash lifts the whole picture; only a faint residual bolt is left at 1.0 s.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/124a.png",
+     "note": "At 0.2 s the +1.5-stop flash, applied after the bolt, blows the bolt's blue glow into a broad featureless white beam with no branches readable, and by 1.0 s the frame is clean; vs Premiere: Premiere draws a thin branching blue-white bolt; AE gives a thick blown white streak.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: The Exposure keys sit after Lightning and multiply its #7FB8FF glow to clipped white; with Exposure first the double flash still lifts the footage while the white core, forks and blue glow composite on top unclipped.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/124a.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Lens flare sweep",
+   "summary": "A classic lens flare fades up and travels left to right across the top of frame, like the sun catching the lens.",
+   "use_for": [
+    "skyline, rally or sunrise establishing shots",
+    "logo or title reveal (sweep across it)",
+    "hope / victory beat in a reel",
+    "product or trophy glint"
+   ],
+   "avoid": [
+    "no plausible light source in the shot: reads fake",
+    "brightness over ~150 on faces or text",
+    "neutral news footage (stylised, editorialised)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lens Flare",
+     "pr_props": {
+      "Flare Center": [
+       [
+        0,
+        [
+         0.15,
+         0.25
+        ]
+       ],
+       [
+        2.5,
+        [
+         0.85,
+         0.2
+        ]
+       ]
+      ],
+      "Flare Brightness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.4,
+        110
+       ],
+       [
+        2.1,
+        110
+       ],
+       [
+        2.5,
+        0
+       ]
+      ],
+      "Lens Type": 0,
+      "Blend With Original": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lens Flare",
+     "props": {
+      "Flare Center": [
+       [
+        0,
+        [
+         290,
+         270
+        ]
+       ],
+       [
+        2.5,
+        [
+         1630,
+         215
+        ]
+       ]
+      ],
+      "Flare Brightness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.4,
+        110
+       ],
+       [
+        2.1,
+        110
+       ],
+       [
+        2.5,
+        0
+       ]
+      ],
+      "Lens Type": 1,
+      "Blend With Original": 0
+     }
+    }
+   ],
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "2.5 s sweep; scale the times to the clip. Lens Type is 0-based in Premiere (0 = 50-300mm Zoom) and 1-based in After Effects (1 = the same lens). For a static sun hit, drop the Flare Center keyframes and park it on the real light source. AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "Lens Flare"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/093b.png",
+    "note": "A faint small flare at the left at 0.2 s becomes a bright flare with rings at mid-left near the top by 1.0 s, so it fades up and travels left to right.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/125b.png",
+     "note": "A faint small flare at upper left at 0.2 s becomes a bright flare with ghost rings further right along the top by 1.0 s, so it fades up and travels left to right; vs Premiere: practically identical to Premiere.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "God rays from above",
+   "summary": "Warm volumetric light rays stream down from a source above the frame through the bright areas and slowly drift.",
+   "use_for": [
+    "temple, parliament or monument interiors",
+    "inspirational / tribute moments",
+    "dusty archival interiors",
+    "pairs with Floating dust motes (AE)"
+   ],
+   "avoid": [
+    "night or very dark footage: the rays are driven by highlights and barely show",
+    "faces in the ray path at high Intensity (they wash out)",
+    "hard-news footage"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Volumetric Rays",
+     "pr_props": {
+      "Intensity": [
+       [
+        0,
+        0
+       ],
+       [
+        0.8,
+        75
+       ]
+      ],
+      "Highlights Only": 45,
+      "Ray Length": 85,
+      "Light Position": [
+       [
+        0,
+        [
+         0.42,
+         0.12
+        ]
+       ],
+       [
+        6,
+        [
+         0.58,
+         0.12
+        ]
+       ]
+      ],
+      "Volumetric Fog": 30,
+      "Color": "#FFD9A0",
+      "Colorize": 40
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "CC Light Rays",
+     "props": {
+      "Intensity": [
+       [
+        0,
+        0
+       ],
+       [
+        0.8,
+        300
+       ]
+      ],
+      "Center": [
+       [
+        0,
+        [
+         806,
+         130
+        ]
+       ],
+       [
+        6,
+        [
+         1114,
+         130
+        ]
+       ]
+      ],
+      "Radius": 100,
+      "Warp Softness": 60,
+      "Shape": 1,
+      "Color from Source": 1,
+      "Allow Brightening": 1
+     }
+    }
+   ],
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "Rays fade up over 0.8 s and the source drifts 16% of the frame width over 6 s; stretch the drift to the clip length and keep it slow. Put the source where a window or sky would be. AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "Volumetric Rays",
+    "CC Light Rays"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/094b.png",
+    "note": "Warm yellow rays stream down through the bright areas; strong (foreground blocks blown, 22% near white) but faces and stripes stay readable.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/126b.png",
+     "note": "At 1.0 s the rays show only as a small hot warm spot near the top centre with a mild overall lift, with no ray streaks reaching down through the frame; vs Premiere: much weaker than Premiere, which streams strong yellow rays down through the bright areas.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: The card's verified demo at Intensity 300 with a 70 px source drew visible radial streaks, while 220 with a 60 px source lights only a spot, so a stronger ramp and a larger emitting area let the rays reach down into the frame.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/126b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Glint sparkle on highlights",
+   "summary": "Star-shaped glints twinkle on the brightest highlights (metal, jewellery, water, lights) for a festive or premium sparkle.",
+   "use_for": [
+    "awards, medals, trophies, gold or jewellery shots",
+    "Diwali lights and celebration reels",
+    "water or snow glitter",
+    "premium product or launch beats"
+   ],
+   "avoid": [
+    "dark frames: glints come from highlights only (lower Highlights Only first)",
+    "serious or tragic stories",
+    "After Effects version on busy bright frames: every highlight gets a cross streak"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Glint",
+     "pr_props": {
+      "Intensity": [
+       [
+        0,
+        0
+       ],
+       [
+        0.4,
+        85
+       ]
+      ],
+      "Highlights Only": 30,
+      "Glint Scale": 45,
+      "Cross Scale": 60,
+      "Shimmer": 80,
+      "Shimmer Speed": 60,
+      "Colorize": 30
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Threshold": 240,
+      "Glow Radius": 140,
+      "Glow Intensity": [
+       [
+        0,
+        0
+       ],
+       [
+        0.4,
+        1.5
+       ]
+      ],
+      "Glow Dimensions": 2
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Threshold": 240,
+      "Glow Radius": 140,
+      "Glow Intensity": [
+       [
+        0,
+        0
+       ],
+       [
+        0.4,
+        1.5
+       ]
+      ],
+      "Glow Dimensions": 3
+     }
+    }
+   ],
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Fade in over 0.4 s; Premiere's Glint shimmers by itself (Shimmer Speed). After Effects has no glint effect: two Glows, one horizontal-only and one vertical-only, draw cross streaks from the hottest highlights; for a twinkle, wobble their Glow Intensity between 0.8 and 1.8 every 0.2-0.4 s.",
+   "built_from": [
+    "Glint",
+    "Glow"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/095b.png",
+    "note": "Long star streaks radiate from the small lamps and other highlights with a soft overall sheen.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/127b.png",
+     "note": "Long horizontal and vertical streaks fire from the small lamps, but the Glow at threshold 210 also washes the upper wall around the left-hand stripes and the flowers in salmon-red, so the frame reads as a red flare grade rather than sparkle on the hottest highlights; vs Premiere: Premiere gives fine white star glints on the lamps with no colour cast.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Here the left-hand white stripe and the bright wall patches have red-channel values between 210 and 240, so at 240 essentially only the lamps (and the hottest flowers) still glow and draw the cross streaks.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/127b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Soft highlight bloom",
+   "summary": "Highlights bloom into a soft warm glow and contrast eases off, giving a dreamy, nostalgic or heroic sheen.",
+   "use_for": [
+    "memory, tribute or flashback beats",
+    "wedding / celebration reels",
+    "hero shot of a leader or athlete",
+    "sunset and golden-hour footage"
+   ],
+   "avoid": [
+    "Wonder Glow Intensity above ~70 or Size above ~150: the frame turns into a yellow haze (gallery render at 85/120 was overblown)",
+    "text-heavy graphics (letters smear)",
+    "After Effects Glow Threshold below ~150 (raw 0-255) on daylight footage: the render check blew the frame to white with false-colour blobs",
+    "investigative or hard-news segments"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Wonder Glow",
+     "pr_props": {
+      "Intensity": 70,
+      "Highlights Only": 40,
+      "Size": 110,
+      "Volumetric Glow": 10,
+      "Color": "#FFE2B8",
+      "Colorize": 25,
+      "Ambient Amount": 10
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": -10,
+      "Highlights": -15,
+      "Faded Film": 10
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Threshold": 175,
+      "Glow Radius": 60,
+      "Glow Intensity": 0.8
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Contrast": -10,
+      "Highlights": -15,
+      "Faded Film": 10
+     }
+    }
+   ],
+   "keyframes_note": "Static look. For a bloom hit on a cut, keyframe Wonder Glow Intensity [[0, 100], [0.4, 70]] (After Effects Glow Intensity [[0, 2.5], [0.4, 0.8]]).",
+   "built_from": [
+    "Wonder Glow",
+    "Lumetri Color",
+    "Glow"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/096b.png",
+    "note": "Re-render with Wonder Glow 70/40/110: the lamps, the left-hand white stripe and the top-right wall now bloom into a warm cream glow and the whole frame lifts and softens (mean diff about 30/255 against 6 before, 3% near white) while faces and stripes stay readable.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/128b.png",
+     "note": "The bright wall, lamps and stripe highlights bloom into a warm glow that runs salmon-orange on the wall and near blown at the top right, a strong dreamy sheen; vs Premiere: stronger and more saturated orange than Premiere's cream bloom.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Light leak wash over a cut",
+   "summary": "Film light-leak streaks wash across the cut and keep glowing off the incoming shot before fading. Premiere's Light Leaks effect alone renders cool cyan-blue streaks; the warmth comes from the transition (After Effects carries a warm light-ray bloom instead).",
+   "use_for": [
+    "travel, lifestyle or celebration montage",
+    "flashback entry or nostalgic chapter",
+    "soft transition between two warm shots",
+    "music-driven reels"
+   ],
+   "avoid": [
+    "hard news or serious stories",
+    "Light Leaks effect left at full Master for more than ~1 s (it hides the shot)",
+    "relying on the effect's colour: its default spectrum renders cool cyan, the warmth comes from the Chroma Leak transition"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Light Leaks",
+     "pr_props": {
+      "Master": [
+       [
+        0,
+        100
+       ],
+       [
+        0.9,
+        0
+       ]
+      ],
+      "Strike Amount": 90,
+      "Spot Amount": 50,
+      "Position": [
+       0.2,
+       0.25
+      ],
+      "Speed": 10
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "CC Light Rays",
+     "props": {
+      "Center": [
+       [
+        0,
+        [
+         150,
+         150
+        ]
+       ],
+       [
+        0.9,
+        [
+         650,
+         250
+        ]
+       ]
+      ],
+      "Radius": 260,
+      "Warp Softness": 120,
+      "Intensity": [
+       [
+        0,
+        400
+       ],
+       [
+        0.9,
+        0
+       ]
+      ],
+      "Color from Source": 0,
+      "Color": "#FF9A3C",
+      "Allow Brightening": 1
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        0,
+        1
+       ],
+       [
+        0.9,
+        0
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Chroma Leak",
+    "dur": 1.0
+   },
+   "sfx": [
+    "air"
+   ],
+   "keyframes_note": "Put the transition on the incoming clip (centred on the cut, needs 0.5 s handles both sides) and the effects on the incoming clip's head: times are from that clip's start, so the leak decays over its first 0.9 s. After Effects shows the transition as a cut unless the build gets an ae_preset, so its version carries the whole leak in the effects: a warm-coloured light-ray bloom from the top-left corner plus an exposure lift, both decaying. AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "Light Leaks",
+    "Chroma Leak",
+    "CC Light Rays",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/097a.png",
+    "note": "Cool cyan-blue streaks wash over the picture at 0.2 s and are gone by 1.0 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the summary from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: rewritten summary said cyan, teal and magenta; measured delta vs the clean 0.2 s frame is about 66% blue, 30% cyan, 3% magenta, so it now says cool cyan-blue"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/129a.png",
+     "note": "At 0.2 s a warm yellow bloom, brightest at the top left, washes most of the frame toward blown (luma about double the clean frame) and by 1.0 s it has fully decayed, a hot leak hit on the cut; vs Premiere: AE washes warm yellow over the whole frame where Premiere lays cool cyan-blue streaks from the right.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Film burn cut",
+   "summary": "The outgoing shot overexposes and warms toward orange-white as a film burn takes it, then the burn clears onto the next shot.",
+   "use_for": [
+    "archival or retro montage",
+    "end of a chapter or era in a documentary",
+    "scandal / 'burning issue' reveal",
+    "trailer act break"
+   ],
+   "avoid": [
+    "using it on every cut",
+    "short clips without 0.4 s handles on both sides of the cut (centred transition)",
+    "text on the incoming shot in the first ~0.4 s (burn residue)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": [
+       [
+        -0.6,
+        0
+       ],
+       [
+        -0.04,
+        1.5
+       ]
+      ],
+      "Temperature": [
+       [
+        -0.6,
+        0
+       ],
+       [
+        -0.04,
+        70
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Wonder Glow",
+     "pr_props": {
+      "Intensity": [
+       [
+        -0.6,
+        0
+       ],
+       [
+        -0.04,
+        90
+       ]
+      ],
+      "Highlights Only": 20,
+      "Size": 150,
+      "Color": "#FF7A1A",
+      "Colorize": 70
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "CC Burn Film",
+     "props": {
+      "Burn": [
+       [
+        -0.7,
+        0
+       ],
+       [
+        -0.04,
+        80
+       ]
+      ],
+      "Center": [
+       900,
+       500
+      ],
+      "Random Seed": 12
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -0.7,
+        0
+       ],
+       [
+        -0.04,
+        1.5
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "Burn Chroma",
+    "dur": 0.8
+   },
+   "sfx": [
+    "air",
+    "amb_projector"
+   ],
+   "keyframes_note": "Effects go on the OUTGOING clip and their times are negative, from its end: the last 0.6-0.7 s overexposes and warms into the cut. The end keys sit at -0.04 (the last frame), never 0: a key time of 0 means the clip START, so [0, peak] plays the move at the head (the gallery render showed exactly that). The 'Burn Chroma' transition goes on the incoming clip, centred on the cut. For a fiery burn-through with glowing holes use the 'Phosphor' transition instead. In After Effects CC Burn Film eats the shot into charred holes that show whatever is below (black on a single track). AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "Lumetri Color",
+    "Wonder Glow",
+    "Burn Chroma",
+    "Phosphor",
+    "CC Burn Film",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/098c.png",
+    "note": "With the end keys at -0.04 the 0.2 s and 1.0 s frames are now clean (identical to the reference) and the burn plays at the tail as intended: from about 1.4 s the shot warms and overexposes until the last frames are blown yellow-orange with dark orange glow blotches (098c, taken at 1.84 s from the same render).",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/130b.png",
+     "note": "Both frames are clean (the 1.0 s frame is identical to the reference) because the burn and exposure keys run only over the last 0.7 s before the cut, which neither sample reaches; vs Premiere: Premiere passed on an extra tail frame at 1.84 s; the AE half needs the same tail sample.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Bokeh dream background",
+   "summary": "The shot racks out of focus into lens bokeh discs and dips slightly darker so text or a cut-out on top stands out.",
+   "use_for": [
+    "background behind a quote card, title or lower-third",
+    "memory / tribute photo montage",
+    "night city lights and festival lights",
+    "transition into a dream or flashback"
+   ],
+   "avoid": [
+    "footage without point highlights: it just looks blurry",
+    "Gain near 100 on bright skies (blooms to white)",
+    "when the background content itself is the evidence"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Bokeh Blur",
+     "pr_props": {
+      "Blur Amount": [
+       [
+        0,
+        0
+       ],
+       [
+        0.8,
+        45
+       ]
+      ],
+      "Aperture Edges": 6,
+      "Aperture Roundness": 60,
+      "Gain": 85
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Exposure": -0.3
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Camera Lens Blur",
+     "props": {
+      "Blur Radius": [
+       [
+        0,
+        0
+       ],
+       [
+        0.8,
+        30
+       ]
+      ],
+      "Shape": 4,
+      "Roundness": 60,
+      "Gain": 25,
+      "Threshold": 0.7
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Exposure": -0.3
+     }
+    }
+   ],
+   "keyframes_note": "Rack defocus over 0.8 s, timed so the text lands as the blur peaks. For a static background drop the keyframes (Blur Amount 45 / Blur Radius 30).",
+   "built_from": [
+    "Bokeh Blur",
+    "Lumetri Color",
+    "Camera Lens Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/099b.png",
+    "note": "At 1.0 s the shot is racked fully soft into round bokeh discs and slightly darker; at 0.2 s it is still nearly sharp.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/131b.png",
+     "note": "At 0.2 s the shot is still nearly sharp and at 1.0 s it is racked fully soft, with highlights spread into soft discs and a slight darkening; vs Premiere: matches Premiere in softness and darkening.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Floating dust motes",
+   "summary": "Sparse soft specks of dust drift slowly through the frame, catching light, for an old-room or sunbeam atmosphere.",
+   "use_for": [
+    "archival interiors, libraries, old houses",
+    "interview B-roll in a sunlit room",
+    "pairs with God rays from above",
+    "nostalgic or reflective beats"
+   ],
+   "avoid": [
+    "Premiere: no particle generator, After Effects only",
+    "high Birth Rate: it looks like snow",
+    "fast-moving or handheld footage (the motes do not track the camera)"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "CC Particle World",
+     "props": {
+      "Birth Rate": [
+       [
+        0,
+        8
+       ],
+       [
+        0.4,
+        0.6
+       ]
+      ],
+      "Longevity (sec)": 6,
+      "Radius X": 0.8,
+      "Radius Y": 0.5,
+      "Radius Z": 0.4,
+      "Velocity": 0.02,
+      "Gravity": -0.01,
+      "Extra": 0.3,
+      "Particle Type": 5,
+      "Birth Size": 0.1,
+      "Death Size": 0.08,
+      "Size Variation": 70,
+      "Max Opacity": 80,
+      "Birth Color": "#FFF1D6",
+      "Death Color": "#FFE2B0",
+      "Composite With Original": 1
+     }
+    }
+   ],
+   "keyframes_note": "The opening Birth Rate burst seeds the whole volume, then 0.6 keeps it topped up; still QC at >= 1 s of layer time. Velocity and Gravity near zero keep the drift lazy. Pair with God rays from above for dust in a beam.",
+   "built_from": [
+    "CC Particle World"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/recipes_ae/132b.png",
+    "note": "Only scattered cream specks a few pixels wide appear (the 1.0 s frame differs from the clean reference by about 0.5/255 on average), too small and faint to read as dust at normal viewing size.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     },
+     {
+      "verdict": "weak",
+      "changed": "2026-10-14",
+      "why": "after_effects changed: At Birth Size 0.04 and Max Opacity 55 the motes are a few pixels wide and half transparent; 0.1 is the size at which the ember recipe's sparks read as distinct specks, and higher opacity lets them catch the light.; not rendered again",
+      "frame": "pve/gallery/recipes_ae/132b.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Map location pulse ring",
+   "summary": "A solid dot marks a place on a map while a thin ring expands from it and fades, repeating like a radar ping.",
+   "use_for": [
+    "marking a city, constituency or incident site on a map",
+    "data-viz callout on a chart point",
+    "'where it happened' beats in news explainers"
+   ],
+   "avoid": [
+    "Premiere: no ring generator; use the 'Map / chart region spotlight pulse' recipe or the 'Simple Map Marker' After Effects preset",
+    "more than 3-4 simultaneous pings (visual noise)",
+    "colours that clash with the map palette"
+   ],
+   "app": "AE",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Radius": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        140
+       ],
+       [
+        1.21,
+        0
+       ],
+       [
+        2.4,
+        140
+       ],
+       [
+        2.41,
+        0
+       ],
+       [
+        3.6,
+        140
+       ]
+      ],
+      "Edge": 3,
+      "Contextual Slider": 8,
+      "Color": "#FFD400",
+      "Opacity": [
+       [
+        0,
+        100
+       ],
+       [
+        1.2,
+        0
+       ],
+       [
+        1.21,
+        100
+       ],
+       [
+        2.4,
+        0
+       ],
+       [
+        2.41,
+        100
+       ],
+       [
+        3.6,
+        0
+       ]
+      ],
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       960,
+       540
+      ],
+      "Radius": 12,
+      "Edge": 1,
+      "Color": "#FFD400",
+      "Opacity": 100,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Threshold": 240,
+      "Glow Radius": 20,
+      "Glow Intensity": 1
+     }
+    }
+   ],
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Three 1.2 s pings; append more pairs to loop. Set both Circle Centers to the location in comp pixels. Edge 3 = Thickness (Contextual Slider = ring thickness px); Blending Mode 2 = Normal keeps the map visible (1 = None would show only the circle). AE points are comp pixels for 1920x1080; scale x and y for other frame sizes (x*W/1920, y*H/1080).",
+   "built_from": [
+    "Circle",
+    "Glow",
+    "Simple Map Marker"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "corrected_unverified",
+    "frame": "pve/gallery/recipes_ae/133b.png",
+    "note": "The yellow dot and the expanding thin ring read clearly at the frame centre (small ring at 0.2 s, wide faded ring at 1.0 s), but the Glow at threshold 180 also blooms the bright wall and lamps into orange-yellow across the whole picture.",
+    "rerender": true,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)",
+      "second_opinion": "agree"
+     },
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-14",
+      "why": "after_effects changed: The Glow is meant for the dot and ring (red channel 255) but at 180 it also catches about a fifth of the base picture; at 240 it leaves the map or footage underneath untouched except its hottest whites.; not rendered again",
+      "frame": "pve/gallery/recipes_ae/133b.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Map / chart region spotlight pulse",
+   "summary": "Everything except one region of a map or chart dims and softens while a warm light pool on the region pulses.",
+   "use_for": [
+    "highlighting a state or district on a map",
+    "pointing at one bar, line or number in a chart screenshot",
+    "focusing on one face in a group photo",
+    "document or newspaper callout"
+   ],
+   "avoid": [
+    "region near the frame edge (the light pool falls off-frame)",
+    "moving footage: the spotlight does not track",
+    "Ambience Intensity below ~10: the rest of the map goes black and loses context"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lighting Effects",
+     "pr_props": {
+      "Light Type": 3,
+      "Light Color": "#FFE6A0",
+      "Center": [
+       0.62,
+       0.4
+      ],
+      "Major Radius": 20,
+      "Minor Radius": 20,
+      "Intensity": [
+       [
+        0,
+        30
+       ],
+       [
+        0.4,
+        50
+       ],
+       [
+        0.8,
+        30
+       ],
+       [
+        1.2,
+        50
+       ],
+       [
+        1.6,
+        30
+       ]
+      ],
+      "Focus": 60,
+      "Ambience Intensity": 25
+     }
+    },
+    {
+     "name": "Focus Blur",
+     "pr_props": {
+      "Blur Amount": [
+       [
+        0,
+        0
+       ],
+       [
+        0.5,
+        30
+       ]
+      ],
+      "Position": [
+       0.62,
+       0.4
+      ],
+      "Width": 25,
+      "Height": 35,
+      "Feather": 80,
+      "Gain": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       1190,
+       432
+      ],
+      "Radius": 230,
+      "Edge": 1,
+      "Feather Outer Edge": 150,
+      "Invert Circle": 1,
+      "Color": "#000000",
+      "Opacity": [
+       [
+        0,
+        0
+       ],
+       [
+        0.5,
+        60
+       ]
+      ],
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       1190,
+       432
+      ],
+      "Radius": [
+       [
+        0.5,
+        200
+       ],
+       [
+        1.3,
+        250
+       ],
+       [
+        1.31,
+        200
+       ],
+       [
+        2.1,
+        250
+       ]
+      ],
+      "Edge": 3,
+      "Contextual Slider": 6,
+      "Color": "#FFD400",
+      "Opacity": [
+       [
+        0.5,
+        100
+       ],
+       [
+        1.3,
+        0
+       ],
+       [
+        1.31,
+        100
+       ],
+       [
+        2.1,
+        0
+       ]
+      ],
+      "Blending Mode": 2
+     }
+    }
+   ],
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Set the region in both apps: Premiere Center/Position as frame fractions, After Effects Center in comp pixels ([0.62, 0.4] = [1190, 432] in 1920x1080). Premiere pulses the light Intensity 30-50 every 0.8 s; After Effects dims the outside of a feathered circle to 60% black (inverted Circle) and pings a yellow ring twice. Repeat the pulse pairs for longer holds.",
+   "built_from": [
+    "Lighting Effects",
+    "Focus Blur",
+    "Circle"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/100b.png",
+    "note": "A warm round light pool sits on the stripes and the right-hand figure while everything else dims and blurs; the pool core runs hot (8% clipped).",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/134b.png",
+     "note": "A yellow ring pings around the right-hand region while everything outside a feathered circle there darkens to about 60% black by 1.0 s, so the region is clearly spotlit; vs Premiere: AE dims without blurring and marks the region with a thin ring instead of Premiere's warm light pool and soft surround.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Route / connector line draw",
+   "summary": "A glowing line draws itself from one point to another (city to city, cause to effect). Premiere draws a thin white-core line with the plug-in's blue-violet glow and no end dot; After Effects lands an amber dot at the end.",
+   "use_for": [
+    "trade, migration, travel or supply routes on a map",
+    "linking two people or places in an explainer",
+    "flight / missile path reconstructions (stylised)",
+    "data-viz connector between two chart elements"
+   ],
+   "avoid": [
+    "curved routes: both effects draw straight lines (use a shape layer with the 'Write On Arrow' preset for curves)",
+    "Premiere: the line is the Lightning effect straightened (Amplitude 0); its glow colour is the plug-in default blue and cannot be set, check a frame",
+    "more than two or three lines at once"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lightning",
+     "pr_props": {
+      "Start point": [
+       0.27,
+       0.57
+      ],
+      "End point": [
+       [
+        0,
+        [
+         0.27,
+         0.57
+        ]
+       ],
+       [
+        0.8,
+        [
+         0.72,
+         0.35
+        ]
+       ]
+      ],
+      "Segments": 3,
+      "Amplitude": 0,
+      "Detail Level": 0,
+      "Detail Amplitude": 0,
+      "Branching": 0,
+      "Rebranching": 0,
+      "Width": 8,
+      "Core Width": 0.5,
+      "Speed": 1,
+      "Fixed Endpoint": true,
+      "Inside Color": "#FFFFFF"
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Laser",
+     "props": {
+      "Starting Point": [
+       518,
+       616
+      ],
+      "Ending Point": [
+       1382,
+       378
+      ],
+      "Length": 1,
+      "Time": [
+       [
+        0,
+        0
+       ],
+       [
+        0.8,
+        0.5
+       ]
+      ],
+      "Starting Thickness": 6,
+      "Ending Thickness": 6,
+      "Softness": 0.4,
+      "Inside Color": "#FFFFFF",
+      "Outside Color": "#FFB000",
+      "3D Perspective": 0,
+      "Composite On Original": 1
+     }
+    },
+    {
+     "name": "ADBE Circle",
+     "props": {
+      "Center": [
+       1382,
+       378
+      ],
+      "Radius": [
+       [
+        0.8,
+        0
+       ],
+       [
+        0.95,
+        14
+       ],
+       [
+        1.0,
+        12
+       ]
+      ],
+      "Edge": 1,
+      "Color": "#FFB000",
+      "Opacity": 100,
+      "Blending Mode": 2
+     }
+    }
+   ],
+   "sfx": [
+    "swoosh_tr"
+   ],
+   "keyframes_note": "Draw-on in 0.8 s. After Effects Beam: with Length 1 the beam spans tail = Time*2-1 to head = Time*2 of the path (measured on the gallery render: Length 0.7 / Time 0.5 covered 15%-85%), so Time 0 -> 0.5 grows it from start to end and holding 0.5 keeps the full line; Time past 0.5 makes it leave. Premiere grows the line by keyframing End point from the start point to the destination. Keep the start/end points identical between apps ([0.27, 0.57] = [518, 616], [0.72, 0.35] = [1382, 378] in 1920x1080).",
+   "built_from": [
+    "Lightning",
+    "Beam",
+    "Circle",
+    "Write On Arrow"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/101b.png",
+    "note": "A thin straight white-violet line grows from the left of frame toward the right (partial at 0.2 s, full at 1.0 s) with no end dot.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the summary from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/135b.png",
+     "note": "A thin amber-edged line grows from the left foreground block toward the upper right (short at 0.2 s, full length at 1.0 s) and lands an amber dot at its end; vs Premiere: same path and timing as Premiere's line, but amber instead of blue-violet and with the end dot.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Chart / shape pulse glow",
+   "summary": "A graphic element with transparency (map state, chart bar, icon, key number) pulses with a coloured glow to pull the eye; in Premiere the Edge Glow is only a faint tint on the brightest pixels (render-checked on footage, not yet on an alpha graphic), so the pulse is subtle, while the After Effects version glows from the alpha edge.",
+   "use_for": [
+    "highlighting one state or bar in an animated map or chart",
+    "key figure or stat callout",
+    "icon or logo emphasis in an explainer"
+   ],
+   "avoid": [
+    "full-frame footage: use it on a graphic clip / layer with alpha",
+    "pulsing several elements at once",
+    "low-contrast glow colour against the background"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Edge Glow",
+     "pr_props": {
+      "Intensity": [
+       [
+        0,
+        30
+       ],
+       [
+        0.3,
+        100
+       ],
+       [
+        0.7,
+        30
+       ],
+       [
+        1.0,
+        100
+       ],
+       [
+        1.4,
+        30
+       ]
+      ],
+      "Highlights Only": 0,
+      "Size": 60,
+      "Colorize": 100,
+      "Vibrance": 40,
+      "Color": "#FFB000",
+      "Width": 200,
+      "Height": 200
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Based On": 1,
+      "Glow Radius": 30,
+      "Glow Intensity": [
+       [
+        0,
+        0.5
+       ],
+       [
+        0.3,
+        2.5
+       ],
+       [
+        0.7,
+        0.5
+       ],
+       [
+        1.0,
+        2.5
+       ],
+       [
+        1.4,
+        0.5
+       ]
+      ],
+      "Glow Colors": 2,
+      "Color A": "#FFB000",
+      "Color B": "#FF5A00"
+     }
+    }
+   ],
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Two pulses over 1.4 s; repeat the pairs to hold longer. Apply to the graphic clip/layer itself, not the footage under it. After Effects glows from the alpha edge (Glow Based On 1 = Alpha Channel) with A & B colours; Premiere's Edge Glow blooms the graphic's bright pixels and Colorize 100 tints it. ('Alpha Glow' in Premiere is the true alpha-edge glow but was not render-tested.) Premiere's bloom stays a faint tint: at Width/Height 15 with Size 40 the gallery render showed no readable glow, and the re-render at Size 60 with Width/Height 200 was still only a faint tint on footage; for a strong pulse use After Effects or test 'Alpha Glow'.",
+   "built_from": [
+    "Edge Glow",
+    "Glow"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/102b.png",
+    "note": "No visible change from the first render: at the 1.0 s peak only a faint yellow-green tint sits on a small round motif, lamps and plants (mean diff about 4/255, frame luma pulse +6 at 0.3 s and +4 at 1.0 s), so Size 60 with Width/Height 200 still gives no readable glow on footage, and no in-range value clearly fixes it (the card's Size 100 demo is just as faint), so the summary was rewritten.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/136b.png",
+     "note": "On a full-frame opaque layer the alpha-based Glow floods the entire frame orange-yellow at both samples (mean luma about 196 against 106 clean), so the alpha-edge pulse needs a graphic with transparency to be judged; vs Premiere: Premiere's version is only a faint tint on footage; neither half has been tried on an alpha graphic.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "vfx_overlays",
+   "name": "Title disintegrates to dust",
+   "summary": "A title breaks into fine grains that warp and blow sideways until nothing is left, like text turning to dust.",
+   "use_for": [
+    "ending a title or name card dramatically",
+    "'erased', 'lost' or 'forgotten' beats",
+    "trailer title outs",
+    "Thanos-snap style meme reels"
+   ],
+   "avoid": [
+    "full-frame footage (it dissolves to black): use it on a title / graphic with alpha",
+    "long durations: over ~1.5 s it reads as a render fault",
+    "small body text"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Turbulent Displace",
+     "pr_props": {
+      "Amount": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        60
+       ]
+      ],
+      "Size": 30,
+      "Complexity": 3,
+      "Evolution": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        180
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Directional Blur",
+     "pr_props": {
+      "Angle": 90,
+      "Amount": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        40
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Block Dissolve",
+     "pr_props": {
+      "Transition Completion": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        100
+       ]
+      ],
+      "Block Width": 2,
+      "Block Height": 2,
+      "Feather": 2
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "CC Scatterize",
+     "props": {
+      "Scatter": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        200
+       ]
+      ],
+      "Right Twist": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        30
+       ]
+      ],
+      "Left Twist": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        -30
+       ]
+      ],
+      "Transfer Mode": 1
+     }
+    },
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 90,
+      "Blur Length": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.04,
+        60
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Block Dissolve",
+     "props": {
+      "Transition Completion": [
+       [
+        -0.6,
+        0
+       ],
+       [
+        -0.04,
+        100
+       ]
+      ],
+      "Block Width": 2,
+      "Block Height": 2
+     }
+    }
+   ],
+   "sfx": [
+    "whoosh"
+   ],
+   "keyframes_note": "Out move over the title's last 1.0 s (negative times = from the layer's end). The end keys sit at -0.04 (the last frame), never 0: a key time of 0 means the clip START, so [0, peak] plays the move at the head (the gallery render showed exactly that). Order matters: warp and smear first, then Block Dissolve (2 px blocks) eats the result away so the grains thin out to nothing. Premiere's new Directional Blur uses Angle 90 for horizontal; After Effects' Directional Blur (match 'ADBE Motion Blur') uses Direction 90.",
+   "built_from": [
+    "Turbulent Displace",
+    "Directional Blur",
+    "Block Dissolve",
+    "CC Scatterize"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/103c.png",
+    "note": "With the end keys at -0.04 the 0.2 s and 1.0 s frames are now intact and the out move plays at the tail as intended: from about 1.0 s the picture warps, smears sideways and breaks into fine grains that thin to near black by the last frame (103c, taken at 1.6 s; on full-frame footage it ends black, as the avoid list says).",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/137a.png",
+     "note": "From the first frame the constant Right/Left Twist bends the whole picture into a skewed shape with black wedges in the corners, long before the out move, which only starts adding grain and darkening at 1.0 s; vs Premiere: Premiere's 0.2 s and 1.0 s frames are intact because all its distortion is keyed to the tail.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Right Twist and Left Twist were constants and twist the layer even at Scatter 0; keying them from 0 alongside the Scatter ramp keeps the picture intact until the last 1.0 s.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/137a.png"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

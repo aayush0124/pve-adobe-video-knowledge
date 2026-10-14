@@ -1,0 +1,2126 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Particle World",
+   "match": "CC Particle World",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "3D particle generator that emits lines, polygons, spheres or textured sprites from a producer point, with gravity, floor bounce and an internal effect camera. Particles fade from a birth colour to a death colour and can be composited over the layer.",
+   "look": [
+    "particles",
+    "sparks",
+    "embers",
+    "magic dust",
+    "3D particles",
+    "fireworks"
+   ],
+   "use_for": [
+    "rising embers / sparks behind a trailer title card",
+    "sparkle or magic-dust accents for AI-explainer intros",
+    "Diwali / celebration sparks on festive reels",
+    "burst of particles on a hit word in a hook"
+   ],
+   "avoid": [
+    "default Line particles at low Birth Rate look thin and cheap; raise Birth Rate and size",
+    "Composite With Original is off by default, so the layer content is replaced by black/transparent",
+    "very high Birth Rate x Longevity gets slow and noisy"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Birth Rate",
+     "does": "emission rate (relative units; default 2 is already a steady stream)",
+     "typical": "2-10 for accents, 15-40 for dense bursts"
+    },
+    {
+     "name": "Longevity (sec)",
+     "does": "lifetime of each particle",
+     "typical": "1-3"
+    },
+    {
+     "name": "Radius X",
+     "does": "width of the producer volume (world units, not pixels; 0.025 = point source)",
+     "typical": "0.025 for a point source, 0.3-0.6 for a wide band"
+    },
+    {
+     "name": "Velocity",
+     "does": "launch speed",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Gravity",
+     "does": "downward pull (negative = rises)",
+     "typical": "-0.2 for rising embers, 0.5 for falling sparks"
+    },
+    {
+     "name": "Birth Size",
+     "does": "particle size at birth",
+     "typical": "0.1-0.5"
+    },
+    {
+     "name": "Birth Color",
+     "does": "colour at birth (used by the default colour map)",
+     "typical": "#FFE04A warm, #9AD8FF cool"
+    },
+    {
+     "name": "Composite With Original",
+     "does": "1 = draw particles over the layer image, 0 = particles only",
+     "typical": "1 on footage; 0 on a solid set to Add/Screen"
+    }
+   ],
+   "demo_settings": {
+    "Birth Rate": 10,
+    "Longevity (sec)": 2,
+    "Radius X": 0.5,
+    "Radius Y": 0.25,
+    "Velocity": 1.2,
+    "Gravity": 0.3,
+    "Birth Size": 0.4,
+    "Death Size": 0.2,
+    "Max Opacity": 100,
+    "Birth Color": "#FFE04A",
+    "Death Color": "#FF3A10",
+    "Composite With Original": 1
+   },
+   "enum_labels": {
+    "Grid Position": {
+     "1": "Floor",
+     "2": "Producer",
+     "3": "World"
+    },
+    "Grid Axis": {
+     "1": "X Axis",
+     "2": "Y Axis",
+     "3": "Z Axis"
+    },
+    "Animation": {
+     "1": "Explosive",
+     "2": "Direction Axis",
+     "3": "Cone Axis",
+     "4": "(separator)",
+     "5": "Viscouse",
+     "6": "Twirl",
+     "7": "Twirly",
+     "8": "Vortex",
+     "9": "Fire",
+     "10": "(separator)",
+     "11": "Jet Sideways",
+     "12": "(separator)",
+     "13": "Fractal Omni",
+     "14": "Fractal Uni"
+    },
+    "Particle Visibility": {
+     "1": "All",
+     "2": "Above Floor",
+     "3": "After Floor"
+    },
+    "Render Animation": {
+     "1": "Normal",
+     "2": "Reflected on Floor",
+     "3": "Projected on Floor"
+    },
+    "Floor Action": {
+     "1": "None",
+     "2": "Ice",
+     "3": "Glue",
+     "4": "Bounce"
+    },
+    "Particle Type": {
+     "1": "Line",
+     "2": "Star",
+     "3": "(separator)",
+     "4": "Shaded Sphere",
+     "5": "Faded Sphere",
+     "6": "Darken&Faded Sphere",
+     "7": "Bubble",
+     "8": "(separator)",
+     "9": "Motion Polygon",
+     "10": "Motion Square",
+     "11": "TriPolygon",
+     "12": "QuadPolygon",
+     "13": "Textured TriPolygon",
+     "14": "Textured QuadPolygon",
+     "15": "Tetrahedron",
+     "16": "Cube",
+     "17": "(separator)",
+     "18": "Lens Convex",
+     "19": "Lens Concave",
+     "20": "Lens Fade",
+     "21": "Lens Darken Fade",
+     "22": "Lens Bubble",
+     "23": "(separator)",
+     "24": "Textured Square",
+     "25": "Textured Disc",
+     "26": "Textured Faded Disc"
+    },
+    "Texture Time": {
+     "1": "Birth",
+     "2": "Current",
+     "3": "From Start"
+    },
+    "Rotation Axis": {
+     "1": "X Axis",
+     "2": "Y Axis",
+     "3": "Z Axis",
+     "4": "Any Axis"
+    },
+    "Color Map": {
+     "1": "Custom",
+     "2": "Birth to Death",
+     "3": "Origin to Death",
+     "4": "Birth to Origin",
+     "5": "Origin Constant"
+    },
+    "Transfer Mode": {
+     "1": "Composite",
+     "2": "Screen",
+     "3": "Add",
+     "4": "Black Matte"
+    },
+    "Type": {
+     "1": "None",
+     "2": "Fade",
+     "3": "Fog"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "CC Light Rays",
+    "Fast Box Blur",
+    "Echo"
+   ],
+   "scripting": "Simulation effect: it simulates in layer time from the layer's START (layer time 0), not from a trimmed in-point, so a layer that starts at its first visible frame shows little at first; start the layer earlier (negative start / footage 'in' offset) to pre-roll, and sample QC frames >= 1 s of layer time. Popup labels (enum_labels) are read from the installed plug-in's own popup strings; '(-' entries are disabled separators that still take an index, never set them. Default Particle Type 1 = Line; 5 Faded Sphere suits embers/sparks; Animation 1 = Explosive, 9 = Fire. 'Type' is the Depth Cue type. 'Distance' is the Effect Camera distance; 'Distance#2' is the Depth Cue distance. The Grid & Guides toggles (Position, Radius, Motion Path, Grid, Horizon, Axis Box) only draw comp-viewer guides, not rendered pixels. Texture Layer is a layer reference (not settable from a spec; set it by layer index in ExtendScript and use a Textured Particle Type 13/14/24-26). Best practice: apply to a black solid with Add/Screen blend over the footage rather than on the footage itself.",
+   "recipe": {
+    "Birth Rate": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      12
+     ],
+     [
+      1.2,
+      12
+     ],
+     [
+      1.6,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/167.png",
+    "note": "Hundreds of thin yellow-to-orange line particles stream across the whole frame over the still-visible photo, as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Pixel Polly",
+   "match": "CC Pixel Polly",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Breaks the layer into a grid of polygons or squares that fly apart from a force centre, spin and fall under gravity, like a shattered pane.",
+   "look": [
+    "shatter",
+    "explode",
+    "polygon break-up",
+    "disintegrate",
+    "low-poly"
+   ],
+   "use_for": [
+    "blow apart a fake-news screenshot or quote card in a myth-busting explainer",
+    "exit transition: photo shatters away to reveal the next shot",
+    "trailer impact hit on a title card",
+    "reveal: pieces fly off a graphic on a beat"
+   ],
+   "avoid": [
+    "before Start Time (sec) the layer is shown intact, so a frame sampled too early looks unchanged",
+    "tiny Grid Spacing on 4K-size layers is slow and looks like noise",
+    "pieces leave the frame edges with no motion blur unless layer motion blur is on"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Force",
+     "does": "outward push from the force centre",
+     "typical": "80-300"
+    },
+    {
+     "name": "Gravity",
+     "does": "downward pull on pieces",
+     "typical": "0.5-3"
+    },
+    {
+     "name": "Force Center",
+     "does": "point the pieces explode from (pixels)",
+     "typical": "[960, 540] or the hit point"
+    },
+    {
+     "name": "Grid Spacing",
+     "does": "size of each piece in pixels",
+     "typical": "20-60"
+    },
+    {
+     "name": "Spinning",
+     "does": "spin of pieces (degrees)",
+     "typical": "180-720"
+    },
+    {
+     "name": "Direction Randomness",
+     "does": "randomness of flight direction (0-1)",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Start Time (sec)",
+     "does": "layer time at which the break-up begins",
+     "typical": "the cut/beat time"
+    }
+   ],
+   "demo_settings": {
+    "Force": 150,
+    "Gravity": 1.5,
+    "Grid Spacing": 40,
+    "Direction Randomness": 0.3,
+    "Speed Randomness": 0.3,
+    "Start Time (sec)": 1
+   },
+   "enum_labels": {
+    "Object": {
+     "1": "Polygon",
+     "2": "Textured Polygon",
+     "3": "(separator)",
+     "4": "Square",
+     "5": "Textured Square"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "CC Scatterize",
+    "Shatter",
+    "Glow",
+    "camera shake (Transform/Wiggle)"
+   ],
+   "scripting": "Time-based: the layer stays intact until 'Start Time (sec)' (layer time, measured from the layer's start, not comp time), then pieces fly. Set Start Time to the impact moment instead of keyframing Force; a second or so after it most pieces have left the frame, so keep the hold short. Object popup: 1 Polygon, 2 Textured Polygon (default), 3 is a disabled separator, 4 Square, 5 Textured Square (labels read from the plug-in). Turn on layer motion blur for a convincing break.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/168.png",
+    "note": "0.7 s after Start Time the photo has broken into textured triangular shards that spin and fall over black, most of the frame already empty.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Rainfall",
+   "match": "CSRainfall",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Generates falling rain streaks with depth, wind and spread, optionally picking up colour from the background, composited over the layer.",
+   "look": [
+    "rain",
+    "monsoon",
+    "moody",
+    "storm",
+    "weather",
+    "streaks"
+   ],
+   "use_for": [
+    "monsoon / flood story atmosphere on stills or B-roll in a documentary",
+    "sombre tone for tragedy or relief-fund explainers",
+    "rainy-night trailer look on title cards",
+    "seasonal (monsoon session, weather) reels"
+   ],
+   "avoid": [
+    "adding rain to real news footage presented as real is misleading; keep it on titles, graphics or clearly stylised shots",
+    "default Opacity 25 is very subtle; dry-looking subjects under heavy rain look fake",
+    "huge Drops counts (100k+) slow renders with little gain"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Drops",
+     "does": "number of drops",
+     "typical": "5000-20000"
+    },
+    {
+     "name": "Size",
+     "does": "streak thickness",
+     "typical": "2-6"
+    },
+    {
+     "name": "Speed",
+     "does": "fall speed",
+     "typical": "3000-6000"
+    },
+    {
+     "name": "Wind",
+     "does": "sideways drift / slant",
+     "typical": "-800 to 800"
+    },
+    {
+     "name": "Opacity",
+     "does": "drop opacity (%)",
+     "typical": "30-70"
+    },
+    {
+     "name": "Color",
+     "does": "drop colour",
+     "typical": "#FFFFFF or a pale blue #CFE3FF"
+    },
+    {
+     "name": "Scene Depth",
+     "does": "depth range; larger = more distant, smaller drops",
+     "typical": "3000-8000"
+    }
+   ],
+   "demo_settings": {
+    "Drops": 15000,
+    "Size": 4,
+    "Speed": 4000,
+    "Wind": 400,
+    "Opacity": 70,
+    "Color": "#FFFFFF"
+   },
+   "enum_labels": {
+    "Transfer Mode": {
+     "1": "Composite",
+     "2": "Lighten"
+    },
+    "Appearance": {
+     "1": "Refracting",
+     "2": "Soft Solid"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Exposure / Curves (darken)",
+    "Fast Box Blur",
+    "CC Snowfall",
+    "Lumetri Color"
+   ],
+   "scripting": "Procedural over time (not an accumulating particle sim): drops cover the frame from the layer's first frame. Composite With Original defaults to 1 (rain over the image). Transfer Mode 1 Composite / 2 Lighten (default); Appearance 1 Refracting / 2 Soft Solid (default); labels read from the plug-in. Offset is in comp pixels. Change Random Seed to get a different drop pattern on stacked copies.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/169.png",
+    "note": "Dense slanted white rain streaks cover the photo, which stays readable underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Scatterize",
+   "match": "CC Scatterize",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Scatters the layer's pixels into a cloud of dust particles, with optional twist on the left and right halves; animated it makes a layer disintegrate into dust.",
+   "look": [
+    "dust",
+    "disintegrate",
+    "snap",
+    "scatter",
+    "particles",
+    "dissolve"
+   ],
+   "use_for": [
+    "'Thanos snap' disintegration of a person cut-out or quote card in meme reels",
+    "dissolve transition out of a title or lower-third",
+    "vanishing a claim / statistic in a myth-busting explainer",
+    "dreamy dust breakup on logo outros"
+   ],
+   "avoid": [
+    "on a full-frame photo the scatter fills the frame with noise; works best on cut-outs or text with alpha",
+    "no direction control, so the dust spreads evenly rather than blowing away; pair with a wipe or Transform for direction"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scatter",
+     "does": "how far pixels are thrown",
+     "typical": "0 (intact) to 100-300"
+    },
+    {
+     "name": "Right Twist",
+     "does": "twist applied to the right side (degrees)",
+     "typical": "-90 to 90"
+    },
+    {
+     "name": "Left Twist",
+     "does": "twist applied to the left side (degrees)",
+     "typical": "-90 to 90"
+    },
+    {
+     "name": "Transfer Mode",
+     "does": "how scattered pixels composite: 1 Composite, 2 Screen, 3 Add, 4 Alpha Add",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Scatter": 150,
+    "Right Twist": 45,
+    "Left Twist": -45
+   },
+   "enum_labels": {
+    "Transfer Mode": {
+     "1": "Composite",
+     "2": "Screen",
+     "3": "Add",
+     "4": "Alpha Add"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Linear Wipe",
+    "Fast Box Blur",
+    "Turbulent Displace",
+    "Glow"
+   ],
+   "scripting": "Not time-dependent: Scatter 0 = intact, so it is keyframed directly. Transfer Mode labels read from the plug-in (1 Composite, 2 Screen, 3 Add, 4 Alpha Add). Combine with a Linear Wipe or a gradient-wiped duplicate layer to make dust peel off in one direction.",
+   "recipe": {
+    "Scatter": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      200
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/170.png",
+    "note": "At Scatter 150 the full-frame photo is dissolved into a uniform cloud of grey-violet dust/noise with no readable image, as the summary and avoid note describe.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Snowfall",
+   "match": "CSSnowfall",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Generates 3D snowflakes falling with wind, wiggle and depth variation, lit by the background, composited over the layer.",
+   "look": [
+    "snow",
+    "winter",
+    "cold",
+    "festive",
+    "flakes",
+    "weather"
+   ],
+   "use_for": [
+    "Kashmir / Himachal winter and cold-wave stories",
+    "Christmas / New Year festive reels and greeting cards",
+    "soft atmosphere on title cards and end cards",
+    "dreamy slow snow on cinematic stills"
+   ],
+   "avoid": [
+    "adding snow to real news footage presented as real is misleading; keep it on titles, graphics or clearly stylised shots",
+    "snow on summer / Indian plains footage reads as fake",
+    "defaults (Size 3, Opacity 50), and even Size 5 / Opacity 85, read as faint specks on a full-frame shot; use Size 8-12 and Opacity 90-100 for visible snowfall",
+    "large Flakes + big Size turns into a white sheet"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Flakes",
+     "does": "number of flakes",
+     "typical": "8000-30000"
+    },
+    {
+     "name": "Size",
+     "does": "flake size",
+     "typical": "6-12 (5 still reads as faint specks on a full-frame shot)"
+    },
+    {
+     "name": "Speed",
+     "does": "fall speed",
+     "typical": "150-400"
+    },
+    {
+     "name": "Wind",
+     "does": "sideways drift",
+     "typical": "-200 to 200"
+    },
+    {
+     "name": "Amount",
+     "does": "wiggle amount (Wiggle group)",
+     "typical": "20-60"
+    },
+    {
+     "name": "Opacity",
+     "does": "flake opacity (%)",
+     "typical": "70-100"
+    },
+    {
+     "name": "Color",
+     "does": "flake colour",
+     "typical": "#FFFFFF"
+    }
+   ],
+   "demo_settings": {
+    "Flakes": 20000,
+    "Size": 10,
+    "Scene Depth": 3000,
+    "Speed": 250,
+    "Opacity": 100,
+    "Color": "#FFFFFF"
+   },
+   "enum_labels": {
+    "Transfer Mode": {
+     "1": "Composite",
+     "2": "Lighten"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "CC Rainfall",
+    "Lumetri Color (cool grade)",
+    "Glow",
+    "Fast Box Blur"
+   ],
+   "scripting": "Procedural over time (not an accumulating particle sim): flakes cover the frame from the layer's first frame. Composite With Original defaults to 1. 'Amount', 'Frequency' and 'Stochastic Wiggle' belong to the Wiggle group. Transfer Mode 1 Composite / 2 Lighten (default), labels read from the plug-in. Stack two copies (different Random Seed, Size and Scene Depth) for foreground/background depth.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/171.png",
+    "note": "Dense, clearly visible white flakes of varied size now fall across the whole photo with the scene still readable, where the old render showed only 1-2 px specks visible when zoomed.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Star Burst",
+   "match": "CC Star Burst",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Turns the layer into a grid of spheres coloured by its pixels that fly towards the viewer, creating a warp-speed starfield.",
+   "look": [
+    "starfield",
+    "warp speed",
+    "hyperspace",
+    "space",
+    "dots",
+    "sci-fi"
+   ],
+   "use_for": [
+    "warp / hyperspace intro for AI and tech explainers",
+    "space-themed background for ISRO / space mission stories",
+    "abstract dotted transition into a title",
+    "sci-fi trailer interstitial"
+   ],
+   "avoid": [
+    "the source image is unreadable once scattered; use colourful or gradient sources, not faces",
+    "looks dated on its own; add glow and motion blur"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Scatter",
+     "does": "how widely the dots are randomly scattered through the star field",
+     "typical": "100-300"
+    },
+    {
+     "name": "Speed",
+     "does": "travel speed (negative = away)",
+     "typical": "0.5-3"
+    },
+    {
+     "name": "Grid Spacing",
+     "does": "pixel spacing of the dot grid",
+     "typical": "4-10"
+    },
+    {
+     "name": "Size",
+     "does": "dot size (%)",
+     "typical": "60-200"
+    },
+    {
+     "name": "Shading",
+     "does": "sphere shading",
+     "typical": "0-50"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mix with the untouched layer (0-1)",
+     "typical": "0 for full effect"
+    },
+    {
+     "name": "Phase",
+     "does": "time offset of the motion",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Scatter": 250,
+    "Speed": 1.5,
+    "Grid Spacing": 6,
+    "Size": 140,
+    "Shading": 30,
+    "Blend w. Original": 0
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "CC Radial Blur",
+    "Directional Blur",
+    "Fill / Tint"
+   ],
+   "scripting": "Animates on its own over time (Speed); frame 0 already shows the dot grid. Blend w. Original is 0-1 (not %). Apply to a colourful plate or gradient solid rather than to faces.",
+   "recipe": {
+    "Blend w. Original": [
+     [
+      0,
+      1
+     ],
+     [
+      0.8,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/172.png",
+    "note": "The photo is replaced by a black starfield of coloured dots sampled from the image, matching the warp-speed starfield summary.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Card Dance",
+   "match": "APC CardDanceCam",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Splits the layer into a grid of cards that can move, rotate and scale individually in 3D, each card's amount driven by a gradient layer, with lighting and a back face.",
+   "look": [
+    "card flip",
+    "mosaic",
+    "tiles",
+    "3D grid",
+    "venetian blinds",
+    "transition"
+   ],
+   "use_for": [
+    "tile-flip transition from one photo to the next in an explainer",
+    "mosaic reveal of a headline or leader portrait",
+    "stylised data-wall / video-wall look for news openers",
+    "staggered card scatter on beat drops in reels"
+   ],
+   "avoid": [
+    "with every Source at its default (1 None) only Offset applies, so all cards move identically; stagger needs a Gradient Layer plus a Source such as 2 Intensity 1",
+    "hard black gaps between rotated cards look cheap; set a Back Layer and lighting",
+    "many rows x columns with lighting is slow"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Rows",
+     "does": "number of card rows",
+     "typical": "6-20"
+    },
+    {
+     "name": "Columns",
+     "does": "number of card columns",
+     "typical": "8-30"
+    },
+    {
+     "name": "Offset#4",
+     "does": "X Rotation offset (degrees) applied to every card",
+     "typical": "0-180"
+    },
+    {
+     "name": "Multiplier#4",
+     "does": "X Rotation amount scaled by the Source value (no effect while Source#4 = None)",
+     "typical": "90-180"
+    },
+    {
+     "name": "Offset#3",
+     "does": "Z Position offset (moves all cards in depth)",
+     "typical": "0-5"
+    },
+    {
+     "name": "Multiplier#3",
+     "does": "Z Position amount from the Source value (no effect while Source#3 = None)",
+     "typical": "2-10"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "card lighting strength",
+     "typical": "0.8-2"
+    },
+    {
+     "name": "Specular Reflection",
+     "does": "shiny highlight on cards",
+     "typical": "0.2-0.8"
+    }
+   ],
+   "demo_settings": {
+    "Rows": 12,
+    "Columns": 16,
+    "Offset#4": 40,
+    "Offset#6": 10,
+    "Specular Reflection": 0.6
+   },
+   "enum_labels": {
+    "Rows & Columns": {
+     "1": "Independent",
+     "2": "Columns Follows Rows"
+    },
+    "Rotation Order": {
+     "1": "XYZ",
+     "2": "XZY",
+     "3": "YXZ",
+     "4": "YZX",
+     "5": "ZXY",
+     "6": "ZYX"
+    },
+    "Transformation Order": {
+     "1": "Position, Rotate, Scale",
+     "2": "Position, Scale, Rotate",
+     "3": "Rotate, Position, Scale",
+     "4": "Rotate, Scale, Position",
+     "5": "Scale, Position, Rotate",
+     "6": "Scale, Rotate, Position"
+    },
+    "Source": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#2": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#3": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#4": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#5": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#6": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#7": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Source#8": {
+     "1": "None",
+     "2": "Intensity 1",
+     "3": "Red 1",
+     "4": "Green 1",
+     "5": "Blue 1",
+     "6": "Alpha 1",
+     "7": "Intensity H Slope 1",
+     "8": "Intensity V Slope 1",
+     "9": "Red H Slope 1",
+     "10": "Red V Slope 1",
+     "11": "Intensity 2",
+     "12": "Red 2",
+     "13": "Green 2",
+     "14": "Blue 2",
+     "15": "Alpha 2",
+     "16": "Intensity H Slope 2",
+     "17": "Intensity V Slope 2",
+     "18": "Red H Slope 2",
+     "19": "Red V Slope 2"
+    },
+    "Camera System": {
+     "1": "Camera Position",
+     "2": "Corner Pins",
+     "3": "Comp Camera"
+    },
+    "Transform Order": {
+     "1": "Rotate XYZ, Position",
+     "2": "Rotate XZY, Position",
+     "3": "Rotate YXZ, Position",
+     "4": "Rotate YZX, Position",
+     "5": "Rotate ZXY, Position",
+     "6": "Rotate ZYX, Position",
+     "7": "Position, Rotate XYZ",
+     "8": "Position, Rotate XZY",
+     "9": "Position, Rotate YXZ",
+     "10": "Position, Rotate YZX",
+     "11": "Position, Rotate ZXY",
+     "12": "Position, Rotate ZYX"
+    },
+    "Light Type": {
+     "1": "Point Source",
+     "2": "Distant Source",
+     "3": "First Comp Light"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Gradient Ramp (precomp as gradient layer)",
+    "CC Light Sweep",
+    "Drop Shadow",
+    "Glow"
+   ],
+   "scripting": "Repeated names: groups in order X Position, Y Position, Z Position, X Rotation, Y Rotation, Z Rotation, X Scale, Y Scale map to Source/Multiplier/Offset, #2 ... #8 (e.g. X Rotation Offset = 'Offset#4', Z Rotation = '#6'). 'Focal Length' = Camera Position group, 'Focal Length#2' = Corner Pins group. Each card = Source value x Multiplier + Offset. Source popup (all 8 groups, labels read from the plug-in): 1 None (default), 2-10 = Gradient Layer 1 channels (Intensity, Red, Green, Blue, Alpha, Intensity H/V Slope, Red H/V Slope), 11-19 = the same for Gradient Layer 2; there is no row/column/random source, so stagger always needs a gradient layer. Back Layer, Gradient Layer 1 and Gradient Layer 2 are layer references (set by layer index in ExtendScript, not from a spec); the gradient layer should be a precomp of a Gradient Ramp so the effect sees it. Light Type 1 Point Source, 2 Distant Source (default), 3 First Comp Light. Camera System 3 uses the comp camera. 'Upper Left  Corner' and 'Lower Left  Corner' contain a double space.",
+   "recipe": {
+    "Offset#4": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/173.png",
+    "note": "The photo is split into a 12x16 grid of cards each tilted in X and Z, with black gaps between them.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Caustics",
+   "match": "APC Caustics",
+   "category": "Simulation",
+   "status": "needs_input",
+   "summary": "Renders the light patterns and refraction of water: a bottom layer seen through a rippling water surface with tinted, lit caustic highlights.",
+   "look": [
+    "underwater",
+    "caustics",
+    "water ripples",
+    "refraction",
+    "pool light",
+    "aqua"
+   ],
+   "use_for": [
+    "underwater light on backgrounds for ocean, flood or Navy stories",
+    "rippling-water look on a map or logo",
+    "pool-light texture behind titles"
+   ],
+   "avoid": [
+    "without a Water Surface height map it only tints the layer blue; it needs a Wave World (or Fractal Noise) precomp",
+    "heavy to render, especially with a Sky layer"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Wave Height",
+     "does": "strength of refraction from the water surface",
+     "typical": "0.2-0.6"
+    },
+    {
+     "name": "Smoothing",
+     "does": "smooths the height map",
+     "typical": "5-15"
+    },
+    {
+     "name": "Water Depth",
+     "does": "apparent depth of water",
+     "typical": "0.1-0.3"
+    },
+    {
+     "name": "Surface Color",
+     "does": "water tint colour",
+     "typical": "#0080FF"
+    },
+    {
+     "name": "Surface Opacity",
+     "does": "tint strength (0-1)",
+     "typical": "0.1-0.4"
+    },
+    {
+     "name": "Caustics Strength",
+     "does": "brightness of the focused light patterns",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "light strength",
+     "typical": "1-2"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Repeat Mode": {
+     "1": "Once",
+     "2": "Tiled",
+     "3": "Reflected"
+    },
+    "If Layer Size Differs": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    },
+    "Repeat Mode#2": {
+     "1": "Once",
+     "2": "Tiled",
+     "3": "Reflected"
+    },
+    "If Layer Size Differs#2": {
+     "1": "Center",
+     "2": "Stretch to Fit"
+    },
+    "Light Type": {
+     "1": "Point Source",
+     "2": "Distant Source",
+     "3": "First Comp Light"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Wave World",
+    "Fractal Noise",
+    "Glow",
+    "Displacement Map"
+   ],
+   "scripting": "Needs a Water Surface layer (layer reference): a precomp containing Wave World (View = Height Map) or animated Fractal Noise, hidden from render. Bottom, Water Surface and Sky are layer references set by layer index in ExtendScript (not from a spec). 'Scaling', 'Repeat Mode', 'If Layer Size Differs' = Bottom group; '#2' versions = Sky group. Caustics Strength default 0 = no caustic highlights; raise it. Light Type labels read from the plug-in: 1 Point Source, 2 Distant Source (default), 3 First Comp Light.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card is needs_input (needs a Water Surface layer reference), so the gallery skipped it and no frame exists.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Foam",
+   "match": "APC Foam",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Particle simulation of bubbles: produces, floats, wobbles and pops bubbles with physics, wind, a flow map and optional reflection map.",
+   "look": [
+    "bubbles",
+    "foam",
+    "soap bubbles",
+    "underwater",
+    "playful",
+    "floating"
+   ],
+   "use_for": [
+    "'bubble about to burst' metaphor in economy / stock-market explainers",
+    "playful bubbles on kids or light-hearted reels",
+    "underwater atmosphere with Caustics",
+    "floating bubble accents around a product or logo"
+   ],
+   "avoid": [
+    "View defaults to Draft (outline circles); set View to Rendered or output looks like wireframe",
+    "the source layer image is not shown; apply on a separate solid above the footage",
+    "slow to simulate and must evaluate from the layer start"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "View",
+     "does": "Draft outlines vs final rendered bubbles",
+     "typical": "3 (Rendered)"
+    },
+    {
+     "name": "Production Rate",
+     "does": "bubbles produced per unit time (default 1 is already a steady stream)",
+     "typical": "1-10"
+    },
+    {
+     "name": "Producer Point",
+     "does": "emitter position (pixels)",
+     "typical": "[960, 900] with Wind Direction 0 for rising bubbles"
+    },
+    {
+     "name": "Producer X Size",
+     "does": "emitter width (fraction of layer)",
+     "typical": "0.1-0.45"
+    },
+    {
+     "name": "Size",
+     "does": "bubble size",
+     "typical": "0.5-1.5"
+    },
+    {
+     "name": "Lifespan",
+     "does": "bubble lifetime (internal time units; default 300)",
+     "typical": "200-500"
+    },
+    {
+     "name": "Wind Speed",
+     "does": "drift speed",
+     "typical": "0.5-2"
+    },
+    {
+     "name": "Wind Direction",
+     "does": "drift direction (degrees, 0 = up)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "View": 3,
+    "Production Rate": 5,
+    "Producer X Size": 0.3,
+    "Producer Y Size": 0.2,
+    "Size": 1,
+    "Size Variance": 0.5,
+    "Bubble Growth Speed": 0.3,
+    "Initial Speed": 1
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Draft",
+     "2": "Draft + Flow Map",
+     "3": "Rendered"
+    },
+    "Blend Mode": {
+     "1": "Transparent",
+     "2": "Solid Old on top",
+     "3": "Solid New on top"
+    },
+    "Bubble Texture": {
+     "1": "User Defined",
+     "2": "(separator)",
+     "3": "Default Bubble",
+     "4": "Amber Bock",
+     "5": "Water Beads",
+     "6": "Spit",
+     "7": "Cartoon Coffee",
+     "8": "Winter Stream",
+     "9": "Soda Water",
+     "10": "Orange Soda",
+     "11": "Nuclear Waste",
+     "12": "Red Tide",
+     "13": "Magma Marbles",
+     "14": "Sunset Foam",
+     "15": "Pepto",
+     "16": "Algae",
+     "17": "Blisters",
+     "18": "Bubble Wrap",
+     "19": "Grape Soda"
+    },
+    "Bubble Orientation": {
+     "1": "Fixed",
+     "2": "Physical Orientation",
+     "3": "Bubble Velocity"
+    },
+    "Flow Map Fits": {
+     "1": "Universe",
+     "2": "Screen"
+    },
+    "Simulation Quality": {
+     "1": "Normal",
+     "2": "High",
+     "3": "Intense"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Caustics",
+    "Glow",
+    "CC Lens",
+    "Fast Box Blur"
+   ],
+   "scripting": "Simulation effect: it simulates in layer time from the layer's START (layer time 0), not from a trimmed in-point, so a layer that starts at its first visible frame shows little at first; start the layer earlier (negative start / footage 'in' offset) to pre-roll, and sample QC frames >= 1 s of layer time. Always set View = 3 (Rendered) for output. Labels (read from After Effects 26.0): Bubble Texture 1 User Defined (needs Bubble Texture Layer), 2 a disabled separator, 3 Default Bubble (default) ... 19 Grape Soda; Flow Map Fits 1 Universe, 2 Screen. Bubble Texture Layer, Environment Map and Flow Map are layer references (set by layer index in ExtendScript). Bubbles do not rise on their own: aim Wind Direction (0 = up) or Initial Direction. Put it on a transparent solid above the footage.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/174.png",
+    "note": "Rendered iridescent soap bubbles of varied size cluster over black, the source photo not shown.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Particle Playground",
+   "match": "ADBE Playgnd",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Legacy particle system: a cannon, grid or exploded layer emits dot or text particles driven by gravity, repel, walls and layer-based property maps.",
+   "look": [
+    "particles",
+    "fountain",
+    "confetti dots",
+    "explode layer",
+    "legacy",
+    "2D particles"
+   ],
+   "use_for": [
+    "simple fountain or spray of coloured dots (confetti for election results)",
+    "exploding a text/logo layer into particles (Layer Exploder)",
+    "particle rain of dots driven by a gradient map",
+    "quick 0-plugin particle accents when CC Particle World is overkill"
+   ],
+   "avoid": [
+    "default output is small red dots and looks dated; style with glow, blur and colour",
+    "the source layer content is replaced; apply to a solid",
+    "many particles plus property mappers render very slowly (CPU only)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "cannon position (pixels)",
+     "typical": "[960, 1000] for a bottom fountain"
+    },
+    {
+     "name": "Particles Per Second",
+     "does": "cannon emission rate",
+     "typical": "60-500"
+    },
+    {
+     "name": "Direction",
+     "does": "cannon direction (degrees, 0 = up)",
+     "typical": "0"
+    },
+    {
+     "name": "Direction Random Spread",
+     "does": "spray cone (degrees)",
+     "typical": "20-60"
+    },
+    {
+     "name": "Velocity",
+     "does": "launch speed",
+     "typical": "130-600"
+    },
+    {
+     "name": "Color",
+     "does": "cannon particle colour",
+     "typical": "#FFD21F"
+    },
+    {
+     "name": "Particle Radius",
+     "does": "cannon dot radius (pixels)",
+     "typical": "2-8"
+    },
+    {
+     "name": "Force",
+     "does": "gravity strength (Gravity group)",
+     "typical": "50-300"
+    }
+   ],
+   "demo_settings": {
+    "Position": [
+     960,
+     900
+    ],
+    "Particles Per Second": 400,
+    "Velocity": 400,
+    "Direction Random Spread": 45,
+    "Particle Radius": 6,
+    "Color": "#FFD21F",
+    "Force": 250
+   },
+   "enum_labels": {
+    "Particles from": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Time Offset Type": {
+     "1": "Relative",
+     "2": "Absolute",
+     "3": "Relative Random",
+     "4": "Absolute Random"
+    },
+    "Particles from#2": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#2": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Particles from#3": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#3": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Particles from#4": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#4": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Particles from#5": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#5": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Particles from#6": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#6": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Particles from#7": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#7": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Map Red to": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Kinetic Friction",
+     "6": "Static Friction",
+     "7": "Angle",
+     "8": "Angular Velocity",
+     "9": "Torque",
+     "10": "Scale",
+     "11": "X Scale",
+     "12": "Y Scale",
+     "13": "X",
+     "14": "Y",
+     "15": "Gradient Velocity",
+     "16": "X Speed",
+     "17": "Y Speed",
+     "18": "Gradient Force",
+     "19": "X Force",
+     "20": "Y Force",
+     "21": "Opacity",
+     "22": "Mass",
+     "23": "Lifespan",
+     "24": "Character",
+     "25": "Font Size",
+     "26": "Time Offset",
+     "27": "Scale Speed"
+    },
+    "Map Green to": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Kinetic Friction",
+     "6": "Static Friction",
+     "7": "Angle",
+     "8": "Angular Velocity",
+     "9": "Torque",
+     "10": "Scale",
+     "11": "X Scale",
+     "12": "Y Scale",
+     "13": "X",
+     "14": "Y",
+     "15": "Gradient Velocity",
+     "16": "X Speed",
+     "17": "Y Speed",
+     "18": "Gradient Force",
+     "19": "X Force",
+     "20": "Y Force",
+     "21": "Opacity",
+     "22": "Mass",
+     "23": "Lifespan",
+     "24": "Character",
+     "25": "Font Size",
+     "26": "Time Offset",
+     "27": "Scale Speed"
+    },
+    "Map Blue to": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Kinetic Friction",
+     "6": "Static Friction",
+     "7": "Angle",
+     "8": "Angular Velocity",
+     "9": "Torque",
+     "10": "Scale",
+     "11": "X Scale",
+     "12": "Y Scale",
+     "13": "X",
+     "14": "Y",
+     "15": "Gradient Velocity",
+     "16": "X Speed",
+     "17": "Y Speed",
+     "18": "Gradient Force",
+     "19": "X Force",
+     "20": "Y Force",
+     "21": "Opacity",
+     "22": "Mass",
+     "23": "Lifespan",
+     "24": "Character",
+     "25": "Font Size",
+     "26": "Time Offset",
+     "27": "Scale Speed"
+    },
+    "Particles from#8": {
+     "1": "All",
+     "2": "None",
+     "3": "Cannon",
+     "4": "Grid",
+     "5": "Layer Exploder",
+     "6": "Particle Exploder",
+     "7": "Cannon or Grid",
+     "8": "Cannon or Layer Exploder",
+     "9": "Cannon or Particle Exploder",
+     "10": "Grid or Layer Exploder",
+     "11": "Grid or Particle Exploder",
+     "12": "Layer Exploder or Particle Exploder",
+     "13": "Cannon or Grid or Layer Exploder",
+     "14": "Cannon or Grid or Particle Exploder",
+     "15": "Cannon or Layer Exploder or Particle Exploder",
+     "16": "Grid or Layer Exploder or Particle Exploder"
+    },
+    "Characters#8": {
+     "1": "None",
+     "2": "Selection Text 1",
+     "3": "Selection Text 2",
+     "4": "Selection Text 3"
+    },
+    "Map Red to#2": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Angle",
+     "6": "Angular Velocity",
+     "7": "Scale",
+     "8": "X Scale",
+     "9": "Y Scale",
+     "10": "X",
+     "11": "Y",
+     "12": "Gradient Velocity",
+     "13": "X Speed",
+     "14": "Y Speed",
+     "15": "Opacity",
+     "16": "Character",
+     "17": "Font Size",
+     "18": "Time Offset",
+     "19": "Scale Speed"
+    },
+    "Operator": {
+     "1": "Set",
+     "2": "Add",
+     "3": "Difference",
+     "4": "Subtract",
+     "5": "Multiply",
+     "6": "Min",
+     "7": "Max"
+    },
+    "Map Green to#2": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Angle",
+     "6": "Angular Velocity",
+     "7": "Scale",
+     "8": "X Scale",
+     "9": "Y Scale",
+     "10": "X",
+     "11": "Y",
+     "12": "Gradient Velocity",
+     "13": "X Speed",
+     "14": "Y Speed",
+     "15": "Opacity",
+     "16": "Character",
+     "17": "Font Size",
+     "18": "Time Offset",
+     "19": "Scale Speed"
+    },
+    "Operator#2": {
+     "1": "Set",
+     "2": "Add",
+     "3": "Difference",
+     "4": "Subtract",
+     "5": "Multiply",
+     "6": "Min",
+     "7": "Max"
+    },
+    "Map Blue to#2": {
+     "1": "None",
+     "2": "Red",
+     "3": "Green",
+     "4": "Blue",
+     "5": "Angle",
+     "6": "Angular Velocity",
+     "7": "Scale",
+     "8": "X Scale",
+     "9": "Y Scale",
+     "10": "X",
+     "11": "Y",
+     "12": "Gradient Velocity",
+     "13": "X Speed",
+     "14": "Y Speed",
+     "15": "Opacity",
+     "16": "Character",
+     "17": "Font Size",
+     "18": "Time Offset",
+     "19": "Scale Speed"
+    },
+    "Operator#3": {
+     "1": "Set",
+     "2": "Add",
+     "3": "Difference",
+     "4": "Subtract",
+     "5": "Multiply",
+     "6": "Min",
+     "7": "Max"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Echo",
+    "Fast Box Blur",
+    "CC Particle World"
+   ],
+   "scripting": "Simulation effect: it simulates in layer time from the layer's START (layer time 0), not from a trimmed in-point, so a layer that starts at its first visible frame shows little at first; start the layer earlier (negative start / footage 'in' offset) to pre-roll, and sample QC frames >= 1 s of layer time. Repeated names follow group order: 'Position'/'Color'/'Particle Radius' = Cannon, '#2' = Grid; 'Radius of New Particles'/'Velocity Dispersion' = Layer Exploder, '#2' = Particle Exploder; 'Direction' = Cannon, 'Direction#2' = Gravity; 'Force' = Gravity, 'Force#2' = Repel. The many 'Particles from', 'Selection Map', 'Characters', 'Older/Younger than', 'Age Feather', 'Min', 'Max', 'Operator' copies belong to successive Affects groups (#2, #3 ...); enum_labels apply to every copy. Persistent 'Map Red/Green/Blue to' (1-27) start 1 None, 2 Red, 3 Green, 4 Blue, 5 Kinetic Friction ... 21 Opacity, 22 Mass, 23 Lifespan; labels read from the plug-in. Explode Layer, Selection Map, Use Layer, Use Layer As Map are layer references and Boundary (Wall) is a mask reference; none can be set from a spec. Grid emitter is off while Particles Across/Down = 0. Text/character particles are set in the effect's Options dialog, which scripts cannot drive.",
+   "recipe": {
+    "Particles Per Second": [
+     [
+      0,
+      500
+     ],
+     [
+      0.4,
+      500
+     ],
+     [
+      0.5,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/175.png",
+    "note": "A cannon near the bottom centre sprays a fountain of yellow square dots up and out over black, replacing the photo.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Shatter",
+   "match": "APC Shatter",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Breaks the layer into extruded 3D pieces (bricks, glass, hexagons, puzzle and more) that explode outward from force spheres, tumble and fall, with lighting and textured faces.",
+   "look": [
+    "glass shatter",
+    "explosion",
+    "3D pieces",
+    "smash",
+    "impact",
+    "breaking"
+   ],
+   "use_for": [
+    "glass-smash transition for BREAKING NEWS stingers",
+    "smashing a quote card or claim in a fact-check reel",
+    "trailer impact hit revealing the next shot",
+    "title that shatters on a bass hit"
+   ],
+   "avoid": [
+    "View defaults to a wireframe preview; set View = 1 (Rendered) or the render shows wireframe",
+    "pieces stay put until a force sphere reaches them, and a big Radius x Strength empties the frame within a second",
+    "flat lighting makes pieces look like cardboard; use lighting and a slight extrusion"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "View",
+     "does": "Rendered vs wireframe previews",
+     "typical": "1 (Rendered) for output"
+    },
+    {
+     "name": "Pattern",
+     "does": "piece shape popup (1-22): 3 Bricks (default), 8 Glass, 11 Hexagons, 16 Puzzle, 18 Squares, 21 Triangles 1",
+     "typical": "8 (Glass) for a glass smash, 3 (Bricks)"
+    },
+    {
+     "name": "Repetitions",
+     "does": "piece density",
+     "typical": "10-40"
+    },
+    {
+     "name": "Extrusion Depth",
+     "does": "piece thickness",
+     "typical": "0.1-0.5"
+    },
+    {
+     "name": "Position",
+     "does": "Force 1 centre (pixels)",
+     "typical": "impact point"
+    },
+    {
+     "name": "Radius",
+     "does": "Force 1 sphere radius",
+     "typical": "0.3-0.8"
+    },
+    {
+     "name": "Strength",
+     "does": "Force 1 blast strength",
+     "typical": "3-15"
+    },
+    {
+     "name": "Gravity",
+     "does": "pull on pieces (Physics group)",
+     "typical": "2-10"
+    }
+   ],
+   "demo_settings": {
+    "View": 1,
+    "Render": 1,
+    "Repetitions": 20,
+    "Extrusion Depth": 0.3,
+    "Radius": 0.5,
+    "Strength": 4
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Rendered",
+     "2": "Wireframe Front View",
+     "3": "Wireframe",
+     "4": "Wireframe Front View + Forces",
+     "5": "Wireframe + Forces"
+    },
+    "Render": {
+     "1": "All",
+     "2": "Layer",
+     "3": "Pieces"
+    },
+    "Pattern": {
+     "1": "Custom",
+     "2": "(separator)",
+     "3": "Bricks",
+     "4": "Carpenter’s Wheel",
+     "5": "Chevrons",
+     "6": "Crescents",
+     "7": "Eggs",
+     "8": "Glass",
+     "9": "Herringbone 1",
+     "10": "Herringbone 2",
+     "11": "Hexagons",
+     "12": "Js",
+     "13": "Octagons & Squares",
+     "14": "Overlaid Squares",
+     "15": "Planks",
+     "16": "Puzzle",
+     "17": "Rhombi",
+     "18": "Squares",
+     "19": "Squares & Triangles",
+     "20": "Stars & Triangles",
+     "21": "Triangles 1",
+     "22": "Triangles 2"
+    },
+    "Tumble Axis": {
+     "1": "Free",
+     "2": "None",
+     "3": "X",
+     "4": "Y",
+     "5": "Z",
+     "6": "XY",
+     "7": "XZ",
+     "8": "YZ"
+    },
+    "Front Mode": {
+     "1": "Color",
+     "2": "Layer",
+     "3": "Tinted Layer",
+     "4": "Color + Opacity",
+     "5": "Layer + Opacity",
+     "6": "Tinted Layer + Opacity"
+    },
+    "Side Mode": {
+     "1": "Color",
+     "2": "Layer",
+     "3": "Tinted Layer",
+     "4": "Color + Opacity",
+     "5": "Layer + Opacity",
+     "6": "Tinted Layer + Opacity"
+    },
+    "Back Mode": {
+     "1": "Color",
+     "2": "Layer",
+     "3": "Tinted Layer",
+     "4": "Color + Opacity",
+     "5": "Layer + Opacity",
+     "6": "Tinted Layer + Opacity"
+    },
+    "Camera System": {
+     "1": "Camera Position",
+     "2": "Corner Pins",
+     "3": "Comp Camera"
+    },
+    "Transform Order": {
+     "1": "Rotate XYZ, Position",
+     "2": "Rotate XZY, Position",
+     "3": "Rotate YXZ, Position",
+     "4": "Rotate YZX, Position",
+     "5": "Rotate ZXY, Position",
+     "6": "Rotate ZYX, Position",
+     "7": "Position, Rotate XYZ",
+     "8": "Position, Rotate XZY",
+     "9": "Position, Rotate YXZ",
+     "10": "Position, Rotate YZX",
+     "11": "Position, Rotate ZXY",
+     "12": "Position, Rotate ZYX"
+    },
+    "Light Type": {
+     "1": "Point Source",
+     "2": "Distant Source",
+     "3": "First Comp Light"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "CC Pixel Polly",
+    "camera shake",
+    "Glow",
+    "Drop Shadow"
+   ],
+   "scripting": "Simulation effect: the layer is intact until a force sphere reaches the pieces, and pieces keep flying in layer time from the layer's start; sample QC frames ~0.5-1 s after the break. Set View = 1 or the output is a wireframe (default 5 = Wireframe + Forces). 'Position', 'Depth', 'Radius', 'Strength' = Force 1; '#2' = Force 2 (Force 2 Radius defaults to 0 = off). 'Focal Length' = Camera Position, 'Focal Length#2' = Corner Pins. Popup labels read from the plug-in: Pattern 1 Custom (needs Custom Shatter Map), 2 is a disabled separator, 3-22 the shapes; Light Type 1 Point Source, 2 Distant Source (default), 3 First Comp Light. Custom Shatter Map, Gradient Layer and Front/Side/Back Layer are layer references (set by layer index in ExtendScript). Gradient Layer + Shatter Threshold makes pieces break progressively along a wipe.",
+   "recipe": {
+    "Position": [
+     [
+      0,
+      [
+       -200,
+       540
+      ]
+     ],
+     [
+      1,
+      [
+       2120,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/176.png",
+    "note": "Extruded 3D brick pieces have blown out of the centre and tumble down over black, intact brick edges remain only at the frame corners.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Wave World",
+   "match": "APC Wave World",
+   "category": "Simulation",
+   "status": "current",
+   "summary": "Simulates water waves on a grid from ring or line producers and outputs a greyscale height map (or a wireframe preview), mainly as a source map for Caustics or Displacement Map.",
+   "look": [
+    "height map",
+    "ripples",
+    "water waves",
+    "greyscale",
+    "displacement source",
+    "utility"
+   ],
+   "use_for": [
+    "water surface map for Caustics (underwater light)",
+    "drive Displacement Map for ripple distortion on a logo or map",
+    "ripple from a tap point in a touch-UI explainer",
+    "abstract wave texture under titles"
+   ],
+   "avoid": [
+    "the layer image is replaced by a grey map; it is a utility, not a final look",
+    "View defaults to 2 (Wireframe Preview); set View = 1 (Height Map) or the render is a wireframe",
+    "must simulate from the layer start; long comps are slow without Pre-roll",
+    "high Amplitude with raised Contrast clips the height map to hard black/white blobs instead of grey ripples; keep Amplitude <= ~0.8 and Contrast near 0.25-0.35"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "View",
+     "does": "Height Map output vs Wireframe Preview",
+     "typical": "1 (Height Map) for output; default 2 is the wireframe"
+    },
+    {
+     "name": "Grid Resolution",
+     "does": "simulation detail",
+     "typical": "40-120"
+    },
+    {
+     "name": "Wave Speed",
+     "does": "how fast waves travel",
+     "typical": "0.3-1"
+    },
+    {
+     "name": "Damping",
+     "does": "how quickly waves die out",
+     "typical": "0.01-0.05"
+    },
+    {
+     "name": "Pre-roll (seconds)",
+     "does": "simulated time before frame 0",
+     "typical": "1-3"
+    },
+    {
+     "name": "Amplitude",
+     "does": "Producer 1 wave strength",
+     "typical": "0.3-0.8 (1.5 with Contrast 0.6 clips the map to a black/white blob)"
+    },
+    {
+     "name": "Frequency",
+     "does": "Producer 1 waves per second",
+     "typical": "1-4"
+    },
+    {
+     "name": "Position",
+     "does": "Producer 1 centre (pixels)",
+     "typical": "[960, 540]"
+    }
+   ],
+   "demo_settings": {
+    "View": 1,
+    "Grid Resolution": 80,
+    "Amplitude": 0.5,
+    "Frequency": 1.5,
+    "Pre-roll (seconds)": 2,
+    "Contrast": 0.3
+   },
+   "enum_labels": {
+    "View": {
+     "1": "Height Map",
+     "2": "Wireframe Preview"
+    },
+    "Render Dry Areas As": {
+     "1": "Solid",
+     "2": "Transparent"
+    },
+    "Type": {
+     "1": "Ring",
+     "2": "Line"
+    },
+    "Type#2": {
+     "1": "Ring",
+     "2": "Line"
+    },
+    "Reflect Edges": {
+     "1": "None",
+     "2": "All",
+     "3": "Left",
+     "4": "Top",
+     "5": "Right",
+     "6": "Bottom",
+     "7": "Left & Top",
+     "8": "Right & Left",
+     "9": "Right & Top",
+     "10": "Bottom & Left",
+     "11": "Bottom & Top",
+     "12": "Bottom & Right",
+     "13": "Right & Left & Top",
+     "14": "Bottom & Left & Top",
+     "15": "Bottom & Right & Left",
+     "16": "Bottom & Right & Top"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Caustics",
+    "Displacement Map",
+    "Fractal Noise",
+    "CC Glass"
+   ],
+   "scripting": "Simulation effect: it simulates in layer time from the layer's START (layer time 0), not from a trimmed in-point, so a layer that starts at its first visible frame shows little at first; start the layer earlier (negative start / footage 'in' offset) to pre-roll, and sample QC frames >= 1 s of layer time. Use Pre-roll to have waves present at frame 0. View 1 = Height Map, 2 = Wireframe Preview (default); labels read from the plug-in. Producer 1 props are the plain names; Producer 2 props are '#2' (Producer 2 Amplitude defaults to 0 = off). Ground is a layer reference (set by layer index in ExtendScript). Put Wave World in a precomp and use that precomp as Caustics 'Water Surface' or Displacement Map source, with the precomp layer hidden.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/177.png",
+    "note": "Frame is now a clean greyscale height map of concentric ripple rings spreading from the centre producer (small black dot at the source), replacing the old hard-clipped white field with a jagged black blob.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  }
+ ]
+}

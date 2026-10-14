@@ -1,0 +1,1552 @@
+{
+ "cards": [
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blur Glitch",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "needs_input",
+   "summary": "Meant to smear the whole line in and out of blur: a wiggle(7, 100) expression on the animator's Blur drives horizontal and vertical blur independently about 7 times a second. In the gallery render (applied at 0 s) both sampled frames, 0.5 s and 1.4 s, were pixel-identical to the plain text with no blur at all, so the blur is intermittent at best (negative wiggle values clamp to 0) or not evaluating: scrub it before relying on it.",
+   "look": [
+    "glitch",
+    "blur",
+    "intermittent",
+    "unverified"
+   ],
+   "use_for": [
+    "Glitchy title for a tech / AI explainer hook",
+    "'Fake news' or 'breaking' style caption in a political reel",
+    "Short glitch beat on a trailer title"
+   ],
+   "avoid": [
+    "Unverified: the gallery render showed no blur at 0.5 s or 1.4 s; scrub the layer, or raise the Blur base value so the wiggle stays positive, before using it",
+    "Same blur on every character (the range selector covers the whole line): it reads as a focus glitch, not a per-letter glitch"
+   ],
+   "confidence": "low",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: a wiggle(7, 100) expression on Blur runs for the whole layer, so comp.time does not matter; the gallery render caught it sharp at both 0.5 s and 1.4 s.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. To calm it, edit the wiggle(7, 100) expression on 'Blur Glitch Animator' > Blur (lower the second number) or trim the layer.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "broken",
+    "frame": "pve/gallery/presets/354a.png",
+    "note": "Both frames (0.5 s and 1.4 s) are pixel-identical to the plain white text: no blur at all, so the wiggle(7, 100) blur was either clamped to 0 at both samples or did not evaluate.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Blur In By Word",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Words appear left to right, one after another, each fading up from a heavy blur (184 x 277 px) until sharp.",
+   "look": [
+    "blur reveal",
+    "word by word",
+    "soft",
+    "clean",
+    "documentary title"
+   ],
+   "use_for": [
+    "Clean documentary title or quote reveal",
+    "Word-paced caption reveal synced to voice-over",
+    "Lower-third headline in news explainers"
+   ],
+   "avoid": [
+    "2 s is slow for punchy reels: compress the keys"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes); the text is unformed before, and rests in its normal layout after the last key. One Range Selector (Based On Words, Ramp Up, End 50) Offset animates -50 to 100 over 'Blur In By Word Animator' (Opacity 0, Blur 184 x 277).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/355a.png",
+    "note": "0.5 s: both words are heavy soft blobs; 1.4 s: ARCHIVE is sharp while 1947 is still a blurred blob, so words clear one after another.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bullet Train In",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Characters rush in from the left (starting 302 px left of place) with a strong horizontal-only blur (416 px) while fading up, snapping into place left to right in about half a second, like a passing train.",
+   "look": [
+    "speed",
+    "horizontal blur",
+    "streak",
+    "fast",
+    "energetic"
+   ],
+   "use_for": [
+    "Fast hook title in a social reel on a whoosh SFX",
+    "Stat or headline slam in a news reel",
+    "Trailer card hit"
+   ],
+   "avoid": [
+    "Too aggressive for slow, serious documentary pieces",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 0.53 s later (measured from the .ffx keyframes); the text is unformed before, and rests in its normal layout after the last key. Range Selector (Ramp Up) Offset -100 to 100 over 'Bullet Train In Animator' (Position [-302,0], Opacity 0, Blur [416,0]).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/356a.png",
+    "note": "0.5 s: the line has landed except the last character, which is still a horizontal streak; 1.4 s settled, matching the ~0.53 s move.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Evaporate Out",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Characters vanish in random order: each swells to 263% while blurring (113 px) and fading out, as if evaporating.",
+   "look": [
+    "evaporate",
+    "blur out",
+    "scale up",
+    "fade",
+    "dreamy"
+   ],
+   "use_for": [
+    "Soft exit for a quote or remembrance title",
+    "Ending a documentary chapter card",
+    "Dissolving a claim on screen in an explainer"
+   ],
+   "avoid": [
+    "Wrong mood for hard news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-out: keys start at comp.time and end 2.37 s later (measured from the .ffx keyframes); the text is gone after the last key, so apply it 2.37 s before the out-point. Animator: Scale 263%, Opacity 0, Blur 113; random-order Ramp Down selector. The Range Selector works in index units (Index Offset -17 to 29), so lines longer than about 29 characters may not fully clear: check the last frame.",
+   "scripting": "Set comp.time to the end of the hold minus the run length so the last key lands on layer.outPoint, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/357a.png",
+    "note": "0.5 s: random characters (C, 1, 7) are blurring and fading; 1.4 s: only one swollen soft blob is left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Foggy In",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Characters fade in left to right out of a wide horizontal smear (stretched to 1204% width, blur 200 x 50 px), so the line clears like fog lifting.",
+   "look": [
+    "fog",
+    "blur reveal",
+    "horizontal stretch",
+    "soft",
+    "mysterious"
+   ],
+   "use_for": [
+    "Moody documentary or trailer title",
+    "Opening card for an investigation piece",
+    "Soft reveal over slow aerial B-roll"
+   ],
+   "avoid": [
+    "The 12x horizontal stretch smears unrevealed letters across the frame mid-move: check it over busy footage",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.13 s later (measured from the .ffx keyframes); the text is unformed before, and rests in its normal layout after the last key. Range Selector (Ramp Up, left to right, Randomize Order off) Offset -100 to 100 over 'Foggy Animator' (Scale [1204,100], Opacity 0, Blur [200,50]).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/358a.png",
+    "note": "0.5 s: the line is one wide horizontal smear; 1.4 s: ARCHIVE is sharp and 1947 is still stretched and smeared.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Harsh Blur In By Character",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Characters snap in one at a time in random order out of a heavy 350 px blur while fading up; a wiggly selector makes not-yet-landed characters flicker partly into view.",
+   "look": [
+    "blur",
+    "per character",
+    "punchy",
+    "sharp",
+    "reveal"
+   ],
+   "use_for": [
+    "Punchy hook text in reels",
+    "Trailer title cards",
+    "Number or stat reveal in explainers"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 1.32 s later (measured from the .ffx keyframes); the text is hidden before, and rests in its normal layout after the last key. One animator (Opacity 0, Blur 350 x 350) with range selector 'Blur Effect ' (Start 0 to 100, Randomize Order on) intersected with wiggly selector 'Blur Wiggle ' (2 wiggles/s, -15..82%).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes. Animator and selector names end with a trailing space ('Malicious Blur In By Character ', 'Blur Effect ', 'Blur Wiggle '): include it when looking them up by name.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/359a.png",
+    "note": "0.5 s: a random subset of characters is sharp, others missing, one a tall blur streak; 1.4 s fully settled.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Harsh Blur Out By Character",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Characters blur hard (350 px) and fade out one by one in random order, flickering via a wiggly selector: the reverse of Harsh Blur In By Character.",
+   "look": [
+    "blur out",
+    "per character",
+    "punchy",
+    "exit"
+   ],
+   "use_for": [
+    "Exit for a title that entered with Harsh Blur In",
+    "Fast caption exit in reels",
+    "Trailer title exit before a cut"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-out: keys start at comp.time and end 1.36 s later (measured from the .ffx keyframes); the text is gone after the last key, so apply it 1.36 s before the out-point. One animator (Opacity 0, Blur 350 x 350); range selector 'Blur Effect ' Start 100 to 0 (Randomize Order on) intersected with wiggly selector 'Blur Wiggle '.",
+   "scripting": "Set comp.time to the end of the hold minus the run length so the last key lands on layer.outPoint, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Animator and selector names end with a trailing space ('Malicious Blur Out By Character ', 'Blur Effect ', 'Blur Wiggle '): include it when looking them up by name.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/360a.png",
+    "note": "0.5 s: random characters are gone or blurred while others stay sharp; 1.4 s: the text has vanished.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Transporter In",
+   "match": null,
+   "category": "Text/Blurs",
+   "status": "current",
+   "summary": "Characters materialise in random order from thin, tall blurred streaks (13% wide x 3000% tall, blur 275 x 25 px) that collapse into the letters while fading up, like a sci-fi teleporter beam.",
+   "look": [
+    "sci-fi",
+    "teleport",
+    "shimmer",
+    "materialise",
+    "blur"
+   ],
+   "use_for": [
+    "AI / tech explainer titles",
+    "Futuristic trailer title",
+    "Product or app name reveal"
+   ],
+   "avoid": [
+    "Gimmicky on serious political or news content",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.13 s later (measured from the .ffx keyframes); the text is hidden before, and rests in its normal layout after the last key. 'Transporter In Animator': Scale [13,3000], Opacity 0, Blur [275,25]; random-order Ramp Up Range Selector Offset -100 to 100.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/361a.png",
+    "note": "0.5 s: tall thin blurred vertical beams; 1.4 s: characters partly formed, the rest still tall streaks.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Bloom Flower In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters spin very fast (Rotation keyed -36000 to 0 deg, 100 turns) about an anchor 100 px off each glyph while fading in, in random order, opening out like petals.",
+   "look": [
+    "bloom",
+    "fast spin",
+    "orbit",
+    "playful",
+    "organic"
+   ],
+   "use_for": [
+    "Festival / celebration greeting text",
+    "Light-hearted reel title",
+    "Kids or lifestyle explainer opener"
+   ],
+   "avoid": [
+    "Too playful for news and political seriousness",
+    "Extreme spin strobes without motion blur",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes); the text is hidden before, and rests in its normal layout after the last key. Animators: 'Animator - Anchor Point/Scale' (only Anchor Point [0,100] is active, no scale), 'Animator - Rotation' (Rotation keyed -36000 to 0 deg), 'Animator - Opacity' (0); random-order Round and Ramp Up selectors.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/362b.png",
+    "note": "0.5 s: one faint rotated H; 1.4 s: scattered, semi-transparent characters spinning about offset pivots around the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Clockwise Entry",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters grow in from zero size left to right while circling into place: one animator turns them two times clockwise (Rotation -720 to 0) about an anchor 100 px off the glyph at 600% scale, a second rides a looping circular Position path (9 keys, two loops about 490 px across) at 0% scale; settles in 2 s.",
+   "look": [
+    "circular path",
+    "clockwise",
+    "grow in",
+    "spin",
+    "playful"
+   ],
+   "use_for": [
+    "Playful reel captions",
+    "Animated list items in an explainer",
+    "Clock or cycle themed title"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes); the text is hidden (0% scale) before, and rests in its normal layout after the last key. '\\tAnimator - Anchor/Pos/Scale' (Anchor [0,100], Scale 600%, Rotation -720) and '\\tAnimator - Anchor/Pos/Scale 2' (9-key Position circle, Scale 0%, Opacity 25) share Ramp Up selectors (End 20 to 100, Offset -20 to 100).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together). Animator/selector names in this preset start with a TAB character (e.g. '\\tAnimator - Rotation'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/363a.png",
+    "note": "0.5 s: A and R near place while H and C circle in from below, rotated; 1.4 s: ARCHIVE landed, 1947 still circling below.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Counter Rotate",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "A wave passes left to right: each character makes one full clockwise turn while it swells (up to 770%) and fades to transparent at the wave's peak, then returns; the line is readable before and after.",
+   "look": [
+    "spin",
+    "swell",
+    "wave",
+    "emphasis",
+    "motion graphics"
+   ],
+   "use_for": [
+    "Abstract motion-graphics title",
+    "Tech / machinery explainer text",
+    "Stylised reel caption"
+   ],
+   "avoid": [
+    "Mid-wave the letters are several times larger and semi-transparent: busy over detailed footage, and they can cross the frame edge",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-place move, readable at both ends: keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes). '\\tAnimator - Rotation' (Rotation 360) under '\\tSelector - Offset (Ramp Down)' and '\\tAnimator - Scale/Opacity' (Scale 770%, Opacity 0) under '\\tSelector - Offset (Smooth)', both Offset -100 to 100.",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Animator/selector names in this preset start with a TAB character (e.g. '\\tAnimator - Rotation'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/364a.png",
+    "note": "0.5 s: the first characters are swollen, rotated and semi-transparent; 1.4 s: ARCHIVE readable, 1947 swollen and turning.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Dust Devil Out",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters whirl away from the line left to right: each spins two turns (720 deg) about a pivot about 280 px off the baseline and slides 130 px sideways, odd and even characters going opposite ways like a whirlwind. It does not fade: the characters end scattered but still visible.",
+   "look": [
+    "whirlwind",
+    "swirl",
+    "spin out",
+    "scatter",
+    "exit"
+   ],
+   "use_for": [
+    "Stylised exit for a title in a reel",
+    "Wind or storm themed documentary card",
+    "Comic exit of a debunked claim in satire"
+   ],
+   "avoid": [
+    "Does not remove the text (no Opacity or Scale): cut or fade the layer at the last key",
+    "Busy: avoid for sober news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes). 'Animator - Pos/Rot/Tracking' (Anchor [0,-279], Position [130,0], Rotation 720) under a Ramp Down 'Selector - Offset' -100 to 100 (characters excluding spaces), plus 'Expression Selector - Odd/Even' that flips the sign for every other character. Characters stay visible, displaced, after the last key.",
+   "scripting": "Set comp.time to the out-point minus 3.0 s so the last key lands on layer.outPoint, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. The preset leaves the characters visible: trim the layer at the last key or key the layer's Opacity to 0 over the last ~0.5 s.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/365b.png",
+    "note": "0.5 s: A and R whirling off while the rest is in place; 1.4 s: every character scattered, rotated and still fully visible.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lasso In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters swing in along a looping path driven by an animated anchor point (11 keys swinging side to side about 500 px, narrowing as they go) and land left to right, like a lasso being reeled in. No fade: before landing the characters are visible but displaced.",
+   "look": [
+    "loop",
+    "swing",
+    "lasso",
+    "playful"
+   ],
+   "use_for": [
+    "Playful reel titles",
+    "Comic or rural-humour captions",
+    "Animated word entrance in kids or lifestyle content"
+   ],
+   "avoid": [
+    "Low readability during the 3 s move",
+    "Characters are visible, displaced up to ~500 px, from the first frame: start the layer at comp.time",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes); the text rests in its normal layout after the last key. 'Animator - Spin Anchor Point' (11 Anchor Point keys over 3 s, no rotation or opacity) under a Ramp Up 'Selector - Offset' -50 to 100 (End 50).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/366b.png",
+    "note": "0.5 s: only the A is in frame (low); 1.4 s: ARC landed and the rest stacked up and to the left along the looping path, fully opaque.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Lasso Tumble In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Like Lasso In but tumbling: characters swing on an animated anchor while their scale flips between about +257% and -257% (mirror flips), and an opacity animator reveals them left to right; they settle after 3 s.",
+   "look": [
+    "loop",
+    "tumble",
+    "flip",
+    "swing",
+    "chaotic"
+   ],
+   "use_for": [
+    "Comic or meme reel titles",
+    "Energetic intro text",
+    "Satire beat in a political satire reel"
+   ],
+   "avoid": [
+    "Low readability during the move",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes); the text is hidden before, and rests in its normal layout after the last key. 'Animator - Spin Anchor Point' (12 Anchor keys, Scale keyed +257/-257 alternating to 115) under 'Selector - Offset' (Ramp Up, End 20, Max Amount 50%, Offset -13 to 100) and 'Animator - Opacity (Reveal)' (Opacity 0, square selector Start 0 to 100 over 2.8 s).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/367b.png",
+    "note": "0.5 s: A and a small R visible, rest hidden; 1.4 s: ARCHI landed, V still displaced, rest not yet revealed.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Musical Chairs",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "In random order, each character swings one full turn around a pivot offset about 60 px right and 60 px down, so letters loop past their neighbours and land back in place; readable before and after the 4 s move.",
+   "look": [
+    "shuffle",
+    "orbit",
+    "swing",
+    "playful",
+    "random"
+   ],
+   "use_for": [
+    "Comic 'jumbled statement' beat in satire",
+    "Word-play or quiz reveal",
+    "Playful reel caption"
+   ],
+   "avoid": [
+    "Letters overlap their neighbours mid-move: hard to read for most of the 4 s",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-place move, readable at both ends: keys start at comp.time and end 4.0 s later (measured from the .ffx keyframes). '\\tAnimator - Adjust Anchor Point' (Anchor [60,60] with a compensating Position expression, applies to every character) plus '\\tAnimator - Rotation' (Rotation 360) under a random-order Ramp Up '\\tSelector - Offset' -50 to 100 (End 30, eases 50/50). A wiggle(30,30) expression is stored on a Fill Hue property that is not enabled, so it has no visible effect.",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Animator/selector names in this preset start with a TAB character (e.g. '\\tAnimator - Rotation'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/368b.png",
+    "note": "0.5 s: unchanged (selector not reached yet); 1.4 s: R and I loop out of place past their neighbours while the rest stays readable.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Newton",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "As a wave passes left to right, characters swing out on an animated anchor point (11 keys alternating roughly 400-500 px left and right, on looping arcs that also carry them a few hundred px above and below the line), then settle back in place; readable before and after.",
+   "look": [
+    "pendulum",
+    "swing",
+    "physics",
+    "playful"
+   ],
+   "use_for": [
+    "Physics or science explainer gag",
+    "Comic emphasis on a slogan in satire",
+    "Playful reel caption"
+   ],
+   "avoid": [
+    "Characters swing hundreds of px mid-wave: leave side room or they leave the frame",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-place move, readable at both ends: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes). '\\tAnimator - Spin Anchor Point' (11 Anchor Point keys, no opacity) under a Smooth-shape '\\tSelector - Offset' -50 to 100 (End 50).",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Animator/selector names in this preset start with a TAB character (e.g. '\\tAnimator - Rotation'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/369a.png",
+    "note": "0.5 s: C dropped below the line and R near the bottom edge; 1.4 s: H high above, I V E off frame, ARC and 1947 in place: a travelling wave of big looping swings.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Radial Flare In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters spin in (Rotation 10800 deg, 30 turns) stretched 5x wide around a pivot that travels from 1000 px below to 500 px above the line, fading up left to right, like a radial flare collapsing into the text.",
+   "look": [
+    "radial",
+    "flare",
+    "rotate in",
+    "scale",
+    "energetic"
+   ],
+   "use_for": [
+    "High-energy reel title",
+    "Trailer title slam",
+    "Event or launch name reveal"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes); the text is hidden before, and rests in its normal layout after the last key. 'Animator - Set Anchor Point' (Anchor keyed [0,1000] to [0,-500], Position expression cancels the shift), 'Animator - Scale/Rotation' (Scale [500,100], Rotation 10800) and 'Animator - Opacity (Reveal)' (Opacity 0); Ramp Up Offset selectors -100 to 100.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/370b.png",
+    "note": "0.5 s: nothing visible yet; 1.4 s: AR landed, the rest wide-stretched, rotated and semi-transparent around the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Retrograde",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Opposite orbits: every character except the second makes two clockwise turns about a pivot near the line's left side while the second character makes two counter-clockwise turns about the same pivot, at a constant speed (linear keys) starting at comp.time and landing back in place 2 s later; the line passes upside-down at about 0.5 s and 1.5 s and flashes upright for an instant at the 1.0 s midpoint.",
+   "look": [
+    "counter spin",
+    "rotation",
+    "orbit",
+    "cosmic"
+   ],
+   "use_for": [
+    "Space or astronomy explainer titles",
+    "Astrology-themed reel text",
+    "Abstract motion-graphics beat"
+   ],
+   "avoid": [
+    "The whole line swings in a wide circle: needs plenty of free space around the text",
+    "Busy on long lines: keep to one or two words",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-place move, readable at comp.time, for an instant at the 1.0 s midpoint (360 deg) and after the last key: keys start at comp.time and end about 2.0 s later (the 1.0 s offset stored in the .ffx is dropped by applyPreset; the gallery render, applied at 0 s, already showed the line turned ~180 deg at 0.5 s and still orbiting at 1.4 s). 'Animator - Rotate Character' 0 to -720 deg on the second character only; 'Animator - Rotate Line' 0 to 720 deg on the rest (Subtract selector linked to the first by expression); Anchor Point Grouping = Line.",
+   "scripting": "Set comp.time to where the spin should begin (it starts at once), then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the Rotation keys on both animators.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/371a.png",
+    "note": "The line is upside-down about a left-side pivot at 0.5 s and still orbiting at 1.4 s, with one character turning the other way.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: summary said the line hangs upside-down mid-move; the keys are linear (~180 deg at 0.5 s, ~504 deg at 1.4 s in the frames), so it is upside-down at 0.5 s and 1.5 s and upright at the 1.0 s midpoint; timing rewrite (comp.time, 2 s) confirmed"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Rotate",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "In random order, each character spins one full turn (360 deg) about a pivot at the top of the glyph (not its centre, so a turning letter swings up above the line) and lands back upright; readable before and after the 3 s move.",
+   "look": [
+    "rotation",
+    "spin",
+    "random",
+    "flourish"
+   ],
+   "use_for": [
+    "Playful emphasis on a word",
+    "Abstract motion-graphics text",
+    "Comic reel caption"
+   ],
+   "avoid": [
+    "A full turn ends where it started: reads as a flourish, not a reveal",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "In-place move, readable at both ends: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes). '\\tAnimator - Rotate' (Rotation 360) under a random-order Ramp Down '\\tSelector - Offset' -50 to 100 (End 50, eases 50/50). A wiggle(30,30) expression sits on a Fill Hue property that is not enabled, so it does nothing.",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Animator/selector names in this preset start with a TAB character (e.g. '\\tAnimator - Rotation'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/372b.png",
+    "note": "0.5 s: H and 7 tipped over; 1.4 s: A, I and 9 mid-turn in random order, the rest upright; turning letters swing up above the line, so the pivot is at the top of the glyph, not its centre.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Somersault In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters roll in from about 600 px to the left, each doing three somersaults (three staggered 360-degree turns, each carrying it about 200 px right) before settling. No fade: the line is visible, shifted left, before the move.",
+   "look": [
+    "somersault",
+    "roll",
+    "flip",
+    "playful",
+    "bouncy"
+   ],
+   "use_for": [
+    "Energetic reel title",
+    "Sports news title",
+    "Fun list items in an explainer"
+   ],
+   "avoid": [
+    "Text is visible (shifted ~600 px left, maybe off-frame) before it rolls in: start the layer at comp.time",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes); the text rests in its normal layout after the last key. Three animators 'Animator - Pos/Rot (Loop 1/2/3)' (Position about [-200,0] + Rotation 360 each) under Ramp Up Offset selectors (characters excluding spaces) that run 0-1.33, 0.33-1.67 and 0.67-2.0 s.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/373a.png",
+    "note": "0.5 s: the line is about 600 px left, only 47 at the frame edge; 1.4 s: the characters are a tumbling pile still left of place.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spin Fast In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters spin extremely fast (50 turns) while fading in and settle into the line.",
+   "look": [
+    "fast spin",
+    "rotation",
+    "energetic",
+    "whirl"
+   ],
+   "use_for": [
+    "Punchy hook text in reels",
+    "Stat reveal on a whoosh",
+    "Trailer title hit"
+   ],
+   "avoid": [
+    "Very fast spin strobes without motion blur: enable layer motion blur",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes); the text is unformed before, and rests in its normal layout after the last key. 'Animator - Rotation' (Rotation keyed -18000 to 0 deg under a Triangle selector) plus 'Animator - Opacity' (Ramp Up reveal).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/374b.png",
+    "note": "0.5 s: faint spinning A and R; 1.4 s: ARCH landed, I V E still spinning and semi-transparent.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spiral In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters spiral into place left to right: each makes two turns (720 deg) about a pivot about 360 px away that shrinks to nothing, with tracking tightened (-50) until it lands. No fade: before the move the characters are visible but displaced.",
+   "look": [
+    "spiral",
+    "swirl",
+    "converge",
+    "hypnotic"
+   ],
+   "use_for": [
+    "Dream or flashback title",
+    "Mystery explainer opener",
+    "Reel title on a zoom transition"
+   ],
+   "avoid": [
+    "Characters are visible (displaced ~360 px) before they spiral in: start the layer at comp.time",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes); the text rests in its normal layout after the last key. 'Animator 1' (Anchor [0,-360], Rotation 720, Tracking -50) under a Ramp Up 'Range Selector 1' Offset -100 to 100 (characters excluding spaces). No Opacity or Scale.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/375b.png",
+    "note": "0.5 s: A, R and C far out on a wide orbit; 1.4 s: every character scattered around a tightening spiral, fully opaque.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Spiral Out",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters spiral away left to right and vanish: each turns 2.5 times (900 deg) about a pivot 300 px off the baseline, drifts 130 px sideways and shrinks to 0%.",
+   "look": [
+    "spiral",
+    "swirl",
+    "disperse",
+    "exit"
+   ],
+   "use_for": [
+    "Exit for a title that used Spiral In",
+    "Dream or flashback exit",
+    "Transition out of a chapter card"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-out: keys start at comp.time and end 3.0 s later (measured from the .ffx keyframes); the text is gone (0% scale) after the last key, so apply it 3.0 s before the out-point. 'Animator - Anchor/Pos/Scale...' (Anchor [0,-300], Position [130,0], Scale 0%, Rotation 900) under a Ramp Down 'Selector - Offset' -100 to 100.",
+   "scripting": "Set comp.time to the end of the hold minus the run length so the last key lands on layer.outPoint, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/376b.png",
+    "note": "0.5 s: the first characters curl away while IVE 1947 sit in place; 1.4 s: all characters small, rotated and spiralling out.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Swoop In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters swoop in from zero size along a long horizontal sweep (Position keyed about +1280 to -1570 px) while spinning 540 deg at 600% scale about offset anchors, landing left to right in about 2.5 s.",
+   "look": [
+    "swoop",
+    "arc",
+    "fluid",
+    "dynamic"
+   ],
+   "use_for": [
+    "Smooth headline entrance",
+    "Travel or nature documentary title",
+    "Reel caption entrance"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.48 s later (measured from the .ffx keyframes); the text is hidden (0% scale) before, and rests in its normal layout after the last key. 'Animator - Anchor/Pos/Scale' (Anchor [0,55], Position [-410,69], Scale 600%, Rotation 540) and 'Animator - Anchor/Pos/Scale 2' (Anchor [54,63], Position keyed, Scale 0%, Opacity 25) share Ramp Up 'Selector - Offset/End' selectors (End 20 to 100, Offset -20 to 100).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/377b.png",
+    "note": "0.5 s: A landed, C R H swooping in from the lower right, faded; 1.4 s: ARCHI landed, 1947 swinging in from the left.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Tea Leaves In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters drift and rotate around five offset anchor points, swirling slowly like tea leaves before settling into the line.",
+   "look": [
+    "swirl",
+    "slow drift",
+    "settle",
+    "organic",
+    "soft"
+   ],
+   "use_for": [
+    "Calm documentary or lifestyle title over a long hold",
+    "Food, tea or culture piece title",
+    "Slow ambient intro"
+   ],
+   "avoid": [
+    "Very long (11.5 s): scale the keys down for reels",
+    "Scattered start looks messy on long lines",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in, long: keys start at comp.time, the Offset selectors run 100 to -100 until 10.5 s and rotations end 11.5 s later (measured from the .ffx keyframes); the line is settled at 10.5 s because the selectors have released every character by then. No Opacity: characters are scattered from the first frame, at first mostly outside a 960x540 frame (the gallery render showed nothing at 0.5 s and only A and R drifting in at 1.4 s).",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes. To shorten, scale every key time on the text animators (e.g. x0.25 for about 3 s).",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/378b.png",
+    "note": "0.5 s: nothing in frame (characters scattered outside the frame); 1.4 s: A and R drifting, rotated, far up-right of the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Tire Rim In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters wheel into place: each spins 6.5 turns (2340 deg) about a pivot 460 px to its left while stretched 6x tall, unwinding left to right over 2 s. No fade: before the move they are visible, upside-down and swung around the pivot.",
+   "look": [
+    "wheel",
+    "rotate in",
+    "scale",
+    "motion"
+   ],
+   "use_for": [
+    "Automotive or transport explainer titles",
+    "Playful reel title",
+    "Logo-style word reveal"
+   ],
+   "avoid": [
+    "Characters are visible (upside-down, far left of place) before the move: start the layer at comp.time",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes); the text rests in its normal layout after the last key. 'Animator - Set Anchor Point' (Anchor [-460,-19], Position expression cancels the shift) and 'Animator - Scale/Rotation' (Scale [100,600], Rotation 2340) under a Ramp Up 'Range Selector 1' Offset -100 to 100.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector keyframes.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/379b.png",
+    "note": "0.5 s: nothing in frame; 1.4 s: ARC landed, I and E stretched tall and wheeling around, rest off frame.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Whirl In",
+   "match": null,
+   "category": "Text/Curves and Spins",
+   "status": "current",
+   "summary": "Characters grow in from 0% scale left to right while a wave throws them along an outward spiral Position path (7 keys widening to several hundred px), landing in about 1.3 s.",
+   "look": [
+    "whirl",
+    "swirl",
+    "grow in",
+    "fast",
+    "dynamic"
+   ],
+   "use_for": [
+    "Energetic title in reels",
+    "Trailer title",
+    "Wind or storm themed card"
+   ],
+   "avoid": [
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Animate-in: keys start at comp.time and end 1.33 s later (measured from the .ffx keyframes); the text is hidden (0% scale) before, and rests in its normal layout after the last key. '\\tAnimator - Position' (7-key spiral path, Smooth selector) plus '\\tAnimator - Opacity (Reveal)', which despite its name sets Scale to 0% (Ramp Up selector); both Offset -100 to 100.",
+   "scripting": "Set comp.time to where the text should start forming, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by scaling all keyframes on the text animators (selector keys and the keyed properties together). Animator/selector names in this preset start with a TAB character (e.g. '\\tAnimator - Rotation'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/380a.png",
+    "note": "0.5 s: ARCHIVE growing in from small along a curving path, 1947 not there yet; 1.4 s settled.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "2D Text Box (Mask & Effects)",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "current",
+   "summary": "Adds a box behind the text that auto-sizes to it (an expression-driven mask path measured with sourceRectAtTime), filled 50% grey by Fill, outlined 3 px white by Stroke, with the text kept in front by CC Composite ('In front'); controls for padding (35 px), roundness (20), scale and offset live on a '2D Text Box' pseudo effect.",
+   "look": [
+    "text box",
+    "caption plate",
+    "lower third",
+    "auto-size",
+    "rounded corners"
+   ],
+   "use_for": [
+    "News lower-third or name strap that resizes with the text",
+    "Caption plate behind subtitles in reels",
+    "Highlighted keyword box in explainers"
+   ],
+   "avoid": [
+    "Default box is 50% grey (#808080) with a 3 px white outline: set Fill and Stroke colours to the brand palette",
+    "'Measure Text' defaults to 'During Whole Comp', so the box fits the largest text over the comp; use 'At Single Time' + 'Measure At Time [sec]' if it must hug one frame's text"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "2D Text Box",
+    "CC Composite",
+    "Fill",
+    "Stroke"
+   ],
+   "duration_note": "No keyframes: the mask path expression follows the text for the whole layer, so comp.time does not matter.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer. Controls are on the pseudo effect (match 'Pseudo/ADBE 2D Text Box', layer name '\\t2D Text Box' with a leading TAB): 'Measure Text' (At Single Time | During Whole Comp | After Time | Before Time), 'Measure At Time [sec]', 'Uniform Scale', 'Scale X', 'Scale Y', 'Scale Origin' (Center | Upper Left | Upper Right | Lower Right | Lower Left), 'Padding Overall', 'Padding Left/Right/Top/Bottom', 'Offset X', 'Offset Y', 'Roundness', 'Uniform Roundness', 'Scale Roundness', 'Corner Sharpness', 'Enable Per Corner', 'Round Upper Left/Upper Right/Lower Right/Lower Left'. Box colour: Fill > Color; outline: Stroke > Color and Brush Size.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/381a.png",
+    "note": "Grey box with a white rounded outline sits snugly behind ARCHIVE 1947 with padding, text in front, in both frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Cycle Word List",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "current",
+   "summary": "A Source Text expression swaps the text through a word list (default One|Two|...|Ten), stepping at the rate of a 'Cycle Frame Rate' slider (default 5 words per second).",
+   "look": [
+    "word cycle",
+    "rotating words",
+    "kinetic",
+    "flip text"
+   ],
+   "use_for": [
+    "Rotating keyword in a hook line ('jobs / roads / water')",
+    "Rotating feature list in an AI explainer",
+    "Fast word flicker on a trailer beat"
+   ],
+   "avoid": [
+    "Words live in the expression's buzz_words string ('A|B|C'): edit layer.text.sourceText.expression",
+    "Hard cuts between words: pair with a blur or fade for polish"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: index = floor(time * Cycle Frame Rate) mod word count, using comp time, so it cycles for the whole layer.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Set the 'Cycle Frame Rate' Slider Control (words per second) and replace the buzz_words string in the Source Text expression. The slider's name starts with a TAB ('\\tCycle Frame Rate'), matching the expression's effect(\"\\tCycle Frame Rate\"): keep it if you rename or look it up.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/382a.png",
+    "note": "Text reads THREE at 0.5 s and EIGHT at 1.4 s, exactly floor(time*5) through the default list.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Display Comp Time",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "current",
+   "summary": "Replaces the text with a live readout of the current comp time via timeToCurrentFormat(), in the project's display format (timecode by default).",
+   "look": [
+    "timecode",
+    "clock",
+    "counter",
+    "burn-in",
+    "technical"
+   ],
+   "use_for": [
+    "Review burn-in timecode on drafts",
+    "On-screen running clock in a timeline explainer",
+    "CCTV or surveillance style time stamp"
+   ],
+   "avoid": [
+    "Shows comp time, not real-world time",
+    "Remove from final renders if used only for review"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: the Source Text expression updates every frame for the whole layer.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. The original text is replaced; font and size still come from the layer's text style.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/383a.png",
+    "note": "Text reads 00:00:00:13 at 0.5 s and 00:00:01:10 at 1.4 s (25 fps timecode).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Frame Number",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "current",
+   "summary": "Replaces the text with the current frame number via timeToFrames() in a Source Text expression.",
+   "look": [
+    "frame counter",
+    "technical",
+    "burn-in",
+    "counter"
+   ],
+   "use_for": [
+    "Frame-accurate review burn-in",
+    "Debugging timing in automated renders",
+    "Retro technical or film-leader look"
+   ],
+   "avoid": [
+    "Review aid, not a creative element: remove from the final render"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: the Source Text expression updates every frame for the whole layer.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/384a.png",
+    "note": "Text reads 13 at 0.5 s and 35 at 1.4 s (25 fps).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Inch Worm",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "current",
+   "summary": "The line crawls left like an inchworm: a hump of characters lifts (up to 120 px) and travels along the word while the rear catches up, and the whole line steps 60 px left each cycle (about 1.4 s), looping for the rest of the layer.",
+   "look": [
+    "crawl",
+    "squash and stretch",
+    "playful",
+    "loop"
+   ],
+   "use_for": [
+    "Playful kids or comedy title",
+    "Comic 'slow progress' gag in satire",
+    "Loading or waiting text"
+   ],
+   "avoid": [
+    "The text keeps travelling left (60 px per cycle, about 40 px/s): it crawls off screen on long layers; make 'X Move Distance' positive to crawl right",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "Keys start at comp.time and end about 1.44 s later (the 1.56 s offset stored in the .ffx is dropped by applyPreset: the gallery render, applied at 0 s, showed the hump up at 0.5 s and the line flat, one 60 px step left, at 1.4 s), then loopOut('cycle') / loopOut('offset') repeat the crawl for the rest of the layer.",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Slider Controls (names start with a TAB, e.g. '\\tX Move Distance'): 'X Move Distance' (default -60), 'Y Move Distance' (default -120, hump height), 'Count of Inches' (keyed 0 to 1, loopOut('offset')); animators 'Vertical Jump', 'Horizontal Jump', 'Continuous Movement'.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/385a.png",
+    "note": "A hump of characters lifted at 0.5 s; flat and about 60 px left of its start at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "agree"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Text Bounce",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "current",
+   "summary": "Characters drop from about 320 px above and bounce to rest one after another, each bounce half the height of the last, driven by an expression selector on a Position [0,-320] animator with sliders for frequency, per-character delay, decay and start phase.",
+   "look": [
+    "bounce",
+    "elastic",
+    "decay",
+    "playful",
+    "kinetic"
+   ],
+   "use_for": [
+    "Bouncy hook text in social reels",
+    "Fun stat pop-ups in explainers",
+    "Kinetic typography beats"
+   ],
+   "avoid": [
+    "The expression uses comp time, not the layer in-point: on a layer starting late the bounce has already decayed",
+    "Too bouncy for sober documentary or news",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [
+    "Slider Control"
+   ],
+   "duration_note": "No keyframes: t = time * frequency - per-character delay, with comp time, so the bounce decays from comp time 0 (not from the layer start).",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Slider Controls (names start with a TAB, e.g. '\\tBounce Frequency'): 'Bounce Frequency' (default 4, i.e. 0.5 s per bounce), 'Bounce Per-Character Delay' (default 0.25; negative reverses the order), 'Bounce Decay' (default 50 percent), 'Bounce Start' (default 100 = start at the top; 0 = bottom). With the defaults the bounce has died out about 3 s after comp time 0. For a layer that starts late, precompose it or change time to (time - inPoint) in the expression selector.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/386a.png",
+    "note": "0.5 s: characters at staggered heights, some above the frame; 1.4 s: a small decaying wave across the line.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Word List Highlight",
+   "match": null,
+   "category": "Text/Expressions",
+   "status": "needs_input",
+   "summary": "An expression selector (based on words) turns every word found in a word dictionary (default: and, for, to, from, of, Highlight) red via 'Animator 1' Fill Color, leaving other words unchanged. It needs text that contains one of those words (or an edited dictionary): on 'ARCHIVE 1947' it did nothing.",
+   "look": [
+    "keyword highlight",
+    "emphasis",
+    "selective colour",
+    "static"
+   ],
+   "use_for": [
+    "Highlight key terms in an explainer caption",
+    "Pick out names or numbers in a news strap",
+    "Emphasise brand words in a reel caption"
+   ],
+   "avoid": [
+    "Exact, case-sensitive whole-word match (split on whitespace): punctuation stuck to a word or a capital letter stops the match",
+    "Highlight colour is red (#FF0000) on 'Animator 1' Fill Color: set it to the brand colour"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer containing a word from the expression's wordDictionary (edit the list to match the text)",
+   "effects_used": [],
+   "duration_note": "No keyframes: a static, expression-based selection for the whole layer.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Edit wordDictionary = [...] in Animator 1's Expression Selector Amount expression. Animator 1 sets Fill Color #FF0000; change it to the brand colour.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/presets/387a.png",
+    "note": "Both frames are unchanged white text: ARCHIVE 1947 contains none of the dictionary words, so nothing is selected (the preset needs matching words to show anything).",
+    "rerender": false,
+    "second_opinion": "agree",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Chasing Stroke",
+   "match": null,
+   "category": "Text/Fill and Stroke",
+   "status": "current",
+   "summary": "Sets the text's stroke colour to red ('Base Stroke') and sends a triangle-shaped wave of stroke (width up to +25 px) left to right and back over 3.2 s, so a red outline pulses along the characters.",
+   "look": [
+    "stroke",
+    "outline",
+    "chase",
+    "neon",
+    "sweep"
+   ],
+   "use_for": [
+    "Neon-style title accent in reels",
+    "Emphasis sweep on a key word",
+    "Tech or gaming explainer titles"
+   ],
+   "avoid": [
+    "Stroke is red (#FF0000) from 'Base Stroke': change Stroke Color there for brand colours",
+    "Thin strokes vanish on small captions",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys start at comp.time and end 3.2 s later (measured from the .ffx keyframes) (3 keys on the Range Selector Offset: -50, 100 at 1.6 s, -50 at 3.2 s). 'Animator 1' (Stroke Opacity 0, Stroke Width 25) uses a Subtract-mode Triangle selector, so the visible stroke rides the wave's flanks.",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/388a.png",
+    "note": "0.5 s: red stroke glow on ARCHI; 1.4 s: the red stroke has moved to 47 at the right end.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Chill Hue Shift",
+   "match": null,
+   "category": "Text/Fill and Stroke",
+   "status": "current",
+   "summary": "Turns the text blue (#0055FE via 'Animator 1') and lets a wiggly selector drift each character's fill hue by up to +/-30 deg about once a second: a gentle blue-violet-cyan shimmer.",
+   "look": [
+    "hue shift",
+    "colour drift",
+    "random",
+    "calm",
+    "shimmer"
+   ],
+   "use_for": [
+    "Calm lifestyle or tech title",
+    "Ambient typography over B-roll",
+    "Music or mood reel text"
+   ],
+   "avoid": [
+    "Recolours the text blue: change Fill Color on 'Animator 1' for brand colours",
+    "Not for party-coloured political titles where colour carries meaning",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: a Wiggly Selector animates the hue continuously for the whole layer.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Tune wiggle speed and amount on 'Wiggly Selector - Randomize' under 'Animator - Wiggle Fill Hue'.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/389a.png",
+    "note": "Text is blue with per-character hue drifting between deep blue and cyan-blue in both frames.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Color Wash Behavior",
+   "match": null,
+   "category": "Text/Fill and Stroke",
+   "status": "current",
+   "summary": "Patches of neighbouring characters drift in and out of pale pastel tints: 'Animator 1' Fill Color #F2BA41 (gold) is driven by a wiggly selector (2 wiggles/s, 60% character correlation, -50% to 75%, Lock Dimensions off) intersected with a full-line by-word range selector. Because R, G and B are wiggled separately, each character wanders between pale gold, pale yellow, cream, peach, pink and lavender rather than one gold, and the tint slides across characters rather than switching whole words. Subtle on white text.",
+   "look": [
+    "colour wash",
+    "shimmer",
+    "pastel",
+    "multicolour",
+    "loop",
+    "random",
+    "subtle"
+   ],
+   "use_for": [
+    "Looping shimmer on an end card or call to action",
+    "Subtle life on a static title over B-roll",
+    "Neon or festive greeting text"
+   ],
+   "avoid": [
+    "Fill Color is #F2BA41 on 'Animator 1', but with Lock Dimensions off each channel wiggles on its own, so any brand colour also splits into off-hue mixes: turn on Lock Dimensions on 'Wiggly Selector 1' for a single-hue wash",
+    "Tints are pale on white text (pale gold, yellow, lavender): use a stronger Fill Color or darker text if it must read",
+    "Constant motion distracts from voice-over on long holds",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "medium",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: the Wiggly Selector animates it for the whole layer (a 'Behavior').",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Colour lives on Animator 1; speed, amount range and Lock Dimensions on 'Wiggly Selector 1'.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/390b.png",
+    "note": "Pale tints drift over groups of characters (pale yellow and lavender at 0.5 s, pale gold on the first letters at 1.4 s); subtle on white.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: the lavender/yellow are not a negative-wiggle swing (white plus a negative amount clamps to white); Lock Dimensions is off so R, G, B wiggle separately (frames: C/H #FDFF98 pale yellow at 1.4 s, 1947 #F6D2F9 lavender at 0.5 s); rewrote summary/look/avoid/scripting"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Cycle Fill Hue",
+   "match": null,
+   "category": "Text/Fill and Stroke",
+   "status": "current",
+   "summary": "Turns the text red ('Animator 1') and spins its fill hue through the spectrum on 'Animator 2' (985 deg in the first 2 s, then forever via loopOut('continue')): a fast rainbow cycle.",
+   "look": [
+    "rainbow",
+    "hue cycle",
+    "colour shift",
+    "retro",
+    "playful"
+   ],
+   "use_for": [
+    "Party or festival greeting text",
+    "Retro or meme-style reel caption",
+    "Attention grab on a call to action"
+   ],
+   "avoid": [
+    "Looks cheap on serious news and documentaries",
+    "Some hues kill legibility over bright footage"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys start at comp.time and end 2.0 s later (measured from the .ffx keyframes), then loopOut('continue') keeps the hue rotating at the same speed for the rest of the layer.",
+   "scripting": "Set comp.time to where the move should begin, then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Slow it down by moving the second Fill Hue key later.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/391a.png",
+    "note": "Solid fill colour cycles: blue-violet at 0.5 s, magenta-pink at 1.4 s, consistent with 985 deg over 2 s from red.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Fill Color Wipe",
+   "match": null,
+   "category": "Text/Fill and Stroke",
+   "status": "current",
+   "summary": "The text turns red ('Animator 1'), and from comp.time a white fill ('Animator 2') wipes across it left to right, character by character, finishing 1.5 s later and holding white.",
+   "look": [
+    "colour wipe",
+    "fill change",
+    "highlight",
+    "clean"
+   ],
+   "use_for": [
+    "Highlight a keyword by wiping it to the brand colour",
+    "Karaoke-style caption fill synced to voice-over",
+    "Fact-check colour change"
+   ],
+   "avoid": [
+    "Start colour is red and end colour white whatever the text's own colour: set Fill Color on '\\tAnimator 1' (start) and '\\tAnimator 2' (end) to the brand colours",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "Keys start at comp.time and end 1.5 s later (the 0.5 s offset stored in the .ffx is dropped by applyPreset: the gallery render, applied at 0 s, was a third wiped at 0.5 s and all white but the last character at 1.4 s): '\\tRange Selector 1' End 0 to 100 (square, characters excluding spaces) on '\\tAnimator 2', and the white holds after.",
+   "scripting": "Set comp.time to where the wipe should start (it starts at once), then apply. applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Retime by moving the selector End keyframes. Animator/selector names in this preset start with a TAB character ('\\tAnimator 1', '\\tAnimator 2', '\\tRange Selector 1'): include it when looking them up by name, or use indices.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/392a.png",
+    "note": "Red text wiped to white left to right: the first four characters white at 0.5 s, only the last one red at 1.4 s.",
+    "rerender": false,
+    "recheck": "2026-10-13: re-rendered in live wave 1 (frames the old verdict was judged on: pve/work/gallery_pre_fix/)",
+    "previous": [
+     {
+      "verdict": "wrong",
+      "changed": "2026-10-13",
+      "why": "the verify step rewrote the card text from this render (its rule for 'wrong'); the rewritten card has not been rendered again"
+     },
+     {
+      "verdict": "corrected_unverified",
+      "changed": "2026-10-13",
+      "why": "re-rendered with the corrected text and values (live wave 1); the new frame matches the corrected card",
+      "second_opinion": "corrected: scripting's example name '\\tAnimator - Rotation' is not in this preset; listed the real names (Animator 1, Animator 2, Range Selector 1, each with a leading TAB). Timing rewrite confirmed: H about 2/3 white at 0.5 s, 7 about 1/4 white at 1.4 s, linear over 1.5 s"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_preset",
+   "app": "AE",
+   "name": "Flicker Color",
+   "match": null,
+   "category": "Text/Fill and Stroke",
+   "status": "current",
+   "summary": "Gives the text a purple stroke ('Base Stroke', #603CB0) and, 20 times a second, randomly flickers each character's stroke width (up to 30 px) and shifts fill and stroke hues (+/-50 deg), like a faulty neon sign.",
+   "look": [
+    "flicker",
+    "neon",
+    "glitch",
+    "random",
+    "warning"
+   ],
+   "use_for": [
+    "Faulty-neon sign title",
+    "Alert or glitch emphasis in news reels",
+    "Horror or thriller trailer text"
+   ],
+   "avoid": [
+    "Flickers at ~20 Hz, far above the 3-flashes-per-second photosensitivity guideline: keep it very short or lower Temporal Frequency",
+    "Overrides the text's stroke colour and shifts its fill hue",
+    "Hindi/Devanagari (measured 2026-10-13): per-character animators split dependent vowel signs (matras) from their consonants mid-animation, though the settled text shapes correctly; for Hindi animate per word or per line (Range Selector Based On: Words or Lines, or a By Word / By Line preset)"
+   ],
+   "confidence": "high",
+   "applies_to": "text layer",
+   "effects_used": [],
+   "duration_note": "No keyframes: a wiggly selector flickers the colours continuously for the whole layer.",
+   "scripting": "comp.time does not matter (no keyframes). applyPreset acts on the SELECTED layers of the comp (it makes a new solid if none is selected), so deselect all, set target.selected = true, then target.applyPreset(new File(<batch 'file' path>)). Needs a TextLayer: on other layers the text animators do not apply. Animators: 'Base Stroke' and 'Animator - Wiggle Hue/Stroke'.",
+   "equivalent": "",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/presets/393a.png",
+    "note": "Purple strokes flicker per character: at 0.5 s ARC heavy purple and a thick purple block over IVE; at 1.4 s thin purple outlines on A R E 4 7.",
+    "rerender": false
+   },
+   "flash": {
+    "rate": 3,
+    "basis": "aerender at 25 fps, preset at 0 s on its gallery host for 3.9 s (work/pve_live/flash_rates.json): 8 flashes, at most 3 in one second, over the 6% of the frame that changes (a flash = a rise and a fall of 25+ luma levels); the worst cell of a 24x12 grid reached 9 a second"
+   }
+  }
+ ]
+}

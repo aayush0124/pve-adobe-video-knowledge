@@ -1,0 +1,1263 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Brush Strokes",
+   "match": "ADBE Brush Strokes",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Smears the layer into short directional brush strokes along a stroke angle; on a 1920x1080 frame even the harvested maxima (Brush Size 5, Stroke Length 40, Stroke Density 2) only give a subtle smeared, jagged-edged texture, so a clearly painted look needs the effect on a scaled-down precomp.",
+   "look": [
+    "painterly",
+    "brush strokes",
+    "smeared",
+    "jagged stroke edges",
+    "textured",
+    "soft"
+   ],
+   "use_for": [
+    "painted-portrait treatment for a historical figure in a documentary",
+    "stylized flashback or memory sequence",
+    "artistic still-photo background behind a title card",
+    "transition into an illustrated/painted segment"
+   ],
+   "avoid": [
+    "faces and small text turn to mush at large Brush Size / Stroke Length",
+    "strokes 'boil' on moving footage because they are rebuilt from the image every frame; best on stills or slow moves",
+    "looks like a cheap Photoshop filter when used full strength on a whole edit",
+    "at 1920x1080 the harvested maxima (Brush Size 5, Stroke Length 40, Stroke Density 2) still read as a soft smear at preview size (verified render); for a visible painting apply it inside a precomp scaled down (e.g. 50%) and scale back up (untested), and push contrast/saturation",
+    "long strokes pull a black jagged fringe in from outside the layer along the frame edges (left and top in the Stroke Length 40 render); scale the layer slightly past the frame or crop the edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Brush Size",
+     "does": "width of each stroke (px-ish units)",
+     "typical": "1-3 barely visible at 1080p; 5 is the max and still subtle at 1080p"
+    },
+    {
+     "name": "Stroke Length",
+     "does": "length of each stroke",
+     "typical": "5-20"
+    },
+    {
+     "name": "Stroke Angle",
+     "does": "direction of strokes in degrees",
+     "typical": "135 (default) or match the motion"
+    },
+    {
+     "name": "Stroke Density",
+     "does": "how many strokes cover the frame",
+     "typical": "1-1.5"
+    },
+    {
+     "name": "Stroke Randomness",
+     "does": "variation of stroke placement/angle",
+     "typical": "0.5-1.2"
+    },
+    {
+     "name": "Paint Surface",
+     "does": "what the strokes paint onto (popup)",
+     "typical": "1 = on original image"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "mix back the unprocessed image (0-1 fraction)",
+     "typical": "0-0.4"
+    }
+   ],
+   "demo_settings": {
+    "Brush Size": 5,
+    "Stroke Length": 40,
+    "Stroke Angle": 135,
+    "Stroke Density": 2,
+    "Stroke Randomness": 1,
+    "Paint Surface": 1,
+    "Blend With Original": 0
+   },
+   "enum_labels": {
+    "Paint Surface": {
+     "1": "Paint On Original Image",
+     "2": "Paint On Transparent",
+     "3": "Paint On White",
+     "4": "Paint On Black"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Brush Strokes (Premiere Stylize, current in v26; same engine, match AE.ADBE Brush Strokes)",
+   "pairs_with": [
+    "Hue/Saturation",
+    "Curves",
+    "Fractal Noise (paper texture)",
+    "Unsharp Mask"
+   ],
+   "scripting": "Paint Surface is a 4-item popup (1-based). Blend With Original harvested range is 0-1, so pass a fraction (0.3 = 30%), not 0-100. Stroke Angle is degrees with no harvested limit. Checkbox-like/popup values are numbers.",
+   "recipe": {
+    "Blend With Original": [
+     [
+      0,
+      1
+     ],
+     [
+      1.0,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/ae/178.png",
+    "note": "Stroke texture is stronger than the old render (jagged diagonal streaks now show on the stripes, block edges and hair) but at preview size the frame still reads as a soft smeared image rather than a painting, faces stay intact, and the maxed Stroke Length now drags a black jagged fringe in along the left and top frame edges that the old render did not have.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Block Load",
+   "match": "CS BlockLoad",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Simulates a progressive-JPEG style image load: the layer builds up as large blocks that refine pass by pass into the full-resolution picture as Completion rises to 100.",
+   "look": [
+    "progressive load",
+    "blocky",
+    "pixelated",
+    "digital",
+    "retro internet",
+    "loading"
+   ],
+   "use_for": [
+    "'image loading' reveal of a screenshot, document or leaked photo in a news explainer",
+    "digital/tech transition into a photo",
+    "retro dial-up internet gag in an AI-education reel",
+    "reveal of a leader's photo in a political explainer"
+   ],
+   "avoid": [
+    "static Completion below 100 just looks like low-res footage",
+    "too slow a load drags the pace; keep the reveal under ~1.5 s",
+    "a linear 0 -> 100 Completion keyframe spends ~90% of the move on 1-4 px passes that read as the finished image; ease or hold the low values"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Completion",
+     "does": "load progress 0-100; 100 = full image",
+     "typical": "keyframe 0 -> 100; the visible coarse-block phase is only the first ~10% (Scans 8)"
+    },
+    {
+     "name": "Scans",
+     "does": "number of refinement passes; first pass block = 2^(Scans-1) px, each pass halves it down to 1 px",
+     "typical": "7-9 on 1080p (4 starts at only 8 px blocks)"
+    },
+    {
+     "name": "Start Cleared",
+     "does": "1 = starts fully transparent at Completion 0",
+     "typical": "1 for reveals"
+    },
+    {
+     "name": "Bilinear",
+     "does": "1 = smooth blocks instead of hard pixels",
+     "typical": "0 for the digital look"
+    }
+   ],
+   "demo_settings": {
+    "Completion": 4,
+    "Scans": 8,
+    "Start Cleared": 1,
+    "Bilinear": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Mosaic (Legacy) in Premiere with keyframed Horizontal/Vertical Blocks (low -> high) approximates the block-to-sharp refine, without the transparent build-up",
+   "pairs_with": [
+    "Mosaic",
+    "Glow",
+    "Drop Shadow",
+    "Linear Wipe"
+   ],
+   "scripting": "Start Cleared and Bilinear are 0/1 checkboxes. With Start Cleared on, Completion 0 is an empty frame. Completion is spent per block row, not per pass: pass j uses blocks of 2^(Scans-1-j) px sampled from the block's top-left pixel, loads top to bottom, and costs time proportional to its row count, so the 1 px pass takes the last ~50%, 2 px ~25-50%, 4 px ~12-25%, 8 px ~6-12%, 16 px ~3-6% (any Scans >= 6). Measured on aerender: Completion 40 / Scans 6 = 2 px blocks over 4 px with the scan line at y 688 of 1080 (looks untouched at preview size). For a static demo use Completion ~3-5 with Scans 8 (16/32 px blocks); for a reveal keyframe Completion 0 -> ~12 over most of the move, then snap to 100.",
+   "recipe": {
+    "Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      12
+     ],
+     [
+      1.2,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/179.png",
+    "note": "The frame now reads clearly as a progressive image load, with ~16 px blocks above the scan line (about y 450 of 1080) and ~32 px blocks below it covering the whole picture, where the old Completion 40 render had 2-4 px blocks that looked untouched at preview size.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Burn Film",
+   "match": "CC Burn Film",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Burns spreading holes through the layer like celluloid melting in a projector: dark scorched blotches grow out from around the Center and their cores become transparent.",
+   "look": [
+    "film burn",
+    "celluloid melt",
+    "vintage",
+    "scorched",
+    "archival",
+    "projector"
+   ],
+   "use_for": [
+    "burn-out ending of an archival / old-footage segment in a documentary",
+    "transition from a historic photo to the next shot",
+    "vintage 'film reel' flashback in a trailer",
+    "dramatic reveal of the layer underneath"
+   ],
+   "avoid": [
+    "burnt area is transparent: with nothing below it shows black/comp background",
+    "a static mid-burn frame looks like damage, animate it",
+    "Center on a face burns the face first"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Burn",
+     "does": "amount burned away 0-100",
+     "typical": "keyframe 0 -> 100 over 1-2 s"
+    },
+    {
+     "name": "Center",
+     "does": "where the burn starts (px)",
+     "typical": "off-centre, e.g. [1300, 400]"
+    },
+    {
+     "name": "Random Seed",
+     "does": "changes the burn shape",
+     "typical": "any 0-5000"
+    }
+   ],
+   "demo_settings": {
+    "Burn": 45,
+    "Center": [
+     960,
+     540
+    ],
+    "Random Seed": 12
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "none in Premiere 2026; use a film-burn overlay clip in Screen/Add blend mode",
+   "pairs_with": [
+    "Noise",
+    "Glow",
+    "Curves (warm/sepia)",
+    "Fractal Noise flicker"
+   ],
+   "scripting": "Place another layer (next shot or a warm-colour solid) below to see through the burn. Center is [x, y] px in a 1920x1080 comp.",
+   "recipe": {
+    "Burn": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/180.png",
+    "note": "Several dark scorched burn blotches with black (transparent) cores eat through the frame around the centre, darkening the whole shot like melting celluloid.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Glass",
+   "match": "CC Glass",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Turns the layer into a lit, refracting glass surface: a bump map (the layer itself by default) adds height, specular highlights and displacement so the image looks embossed under glass.",
+   "look": [
+    "glass",
+    "embossed",
+    "refraction",
+    "specular highlights",
+    "liquid",
+    "3D relief"
+   ],
+   "use_for": [
+    "glassy embossed logo or title over a background",
+    "liquid/glass distortion texture for an abstract background",
+    "stylized 'under glass' treatment of a still in an AI-education reel",
+    "animated light sweep across an embossed graphic"
+   ],
+   "avoid": [
+    "on busy live-action the relief is noisy and faces distort",
+    "high Displacement smears the image beyond recognition",
+    "low Softness on detailed or noisy footage gives a crunchy, noisy relief; blur the bump source or raise Softness"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Bump Map",
+     "does": "layer whose values give surface height (default = this layer)",
+     "typical": "leave as self or a blurred matte/text layer"
+    },
+    {
+     "name": "Softness",
+     "does": "blurs the bump map, smoother relief",
+     "typical": "5-40"
+    },
+    {
+     "name": "Height",
+     "does": "relief depth; negative inverts",
+     "typical": "20-60"
+    },
+    {
+     "name": "Displacement",
+     "does": "refraction distortion of the image",
+     "typical": "50-200"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "brightness of the effect light",
+     "typical": "100-200"
+    },
+    {
+     "name": "Light Direction",
+     "does": "angle of the distant light in degrees",
+     "typical": "-45"
+    },
+    {
+     "name": "Specular",
+     "does": "strength of glossy highlights",
+     "typical": "40-80"
+    },
+    {
+     "name": "Roughness",
+     "does": "highlight spread; small = sharp glints",
+     "typical": "0.01-0.05"
+    }
+   ],
+   "demo_settings": {
+    "Softness": 10,
+    "Height": 50,
+    "Displacement": 150,
+    "Light Intensity": 150,
+    "Light Direction": -45,
+    "Specular": 70,
+    "Roughness": 0.02
+   },
+   "enum_labels": {
+    "Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness"
+    },
+    "Using": {
+     "1": "Effect Light",
+     "2": "AE Lights"
+    },
+    "Light Type": {
+     "1": "Distant Light",
+     "2": "Point Light"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fast Box Blur (on the bump layer)",
+    "Glow",
+    "CC Light Sweep",
+    "Bevel Alpha"
+   ],
+   "scripting": "Bump Map is a layer reference and cannot be set from a spec; default 1 means the effect layer itself, which works without another layer. Property (1-6) picks which channel of the bump map drives height; 1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance, 6 Lightness (default) (read from After Effects 26.0). Light Position only matters for Light Type 2 (point light). Light Color is #RRGGBB. Using 2 needs AE light layers in the comp.",
+   "recipe": {
+    "Light Direction": [
+     [
+      0,
+      -120
+     ],
+     [
+      2.0,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/181.png",
+    "note": "Image turned into a bright, refracting embossed glass relief with white specular rims on the figures, stripes and foreground blocks.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC HexTile",
+   "match": "CS HexTile",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Rebuilds the frame as a honeycomb of hexagonal tiles, each tile repeating the image area around the centre, giving a hex-mosaic / insect-eye pattern.",
+   "look": [
+    "hexagon",
+    "honeycomb",
+    "mosaic",
+    "tech",
+    "tiled",
+    "abstract"
+   ],
+   "use_for": [
+    "tech/AI honeycomb background for an explainer title",
+    "hex-pixel transition between shots (animate Radius)",
+    "stylized data/network motif behind lower thirds",
+    "abstract music-reel visual"
+   ],
+   "avoid": [
+    "small Radius on faces or flags makes the subject unreadable",
+    "Smearing at extremes produces muddy streaks"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "size of each hexagon (px)",
+     "typical": "60-250"
+    },
+    {
+     "name": "Center",
+     "does": "origin of the tile grid (px)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Render",
+     "does": "tile render mode (popup, 3 options)",
+     "typical": "1"
+    },
+    {
+     "name": "Rotate",
+     "does": "rotation of the hex grid in degrees",
+     "typical": "0-30"
+    },
+    {
+     "name": "Smearing",
+     "does": "smears/stretches tile content",
+     "typical": "0 to +-30"
+    },
+    {
+     "name": "Lock Center Tile",
+     "does": "1 = keeps the centre tile showing the original area",
+     "typical": "1 when the subject is centred"
+    }
+   ],
+   "demo_settings": {
+    "Render": 1,
+    "Radius": 150,
+    "Center": [
+     960,
+     540
+    ],
+    "Lock Center Tile": 1,
+    "Rotate": 0,
+    "Smearing": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Fill",
+    "CC Kaleida",
+    "Gradient Ramp"
+   ],
+   "scripting": "Render: 1 Tile (default), 2 Fold Aligned, 3 Fold Seamlessly (read from After Effects 26.0). Lock Center Tile is 0/1. Radius min is 3; very small values are slow and noisy. Rotate is degrees with no harvested limit.",
+   "recipe": {
+    "Radius": [
+     [
+      0,
+      400
+     ],
+     [
+      0.6,
+      120
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/182.png",
+    "note": "Frame rebuilt as a honeycomb of large hexagons, each repeating the centre area (sky and a striped edge) of the shot.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Render": {
+     "1": "Tile",
+     "2": "Fold Aligned",
+     "3": "Fold Seamlessly"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Kaleida",
+   "match": "CC Kaleida",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Kaleidoscope: mirrors a wedge of the image around a centre point in one of several mirror patterns, producing symmetrical trippy imagery.",
+   "look": [
+    "kaleidoscope",
+    "mirror",
+    "symmetry",
+    "psychedelic",
+    "trippy",
+    "mandala"
+   ],
+   "use_for": [
+    "abstract looping background behind a title or quote card",
+    "psychedelic dream / confusion beat in a satire reel",
+    "transition by animating Size or Rotation",
+    "music-driven montage visual"
+   ],
+   "avoid": [
+    "destroys recognisability of people and flags, never on a factual news shot",
+    "very small Size gives high-frequency detail that compresses badly on Instagram"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Size",
+     "does": "size of the mirrored segment; larger = bigger, simpler pattern (units unverified, default 20 is fairly fine)",
+     "typical": "20-100"
+    },
+    {
+     "name": "Mirroring",
+     "does": "mirror pattern (popup, 9 options)",
+     "typical": "1-9, default 6"
+    },
+    {
+     "name": "Rotation",
+     "does": "rotates the pattern in degrees",
+     "typical": "animate 0 -> 90"
+    },
+    {
+     "name": "Center",
+     "does": "centre of the kaleidoscope (px)",
+     "typical": "[960, 540]"
+    },
+    {
+     "name": "Floating Center",
+     "does": "changes how moving Center affects the sampled image area (exact behaviour unverified)",
+     "typical": "0"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     540
+    ],
+    "Size": 50,
+    "Mirroring": 6,
+    "Rotation": 0,
+    "Floating Center": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "CC HexTile",
+    "Glow",
+    "Hue/Saturation (Master Hue cycle)",
+    "Mirror"
+   ],
+   "scripting": "Mirroring: 1 Unfold, 2 Wheel, 3 Fish Head, 4 Can Meas, 5 Flip Flop, 6 Flower (default, the rendered demo), 7 Dia Cross, 8 Flipper, 9 Starlish (read from After Effects 26.0). Size units are not verified (it may scale with the layer, not raw px), so check the look before committing; 1 is the minimum. Floating Center is 0/1. Rotation is degrees, no harvested limit.",
+   "recipe": {
+    "Rotation": [
+     [
+      0,
+      0
+     ],
+     [
+      4.0,
+      90
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/183.png",
+    "note": "Symmetrical kaleidoscope pattern of mirrored copies of a face and a small star-shaped wedge tiled across the frame.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Mirroring": {
+     "1": "Unfold",
+     "2": "Wheel",
+     "3": "Fish Head",
+     "4": "Can Meas",
+     "5": "Flip Flop",
+     "6": "Flower",
+     "7": "Dia Cross",
+     "8": "Flipper",
+     "9": "Starlish"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Mr. Smoothie",
+   "match": "CC Mr. Smoothie",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Replaces the image with smooth flowing colour bands: it samples the colours along a line between Sample A and Sample B and maps them onto the frame by a property (e.g. luminance) of the flow layer, giving a psychedelic liquid-colour look.",
+   "look": [
+    "psychedelic",
+    "liquid colour",
+    "colour bands",
+    "abstract",
+    "posterized gradient",
+    "trippy"
+   ],
+   "use_for": [
+    "animated psychedelic background (animate Phase)",
+    "abstract colour-wash transition",
+    "stylized 'trip' / dream beat in a satire reel",
+    "motion background behind a quote card"
+   ],
+   "avoid": [
+    "completely loses the original picture, useless where the subject must be recognised",
+    "Smoothness near 0 gives harsh noisy banding"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Flow Layer",
+     "does": "layer whose values drive the colour mapping (default = this layer)",
+     "typical": "self, or a gradient/fractal layer"
+    },
+    {
+     "name": "Property",
+     "does": "which channel of the flow layer is used (popup, 8 options)",
+     "typical": "5 (default)"
+    },
+    {
+     "name": "Smoothness",
+     "does": "how smooth the colour transitions are",
+     "typical": "10-60"
+    },
+    {
+     "name": "Sample A",
+     "does": "start point of the colour sampling line (px)",
+     "typical": "[480, 270]"
+    },
+    {
+     "name": "Sample B",
+     "does": "end point of the colour sampling line (px)",
+     "typical": "[1440, 810]"
+    },
+    {
+     "name": "Phase",
+     "does": "cycles colours along the bands (degrees)",
+     "typical": "animate 0 -> 360"
+    },
+    {
+     "name": "Color Loop",
+     "does": "how many times the sampled palette repeats (popup, 4)",
+     "typical": "1-2"
+    }
+   ],
+   "demo_settings": {
+    "Property": 5,
+    "Smoothness": 20,
+    "Sample A": [
+     480,
+     270
+    ],
+    "Sample B": [
+     1440,
+     810
+    ],
+    "Phase": 90,
+    "Color Loop": 2
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Fractal Noise (as flow layer)",
+    "Fast Box Blur",
+    "Glow",
+    "Hue/Saturation"
+   ],
+   "scripting": "Flow Layer is a layer reference and cannot be set from a spec; default 1 means the effect layer itself, which is enough to see the effect. Property (1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance (default), 6 Lightness, 7 Hue, 8 Saturation) and Color Loop (1 AB, 2 BA, 3 ABA, 4 BAB) are read from After Effects 26.0. Sample A/B are px points; put them on colourful areas (e.g. saturated stripes) for a vivid palette.",
+   "recipe": {
+    "Phase": [
+     [
+      0,
+      0
+     ],
+     [
+      4.0,
+      360
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/184.png",
+    "note": "Picture replaced by smooth liquid magenta, grey and pale-blue colour bands that follow the original shapes, a psychedelic colour-wash look.",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness",
+     "7": "Hue",
+     "8": "Saturation"
+    },
+    "Color Loop": {
+     "1": "AB",
+     "2": "BA",
+     "3": "ABA",
+     "4": "BAB"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Plastic",
+   "match": "CC Plastic",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Lights the layer as a glossy plastic or metal surface using a bump layer (the layer itself by default), giving embossed relief with specular highlights and optional dust.",
+   "look": [
+    "plastic",
+    "glossy",
+    "embossed",
+    "relief",
+    "metallic",
+    "3D surface"
+   ],
+   "use_for": [
+    "glossy embossed logo / title plate",
+    "shiny plastic text for a playful AI-education reel",
+    "stylized relief texture on a still for a background",
+    "animated light sweep across a badge or emblem"
+   ],
+   "avoid": [
+    "on live-action faces the relief looks like skin disease",
+    "high Height with low Softness on detailed footage gives a crunchy, noisy relief"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Bump Layer",
+     "does": "layer whose values give surface height (default = this layer)",
+     "typical": "self or a blurred text/matte layer"
+    },
+    {
+     "name": "Height",
+     "does": "relief depth; negative inverts",
+     "typical": "20-60"
+    },
+    {
+     "name": "Softness",
+     "does": "blurs the bump, smoother relief",
+     "typical": "5-40"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "brightness of the effect light",
+     "typical": "100-200"
+    },
+    {
+     "name": "Light Direction",
+     "does": "distant light angle in degrees",
+     "typical": "-45"
+    },
+    {
+     "name": "Specular",
+     "does": "gloss highlight strength",
+     "typical": "50-100"
+    },
+    {
+     "name": "Roughness",
+     "does": "highlight spread; small = sharp gloss",
+     "typical": "0.01-0.06"
+    },
+    {
+     "name": "Metal",
+     "does": "100 = highlights take surface colour (metal), 0 = white (plastic)",
+     "typical": "0-40 for plastic"
+    }
+   ],
+   "demo_settings": {
+    "Softness": 10,
+    "Height": 50,
+    "Light Intensity": 150,
+    "Light Direction": -45,
+    "Specular": 100,
+    "Roughness": 0.03,
+    "Metal": 20,
+    "Dust": 0
+   },
+   "enum_labels": {
+    "Property": {
+     "1": "Red",
+     "2": "Green",
+     "3": "Blue",
+     "4": "Alpha",
+     "5": "Luminance",
+     "6": "Lightness"
+    },
+    "Using": {
+     "1": "Effect Light",
+     "2": "AE Lights"
+    },
+    "Light Type": {
+     "1": "Distant Light",
+     "2": "Point Light"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Bevel Alpha",
+    "CC Light Sweep",
+    "Glow",
+    "Fast Box Blur (on the bump layer)"
+   ],
+   "scripting": "Bump Layer is a layer reference and cannot be set from a spec; default 1 = the effect layer itself. Property picks the bump channel: 1 Red, 2 Green, 3 Blue, 4 Alpha, 5 Luminance (default), 6 Lightness (read from After Effects 26.0). Light Position default is [480, 270] (quarter frame) and only matters for Light Type 2. Light Color / Ambient Light Color are #RRGGBB. Cut Min/Max clip the bump range (0-100).",
+   "recipe": {
+    "Light Direction": [
+     [
+      0,
+      -135
+     ],
+     [
+      2.0,
+      45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/185.png",
+    "note": "Whole image embossed into a glossy plastic relief with bright specular highlights along every edge while keeping the original colours.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC RepeTile",
+   "match": "CC RepeTile",
+   "category": "Stylize",
+   "status": "needs_input",
+   "summary": "Extends the layer beyond its own edges by tiling copies of it (mirrored, repeated, brick etc.) to the right, left, top and bottom.",
+   "look": [
+    "tiled",
+    "mirrored edges",
+    "repeat pattern",
+    "extended frame",
+    "wallpaper"
+   ],
+   "use_for": [
+    "fill a 16:9 frame behind a vertical phone clip or portrait photo with mirrored copies (Tiling 4, Unfold)",
+    "add edge room so a zoom-out, rotation or camera shake shows no black borders",
+    "tiled video-wall background for news intros",
+    "infinite-scroll pattern background"
+   ],
+   "avoid": [
+    "on a full-frame layer at 100% scale the extension is outside the comp, nothing visible",
+    "mirrored seams are obvious on faces/text at the edges"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Expand Right",
+     "does": "px of tiling added to the right",
+     "typical": "200-1920"
+    },
+    {
+     "name": "Expand Left",
+     "does": "px of tiling added to the left",
+     "typical": "200-1920"
+    },
+    {
+     "name": "Expand Down",
+     "does": "px of tiling added below",
+     "typical": "100-1080"
+    },
+    {
+     "name": "Expand Up",
+     "does": "px of tiling added above",
+     "typical": "100-1080"
+    },
+    {
+     "name": "Tiling",
+     "does": "tile pattern (popup (read from After Effects 26.0)): 1 Repeat (default), 2 Checker Flip H, 3 Checker Flip V, 4 Unfold (mirrored), 5 Checker 180 deg, 6 Checker Flip 45 deg, 7 / 8 Checker 90 deg CCW / CW, 9 Rosette, 10 Random, 11 None, 12 a separator, 13 Turn CW, 14 Turn CCW, 15 Twist, 16 Slide, 17 Brick",
+     "typical": "4 (Unfold) for mirrored edges; 1 (Repeat) for a video wall"
+    },
+    {
+     "name": "Blend Borders",
+     "does": "1 = softens seams between tiles",
+     "typical": "0-1"
+    }
+   ],
+   "demo_settings": {
+    "Expand Right": 960,
+    "Expand Left": 960,
+    "Expand Down": 540,
+    "Expand Up": 540,
+    "Tiling": 1,
+    "Blend Borders": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Motion Tile",
+    "Fast Box Blur (blurred fill background)",
+    "Camera shake / Wiggle"
+   ],
+   "scripting": "Only visible when the layer is smaller than the comp or moved/scaled/rotated: on a full-frame 1920x1080 layer at 100% the tiles land outside the comp, so the demo frame on the full-frame gallery clip looks unchanged (expected, not a failure). In real use scale the layer to ~40-50% or use a vertical clip. Expand values are layer pixels. Default Tiling 1 is Repeat; the mirrored mode is 4 Unfold (labels (read from After Effects 26.0)). Blend Borders is 0/1. Put it first in the stack, before Transform / scale effects.",
+   "recipe": {},
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/ae/186.png",
+    "note": "Frame is the untouched clip: the gallery layer is full-frame 1920x1080 at 100%, so all tiles land outside the comp and no demo_settings value can bring them into view (needs a scaled-down or vertical layer).",
+    "rerender": false,
+    "second_opinion": "agree",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   },
+   "enum_labels": {
+    "Tiling": {
+     "1": "Repeat",
+     "2": "Checker Flip H",
+     "3": "Checker Flip V",
+     "4": "Unfold",
+     "5": "Checker 180 deg",
+     "6": "Checker Flip 45 deg",
+     "7": "Checker 90 deg CCW",
+     "8": "Checker 90 deg CW",
+     "9": "Rosette",
+     "10": "Random",
+     "11": "None",
+     "12": "(separator)",
+     "13": "Turn CW",
+     "14": "Turn CCW",
+     "15": "Twist",
+     "16": "Slide",
+     "17": "Brick"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Threshold",
+   "match": "CC Threshold",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Converts the image to pure black and white at a chosen threshold level (based on a selected channel), giving a stark photocopy / stencil look.",
+   "look": [
+    "black and white",
+    "high contrast",
+    "stencil",
+    "photocopy",
+    "graphic",
+    "poster"
+   ],
+   "use_for": [
+    "stark photocopy / xerox treatment of a newspaper clipping or document",
+    "stencil-style poster look for a satire title card",
+    "make a quick luma matte for a track matte",
+    "Blend w. Original at ~0.5 for a gritty contrast punch"
+   ],
+   "avoid": [
+    "faces lose all detail at a bad threshold; check skin tones",
+    "flickers on footage with changing exposure"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Threshold",
+     "does": "cut-off level; above = white, below = black (0-1)",
+     "typical": "0.35-0.6"
+    },
+    {
+     "name": "Channel",
+     "does": "which channel is thresholded (popup, 4)",
+     "typical": "1 (default)"
+    },
+    {
+     "name": "Invert",
+     "does": "1 = swaps black and white",
+     "typical": "0"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mixes back the original image (0-1)",
+     "typical": "0-0.5"
+    }
+   ],
+   "demo_settings": {
+    "Threshold": 0.45,
+    "Channel": 1,
+    "Invert": 0,
+    "Blend w. Original": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "no Threshold effect in the harvested Premiere 2026 list; approximate with Black & White followed by Posterize (Level 2)",
+   "pairs_with": [
+    "Fill",
+    "Tint",
+    "Noise",
+    "Fast Box Blur (before, for smooth edges)"
+   ],
+   "scripting": "Threshold and Blend w. Original are 0-1 fractions (not 0-255 / 0-100). Channel: 1 Luminance (default), 2 RGB, 3 Saturation, 4 Alpha (read from After Effects 26.0). Invert is 0/1.",
+   "recipe": {
+    "Threshold": [
+     [
+      0,
+      0.9
+     ],
+     [
+      0.5,
+      0.45
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/187.png",
+    "note": "Image reduced to stark pure black and white stencil shapes (figures, foreground blocks and stripe outlines black on white).",
+    "rerender": false
+   },
+   "enum_labels": {
+    "Channel": {
+     "1": "Luminance",
+     "2": "RGB",
+     "3": "Saturation",
+     "4": "Alpha"
+    }
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Threshold RGB",
+   "match": "CC Threshold RGB",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Thresholds the red, green and blue channels separately, reducing the image to the eight pure primary/secondary colours for a loud posterized pop-art look.",
+   "look": [
+    "posterized",
+    "pop art",
+    "8-colour",
+    "high contrast",
+    "graphic",
+    "screenprint"
+   ],
+   "use_for": [
+    "pop-art / screenprint treatment of a leader photo in a satire reel",
+    "loud stylized flash frame on a beat",
+    "retro poster background for a title",
+    "glitchy colour punch in a transition"
+   ],
+   "avoid": [
+    "skin turns red/magenta blotches; unflattering for portraits",
+    "too garish for serious news or documentary"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Red Threshold",
+     "does": "cut-off for the red channel (0-1)",
+     "typical": "0.4-0.6"
+    },
+    {
+     "name": "Green Threshold",
+     "does": "cut-off for the green channel (0-1)",
+     "typical": "0.4-0.6"
+    },
+    {
+     "name": "Blue Threshold",
+     "does": "cut-off for the blue channel (0-1)",
+     "typical": "0.4-0.6"
+    },
+    {
+     "name": "Invert Red Channel",
+     "does": "1 = inverts red after threshold",
+     "typical": "0"
+    },
+    {
+     "name": "Blend w. Original",
+     "does": "mixes back the original image (0-1)",
+     "typical": "0-0.5"
+    }
+   ],
+   "demo_settings": {
+    "Red Threshold": 0.5,
+    "Green Threshold": 0.45,
+    "Blue Threshold": 0.55,
+    "Invert Red Channel": 0,
+    "Invert Green Channel": 0,
+    "Invert Blue Channel": 0,
+    "Blend w. Original": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Posterize (Premiere Stylize) at Level 2 gives the same 8-colour result with a fixed 50% cut-off per channel",
+   "pairs_with": [
+    "Posterize",
+    "CC Ball Action (dot-grid look)",
+    "Noise",
+    "Hue/Saturation"
+   ],
+   "scripting": "All thresholds and Blend w. Original are 0-1 fractions. The Invert * Channel props are 0/1 checkboxes.",
+   "recipe": {
+    "Blend w. Original": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/188.png",
+    "note": "Image posterized to loud flat primaries and secondaries (red foreground blocks, yellow/green/cyan background, white/black figures), a pop-art screenprint look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Vignette",
+   "match": "CS Vignette",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Darkens (or with negative Amount, brightens) the frame edges with a lens-like falloff around a movable centre, optionally protecting highlights.",
+   "look": [
+    "vignette",
+    "cinematic",
+    "lens falloff",
+    "moody",
+    "focus",
+    "dark edges"
+   ],
+   "use_for": [
+    "pull the eye to the speaker in an interview or press shot",
+    "moody cinematic grade in a documentary or trailer",
+    "darken edges behind lower-third and caption areas",
+    "negative Amount for a soft bright dreamy edge"
+   ],
+   "avoid": [
+    "applied to a 16:9 source that is later reframed/panned inside a 9:16 comp, the vignette ends up off-centre; put it on an adjustment layer in the final comp",
+    "obvious dark corners look amateur; keep it subtle in news"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "strength; negative brightens the edges",
+     "typical": "40-150"
+    },
+    {
+     "name": "Angle of View",
+     "does": "how far the falloff reaches into the frame (degrees)",
+     "typical": "40-80"
+    },
+    {
+     "name": "Center",
+     "does": "centre of the clear area (px)",
+     "typical": "on the subject, e.g. [960, 500]"
+    },
+    {
+     "name": "Pin Highlights",
+     "does": "protects bright areas from darkening (0-100)",
+     "typical": "0-50"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 150,
+    "Angle of View": 70,
+    "Center": [
+     960,
+     540
+    ],
+    "Pin Highlights": 0
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Lumetri Color (Vignette section) or the Premiere 2026 Vignette effect",
+   "pairs_with": [
+    "Lumetri Color",
+    "Curves",
+    "Noise / film grain",
+    "Camera Lens Blur"
+   ],
+   "scripting": "Center is [x, y] px in a 1920x1080 comp; move it onto the subject for off-centre framing. Amount range is -1000..1000; values above ~200 crush the edges to black.",
+   "recipe": {
+    "Amount": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/189.png",
+    "note": "Strong dark lens falloff: corners crushed to near black while the centre of the frame keeps its original brightness.",
+    "rerender": false
+   }
+  }
+ ]
+}

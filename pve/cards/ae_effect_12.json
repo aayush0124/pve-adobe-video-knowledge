@@ -1,0 +1,1185 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Color Control",
+   "match": "ADBE Color Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "An expression control that holds one colour value and draws nothing by itself. Other properties read it through expressions, so one swatch can recolour a whole template.",
+   "look": [
+    "no visible change",
+    "template rig",
+    "brand colour",
+    "global colour switch"
+   ],
+   "use_for": [
+    "one brand/party colour driving every lower-third bar, outline and highlight in a news template",
+    "recolouring an explainer infographic per channel from a single control",
+    "exposing a colour choice in an Essential Graphics template (MOGRT) for Premiere editors"
+   ],
+   "avoid": [
+    "expecting it to change the picture: without an expression linking to it nothing happens",
+    "pick-whipping many layers to a control on a layer that later gets renamed or deleted breaks every expression"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Color",
+     "does": "the colour value that expressions read, as [r, g, b, a] in 0-1",
+     "typical": "brand hex, e.g. #FF6A00 saffron or #0A2A66 navy"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Fill",
+    "Tint",
+    "Stroke",
+    "Slider Control"
+   ],
+   "scripting": "Status needs_input because it renders nothing until another property's expression references it. Put it on a null or a guide 'CONTROLS' layer, rename the effect (e.g. 'Brand Color') and read it with thisComp.layer(\"CONTROLS\").effect(\"Brand Color\")(\"Color\"). The value is [r, g, b, a] in 0-1. Premiere has no expression controls; the closest is a colour parameter exposed in an Essential Graphics MOGRT.",
+   "recipe": {
+    "Color": [
+     [
+      0,
+      "#FF6A00"
+     ],
+     [
+      1,
+      "#0A2A66"
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Dropdown Menu Control",
+   "match": "ADBE Dropdown Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "An expression control that holds a menu choice (a 1-based index) and draws nothing by itself. Expressions read the index to switch layouts, colours or text in a template.",
+   "look": [
+    "no visible change",
+    "template rig",
+    "style switcher",
+    "variant picker"
+   ],
+   "use_for": [
+    "one menu that switches a lower-third between party colour themes or layouts",
+    "picking left/centre/right alignment or a 9:16 vs 16:9 layout in a reusable explainer template",
+    "exposing a style choice in a MOGRT for Premiere editors"
+   ],
+   "avoid": [
+    "forgetting that the value is an index, not the item text",
+    "changing the menu items by script invalidates the old effect/property references"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Menu",
+     "does": "the selected item as a 1-based index",
+     "typical": "1-3 with the default three items; up to the number of items set by script"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Menu": {
+     "1": "Item 1",
+     "2": "Item 2",
+     "3": "Item 3"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Color Control",
+    "Slider Control",
+    "Checkbox Control"
+   ],
+   "scripting": "Status needs_input: nothing renders until an expression reads it. Default items are Item 1/2/3 (harvest max = 3). Rename items with menuProp.setPropertyParameters([\"Saffron\", \"Navy\", \"Green\"]) (AE 17.0.1+); it returns the updated Menu property and invalidates old references, so use the returned property (or fetch the effect again) before setting values. AdobeBridge specs clamp Menu to the harvested max 3, so when a script adds more items, set the index with ExtendScript (menuProp.setValue(n)). Read in expressions as effect(\"Dropdown Menu Control\")(\"Menu\").value (1-based), typically inside a switch or array lookup.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Layer Control",
+   "match": "ADBE Layer Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "An expression control that points at another layer in the comp and draws nothing by itself. Expressions use it to read that layer's position, opacity or other properties without hard-coding its name.",
+   "look": [
+    "no visible change",
+    "template rig",
+    "layer picker",
+    "follow target"
+   ],
+   "use_for": [
+    "a callout arrow or name tag that follows whichever leader photo or null the editor picks",
+    "switching which tracked null a label, blur box or highlight follows in a news template",
+    "rigs that copy another layer's opacity or position without depending on layer names"
+   ],
+   "avoid": [
+    "leaving it at None: expressions that read it then error",
+    "expecting it to reach a layer in another comp: it only lists layers of its own comp (use comp(\"Name\").layer(\"X\") in the expression instead)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Layer",
+     "does": "which layer of the same comp the control references",
+     "typical": "index of a null, photo or tracked layer"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Point Control",
+    "Slider Control",
+    "Null Object rigs"
+   ],
+   "scripting": "Layer is a layer-type property: AdobeBridge specs cannot set it. Use ExtendScript: eff.property(\"Layer\").setValue(targetLayer.index) (0 = None). In an expression effect(\"Layer Control\")(\"Layer\") returns the Layer object, e.g. effect(\"Layer Control\")(\"Layer\").transform.position. Status needs_input: renders nothing on its own.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Point Control",
+   "match": "ADBE Point Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "An expression control that holds one x,y position (with an on-screen handle) and draws nothing by itself. Expressions read it to place pointers, line ends or effect centres from one draggable point.",
+   "look": [
+    "no visible change",
+    "template rig",
+    "pointer target",
+    "tracking target"
+   ],
+   "use_for": [
+    "end point of a callout leader line pointing at a person or object in a press photo",
+    "one draggable centre shared by a zoom, blur and spotlight in an explainer",
+    "receiving motion-tracker data so labels and highlights follow a moving subject",
+    "map pin or route end point in a political/news map graphic"
+   ],
+   "avoid": [
+    "mixing up layer space and comp space when the control sits on a scaled or moved layer"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Point",
+     "does": "the x,y position expressions read",
+     "typical": "[960, 540] centre; any pixel point of the 1920x1080 comp"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Layer Control",
+    "Slider Control",
+    "Beam",
+    "Track Motion"
+   ],
+   "scripting": "2d_spatial with no range: pixels in the space of the layer it sits on (equals comp space on an untransformed full-frame null). Convert with toComp()/fromComp() in expressions if the layer is moved or scaled. The tracker can apply track points to it (Edit Target > Effect Point Control). Status needs_input: renders nothing on its own.",
+   "recipe": {
+    "Point": [
+     [
+      0,
+      [
+       400,
+       540
+      ]
+     ],
+     [
+      2,
+      [
+       1500,
+       540
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Slider Control",
+   "match": "ADBE Slider Control",
+   "category": "Expression Controls",
+   "status": "needs_input",
+   "summary": "An expression control that holds one keyframeable number and draws nothing by itself. It is the standard way to drive counting numbers, progress bars and master intensity knobs.",
+   "look": [
+    "no visible change",
+    "template rig",
+    "number counter",
+    "master knob"
+   ],
+   "use_for": [
+    "animated counting numbers in stat cards (vote counts, seats won, budget figures) via a Source Text expression",
+    "progress bar or percentage fill in an explainer chart",
+    "one master intensity knob for wiggle/camera-shake amount across many layers",
+    "exposing a numeric parameter in a MOGRT for Premiere editors"
+   ],
+   "avoid": [
+    "showing raw decimals: wrap the value in Math.round() or toFixed()",
+    "values beyond plus/minus 1,000,000 are clamped, so big rupee figures need scaling (slider in lakh/crore units, multiply in the expression)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Slider",
+     "does": "the number expressions read (UI slider shows 0-100 but accepts the full range)",
+     "typical": "0-100 for percentages; up to 1,000,000 for counts"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Color Control",
+    "Point Control",
+    "Dropdown Menu Control"
+   ],
+   "scripting": "Harvested range -1,000,000 to 1,000,000; spec values outside are clamped. Counter: on a text layer's Source Text, Math.round(effect(\"Slider Control\")(\"Slider\")). Use easy-ease keyframes on the slider so the count decelerates. Status needs_input: renders nothing until an expression reads it.",
+   "recipe": {
+    "Slider": [
+     [
+      0,
+      0
+     ],
+     [
+      1.5,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: renders nothing on its own, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "4-Color Gradient",
+   "match": "ADBE 4ColorGradient",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Generates a smooth gradient blended from four coloured points. With Blending Mode None (default) it replaces the layer as a gradient plate and Opacity only fades it towards transparency; with Normal (or another mode) it lays a colour wash over the footage.",
+   "look": [
+    "four-colour gradient",
+    "mesh gradient",
+    "colour wash",
+    "pastel background",
+    "tinted overlay",
+    "soft glow plate"
+   ],
+   "use_for": [
+    "slowly moving soft-gradient background for explainer title cards and AI-channel graphics",
+    "colour wash over archival or b-roll to unify a sequence's palette",
+    "brand-coloured backdrop behind cut-out leader photos in news reels",
+    "background for quote cards and text-only reel slides"
+   ],
+   "avoid": [
+    "Blending Mode 1 (None) drops the footage at any Opacity: Opacity 60 only gives a dimmed, translucent gradient (dark over an empty comp), not a wash",
+    "the saturated rainbow defaults look cheap; pick 2-3 related hues",
+    "high Jitter adds noise that turns blocky after Instagram/YouTube compression"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Point 1",
+     "does": "position of colour 1 in comp pixels (Points 2-4 work the same)",
+     "typical": "[192, 108] top-left default; move inward to tighten the blend"
+    },
+    {
+     "name": "Color 1",
+     "does": "colour at Point 1 (Colors 2-4 likewise)",
+     "typical": "brand hues, e.g. #FF6A00, #FFD400, #00A3FF, #7A00FF"
+    },
+    {
+     "name": "Blend",
+     "does": "how softly the four colours mix; higher = smoother transitions",
+     "typical": "100-400"
+    },
+    {
+     "name": "Jitter",
+     "does": "noise added to break up gradient banding",
+     "typical": "0-10"
+    },
+    {
+     "name": "Opacity",
+     "does": "strength of the gradient over the original layer",
+     "typical": "30-60 with Blending Mode 2 (Normal) for a wash over footage; 100 with None for a background plate"
+    },
+    {
+     "name": "Blending Mode",
+     "does": "1-based popup: how the gradient combines with the layer",
+     "typical": "1 (None: gradient replaces the layer) for plates; 2 (Normal: gradient over the footage at Opacity) for washes"
+    }
+   ],
+   "demo_settings": {
+    "Color 1": "#FF6A00",
+    "Color 2": "#FFD400",
+    "Color 3": "#00A3FF",
+    "Color 4": "#7A00FF",
+    "Blend": 200,
+    "Opacity": 60,
+    "Blending Mode": 2
+   },
+   "enum_labels": {
+    "Blending Mode": {
+     "1": "None",
+     "2": "Normal",
+     "3": "(separator)",
+     "4": "Add",
+     "5": "Multiply",
+     "6": "Screen",
+     "7": "Overlay",
+     "8": "Soft Light",
+     "9": "Hard Light",
+     "10": "(separator)",
+     "11": "Color Dodge",
+     "12": "Color Burn",
+     "13": "(separator)",
+     "14": "Darken",
+     "15": "Lighten",
+     "16": "Difference",
+     "17": "Exclusion",
+     "18": "(separator)",
+     "19": "Hue",
+     "20": "Saturation",
+     "21": "Color",
+     "22": "Luminosity"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "4-Color Gradient",
+   "pairs_with": [
+    "Fractal Noise",
+    "Gaussian Blur",
+    "Turbulent Displace",
+    "Tint"
+   ],
+   "scripting": "Points are comp pixels; defaults sit at 10%/90% of 1920x1080. Property names are flat ('Point 1', 'Color 1' ...); the second 'Color 4' header in the harvest is only the group end marker. Blending Mode is a 22-item popup: 1 = None (default, gradient replaces the layer; a render at Opacity 60 showed a dimmed gradient over black with no footage). 2 = Normal is render-confirmed (Opacity 60 gives a four-colour wash with the footage visible underneath); the rest are in enum_labels (read from After Effects 26.0) with separators at 3, 10, 13 and 18; only 1 and 2 have been rendered. Usually applied to a solid for a plate or to an adjustment layer for a wash.",
+   "recipe": {
+    "Point 1": [
+     [
+      0,
+      [
+       192,
+       108
+      ]
+     ],
+     [
+      6,
+      [
+       700,
+       400
+      ]
+     ]
+    ],
+    "Point 4": [
+     [
+      0,
+      [
+       1728,
+       972
+      ]
+     ],
+     [
+      6,
+      [
+       1300,
+       700
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/091.png",
+    "note": "With Blending Mode 2 (Normal) at Opacity 60 the footage now stays visible under an orange/yellow/cyan/purple four-corner wash, where the old Mode 1 render was a dimmed gradient over black with the footage gone.",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Advanced Lightning",
+   "match": "ADBE Lightning 2",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a procedural electric lightning bolt with a bright core and coloured glow from an Origin towards a target or direction. Animating Conductivity State makes it flicker and re-branch.",
+   "look": [
+    "electric bolt",
+    "glow",
+    "energy",
+    "sci-fi",
+    "storm",
+    "power surge"
+   ],
+   "use_for": [
+    "trailer/hype moment: electricity crackling between two titles or graphic elements (a 'clash' beat)",
+    "power-sector or electricity explainer visuals",
+    "energy hit on a title slam in reels",
+    "storm ambience in a dramatic documentary reconstruction"
+   ],
+   "avoid": [
+    "leaving it static: a frozen bolt looks fake, animate Conductivity State",
+    "bolts drawn over real people's faces in news content can read as mockery; keep it on graphics",
+    "high Complexity with a large Glow Radius renders slowly"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Lightning Type",
+     "does": "1-based popup: 1 Direction, 2 Strike, 3 Breaking, 4 Bouncey, 5 a separator, 6 Omni, 7 Anywhere, 8 Vertical, 9 Two-Way Strike",
+     "typical": "2 (Strike) for a bolt hitting a target, 1 (Direction) for an aimed bolt"
+    },
+    {
+     "name": "Origin",
+     "does": "start point of the bolt in comp pixels",
+     "typical": "[960, 40] top centre"
+    },
+    {
+     "name": "Contextual Control",
+     "does": "direction point or strike target; for Omni/Anywhere it sets the radius",
+     "typical": "[960, 1000]"
+    },
+    {
+     "name": "Conductivity State",
+     "does": "random-variation seed; animating it makes the bolt flicker",
+     "typical": "keyframe 0 -> 20-30 per second"
+    },
+    {
+     "name": "Core Radius",
+     "does": "thickness of the white core in px",
+     "typical": "2-6"
+    },
+    {
+     "name": "Glow Radius",
+     "does": "size of the coloured glow around the core",
+     "typical": "50-120"
+    },
+    {
+     "name": "Glow Color",
+     "does": "colour of the glow",
+     "typical": "#4FA8FF electric blue or #B04FFF violet"
+    },
+    {
+     "name": "Composite on Original",
+     "does": "0 = bolt only (layer pixels dropped), 1 = bolt drawn over the layer",
+     "typical": "1 on footage; 0 on a black solid set to Add/Screen"
+    }
+   ],
+   "demo_settings": {
+    "Lightning Type": 2,
+    "Origin": [
+     960,
+     40
+    ],
+    "Contextual Control": [
+     960,
+     1000
+    ],
+    "Core Radius": 4,
+    "Core Opacity": 90,
+    "Glow Radius": 90,
+    "Glow Opacity": 70,
+    "Glow Color": "#4FA8FF",
+    "Turbulence": 1.5,
+    "Forking": 0.4,
+    "Composite on Original": 1
+   },
+   "enum_labels": {
+    "Lightning Type": {
+     "1": "Direction",
+     "2": "Strike",
+     "3": "Breaking",
+     "4": "Bouncey",
+     "5": "(separator)",
+     "6": "Omni",
+     "7": "Anywhere",
+     "8": "Vertical",
+     "9": "Two-Way Strike"
+    },
+    "Fractal Type": {
+     "1": "Linear",
+     "2": "Semi Linear",
+     "3": "Spline"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Lightning",
+   "pairs_with": [
+    "Glow",
+    "CC Light Burst 2.5",
+    "Exposure",
+    "Transform (wiggle expression for shake)"
+   ],
+   "scripting": "Composite on Original defaults to 0, which drops the layer's own pixels and shows only the bolt: either set it to 1 or apply to a black solid in Add/Screen mode. Origin and Contextual Control are comp pixels; what Contextual Control means depends on Lightning Type (its UI label changes per type, hence the generic harvested name). Checkbox-like props (Decay Main Core, Composite on Original, Main Core Collision Only) are 0/1. Alpha Obstacle makes bolts avoid (+) or cling to (-) the layer's alpha edges. Lightning Type (read from After Effects 26.0): 1 Direction, 2 Strike, 3 Breaking, 4 Bouncey, 5 a separator, 6 Omni, 7 Anywhere, 8 Vertical, 9 Two-Way Strike. Premiere's 'Lightning' is the older, simpler AE Lightning effect (different properties: Start point, End point, Segments ...), not this one.",
+   "recipe": {
+    "Conductivity State": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      25
+     ]
+    ],
+    "Glow Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.1,
+      80
+     ],
+     [
+      0.5,
+      40
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/092.png",
+    "note": "A bright white-core bolt with a light-blue glow strikes from the top centre down to the bottom through the centre of the frame, drawn over the footage.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Audio Spectrum",
+   "match": "ADBE AudSpect",
+   "category": "Generate",
+   "status": "needs_input",
+   "summary": "Draws a frequency-spectrum visualiser (bars, lines or dots) from an audio layer along a straight line or a mask path (a circular mask gives a ring), moving with the music or voice.",
+   "look": [
+    "audio visualiser",
+    "equalizer bars",
+    "podcast audiogram",
+    "music reactive",
+    "neon spectrum",
+    "circular spectrum"
+   ],
+   "use_for": [
+    "podcast or interview clip audiograms for reels",
+    "visual bed under a voice-over-only explainer segment",
+    "music-reactive bars on a lyric or hype reel",
+    "circular spectrum ring around a speaker's photo"
+   ],
+   "avoid": [
+    "without an Audio Layer set it draws nothing",
+    "many thin bands flicker and shimmer after Instagram compression",
+    "the default magenta colours look like a stock template"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Audio Layer",
+     "does": "the layer whose audio drives the spectrum",
+     "typical": "the VO or music layer index"
+    },
+    {
+     "name": "Start Point",
+     "does": "start of the baseline in comp pixels",
+     "typical": "[192, 800]"
+    },
+    {
+     "name": "End Point",
+     "does": "end of the baseline in comp pixels",
+     "typical": "[1728, 800]"
+    },
+    {
+     "name": "Frequency bands",
+     "does": "number of bars/samples across the spectrum",
+     "typical": "32-128"
+    },
+    {
+     "name": "End Frequency",
+     "does": "highest frequency shown (Start Frequency is the lowest); content above it is not drawn",
+     "typical": "2000 default; 4000-8000 so speech sibilance and music highs also move the bars"
+    },
+    {
+     "name": "Maximum Height",
+     "does": "height scale of the bars in px",
+     "typical": "300-1500"
+    },
+    {
+     "name": "Thickness",
+     "does": "width of each bar or line",
+     "typical": "6-20"
+    },
+    {
+     "name": "Display Options",
+     "does": "1-based popup: Digital bars, Analog lines or Analog dots",
+     "typical": "1 (Digital) for clean bars"
+    },
+    {
+     "name": "Inside Color",
+     "does": "core colour of the bars (Outside Color is the soft edge)",
+     "typical": "#FFFFFF with an Outside Color in the brand hue"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Display Options": {
+     "1": "Digital",
+     "2": "Analog lines",
+     "3": "Analog dots"
+    },
+    "Side Options": {
+     "1": "Side A",
+     "2": "Side B",
+     "3": "Side A & B"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur",
+    "Echo",
+    "Polar Coordinates"
+   ],
+   "scripting": "Audio Layer is a layer-type property and Path is a mask-type property: specs cannot set either. Use ExtendScript: eff.property(\"Audio Layer\").setValue(audioLayer.index); eff.property(\"Path\").setValue(maskIndex) for a mask on the same layer (0 = none, then Start/End Point are used). For a ring, draw a circular mask on the layer and pick it as Path (keep Use Polar Path 0); Use Polar Path 1 instead radiates the spectrum outward from Start Point as a starburst. Apply to a full-frame solid; Composite On Original 0 (default) shows only the visualiser. Hue Interpolation has no harvested range. Premiere has no built-in equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: needs an Audio Layer set by script, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Audio Waveform",
+   "match": "ADBE AudWave",
+   "category": "Generate",
+   "status": "needs_input",
+   "summary": "Draws the amplitude waveform of an audio layer as a moving line, bars or dots along a straight line or mask path, reacting to speech or music.",
+   "look": [
+    "waveform",
+    "oscilloscope",
+    "audiogram",
+    "voice reactive",
+    "neon line",
+    "phone-call graphic"
+   ],
+   "use_for": [
+    "voice-reactive line under a podcast or talking-head clip",
+    "audiogram for quote clips from speeches in news reels",
+    "phone-call or leaked-audio style graphic in explainers",
+    "oscilloscope look for tech/AI content"
+   ],
+   "avoid": [
+    "without an Audio Layer set it draws nothing",
+    "a very short Audio Duration with high Maximum Height jitters wildly",
+    "default magenta colours look like a template"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Audio Layer",
+     "does": "the layer whose audio drives the waveform",
+     "typical": "the VO or interview layer index"
+    },
+    {
+     "name": "Start Point",
+     "does": "start of the line in comp pixels",
+     "typical": "[192, 540]"
+    },
+    {
+     "name": "End Point",
+     "does": "end of the line in comp pixels",
+     "typical": "[1728, 540]"
+    },
+    {
+     "name": "Displayed Samples",
+     "does": "number of points along the line; fewer = chunkier",
+     "typical": "60-300"
+    },
+    {
+     "name": "Maximum Height",
+     "does": "amplitude scale in px",
+     "typical": "150-400"
+    },
+    {
+     "name": "Audio Duration (milliseconds)",
+     "does": "time window of audio shown along the line",
+     "typical": "125-500"
+    },
+    {
+     "name": "Thickness",
+     "does": "line thickness",
+     "typical": "3-10"
+    },
+    {
+     "name": "Display Options",
+     "does": "1-based popup: Digital, Analog lines or Analog dots",
+     "typical": "2 (Analog lines, default)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Waveform Options": {
+     "1": "Mono",
+     "2": "Left",
+     "3": "Right"
+    },
+    "Display Options": {
+     "1": "Digital",
+     "2": "Analog lines",
+     "3": "Analog dots"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur",
+    "Echo"
+   ],
+   "scripting": "Audio Layer is a layer-type property and Path is a mask-type property: specs cannot set either. Use ExtendScript: eff.property(\"Audio Layer\").setValue(audioLayer.index); eff.property(\"Path\").setValue(maskIndex) for a mask on the same layer (0 = none). Apply to a full-frame solid; Composite On Original 0 (default) shows only the waveform. Random Seed (Analog) only affects the Analog display styles. Premiere has no built-in equivalent.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "status needs_input: needs an Audio Layer set by script, so no frame was made",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Beam",
+   "match": "ADBE Laser",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Draws a glowing laser/light beam between a start and an end point. Animating Time sends a bolt of light travelling along the line.",
+   "look": [
+    "laser",
+    "light beam",
+    "glow line",
+    "energy streak",
+    "sci-fi",
+    "connector line"
+   ],
+   "use_for": [
+    "animated glowing connector between two points on a map or diagram in an explainer",
+    "laser-scan reveal across a title in a tech/AI reel",
+    "light-streak element in trailer transitions",
+    "highlight line under a key statistic"
+   ],
+   "avoid": [
+    "the default pink/red colours look dated",
+    "Composite On Original 0 hides the layer: use a solid in Add/Screen or set it to 1",
+    "very thick beams with 3D Perspective look like cheap 90s lasers"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Starting Point",
+     "does": "start of the beam path in comp pixels",
+     "typical": "any pixel point, often linked to a null"
+    },
+    {
+     "name": "Ending Point",
+     "does": "end of the beam path in comp pixels",
+     "typical": "any pixel point"
+    },
+    {
+     "name": "Length",
+     "does": "beam length as a fraction of the start-to-end distance",
+     "typical": "0.2-1 (1 with Time 0.5 fills the whole line)"
+    },
+    {
+     "name": "Time",
+     "does": "how far the beam has travelled along the path (0.5 = centred)",
+     "typical": "0.5 for a static beam; animate 0 -> 1 to shoot it across"
+    },
+    {
+     "name": "Starting Thickness",
+     "does": "beam thickness at the start in px (Ending Thickness for the end)",
+     "typical": "4-30"
+    },
+    {
+     "name": "Softness",
+     "does": "edge falloff of the beam",
+     "typical": "0.4-0.7"
+    },
+    {
+     "name": "Inside Color",
+     "does": "hot core colour",
+     "typical": "#FFFFFF"
+    },
+    {
+     "name": "Outside Color",
+     "does": "glow/edge colour",
+     "typical": "#00C8FF cyan or a brand hue"
+    }
+   ],
+   "demo_settings": {
+    "Starting Point": [
+     200,
+     900
+    ],
+    "Ending Point": [
+     1720,
+     180
+    ],
+    "Length": 0.7,
+    "Time": 0.5,
+    "Starting Thickness": 24,
+    "Ending Thickness": 24,
+    "Softness": 0.6,
+    "Inside Color": "#FFFFFF",
+    "Outside Color": "#00C8FF",
+    "Composite On Original": 1
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Trim Paths (shape layer)",
+    "Fast Box Blur",
+    "Turbulent Displace"
+   ],
+   "scripting": "Length and Time are 0-1 fractions (the UI shows percent). Points are comp pixels; link them to Point Control or null positions with expressions for map connectors. 3D Perspective (0/1, default 1) scales thickness with depth. Composite On Original defaults to 0, which shows only the beam.",
+   "recipe": {
+    "Time": [
+     [
+      0,
+      0
+     ],
+     [
+      0.8,
+      1
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/093.png",
+    "note": "A crisp cyan beam with a white core runs diagonally from lower left to upper right across the centre of the photo, footage intact.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Glue Gun",
+   "match": "CC Glue Gun",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Paints a glossy, wet-looking 3D-shaded bead of 'glue' along the path of an animated Brush Position, lit and reflecting the layer. With a static position it draws a single shiny blob.",
+   "look": [
+    "glossy liquid",
+    "glue bead",
+    "chrome blob",
+    "3D shaded stroke",
+    "handmade write-on"
+   ],
+   "use_for": [
+    "playful liquid underline or write-on in an AI-tool or education reel",
+    "comic emphasis circle drawn around an object (animate Brush Position)",
+    "quirky glossy stroke for a social transition"
+   ],
+   "avoid": [
+    "looks gimmicky in serious news or political content",
+    "a static Brush Position only draws one blob; a stroke needs keyframes or an expression",
+    "large Wobble values make the bead lumpy and messy",
+    "it outputs only the bead: the rest of the layer turns transparent (black in an empty comp), so apply it to a duplicate above the footage"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Brush Position",
+     "does": "where the bead is laid down; its motion path becomes the stroke",
+     "typical": "keyframed path in comp pixels"
+    },
+    {
+     "name": "Stroke Width",
+     "does": "bead thickness; not literal px (160 rendered a ~1000 px wide blob in a 1920 comp)",
+     "typical": "4 (default) to 20 for a stroke, roughly 25-125 px if the ~6x scale seen at 160 holds; 100+ for one big lens-like blob"
+    },
+    {
+     "name": "Density",
+     "does": "how closely blobs are packed along the stroke",
+     "typical": "50-150"
+    },
+    {
+     "name": "Time Span (sec)",
+     "does": "how much of the brush's past path stays visible",
+     "typical": "1-5 for a trailing stroke (behaviour at 0 not verified)"
+    },
+    {
+     "name": "Reflection",
+     "does": "how strongly the layer image reflects in the bead",
+     "typical": "50-150"
+    },
+    {
+     "name": "Wobble Width",
+     "does": "random sideways wobble of the bead",
+     "typical": "0-10"
+    },
+    {
+     "name": "Light Intensity",
+     "does": "brightness of the effect light on the bead",
+     "typical": "80-150"
+    }
+   ],
+   "demo_settings": {
+    "Brush Position": [
+     960,
+     540
+    ],
+    "Time Span (sec)": 10,
+    "Stroke Width": 160,
+    "Density": 100,
+    "Reflection": 100,
+    "Strength": 100,
+    "Light Intensity": 120
+   },
+   "enum_labels": {
+    "Paint Style": {
+     "1": "Plain",
+     "2": "Wobbly"
+    },
+    "Using": {
+     "1": "Effect Light",
+     "2": "AE Lights"
+    },
+    "Light Type": {
+     "1": "Distant Light",
+     "2": "Point Light"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "",
+   "pairs_with": [
+    "Drop Shadow",
+    "CC Glass",
+    "Glow"
+   ],
+   "scripting": "Brush Position must be keyframed (or driven by an expression, e.g. a Point Control or wiggle) to draw a stroke; the bead accumulates along the brush's past path, so the demo still only shows one blob. Time Span (sec) limits how much history stays; its exact behaviour at the default 0 is not verified, so the demo sets 10 (longer than any test clip) to be safe either way. Using 2 needs a light layer in the comp. Light Direction has no harvested range (degrees). Paint Style: 1 Plain, 2 Wobbly; Using: 1 Effect Light, 2 AE Lights; Light Type: 1 Distant Light, 2 Point Light (read from After Effects 26.0). Low confidence overall: render a test before relying on it.",
+   "recipe": {
+    "Brush Position": [
+     [
+      0,
+      [
+       300,
+       700
+      ]
+     ],
+     [
+      1.2,
+      [
+       960,
+       400
+      ]
+     ],
+     [
+      2.4,
+      [
+       1620,
+       700
+      ]
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/094.png",
+    "note": "A single large glossy sphere-like blob refracts the photo like a fisheye while everything outside it goes black (layer dropped); card now notes that.",
+    "rerender": false,
+    "second_opinion": "corrected: Stroke Width typical lowered from 20-80 to 4-20; frame 094 shows 160 gives a ~1000 px blob (about 6x), so 20-80 would be a 125-500 px bead, not a stroke"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Light Burst 2.5",
+   "match": "CC Light Burst 2.5",
+   "category": "Generate",
+   "status": "current",
+   "summary": "Streaks the layer's own bright areas outward from a centre point into radial light rays, like a burst of volumetric light or a zoom-streak flash.",
+   "look": [
+    "light rays",
+    "god rays",
+    "radial streaks",
+    "burst",
+    "flash",
+    "glow"
+   ],
+   "use_for": [
+    "flash/light-burst transition between shots in trailers and hype reels",
+    "god rays behind a logo or title reveal",
+    "dramatic emphasis on a stage or podium moment in rally edits",
+    "energetic accent on a music beat in reels"
+   ],
+   "avoid": [
+    "on faces it smears features into streaks",
+    "high Intensity on full-frame footage clips the highlights to flat white",
+    "a full-strength burst held for seconds looks dated; keep it to a beat"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Center",
+     "does": "point the rays radiate from, in comp pixels",
+     "typical": "on the brightest element, e.g. [960, 380]"
+    },
+    {
+     "name": "Intensity",
+     "does": "brightness/strength of the rays",
+     "typical": "100-400"
+    },
+    {
+     "name": "Ray Length",
+     "does": "length of the streaks; negative values pull inward",
+     "typical": "30-200"
+    },
+    {
+     "name": "Burst",
+     "does": "1-based popup: ray style",
+     "typical": "2 (Fade, default)"
+    },
+    {
+     "name": "Set Color",
+     "does": "0/1: tint the rays with Color",
+     "typical": "1 for a warm or brand-tinted burst"
+    },
+    {
+     "name": "Color",
+     "does": "ray tint when Set Color is 1",
+     "typical": "#FFE640 warm gold"
+    }
+   ],
+   "demo_settings": {
+    "Center": [
+     960,
+     380
+    ],
+    "Intensity": 160,
+    "Ray Length": 80,
+    "Burst": 2
+   },
+   "enum_labels": {
+    "Burst": {
+     "1": "Straight",
+     "2": "Fade",
+     "3": "Center"
+    }
+   },
+   "cost": "medium",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Glow",
+    "Exposure",
+    "CC Light Rays",
+    "Radial Blur"
+   ],
+   "scripting": "Not a pure generator: rays come from the layer's own bright pixels, so dark footage shows little. Raise Intensity or apply it to a duplicated, brightened layer set to Add/Screen. Center is comp pixels. Halo Alpha and Set Color are 0/1 checkboxes. Burst: 1 Straight, 2 Fade (default), 3 Center (read from After Effects 26.0). For a flash, ramp Ray Length from 0 and keep Intensity at 100 at the ends: Intensity appears to scale the whole result's brightness (not verified), so keyframing it to 0 risks dark/black frames.",
+   "recipe": {
+    "Intensity": [
+     [
+      0,
+      100
+     ],
+     [
+      0.25,
+      400
+     ],
+     [
+      0.7,
+      100
+     ]
+    ],
+    "Ray Length": [
+     [
+      0,
+      0
+     ],
+     [
+      0.25,
+      150
+     ],
+     [
+      0.7,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/095.png",
+    "note": "Strong radial light streaks burst out from the upper centre, washing the frame bright and smearing the figures and stripes outward.",
+    "rerender": false
+   }
+  }
+ ]
+}

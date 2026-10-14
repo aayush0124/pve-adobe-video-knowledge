@@ -1,0 +1,1062 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Alpha Levels",
+   "match": "ADBE Alpha Levels2",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Levels for the alpha channel only, on a 0-255 scale (probably the 8-bit version): remaps transparency with input/output black and white points and gamma. It tightens or softens a keyed or masked edge; on fully opaque footage only Output White Level changes anything (it fades the whole layer). Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "matte cleanup",
+    "edge choke",
+    "transparency",
+    "alpha levels"
+   ],
+   "use_for": [
+    "crushing the semi-transparent fringe left by a green-screen key of a presenter",
+    "hardening a soft feathered mask edge on a cut-out leader photo",
+    "uniformly fading a layer through Output White Level in old project files"
+   ],
+   "avoid": [
+    "new work: use Levels (Individual Controls) alpha controls, Simple Choker or Matte Choker",
+    "does nothing visible on an opaque press photo or video unless Output White Level is lowered",
+    "Output Black Level above 0 makes fully transparent areas partly opaque: a dark box appears around a cut-out",
+    "values are 0-255 here; do not reuse numbers from the 0-1 version (ADBE Alpha Levels3)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Input Black Level",
+     "does": "alpha at or below this becomes fully transparent (removes faint fringe)",
+     "typical": "20-80"
+    },
+    {
+     "name": "Input White Level",
+     "does": "alpha at or above this becomes fully opaque (solidifies a soft edge)",
+     "typical": "175-235"
+    },
+    {
+     "name": "Gamma",
+     "does": "bends the mid-transparency values; below 1 thins the edge, above 1 thickens it",
+     "typical": "0.7-1.5"
+    },
+    {
+     "name": "Output Black Level",
+     "does": "minimum alpha of the result; above 0 the transparent surround of a cut-out becomes visible",
+     "typical": "0"
+    },
+    {
+     "name": "Output White Level",
+     "does": "maximum alpha of the result, i.e. overall opacity",
+     "typical": "255 (lower to fade the layer)"
+    }
+   ],
+   "demo_settings": {
+    "Output White Level": 128
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Levels (Individual Controls) (ADBE Pro Levels2) Alpha controls, or Simple Choker / Matte Choker for edges; Premiere: no alpha-levels effect (Alpha Adjust only scales opacity; Ultra Key Matte Cleanup chokes/softens a keyed edge)",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Simple Choker",
+    "Matte Choker"
+   ],
+   "scripting": "Obsolete twin of ADBE Alpha Levels3: all level values are 0-255, Gamma 0-10. Five plain 1d sliders, no dropdowns. Works on alpha only, so on an opaque layer only Output White Level is visible (demo: 128 = half opacity, the frame darkens over the black comp background). For new builds use ADBE Pro Levels2 ('Alpha Input Black' etc., 0-1 scale).",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/232.png",
+    "note": "Whole frame drops to about half brightness (half opacity over the black comp background), exactly the Output White Level 128 fade the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Alpha Levels",
+   "match": "ADBE Alpha Levels3",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy Levels for the alpha channel only, with values on a 0-1 scale (likely the higher-bit-depth version, unverified): remaps transparency with input/output black and white points and gamma. It tightens or softens keyed or masked edges; on opaque footage only Output White Level has an effect. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "matte cleanup",
+    "edge choke",
+    "transparency",
+    "alpha levels"
+   ],
+   "use_for": [
+    "removing a faint halo around a keyed presenter",
+    "firming up a feathered cut-out of a politician or object",
+    "fading a whole layer in old templates through Output White Level"
+   ],
+   "avoid": [
+    "new work: use Levels (Individual Controls) alpha controls, Simple Choker or Matte Choker",
+    "values are 0-1 fractions here; 0-255 numbers from the 8-bit version get clamped to 1",
+    "no visible change on an opaque frame unless Output White Level is lowered",
+    "Output Black Level above 0 makes fully transparent areas partly opaque (dark box around a cut-out)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Input Black Level",
+     "does": "alpha at or below this becomes fully transparent",
+     "typical": "0.08-0.3"
+    },
+    {
+     "name": "Input White Level",
+     "does": "alpha at or above this becomes fully opaque",
+     "typical": "0.7-0.92"
+    },
+    {
+     "name": "Gamma",
+     "does": "bends mid-transparency; below 1 thins the edge, above 1 thickens it",
+     "typical": "0.7-1.5"
+    },
+    {
+     "name": "Output Black Level",
+     "does": "minimum alpha of the result; above 0 the transparent surround of a cut-out becomes visible",
+     "typical": "0"
+    },
+    {
+     "name": "Output White Level",
+     "does": "maximum alpha (overall opacity)",
+     "typical": "1 (lower to fade)"
+    }
+   ],
+   "demo_settings": {
+    "Output White Level": 0.5
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Levels (Individual Controls) (ADBE Pro Levels2) Alpha controls, or Simple Choker / Matte Choker for edges; Premiere: no alpha-levels effect (Alpha Adjust only scales opacity; Ultra Key Matte Cleanup chokes/softens a keyed edge)",
+   "pairs_with": [
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Simple Choker",
+    "Matte Choker"
+   ],
+   "scripting": "Same property names as ADBE Alpha Levels2 but every level is a 0-1 fraction (Gamma 0-10). Plain 1d sliders, no dropdowns. Alpha only: on opaque footage only Output White Level shows (demo 0.5 = half opacity). Prefer ADBE Pro Levels2 alpha controls for new builds.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/233.png",
+    "note": "Byte-identical to the 0-255 version at 128: Output White Level 0.5 fades the whole frame to half opacity over black.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Apply Color LUT",
+   "match": "ADBE Apply Color LUT",
+   "category": "_Obsolete",
+   "status": "needs_input",
+   "summary": "Legacy version of Apply Color LUT: grades the layer through a LUT file (.cube, .3dl and similar) chosen in a file dialog when the effect is applied in the UI. With no LUT loaded it leaves the image unchanged. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "LUT grade",
+    "film look",
+    "log to Rec.709",
+    "colour transform"
+   ],
+   "use_for": [
+    "keeping old projects that convert log camera footage to Rec.709 rendering the same",
+    "re-rendering an old template that carries a channel's signature film-look LUT"
+   ],
+   "avoid": [
+    "new work: use Apply Color LUT (ADBE Apply Color LUT2) or Lumetri Color's Input LUT / Look",
+    "a script cannot set the LUT file: the only harvested entries are headers ('<LUT not set>')",
+    "applying it can open a file dialog that stalls an unattended run"
+   ],
+   "confidence": "medium",
+   "params": [],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Apply Color LUT (ADBE Apply Color LUT2); Premiere: Lumetri Color (Basic Correction Input LUT, Creative Look)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Curves",
+    "Exposure"
+   ],
+   "scripting": "No settable properties: both harvested entries are headers ('<LUT not set>'). The LUT is chosen in a file dialog at apply time; pve/dialog_watchdog.py exists to cancel the LUT-file dialog that 'Apply Color LUT' opens during a scripted harvest, so run it alongside any unattended build that adds this effect. With the dialog cancelled or absent no LUT is loaded: verified 2026-10-04, all 10 frames of the gallery render are byte-identical to the untouched AE render (identity). For scripted LUT grades use ADBE Apply Color LUT2 via a hand-saved .ffx preset with the LUT loaded (layer.applyPreset) or Lumetri Color; see their cards.",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/ae/234.png",
+    "note": "Frame is byte-identical to the untouched AE render: with no scriptable LUT property the effect is an identity pass; needs a hand-made .ffx preset with a LUT loaded to demonstrate.",
+    "rerender": false,
+    "second_opinion": "corrected: scripting said both 'may block on the dialog (unverified which)' and 'did not block the run'; the batch finishing does not prove no dialog (pve/dialog_watchdog.py exists to cancel this effect's LUT dialog and gallery.py does not record whether it ran), so the text now keeps the dialog warning and states only the verified identity result. Agree with verdict broken and needs_input (10/10 frames byte-identical to the untouched render, md5 820db19...).",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the harness lacked the setup it needs (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Box Blur",
+   "match": "ADBE Box Blur",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy box blur: averages neighbouring pixels in a square. More Iterations make it smooth and close to a Gaussian blur; 1 iteration gives a blocky, boxy blur. Same controls, ranges and dropdown as the current Fast Box Blur. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "blur",
+    "soft focus",
+    "defocus",
+    "boxy blur",
+    "streak blur"
+   ],
+   "use_for": [
+    "blurred background plate behind a quote card or lower third",
+    "blur-in / blur-out reveal at the start or end of a shot",
+    "horizontal-only blur for a quick speed-streak whip feel"
+   ],
+   "avoid": [
+    "new work: use Fast Box Blur (ADBE Box Blur2) or Gaussian Blur",
+    "Iterations 1 at a large radius looks blocky and cheap",
+    "with Repeat Edge Pixels off the frame edges go soft and transparent (dark border on a full-frame shot)"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Blur Radius",
+     "does": "blur size in pixels",
+     "typical": "10-40 for background plates, 60-150 for a heavy blur"
+    },
+    {
+     "name": "Iterations",
+     "does": "number of box passes; more = smoother, Gaussian-like",
+     "typical": "3 (1 for a deliberately boxy look)"
+    },
+    {
+     "name": "Blur Dimensions",
+     "does": "direction of the blur (dropdown)",
+     "typical": "1 both, 2 horizontal for a speed streak"
+    },
+    {
+     "name": "Repeat Edge Pixels",
+     "does": "checkbox: keep the frame edges solid instead of fading to transparent",
+     "typical": "1 on full-frame footage"
+    }
+   ],
+   "demo_settings": {
+    "Blur Radius": 30,
+    "Iterations": 3
+   },
+   "enum_labels": {
+    "Blur Dimensions": {
+     "1": "Horizontal and Vertical",
+     "2": "Horizontal",
+     "3": "Vertical"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Fast Box Blur (ADBE Box Blur2); Premiere: Fast Blur / Gaussian Blur",
+   "pairs_with": [
+    "Brightness & Contrast",
+    "CC Vignette",
+    "Glow"
+   ],
+   "scripting": "Same property names, ranges and dropdown order as ADBE Box Blur2, so a spec can swap the match name unchanged. Blur Dimensions is 1-based: 1 Horizontal and Vertical, 2 Horizontal, 3 Vertical. Repeat Edge Pixels is a 0/1 checkbox.",
+   "recipe": {
+    "Blur Radius": [
+     [
+      0,
+      40
+     ],
+     [
+      0.4,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/235.png",
+    "note": "The whole photo is evenly and heavily blurred (faces, stripes and foreground blocks lose all detail) with solid frame edges, as described for radius 30, 3 iterations.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Brightness & Contrast",
+   "match": "ADBE Brightness & Contrast",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy brightness and contrast: shifts every tone up or down and stretches or flattens the tonal range. The old maths clips highlights and shadows quickly at large values (same behaviour as 'Use Legacy' in the current effect). Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "brighten",
+    "darken",
+    "punchy contrast",
+    "flat",
+    "basic grade"
+   ],
+   "use_for": [
+    "quick lift of a dark archival or phone clip",
+    "bright flash on a beat by keyframing Brightness up and back",
+    "keeping old templates that already use it rendering identically"
+   ],
+   "avoid": [
+    "new work: use Brightness & Contrast (ADBE Brightness & Contrast 2) or Lumetri Color",
+    "large values clip faces, flags and white shirts to flat white or black"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Brightness",
+     "does": "adds or removes overall brightness",
+     "typical": "-25 to 25 for correction; 60-100 for a flash (may not reach pure white; use Exposure for a white-out)"
+    },
+    {
+     "name": "Contrast",
+     "does": "stretches (positive) or flattens (negative) the tonal range",
+     "typical": "10-30 for punch, -20 for a faded look"
+    }
+   ],
+   "demo_settings": {
+    "Brightness": 30,
+    "Contrast": 40
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "AE replacement: Brightness & Contrast (ADBE Brightness & Contrast 2; its 'Use Legacy (supports HDR)' checkbox gives the old behaviour); Premiere: Brightness & Contrast",
+   "pairs_with": [
+    "Hue/Saturation",
+    "Curves",
+    "CC Vignette"
+   ],
+   "scripting": "Two 1d sliders, both -100 to 100 (the current effect allows Brightness -150 to 150). No dropdowns. Legacy maths; use the current match name 'ADBE Brightness & Contrast 2' for new builds.",
+   "recipe": {
+    "Brightness": [
+     [
+      0,
+      80
+     ],
+     [
+      0.25,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/236.png",
+    "note": "Frame is clearly brighter with stronger contrast; the white wall and white clothing clip toward flat white, as the card warns.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Composite (obsolete)",
+   "match": "CC Composite",
+   "category": "_Obsolete",
+   "status": "needs_input",
+   "summary": "Legacy CC Composite: blends the layer's original, un-effected image back with the result of the effects above it in the effect stack, using a blend mode and opacity. The current CC Composite (CS Composite) can also take another layer as Top Layer. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "blend",
+    "effect mix",
+    "soft glow",
+    "composite original"
+   ],
+   "use_for": [
+    "laying the sharp original back over a blurred copy for a soft-glow dream look in a flashback",
+    "restoring natural colour over a heavy stylised effect stack at partial opacity"
+   ],
+   "avoid": [
+    "first or alone in the stack it composites the image with itself, so little or nothing changes",
+    "new work: use CC Composite (CS Composite) or an effect's own blend-with-original control"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Opacity",
+     "does": "strength of the original composited back on",
+     "typical": "30-70"
+    },
+    {
+     "name": "Composite Original",
+     "does": "blend mode used to lay the original over the effected result (dropdown, 41 entries)",
+     "typical": "3 In front (default); 6 Multiply, 13 Screen, 18 Overlay"
+    },
+    {
+     "name": "RGB Only",
+     "does": "checkbox: composite colour channels only and keep the effected alpha",
+     "typical": "1"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Composite Original": {
+     "1": "Copy",
+     "2": "Behind",
+     "3": "In front",
+     "4": "(separator)",
+     "5": "Darken",
+     "6": "Multiply",
+     "7": "Linear Burn",
+     "8": "Color Burn",
+     "9": "Classic Color Burn",
+     "10": "(separator)",
+     "11": "Add",
+     "12": "Lighten",
+     "13": "Screen",
+     "14": "Linear Dodge",
+     "15": "Color Dodge",
+     "16": "Classic Color Dodge",
+     "17": "(separator)",
+     "18": "Overlay",
+     "19": "Soft Light",
+     "20": "Hard Light",
+     "21": "Linear Light",
+     "22": "Vivid Light",
+     "23": "Pin Light",
+     "24": "Hard Mix",
+     "25": "(separator)",
+     "26": "Difference",
+     "27": "Classic Difference",
+     "28": "Exclusion",
+     "29": "(separator)",
+     "30": "Hue",
+     "31": "Saturation",
+     "32": "Color",
+     "33": "Luminosity",
+     "34": "(separator)",
+     "35": "Stencil Alpha",
+     "36": "Stencil Luma",
+     "37": "Silhouette Alpha",
+     "38": "Silhouette Luma",
+     "39": "(separator)",
+     "40": "Add Alpha",
+     "41": "Luminescent Premul"
+    }
+   },
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: CC Composite (CS Composite); Premiere: none (stack a duplicate clip with a blend mode)",
+   "pairs_with": [
+    "Fast Box Blur",
+    "Glow",
+    "Gaussian Blur"
+   ],
+   "scripting": "Must sit AFTER (below) the effects whose result it blends with; alone it is a near no-op, so demo_settings are left empty and the gallery frame is expected unchanged. Composite Original is a 1-based blend-mode dropdown with 41 entries counting separators: 1 Copy, 2 Behind, 3 In front (default), 5 Darken, 6 Multiply ... 13 Screen ... 18 Overlay ... 41 Luminescent Premul (enum_labels (read from After Effects 26.0)). RGB Only is a 0/1 checkbox. Prefer the current match name 'CS Composite' for new builds. Verified 2026-10-04: alone with defaults the gallery frame is byte-identical to the untouched AE render, confirming the no-op. A demo needs a stacked render (e.g. Fast Box Blur above it, CC Composite below at Opacity 50) that the single-effect gallery does not do.",
+   "verified": {
+    "verdict": "untested:needs_second_layer",
+    "frame": "pve/gallery/ae/237.png",
+    "note": "Frame is byte-identical to the untouched AE render: alone in the stack it composites the image over itself; needs a stacked demo with an effect above it.",
+    "rerender": false,
+    "second_opinion": "agree: all 10 rendered frames are byte-identical to the untouched AE render (same md5 as Separate XYZ Position / Set Matte defaults); at the default Composite Original mode it is identity alone, so a stacked demo is needed and needs_input is right.",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the one-effect test cannot exercise it (see note)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC PS Classic (obsolete)",
+   "match": "CC PS Classic",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy CC Particle Systems: replaces the layer's image with animated particles on black that burst out, fade from a birth colour to a death colour and fall or drift with gravity and turbulence (the default Animation draws four-point star sparkles). Superseded by CC Particle Systems II. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "particles",
+    "star sparkles",
+    "sparks",
+    "fireworks",
+    "dust burst"
+   ],
+   "use_for": [
+    "spark or confetti burst behind a title reveal",
+    "rising embers on a trailer title card",
+    "keeping an old template's particle look"
+   ],
+   "avoid": [
+    "new work: use CC Particle Systems II or CC Particle World",
+    "the default yellow-to-green colours look dated; always set Birth/Death Color",
+    "no emitter position in the harvest, so placement cannot be scripted",
+    "replaces the layer's own image with particles on black: apply it to a separate solid and composite with Add or Screen",
+    "high Birth Rate with long Longevity piles the sparkles into a blown-out white frame"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Birth Rate",
+     "does": "how many particles are emitted",
+     "typical": "5-20 (with Longevity 1; 50 with Longevity 2 blew the frame out)"
+    },
+    {
+     "name": "Longevity (sec)",
+     "does": "how long each particle lives",
+     "typical": "1-2"
+    },
+    {
+     "name": "Velocity",
+     "does": "launch speed of the particles",
+     "typical": "1-4 (units unverified)"
+    },
+    {
+     "name": "Gravity",
+     "does": "downward pull; negative values make particles rise",
+     "typical": "-1 to 1"
+    },
+    {
+     "name": "Turbulence",
+     "does": "random wobble of the particle paths",
+     "typical": "0-2"
+    },
+    {
+     "name": "Max Opacity",
+     "does": "peak opacity of the particles",
+     "typical": "75-100"
+    },
+    {
+     "name": "Birth Color",
+     "does": "colour at emission",
+     "typical": "#FFD27A for warm sparks"
+    },
+    {
+     "name": "Death Color",
+     "does": "colour at end of life",
+     "typical": "#B22A10"
+    }
+   ],
+   "demo_settings": {
+    "Birth Rate": 10,
+    "Longevity (sec)": 1,
+    "Birth Color": "#FFD27A",
+    "Death Color": "#B22A10"
+   },
+   "enum_labels": {
+    "Animation": {
+     "1": "Explosive",
+     "2": "Sideways",
+     "3": "Fire",
+     "4": "Bonfire",
+     "5": "Twirl",
+     "6": "Fountain",
+     "7": "Viscouse",
+     "8": "Scatterize",
+     "9": "Sparkle",
+     "10": "Vortexy",
+     "11": "(separator)",
+     "12": "Rain Drops",
+     "13": "Star Light",
+     "14": "Smokish",
+     "15": "Bubbly",
+     "16": "Bally",
+     "17": "Watery Drops",
+     "18": "Experimental"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "AE replacement: CC Particle Systems II (CC Particle Systems II) or CC Particle World; Premiere: none",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur",
+    "CC Composite"
+   ],
+   "scripting": "Animation is a 1-based dropdown (read from After Effects 26.0): 1 Explosive, 2 Sideways, 3 Fire, 4 Bonfire, 5 Twirl, 6 Fountain, 7 Viscouse, 8 Scatterize, 9 Sparkle, 10 Vortexy, 11 a separator, 12 Rain Drops, 13 Star Light (default), 14 Smokish, 15 Bubbly, 16 Bally, 17 Watery Drops, 18 Experimental. Colours are \"#RRGGBB\". There is no emitter/Producer position property in this classic version (low certainty where it emits; likely layer centre). Render confirmed the source image is replaced: particles draw on black, so put it on its own solid layer. Birth Rate 50 with Longevity 2 blew about 80% of the frame out to white; keep Birth Rate x Longevity well under that (Birth Rate 10 with Longevity 1 rendered as separate, readable sparkles spread over the whole frame). The simulation runs from the layer's start time, not its in-point: in the gallery the trimmed clip starts 1.5 s before the comp, so the very first comp frame was already full of particles. Use CC Particle Systems II for new builds.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/238.png",
+    "note": "With Birth Rate 10 / Longevity 1 and the warm colours, the frame now shows separate gold four-point star sparkles fading to deep red on black across the whole frame, where the old render was about 80% blown out to white (the photo is still replaced, as the card already warns).",
+    "rerender": false,
+    "recheck": "after re-render"
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC PS LE Classic (obsolete)",
+   "match": "CC PS LE Classic",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy light edition of CC Particle Systems: emits particles from a Producer point spread over an area set by X/Y Radius, with gravity, turbulence and a birth-to-death colour fade. Superseded by CC Particle Systems II. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "particles",
+    "sparks",
+    "embers",
+    "magic dust"
+   ],
+   "use_for": [
+    "sparks spraying from a point behind a logo or title",
+    "falling embers across the top of a trailer card",
+    "keeping an old template's particle look"
+   ],
+   "avoid": [
+    "new work: use CC Particle Systems II or CC Particle World",
+    "default yellow-to-red colours look dated; set Birth/Death Color",
+    "replaces the layer's own image with particles on black: apply it to a separate solid and composite with Add or Screen"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Producer",
+     "does": "emitter position in comp pixels",
+     "typical": "[960, 540] centre; [960, 0] for a top-edge emitter"
+    },
+    {
+     "name": "X Radius",
+     "does": "horizontal size of the emitter area",
+     "typical": "4-960 (960 spreads across the frame)"
+    },
+    {
+     "name": "Y Radius",
+     "does": "vertical size of the emitter area",
+     "typical": "4-50"
+    },
+    {
+     "name": "Birth Rate",
+     "does": "particles emitted",
+     "typical": "5-40"
+    },
+    {
+     "name": "Longevity (sec)",
+     "does": "life of each particle",
+     "typical": "1-3"
+    },
+    {
+     "name": "Gravity",
+     "does": "downward pull; negative makes particles rise",
+     "typical": "-1 to 1"
+    },
+    {
+     "name": "Birth Color",
+     "does": "colour at emission",
+     "typical": "#FFD27A"
+    },
+    {
+     "name": "Death Color",
+     "does": "colour at end of life",
+     "typical": "#C81010"
+    }
+   ],
+   "demo_settings": {
+    "Producer": [
+     960,
+     540
+    ],
+    "X Radius": 200,
+    "Y Radius": 20,
+    "Birth Rate": 40,
+    "Birth Color": "#FFD27A",
+    "Death Color": "#C81010"
+   },
+   "enum_labels": {
+    "Animation": {
+     "1": "Explosive",
+     "2": "Sideways",
+     "3": "Fire",
+     "4": "Bonfire",
+     "5": "Twirl",
+     "6": "Fountain",
+     "7": "Viscouse",
+     "8": "Scatterize",
+     "9": "Sparkle",
+     "10": "Fractal Explosion",
+     "11": "Vortexy",
+     "12": "Jet",
+     "13": "Jet Sideways",
+     "14": "(separator)",
+     "15": "Star Light",
+     "16": "Bally",
+     "17": "Smokish",
+     "18": "Bubblish",
+     "19": "FireFly",
+     "20": "Watery Drops",
+     "21": "Experimental",
+     "22": "2Experimental"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "AE replacement: CC Particle Systems II (CC Particle Systems II) or CC Particle World; Premiere: none",
+   "pairs_with": [
+    "Glow",
+    "Fast Box Blur"
+   ],
+   "scripting": "Producer is a 2d_spatial point in comp pixels ([960, 540] = centre of 1920x1080). Animation is a 1-based dropdown (read from After Effects 26.0): 1 Explosive ... 9 Sparkle, 10 Fractal Explosion (default), 11 Vortexy, 12 Jet, 13 Jet Sideways, 14 a separator, 15 Star Light ... 22 2Experimental (enum_labels). Colours are \"#RRGGBB\". Units of Velocity/Gravity/Turbulence are unverified (low confidence). Use CC Particle Systems II for new builds.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/239.png",
+    "note": "The photo is replaced by black with a wide band of fine yellow-orange particle streaks fading to dark red as they fall, i.e. the birth-to-death colour fade and gravity the card describes.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Rain (obsolete)",
+   "match": "CC Rain",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy rain generator: draws falling rain streaks over the layer with controls for amount, angle, drop size and opacity. Superseded by CC Rainfall, which adds scene depth, wind and background reflection. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "rain",
+    "storm",
+    "weather",
+    "moody",
+    "streaks"
+   ],
+   "use_for": [
+    "light rain over a sombre documentary establishing shot",
+    "storm mood behind a trailer title card"
+   ],
+   "avoid": [
+    "new work: CC Rainfall (CSRainfall) looks far more natural",
+    "rain over a sunny, high-key press shot looks fake; grade the plate darker first",
+    "Opacity is 0-1, not 0-100"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "number of drops",
+     "typical": "300-1500"
+    },
+    {
+     "name": "Speed",
+     "does": "fall speed",
+     "typical": "1-2"
+    },
+    {
+     "name": "Angle",
+     "does": "slant of the rain in degrees",
+     "typical": "5-15"
+    },
+    {
+     "name": "Angle Variation",
+     "does": "random spread of the slant",
+     "typical": "5-10"
+    },
+    {
+     "name": "Drop Size",
+     "does": "streak size",
+     "typical": "1-4"
+    },
+    {
+     "name": "Opacity",
+     "does": "visibility of the drops (0-1)",
+     "typical": "0.2-0.5"
+    },
+    {
+     "name": "Source Depth",
+     "does": "how much the source image is used as depth for the drops (behaviour unverified)",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 1200,
+    "Drop Size": 3,
+    "Opacity": 0.5
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: CC Rainfall (CSRainfall); Premiere: none native (overlay a rain clip in Screen mode)",
+   "pairs_with": [
+    "Curves",
+    "Fast Box Blur",
+    "CC Vignette"
+   ],
+   "scripting": "All 1d sliders, no dropdowns. Opacity and Source Depth are 0-1 fractions; Speed 0.1-10. Rain animates on its own, no keyframes needed. Use CC Rainfall for new builds.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/240.png",
+    "note": "Fine white rain streaks with a slight slant cover the whole photo, which stays visible underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Snow (obsolete)",
+   "match": "CC Snow",
+   "category": "_Obsolete",
+   "status": "obsolete",
+   "summary": "Legacy snow generator: draws drifting snowflakes over the layer, with amount, fall speed, sideways wobble and flake size. Superseded by CC Snowfall. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "snow",
+    "winter",
+    "weather",
+    "soft flakes"
+   ],
+   "use_for": [
+    "light snowfall over a winter establishing shot (Kashmir, Himalayas)",
+    "festive or nostalgic mood on a title card"
+   ],
+   "avoid": [
+    "new work: CC Snowfall (CSSnowfall) has depth and looks more natural",
+    "snow over a sunny summer press shot looks fake",
+    "Opacity is 0-1, not 0-100"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Amount",
+     "does": "number of flakes",
+     "typical": "1000-4000"
+    },
+    {
+     "name": "Speed",
+     "does": "fall speed; negative values make flakes rise",
+     "typical": "1-2"
+    },
+    {
+     "name": "Amplitude",
+     "does": "sideways drift of each flake",
+     "typical": "2-6"
+    },
+    {
+     "name": "Frequency",
+     "does": "how fast the sideways drift wobbles",
+     "typical": "1-2"
+    },
+    {
+     "name": "Flake Size",
+     "does": "flake size",
+     "typical": "2-5"
+    },
+    {
+     "name": "Opacity",
+     "does": "visibility of the flakes (0-1)",
+     "typical": "0.5-0.8"
+    },
+    {
+     "name": "Source Depth",
+     "does": "how much the source image is used as depth for the flakes (behaviour unverified)",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Amount": 3000,
+    "Flake Size": 4,
+    "Opacity": 0.8
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "no",
+   "equivalent": "AE replacement: CC Snowfall (CSSnowfall); Premiere: none native (overlay a snow clip in Screen mode)",
+   "pairs_with": [
+    "Curves",
+    "Glow",
+    "CC Vignette"
+   ],
+   "scripting": "All 1d sliders, no dropdowns. Opacity and Source Depth are 0-1 fractions; Speed -30 to 30. Animates on its own. Use CC Snowfall for new builds.",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/ae/241.png",
+    "note": "Dense white snowflakes of mixed size are scattered over the whole photo, which stays visible underneath.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Time Blend",
+   "match": "CC Time Blend",
+   "category": "_Obsolete",
+   "status": "needs_input",
+   "summary": "Accumulates frames over time so anything moving leaves smeared, fading trails (an accumulating echo). The Transfer mode and Accumulation decide how bright and how long the trails are. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "motion trails",
+    "ghosting",
+    "smear",
+    "light painting",
+    "dreamy"
+   ],
+   "use_for": [
+    "light-trail smear on night traffic or rally-crowd B-roll",
+    "dreamy flashback ghosting in a documentary",
+    "streaky hit on a fast reel cut"
+   ],
+   "avoid": [
+    "still photos or locked-off shots with nothing moving show no change at all",
+    "the result depends on rendering frames in order from the layer start; partial renders or scrubbing can differ",
+    "new work: Echo or CC Wide Time are deterministic per frame",
+    "scripted aerender gave erratic output, not trails: in a 10-frame render of moving footage from the comp start, 8 frames were near-black faint ghosts (about 6-12% of normal brightness) and 2 frames were a full-brightness copy of a later source frame with white speckles"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Transfer",
+     "does": "blend mode used to accumulate frames (dropdown, 18 entries)",
+     "typical": "1 Blend (default); 2 Composite Over, 4 Screen, 5 Add"
+    },
+    {
+     "name": "Accumulation",
+     "does": "how much of the previous build-up is kept each frame = trail length",
+     "typical": "0.6-0.9"
+    },
+    {
+     "name": "Clear To",
+     "does": "what the accumulation buffer resets to (2-entry dropdown)",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {
+    "Accumulation": 0.85
+   },
+   "enum_labels": {
+    "Transfer": {
+     "1": "Blend",
+     "2": "Composite Over",
+     "3": "Composite Under",
+     "4": "Screen",
+     "5": "Add",
+     "6": "Soft Light",
+     "7": "Hard Light",
+     "8": "Lighten",
+     "9": "Darken",
+     "10": "Multiply",
+     "11": "Difference",
+     "12": "Color",
+     "13": "Overlay",
+     "14": "Luminosity",
+     "15": "(separator)",
+     "16": "Blend - Classic",
+     "17": "Composite Over - Classic",
+     "18": "Composite Under - Classic"
+    },
+    "Clear To": {
+     "1": "Transparent",
+     "2": "Current Frame"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "AE replacement: Echo (ADBE Echo) or CC Wide Time; Premiere: Echo",
+   "pairs_with": [
+    "Glow",
+    "Curves",
+    "Directional Blur"
+   ],
+   "scripting": "Transfer is a 1-based dropdown: 1 Blend (default), 2 Composite Over, 3 Composite Under, 4 Screen, 5 Add, 6 Soft Light, 7 Hard Light, 8 Lighten, 9 Darken, 10 Multiply, 11 Difference, 12 Color, 13 Overlay, 14 Luminosity, 15 a separator, 16-18 the Classic Blend / Composite Over / Composite Under. Clear To: 1 Transparent (default), 2 Current Frame. Both read from After Effects 26.0. Accumulation is 0-1. Stateful: each frame depends on the previous ones, so render from the layer's first frame; aerender of a sub-range may not match a full render. Needs motion in the clip to show anything. Verified 2026-10-04: the gallery rendered the whole 0.4 s comp (10 frames in order from the comp start, moving footage with exposure flashes) and grabbed frame 5; it was not a single-frame render. Frames 0-6 and 9 were near-black faint ghosts, frames 7 and 8 both showed source frame 8 at full brightness; no trails anywhere. Possible causes (untested): the trimmed clip's layer start is 1.5 s before the comp start so the buffer never saw the layer's first frame, or AE renders frames out of order (Multi-Frame Rendering) so the state is not carried. A demo needs a clip whose layer start equals the comp start and a full-length sequential render; do not rely on it in automated builds, use Echo instead.",
+   "verified": {
+    "verdict": "broken",
+    "frame": "pve/gallery/ae/242.png",
+    "note": "All 10 rendered frames show no trails: frame 5 (the gallery frame) is almost black (about 7% of the untouched brightness) with a faint ghost, and frames 7-8 jump to a full-brightness copy of a later source frame. This was a 10-frame sequential aerender of moving footage, so the accumulation does not work in the scripted render path as built.",
+    "rerender": false,
+    "second_opinion": "corrected: the first rewrite blamed a 'single-frame / aerender of one frame' render and asked for 'a sequence render of moving footage', but gallery.py renders the whole 0.4 s comp (10 frames, 25 fps) of moving footage and grabs 0.2 s; the full render (renders/G242.mp4) is erratic, not trail-free-black throughout. Fixed the avoid entry, scripting and note, lowered confidence to low. Agree with verdict broken and needs_input."
+   }
+  },
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "CC Time Blend FX",
+   "match": "CC Time Blend FX",
+   "category": "_Obsolete",
+   "status": "needs_input",
+   "summary": "Two-instance version of CC Time Blend: the Instance popup marks a start copy and an end copy, so only the effects placed between the two copies get accumulated into smeared motion trails. Listed in the hidden '_Obsolete' category (kept so old projects open), not in the normal Effects menu.",
+   "look": [
+    "motion trails",
+    "ghosting",
+    "smear",
+    "stylised echo"
+   ],
+   "use_for": [
+    "accumulating only a glow or colour effect into trails while the base image stays clean",
+    "keeping old templates that use the sandwich setup rendering the same"
+   ],
+   "avoid": [
+    "a single instance does little: it needs a matching start and end copy",
+    "stateful accumulation: partial renders or scrubbing can differ from a full render",
+    "new work: Echo or CC Wide Time are simpler and deterministic"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Instance",
+     "does": "marks this copy as the start or end of the sandwich (2-entry dropdown)",
+     "typical": "1 Copy on the upper instance, 2 Paste on the lower one"
+    },
+    {
+     "name": "Transfer",
+     "does": "blend mode for the accumulation (dropdown, 18 entries)",
+     "typical": "1 Blend (default); the same 18-entry list as CC Time Blend"
+    },
+    {
+     "name": "Accumulation",
+     "does": "trail length (share of previous build-up kept)",
+     "typical": "0.6-0.9"
+    },
+    {
+     "name": "Clear To",
+     "does": "what the buffer resets to (2-entry dropdown)",
+     "typical": "1 (default)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Instance": {
+     "1": "Copy",
+     "2": "Paste"
+    },
+    "Transfer": {
+     "1": "Blend",
+     "2": "Composite Over",
+     "3": "Composite Under",
+     "4": "Screen",
+     "5": "Add",
+     "6": "Soft Light",
+     "7": "Hard Light",
+     "8": "Lighten",
+     "9": "Darken",
+     "10": "Multiply",
+     "11": "Difference",
+     "12": "Color",
+     "13": "Overlay",
+     "14": "Luminosity",
+     "15": "(separator)",
+     "16": "Blend - Classic",
+     "17": "Composite Over - Classic",
+     "18": "Composite Under - Classic"
+    },
+    "Clear To": {
+     "1": "Transparent",
+     "2": "Current Frame"
+    }
+   },
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "AE replacement: Echo (ADBE Echo) or CC Wide Time; Premiere: Echo",
+   "pairs_with": [
+    "Glow",
+    "Hue/Saturation",
+    "CC Time Blend"
+   ],
+   "scripting": "Needs TWO instances on the same layer: one with Instance = 1 above the effects to smear and one with Instance = 2 below them (Instance (read from After Effects 26.0): 1 Copy, 2 Paste; the pairing is untested). A single instance (as in the gallery) is expected to show little or no change, so demo_settings are empty. Transfer: 1-based, 18 entries. Clear To: 1-based, 2 entries. Accumulation 0-1. Stateful: render from the layer start. Needs motion in the clip. Verified 2026-10-04: the single-instance gallery frame is byte-identical to the untouched AE render. A demo needs two instances (start and end) around another effect, rendered as a sequence of moving footage; note that single CC Time Blend gave erratic, trail-free output in the same 10-frame gallery aerender, so a sandwich demo may fail the same way.",
+   "verified": {
+    "verdict": "untested:needs_second_layer",
+    "frame": "pve/gallery/ae/243.png",
+    "note": "Frame is byte-identical to the untouched AE render: one instance alone does nothing; needs the two-instance sandwich and a sequence render of moving footage.",
+    "rerender": false,
+    "second_opinion": "agree: all 10 rendered frames are byte-identical to the untouched AE render, so one instance alone is identity and needs_input is right; added a pointer that CC Time Blend's own sequential render was erratic, so the two-instance demo is not guaranteed to work either.",
+    "previous": [
+     {
+      "verdict": "broken",
+      "changed": "2026-10-13",
+      "why": "the one-effect test cannot exercise it (see note)"
+     }
+    ]
+   }
+  }
+ ]
+}

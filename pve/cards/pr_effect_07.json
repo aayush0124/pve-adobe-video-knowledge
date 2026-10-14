@@ -1,0 +1,993 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "SDR Conform",
+   "match": "AE.ADBE AESDRConform",
+   "category": "Video",
+   "status": "current",
+   "summary": "Tone-maps HDR (HLG/PQ) footage down to standard dynamic range so it looks right in a Rec.709 sequence or SDR export. Brightness sets the overall SDR level, Contrast and Soft Knee shape how highlights roll off.",
+   "look": [
+    "HDR to SDR",
+    "highlight roll-off",
+    "tone mapping",
+    "normalised brightness",
+    "flattened highlights"
+   ],
+   "use_for": [
+    "Drop iPhone/Android HLG HDR clips into a Rec.709 news or reel timeline without blown, washed-out highlights",
+    "Make an SDR deliverable from an HDR documentary master",
+    "Match brightness of HDR phone clips sent by reporters to the rest of an SDR edit"
+   ],
+   "avoid": [
+    "Using it on ordinary SDR footage as a grading tool: it still runs a tone curve and can crush or lift the image unpredictably; use Lumetri instead",
+    "Stacking it on clips the sequence already tone-maps (Premiere 25+ colour management auto tone mapping, or Lumetri/Color Space Transform tone mapping): double tone-mapping looks flat and grey"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Brightness",
+     "does": "Target SDR brightness of the tone-mapped image (higher = brighter mid-tones)",
+     "typical": "10 (default) for typical HLG phone footage; 15-30 if the result looks dim"
+    },
+    {
+     "name": "Contrast",
+     "does": "Adds or removes contrast after tone mapping",
+     "typical": "0 to 20"
+    },
+    {
+     "name": "Soft Knee",
+     "does": "How gently highlights roll off into white (100 = softest knee)",
+     "typical": "60-100; lower keeps more punch but clips sooner"
+    }
+   ],
+   "demo_settings": {
+    "Brightness": 45,
+    "Contrast": 40,
+    "Soft Knee": 40
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "HDR Highlight Compression (closest; After Effects has no direct SDR Conform effect)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Video Limiter"
+   ],
+   "scripting": "Meant for HDR source clips; on an SDR test frame the demo settings (Brightness 4.5x the default, moderate contrast, harder knee) should visibly brighten the shot, but the exact look is not verified; the earlier 70/60/0 demo risked blowing the frame out, so stay at or below these values until a gallery frame confirms. Brightness range is 1-100 (not 0). Apply it before any Lumetri grade in the stack so grading happens in SDR. Confidence is medium because the effect's behaviour on SDR input was not measured in this harvest.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/065.png",
+    "note": "Whole frame lifted far brighter and warmer with the cream wall and highlights flattened toward white and contrast reduced, the tone-curve brightening the card describes (over-bright on this SDR source, as the avoid note warns).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Shape",
+   "match": "AE.ADBE Shape",
+   "category": "Graphics (Essential Graphics shape-layer component; not an Effects-panel effect)",
+   "status": "needs_input",
+   "summary": "The Shape layer inside a Premiere Graphic clip (rectangle, ellipse or pen path drawn with the shape tools). It carries the path, the fill/stroke appearance and a layer transform; applied on its own with no drawn path it shows nothing.",
+   "look": [
+    "flat shape",
+    "lower-third bar",
+    "box",
+    "callout",
+    "solid fill",
+    "outline"
+   ],
+   "use_for": [
+    "Lower-third background bars and name-strap boxes in news and explainer edits",
+    "Highlight boxes or underline bars on screenshots and documents",
+    "Animated colour bars that slide in behind titles in reels",
+    "Track-matte shapes for split screens and reveals"
+   ],
+   "avoid": [
+    "Expecting a script to draw the path: Path and Appearance are binary blobs that cannot be set from a spec",
+    "Animating Scale to 0 for build-ons without easing: looks cheap; slide Position or animate Opacity with easing instead"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Shape layer position inside the graphic (frame fractions)",
+     "typical": "[0.5, 0.85] for a lower-third bar"
+    },
+    {
+     "name": "Scale",
+     "does": "Uniform scale of the shape layer in %",
+     "typical": "100; 0-100 for a pop-on build"
+    },
+    {
+     "name": "Horizontal Scale",
+     "does": "Width-only scale when Uniform Scale is off",
+     "typical": "0 -> 100 for a bar that wipes open sideways"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Locks horizontal and vertical scale together",
+     "typical": "false when animating a bar's width only"
+    },
+    {
+     "name": "Rotation",
+     "does": "Layer rotation in degrees",
+     "typical": "0; small -3..3 for a dynamic tilted strap"
+    },
+    {
+     "name": "Opacity",
+     "does": "Layer opacity %",
+     "typical": "80-100 for straps; 50-70 for a translucent box"
+    },
+    {
+     "name": "Anchor Point",
+     "does": "Pivot for scale and rotation",
+     "typical": "left edge of the bar so it grows from the left"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Shape layer (rectangle/ellipse) in After Effects",
+   "pairs_with": [
+    "Text",
+    "Track Matte Key",
+    "Transform",
+    "Drop Shadow"
+   ],
+   "scripting": "Exists only as a component of a Graphic clip created with Premiere's shape/pen tools or a .mogrt; the path and fill (Path, Appearance) are not settable from a spec, so build the shape in a .mogrt or Graphic template and only drive the transform (Position, Scale, Horizontal Scale, Rotation, Opacity) from script. Horizontal Scale only acts when Uniform Scale is false (harvested default true), so the wipe-open recipe sets it. Left/Top/Right/Bottom and Parent Width/Height/Rotation are Responsive Design pinning internals: leave them alone. The unnamed checkbox row is internal.",
+   "recipe": {
+    "Uniform Scale": false,
+    "Horizontal Scale": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      100
+     ]
+    ],
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: status needs_input (Graphic-clip shape component with no settable path), so the gallery skipped it.",
+    "rerender": false,
+    "second_opinion": "agree: needs_input cards are excluded by gallery.py pr_gallery (status filter), no frame exists in gallery/pr/index.json; recipe values are inside the harvested ranges."
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Sharpen",
+   "match": "AE.ADBE Sharpen",
+   "category": "Blur & Sharpen",
+   "status": "current",
+   "summary": "Increases contrast at edges to make soft footage look crisper. One control: Sharpen Amount.",
+   "look": [
+    "crisp",
+    "edge contrast",
+    "detailed",
+    "harsh",
+    "halo edges"
+   ],
+   "use_for": [
+    "Rescue slightly soft archival, phone or zoomed-in news footage",
+    "Crisp up upscaled clips and screen recordings in explainers",
+    "Add bite to text-heavy B-roll after a punch-in zoom",
+    "Final light sharpening on vertical reels before export"
+   ],
+   "avoid": [
+    "High amounts on compressed or noisy footage: amplifies noise and macro-blocking",
+    "Sharpening faces hard: skin texture and halos look cheap",
+    "Sharpening before a blur or noise reduction in the same stack"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Sharpen Amount",
+     "does": "Strength of edge sharpening",
+     "typical": "10-30 subtle; 40-60 for soft archival; 100+ is a stylised over-sharpened look"
+    }
+   ],
+   "demo_settings": {
+    "Sharpen Amount": 400
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Sharpen",
+   "pairs_with": [
+    "Lumetri Color",
+    "Transform",
+    "Warp Stabilizer"
+   ],
+   "scripting": "Single numeric property 0-4000 (default 0 = no effect; the UI slider stops at 100, higher values must be typed or scripted). Put it last in the effect stack, after colour and scaling. Alternatives rather than partners: Unsharp Mask (radius/threshold control, gentler on noise) or Lumetri Color's Creative > Sharpen if Lumetri is already on the clip. The demo value 400 is deliberately strong: 1080p footage viewed as a 640-px gallery frame hides sharpening, and 150 was barely visible there (verified); real use stays under 60.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/066.png",
+    "note": "At 400 edges are visibly crisper than the reference, with bright halos on the stripes, a small star motif and fine detail (mean diff ~4/255 vs ~1 encode noise), the edge-contrast look described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Simple Text",
+   "match": "AE.ADBE PPro SimpleText",
+   "category": "Video",
+   "status": "current",
+   "summary": "Burns a single line of plain text onto the clip on a semi-transparent box, like a slate or review label. Position, size, justification and box opacity are adjustable; the text itself is typed via Edit Text in Effect Controls.",
+   "look": [
+    "plain caption",
+    "slate text",
+    "burn-in label",
+    "white text on box",
+    "utilitarian"
+   ],
+   "use_for": [
+    "Watermark-style review labels (DRAFT, FOR CLIENT REVIEW, version number) on rough cuts",
+    "Quick shot or source labels on screener copies of news packages",
+    "Temporary placeholder text while a proper title or .mogrt is being designed"
+   ],
+   "avoid": [
+    "Using it for final on-air titles or subtitles: no font, colour or animation control, looks like a test card",
+    "Expecting a script to change the words: the text row is a string property that cannot be set from a spec"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Where the text box sits (frame fractions)",
+     "typical": "[0.5, 0.88] bottom centre (default); [0.5, 0.08] for a top label"
+    },
+    {
+     "name": "Justification",
+     "does": "Text alignment (dropdown)",
+     "typical": "1 (centre)"
+    },
+    {
+     "name": "Size",
+     "does": "Text size",
+     "typical": "40-80"
+    },
+    {
+     "name": "Opacity",
+     "does": "Opacity of the background box behind the text (believed; default 40)",
+     "typical": "40-80"
+    }
+   ],
+   "demo_settings": {
+    "Position": [
+     0.5,
+     0.5
+    ],
+    "Size": 120,
+    "Opacity": 80,
+    "Justification": 1
+   },
+   "enum_labels": {
+    "Justification": {
+     "0": "Left",
+     "1": "Center",
+     "2": "Right"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Basic Text (Obsolete) or a text layer",
+   "pairs_with": [
+    "Timecode",
+    "Clip Name",
+    "Metadata & Timecode Burn-in"
+   ],
+   "scripting": "The words live in the property named a single space (\" \", default \"Default Text\"), a string the spec cannot set; the demo shows \"Default Text\". For real text use a Graphic/.mogrt and set its text via the MOGRT component instead. Justification labels are inferred from the 0..2 range and default 1 (centre); Opacity is believed to be the background box opacity (it shares the 40 default with Timecode), not the text opacity. The unnamed checkbox row is internal.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/067.png",
+    "note": "White \"Default Text\" in a large sans font on a dark translucent box centred on the frame, the slate/burn-in label described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Spherize",
+   "match": "AE.ADBE Spherize",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Bulges a circular area of the image outward as if wrapped around a sphere, like a fisheye magnifier. Radius sets the size of the bulge and Center of Sphere where it sits.",
+   "look": [
+    "bulge",
+    "fisheye",
+    "magnifier",
+    "comic distortion",
+    "warped face",
+    "lens bubble"
+   ],
+   "use_for": [
+    "Comedic big-head / bulging-face gag on a politician or speaker in satire reels",
+    "Magnifier-glass emphasis on a detail in a document or chart in explainers",
+    "Bulge punch on a beat drop in social reels",
+    "Bubble-like transition hit when keyframed up and back down"
+   ],
+   "avoid": [
+    "Using it on serious news or documentary faces: it reads as mockery",
+    "A radius larger than the subject (over ~0.5 x frame height): the whole picture balloons and stretched pixels go soft; keep the bulge on the face or detail"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Radius",
+     "does": "Radius of the bulged area in pixels (0 = off)",
+     "typical": "250-500 for a face; 600-900 for a big comic bulge on 1080p"
+    },
+    {
+     "name": "Center of Sphere",
+     "does": "Centre of the bulge (frame fractions)",
+     "typical": "the subject's face or the detail to magnify"
+    }
+   ],
+   "demo_settings": {
+    "Radius": 500,
+    "Center of Sphere": [
+     0.5,
+     0.5
+    ]
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Spherize",
+   "pairs_with": [
+    "Transform",
+    "Lens Distortion",
+    "Gaussian Blur"
+   ],
+   "scripting": "Radius is in pixels (0-2500) so scale it to the sequence size: ~0.25 x frame height is a face-sized bulge. Center of Sphere is a point in frame fractions. Keyframe Radius for a quick bulge hit; keyframe Center of Sphere to follow a moving face.",
+   "recipe": {
+    "Radius": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      550
+     ],
+     [
+      0.45,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/068.png",
+    "note": "Clear centred bulge: the centre is magnified and the figures are pushed outward and curved, a fisheye/magnifier warp.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Warp Stabilizer",
+   "match": "AE.ADBE SubspaceStabilizer",
+   "category": "Distort",
+   "status": "needs_input",
+   "summary": "Analyses camera shake in the clip and smooths or removes it, cropping and scaling (or synthesising edges) to hide the moving borders. Analysis runs automatically in the background after it is applied.",
+   "look": [
+    "steady",
+    "gimbal-smooth",
+    "locked-off",
+    "slight zoom-in",
+    "jelly wobble when it fails"
+   ],
+   "use_for": [
+    "Steady handheld phone footage from reporters, rallies and on-ground news",
+    "Turn a shaky handheld shot into a smooth, gimbal-like move for documentary B-roll",
+    "Lock off a shaky interview or press-conference shot (Result = No Motion)",
+    "Smooth drone or car-window footage in trailers and reels"
+   ],
+   "avoid": [
+    "Subspace Warp on crowds, faces or fast motion: causes wobbling, rubbery distortion; switch Method to Position, Scale, Rotation",
+    "Clips with a speed change or a size that differs from the sequence: Premiere refuses until the clip is nested",
+    "Very high Smoothness on fast pans: heavy auto-scale crops away the frame",
+    "Exporting before background analysis finishes: the blue \"Analyzing in background\" banner is burned into the render (verified in the PVE gallery); wait for analysis to complete first"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Result",
+     "does": "Smooth Motion keeps the camera move, No Motion locks the shot off",
+     "typical": "0 (Smooth Motion) for moves; 1 (No Motion) for a static tripod look"
+    },
+    {
+     "name": "Smoothness",
+     "does": "How much shake is smoothed (%), Smooth Motion only",
+     "typical": "5-15 keeps a natural handheld feel; 30-50 gimbal-like"
+    },
+    {
+     "name": "Method",
+     "does": "Motion model used for stabilization",
+     "typical": "3 (Subspace Warp) default; 1 (Position, Scale, Rotation) if people wobble"
+    },
+    {
+     "name": "Framing",
+     "does": "How moving edges are hidden",
+     "typical": "2 (Stabilize, Crop, Auto-scale) default"
+    },
+    {
+     "name": "Maximum Scale",
+     "does": "Limit for the automatic zoom-in (%)",
+     "typical": "110-120 to protect resolution"
+    },
+    {
+     "name": "Additional Scale",
+     "does": "Extra zoom applied after stabilization (%)",
+     "typical": "100-105"
+    },
+    {
+     "name": "Crop Less <-> Smooth More",
+     "does": "Trade-off between crop and smoothness when cropping",
+     "typical": "30-50"
+    },
+    {
+     "name": "Rolling Shutter Ripple",
+     "does": "Rolling-shutter correction mode",
+     "typical": "0 (Automatic Reduction); 1 (Enhanced Reduction) for jelly phone footage"
+    }
+   ],
+   "demo_settings": {
+    "Additional Scale": 130,
+    "Smoothness": 50
+   },
+   "enum_labels": {
+    "Result": {
+     "0": "Smooth Motion",
+     "1": "No Motion"
+    },
+    "Method": {
+     "0": "Position",
+     "1": "Position, Scale, Rotation",
+     "2": "Perspective",
+     "3": "Subspace Warp"
+    },
+    "Framing": {
+     "0": "Stabilize Only",
+     "1": "Stabilize, Crop",
+     "2": "Stabilize, Crop, Auto-scale",
+     "3": "Stabilize, Synthesize Edges"
+    },
+    "Rolling Shutter Ripple": {
+     "0": "Automatic Reduction",
+     "1": "Enhanced Reduction"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "yes",
+   "equivalent": "Warp Stabilizer",
+   "pairs_with": [
+    "Lumetri Color",
+    "Sharpen",
+    "Transform"
+   ],
+   "scripting": "Analysis starts by itself when the effect is applied and runs in the background; until it finishes the Program monitor shows an 'Analyzing in background' banner, so an export or frame grab must wait (AnalysisStatusCounter changes while it works; there is no reliable 'done' flag in the harvest). Changing Method or Rolling Shutter / Detailed Analysis settings re-triggers analysis; Smoothness, Framing and scale settings do not. Premiere will not stabilise a clip that has a speed/duration change or whose frame size differs from the sequence: nest it first. On a still or static frame the only visible part of the demo is the 130% Additional Scale zoom, and only after analysis. The many unnamed checkbox rows, Stabilization/Borders/Auto-scale/Advanced (group toggles) and the Left/Top/Right/Bottom synthesis crop values are internals; leave them. needs_input: the PVE gallery render exported before analysis finished, so the banner was burned in; a demo needs the renderer to wait for analysis (and shaky footage) before export.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: status needs_input (the gallery export does not wait for background analysis), so it was not rendered this pass.",
+    "rerender": false,
+    "second_opinion": "agree: not in the current gallery (needs_input); pr_v1/071.png confirms the burned-in 'Analyzing in background' banner the card cites; demo Additional Scale 130 / Smoothness 50 are inside the harvested ranges (0-10000, 0-1000)."
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Strobe Light",
+   "match": "AE.ADBE Strobe",
+   "category": "Stylize",
+   "status": "current",
+   "summary": "Flashes the clip with a solid colour (or makes it transparent) on a fixed clock: each Period starts in the strobe colour, which holds for Period minus Duration, then the picture shows for the last Duration (Duration 0.1 / Period 0.5 = a 0.4 s flash twice a second). The clock starts at the clip's start on the timeline; Random Strobe Probablity between 0 and 100 turns it into random bursts.",
+   "look": [
+    "flash",
+    "strobe",
+    "camera flashbulbs",
+    "white flash frames",
+    "club lights",
+    "flicker"
+   ],
+   "use_for": [
+    "Paparazzi / press-flash feel on red-carpet or press-conference shots",
+    "Beat-synced white or colour flashes in social reels and hype edits",
+    "Trailer-style flash frames between fast cuts",
+    "Lightning or alarm flicker in dramatic explainer recreations"
+   ],
+   "avoid": [
+    "Photosensitivity (Harding test / ITU-R BT.1702): no more than 3 flashes in any one second, and a flash to or from saturated red counts even when it is not bright. With Random Strobe Probablity 0 or 100 it flashes exactly once per Period (keep Period at 0.34 s or longer); any value in between inverts about that share of frames in random bursts (10 reached 6 flashes in one second, 50 reached 11), which cannot be held under the limit. pve.check_spec flags it.",
+    "Leaving it on a whole clip at a regular Period: looks mechanical; switch it off with a Blend With Original key or vary Period from clip to clip",
+    "Strobe Duration equal to Strobe Period (no flash at all) or a tiny Duration (a near-constant flash): the colour shows for Period minus Duration (measured)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Strobe Color",
+     "does": "Colour of the flash",
+     "typical": "#FFFFFF for camera flash; brand colour for stylised hits"
+    },
+    {
+     "name": "Blend With Original",
+     "does": "Mix of the flash with the original image (%; 100 = no visible flash)",
+     "typical": "0-40"
+    },
+    {
+     "name": "Strobe Duration (secs)",
+     "does": "Despite the name, the un-coloured gap at the END of each Period: the colour holds for Period minus Duration, then the picture shows for Duration (0.1 of a 0.5 s Period = a 0.4 s flash; Duration equal to Period draws nothing). Measured identically in After Effects and Premiere",
+     "typical": "Period minus 0.04-0.08 for 1-2 frame camera flashes (e.g. 0.46 with a 0.5 Period)"
+    },
+    {
+     "name": "Strobe Period (secs)",
+     "does": "Time from the start of one flash to the next, in clip time from the clip's start on the timeline (its in point and sequence position do not shift it)",
+     "typical": "0.34-1; match the music beat (60 / BPM)"
+    },
+    {
+     "name": "Random Strobe Probablity",
+     "does": "Share (%) of frames inverted against the Probability-0 pattern, in bursts; the same seed gives the same pattern every render. 10 inverted 11% of frames, 50 about half; 100 is the exact inverse (colour only for the last Duration of each Period, so again one flash per Period)",
+     "typical": "0 (or 100); anything in between is a random burst generator"
+    },
+    {
+     "name": "Strobe",
+     "does": "Whether the flash colours the image or makes the layer transparent",
+     "typical": "0 (colour flash)"
+    },
+    {
+     "name": "Strobe Operator",
+     "does": "Blend math between flash colour and image",
+     "typical": "0 (Copy, solid flash); an Add/Screen-type mode for a brighter glow"
+    },
+    {
+     "name": "Random Seed",
+     "does": "Varies the random pattern",
+     "typical": "any; change per clip so flashes do not repeat"
+    }
+   ],
+   "demo_settings": {
+    "Strobe Color": "#FFFFFF",
+    "Blend With Original": 50,
+    "Strobe Duration (secs)": 0.25,
+    "Strobe Period (secs)": 0.85
+   },
+   "enum_labels": {
+    "Strobe": {
+     "0": "Operates On Color Only",
+     "1": "Makes Layer Transparent"
+    }
+   },
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Strobe Light",
+   "pairs_with": [
+    "Camera Shake",
+    "Transform",
+    "Lumetri Color",
+    "Photosensitive flash rule (Harding / ITU-R BT.1702) and pve check"
+   ],
+   "scripting": "Clip-relative clock: flashes start at clip time 0, P, 2P ... whatever the clip's in point or sequence position (measured 2026-10-13, work/pve_live/strobe.json: a clip at sequence 5.6 s with in point 0.8 s flashed at clip 0, 0.5, 1.0 exactly like a clip at 0 with in point 0). Each flash lasts Period minus Duration: Duration 0.1 / Period 0.5 / Probability 0 gave 10 coloured frames then 2-3 picture frames at 25 fps, frame for frame the same as the After Effects effect (same plug-in), and Duration equal to Period drew nothing. So for an N-second flash set Duration = Period - N. Random Strobe Probablity p inverts about p% of the frames against the Probability-0 pattern in bursts, the same frames every render (10: 11% of frames, at most 6 flashes in one second; 50: 11 in one second; 100: the exact inverse, colour only for the last Duration of each Period). The demo uses Duration 0.25 / Period 0.85 with 50% blend so the gallery frame (clip time 1 s) sits ~0.15 s inside a ~0.6 s flash. The property name 'Random Strobe Probablity' is misspelt in Premiere; use it exactly. Strobe Operator 0..12 follows the After Effects list starting with Copy, Add, Subtract, Multiply, Difference...; only 0 = Copy is relied on here. Strobe Color is a colour property: pass \"#RRGGBB\". The recipe is the render-checked 'Paparazzi strobe' stack: Probability 0 with Duration 0.46 / Period 0.5, a one-frame (0.04 s) white flash at the start of each Period (rendered at 0.00 and 0.52 s), switched off by Blend With Original at 1 s. Strobe enum labels match After Effects' Strobe menu (0-based here).",
+   "recipe": {
+    "Strobe Color": "#FFFFFF",
+    "Strobe Duration (secs)": 0.46,
+    "Strobe Period (secs)": 0.5,
+    "Random Strobe Probablity": 0,
+    "Blend With Original": [
+     [
+      0,
+      0
+     ],
+     [
+      0.9,
+      0
+     ],
+     [
+      1.0,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/069.png",
+    "note": "Re-rendered with Duration 0.25 / Period 0.85: the 1.0 s sample lands in a white 50% flash (mean luminance 98 -> 176).",
+    "rerender": false,
+    "second_opinion": "lead check after re-render",
+    "edited": "2026-10-13: summary, timing, clock and Random Strobe Probablity text rewritten from the strobe measurement renders (work/pve_live/strobe.json); the demo frame verdict stands and the new text matches it"
+   },
+   "flash": {
+    "per_frame": "Random Strobe Probablity",
+    "period": "Strobe Period (secs)",
+    "duration": "Strobe Duration (secs)",
+    "quiet": {
+     "Blend With Original": 90
+    },
+    "basis": "Premiere measurements (work/pve_live/strobe.json): Probability 0 or 100 = one flash per Period (0.5 s Period: at most 2 in any second); 10 reached 6 in one second and 50 reached 11 (random bursts). Blend With Original 90+ is PVE's faint-flash cut-off, not a measurement"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Text",
+   "match": "AE.ADBE Text",
+   "category": "Graphics (Essential Graphics text-layer component; not an Effects-panel effect)",
+   "status": "needs_input",
+   "summary": "The text layer inside a Premiere Graphic clip made with the Type tool or a .mogrt: it holds the Source Text (words, font, style) and a layer transform. It cannot show anything without text authored in Essential Graphics.",
+   "look": [
+    "titles",
+    "lower third",
+    "captions",
+    "kinetic type",
+    "headline"
+   ],
+   "use_for": [
+    "Name straps and lower thirds in news packages and interviews",
+    "Headline and key-fact titles in explainers and political reels",
+    "Trailer title cards and date stamps",
+    "On-screen quotes and stats animated with Position/Scale/Opacity"
+   ],
+   "avoid": [
+    "Placing text over a speaker's face",
+    "Expecting a spec to set the words or font: Source Text is a string blob a spec cannot set",
+    "Left-aligned titles when the house style is centred"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Text layer position (frame fractions)",
+     "typical": "[0.5, 0.85] lower third; [0.5, 0.5] centred title"
+    },
+    {
+     "name": "Scale",
+     "does": "Uniform text scale %",
+     "typical": "100; 90 -> 100 for a gentle settle-in"
+    },
+    {
+     "name": "Horizontal Scale",
+     "does": "Width-only scale when Uniform Scale is off",
+     "typical": "100"
+    },
+    {
+     "name": "Uniform Scale",
+     "does": "Locks horizontal and vertical scale together",
+     "typical": "true"
+    },
+    {
+     "name": "Rotation",
+     "does": "Layer rotation in degrees",
+     "typical": "0"
+    },
+    {
+     "name": "Opacity",
+     "does": "Layer opacity %",
+     "typical": "0 -> 100 fade-in over 0.2-0.4 s"
+    },
+    {
+     "name": "Anchor Point",
+     "does": "Pivot for scale and rotation",
+     "typical": "centre of the text block"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Text layer in After Effects",
+   "pairs_with": [
+    "Shape",
+    "Track Matte Key",
+    "Drop Shadow",
+    "Transform"
+   ],
+   "scripting": "Only exists inside a Graphic clip. Create titles from a .mogrt (importMGT) and set text through its MOGRT component properties, or duplicate a template Graphic clip; the spec cannot set 'Source Text' (string). AdobeBridge already sets words on .mogrt text fields by editing the JSON value (textEditValue, fontTextRunLength, fontEditValue, fontSizeEditValue) and calling setValue (pr_build.jsx mgts 'text'); whether the same JSON edit works on a native Graphic's 'Source Text' row is not verified. Drive only the transform rows from a spec. 'start'/'end', the space-named rows and Left/Top/Right/Bottom/Parent Width/Height/Rotation are text-range and Responsive Design internals: leave them.",
+   "recipe": {
+    "Opacity": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      100
+     ]
+    ],
+    "Scale": [
+     [
+      0,
+      92
+     ],
+     [
+      0.4,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: status needs_input (Graphic-clip text component needs authored Source Text), so it was not rendered.",
+    "rerender": false,
+    "second_opinion": "agree: needs_input, skipped by the gallery, no frame; recipe Opacity 0-100 and Scale 92-100 inside harvested ranges; pr_build.jsx textEditValue path exists as the scripting note says."
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Timecode",
+   "match": "AE.ADBE PPro Timecode",
+   "category": "Video",
+   "status": "current",
+   "summary": "Burns a running timecode (or frame count / feet+frames) onto the clip on a translucent black box, optionally with a camera label. Used for review copies, not final delivery. The newer Metadata & Timecode Burn-in effect does the same with several lines (source/sequence timecode, clip or file name) and is the better choice for new work.",
+   "look": [
+    "burnt-in timecode",
+    "review copy",
+    "slate",
+    "white digits on box",
+    "technical overlay"
+   ],
+   "use_for": [
+    "Timecoded review copies of documentaries and news packages so clients can give notes by TC",
+    "Screeners for legal/compliance checks of political content",
+    "Multicam sync checks with CAM labels",
+    "Source-timecode burn-in on archival footage for logging"
+   ],
+   "avoid": [
+    "Leaving it on the final export",
+    "Applying per clip when the whole cut needs it: put it on an adjustment layer over the sequence instead",
+    "Needing sequence and source timecode or clip names together: use Metadata & Timecode Burn-in instead of stacking several Timecode/Clip Name effects"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Position",
+     "does": "Where the timecode box sits (frame fractions)",
+     "typical": "[0.5, 0.92] bottom centre; [0.5, 0.06] top"
+    },
+    {
+     "name": "Size",
+     "does": "Size of the timecode text",
+     "typical": "40-70"
+    },
+    {
+     "name": "Opacity",
+     "does": "Opacity of the black box behind the digits",
+     "typical": "40-70"
+    },
+    {
+     "name": "Format",
+     "does": "Display format (dropdown; 0 = SMPTE timecode)",
+     "typical": "0"
+    },
+    {
+     "name": "Timecode Source",
+     "does": "Which timecode is shown: clip, media or generated (dropdown)",
+     "typical": "default 1; verify label in UI"
+    },
+    {
+     "name": "Offset",
+     "does": "Frames added to the displayed timecode",
+     "typical": "0"
+    },
+    {
+     "name": "Label Text",
+     "does": "Optional label beside the timecode (dropdown)",
+     "typical": "0 (none) for review copies"
+    }
+   ],
+   "demo_settings": {
+    "Position": [
+     0.5,
+     0.5
+    ],
+    "Size": 120,
+    "Opacity": 80
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Timecode",
+   "pairs_with": [
+    "Simple Text",
+    "Clip Name",
+    "Metadata & Timecode Burn-in"
+   ],
+   "scripting": "Best applied to a full-length adjustment layer on the top track that starts at the sequence start, so clip-relative time equals sequence time. Dropdown order is not verified: Format is believed to be 0 SMPTE, 1 Frames, 2-3 Feet+Frames (35mm/16mm); Label Text 0..10 is believed to be None, Auto, CAM1-CAM9; Timecode Source 0..2 covers Clip / Media / Generate but the default 1 has not been matched to a label. Time Display 0..6 picks the frame rate; leave at default unless the burn-in disagrees with the sequence. Source Track has a broken harvested range (min above max), so no value passes the checker: leave it. The checkbox named a single space (\" \", default true) is most likely Field Symbol; it can only be addressed by that one-space name, so leave it alone.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/070.png",
+    "note": "Large white running timecode 00:00:02:00 on a translucent black box centred on the frame, the review burn-in described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Tint",
+   "match": "AE.ADBE Tint",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Maps the image's dark tones to one colour and bright tones to another, turning it into a monochrome or two-tone (duotone) image. Defaults give plain black and white.",
+   "look": [
+    "black and white",
+    "monochrome",
+    "sepia",
+    "duotone",
+    "archival",
+    "flashback"
+   ],
+   "use_for": [
+    "Quick black-and-white flashback or 'then' half of a then-vs-now comparison",
+    "Sepia/archival look for historical documentary sections",
+    "Duotone brand-colour backgrounds behind text in explainers and reels",
+    "Desaturate a background clip so a coloured graphic pops"
+   ],
+   "avoid": [
+    "Using it as a finished black-and-white grade: it is a straight luminance-to-colour map with no contrast or channel-mix control; for a graded B&W use Lumetri Color (Saturation 0 plus Curves)",
+    "Garish two-colour maps on faces"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Map White To",
+     "does": "Colour that highlights become",
+     "typical": "#FFFFFF for B&W; #F2D7A6 for sepia; brand colour for duotone"
+    },
+    {
+     "name": "Map Black To",
+     "does": "Colour that shadows become",
+     "typical": "#000000 for B&W; deep navy #14213D for a duotone (set outside the checker, see scripting)"
+    },
+    {
+     "name": "Amount to Tint",
+     "does": "Mix between original and tinted image (%)",
+     "typical": "100 for full B&W; 30-60 for a muted, desaturated look"
+    }
+   ],
+   "demo_settings": {
+    "Map White To": "#FFC060",
+    "Amount to Tint": 100
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Tint",
+   "pairs_with": [
+    "Lumetri Color",
+    "Noise",
+    "Vignette",
+    "Brightness & Contrast"
+   ],
+   "scripting": "Map White To is a colour (pass \"#RRGGBB\"). Map Black To is really a colour too, but the harvest recorded it as a number with an impossible range (min above max), so the card checker rejects every value and it stays out of demo_settings. The bridge itself does accept it: example/fx_test passed \"Map Black To\": \"#1a0033\" through setColorValue with no rejection warning (visual result not checked). So for a duotone set it directly in a build spec's pr_props as \"#RRGGBB\" and verify on a rendered frame; otherwise leave it at black. Keyframe Amount to Tint for a colour-to-B&W transition.",
+   "recipe": {
+    "Amount to Tint": [
+     [
+      0,
+      0
+     ],
+     [
+      1.0,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/071.png",
+    "note": "Image turned into a black-to-amber duotone, dark tones black and highlights warm gold, a sepia/archival look.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Track Matte Key",
+   "match": "AE.ADBE Legacy Key Track Matte",
+   "category": "Keying",
+   "status": "needs_input",
+   "summary": "Shows this clip only through the alpha or brightness of a clip on another video track (the matte), e.g. video playing inside text or a shape. Needs a matte clip on a track above.",
+   "look": [
+    "video inside text",
+    "shape reveal",
+    "cut-out",
+    "masked window",
+    "split screen"
+   ],
+   "use_for": [
+    "Footage playing inside a big headline or number in explainers and trailers",
+    "Shape-wipe reveals and split-screen windows in reels",
+    "Highlighting one region of a map or document using a shape matte",
+    "Spotlight/iris reveal on a person in documentary B-roll"
+   ],
+   "avoid": [
+    "A matte clip that is shorter than, or offset from, the fill clip: wherever the matte track is empty the fill turns fully transparent (black or whatever is on lower tracks)",
+    "Pointing 'Matte:' at the wrong track (it counts from 1 = Video 1) or leaving it on None (0 / 4294967295): the fill shows unmasked and the matte graphic still prints on top",
+    "Luma matte from busy footage: noisy, flickering edges"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Matte:",
+     "does": "Which video track supplies the matte, 1-based: 1 = Video 1, 2 = Video 2 ...; 0 and the default 4294967295 = none (the clip shows unmasked). Measured 2026-10-14 on four tracks",
+     "typical": "the number of the track holding the matte (usually the track directly above the clip)"
+    },
+    {
+     "name": "Composite Using:",
+     "does": "Use the matte's alpha (0, Matte Alpha: an opaque matte clip keeps the whole foreground) or its luminance (1, Matte Luma: white shows the clip, black hides it); measured",
+     "typical": "0 (Matte Alpha) for text/shapes; 1 (Matte Luma) for black-and-white mattes"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Composite Using:": {
+     "0": "Matte Alpha",
+     "1": "Matte Luma"
+    }
+   },
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Track Matte (layer setting) / Set Matte",
+   "pairs_with": [
+    "Text",
+    "Shape",
+    "Transform",
+    "Gaussian Blur",
+    "Crop"
+   ],
+   "scripting": "The fill clip sits on a lower track and the matte (text/graphic/shape) on a higher track over the same time range. 'Matte:' is the track number, 1-based (measured 2026-10-14 with discs on V1 and V2: Matte: 1 showed the clip through the V1 disc, 2 through the V2 disc, 4 (an empty track) hid it everywhere, 0 and the default 4294967295 applied no matte). Its harvested range (min 3294967296 above max 1e9) is an artefact of the uint32 probe: pve check ignores a range whose minimum is above its maximum, so 'Matte:' 1..N passes. The Reverse checkbox exists only as an unnamed row and cannot be addressed by name. Match name says 'Legacy', but this is the current Track Matte Key in Premiere's Keying folder and has no newer replacement in the harvested 2026 effect list. When it is set correctly, Premiere uses the matte clip only as a matte and does not print it, so do not also hide or disable the matte track (measured: the track picked as the matte is left out of the composite, even when it is the background track).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/two_track/tmk_matte_1.png",
+    "note": "Two-track render: with Matte: 1 and Composite Using: 1 the clip shows only inside the V1 disc and the lower track everywhere else; Matte: 2 moves the window to the V2 disc, Matte: 0 / default show the clip unmasked, Matte: 4 (empty track) hides it, as the card now says.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-13",
+      "why": "it needs a matte clip on another track, which the one-clip test does not build"
+     },
+     {
+      "verdict": "untested:needs_second_track",
+      "changed": "2026-10-14",
+      "why": "rendered in the live wave 3 two-track test (work/pve_live/wave3/two_track.json): a matte on another track was built",
+      "note": "No frame: status needs_input (needs a matte clip on another track), so it was not rendered.",
+      "second_opinion": "agree: needs_input (no matte track in the single-track gallery), no frame; 'Matte:' harvested range is broken (min 3294967296 > max 1e9) as the card says."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Transform",
+   "match": "AE.ADBE Geometry",
+   "merged_into": "pr_effect_08.json"
+  }
+ ]
+}

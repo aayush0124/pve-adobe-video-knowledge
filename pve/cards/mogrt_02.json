@@ -1,0 +1,1117 @@
+{
+ "cards": [
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Credits",
+   "match": null,
+   "category": "Credits",
+   "status": "current",
+   "summary": "A static movie-poster billing block: seven centred rows of white Bebas Neue caps (large names, small connective words such as 'presents', 'music by') in the lower ~40% of frame (y about 0.6-0.93); the rows slide in one after another with motion blur, hold, then fade.",
+   "look": [
+    "billing block",
+    "condensed caps",
+    "white type",
+    "movie poster",
+    "centred",
+    "bold"
+   ],
+   "use_for": [
+    "end credit card for a documentary or short film",
+    "closing billing block on a trailer or film promo",
+    "crew/credits slide at the end of an explainer episode",
+    "mock 'film credits' gag in a satire reel"
+   ],
+   "avoid": [
+    "It is one static block, not a scrolling roll: long crew lists need several clips",
+    "The large-name / small-word hierarchy is per-character style runs (size) inside each row: replacing textEditValue with one run (fontTextRunLength=[len]) flattens the row to its first run's size",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Credits",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 7 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2, TextLayer#3, TextLayer#4, TextLayer#5, TextLayer#6, TextLayer#7). Defaults: TextLayer = \"COMPANY PRESENTS\"; TextLayer#2 = \"IN ASSOCIATION WITH PARTNER COMPANY AND ANOTHER PARTNER COMPANY\"; TextLayer#3 = \"“FILM TITLE” A FILM BY DIRECTOR NAME AND ANOTHER DIRECTOR\"; TextLayer#4 = \"FEATURING ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR AND ACTOR\"; TextLayer#5 = \"MUSIC BY MUSICIAN COSTUME DESIGNER COSTUMES CO-PRODUCER CO-PRODUCER EDITED BY EDITOR, A.C....\"; TextLayer#6 = \"DIRECTOR OF PHOTOGRAPHY D.O.P., A.S.C.  EXECUTIVE PRODUCERS PRODUCER PRODUCER PRODUCER VIS...\"; TextLayer#7 = \"STORY BY WRITER SCREENPLAY BY WRITER AND WRITER PRODUCED BY PRODUCER DIRECTED BY DIRECTOR \". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch). Each field is one credit row; the large-name/small-word hierarchy lives in style runs, so a plain replace flattens it."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Credits",
+   "match": null,
+   "category": "Credits",
+   "status": "current",
+   "summary": "A centred billing block in white Roboto Slab Bold (one weight: names large, connective words small), seven rows from 'company presents' to 'directed by' in the lower third of frame (y about 0.7-0.92); rows fade in one after another, hold, fade out.",
+   "look": [
+    "slab serif",
+    "billing block",
+    "white type",
+    "centred",
+    "understated",
+    "classic"
+   ],
+   "use_for": [
+    "end credits for a documentary",
+    "credits card on a channel short film",
+    "sober closing credits for an institutional/government film",
+    "contributor credits at the end of a long explainer"
+   ],
+   "avoid": [
+    "Small type: barely legible on phones",
+    "The large-name / small-word hierarchy is per-character style runs (size) inside each row: replacing textEditValue with one run (fontTextRunLength=[len]) flattens the row to its first run's size",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Credits",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.088 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Roboto Slab (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 7 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2, TextLayer#3, TextLayer#4, TextLayer#5, TextLayer#6, TextLayer#7). Defaults: TextLayer = \"COMPANY PRESENTS\"; TextLayer#2 = \"IN ASSOCIATION WITH PARTNER COMPANY AND ANOTHER PARTNER COMPANY\"; TextLayer#3 = \"“FILM TITLE” A FILM BY DIRECTOR NAME AND ANOTHER DIRECTOR\"; TextLayer#4 = \"FEATURING ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR AND ACTOR\"; TextLayer#5 = \"MUSIC BY MUSICIAN COSTUME DESIGNER COSTUMES CO-PRODUCER CO-PRODUCER EDITED BY EDITOR, A.C....\"; TextLayer#6 = \"DIRECTOR OF PHOTOGRAPHY D.O.P., A.S.C.  EXECUTIVE PRODUCERS PRODUCER PRODUCER PRODUCER VIS...\"; TextLayer#7 = \"STORY BY WRITER SCREENPLAY BY WRITER AND WRITER PRODUCED BY PRODUCER DIRECTED BY DIRECTOR \". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch). Each field is one credit row; the large-name/small-word hierarchy lives in style runs, so a plain replace flattens it."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Credits",
+   "match": null,
+   "category": "Credits",
+   "status": "current",
+   "summary": "A centred billing block in small white Lato Regular (names larger than connective words), seven rows in the lower third of frame (y about 0.7-0.9); it builds in through a pixel-block digital glitch over ~0.6 s, holds clean, then breaks up into blocks at the end.",
+   "look": [
+    "small sans",
+    "digital glitch build",
+    "billing block",
+    "white type",
+    "centred",
+    "understated"
+   ],
+   "use_for": [
+    "closing credits on a cinematic documentary",
+    "trailer end card with crew names",
+    "festival short-film credits",
+    "premium portfolio piece credits"
+   ],
+   "avoid": [
+    "Small regular-weight type: busy or bright footage swallows it and it is hard to read on phones; use over black or a dark plate",
+    "The large-name / small-word hierarchy is per-character style runs (size) inside each row: replacing textEditValue with one run (fontTextRunLength=[len]) flattens the row to its first run's size",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Credits",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; pixel-block glitch build-in over the first ~0.6 s, pixel break-up over the last ~0.5 s. Fonts: Lato Regular (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 7 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2, TextLayer#3, TextLayer#4, TextLayer#5, TextLayer#6, TextLayer#7). Defaults: TextLayer = \"COMPANY PRESENTS\"; TextLayer#2 = \"IN ASSOCIATION WITH PARTNER COMPANY AND ANOTHER PARTNER COMPANY\"; TextLayer#3 = \"“FILM TITLE” A FILM BY DIRECTOR NAME AND ANOTHER DIRECTOR\"; TextLayer#4 = \"FEATURING ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR AND ACTOR\"; TextLayer#5 = \"MUSIC BY MUSICIAN COSTUME DESIGNER COSTUMES CO-PRODUCER CO-PRODUCER EDITED BY EDITOR, A.C....\"; TextLayer#6 = \"DIRECTOR OF PHOTOGRAPHY D.O.P., A.S.C.  EXECUTIVE PRODUCERS PRODUCER PRODUCER PRODUCER VIS...\"; TextLayer#7 = \"STORY BY WRITER SCREENPLAY BY WRITER AND WRITER PRODUCED BY PRODUCER DIRECTED BY DIRECTOR \". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch). Each field is one credit row; the large-name/small-word hierarchy lives in style runs, so a plain replace flattens it."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Credits",
+   "match": null,
+   "category": "Credits",
+   "status": "current",
+   "summary": "A left-aligned billing block in cyan (about #1194AA) League Gothic condensed caps in the lower left of frame (x 0.08-0.94, y 0.57-0.91); the seven rows build in one after another, hold, then fade.",
+   "look": [
+    "cyan",
+    "condensed gothic",
+    "left-aligned",
+    "tech",
+    "billing block"
+   ],
+   "use_for": [
+    "credits on an AI/tech explainer channel",
+    "end card of a YouTube documentary with a tech brand colour",
+    "team/credits slide for a product or channel promo"
+   ],
+   "avoid": [
+    "Cyan is baked in (no colour param): clashes with saffron/green political branding",
+    "The large-name / small-word hierarchy is per-character style runs (size) inside each row: replacing textEditValue with one run (fontTextRunLength=[len]) flattens the row to its first run's size",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Credits",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: League Gothic (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 7 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2, TextLayer#3, TextLayer#4, TextLayer#5, TextLayer#6, TextLayer#7). Defaults: TextLayer = \"COMPANY PRESENTS\"; TextLayer#2 = \"IN ASSOCIATION WITH PARTNER COMPANY AND ANOTHER PARTNER COMPANY\"; TextLayer#3 = \"“FILM TITLE” A FILM BY DIRECTOR NAME AND ANOTHER DIRECTOR\"; TextLayer#4 = \"FEATURING ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR ACTOR AND ACTOR\"; TextLayer#5 = \"MUSIC BY MUSICIAN COSTUME DESIGNER COSTUMES CO-PRODUCER CO-PRODUCER EDITED BY EDITOR, A.C....\"; TextLayer#6 = \"DIRECTOR OF PHOTOGRAPHY D.O.P., A.S.C.  EXECUTIVE PRODUCERS PRODUCER PRODUCER PRODUCER VIS...\"; TextLayer#7 = \"STORY BY WRITER SCREENPLAY BY WRITER AND WRITER PRODUCED BY PRODUCER DIRECTED BY DIRECTOR \". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch). Each field is one credit row; the large-name/small-word hierarchy lives in style runs, so a plain replace flattens it."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Coming Up Next",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "'COMING UP NEXT' in italic Lato (light 'coming up', heavy 'NEXT') at the top left, building in through a blocky glitch and glitching out in the last ~0.2 s.",
+   "look": [
+    "italic sans",
+    "glitch-in",
+    "minimal",
+    "top-left bug",
+    "white type"
+   ],
+   "use_for": [
+    "tease the next segment before a break in a news bulletin",
+    "chapter tease in a YouTube explainer",
+    "'next story' bumper inside a news compilation reel"
+   ],
+   "avoid": [
+    "Only one short field: no room for the topic, pair it with a title or thumbnail",
+    "Mixed weights/outlines inside one field are style runs: replacing textEditValue with one run (fontTextRunLength=[len]) flattens it to the first run's style",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; blur/glitch slide-in over ~0.3-0.5 s, glitch-out in the last ~0.2 s. Fonts: Lato (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"COMING UP NEXT\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Live Overlay",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A small letter-spaced white 'LIVE' in Lato near the top right of frame, with the Angled family's blocky glitch-in and short glitch-out.",
+   "look": [
+    "minimal",
+    "white type",
+    "live bug",
+    "letter-spaced",
+    "clean"
+   ],
+   "use_for": [
+    "flag live feed footage in a news package",
+    "live press-conference or rally footage",
+    "live-stream excerpt in a social reel"
+   ],
+   "avoid": [
+    "Plain white with no red badge or dot: reads weaker than a broadcast LIVE bug",
+    "Never on archive or recorded footage (misleading)",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; blur/glitch slide-in over ~0.3-0.5 s, glitch-out in the last ~0.2 s. Fonts: Lato (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"LIVE\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Coming Up",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "'COMING UP NEXT' in white Bebas Neue caps inside a thin underline/box, with 'NEXT' in an outlined/hatched style, top left; pops in and fades out.",
+   "look": [
+    "condensed caps",
+    "outlined word",
+    "boxed",
+    "bold",
+    "white type",
+    "top-left bug"
+   ],
+   "use_for": [
+    "segment tease before a break in a news show",
+    "'next' bumper in a multi-story reel",
+    "chapter tease in a long explainer"
+   ],
+   "avoid": [
+    "Mixed weights/outlines inside one field are style runs: replacing textEditValue with one run (fontTextRunLength=[len]) flattens it to the first run's style",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 4.963 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"COMING UP NEXT\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Live Overlay",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A small boxed 'LIVE' in white Bebas Neue caps with an outlined treatment at the top right of frame; pops in and fades out.",
+   "look": [
+    "condensed caps",
+    "boxed",
+    "live bug",
+    "white type",
+    "bold"
+   ],
+   "use_for": [
+    "mark live footage in news packages",
+    "live press conference / rally feed",
+    "live-stream clip in a reel"
+   ],
+   "avoid": [
+    "No red badge: weak compared with broadcast LIVE bugs",
+    "Never on recorded footage",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 4.963 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"LIVE\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Tap to Hear",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A boxed white Bebas Neue 'TAP FOR SOUND' prompt at the bottom centre of frame (x 0.36-0.64, y 0.77-0.87) that pops in, holds and fades: a call to unmute for muted-autoplay feeds.",
+   "look": [
+    "condensed caps",
+    "boxed",
+    "social prompt",
+    "white type",
+    "call to action"
+   ],
+   "use_for": [
+    "first 2-3 s of an Instagram/Facebook reel whose audio matters (speech, quote, VO)",
+    "social cut of a speech or interview clip",
+    "muted-autoplay teaser of a documentary"
+   ],
+   "avoid": [
+    "Pointless on YouTube long-form or TV output",
+    "Bottom-centre placement sits exactly where burned-in captions/subtitles go; and it is authored for 16:9, so in a 1080x1920 reel sequence check framing",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 4.963 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"TAP FOR SOUND\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Coming Up Next",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A navy-blue gradient bar that wipes in from the left edge at the top of frame carrying 'Coming Up Next...' in white Roboto Slab; fades out at the end.",
+   "look": [
+    "navy bar",
+    "gradient",
+    "slab serif",
+    "broadcast",
+    "corporate",
+    "top-left"
+   ],
+   "use_for": [
+    "break tease in a traditional news bulletin",
+    "'next' bumper for a Doordarshan-style or institutional programme",
+    "segment tease in a long-form explainer"
+   ],
+   "avoid": [
+    "Navy colour is baked in; can look dated/corporate on youth social reels",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Roboto Slab (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Coming Up Next...\". The 1 \"LayerName\" entry is a hidden:true internal control (value \"Shape\") with nothing to edit; never set it. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Live Overlay",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A navy-blue gradient bar at the top right with 'LIVE' in light white Roboto Slab; wipes in, holds and fades.",
+   "look": [
+    "navy bar",
+    "gradient",
+    "slab serif",
+    "live bug",
+    "broadcast",
+    "corporate"
+   ],
+   "use_for": [
+    "live tag on press-conference or parliament feed footage",
+    "live segment marker in a traditional news show",
+    "live feed inside a documentary"
+   ],
+   "avoid": [
+    "Never on recorded footage",
+    "Thin light weight, no red: low urgency",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Roboto Slab (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"LIVE\". The 1 \"LayerName\" entry is a hidden:true internal control (value \"Shape\") with nothing to edit; never set it. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Coming Up",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "'Coming up next...' in small-caps Trajan Pro at the top left, revealed by a blue horizontal light streak and fading out slowly.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "elegant",
+    "serif"
+   ],
+   "use_for": [
+    "chapter tease in a cinematic documentary",
+    "trailer-style 'coming up' card",
+    "premium explainer segment tease"
+   ],
+   "avoid": [
+    "Trajan reads as 'movie trailer' cliche; too ornate for hard news",
+    "Thin small type gets lost over busy footage",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 4.922 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Coming up next...\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Live Overlay",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A small-caps Trajan 'LIVE' near the top right with the Film family's blue light-streak reveal and soft fade.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "live bug"
+   ],
+   "use_for": [
+    "live tag in a cinematic documentary that cuts to a live feed",
+    "stylised live marker in a trailer-like promo"
+   ],
+   "avoid": [
+    "Too elegant/quiet for breaking news",
+    "Never on recorded footage",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 4.922 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"LIVE\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Coming Up Next",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "Cyan condensed League Gothic 'Coming Up Next' framed by square brackets at the top left; the brackets open out to reveal the text, and it fades at the end.",
+   "look": [
+    "cyan",
+    "brackets",
+    "condensed gothic",
+    "tech",
+    "HUD",
+    "top-left"
+   ],
+   "use_for": [
+    "segment tease on an AI/tech explainer channel",
+    "'next' bumper in a tech news reel",
+    "chapter tease in a YouTube tutorial"
+   ],
+   "avoid": [
+    "Cyan baked in: off-brand for saffron/green political pages",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "LayerName",
+    "LayerName",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: League Gothic (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Coming Up Next\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Clip\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Live Overlay",
+   "match": null,
+   "category": "Graphic Overlays",
+   "status": "current",
+   "summary": "A cyan '[LIVE]' in condensed League Gothic with square brackets at the top right; brackets open, hold, fade.",
+   "look": [
+    "cyan",
+    "brackets",
+    "condensed gothic",
+    "tech",
+    "live bug",
+    "HUD"
+   ],
+   "use_for": [
+    "live tag on a tech event or launch stream excerpt",
+    "live marker in an AI-news reel"
+   ],
+   "avoid": [
+    "Never on recorded footage",
+    "Cyan, no red: low urgency for breaking news",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Graphic Overlays",
+   "params": [
+    "LayerName",
+    "LayerName",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: League Gothic (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"LIVE\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Clip\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Image Caption",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "'IMAGE CAPTION HERE' in italic Lato with mixed bold/light words at the bottom centre of frame (x 0.29-0.71, y 0.82-0.86), building in through a blocky glitch and leaving with a glitch over the last ~0.45 s.",
+   "look": [
+    "italic sans",
+    "mixed weights",
+    "caption",
+    "minimal",
+    "glitch in/out",
+    "bottom-centre"
+   ],
+   "use_for": [
+    "source/credit line on a photo or archive still",
+    "location or date caption on B-roll",
+    "photo credit in a news package"
+   ],
+   "avoid": [
+    "Mixed weights/outlines inside one field are style runs: replacing textEditValue with one run (fontTextRunLength=[len]) flattens it to the first run's style",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing",
+    "Bottom-centre position collides with burned-in subtitles; move it with the clip's Motion > Position if captions are on"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; blocky glitch-in over ~0.4-0.6 s, glitch-out over the last ~0.45 s. Fonts: Lato (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"IMAGE CAPTION HERE\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Lower Third",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A one-line name super in italic Lato, bold name then light title ('INSERT NAME TITLE'), at the bottom centre of frame (x 0.31-0.69, y 0.85-0.9); blocky glitch in, glitch out over the last ~0.45 s.",
+   "look": [
+    "italic sans",
+    "lower third",
+    "mixed weights",
+    "minimal",
+    "white type",
+    "glitch-out"
+   ],
+   "use_for": [
+    "name/designation super for an interview bite",
+    "speaker ID in a rally or press-conference clip",
+    "expert ID in an explainer"
+   ],
+   "avoid": [
+    "Name and title share ONE field: the bold/light split is a style run that a plain text replace flattens",
+    "White text only, no backing plate: needs darker footage behind it",
+    "Bottom-centre position collides with burned-in subtitles; it is not a left-side super",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; blocky glitch-in over ~0.4-0.6 s, glitch-out over the last ~0.45 s. Fonts: Lato (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"INSERT NAME TITLE\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Image Caption",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "'IMAGE CAPTION HERE' in white Bebas Neue caps between thin rules above and below, last word outlined, at the bottom centre of frame (x 0.37-0.62, y 0.83-0.92); pops in and fades.",
+   "look": [
+    "condensed caps",
+    "boxed",
+    "outlined word",
+    "caption",
+    "white type"
+   ],
+   "use_for": [
+    "source credit on photos or archive clips",
+    "place/date tag on B-roll",
+    "'FILE PHOTO' / 'REPRESENTATIONAL' tag in news"
+   ],
+   "avoid": [
+    "Mixed weights/outlines inside one field are style runs: replacing textEditValue with one run (fontTextRunLength=[len]) flattens it to the first run's style",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing",
+    "Bottom-centre position collides with burned-in subtitles; move it with the clip's Motion > Position if captions are on"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 4.963 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"IMAGE CAPTION HERE\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Lower Third Left",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A one-line Bebas Neue name super at the lower left: white caps between a thin rule above and a thin rule below (no box sides), all three words solid white in the 2026-10-13 render (no outlined word); scales up from its left edge with a slight overshoot (settles 0.52 s), then shrinks toward the left while fading.",
+   "look": [
+    "condensed caps",
+    "lower third",
+    "bold",
+    "white type",
+    "thin rules"
+   ],
+   "use_for": [
+    "speaker ID in an interview or vox-pop",
+    "politician name super in a news reel",
+    "host ID in an explainer"
+   ],
+   "avoid": [
+    "Name and title share ONE field (the 2026-10-13 render showed all three words solid white, no outlined word)",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing",
+    "Scripted text: this template is Premiere-authored, so pr_build cannot set its text or font ('no editable parameters'); measured 2026-10-13, both the Latin and the Devanagari run showed its own default Latin text"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and shrinks and fades out in about 0.16 s at the very end (measured 2026-10-13: out from 4.76 s, gone after 4.88 s). Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail. Measured 2026-10-13 (5 s slot, clip kept at its native 5.005 s, 25 fps): visible from 0.04 s, in settles 0.52 s (overshoot peak about 0.40 s), out from 4.76 s, gone after 4.88 s; Devanagari identical (same default text).",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"INSERT NAME TITLE\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch). Devanagari run 2026-10-13: No Devanagari could render because this Premiere-authored graphic ignores scripted text, so both runs show the same Latin placeholder with identical timing.",
+   "verified": {
+    "verdict": "untested:needs_setup",
+    "frame": "pve/gallery/mogrts/021_lat_template_b.png",
+    "note": "Its own 'INSERT NAME TITLE' in white Bebas caps sits between a thin rule above and below (no box sides) with all three words solid white and none outlined, scaling up from its left edge with a slight overshoot and shrinking while it fades on the way out.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 template sample (rendered 2026-10-13)"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Bold Lower Third Right",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "The right-side twin of Bold Lower Third Left: boxed white Bebas Neue caps ('YOUR NAME HERE', last word outlined) at the lower right.",
+   "look": [
+    "condensed caps",
+    "lower third",
+    "boxed",
+    "outlined word",
+    "right-aligned",
+    "white type"
+   ],
+   "use_for": [
+    "speaker ID when the subject sits frame-left",
+    "second speaker in a two-person debate cut",
+    "right-side name super in an interview"
+   ],
+   "avoid": [
+    "Name and title share ONE field; the outlined last word is a style run that a plain replace flattens",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "LayerName",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Bebas Neue (installed locally). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Your Name here\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Image Caption",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A navy-blue gradient bar wiping in from the left edge at the lower left with 'Image Caption' in light white Roboto Slab; fades out.",
+   "look": [
+    "navy bar",
+    "gradient",
+    "slab serif",
+    "caption",
+    "broadcast",
+    "corporate"
+   ],
+   "use_for": [
+    "photo/archive source credit in a traditional news package",
+    "location caption in an institutional documentary",
+    "'file footage' tag"
+   ],
+   "avoid": [
+    "Navy baked in; dated look on youth social reels",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Roboto Slab (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Image Caption\". The 1 \"LayerName\" entry is a hidden:true internal control (value \"Shape\") with nothing to edit; never set it. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Lower Third One Line",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A navy-blue gradient bar from the left edge with a bold white Roboto Slab name ('Insert Name Here') at the lower left; wipes in, fades out.",
+   "look": [
+    "navy bar",
+    "gradient",
+    "slab serif",
+    "lower third",
+    "broadcast",
+    "corporate"
+   ],
+   "use_for": [
+    "name super in a traditional news bulletin",
+    "official/minister ID in an institutional film",
+    "speaker ID in an explainer"
+   ],
+   "avoid": [
+    "Navy baked in; reads TV-corporate, not social",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Roboto Slab (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Insert Name Here\". The 1 \"LayerName\" entry is a hidden:true internal control (value \"Shape\") with nothing to edit; never set it. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Classic Lower Third Two Lines",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A navy-blue gradient bar with a bold white Roboto Slab name over a small light caps title line ('ADD TITLE HERE') at the lower left; wipes in, fades out.",
+   "look": [
+    "navy bar",
+    "gradient",
+    "slab serif",
+    "two-line lower third",
+    "broadcast",
+    "corporate"
+   ],
+   "use_for": [
+    "name + designation super for ministers, officials, experts",
+    "interview ID in a documentary",
+    "reporter sign-off ID"
+   ],
+   "avoid": [
+    "Navy baked in; reads TV-corporate, not social",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer",
+    "TextLayer",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: Roboto Slab (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 2 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2). Defaults: TextLayer = \"Insert Name Here\"; TextLayer#2 = \"ADD TITLE HERE\". The 1 \"LayerName\" entry is a hidden:true internal control (value \"Shape\") with nothing to edit; never set it. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Caption",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "'Image Caption Here' in Trajan Pro 3 (caps/small caps) at the bottom centre of frame (x 0.34-0.66, y 0.84-0.88), revealed by a blue light streak and fading slowly.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "caption",
+    "elegant"
+   ],
+   "use_for": [
+    "place/date caption in a cinematic documentary",
+    "archive photo credit in a historical film",
+    "chapter location card"
+   ],
+   "avoid": [
+    "Thin small type disappears over bright or busy footage",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing",
+    "Bottom-centre position collides with burned-in subtitles; move it with the clip's Motion > Position if captions are on"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 4.963 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Image Caption Here\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Lower Third Left Two Line",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A two-line Trajan Pro small-caps super (name over title) at the lower left, revealed by a blue horizontal light streak, holding, then fading.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "two-line lower third",
+    "elegant"
+   ],
+   "use_for": [
+    "interviewee name + designation in a cinematic documentary",
+    "historian/expert ID in a historical explainer",
+    "character ID in a trailer"
+   ],
+   "avoid": [
+    "Trajan/serif reads as film, too ornate for hard news",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 2 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2). Defaults: TextLayer = \"Insert Name Here\"; TextLayer#2 = \"Insert Title Here\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Lower Third Left",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A one-line Trajan Pro small-caps name at the lower left with the Film family's blue light-streak reveal and slow fade.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "lower third",
+    "elegant"
+   ],
+   "use_for": [
+    "subject name in a cinematic documentary",
+    "place or character name in a trailer",
+    "understated speaker ID"
+   ],
+   "avoid": [
+    "Small thin type: hard to read on phones",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Insert Name Here\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Lower Third Right Two Line",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "Right-aligned two-line Trajan Pro small-caps super (name over title) at the lower right, with blue light-streak reveal and slow fade.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "two-line lower third",
+    "right-aligned"
+   ],
+   "use_for": [
+    "name + designation when the subject sits frame-left",
+    "second interviewee in a cinematic doc",
+    "trailer character ID"
+   ],
+   "avoid": [
+    "Trajan/serif reads as film, too ornate for hard news",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 2 text fields, all with the display name \"TextLayer\", so address them by order (TextLayer, TextLayer#2). Defaults: TextLayer = \"Insert Name Here\"; TextLayer#2 = \"Insert Title Here\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Film Lower Third Right",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "A right-aligned one-line Trajan Pro small-caps name at the lower right with blue light-streak reveal and slow fade.",
+   "look": [
+    "Trajan",
+    "small caps",
+    "light streak",
+    "cinematic",
+    "lower third",
+    "right-aligned"
+   ],
+   "use_for": [
+    "subject name when the subject sits frame-left",
+    "place name in a cinematic documentary"
+   ],
+   "avoid": [
+    "Small thin type: hard to read on phones",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; a blue light streak reveals the text in the first ~0.5-0.8 s and it fades over the last ~1 s. Fonts: Trajan Pro 3 (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Insert Name Here\". Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Modern Image Caption",
+   "match": null,
+   "category": "Lower Thirds",
+   "status": "current",
+   "summary": "Cyan League Gothic 'Image Caption Here' at the bottom centre of frame (x 0.39-0.61, y 0.85-0.91), revealed by square brackets that spread open and vanish; fades at the end.",
+   "look": [
+    "cyan",
+    "brackets",
+    "condensed gothic",
+    "tech",
+    "caption",
+    "HUD"
+   ],
+   "use_for": [
+    "screenshot/source caption in an AI-tool explainer",
+    "tool or model name tag on screen recordings",
+    "photo credit in a tech news reel"
+   ],
+   "avoid": [
+    "Cyan baked in: off-brand for political pages",
+    "Hindi/Devanagari text: the font is Latin-only and font editing is locked (capPropFontEdit false), so Devanagari falls back or shows boxes; use an AE-authored/house template for Hindi",
+    "Authored for 1920x1080 at fixed pixel positions: in a 1080x1920 reel sequence corner/edge elements can land off-frame or under the app UI; check framing",
+    "Bottom-centre position collides with burned-in subtitles; move it with the clip's Motion > Position if captions are on"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Lower Thirds",
+   "params": [
+    "LayerName",
+    "LayerName",
+    "TextLayer"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, transparent background; animates in over the first ~0.3-0.5 s and fades out over the last ~0.3-0.5 s. Fonts: League Gothic (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; put it on a video track above the footage (transparent background). Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Image Caption Here\". The 2 \"LayerName\" entries are hidden:true internal controls (value \"Clip\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch)."
+  },
+  {
+   "kind": "mogrt",
+   "app": "PR",
+   "name": "Angled Slate",
+   "match": null,
+   "category": "Slates",
+   "status": "current",
+   "summary": "A full-frame technical slate: colour-bar background with a skewed-in yellow info card (Project, Client, Date, Version, Duration, Frame Rate, Interlacing, Resolution, Aspect Ratio, Bit Depth, Color Profile, Contact, Notes), a logo bubble and a running timecode readout.",
+   "look": [
+    "colour bars",
+    "tech slate",
+    "yellow card",
+    "broadcast leader",
+    "full-frame"
+   ],
+   "use_for": [
+    "head slate on a client delivery master (version, client, duration)",
+    "version tag on review/approval exports",
+    "QC leader before a broadcast/channel delivery"
+   ],
+   "avoid": [
+    "Never leave in the published cut",
+    "The bars are decorative, not a calibrated SMPTE reference",
+    "Logo bubble and timecode are not exposed (hidden controls); the placeholder logo stays"
+   ],
+   "confidence": "medium",
+   "origin": "premiere_bundled",
+   "folder": "Slates",
+   "params": [
+    "TextLayer",
+    "LayerName",
+    "LayerName",
+    "LayerName"
+   ],
+   "duration_note": "Default 5.005 s at 23.976 fps, 1920x1080, full-frame opaque; the card skews/slides in over the first ~0.5 s and the timecode runs throughout. Fonts: Lato (not in Windows\\Fonts: needs Adobe Fonts auto-activation, else Premiere substitutes). The in/out animation is keyframed inside the graphic at fixed times: trimming shorter cuts the outro; lengthening past the default is unverified (Premiere graphic, no responsive-time data in definition.json), so keep it near the default or re-check the tail.",
+   "scripting": "seq.importMGT(file, String(Math.round(sec*254016000000)), vTrack, aTrack) returns the TrackItem; it is full-frame and opaque, so give it its own slot at the head of the cut. Premiere-authored template (authorApp \"ppro\", project.prgraphic): getMGTComponent() is expected to return null for these (as in the sibling Premiere-authored cards); pr_build.jsx then warns \"no editable parameters\" and `continue`s BEFORE `mt.end = ...`, so through pr_build the clip keeps its native ~5 s length and placeholder text. Text must then be reached through the clip's Text components / Source Text (unverified on v26: dump trackItem.components first; confidence on that path is low). If a component is returned, the text fields are the properties whose getValue() is JSON with textEditValue: JSON.parse, set textEditValue, setValue(JSON.stringify(o), true). 1 text field, display name \"TextLayer\". Default: TextLayer = \"Project:\\tProject Name\\rClient:\\tClient Name\\rDate:\\tDate\\rVersion:\\t1.0\\rDuration:\\t00 h ...\". The 3 \"LayerName\" entries are hidden:true internal controls (value \"Clip\"/\"Shape\") with nothing to edit; never set them. Font, font size and faux styles are not editable (fonteditinfo all false); set the length yourself with trackItem.end (outside pr_build's MGT branch). The single text field holds the whole info card: rows separated by \"\\r\", label and value by \"\\t\" (keep that format)."
+  }
+ ]
+}

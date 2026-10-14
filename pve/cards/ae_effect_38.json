@@ -1,0 +1,74 @@
+{
+ "cards": [
+  {
+   "kind": "ae_effect",
+   "app": "AE",
+   "name": "Zoom - wobble",
+   "match": "ADBE CM ZoomWobble",
+   "category": "",
+   "status": "hidden",
+   "summary": "Master control of the 'Zoom - wobbling' transition preset (Transitions - Movement): as Transition Completion goes 0 -> 100 a Transform effect scales the layer up from 0 to 100 % while its Skew, Skew Axis and Rotation unwind from Wobble Amount-based angles to 0, so the layer grows in with a sheared, swirling wobble and lands flat. Linear mapping, no elastic overshoot or bounce.",
+   "look": [
+    "zoom-in",
+    "skew wobble",
+    "shear swirl",
+    "wobbly pop-in",
+    "retro slideshow"
+   ],
+   "use_for": [
+    "wobbly pop-in of a photo card, meme or reaction image in a satire or social reel",
+    "playful entrance of a sticker, logo or emoji plate in an explainer",
+    "reverse (100 -> 0) to shrink and wobble a card out before the next beat"
+   ],
+   "avoid": [
+    "adding the control by match name and expecting motion: on its own it is only sliders and changes no pixels",
+    "serious documentary, news-of-record or condolence/obituary content: the skew wobble reads playful and cheap",
+    "using it on every cut; once per section at most",
+    "Wobble Amount above 70: Transform Skew clamps at 70, so the shear stops growing while the rotation keeps scaling"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Transition Completion",
+     "does": "0 = scale 0 (invisible), skew/rotation at full wobble; 100 = full size, unskewed, upright. Keyframe it; the default 50 freezes a half-size, skewed layer",
+     "typical": "keyframe 0 -> 100 over 0.5-0.8 s with easing (or 100 -> 0 for an exit)"
+    },
+    {
+     "name": "Wobble Amount",
+     "does": "angle in degrees: start Skew = Wobble Amount, start Skew Axis = 6 x Wobble Amount (one full 360-degree axis sweep at the default 60), start Rotation = -Wobble Amount; all unwind to 0",
+     "typical": "30-60 (60 = preset default; keep at or below 70)"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Premiere: none built in; recreate with the Transform effect (keyframe Scale 0 -> 100, Skew 60 -> 0, Skew Axis 360 -> 0, Rotation -60 -> 0). Cross Zoom is only a crude substitute",
+   "pairs_with": [
+    "Transform",
+    "Drop Shadow",
+    "CC Force Motion Blur"
+   ],
+   "scripting": "Pseudo effect (expression-control sliders defined in Support Files/PresetEffects.xml; Wobble Amount is an Angle control), not a renderer: addProperty('ADBE CM ZoomWobble') only adds the sliders and changes NO pixels. To get the look, open the comp, select ONLY the target layer, then layer.applyPreset(new File('C:/Program Files/Adobe/Adobe After Effects 2026/Support Files/Presets/Transitions - Movement/Zoom - wobbling.ffx')) (note the preset file is 'Zoom - wobbling', the control is 'Zoom - wobble'); the preset adds this control plus a Transform effect, then keyframe 'Transition Completion'. Expressions address the control by its display name ('Zoom - wobble'), so never rename the effect. Verified from the preset: Transform Scale = linear(TC, 0, 100, 0, 100); Skew = linear(TC, 0, 100, Wobble, 0); Skew Axis = linear(TC, 0, 100, Wobble * 6, 0); Rotation = linear(TC, 0, 100, -Wobble, 0). Mapping is linear, so ease the keyframes. For motion blur, untick the Transform's 'Use Composition's Shutter Angle' and set its Shutter Angle (e.g. 180).",
+   "recipe": {
+    "Transition Completion": [
+     [
+      0,
+      0
+     ],
+     [
+      0.6,
+      100
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is 'hidden' (pseudo-effect slider control that changes no pixels on its own), so it was not rendered: no entry in gallery/ae/index.json or failed.json.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

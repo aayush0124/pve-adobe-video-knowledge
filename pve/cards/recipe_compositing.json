@@ -1,0 +1,173 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "compositing",
+   "name": "Green-screen finish: key, despill, edge, then grade-match",
+   "summary": "The full order for a real green-screen plate: key the screen, clean and choke the matte edge, remove the green spill, then match the foreground's colour and level to the background plate (light wrap and grain last).",
+   "use_for": [
+    "presenter or interview shot on green into a news set or graphic background",
+    "product or object shots on green"
+   ],
+   "avoid": [
+    "despilling before the key is pulled (the keyer then sees less green)",
+    "choking hard to hide spill instead of suppressing it (fingers and hair vanish)",
+    "a perfect-looking key that ignores the plate: unmatched black level and colour give the cut-out away"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Ultra Key",
+     "pr_props": {
+      "Key Color": "#00B140",
+      "Setting": 0,
+      "Output": 0,
+      "Pedestal": 15,
+      "Choke": 5,
+      "Soften": 5,
+      "Desaturate": 30,
+      "Range": 50,
+      "Spill": 60,
+      "Luma": 50
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 0,
+      "Tint": 0,
+      "Exposure": 0,
+      "Saturation": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "Keylight 906",
+     "props": {
+      "View": 11,
+      "Screen Colour": "#00B140",
+      "Screen Gain": 105,
+      "Clip Black": 15,
+      "Clip White": 85,
+      "Screen Shrink/Grow": -1
+     }
+    },
+    {
+     "name": "ADBE KeyCleaner",
+     "props": {
+      "Additional Edge Radius": 8,
+      "Reduce Chatter": 1,
+      "Strength": 100
+     }
+    },
+    {
+     "name": "ADBE Spill2",
+     "props": {
+      "Method": 1,
+      "Suppression": 85
+     }
+    },
+    {
+     "name": "ADBE Matte Choker",
+     "props": {
+      "Geometric Softness 1": 3,
+      "Choke 1": 20,
+      "Gray Level Softness 1": 0.2
+     }
+    }
+   ],
+   "spec": {
+    "name": "greenscreen_finish",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "clips": [
+     {
+      "src": "clip_b.mp4",
+      "dur": 6,
+      "track": 1
+     },
+     {
+      "src": "greenscreen/presenter.mp4",
+      "dur": 6,
+      "track": 2,
+      "start": 0,
+      "effects": [
+       {
+        "name": "Keylight 906",
+        "pr_name": "Ultra Key",
+        "props": {
+         "View": 11,
+         "Screen Colour": "#00B140",
+         "Screen Gain": 105,
+         "Clip Black": 15,
+         "Clip White": 85,
+         "Screen Shrink/Grow": -1
+        },
+        "pr_props": {
+         "Key Color": "#00B140",
+         "Setting": 0,
+         "Output": 0,
+         "Pedestal": 15,
+         "Choke": 5,
+         "Soften": 5,
+         "Desaturate": 30,
+         "Range": 50,
+         "Spill": 60,
+         "Luma": 50
+        }
+       },
+       {
+        "name": "ADBE Spill2",
+        "pr_name": "Lumetri Color",
+        "props": {
+         "Method": 1,
+         "Suppression": 85
+        },
+        "pr_props": {
+         "Temperature": 0,
+         "Tint": 0,
+         "Exposure": 0,
+         "Saturation": 100
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "keyframes_note": "Order: (1) keyer, (2) matte clean-up (Key Cleaner, then a light Matte Choker), (3) spill suppression, (4) grade match to the background (5) light wrap and matching grain. After Effects stack: Keylight with Screen Colour sampled from the real screen (#00B140 is only nominal chroma green), Clip Black/White to solidify the matte while viewing Screen Matte (View 5), then Final Result (View 11); Key Cleaner recovers edge detail; Advanced Spill Suppressor Method 1 (Standard) after the key; Matte Choker 20 with 3 px softness is a light tighten (its default Choke 75 is heavy). Premiere: Ultra Key does key, clean-up and spill in one effect (Setting 0 = Default; then Pedestal/Choke/Soften and the Spill group), then Lumetri Color for the match (Temperature, Tint, Exposure, Saturation start neutral: set them by eye on the scopes against the plate; they are placeholders here). The spec builds the Premiere half on a placeholder plate (greenscreen/presenter.mp4) over clip_b; its AE half carries only Keylight and Advanced Spill Suppressor because one spec entry pairs one AE effect with one Premiere effect: build the full AE stack from 'after_effects'. Light wrap has no native effect: 'Light wrap (built from layers)'. Measured 2026-10-13 on the synthetic green plate (make_test_media.py: a disc drifting over #00B140): both apps key it cleanly; a real plate with hair and motion blur is still untested.",
+   "built_from": [
+    "Keylight (1.2)",
+    "Key Cleaner",
+    "Advanced Spill Suppressor",
+    "Matte Choker",
+    "Ultra Key",
+    "Lumetri Color",
+    "Compositing finish order: key, despill, edge, grade-match",
+    "Light wrap (built from layers)"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipe_specs/014_main_pr_b.png",
+    "note": "Ultra Key removes the #00B140 screen completely and the disc sits cleanly on the background plate with no green fringe; the grade match and light wrap cannot be judged on synthetic plates.",
+    "rerender": false,
+    "previous": [
+     {
+      "verdict": "not_rendered",
+      "changed": "2026-10-14",
+      "why": "first render: live wave 2 (rendered 2026-10-13)"
+     }
+    ],
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipe_specs/014_scene_aefull_ae_b.png",
+     "note": "Keylight with the full four-effect stack (and the spec's two-effect pair) keys the screen out cleanly; the disc reads a little more muted than Premiere's (mean |luma| difference 6.9-10.8).",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}

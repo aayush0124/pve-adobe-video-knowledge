@@ -1,0 +1,192 @@
+{
+ "cards": [
+  {
+   "kind": "tool",
+   "topic": "delivery",
+   "app": "both",
+   "name": "Delivery spec: YouTube upload (16:9, HD and 4K)",
+   "summary": "What to export for YouTube, per YouTube's own recommended upload settings: MP4, H.264 High profile, progressive, closed GOP of half the frame rate, 4:2:0, BT.709, AAC-LC 48 kHz; SDR bitrates 8 Mbps (1080p 24/25/30), 12 Mbps (1080p 48/50/60), 35-45 Mbps (2160p 24/25/30), 53-68 Mbps (2160p 48/50/60); stereo audio 384 kbps.",
+   "use_for": [
+    "long-form explainers and documentaries on YouTube",
+    "picking the .epr the pipeline exports with",
+    "QC of a file before upload"
+   ],
+   "how": "Premiere H.264, starting from a 'Match Source - High bitrate' style preset: Profile High; Field Order Progressive; frame rate = the sequence's (do not convert at export); Bitrate Encoding VBR 2-pass, Target Bitrate from YouTube's table (8 / 12 / 35-45 / 53-68 Mbps); Key Frame Distance = half the frame rate (15 at 30 fps) where the encoder exposes it; Audio AAC, 48 kHz, Stereo, 384 kbps; Export Color Space Rec. 709. Working defaults beyond YouTube's table: target 1.5-2x the table for grainy or text-heavy pictures (YouTube re-encodes everything, so a heavier upload only costs upload time), max bitrate about 1.5x target, and the loudness target from 'Delivery loudness targets'. Premiere: File > Export > Media (or the Export mode), Format + Preset, then the Video / Audio tabs; save the result as an .epr preset so scripts can reuse it (Sequence.exportAsMediaDirect(out, epr, workArea) or app.encoder.encodeSequence(...) to Media Encoder; PVE Export and Media Encoder cards). Verify every file: ffprobe -v error -show_entries stream=codec_name,profile,width,height,r_frame_rate,field_order,bit_rate,color_primaries,color_transfer,color_space,sample_rate,channels -of compact <file>.",
+   "scriptable": "partial",
+   "script_api": "Export through a saved .epr: Sequence.exportAsMediaDirect(outPath, eprPath, app.encoder.ENCODE_ENTIRE) or app.encoder.encodeSequence(seq, outPath, eprPath, workArea, removeOnCompletion); UXP EncoderManager.exportSequence. The .epr is XML: write one per destination and keep it in the repo's own presets, never a copied Adobe file.",
+   "limits": "YouTube lists 'recommended' settings, not limits; it also accepts other codecs (and Opus / Eclipsa audio). Two consecutive B-frames and the GOP are not exposed by every Premiere H.264 encoder (hardware encoding is limited to CBR and VBR 1-pass, per Adobe's best-practice notes seen only in search results). HDR uploads have their own table on the same page.",
+   "status": "current",
+   "sources": [
+    "https://support.google.com/youtube/answer/1722171",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/overview-of-export-settings.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "delivery",
+   "app": "both",
+   "name": "Delivery spec: vertical Reels, Shorts and TikTok (9:16)",
+   "summary": "What to export for vertical platforms: 9:16, progressive, fixed frame rate, square pixels, H.264 MP4 (or MOV), stereo AAC. Meta's Reels ads guide recommends 1440x2560, up to 15 min and 4 GB, AAC 128 kbps or more, and keeping 14% top, 35% bottom and 6% each side free of text and logos. TikTok's ad pages ask for 540x960 or larger; YouTube has no published Shorts encode or safe-zone spec.",
+   "use_for": [
+    "Instagram / Facebook Reels, YouTube Shorts and TikTok deliveries",
+    "one master export for all three",
+    "QC before posting"
+   ],
+   "how": "Working default (one file for all three): 1080x1920 (or 1440x2560 for Meta ads), the sequence's frame rate (25 or 30, constant), H.264 High, VBR 2-pass target 12-16 Mbps / max 20 (working default: the platforms re-encode, so this is headroom, not a requirement), AAC 48 kHz stereo 320 kbps (Meta's floor is 128), Rec.709. Keep text and faces inside the UI-free area: 'Platform UI safe zones (1080x1920)'. Premiere: File > Export > Media (or the Export mode), Format + Preset, then the Video / Audio tabs; save the result as an .epr preset so scripts can reuse it (Sequence.exportAsMediaDirect(out, epr, workArea) or app.encoder.encodeSequence(...) to Media Encoder; PVE Export and Media Encoder cards). Verify every file: ffprobe -v error -show_entries stream=codec_name,profile,width,height,r_frame_rate,field_order,bit_rate,color_primaries,color_transfer,color_space,sample_rate,channels -of compact <file>.",
+   "scriptable": "partial",
+   "script_api": "As for YouTube: a saved .epr per destination + Sequence.exportAsMediaDirect / app.encoder.encodeSequence; Auto Reframe (Sequence.autoReframeSequence) to make the 9:16 sequence from a 16:9 edit (PVE Auto Reframe card).",
+   "limits": "Instagram's organic upload spec page could not be read (it returned no content), so organic numbers are the ads guide's. TikTok's pages were read only through search snippets (its 'Bitrate: More than or equal to 516 kbps' has an unclear unit); no TikTok codec requirement was found. Shorts: no official Google spec found. Meta gives the safe zone in percent, not pixels.",
+   "status": "current",
+   "sources": [
+    "https://www.facebook.com/business/ads-guide/update/video/instagram-reels?locale=en_US",
+    "https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads",
+    "https://support.google.com/youtube/answer/1722171"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "delivery",
+   "app": "both",
+   "name": "Delivery spec: broadcast masters (ProRes 422 HQ, XDCAM HD422 MXF OP1a)",
+   "summary": "The two common HD broadcast file masters: Apple ProRes 422 HQ in .mov (1920x1080 target 184 Mb/s at 25p, 220 Mb/s at 29.97p) and XDCAM HD422 (MPEG-2 4:2:2P@HL, 50 Mb/s CBR) in MXF OP1a, with 24-bit 48 kHz PCM audio. The broadcaster's spec sheet always wins: field order, track layout, loudness, slate and timecode come from it.",
+   "use_for": [
+    "TV news and documentary deliveries",
+    "handing a programme to a channel's playout",
+    "choosing between a ProRes and an MXF deliverable"
+   ],
+   "how": "Premiere / Media Encoder: Format QuickTime > Video Codec Apple ProRes 422 HQ (frame size and rate = sequence, Render at Maximum Depth on for graded or graphics-heavy edits), audio Uncompressed 48 kHz 24-bit; or Format MXF OP1a > an XDCAM HD 50 preset (Media Encoder lists 'XDCAMHD 50' under MXF OP1a, and AS-10 variants). Field Order: as the channel specifies (interlaced 1080i deliveries need an interlaced sequence or a deliberate conversion; never let the export guess). Audio channel layout and loudness: 'Broadcast audio track layouts (EBU R 123)' and 'Delivery loudness targets'. Premiere: File > Export > Media (or the Export mode), Format + Preset, then the Video / Audio tabs; save the result as an .epr preset so scripts can reuse it (Sequence.exportAsMediaDirect(out, epr, workArea) or app.encoder.encodeSequence(...) to Media Encoder; PVE Export and Media Encoder cards). Verify every file: ffprobe -v error -show_entries stream=codec_name,profile,width,height,r_frame_rate,field_order,bit_rate,color_primaries,color_transfer,color_space,sample_rate,channels -of compact <file>.",
+   "scriptable": "partial",
+   "script_api": "Same export calls with a saved ProRes or MXF .epr; Media Encoder presets are per-machine files, so the pipeline should ship its own .epr rather than reference an installed preset path.",
+   "limits": "ProRes data rates are Apple's targets (actual rates vary with content). The MXF OP1a wrapper for XDCAM HD422 is stated by Autodesk's format list and implied by Adobe's export table; Sony's camera page gives the codec and 50 Mb/s but not 'OP1a'. Adobe notes some formats are only available depending on the installed apps (seen in search results only). UK-style AS-11 / DPP files have their own metadata rules not covered here.",
+   "status": "current",
+   "sources": [
+    "https://support.apple.com/en-us/102207",
+    "https://www.apple.com/final-cut-pro/docs/Apple_ProRes_White_Paper.pdf",
+    "https://pro.sony/en_AU/products/shoulder-camcorders/pdw-700",
+    "https://help.autodesk.com/cloudhelp/2025/ENU/Flame-ImportExportMedia/files/Supported-File-Formats/GUID-7E7B0809-92F9-426D-9D62-CE7D48ABD275.html",
+    "https://helpx.adobe.com/media-encoder/desktop/encoding-quick-start-and-basics/file-formats-supported-export.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "delivery",
+   "app": "both",
+   "name": "Delivery spec: mezzanine and archive masters",
+   "summary": "What to keep after delivery: a high-quality mezzanine (ProRes 422 HQ, or 4444 / 4444 XQ for graphics-heavy or keyed work) from which every platform file can be re-made, plus the project, its collected media and the audio stems. Apple's 1920x1080 targets at 29.97: 422 HQ 220, 4444 330, 4444 XQ 495 Mb/s (25p: 184, 275, 413).",
+   "use_for": [
+    "re-exporting for a new platform without re-rendering effects",
+    "archive of finished programmes",
+    "handing a master to a colourist or another editor"
+   ],
+   "how": "Working default: master = ProRes 422 HQ at the sequence's size and rate, Rec.709 tagged, stereo (or the programme's channel layout) 48 kHz 24-bit PCM; graphics or keyed composites = ProRes 4444; archive folder = master .mov + stems (dialogue / music / effects WAVs: 'Stems and split-track export') + the project collected with Project Manager / Collect Files ('Collect a project for hand-off') + fonts list. Make platform files FROM the master, not from the timeline, when the timeline is slow to render. Premiere: File > Export > Media (or the Export mode), Format + Preset, then the Video / Audio tabs; save the result as an .epr preset so scripts can reuse it (Sequence.exportAsMediaDirect(out, epr, workArea) or app.encoder.encodeSequence(...) to Media Encoder; PVE Export and Media Encoder cards). Verify every file: ffprobe -v error -show_entries stream=codec_name,profile,width,height,r_frame_rate,field_order,bit_rate,color_primaries,color_transfer,color_space,sample_rate,channels -of compact <file>.",
+   "scriptable": "partial",
+   "script_api": "Export the master with a ProRes .epr; transcode platform files with Media Encoder (app.encoder.encodeFile(in, out, epr, ...)) or ffmpeg.",
+   "limits": "Codec choice for archives is a working default (ProRes is an Apple codec; DNxHR HQX is the common Avid alternative, rates not checked here). ProRes 4444 numbers are labelled 'no alpha' in Apple's table: alpha adds to them.",
+   "status": "current",
+   "sources": [
+    "https://support.apple.com/en-us/102207",
+    "https://www.apple.com/final-cut-pro/docs/Apple_ProRes_White_Paper.pdf",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/overview-of-export-settings.html"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "delivery",
+   "app": "both",
+   "name": "Delivery spec: alpha overlays (ProRes 4444, PNG sequence)",
+   "summary": "How to deliver graphics with transparency (lower thirds, tickers, logos, keyed elements) for compositing in another edit: ProRes 4444 or 4444 XQ .mov (the only ProRes flavours that carry alpha) or a PNG sequence (RGB + alpha, lossless). H.264 and HEVC .mp4 deliveries have no usable alpha.",
+   "use_for": [
+    "overlay packs for other editors (ticker, straps, bugs)",
+    "AE graphics into a Premiere edit without Dynamic Link",
+    "sending keyed plates to a compositor"
+   ],
+   "how": "After Effects: Render Queue > Output Module: QuickTime, Apple ProRes 4444, Channels RGB + Alpha (vfx.py uses the 'High Quality with Alpha' template for scenes with 'alpha': true); or PNG Sequence, RGB + Alpha. Choose Straight or Premultiplied colour deliberately and tell the receiver (straight is the safer hand-off; premultiplied against black shows dark fringes if interpreted as straight). Premiere: export Apple ProRes 4444 with alpha (the Video tab's alpha / depth option). Check: ffprobe pix_fmt shows yuva444p10le (ProRes 4444 with alpha) or rgba (PNG).",
+   "scriptable": "yes",
+   "script_api": "AE: OutputModule.applyTemplate('High Quality with Alpha') or setSettings; Premiere: an .epr with alpha enabled",
+   "limits": "The codec inside AE's 'High Quality with Alpha' template was not read back on this install. A PNG sequence is large and needs frame-rate interpretation on import. Premiere's exact alpha checkbox label in 26.x was not verified.",
+   "status": "current",
+   "sources": [
+    "https://support.apple.com/en-us/102207",
+    "https://www.apple.com/final-cut-pro/docs/Apple_ProRes_White_Paper.pdf",
+    "https://ae-scripting.docsforadobe.dev/renderqueue/outputmodule/"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "kind": "tool",
+   "topic": "delivery",
+   "app": "both",
+   "name": "Export encoding choices: VBR 2-pass vs CBR, maximum depth and quality, field order",
+   "summary": "The export switches that matter beyond the preset: bitrate mode (CBR faster, VBR better quality per size, 2-pass more efficient than 1-pass), Render at Maximum Depth (renders at the format's highest bit depth, usually 32-bit float), Use Maximum Render Quality (helps when scaling to a different frame size), and Field Order (progressive vs interlaced fields).",
+   "use_for": [
+    "choosing between fast drafts and final masters",
+    "avoiding banding on gradients and graphics",
+    "exports that change frame size (4K source to HD, 16:9 to 9:16)"
+   ],
+   "how": "Drafts: VBR 1-pass (or hardware encoding). Finals for the web: VBR 2-pass at the destination's target bitrate ('Delivery spec' cards). Broadcast: the channel's mode (XDCAM HD422 is CBR). Turn on Render at Maximum Depth for graded, gradient-heavy or 10-bit sources, and Use Maximum Render Quality when the export size differs from the sequence or sources were scaled. Field Order: Progressive for every web destination.",
+   "scriptable": "partial",
+   "script_api": "All of these are fields inside the .epr (XML): set them once in Premiere, save the preset, and export with it from scripts.",
+   "limits": "Adobe's wording: VBR 2-pass 'lengthens encoding times but ensures greater encoding efficiency' (export settings page). Hardware encoders are limited to CBR and VBR 1-pass (Adobe best-practice page, seen only in search results).",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/overview-of-export-settings.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "delivery_color",
+   "app": "both",
+   "name": "Colour tags on export: Rec.709 colr/nclc and the QuickTime gamma shift",
+   "summary": "Why an H.264 export can look washed out or brighter on a Mac (QuickTime, Safari, some phone apps) but fine in Premiere: the file is tagged BT.709 (QuickTime 'colr' atom 'nclc' 1-1-1 / H.264 VUI 1-1-1) and macOS displays it at about gamma 1.96, Windows about 2.2, while Premiere's viewer works at broadcast 2.4. Adobe's fix is awareness and a viewer setting, not a different export.",
+   "use_for": [
+    "answering 'my export looks washed out'",
+    "checking that exports carry Rec.709 tags",
+    "repairing an untagged file without re-encoding"
+   ],
+   "how": "Premiere: Lumetri Color > Settings > Project > Viewer Gamma: '2.4 (Broadcast)', '2.2 (Web)' or '1.96 (QuickTime)' to preview how a destination will show it (Adobe: changing Viewer Gamma does not change the export). Export Color Space defaults to Rec. 709 for most presets: leave it. Check the tags: ffprobe -v error -select_streams v:0 -show_entries stream=color_primaries,color_transfer,color_space,color_range -of compact <file> -> bt709 / bt709 / bt709 / tv. Repair an untagged H.264 without re-encoding: ffmpeg -i in.mp4 -c copy -bsf:v h264_metadata=colour_primaries=1:transfer_characteristics=1:matrix_coefficients=1 out.mp4. When re-encoding with ffmpeg: -color_primaries bt709 -color_trc bt709 -colorspace bt709 (and -color_range tv).",
+   "scriptable": "partial",
+   "script_api": "No scripting API for Viewer Gamma; tags are set by the export preset (.epr) or fixed afterwards with ffmpeg.",
+   "limits": "Gamma values per OS are Adobe's statement; how each phone app or browser displays tagged video varies and was not measured here. The mov muxer's -movflags write_colr is documented as experimental (may be renamed, not for scripts). Viewer Gamma needs Color Setup 'Direct Rec. 709 (SDR)' or colour management disabled (search-result summary, not read on the page). Full vs legal range errors are a different problem: 'Full vs legal range fix'.",
+   "status": "current",
+   "sources": [
+    "https://helpx.adobe.com/ie/premiere/desktop/troubleshooting/playback-issues/premiere-exports-look-washed-out.html",
+    "https://helpx.adobe.com/premiere/desktop/render-and-export/export-files/overview-of-export-settings.html",
+    "https://developer.apple.com/documentation/quicktime-file-format/color_parameter_atom",
+    "https://ffmpeg.org/ffmpeg-codecs.html",
+    "https://ffmpeg.org/ffmpeg-formats.html",
+    "https://ffmpeg.org/ffmpeg-bitstream-filters.html"
+   ],
+   "confidence": "high"
+  },
+  {
+   "kind": "tool",
+   "topic": "safety",
+   "app": "both",
+   "name": "Photosensitive flash rule (Harding / ITU-R BT.1702) and pve check",
+   "summary": "The photosensitive epilepsy rule every delivery must meet: no more than 3 flashes in any one second where the flashing covers more than a quarter of the screen (ITU-R BT.1702-3, Ofcom). A flash is a pair of opposing brightness changes of 20 cd/m2 or more where the darker image is below 160 cd/m2; any change to or from saturated red counts; regular stripe patterns are covered too. pve.check_spec and check_scenes enforce the 3-per-second limit.",
+   "use_for": [
+    "any edit with strobes, flash transitions, flicker or fast cuts between bright and dark",
+    "music videos and hype reels",
+    "QC before a broadcast or ad delivery"
+   ],
+   "how": "Numbers (BT.1702-3 / Ofcom): flashes are acceptable when their leading edges are at least 360 ms apart at 50 Hz (9 frames at 25 fps) or 334 ms at 60 Hz; more than 5 light-dark stripe pairs is a harmful pattern when stationary over more than 40% of the screen or moving over more than 25%; flashing that lasts more than 5 s can be risky even when it complies. Web (WCAG 2.2 SC 2.3.1): a flash is a change of 10% or more of relative luminance with the darker image below 0.80, over more than a 341x256 px area at 1024x768. In PVE: cards that flash carry a 'flash' field (per_frame, period, rate, per_use, quiet, basis); pve.check_spec / check_scenes rate every such effect, preset and transition from the spec's own values and report more than pve.FLASH_LIMIT (3) flashes a second as an issue; where no rate can be computed the line starts 'check by eye' and is advisory. UK broadcast and advertising deliveries are commonly checked with a Harding FPA test (the ASA asks ads to pass one or an equivalent).",
+   "scriptable": "partial",
+   "script_api": "pve.check_spec(spec) / pve.check_scenes(scenes) -> issue lines (flash lines included); pve.FLASH_LIMIT = 3; pve.advisory(line) is true for 'check by eye' lines. Measuring a render: per-frame mean luma (ffmpeg signalstats) is a rough screen, not a BT.1702 analyser.",
+   "limits": "PVE counts flashes per effect or transition from card data; it does not analyse rendered pixels, does not add a strobe clip to a nearby flash transition (pve.py notes this), and cannot judge red flashes or patterns: the final render still needs a proper analyser (Harding FPA or equivalent) for broadcast. Ofcom's guidance cites Harding's research but does not itself require the Harding test.",
+   "status": "current",
+   "sources": [
+    "https://www.itu.int/dms_pubrec/itu-r/rec/bt/R-REC-BT.1702-3-202311-I!!PDF-E.pdf",
+    "https://www.ofcom.org.uk/siteassets/resources/documents/tv-radio-and-on-demand/broadcast-guidance/programme-guidance/broadcast-code-guidance/section-2-guidance-notes.pdf",
+    "https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold.html",
+    "https://www.asa.org.uk/news/flashing-images-in-advertising.html",
+    "pve/pve.py"
+   ],
+   "confidence": "high"
+  }
+ ]
+}

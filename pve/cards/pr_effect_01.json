@@ -1,0 +1,925 @@
+{
+ "cards": [
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Bend",
+   "match": "PR.ADBE Bend",
+   "category": "Distort",
+   "status": "obsolete",
+   "summary": "Legacy Premiere distortion that runs travelling waves through the frame horizontally and vertically, so the picture ripples and bends like a flag or a reflection in water. The waves move on their own over time, without keyframes.",
+   "look": [
+    "wavy ripple",
+    "rubbery warp",
+    "heat haze",
+    "dream wobble",
+    "water reflection"
+   ],
+   "use_for": [
+    "Dream / flashback wobble on an archive photo",
+    "Fake heat haze or underwater ripple on b-roll",
+    "Comic 'drunk' wobble on a satire reaction shot"
+   ],
+   "avoid": [
+    "Choosing it over Wave Warp or Turbulent Displace: it is CPU-only legacy code with a setup dialog, and parts of its harvest are unreliable",
+    "Strong intensity on faces looks cheap",
+    "Frame edges pull in and reveal the fill colour or transparency"
+   ],
+   "confidence": "low",
+   "params": [
+    {
+     "name": "Horizontal Intensity",
+     "does": "Height of the horizontal waves (how far pixels move)",
+     "typical": "10-30 (default 15)"
+    },
+    {
+     "name": "Horizontal Rate",
+     "does": "Speed of the horizontal waves",
+     "typical": "2-8 (default 4)"
+    },
+    {
+     "name": "Horizontal Width",
+     "does": "Wavelength of the horizontal waves",
+     "typical": "30-70 (default 50)"
+    },
+    {
+     "name": "Vertical Intensity",
+     "does": "Height of the vertical waves",
+     "typical": "10-30 (default 15)"
+    },
+    {
+     "name": "Vertical Rate",
+     "does": "Speed of the vertical waves",
+     "typical": "2-8 (default 4)"
+    },
+    {
+     "name": "Vertical Width",
+     "does": "Wavelength of the vertical waves",
+     "typical": "30-70 (default 50)"
+    }
+   ],
+   "demo_settings": {
+    "Horizontal Intensity": 25,
+    "Vertical Intensity": 25
+   },
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Wave Warp",
+   "pairs_with": [
+    "Gaussian Blur",
+    "Lumetri Color",
+    "Cross Dissolve"
+   ],
+   "scripting": "Bend is not in the Premiere 2026 Effects panel as far as can be told (Adobe's 26.0 effect lists and Distort docs do not mention it), but it is still in the QE effect list, so it can be applied by name from a script. That status is not confirmed: use Wave Warp for new edits. 'Horizontal/Vertical Frequency' and 'Horizontal/Vertical Source' have unclamped harvested ranges (+/-1e9) and are probably the setup-dialog popups (wave direction / wave type), so do not set them. 'Fill Color' is exposed as a number with a broken harvested range (min > max), so do not set it either. If you use Bend anyway, set the Intensity, Rate and Width rows only. The default 15 intensity already animates; the demo uses 25 on both axes.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/000.png",
+    "note": "Obsolete card but frame 000 was rendered: strong horizontal and vertical waves bend the whole shot into a liquid swirl, stripes and figures warped into S-curves.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Balance (RGB)",
+   "match": "PR.ADBE Color Balance",
+   "category": "Image Control",
+   "status": "current",
+   "summary": "Scales the red, green and blue channels independently to shift the overall colour cast. It is a fast, simple white-balance or tint correction.",
+   "look": [
+    "warm cast",
+    "cool cast",
+    "colour shift",
+    "white balance",
+    "tinted"
+   ],
+   "use_for": [
+    "Quickly warm up a cold archive or phone clip",
+    "Cool / blue cast for a tense or night segment in a documentary",
+    "Neutralise a green or magenta cast on mixed press footage before Lumetri",
+    "Strong colour wash for a flashback (one channel high, the others low)"
+   ],
+   "avoid": [
+    "Big pushes clip the highlights of that channel and look cheap; use Lumetri Color for real grading",
+    "It is believed to scale (gain) each channel, so pure black would stay black and a tint in lifted shadows cannot be removed: use Lumetri Color or Levels for shadow casts"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Red",
+     "does": "Red channel gain (internal units, 255 = unchanged)",
+     "typical": "230-290 subtle, 320-420 strong warm"
+    },
+    {
+     "name": "Green",
+     "does": "Green channel gain (255 = unchanged)",
+     "typical": "235-275; lower to remove a green cast"
+    },
+    {
+     "name": "Blue",
+     "does": "Blue channel gain (255 = unchanged)",
+     "typical": "200-280; lower to warm, raise to cool"
+    }
+   ],
+   "demo_settings": {
+    "Red": 400,
+    "Green": 255,
+    "Blue": 140
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Channel Mixer",
+   "pairs_with": [
+    "Lumetri Color",
+    "Levels",
+    "Brightness & Contrast",
+    "Vignette"
+   ],
+   "scripting": "These are harvested internal units: 0..510, with 255 = no change. Effect Controls shows 0-200 % with 100 as the default, so internal = UI x 2.55. That conversion is inferred from the default and the range, not tested on screen. Keep all three near 255 for corrections. Moving only one channel above 300 gives an obvious cast.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/001.png",
+    "note": "Strong warm orange cast over the whole shot (mean R 129->187, B 63->37, G unchanged), a clear channel-scaled tint.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Replace",
+   "match": "PR.ADBE Color Replace",
+   "category": "Image Control",
+   "status": "current",
+   "summary": "Replaces every pixel close to a chosen Target Color with a new Replace Color, keeping the original shading (or a flat fill with Solid Colors). Similarity sets how wide a range of shades is matched.",
+   "look": [
+    "colour swap",
+    "recolour",
+    "pop-art",
+    "surreal colour"
+   ],
+   "use_for": [
+    "Recolour a flag, banner or t-shirt to another colour for a satire beat",
+    "Swap a plain background wall colour in an explainer shot",
+    "Turn an orange sunset sky green or purple for a surreal trailer moment"
+   ],
+   "avoid": [
+    "High Similarity bleeds into skin tones and the whole frame",
+    "Noisy or compressed footage gives speckled, flickering edges; Lumetri HSL Secondary is cleaner",
+    "Recolouring real news footage can mislead viewers: only for clearly labelled satire or explainer graphics"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Target Color",
+     "does": "The colour to find",
+     "typical": "sampled from the actual frame, e.g. a flag red"
+    },
+    {
+     "name": "Replace Color",
+     "does": "The colour that replaces it",
+     "typical": "brand or contrasting colour, e.g. #00C850"
+    },
+    {
+     "name": "Similarity",
+     "does": "Tolerance: how far from Target Color a pixel can be and still be replaced",
+     "typical": "15-45 (harvested range 0..127)"
+    },
+    {
+     "name": "Solid Colors",
+     "does": "true = flat fill with no shading, false = keep the original shading",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Target Color": "#903C1A",
+    "Replace Color": "#00C850",
+    "Similarity": 40,
+    "Solid Colors": false
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Change to Color",
+   "pairs_with": [
+    "Color Pass",
+    "Lumetri Color",
+    "Track Matte Key"
+   ],
+   "scripting": "Matching is global by RGB distance. For a real job, sample Target Color from a frame of the clip: a guessed colour may match nothing. The demo Target Color #903C1A is the stripe / desk red sampled from the gallery test clip (test_a.mp4 at 2 s), so the stripes turn green; a pure red such as #C8282D barely occurs in that footage. Similarity is in harvested units 0..127, and how they map to the UI percentage is not verified. To limit the swap to one object, add a mask on the effect (masks cannot come from a spec). Colours are \"#RRGGBB\"; the harvest stores them as packed 64-bit ints.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/002.png",
+    "note": "Warm/dark tones (clothing, foreground blocks, stripes, wall shadows) are swapped to green with their shading kept while faces and the light wall stay, an obvious surreal recolour.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Gamma Correction",
+   "match": "PR.ADBE Gamma Correction",
+   "category": "Image Control",
+   "status": "current",
+   "summary": "Brightens or darkens the midtones while leaving the deepest blacks and brightest whites largely in place. It has one slider, and 10 means no change.",
+   "look": [
+    "brighter mids",
+    "darker mids",
+    "moody",
+    "washed out",
+    "exposure fix"
+   ],
+   "use_for": [
+    "Lift a dark interview or phone clip without blowing the highlights",
+    "Darken the midtones for a moody documentary reconstruction or trailer shot",
+    "Quickly match brightness between archive clips"
+   ],
+   "avoid": [
+    "Extremes (1-3 or 24-28) flatten or crush the image and look cheap",
+    "It does not fix colour casts or contrast: use Levels or Lumetri Color for those"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Gamma",
+     "does": "Midtone curve: 10 = neutral; values below 10 are believed to brighten the midtones and values above 10 to darken them",
+     "typical": "7-13 for corrections, 18-22 for a moody look"
+    }
+   ],
+   "demo_settings": {
+    "Gamma": 20
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Levels",
+   "pairs_with": [
+    "Brightness & Contrast",
+    "Color Balance (RGB)",
+    "Lumetri Color"
+   ],
+   "scripting": "Range 1..28 and default 10 come from the harvest. The direction (lower = lighter) is from memory of the Adobe docs and is not verified: check one rendered frame before relying on it. It is safe to keyframe for a slow exposure drift.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/003.png",
+    "note": "Gamma 20 darkens the midtones (mean RGB 129/102/63 -> 76/48/21) into a moody saturated brown while the brightest wall areas hold.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Extract",
+   "match": "PR.ADBE Extract",
+   "category": "Adjust",
+   "status": "current",
+   "summary": "Turns the clip into pure black and white: pixels whose brightness falls between Black Input Level and White Input Level become white and the rest become black, with Softness adding grey gradation at the boundary. The result is a stark stencil or threshold image.",
+   "look": [
+    "stark black and white",
+    "stencil",
+    "threshold",
+    "graphic",
+    "photocopy",
+    "high contrast"
+   ],
+   "use_for": [
+    "Stencil / poster treatment of a leader's photo for a title card",
+    "Graphic black-and-white background behind lower thirds or quotes",
+    "Quick luma-matte source for Track Matte Key",
+    "One- or two-frame flash frames in a trailer or meme reel"
+   ],
+   "avoid": [
+    "A narrow range with low Softness gives noisy, blotchy faces",
+    "It is not a tasteful black-and-white grade: use Black & White or Lumetri saturation 0 for that"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Black Input Level",
+     "does": "Lower brightness bound; darker pixels become black",
+     "typical": "50-100 (default 64)"
+    },
+    {
+     "name": "White Input Level",
+     "does": "Upper brightness bound; brighter pixels also become black",
+     "typical": "180-240 (default 192)"
+    },
+    {
+     "name": "Softness",
+     "does": "Grey gradation at the boundaries (0 = hard threshold)",
+     "typical": "10-40"
+    },
+    {
+     "name": "Invert",
+     "does": "Swaps the black and white result",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Black Input Level": 80,
+    "White Input Level": 220,
+    "Softness": 30,
+    "Invert": false
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Threshold",
+   "pairs_with": [
+    "Tint",
+    "Track Matte Key",
+    "Noise",
+    "Posterize"
+   ],
+   "scripting": "Do not confuse it with After Effects' 'Extract', which is a channel/luma KEY that makes pixels transparent. Premiere's Extract outputs an opaque black-and-white image. Levels are 0..255 8-bit units; keep White Input Level > Black Input Level. Add Tint after it for a two-colour (party-colour) stencil.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/004.png",
+    "note": "Shot becomes a stark black-and-white threshold stencil: light wall white, dark clothing and foreground blocks black, soft grey at the boundaries.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Color Pass",
+   "match": "PR.ADBE Color Pass",
+   "category": "Image Control",
+   "status": "current",
+   "summary": "Keeps one chosen colour (and the shades near it) and turns everything else greyscale, the classic 'colour splash' or Sin City look. Reverse does the opposite: it greys out only the chosen colour.",
+   "look": [
+    "colour splash",
+    "selective colour",
+    "sin city",
+    "isolated red",
+    "noir"
+   ],
+   "use_for": [
+    "Keep only a party flag's colour in a crowd or rally shot",
+    "Highlight a red file or object in a documentary reconstruction",
+    "Noir flashback where one key object stays in colour",
+    "Trailer 'blood red' accent beat"
+   ],
+   "avoid": [
+    "High Similarity lets skin and other colours through and the look collapses",
+    "Compressed footage makes the kept colour's edges flicker; Lumetri HSL Secondary is cleaner"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Color",
+     "does": "The colour to keep",
+     "typical": "sampled flag / object colour, e.g. #903C1A (the test clip's stripe red)"
+    },
+    {
+     "name": "Similarity",
+     "does": "How wide a range of shades around Color survives",
+     "typical": "10-25 on warm footage; at 40 most warm tones (skin, wall, foreground blocks) survived on the test clip (harvested range 0..127)"
+    },
+    {
+     "name": "Reverse",
+     "does": "true = grey out only the chosen colour and keep the rest",
+     "typical": "false"
+    }
+   ],
+   "demo_settings": {
+    "Color": "#903C1A",
+    "Similarity": 15,
+    "Reverse": false
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Leave Color",
+   "pairs_with": [
+    "Lumetri Color",
+    "Vignette",
+    "Noise",
+    "Brightness & Contrast"
+   ],
+   "scripting": "Even when the chosen colour is absent, the frame still turns grey, so the effect is always visible. Sample Color from the real clip for a clean result: the demo #903C1A is the stripe red sampled from the gallery test clip, but on this warm clip Similarity 40 kept almost everything in colour (only the lightest wall greyed), so the demo uses 15. Similarity is in harvested units 0..127, and how they map to the UI is unverified. The 'colour drains away' recipe starts at 120 (nearly everything kept, since 40 already kept most colours) and ends at the demo value 15, not 35: on the test clip 35-40 still leaves most of the frame in colour, so the drain would never land on the splash look.",
+   "recipe": {
+    "Similarity": [
+     [
+      0,
+      120
+     ],
+     [
+      1.0,
+      15
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/005.png",
+    "note": "Re-rendered at Similarity 15: the frame is greyscale except the red stripes, skin and flowers, a clear colour-splash look (mean saturation 136 -> 12).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Lens Distortion",
+   "match": "PR.ADBE Lens Distortion",
+   "category": "Distort",
+   "status": "current",
+   "summary": "Simulates or corrects lens curvature: positive Curvature bulges the image outward (convex, barrel / fisheye) and negative Curvature pinches it (concave, pincushion), with optional off-centre and prism skew. Uncovered areas become transparent or are filled with Fill Color.",
+   "look": [
+    "fisheye",
+    "barrel bulge",
+    "pincushion",
+    "warp",
+    "action-cam",
+    "lens punch"
+   ],
+   "use_for": [
+    "Remove GoPro / drone / action-cam fisheye: negative Curvature (start around -30 to -50) straightens the bowed lines",
+    "Fake fisheye bulge on a meme or reaction close-up",
+    "Warp-zoom punch transition when Curvature is keyframed across a cut",
+    "Slight curvature on screen recordings for a retro CRT look"
+   ],
+   "avoid": [
+    "Large values on faces look cartoonish unless that is the joke",
+    "Strong positive Curvature shrinks the picture into a rounded barrel and exposes the frame edges and corners (filled white with default settings in the gallery render): scale the clip up ~120-140 % or set Fill Color"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Curvature",
+     "does": "Amount of lens bend: positive = convex bulge (barrel / fisheye), negative = concave pinch (pincushion, also removes fisheye)",
+     "typical": "+/-10-25 subtle, +/-50-80 strong"
+    },
+    {
+     "name": "Vertical Decentering",
+     "does": "Moves the distortion centre up/down",
+     "typical": "0, or +/-20 for an off-axis look"
+    },
+    {
+     "name": "Horizontal Decentering",
+     "does": "Moves the distortion centre left/right",
+     "typical": "0, or +/-20"
+    },
+    {
+     "name": "Vertical Prism FX",
+     "does": "Keystone-like vertical skew",
+     "typical": "0-30"
+    },
+    {
+     "name": "Horizontal Prism FX",
+     "does": "Keystone-like horizontal skew",
+     "typical": "0-30"
+    },
+    {
+     "name": "Fill Alpha",
+     "does": "Harvested default true; with that default the gallery render filled the uncovered area with Fill Color (white), not transparency, so what true/false do is unverified",
+     "typical": "true"
+    },
+    {
+     "name": "Fill Color",
+     "does": "Colour of the uncovered area around the distorted picture (default white)",
+     "typical": "#000000"
+    }
+   ],
+   "demo_settings": {
+    "Curvature": 60
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Optics Compensation",
+   "pairs_with": [
+    "Transform",
+    "Directional Blur",
+    "Gaussian Blur",
+    "Camera Shake"
+   ],
+   "scripting": "Sign convention per Adobe's documentation: positive Curvature makes the image convex (bulge / fisheye), negative makes it concave (pincushion), which is why fisheye removal uses negative values. Checked on a rendered frame: +60 gives a convex barrel that pulls the picture in from all four edges. With the default Fill settings the uncovered area rendered white (the default Fill Color), not transparent/black. For the punch transition, keyframe both clips around the cut, or place it on an adjustment layer spanning the cut.",
+   "recipe": {
+    "Curvature": [
+     [
+      0,
+      0
+     ],
+     [
+      0.15,
+      70
+     ],
+     [
+      0.3,
+      0
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/006.png",
+    "note": "Curvature 60 pulls the picture into a convex barrel shape with bowed edges, and the uncovered surround is filled white (default Fill Color).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Levels",
+   "match": "PR.ADBE Levels",
+   "category": "Adjust",
+   "status": "current",
+   "summary": "Classic input/output levels for the composite RGB and for each channel separately. It remaps the black point, white point and gamma to fix contrast, crush or lift blacks, or tint shadows and highlights per channel.",
+   "look": [
+    "punchy contrast",
+    "crushed blacks",
+    "faded",
+    "lifted blacks",
+    "colour cast",
+    "matched"
+   ],
+   "use_for": [
+    "Fix flat or washed-out press / phone footage by setting the black and white input points",
+    "Faded 'archive' look by raising (RGB) Black Output Level",
+    "Tint the shadows (e.g. blue/teal) per channel for a cinematic documentary look",
+    "Match exposure between interview angles"
+   ],
+   "avoid": [
+    "Black input above ~60 or white input below ~190 crushes or clips detail",
+    "Per-channel moves without checking a scope give odd skin tones"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "(RGB) Black Input Level",
+     "does": "Input value that becomes black (crushes shadows)",
+     "typical": "0-40"
+    },
+    {
+     "name": "(RGB) White Input Level",
+     "does": "Input value that becomes white (brightens highlights)",
+     "typical": "215-255"
+    },
+    {
+     "name": "(RGB) Gamma",
+     "does": "Midtone gamma x100 (100 = 1.0)",
+     "typical": "80-130"
+    },
+    {
+     "name": "(RGB) Black Output Level",
+     "does": "Lifts the darkest output (faded look)",
+     "typical": "0-40"
+    },
+    {
+     "name": "(RGB) White Output Level",
+     "does": "Lowers the brightest output (softer highlights)",
+     "typical": "220-255"
+    },
+    {
+     "name": "(B) Black Output Level",
+     "does": "Adds blue into the shadows",
+     "typical": "0-40"
+    }
+   ],
+   "demo_settings": {
+    "(RGB) Black Input Level": 45,
+    "(RGB) White Input Level": 205,
+    "(RGB) Gamma": 85,
+    "(B) Black Output Level": 45
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "unknown",
+   "equivalent": "Levels (Individual Controls)",
+   "pairs_with": [
+    "Lumetri Color",
+    "Color Balance (RGB)",
+    "Noise",
+    "Vignette"
+   ],
+   "scripting": "All levels are 8-bit 0..255 values. Gamma rows are x100 (100 = 1.0, range 0..1000). As in After Effects, gamma above 100 should brighten the midtones, but that is not verified. Rows are prefixed (RGB), (R), (G), (B); use those exact names. Premiere's histogram setup dialog cannot be reached from a script, and it is not needed.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/007.png",
+    "note": "Punchier contrast with crushed blacks and brighter highlights, and the lifted blue output gives the dark clothing a cool tint (mean B up while R/G drop).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "ASC CDL",
+   "match": "AE.ADBE AEASCCDL",
+   "category": "Color Correction",
+   "status": "current",
+   "summary": "Applies an ASC Color Decision List primary grade: per-channel Slope (gain), Offset (lift) and Power (gamma), plus overall Saturation. CDL is the standard numeric format for carrying a look between grading tools.",
+   "look": [
+    "primary grade",
+    "warm",
+    "cool",
+    "saturated",
+    "filmic",
+    "neutral"
+   ],
+   "use_for": [
+    "Apply CDL numbers received from a colourist or DIT to match a series look",
+    "Fast numeric primary grade (warm highlights, cooler shadows) for a documentary",
+    "Boost the saturation of dull press footage",
+    "Store a reusable channel look as plain numbers in a spec"
+   ],
+   "avoid": [
+    "Offsets are strong: +/-0.05 is already a clear shift and most of the +/-10 range is unusable",
+    "Power far from 1 bands or posterises 8-bit footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Red Slope",
+     "does": "Red gain (1 = neutral)",
+     "typical": "0.85-1.3"
+    },
+    {
+     "name": "Blue Slope",
+     "does": "Blue gain (1 = neutral)",
+     "typical": "0.8-1.2"
+    },
+    {
+     "name": "Red Offset",
+     "does": "Red lift added to all levels (0 = neutral)",
+     "typical": "-0.05..0.05"
+    },
+    {
+     "name": "Blue Offset",
+     "does": "Blue lift (0 = neutral)",
+     "typical": "-0.05..0.05"
+    },
+    {
+     "name": "Green Power",
+     "does": "Green midtone gamma (1 = neutral)",
+     "typical": "0.9-1.1"
+    },
+    {
+     "name": "Saturation",
+     "does": "Overall saturation (1 = neutral, 0 = greyscale)",
+     "typical": "0.8-1.4"
+    }
+   ],
+   "demo_settings": {
+    "Red Slope": 1.3,
+    "Blue Slope": 0.8,
+    "Red Power": 0.9,
+    "Saturation": 1.5
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "OCIO CDL Transform (reads a .cc/.cdl file) or Lumetri Color",
+   "pairs_with": [
+    "Lumetri Color",
+    "Video Limiter",
+    "Noise"
+   ],
+   "scripting": "Values are plain floats. Slope and Power are neutral at 1, Offset at 0, Saturation at 1. The ASC formula is out = (in x slope + offset) ^ power, followed by saturation. After Effects has no numeric ASC CDL effect: its OCIO CDL Transform applies a .cc/.cdl file instead, and Lumetri Color is the closest hand-set grade. Pasted CDL triples map in R, G, B order to the Red/Green/Blue rows.",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/008.png",
+    "note": "Strong warm orange primary grade with boosted saturation (mean R 129->191, B 63->22, saturation 136->229), as described.",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Alpha Adjust",
+   "match": "AE.ADBE Alpha Adjust",
+   "category": "Keying",
+   "status": "current",
+   "summary": "Changes how a clip's alpha channel is used: scale its opacity, ignore the embedded alpha, invert it, or show only the matte. On an opaque live-action clip it simply makes the clip see-through.",
+   "look": [
+    "transparency",
+    "inverted matte",
+    "alpha view",
+    "see-through"
+   ],
+   "use_for": [
+    "Invert a logo or graphic alpha to cut a 'window' together with Track Matte Key",
+    "Ignore the bad alpha of an imported PNG / ProRes 4444 graphic",
+    "Mask Only to check a key or a graphic's matte during QC",
+    "Set the opacity of a keyed overlay after the keyer, independently of the clip's Opacity"
+   ],
+   "avoid": [
+    "On opaque footage Invert Alpha makes the whole clip vanish",
+    "For a simple fade it duplicates the built-in Opacity property: use Opacity keyframes instead"
+   ],
+   "confidence": "high",
+   "params": [
+    {
+     "name": "Opacity",
+     "does": "Scales the alpha channel (0-100 %)",
+     "typical": "40-100"
+    },
+    {
+     "name": "Ignore Alpha",
+     "does": "Treats the clip as fully opaque",
+     "typical": "false; true for broken-alpha graphics"
+    },
+    {
+     "name": "Invert Alpha",
+     "does": "Swaps opaque and transparent areas",
+     "typical": "false; true to punch a window"
+    },
+    {
+     "name": "Mask Only",
+     "does": "Shows the alpha as a white-on-black image",
+     "typical": "false; true only for QC"
+    }
+   ],
+   "demo_settings": {
+    "Opacity": 40
+   },
+   "enum_labels": {},
+   "cost": "light",
+   "gpu": "yes",
+   "equivalent": "Set Matte",
+   "pairs_with": [
+    "Track Matte Key",
+    "Ultra Key",
+    "Luma Key",
+    "Crop"
+   ],
+   "scripting": "How visible the result is depends on what lies underneath: it is black when the track below is empty. Effect order matters: place it after a keyer (Ultra Key, Luma Key) to adjust the key's result. In After Effects the same job is done by layer Opacity, Set Matte or Invert (Channel: Alpha).",
+   "recipe": {},
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/pr/009.png",
+    "note": "Opacity 40 makes the opaque clip see-through over the empty black track, so the shot renders at about 40% brightness (mean RGB 129/102/63 -> 50/40/24).",
+    "rerender": false
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Alpha Glow",
+   "match": "AE.ADBE Alpha Glow",
+   "category": "Stylize",
+   "status": "needs_input",
+   "summary": "Adds a coloured glow that radiates outward from the edges of a clip's alpha channel, for example around text, a logo or a keyed subject. A full-frame opaque clip has no alpha edges, so nothing shows. In Premiere 26 it sits in the Legacy folder.",
+   "look": [
+    "edge glow",
+    "neon outline",
+    "halo",
+    "soft aura"
+   ],
+   "use_for": [
+    "Neon halo around title or lower-third text in a reel",
+    "Glow around a cut-out leader photo (PNG or keyed) in an explainer",
+    "Aura on a logo in an end card"
+   ],
+   "avoid": [
+    "New edits: it is a Legacy (CPU) effect in Premiere 26; use Drop Shadow with Distance 0 and high Softness for an alpha-edge glow",
+    "Full-frame live-action footage: no visible change",
+    "A large Glow with saturated colours looks dated (2000s WordArt)"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Glow",
+     "does": "How far the glow extends from the alpha edge",
+     "typical": "20-50 (default 25)"
+    },
+    {
+     "name": "Brightness",
+     "does": "Initial opacity / strength of the glow",
+     "typical": "180-255"
+    },
+    {
+     "name": "Start Color",
+     "does": "Glow colour at the edge",
+     "typical": "brand accent, e.g. #FFD400"
+    },
+    {
+     "name": "End Color",
+     "does": "Colour the glow fades to (used only when the unnamed 'Use End Color' toggle is on)",
+     "typical": "#FF5A00"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {},
+   "cost": "medium",
+   "gpu": "no",
+   "equivalent": "Drop Shadow",
+   "pairs_with": [
+    "Drop Shadow",
+    "Ultra Key",
+    "Track Matte Key",
+    "Edge Glow"
+   ],
+   "scripting": "Legacy effect, kept for old projects. The current replacement for an alpha-edge glow is Drop Shadow with Distance 0, a high Softness and a bright Shadow Color; Edge Glow and Wonder Glow are highlight blooms, not alpha-edge glows. If you still use Alpha Glow, apply it to a clip with transparency: a title / graphic, a PNG cut-out, footage after Ultra Key, or a nested clip that is scaled down. Settings for such a clip: {\"Glow\": 40, \"Brightness\": 255, \"Start Color\": \"#FFD400\"}. The two unnamed bool rows (harvest name \"\") are believed to be 'Use End Color' and 'Fade Out', in that order. They cannot be addressed by name, so leave them at their defaults. The closest After Effects effect is Glow with Glow Based On: Alpha Channel.",
+   "recipe": {
+    "Glow": [
+     [
+      0,
+      0
+     ],
+     [
+      0.4,
+      45
+     ],
+     [
+      1.2,
+      30
+     ]
+    ]
+   },
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (a full-frame opaque clip has no alpha edges to glow), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  },
+  {
+   "kind": "pr_effect",
+   "app": "PR",
+   "name": "Auto Reframe",
+   "match": "AE.ADBE AEFilterAutoFramer",
+   "category": "Transform",
+   "status": "needs_input",
+   "summary": "Adobe Sensei analyses the clip and pans / zooms it to keep the main action in frame when the sequence has a different aspect ratio from the footage (e.g. 16:9 footage in a 9:16 reel sequence). It writes the path it finds into generated keyframes, and the Reframe Offset / Scale / Rotation rows let you tweak it.",
+   "look": [
+    "auto pan",
+    "vertical reframe",
+    "subject follow",
+    "smart crop"
+   ],
+   "use_for": [
+    "Turn 16:9 press or interview footage into 9:16 reels while keeping the speaker centred",
+    "Square 1:1 cut-downs of news clips",
+    "Quick vertical version of a documentary trailer"
+   ],
+   "avoid": [
+    "In a sequence with the same aspect ratio as the clip it does nothing",
+    "Fast multi-person shots make it hunt between faces: fix with Adjust Position or manual keyframes",
+    "Burned-in lower thirds and tickers in the source get cropped off: reframe clean footage"
+   ],
+   "confidence": "medium",
+   "params": [
+    {
+     "name": "Motion Tracking",
+     "does": "How quickly the reframe follows the action (dropdown)",
+     "typical": "1 (Default); 0 for interviews, 2 for sport / handheld"
+    },
+    {
+     "name": "Reframe Scale",
+     "does": "Extra zoom on top of the analysed framing (100 = as analysed)",
+     "typical": "100-130"
+    },
+    {
+     "name": "Reframe Offset",
+     "does": "Manual offset of the analysed framing",
+     "typical": "[0, 0]"
+    },
+    {
+     "name": "Reframe Rotation",
+     "does": "Extra rotation in degrees",
+     "typical": "0"
+    },
+    {
+     "name": "Adjust Position",
+     "does": "Manual position override of the reframed path",
+     "typical": "[0.5, 0.5]"
+    }
+   ],
+   "demo_settings": {},
+   "enum_labels": {
+    "Motion Tracking": {
+     "0": "Slower Motion",
+     "1": "Default",
+     "2": "Faster Motion"
+    }
+   },
+   "cost": "heavy",
+   "gpu": "unknown",
+   "equivalent": "",
+   "pairs_with": [
+    "Transform",
+    "Crop",
+    "Gaussian Blur"
+   ],
+   "scripting": "It only does something when the sequence aspect differs from the clip, and it needs its own analysis pass, which runs in the background after the effect is applied: wait before rendering. The better scripted route is the ExtendScript call Sequence.autoReframeSequence(numerator, denominator, 'slower'|'default'|'faster', newName, useNestedSequences) on the finished 16:9 sequence. It creates a new reframed sequence with Auto Reframe already applied to every clip. Never set the internal rows ' ' (blank name), 'Hash arb data', 'Generated Keyframes', 'Scale (Auto Generated)' or 'Overwrite generated path'. The units of Reframe Offset are unverified. After Effects has no equivalent effect: reframe there with Transform or Position keyframes.",
+   "recipe": {},
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "Card status is needs_input (needs a sequence aspect different from the clip plus an analysis pass), so no gallery frame was rendered.",
+    "rerender": false,
+    "second_opinion": "agree"
+   }
+  }
+ ]
+}

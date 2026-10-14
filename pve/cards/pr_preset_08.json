@@ -1,0 +1,1225 @@
+{
+ "cards": [
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Ice (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Icy cyan grade: cyan cast in shadows and mids, blues and skies pushed hard toward cyan, overall brightness kept; skin stays readable (saturation about 0.9x) but leans cool. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "icy",
+    "cyan",
+    "cool",
+    "clean",
+    "tech",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Cool, modern B-roll in AI / tech explainers",
+    "Cold-weather, mountain or Himalayan footage",
+    "Cyber-crime or sci-fi trailer moods",
+    "Background plates behind cold, data-heavy titles"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Warm human stories and interviews: the cyan cast makes people look cold",
+    "Brand or party blues that must stay accurate: they turn cyan"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Blue Ice.look (LUT card 'Blue Ice'); Creative > Look 'SL BLUE ICE' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 6 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 6 is Lumetri/Looks/Legacy/Blue Ice.look (one LUT layer; data in Lumetri/LUTs/Legacy/BLUE ICE - SL - 3527.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 6 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Blue Ice.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL BLUE ICE' (Lumetri/LUTs/Creative/SL BLUE ICE.itx, encrypted, so its match to this preset is unverified); its Look index is probably 22 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 22, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.16/0.47/0.86 (luma); mid grey 0.45 -> R/G/B 0.37/0.50/0.54; skin saturation x0.91 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": -30,
+     "Tint": -15,
+     "Contrast": 10,
+     "Vibrance": 15
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Intense (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Like Blue Ice but harder: much darker shadows (grey 0.18 -> about 0.11), mids slightly darker and a stronger cyan cast; skin loses a little saturation (about 0.85x) and darker skin turns dusky. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "intense cyan",
+    "cool",
+    "contrasty",
+    "moody",
+    "deep shadows",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Hard-hitting cyber / surveillance explainer B-roll",
+    "Action-trailer night or rain shots",
+    "Cold backgrounds for warning or alert titles"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Close-ups of faces: skin goes cold and dusky",
+    "Dark or underexposed footage: shadows crush"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Blue Intense.look (LUT card 'Blue Intense'); Creative > Look 'SL BLUE INTENSE' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 7 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 7 is Lumetri/Looks/Legacy/Blue Intense.look (one LUT layer; data in Lumetri/LUTs/Legacy/BLUE INTENSE - SL - 3527.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 7 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Blue Intense.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL BLUE INTENSE' (Lumetri/LUTs/Creative/SL BLUE INTENSE.itx, encrypted, so its match to this preset is unverified); its Look index is probably 23 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 23, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.11/0.41/0.86 (luma); mid grey 0.45 -> R/G/B 0.29/0.44/0.48; skin saturation x0.86 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": -40,
+     "Tint": -20,
+     "Contrast": 25,
+     "Blacks": -20,
+     "Saturation": 90
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Moon (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Soft, cool grade: a gentle cyan cast with greenish-cyan shadows, contrast and skin saturation almost unchanged; the mildest of the blue SpeedLooks. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "soft blue",
+    "gentle cool",
+    "calm",
+    "night",
+    "subtle",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Calm night or dusk B-roll",
+    "Reflective documentary interludes",
+    "Lo-fi reel backgrounds",
+    "Night-time city establishing shots"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Expecting day-for-night: it does not darken the shot (SL Blue Day4Nite does)"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Blue Moon.look (LUT card 'Blue Moon'); Creative > Look 'SL BLUE MOON' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 8 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 8 is Lumetri/Looks/Legacy/Blue Moon.look (one LUT layer; data in Lumetri/LUTs/Legacy/BLUE MOON - SL - 3527.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 8 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Blue Moon.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL BLUE MOON' (Lumetri/LUTs/Creative/SL BLUE MOON.itx, encrypted, so its match to this preset is unverified); its Look index is probably 24 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 24, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.16/0.43/0.83 (luma); mid grey 0.45 -> R/G/B 0.38/0.45/0.46; skin saturation x0.97 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": -20,
+     "Tint": -8,
+     "Saturation": 95
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Blue Steel (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Bright, steely grade: cool blue-grey mids, green-cyan shadows, mids lifted (grey 0.45 -> about 0.56) and highlights pushed toward clipping; reds and greens are muted and skin is brighter but less saturated (about 0.8x). Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "steel",
+    "metallic",
+    "cool",
+    "muted",
+    "bright",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Defence, military or industrial B-roll",
+    "Gritty thriller or war-trailer beats",
+    "Factory, infrastructure or cold corporate footage"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Bright or overexposed footage: highlights clip",
+    "Anything that needs natural skin or accurate party / brand reds"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Blue Steel.look (LUT card 'Blue Steel'); Creative > Look 'SL BLUE STEEL' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 9 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 9 is Lumetri/Looks/Legacy/Blue Steel.look (one LUT layer; data in Lumetri/LUTs/Legacy/BLUE STEEL - SL - 3527.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 9 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Blue Steel.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL BLUE STEEL' (Lumetri/LUTs/Creative/SL BLUE STEEL.itx, encrypted, so its match to this preset is unverified); its Look index is probably 25 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 25, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.17/0.56/0.94 (luma); mid grey 0.45 -> R/G/B 0.48/0.58/0.62; skin saturation x0.81 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": 0.4,
+     "Temperature": -25,
+     "Tint": -10,
+     "Saturation": 75,
+     "Contrast": 10
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch HDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Clean, neutral punch: tone almost unchanged (the gentlest of the three Clean Punch variants, for high-dynamic-range scenes that need no extra contrast), richer colour (skin about 1.2x, primaries clearly stronger) and a very slight cool-green cast in the mids. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "clean",
+    "punchy",
+    "vivid",
+    "neutral",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Vibrant but natural social reels",
+    "Travel, rally or event B-roll with bright skies and deep shade",
+    "Talking-head or AI-tool demo footage that only needs richer colour"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Already vivid scenes (flags, saffron, festivals): colours oversaturate"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Clean Punch HDR.look (LUT card 'Clean Punch HDR')",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 11 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 11 is Lumetri/Looks/Legacy/Clean Punch HDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/CLEAN PUNCH HDR - SL - 3563.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 11 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Clean Punch HDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. There is no 'SL' Creative LUT for this look in Lumetri/LUTs/Creative, so the Look dropdown offers no substitute. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.16/0.44/0.79 (luma); mid grey 0.45 -> R/G/B 0.40/0.45/0.44; skin saturation x1.17 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Contrast": 5,
+     "Saturation": 120
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch LDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "The brightest, most contrasty Clean Punch: mids lifted strongly (grey 0.45 -> about 0.58, 0.80 -> 0.95) with richer colour (skin about 1.2x saturation and brighter); made for low-dynamic-range (flat, dull or slightly underexposed) shots. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "clean",
+    "bright",
+    "high key",
+    "punchy",
+    "airy",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Bright, airy reel looks from dull or overcast footage",
+    "Lifting slightly underexposed interviews",
+    "Clean desk, product or white-background shots"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Already bright or well-exposed footage: highlights and skin blow out"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Clean Punch LDR.look (LUT card 'Clean Punch LDR')",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 12 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 12 is Lumetri/Looks/Legacy/Clean Punch LDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/CLEAN PUNCH LDR - SL - 3563.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 12 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Clean Punch LDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. There is no 'SL' Creative LUT for this look in Lumetri/LUTs/Creative, so the Look dropdown offers no substitute. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.14/0.58/0.95 (luma); mid grey 0.45 -> R/G/B 0.54/0.59/0.57; skin saturation x1.19 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": 0.5,
+     "Contrast": 15,
+     "Saturation": 120
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Clean Punch NDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "The middle Clean Punch (normal dynamic range): neutral balance, a moderate contrast and brightness lift (grey 0.45 -> about 0.48, 0.80 -> 0.87) and richer colour (skin about 1.2x saturation). Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "clean",
+    "punchy",
+    "neutral",
+    "vivid",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "General-purpose punchy grade for B-roll",
+    "Social reels that need clean, rich colour",
+    "Matching mixed phone / DSLR clips to one base look"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Already saturated footage (festivals, flags): colours go garish"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Clean Punch NDR.look (LUT card 'Clean Punch NDR')",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 13 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 13 is Lumetri/Looks/Legacy/Clean Punch NDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/CLEAN PUNCH NDR - SL - 3563.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 13 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Clean Punch NDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. There is no 'SL' Creative LUT for this look in Lumetri/LUTs/Creative, so the Look dropdown offers no substitute. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.14/0.48/0.87 (luma); mid grey 0.45 -> R/G/B 0.44/0.50/0.48; skin saturation x1.20 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": 0.15,
+     "Contrast": 15,
+     "Saturation": 120
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Heat (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Hot amber grade: warm orange mids and highlights, deeply crushed shadows (grey 0.18 -> about 0.08), skin much warmer and richer (about 1.4x saturation), greens pushed to olive-yellow and blues muted. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "hot",
+    "amber",
+    "warm",
+    "sun-baked",
+    "desert",
+    "crushed blacks",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Heat-wave or drought news B-roll",
+    "Rural summer or Rajasthan / desert footage",
+    "War-zone or desert trailer shots"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Tungsten-lit indoor footage turns orange",
+    "Crushed blacks lose detail in hair and dark clothing"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Heat.look (LUT card 'Gold Heat'); Creative > Look 'SL GOLD HEAT' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 19 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 19 is Lumetri/Looks/Legacy/Gold Heat.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD HEAT - SL - 3528.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 19 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Heat.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL GOLD HEAT' (Lumetri/LUTs/Creative/SL GOLD HEAT.itx, encrypted, so its match to this preset is unverified); its Look index is probably 46 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 46, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.08/0.46/0.90 (luma); mid grey 0.45 -> R/G/B 0.51/0.46/0.41; skin saturation x1.40 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": 40,
+     "Tint": 5,
+     "Contrast": 30,
+     "Blacks": -30,
+     "Saturation": 115
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Orange (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Golden, contrasty grade with neutral greys: crushed shadows, brighter mids and highlights (grey 0.45 -> about 0.53, 0.80 -> 0.96), skin and warm tones pushed toward golden orange and richer (about 1.4x), greens toward olive, blues kept clean and saturated, so warm skin stands out against cool skies. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "golden",
+    "warm skin",
+    "contrasty",
+    "blockbuster",
+    "stylised",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Action or hype trailer grades",
+    "City and sunset B-roll",
+    "Hype reels with people against open sky"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Bright footage: highlights clip",
+    "Pure reds (party flags, logos) darken toward deep red while skin goes golden"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Orange.look (LUT card 'Gold Orange'); Creative > Look 'SL GOLD ORANGE' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 20 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 20 is Lumetri/Looks/Legacy/Gold Orange.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD ORANGE - SL - 3528.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 20 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Orange.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL GOLD ORANGE' (Lumetri/LUTs/Creative/SL GOLD ORANGE.itx, encrypted, so its match to this preset is unverified); its Look index is probably 47 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 47, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). The hue moves (skin and warm tones to golden orange, greens to olive) need Hue vs Hue curves, which a spec cannot set. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.11/0.53/0.96 (luma); mid grey 0.45 -> R/G/B 0.54/0.53/0.53; skin saturation x1.44 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": 0.3,
+     "Contrast": 30,
+     "Blacks": -25,
+     "Saturation": 115
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush HDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Bright, punchy golden grade: crushed shadows, strongly lifted mids and highlights (grey 0.45 -> about 0.57, 0.80 -> 0.97), slightly cool-neutral greys, skin brighter and yellower, greens to olive and blues deepened; overall saturation about unchanged. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "golden",
+    "bright",
+    "contrasty",
+    "crushed shadows",
+    "sunlit",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Sunny outdoor B-roll that needs a bright, punchy look",
+    "High-energy reel or trailer sections",
+    "Rural or harvest footage (greens go golden-olive)"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Bright or well-exposed footage: highlights and skin blow out",
+    "Dark scenes: shadows crush to black"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Rush HDR.look (LUT card 'Gold Rush HDR'); Creative > Look 'SL GOLD RUSH HDR' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 21 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 21 is Lumetri/Looks/Legacy/Gold Rush HDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD RUSH HDR - SL - 3528.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 21 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Rush HDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL GOLD RUSH HDR' (Lumetri/LUTs/Creative/SL GOLD RUSH HDR.itx, encrypted, so its match to this preset is unverified); its Look index is probably 48 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 48, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). The olive greens and yellower skin need Hue vs Hue curves, which a spec cannot set. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.12/0.57/0.97 (luma); mid grey 0.45 -> R/G/B 0.54/0.58/0.58; skin saturation x1.06 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": 0.4,
+     "Contrast": 25,
+     "Blacks": -30,
+     "Saturation": 105
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Rush LDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Like Gold Rush HDR with deeper shadows (grey 0.18 -> about 0.08) and a little less brightening (0.45 -> about 0.51, 0.80 -> 0.96): neutral greys, richer warm skin (about 1.2x), greens to olive and blues deepened. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "golden",
+    "contrasty",
+    "punchy",
+    "crushed shadows",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Flat or dull daylight footage that needs strong contrast",
+    "High-energy reel or trailer montage",
+    "Rural or harvest footage (greens go golden-olive)"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Dark scenes and dark skin: shadows crush",
+    "Bright footage: highlights clip"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Rush LDR.look (LUT card 'Gold Rush LDR'); Creative > Look 'SL GOLD RUSH LDR' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 22 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 22 is Lumetri/Looks/Legacy/Gold Rush LDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD RUSH LDR - SL - 3528.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 22 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Rush LDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL GOLD RUSH LDR' (Lumetri/LUTs/Creative/SL GOLD RUSH LDR.itx, encrypted, so its match to this preset is unverified); its Look index is probably 49 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 49, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). The olive greens need Hue vs Hue curves, which a spec cannot set. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.08/0.51/0.96 (luma); mid grey 0.45 -> R/G/B 0.49/0.51/0.49; skin saturation x1.25 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": 0.2,
+     "Contrast": 35,
+     "Blacks": -35,
+     "Saturation": 110
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Sport (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Contrasty, punchy sports grade: near-neutral (very slightly cool) balance, blacks crushed (everything below about 0.1 goes black), mids a little darker and primaries strongly saturated (skin about 1.2x). Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "sport",
+    "punchy",
+    "contrasty",
+    "saturated",
+    "energetic",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Sports, cricket or rally footage",
+    "High-energy reels",
+    "Crowd and stadium shots"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Crushed blacks lose detail in dark clothing, hair and shadows"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Sport.look (LUT card 'Gold Sport')",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 23 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 23 is Lumetri/Looks/Legacy/Gold Sport.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD SPORT - SL - 3561.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 23 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Sport.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. There is no 'SL' Creative LUT for this look in Lumetri/LUTs/Creative, so the Look dropdown offers no substitute. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.10/0.41/0.82 (luma); mid grey 0.45 -> R/G/B 0.39/0.41/0.43; skin saturation x1.17 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Contrast": 35,
+     "Blacks": -30,
+     "Saturation": 120
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Tobacco (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Warm brown-amber 'tobacco' grade: warm shadows, mids and highlights with contrast about unchanged (slightly denser shadows), skin richer (about 1.3x saturation) while blues and skies are muted. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "tobacco",
+    "brown",
+    "amber",
+    "nostalgic",
+    "warm",
+    "rich skin",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Nostalgic history segments",
+    "1970s / old-India recreations",
+    "Warm, intimate interview mood"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Skin can turn orange on already-warm (tungsten) footage",
+    "Blue skies and blue brand colours go dull"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Tobacco.look (LUT card 'Gold Tobacco'); Creative > Look 'SL GOLD TOBACCO' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 24 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 24 is Lumetri/Looks/Legacy/Gold Tobacco.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD TOBACCO - SL - 3528.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 24 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Tobacco.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL GOLD TOBACCO' (Lumetri/LUTs/Creative/SL GOLD TOBACCO.itx, encrypted, so its match to this preset is unverified); its Look index is probably 50 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 50, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.14/0.42/0.80 (luma); mid grey 0.45 -> R/G/B 0.46/0.41/0.40; skin saturation x1.30 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": 35,
+     "Tint": 8,
+     "Saturation": 110
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Gold Western (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Dusty yellow-orange western warmth: warm shadows, warm mids and highlights, skin warmer and richer (about 1.3x), greens shifted to yellow-olive and blue skies muted toward grey. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "western",
+    "dusty",
+    "warm",
+    "yellow",
+    "period",
+    "sepia-ish",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Rural or heritage stories",
+    "Dusty village or desert footage",
+    "Period-drama trailer beats"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Blue skies turn muddy grey-blue"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Gold Western.look (LUT card 'Gold Western'); Creative > Look 'SL GOLD WESTERN' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 25 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 25 is Lumetri/Looks/Legacy/Gold Western.look (one LUT layer; data in Lumetri/LUTs/Legacy/GOLD WESTERN - SL - 3528.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 25 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Gold Western.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL GOLD WESTERN' (Lumetri/LUTs/Creative/SL GOLD WESTERN.itx, encrypted, so its match to this preset is unverified); its Look index is probably 51 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 51, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.15/0.41/0.79 (luma); mid grey 0.45 -> R/G/B 0.46/0.40/0.36; skin saturation x1.34 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": 45,
+     "Tint": -5,
+     "Saturation": 105,
+     "Faded Film": 10
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Neutral Start (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Filmic baseline, not a creative look: mids drop by most of a stop (grey 0.45 -> about 0.36, 0.80 -> 0.72) for a denser image, with slightly cool shadows and rich, clean primaries (skin about 1.1x saturation, darker); meant as a starting point before your own grade. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "neutral",
+    "base grade",
+    "filmic",
+    "dense",
+    "rich primaries",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Base grade under manual Lumetri tweaks",
+    "A denser, filmic start for flat-looking phone or DSLR interviews",
+    "Consistent baseline across mixed documentary footage"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Dark or underexposed footage: it darkens mids further",
+    "Expecting a creative look: it is only a starting point"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Neutral Start.look (LUT card 'Neutral Start'); Creative > Look 'SL NEUTRAL START' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 32 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 32 is Lumetri/Looks/Legacy/Neutral Start.look (one LUT layer; data in Lumetri/LUTs/Legacy/NEUTRAL START - SL - 3560.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 32 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Neutral Start.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NEUTRAL START' (Lumetri/LUTs/Creative/SL NEUTRAL START.itx, encrypted, so its match to this preset is unverified); its Look index is probably 58 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 58, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.12/0.36/0.72 (luma); mid grey 0.45 -> R/G/B 0.35/0.37/0.38; skin saturation x1.13 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Exposure": -0.4,
+     "Contrast": 15,
+     "Saturation": 110
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir 1965 (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Contrasty black-and-white with bright highlights (grey 0.80 -> about 0.92) and a yellow-filter response: blue barely counts, so skies and blue clothing render darker than a plain desaturate while greens and skin render light. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "black and white",
+    "contrasty",
+    "classic",
+    "1960s",
+    "bright highlights",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Flashback or archival-style recreations",
+    "Historic political moments (1960s-70s)",
+    "Memorial or tribute segments"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Bright skies and white clothing blow out"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir 1965.look (LUT card 'Noir 1965'); Creative > Look 'SL NOIR 1965' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 33 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 33 is Lumetri/Looks/Legacy/Noir 1965.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR 1965 - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 33 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir 1965.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR 1965' (Lumetri/LUTs/Creative/SL NOIR 1965.itx, encrypted, so its match to this preset is unverified); its Look index is probably 59 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 59, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Saturation 0 gives a plain luminance mix; the yellow-filter response needs per-channel control the Lumetri spec cannot set (After Effects' Black & White effect has per-hue sliders if the shot is built there). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.11/0.46/0.92 (luma); mid grey 0.45 -> R/G/B 0.46/0.46/0.46.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Contrast": 25,
+     "Whites": 15
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir HDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Soft, bright, low-contrast black-and-white: shadows and mids lifted (grey 0.18 -> about 0.33, 0.45 -> 0.61) while true black stays black; blues render dark, reds lighter than a plain desaturate. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "soft b&w",
+    "bright",
+    "low contrast",
+    "monochrome",
+    "lifted shadows",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Dream or memory sequences",
+    "Soft B&W documentary interviews",
+    "Quote cards over B&W B-roll"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Grey, lifted shadows can look washed-out after platform compression"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir HDR.look (LUT card 'Noir HDR'); Creative > Look 'SL NOIR HDR' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 34 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 34 is Lumetri/Looks/Legacy/Noir HDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR HDR - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 34 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir HDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR HDR' (Lumetri/LUTs/Creative/SL NOIR HDR.itx, encrypted, so its match to this preset is unverified); its Look index is probably 60 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 60, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.33/0.61/0.90 (luma); mid grey 0.45 -> R/G/B 0.61/0.61/0.61.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Exposure": 0.5,
+     "Contrast": -25,
+     "Shadows": 30
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir LDR (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Hard, high-contrast black-and-white: blacks crushed (grey 0.18 -> about 0.04) and highlights pushed to white (0.80 -> 0.99); blues render dark. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "high contrast b&w",
+    "stark",
+    "graphic",
+    "monochrome",
+    "crushed blacks",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Dramatic trailer beats",
+    "Stark quote or statement moments",
+    "Graphic B&W reel sections"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Midtone detail and skin texture burn out",
+    "Dark footage: shadows go solid black"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir LDR.look (LUT card 'Noir LDR'); Creative > Look 'SL NOIR LDR' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 35 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 35 is Lumetri/Looks/Legacy/Noir LDR.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR LDR - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 35 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir LDR.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR LDR' (Lumetri/LUTs/Creative/SL NOIR LDR.itx, encrypted, so its match to this preset is unverified); its Look index is probably 61 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 61, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.04/0.51/0.99 (luma); mid grey 0.45 -> R/G/B 0.51/0.51/0.51.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Contrast": 60,
+     "Blacks": -30,
+     "Whites": 20
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Black-and-white with an orange-filter-like mix: reds and skin render lighter and greens (foliage) darker than a plain desaturate, skies stay mid-grey; tone about neutral with slightly softer highlights (French New Wave feel). Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "nouvelle vague",
+    "orange filter",
+    "b&w",
+    "soft contrast",
+    "glowing skin",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Arty B&W interviews",
+    "B&W portraits where skin should glow",
+    "Art-house trailer moods"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Green foliage goes dark and muddy"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir Nouvelle.look (LUT card 'Noir Nouvelle'); Creative > Look 'SL NOIR NOUVELLE' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 36 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 36 is Lumetri/Looks/Legacy/Noir Nouvelle.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR NOUVELLE - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 36 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir Nouvelle.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR NOUVELLE' (Lumetri/LUTs/Creative/SL NOIR NOUVELLE.itx, encrypted, so its match to this preset is unverified); its Look index is probably 62 (None + Creative folder sorted by name) (NOUVELLE and NOUVELLE RED may be swapped, depending on how the menu sorts), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 62, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). The red-weighted mix needs per-channel control the Lumetri spec cannot set (Hue vs Luma curves are not settable); an untested route is Film Impact 'Channel Mix' in RGB with Red raised and Green lowered, placed before the desaturating Lumetri. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.17/0.43/0.77 (luma); mid grey 0.45 -> R/G/B 0.43/0.43/0.43.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Contrast": -5
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Nouvelle Red (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "A stronger red-filter black-and-white than Noir Nouvelle: red makes up about half of the mix, so reds and skin render light, foliage dark and blue skies a little darker than a plain desaturate; tone about neutral. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "red filter",
+    "b&w",
+    "dramatic",
+    "darker skies",
+    "glowing skin",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Dramatic B&W portraits",
+    "Moody B&W landscapes with darker foliage and skies",
+    "Stylised trailer title backgrounds"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Green foliage goes very dark"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir Nouvelle Red.look (LUT card 'Noir Nouvelle Red'); Creative > Look 'SL NOIR NOUVELLE RED' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 37 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 37 is Lumetri/Looks/Legacy/Noir Nouvelle Red.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR NOUVELLE RED - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 37 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir Nouvelle Red.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR NOUVELLE RED' (Lumetri/LUTs/Creative/SL NOIR NOUVELLE RED.itx, encrypted, so its match to this preset is unverified); its Look index is probably 63 (None + Creative folder sorted by name) (NOUVELLE and NOUVELLE RED may be swapped, depending on how the menu sorts), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 63, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). The red-filter mix needs per-channel control the Lumetri spec cannot set; an untested route is Film Impact 'Channel Mix' in RGB with Red raised and Green / Blue lowered, placed before the desaturating Lumetri. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.17/0.43/0.76 (luma); mid grey 0.45 -> R/G/B 0.43/0.43/0.43.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Contrast": -5
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Red Wave (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Extreme, infrared-like black-and-white built almost only from the red channel: reds and skin render light while foliage and blue skies go very dark; mids overall darker (grey 0.45 -> about 0.34). Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "infrared-like",
+    "surreal",
+    "b&w",
+    "stylised",
+    "glowing reds",
+    "dark skies",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Surreal or stylised music-reel moments",
+    "Making red banners, flags or clothing glow in a B&W frame",
+    "Dream sequences"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Green-heavy scenes: foliage turns almost black",
+    "Anything that must look natural"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir Red Wave.look (LUT card 'Noir Red Wave'); Creative > Look 'SL NOIR RED WAVE' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 38 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 38 is Lumetri/Looks/Legacy/Noir Red Wave.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR RED WAVE - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 38 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir Red Wave.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR RED WAVE' (Lumetri/LUTs/Creative/SL NOIR RED WAVE.itx, encrypted, so its match to this preset is unverified); its Look index is probably 64 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 64, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). The red-channel-only mix cannot be reproduced with spec-settable Lumetri properties; the approximation is only a plain, darker B&W. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.12/0.34/0.68 (luma); mid grey 0.45 -> R/G/B 0.34/0.34/0.34.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Exposure": -0.5,
+     "Contrast": 10
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Noir Tri-X (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Moody black-and-white in the spirit of Kodak Tri-X photojournalism: darker mids (grey 0.45 -> about 0.35, 0.80 -> 0.72) while pure whites stay white, and an even, film-like colour mix (reds and blues count more, greens less than in a plain desaturate); it adds no grain. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "tri-x",
+    "photojournalism",
+    "b&w",
+    "documentary",
+    "moody",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Photojournalistic documentary sequences",
+    "Protest or press footage",
+    "Tribute segments"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Expecting film grain: add Noise or a grain overlay separately",
+    "Dark footage: mids get darker still"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Noir Tri-X.look (LUT card 'Noir Tri-X'); Creative > Look 'SL NOIR TRI-X' as an unverified single-LUT substitute",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 39 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 39 is Lumetri/Looks/Legacy/Noir Tri-X.look (one LUT layer; data in Lumetri/LUTs/Legacy/NOIR TRI-X - SL - 3522.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 39 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Noir Tri-X.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. Premiere-native single-LUT substitute: Creative > Look 'SL NOIR TRI-X' (Lumetri/LUTs/Creative/SL NOIR TRI-X.itx, encrypted, so its match to this preset is unverified); its Look index is probably 65 (None + Creative folder sorted by name), but the harvested menu has 69 entries (0-68), so read the live Look menu labels before using {\"Look\": 65, \"Intensity#2\": 100}. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.11/0.35/0.72 (luma); mid grey 0.45 -> R/G/B 0.35/0.35/0.35.",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Saturation": 0,
+     "Exposure": -0.4,
+     "Contrast": 10
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "SL Retro Brown (Universal)",
+   "match": null,
+   "category": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "bin": "Presets/Lumetri Presets/SpeedLooks/Universal",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Brown vintage grade: warm brown mids, red-brown shadows, blues almost removed (pure blue goes near-black, skies dark slate) and greens muted, while skin gets warmer and richer (about 1.2x); slightly more contrast. Universal SpeedLooks version for ordinary Rec.709 video (phones, DSLRs in a standard profile, stock, news and web clips): the SpeedLooks 'Universal' camera-profile LUT feeds the look.",
+   "look": [
+    "vintage",
+    "brown",
+    "warm",
+    "sepia-ish",
+    "70s",
+    "nostalgic",
+    "SpeedLooks"
+   ],
+   "use_for": [
+    "Old-photo or archival flashbacks",
+    "History explainer segments",
+    "Nostalgic reels"
+   ],
+   "avoid": [
+    "Camera log footage (LogC, S-Log, C-Log, V-Log): the Universal patch expects ordinary video, so log stays flat with grey highlights (measured: 90% white lands near 0.6); use the matching camera variant, e.g. '(Arri Alexa)', or convert to Rec.709 first",
+    "Blue skies, blue clothing or blue logos go near-black",
+    "Modern footage with phones, LED screens or new cars breaks the period illusion"
+   ],
+   "confidence": "medium",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx plus Creative > Look = Lumetri/Looks/Legacy/Retro Brown.look (LUT card 'Retro Brown')",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. Parsed from Lumetri Presets.prfpset: one Lumetri Color (AE.ADBE Lumetri), saved by an older 98-parameter Lumetri, with only two non-default settings: Basic Correction > Input LUT = legacy value 32 and Creative > Look = legacy value 40 (Intensity 100). Both legacy lists are sorted by name (the Look list also holds the Cinespace, Fuji, Kodak and Monochrome looks), so Look 40 is Lumetri/Looks/Legacy/Retro Brown.look (one LUT layer; data in Lumetri/LUTs/Legacy/RETRO BROWN - SL - 3562.itx), and Input LUT 32 is the last SpeedLooks camera profile after REDLOGFILM (29): Lumetri/LUTs/Legacy/UNIVERSAL - SL - PROFILE.itx, the generic 'Universal' camera patch (the camera variants use 8 = Arri Alexa to 29 = REDLOGFILM). That mapping is inferred from the sort order and the LUT maths (the patch compresses ordinary video into the log-like space the look expects), not checked in the UI. Do NOT copy 32 / 40 into pr_props: PR 2026 exposes 'Input LUT' 0-11 and 'Look' 0-68 over different, install-dependent lists that do not include these legacy files, and LUTAsset / LookAsset are strings a spec cannot set; whether PR 2026 still resolves the legacy values when the preset is dragged on by hand is untested, so check a rendered frame. Exact route: apply the preset by hand (or Input LUT > Browse to UNIVERSAL - SL - PROFILE.itx and Look > Browse to Retro Brown.look), then reuse it with copy / paste attributes; outside Premiere, chain the two .itx files (binary ITX3: 40-byte header, then 32x32x32 float32 RGB, red index fastest) into one .cube. To soften the grade, put it on an adjustment layer and lower that layer's Opacity: lowering Creative 'Intensity#2' alone leaves the Universal patch at full strength, so the picture goes flat and washed-out. There is no 'SL' Creative LUT for this look in Lumetri/LUTs/Creative, so the Look dropdown offers no substitute. Rough scriptable stand-in for Rec.709 footage: the 'approx' Lumetri Color pr_props (cast, tone and saturation only, eyeballed from the measurements, not verified). Removing the blues needs HSL / Hue vs Sat controls a spec cannot set. Measured on the installed LUT data (Universal profile then look, trilinear, Rec.709 test values): grey 0.18/0.45/0.80 -> 0.10/0.41/0.84 (luma); mid grey 0.45 -> R/G/B 0.49/0.40/0.35; skin saturation x1.24 (mean of three skin tones).",
+   "input_space": "Rec.709 (display-referred)",
+   "approx": {
+    "name": "Lumetri Color",
+    "pr_props": {
+     "Temperature": 35,
+     "Tint": 10,
+     "Saturation": 90,
+     "Contrast": 10
+    }
+   }
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Full to Legal Range, 10-bit",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Technical",
+   "bin": "Presets/Lumetri Presets/Technical",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Technical range fix: one Lumetri Color whose Input LUT is FullToSMPTE10.cube, an extended-domain LUT that maps -0.073..1.095 (the 10-bit full-range codes read as legal range) onto 0..1. On a full-range clip that Premiere decoded as legal range it brings the crushed blacks and clipped whites back (only if the out-of-range values survived decoding); on correctly decoded footage it just squeezes 0..1 into 64/1023..940/1023, giving greyer blacks and dimmer whites. A fix, not a creative look.",
+   "look": [
+    "legal range",
+    "range fix",
+    "lifted blacks",
+    "lower contrast",
+    "technical"
+   ],
+   "use_for": [
+    "Fix 10-bit ProRes / HEVC / camera files that look crushed and over-contrasty because full-range data is being read as legal range",
+    "OBS or screen recordings captured in full range but flagged (or read) as limited: crushed shadows and clipped highlights next to normal camera clips"
+   ],
+   "avoid": [
+    "On correctly decoded footage it only washes the image out: check the waveform first (blacks piled at 0 and whites flat at 100)",
+    "As a broadcast-safe / legaliser pass: Premiere already maps 0..1 to legal 16-235 when it encodes, so this squeezes twice (grey blacks, dim whites on air); use Video Limiter for that",
+    "Stacking it with a Legal to Full preset or a second range fix",
+    "Using the wrong bit-depth variant: pick the one matching the source (10-bit here); in float the 8 / 10 / 12-bit variants differ by under 0.3%"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/FullToSMPTE10.cube (LUT card 'FullToSMPTE10'); Levels for a script-only version",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset (saved by an older 98-parameter Lumetri) sets only Basic Correction > Input LUT = custom (legacy value 1) with FullToSMPTE10.cube embedded in the Lumetri blob (the stored path is Adobe's build machine, ending Lumetri/LUTs/Legacy/FullToSMPTE10.cube; the installed copy is Lumetri/LUTs/Legacy/FullToSMPTE10.cube in the Premiere folder), with Look = None and every other control neutral. The legacy LUT is not in today's 'Input LUT' popup (0-11, install-dependent) and the 'LUTAsset' file blob cannot be set from a spec, so the exact Lumetri route is manual (apply the preset, or Input LUT > Browse). Script-only equivalent for the squeeze: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Output Level\": 16, \"(RGB) White Output Level\": 235}}. Levels works in 8-bit 0-255 units; 16/235 matches 10-bit 64/940 and 12-bit 256/3760 within about one 8-bit code. Unlike the extended-domain LUT, Levels probably clips values outside 0..1 before remapping (not verified), so it cannot recover the crushed shadow / clipped highlight detail of a misread full-range clip; use the LUT for that. Check the waveform before and after."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Full to Legal Range, 12-bit",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Technical",
+   "bin": "Presets/Lumetri Presets/Technical",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Technical range fix: one Lumetri Color whose Input LUT is FullToSMPTE12.cube, an extended-domain LUT that maps -0.073..1.096 (the 12-bit full-range codes read as legal range) onto 0..1. On a full-range clip that Premiere decoded as legal range it brings the crushed blacks and clipped whites back (only if the out-of-range values survived decoding); on correctly decoded footage it just squeezes 0..1 into 256/4095..3760/4095, giving greyer blacks and dimmer whites. A fix, not a creative look.",
+   "look": [
+    "legal range",
+    "range fix",
+    "lifted blacks",
+    "lower contrast",
+    "technical"
+   ],
+   "use_for": [
+    "Fix 12-bit raw-derived or ProRes 4444 sources that look crushed and over-contrasty because full-range data is being read as legal range",
+    "OBS or screen recordings captured in full range but flagged (or read) as limited: crushed shadows and clipped highlights next to normal camera clips"
+   ],
+   "avoid": [
+    "On correctly decoded footage it only washes the image out: check the waveform first (blacks piled at 0 and whites flat at 100)",
+    "As a broadcast-safe / legaliser pass: Premiere already maps 0..1 to legal 16-235 when it encodes, so this squeezes twice (grey blacks, dim whites on air); use Video Limiter for that",
+    "Stacking it with a Legal to Full preset or a second range fix",
+    "Using the wrong bit-depth variant: pick the one matching the source (12-bit here); in float the 8 / 10 / 12-bit variants differ by under 0.3%"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/FullToSMPTE12.cube (LUT card 'FullToSMPTE12'); Levels for a script-only version",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset (saved by an older 98-parameter Lumetri) sets only Basic Correction > Input LUT = custom (legacy value 1) with FullToSMPTE12.cube embedded in the Lumetri blob (the stored path is Adobe's build machine, ending Lumetri/LUTs/Legacy/FullToSMPTE12.cube; the installed copy is Lumetri/LUTs/Legacy/FullToSMPTE12.cube in the Premiere folder), with Look = None and every other control neutral. The legacy LUT is not in today's 'Input LUT' popup (0-11, install-dependent) and the 'LUTAsset' file blob cannot be set from a spec, so the exact Lumetri route is manual (apply the preset, or Input LUT > Browse). Script-only equivalent for the squeeze: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Output Level\": 16, \"(RGB) White Output Level\": 235}}. Levels works in 8-bit 0-255 units; 16/235 matches 10-bit 64/940 and 12-bit 256/3760 within about one 8-bit code. Unlike the extended-domain LUT, Levels probably clips values outside 0..1 before remapping (not verified), so it cannot recover the crushed shadow / clipped highlight detail of a misread full-range clip; use the LUT for that. Check the waveform before and after."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Full to Legal Range, 8-bit",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Technical",
+   "bin": "Presets/Lumetri Presets/Technical",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Technical range fix: one Lumetri Color whose Input LUT is FullToSMPTE8.cube, an extended-domain LUT that maps -0.073..1.091 (the 8-bit full-range codes read as legal range) onto 0..1. On a full-range clip that Premiere decoded as legal range it brings the crushed blacks and clipped whites back (only if the out-of-range values survived decoding); on correctly decoded footage it just squeezes 0..1 into 16/255..235/255, giving greyer blacks and dimmer whites. A fix, not a creative look.",
+   "look": [
+    "legal range",
+    "range fix",
+    "lifted blacks",
+    "lower contrast",
+    "technical"
+   ],
+   "use_for": [
+    "Fix 8-bit H.264 / HEVC phone clips, screen recordings and web downloads that look crushed and over-contrasty because full-range data is being read as legal range",
+    "OBS or screen recordings captured in full range but flagged (or read) as limited: crushed shadows and clipped highlights next to normal camera clips"
+   ],
+   "avoid": [
+    "On correctly decoded footage it only washes the image out: check the waveform first (blacks piled at 0 and whites flat at 100)",
+    "As a broadcast-safe / legaliser pass: Premiere already maps 0..1 to legal 16-235 when it encodes, so this squeezes twice (grey blacks, dim whites on air); use Video Limiter for that",
+    "Stacking it with a Legal to Full preset or a second range fix",
+    "Using the wrong bit-depth variant: pick the one matching the source (8-bit here); in float the 8 / 10 / 12-bit variants differ by under 0.3%"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/FullToSMPTE8.cube (LUT card 'FullToSMPTE8'); Levels for a script-only version",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset (saved by an older 98-parameter Lumetri) sets only Basic Correction > Input LUT = custom (legacy value 1) with FullToSMPTE8.cube embedded in the Lumetri blob (the stored path is Adobe's build machine, ending Lumetri/LUTs/Legacy/FullToSMPTE8.cube; the installed copy is Lumetri/LUTs/Legacy/FullToSMPTE8.cube in the Premiere folder), with Look = None and every other control neutral. The legacy LUT is not in today's 'Input LUT' popup (0-11, install-dependent) and the 'LUTAsset' file blob cannot be set from a spec, so the exact Lumetri route is manual (apply the preset, or Input LUT > Browse). Script-only equivalent for the squeeze: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Output Level\": 16, \"(RGB) White Output Level\": 235}}. Levels works in 8-bit 0-255 units; 16/235 matches 10-bit 64/940 and 12-bit 256/3760 within about one 8-bit code. Unlike the extended-domain LUT, Levels probably clips values outside 0..1 before remapping (not verified), so it cannot recover the crushed shadow / clipped highlight detail of a misread full-range clip; use the LUT for that. Check the waveform before and after."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Legal to Full Range, 10-bit",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Technical",
+   "bin": "Presets/Lumetri Presets/Technical",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Technical range fix: one Lumetri Color whose Input LUT is SMPTEToFull10.cube, which expands legal range to full range: 64/1023 goes to 0 and 940/1023 to 1.0 (about +16% contrast and saturation), and values outside legal range are pushed below 0 / above 1 (they clip on display and export). Washed-out, grey-black footage regains its punch; a fix for mis-flagged footage, not a creative look.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast",
+    "punch restore",
+    "technical"
+   ],
+   "use_for": [
+    "Fix washed-out 10-bit ProRes / HEVC / camera files with grey blacks (legal-range video read as full range)",
+    "Screen recordings, OBS captures or re-encoded downloads whose blacks sit near 16/255 and whites near 235/255 on the waveform",
+    "Match a mis-flagged clip to the rest of a news package"
+   ],
+   "avoid": [
+    "On correctly decoded footage it clips shadows and highlights: use it only when the waveform shows blacks near 16 and whites near 235",
+    "Stacking it with a Full to Legal preset or a second range fix",
+    "Using the wrong bit-depth variant: pick the one matching the source (10-bit here); in float the 8 / 10 / 12-bit variants are nearly identical"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/SMPTEToFull10.cube (LUT card 'SMPTEToFull10'); Levels for a script-only version",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset (saved by an older 98-parameter Lumetri) sets only Basic Correction > Input LUT = custom (legacy value 1) with SMPTEToFull10.cube embedded in the Lumetri blob (the stored path is Adobe's build machine, ending Lumetri/LUTs/Legacy/SMPTEToFull10.cube; the installed copy is Lumetri/LUTs/Legacy/SMPTEToFull10.cube in the Premiere folder), with Look = None and every other control neutral. The legacy LUT is not in today's 'Input LUT' popup (0-11, install-dependent) and the 'LUTAsset' file blob cannot be set from a spec, so the exact Lumetri route is manual (apply the preset, or Input LUT > Browse). Script-only equivalent: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}. Levels works in 8-bit 0-255 units; 16/235 matches 10-bit 64/940 and 12-bit 256/3760 within about one 8-bit code. Levels clips below 16 and above 235 where the LUT keeps them as float values outside 0..1; after display or export the result is the same. Check the waveform before and after."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Legal to Full Range, 12-bit",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Technical",
+   "bin": "Presets/Lumetri Presets/Technical",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Technical range fix: one Lumetri Color whose Input LUT is SMPTEToFull12.cube, which expands legal range to full range: 256/4095 goes to 0 and 3760/4095 to 1.0 (about +16% contrast and saturation), and values outside legal range are pushed below 0 / above 1 (they clip on display and export). Washed-out, grey-black footage regains its punch; a fix for mis-flagged footage, not a creative look.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast",
+    "punch restore",
+    "technical"
+   ],
+   "use_for": [
+    "Fix washed-out 12-bit raw-derived or ProRes 4444 sources with grey blacks (legal-range video read as full range)",
+    "Screen recordings, OBS captures or re-encoded downloads whose blacks sit near 16/255 and whites near 235/255 on the waveform",
+    "Match a mis-flagged clip to the rest of a news package"
+   ],
+   "avoid": [
+    "On correctly decoded footage it clips shadows and highlights: use it only when the waveform shows blacks near 16 and whites near 235",
+    "Stacking it with a Full to Legal preset or a second range fix",
+    "Using the wrong bit-depth variant: pick the one matching the source (12-bit here); in float the 8 / 10 / 12-bit variants are nearly identical"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/SMPTEToFull12.cube (LUT card 'SMPTEToFull12'); Levels for a script-only version",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset (saved by an older 98-parameter Lumetri) sets only Basic Correction > Input LUT = custom (legacy value 1) with SMPTEToFull12.cube embedded in the Lumetri blob (the stored path is Adobe's build machine, ending Lumetri/LUTs/Legacy/SMPTEToFull12.cube; the installed copy is Lumetri/LUTs/Legacy/SMPTEToFull12.cube in the Premiere folder), with Look = None and every other control neutral. The legacy LUT is not in today's 'Input LUT' popup (0-11, install-dependent) and the 'LUTAsset' file blob cannot be set from a spec, so the exact Lumetri route is manual (apply the preset, or Input LUT > Browse). Script-only equivalent: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}. Levels works in 8-bit 0-255 units; 16/235 matches 10-bit 64/940 and 12-bit 256/3760 within about one 8-bit code. Levels clips below 16 and above 235 where the LUT keeps them as float values outside 0..1; after display or export the result is the same. Check the waveform before and after."
+  },
+  {
+   "kind": "pr_preset",
+   "app": "PR",
+   "name": "Legal to Full Range, 8-bit",
+   "match": null,
+   "category": "Presets/Lumetri Presets/Technical",
+   "bin": "Presets/Lumetri Presets/Technical",
+   "file": "Lumetri Presets.prfpset",
+   "status": "current",
+   "summary": "Technical range fix: one Lumetri Color whose Input LUT is SMPTEToFull8.cube, which expands legal range to full range: 16/255 goes to 0 and 235/255 to 1.0 (about +16% contrast and saturation), and values outside legal range are pushed below 0 / above 1 (they clip on display and export). Washed-out, grey-black footage regains its punch; a fix for mis-flagged footage, not a creative look.",
+   "look": [
+    "full range",
+    "deeper blacks",
+    "more contrast",
+    "punch restore",
+    "technical"
+   ],
+   "use_for": [
+    "Fix washed-out 8-bit H.264 / HEVC phone clips, screen recordings and web downloads with grey blacks (legal-range video read as full range)",
+    "Screen recordings, OBS captures or re-encoded downloads whose blacks sit near 16/255 and whites near 235/255 on the waveform",
+    "Match a mis-flagged clip to the rest of a news package"
+   ],
+   "avoid": [
+    "On correctly decoded footage it clips shadows and highlights: use it only when the waveform shows blacks near 16 and whites near 235",
+    "Stacking it with a Full to Legal preset or a second range fix",
+    "Using the wrong bit-depth variant: pick the one matching the source (8-bit here); in float the 8 / 10 / 12-bit variants are nearly identical"
+   ],
+   "confidence": "high",
+   "effects_used": {
+    "AE.ADBE Lumetri": "Lumetri Color"
+   },
+   "equivalent": "Lumetri Color > Basic Correction > Input LUT = Lumetri/LUTs/Legacy/SMPTEToFull8.cube (LUT card 'SMPTEToFull8'); Levels for a script-only version",
+   "scripting": "Premiere's scripting API cannot apply .prfpset presets by name. The preset (saved by an older 98-parameter Lumetri) sets only Basic Correction > Input LUT = custom (legacy value 1) with SMPTEToFull8.cube embedded in the Lumetri blob (the stored path is Adobe's build machine, ending Lumetri/LUTs/Legacy/SMPTEToFull8.cube; the installed copy is Lumetri/LUTs/Legacy/SMPTEToFull8.cube in the Premiere folder), with Look = None and every other control neutral. The legacy LUT is not in today's 'Input LUT' popup (0-11, install-dependent) and the 'LUTAsset' file blob cannot be set from a spec, so the exact Lumetri route is manual (apply the preset, or Input LUT > Browse). Script-only equivalent: {\"name\": \"Levels\", \"pr_props\": {\"(RGB) Black Input Level\": 16, \"(RGB) White Input Level\": 235}}. Levels works in 8-bit 0-255 units; 16/235 matches 10-bit 64/940 and 12-bit 256/3760 within about one 8-bit code. Levels clips below 16 and above 235 where the LUT keeps them as float values outside 0..1; after display or export the result is the same. Check the waveform before and after."
+  }
+ ]
+}

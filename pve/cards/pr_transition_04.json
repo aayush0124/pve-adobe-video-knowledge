@@ -1,0 +1,632 @@
+{"cards": [
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Swing In",
+ "match": null,
+ "category": "3D Motion (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "The incoming clip swings into place like a door on a hinge at the left edge, rotating in perspective until it lies flat over the outgoing clip.",
+ "look": [
+  "hinged door",
+  "perspective panel",
+  "3D flip",
+  "early-2000s",
+  "slideshow"
+ ],
+ "use_for": [
+  "ironic 'cheap TV' gag in satire reels",
+  "retro slideshow parody",
+  "mock home-video wedding look"
+ ],
+ "avoid": [
+  "any serious documentary or news cut: reads as amateur",
+  "faces near the hinge edge get squeezed into a sliver",
+  "cannot be found in the Effects panel, so a human editor cannot tweak it later"
+ ],
+ "confidence": "high",
+ "family": "3D",
+ "feel": "cheap 2000s, playful",
+ "duration_typical": "0.6-1.0",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "PR: 3D Spin / Flip Motion (new 3D transitions) or Motion keyframes. AE: make the incoming layer 3D, move its Anchor Point to the left edge and keyframe Y Rotation from 90 to 0 with ease-out (use the sign that starts the free edge away from camera; flip it for the Swing Out look).",
+ "scripting": "Hidden CS6 transition, still applied by name through QE (getVideoTransitionByName + addTransition): gallery placed it 1 s centred at 193.52-194.52 s with no error and it rendered. Centred needs handles on both clips. Hinge side/direction is an Effect Controls setting that was not harvested, so script only name + duration + alignment. Gallery frames confirm: hinge on the left edge, the free right edge starts shorter than the frame (behind the screen) and opens out to full frame. Swing Out uses the same hinge but its free edge comes toward the viewer (taller than the frame, cropped top and bottom).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/048b.png",
+  "note": "Plate B panel hinged on the left edge swings open in perspective, free right edge shorter than the frame, nearly flat by 80%.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Swing Out",
+ "match": null,
+ "category": "3D Motion (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "Like Swing In, the incoming clip swings in on a hinge at the left edge, but its free edge comes in from in front of the screen (toward the viewer, overflowing the frame top and bottom) before settling flat over the outgoing clip.",
+ "look": [
+  "hinged gate",
+  "perspective panel",
+  "3D flip",
+  "early-2000s",
+  "slideshow"
+ ],
+ "use_for": [
+  "ironic retro gag in satire reels",
+  "parody of old wedding / event videos",
+  "throwback segment in an AI-history explainer"
+ ],
+ "avoid": [
+  "serious news or documentary edits: looks amateur",
+  "subjects near the hinge edge get crushed",
+  "only subtly different from Swing In (free edge toward vs away from camera): do not plan an edit around the difference"
+ ],
+ "confidence": "high",
+ "family": "3D",
+ "feel": "cheap 2000s, playful",
+ "duration_typical": "0.6-1.0",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "PR: 3D Spin / Flip Motion or Motion keyframes. AE: 3D incoming layer, Anchor Point on the edge, keyframe Y Rotation from 90 to 0 with ease-out, using the opposite sign to Swing In so the free edge starts toward the camera.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 197.52-198.52 s with no error. Centred needs handles on both clips. Edge/direction options live only in Effect Controls (not harvested). Gallery frames confirm the left hinge with the free edge swinging in larger than the frame (in front of the screen plane), unlike Swing In where it recedes.",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/049b.png",
+  "note": "Plate B panel hinged on the left edge opens out with its free edge overflowing the frame top and bottom, covering plate A by 80%.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Swirl",
+ "match": null,
+ "category": "Slide (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "The incoming clip arrives as a cluster of small rotating tiles that swirl out from the centre and grow until they assemble into the full frame.",
+ "look": [
+  "rotating tiles",
+  "swirling cards",
+  "fragmented",
+  "busy",
+  "2000s DVD menu"
+ ],
+ "use_for": [
+  "ironic 'over-the-top edit' joke in satire reels",
+  "quick chaos beat for a meme-style reel",
+  "retro powerpoint parody"
+ ],
+ "avoid": [
+  "anything that needs to look premium",
+  "faces in the centre get chopped into tiles",
+  "longer than about 1 s it becomes tiresome"
+ ],
+ "confidence": "high",
+ "family": "stylized",
+ "feel": "busy, cheesy",
+ "duration_typical": "0.6-1.0",
+ "sfx": "swoosh_tr",
+ "single_sided_ok": true,
+ "equivalent": "PR: Shape Flow or Kaleidoscope (new transitions) for a modern stylized hand-off. AE: Card Wipe on the outgoing layer (Back Layer = incoming, Flip Axis Random, keyframe Transition Completion 0 -> 100%) or CC Twister.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 201.52-202.52 s with no error and rendered tiles as described. Centred needs handles on both clips. No harvested parameters (tile count/rotation are Effect Controls only).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/050b.png",
+  "note": "A cluster of small rotated plate B tiles appears in the centre and grows and spreads in a swirl over plate A.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Texturize",
+ "match": null,
+ "category": "Special Effect (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "Maps the luminance of one clip onto the other as an embossed texture, so both images appear merged in a relief-like, colour-shifted blend for the length of the transition, then it cuts to the incoming clip.",
+ "look": [
+  "embossed blend",
+  "texture overlay",
+  "muddy double exposure",
+  "colour shift",
+  "dated"
+ ],
+ "use_for": [
+  "deliberately ugly 'bad edit' gag in a satire reel",
+  "dream / confusion beat in a parody"
+ ],
+ "avoid": [
+  "any serious content: looks muddy and dated",
+  "faces become unreadable mid-transition",
+  "single-sided use from black gives an odd half-texture"
+ ],
+ "confidence": "medium",
+ "family": "stylized",
+ "feel": "muddy, dated, surreal",
+ "duration_typical": "0.5-1.0",
+ "sfx": "air",
+ "single_sided_ok": false,
+ "equivalent": "PR: Additive Dissolve or Luma Fade for a cleaner blend. AE: Texturize effect (Stylize > Texturize) on the incoming layer with Texture Layer = outgoing clip, plus an opacity crossfade.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 205.52-206.52 s with no error; gallery frames show the embossed A/B blend through the whole duration. Needs both clips (handles on both sides); not useful single-sided.",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/051b.png",
+  "note": "All three frames show a muddy embossed relief blend of plate B's texture over the colour-shifted plate A, no gradual reveal.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Three-D",
+ "match": null,
+ "category": "Special Effect (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "Puts the outgoing clip into the red channel and the incoming clip into the blue channel, giving a red/blue anaglyph-style frame for the whole transition instead of a gradual change.",
+ "look": [
+  "red/blue anaglyph",
+  "magenta wash",
+  "channel split",
+  "harsh colour",
+  "3D glasses"
+ ],
+ "use_for": [
+  "flash-frame glitch accent between two shots in a meme reel",
+  "'3D glasses' joke in satire",
+  "very short colour-burst hit on a beat"
+ ],
+ "avoid": [
+  "anything longer than a few frames: the red/blue wash is harsh and ugly",
+  "brand colours and skin tones are destroyed",
+  "photosensitivity: do not flicker it repeatedly"
+ ],
+ "confidence": "medium",
+ "family": "glitch/damage",
+ "feel": "harsh, glitchy, novelty",
+ "duration_typical": "0.1-0.3",
+ "sfx": "glitch",
+ "single_sided_ok": false,
+ "equivalent": "PR: Glitch or Chroma Leak (new transitions) for a modern colour hit. AE: 3D Glasses effect (Perspective > 3D Glasses: Left View = outgoing layer, Right View = incoming layer, 3D View = Balanced Colored Red Blue) held for the transition length.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 209.52-210.52 s with no error; every gallery frame was red/blue, i.e. it holds the anaglyph look rather than ramping. Keep it a few frames long. Needs both clips.",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/052b.png",
+  "note": "Every frame is a red/blue anaglyph: plate A in red, plate B in blue, constant for the whole transition.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Tumble Away",
+ "match": null,
+ "category": "3D Motion (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "The outgoing clip shrinks and spins away into the distance, tumbling like a flipped card, revealing the incoming clip behind it.",
+ "look": [
+  "spinning card",
+  "shrinking frame",
+  "tumble",
+  "flying away",
+  "2000s"
+ ],
+ "use_for": [
+  "'and that claim got thrown out' gag in satire reels",
+  "throwing away a rejected option in an explainer",
+  "comic exit of a politician's quote card"
+ ],
+ "avoid": [
+  "serious documentary or news: reads as a toy",
+  "small subjects become unreadable as the frame spins"
+ ],
+ "confidence": "high",
+ "family": "3D",
+ "feel": "comic, cheap 2000s",
+ "duration_typical": "0.6-1.0",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "PR: Spin Motion or 3D Spin (new transitions), or Transform keyframes. AE: outgoing layer 3D, keyframe Scale 100 -> 0, Z Rotation 0 -> 720 and a little X Rotation, ease-in, incoming layer underneath.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 213.52-214.52 s with no error; gallery frames show the outgoing frame tumbling small over the incoming clip. As a single-sided end transition it tumbles the clip away onto black / the track below.",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/053b.png",
+  "note": "Plate A shrinks into a perspective card that flips and tumbles away to a sliver, revealing plate B behind it.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Venetian Blinds",
+ "match": null,
+ "category": "Wipe",
+ "status": "current",
+ "summary": "The incoming clip is revealed through horizontal bands that open together like venetian blinds.",
+ "look": [
+  "horizontal blinds",
+  "striped reveal",
+  "bands",
+  "retro",
+  "graphic"
+ ],
+ "use_for": [
+  "retro / TV-news throwback reveal",
+  "revealing a document or headline still in an explainer",
+  "split-second striped hand-off on a beat in a reel"
+ ],
+ "avoid": [
+  "fine horizontal detail (text lines, horizons) flickers between bands",
+  "overused it looks like a 90s slideshow"
+ ],
+ "confidence": "high",
+ "family": "wipe",
+ "feel": "retro graphic, mechanical",
+ "duration_typical": "0.5-0.8",
+ "sfx": "shutter",
+ "single_sided_ok": true,
+ "equivalent": "AE: Venetian Blinds effect (Transition > Venetian Blinds) on the outgoing layer, keyframe Transition Completion 0 -> 100%, Direction for band orientation (check that the bands come out horizontal; rotate 90 degrees if not), Width to set band size. PR's newer Louver transition is a 3D rotating-slat take on the same idea, not a flat blind reveal.",
+ "scripting": "Applied by name via QE: placed 1 s centred at 217.52-218.52 s with no error. Centred needs handles on both clips. Band count, direction and border are Effect Controls settings (not harvested); script only name + duration + alignment.",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/054b.png",
+  "note": "Horizontal bands of plate B widen together until only thin strips of plate A remain.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Wedge Wipe",
+ "match": null,
+ "category": "Wipe",
+ "status": "current",
+ "summary": "A pie-shaped wedge opens from the centre of the frame and sweeps both ways around it until the incoming clip fills the screen.",
+ "look": [
+  "fan wipe",
+  "pie wedge",
+  "symmetric sweep",
+  "radial",
+  "graphic"
+ ],
+ "use_for": [
+  "symmetric reveal of a title card or map in an explainer",
+  "playful scene change in a kids/education reel",
+  "retro game-show style hand-off in satire"
+ ],
+ "avoid": [
+  "the closing point sits at frame bottom-centre: keep key subjects out of the last wedge",
+  "looks cheap on slow emotional moments"
+ ],
+ "confidence": "high",
+ "family": "wipe",
+ "feel": "playful graphic",
+ "duration_typical": "0.5-0.8",
+ "sfx": "swoosh_tr",
+ "single_sided_ok": true,
+ "equivalent": "AE: Radial Wipe on the outgoing layer with Wipe = Both, Start Angle 0, Wipe Center at frame centre, keyframe Transition Completion 0 -> 100%.",
+ "scripting": "Applied by name via QE: placed 1 s centred at 221.52-222.52 s with no error; gallery frames show the wedge opening upward from centre and closing at the bottom. Centred needs handles on both clips. Direction/border/feather are Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/055b.png",
+  "note": "A wedge with its apex at frame centre opens from 12 o'clock and sweeps both ways, half the frame at the cut, a small bottom wedge left at 80%.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Wipe",
+ "match": null,
+ "category": "Wipe",
+ "status": "current",
+ "summary": "A straight hard-edged line moves across the frame (left to right by default), revealing the incoming clip behind it.",
+ "look": [
+  "linear wipe",
+  "hard edge",
+  "clean",
+  "classic",
+  "broadcast"
+ ],
+ "use_for": [
+  "clean before/after comparison in an explainer",
+  "news-package style scene change",
+  "beat-synced hand-off in a reel",
+  "map or chart reveal"
+ ],
+ "avoid": [
+  "a hard edge at long durations feels slow and 90s: keep it short or add feather",
+  "moving camera against the wipe direction looks messy"
+ ],
+ "confidence": "high",
+ "family": "wipe",
+ "feel": "clean, classic broadcast",
+ "duration_typical": "0.3-0.6",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "AE: Linear Wipe on the outgoing layer, keyframe Transition Completion 0 -> 100% (Feather 0 for a hard edge), set Wipe Angle for direction. PR's newer Linear Wipe / Soft Wipe transitions give a modern feathered version.",
+ "scripting": "Applied by name via QE: placed 1 s centred at 225.52-226.52 s with no error; gallery shows a left-to-right reveal. Centred needs handles on both clips. Direction, border width/colour and feather are Effect Controls settings (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/056b.png",
+  "note": "A hard vertical edge moves left to right (about 1/4, 1/2, 4/5 across) revealing plate B.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Zig-Zag Blocks",
+ "match": null,
+ "category": "Wipe",
+ "status": "current",
+ "summary": "The incoming clip fills in as rows of blocks that run back and forth in a zig-zag, row by row from the top to the bottom of the frame.",
+ "look": [
+  "block wipe",
+  "zig-zag rows",
+  "tiled",
+  "digital",
+  "retro computer"
+ ],
+ "use_for": [
+  "retro computer / loading-screen gag in an AI-education reel",
+  "playful data reveal",
+  "ironic 'old PowerPoint' beat in satire"
+ ],
+ "avoid": [
+  "serious documentary moments",
+  "long durations: the row-by-row fill feels slow"
+ ],
+ "confidence": "high",
+ "family": "wipe",
+ "feel": "retro digital, mechanical",
+ "duration_typical": "0.5-1.0",
+ "sfx": "shutter",
+ "single_sided_ok": true,
+ "equivalent": "AE: no single effect; CC Grid Wipe is the nearest, or a grid of rectangle shape layers used as a track matte with staggered scale keyframes in serpentine order.",
+ "scripting": "Applied by name via QE: placed 1 s centred at 229.52-230.52 s with no error; gallery frames show full-width rows of blocks filling top-down, odd rows left-to-right and even rows right-to-left. Centred needs handles on both clips. Block counts are Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/057b.png",
+  "note": "Rows of blocks fill with plate B from the top down, alternate rows running in opposite directions.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Zoom",
+ "match": null,
+ "category": "Zoom (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "The incoming clip starts as a small rectangle in the centre and scales up until it fills the frame over the outgoing clip.",
+ "look": [
+  "picture-in-picture grow",
+  "scale up",
+  "centre zoom",
+  "simple",
+  "2000s"
+ ],
+ "use_for": [
+  "'zoom into the detail' gag in satire",
+  "quick grow-in of an evidence clip in a news explainer",
+  "retro slideshow parody"
+ ],
+ "avoid": [
+  "linear scale looks mechanical next to modern eased zooms",
+  "the hard rectangle edge looks cheap on serious content"
+ ],
+ "confidence": "high",
+ "family": "zoom",
+ "feel": "simple, slightly dated",
+ "duration_typical": "0.4-0.8",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "PR: Pop Motion / Motion Tween (new transitions) or Motion Scale keyframes with easing. AE: keyframe the incoming layer Scale 0 -> 100% with an ease-out (optionally add motion blur).",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 233.52-234.52 s with no error; gallery shows the incoming rectangle growing from the centre. Centred needs handles on both clips. Zoom centre point is Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/058b.png",
+  "note": "Plate B starts as a small centred rectangle and scales up over plate A, nearly full frame by 80%.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Zoom Boxes",
+ "match": null,
+ "category": "Zoom (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "The incoming clip appears as a grid of small boxes that each scale up from their own centre until they merge into the full frame.",
+ "look": [
+  "grid of boxes",
+  "tiled zoom",
+  "mosaic grow",
+  "busy",
+  "2000s"
+ ],
+ "use_for": [
+  "ironic retro hand-off in satire reels",
+  "playful reveal of a grid/collage topic",
+  "AI-education 'pixels assembling' gag"
+ ],
+ "avoid": [
+  "faces get split by the grid gaps mid-transition",
+  "looks cheap on premium or serious content"
+ ],
+ "confidence": "high",
+ "family": "zoom",
+ "feel": "busy, cheap 2000s",
+ "duration_typical": "0.5-1.0",
+ "sfx": "swoosh_tr",
+ "single_sided_ok": true,
+ "equivalent": "PR: Mosaic or Shape Flow (new transitions) for a modern tiled hand-off. AE: a grid of square shape layers scaling 0 -> 100% used as a track matte for the incoming layer; CC Grid Wipe is the nearest single effect.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 237.52-238.52 s with no error; gallery frames show boxes growing on a grid. Centred needs handles on both clips. Box count is Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/059b.png",
+  "note": "A 4x3 grid of plate B boxes, each scaling up from its own centre, nearly merging into the full frame by 80%.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Zoom Trails",
+ "match": null,
+ "category": "Zoom (CS6-era; not in the v26 Effects panel)",
+ "status": "obsolete",
+ "summary": "The outgoing clip shrinks toward the centre leaving a tunnel of trailing copies behind it, revealing the incoming clip as the trails vanish.",
+ "look": [
+  "echo trails",
+  "tunnel",
+  "shrinking frame",
+  "psychedelic",
+  "2000s"
+ ],
+ "use_for": [
+  "'down the rabbit hole' gag in a satire reel",
+  "dream / flashback entry in a parody",
+  "trippy hand-off in a meme reel"
+ ],
+ "avoid": [
+  "serious news or documentary: looks dated",
+  "the echo tunnel is very busy on detailed footage"
+ ],
+ "confidence": "high",
+ "family": "zoom",
+ "feel": "trippy, dated",
+ "duration_typical": "0.6-1.0",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "PR: Zoom Blur or Cross Zoom (new transitions) for a modern zoom hand-off. AE: keyframe the outgoing layer Scale 100 -> 0% and add Echo (Number of Echoes 6-10, Decay 0.7) or CC Force Motion Blur.",
+ "scripting": "Hidden CS6 transition, applied by name via QE: placed 1 s centred at 241.52-242.52 s with no error; gallery frames show the echo tunnel then a small outgoing frame over the incoming clip. Centred needs handles on both clips. Trail count is Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/060b.png",
+  "note": "Plate A shrinks toward the centre leaving a tunnel of echo copies, revealing plate B around it.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Barn Doors",
+ "match": null,
+ "category": "Wipe",
+ "status": "current",
+ "summary": "A hard-edged wipe that opens from a vertical seam in the centre: the incoming clip appears in a centre strip that widens toward the left and right edges like opening barn doors. The outgoing halves are masked in place, they do not slide.",
+ "look": [
+  "split from centre",
+  "doors opening",
+  "symmetric",
+  "clean",
+  "reveal"
+ ],
+ "use_for": [
+  "big reveal of a title card or headline",
+  "opening a 'case file' in a political explainer",
+  "before/after reveal in a reel",
+  "chapter opener in a documentary"
+ ],
+ "avoid": [
+  "hard edge at long durations feels 90s",
+  "an outgoing face on the centre seam is split in half in the first frames, and the incoming edges appear last: keep key outgoing subjects off-centre"
+ ],
+ "confidence": "high",
+ "family": "wipe",
+ "feel": "clean reveal, symmetric",
+ "duration_typical": "0.4-0.8",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "AE: rectangle mask on the incoming layer (or a centred rectangle shape layer as track matte) keyframed from 0 width to full frame width; or two Linear Wipes on mirrored halves of the outgoing layer.",
+ "scripting": "Applied by name via QE: placed 1 s centred at 245.52-246.52 s with no error; gallery shows a vertical centre opening. Centred needs handles on both clips. Horizontal vs vertical orientation and border are Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/061b.png",
+  "note": "A centre strip of plate B widens to both sides while the plate A halves stay masked in place.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Center Split",
+ "match": null,
+ "category": "Slide",
+ "status": "current",
+ "summary": "The outgoing clip is cut into four quarters that slide away to the corners, revealing the incoming clip through a widening cross in the middle.",
+ "look": [
+  "four-way split",
+  "quarters sliding",
+  "cross reveal",
+  "graphic",
+  "punchy"
+ ],
+ "use_for": [
+  "energetic hand-off on a beat in a reel",
+  "breaking-news style reveal of a headline card",
+  "trailer title reveal"
+ ],
+ "avoid": [
+  "faces in the centre get sliced into four",
+  "long durations look dated"
+ ],
+ "confidence": "high",
+ "family": "slide/push",
+ "feel": "punchy graphic",
+ "duration_typical": "0.3-0.6",
+ "sfx": "whoosh",
+ "single_sided_ok": true,
+ "equivalent": "AE: duplicate the outgoing layer four times, mask one quarter on each, keyframe each Position toward its own corner (ease-in), incoming layer underneath.",
+ "scripting": "Applied by name via QE: placed 1 s centred at 249.52-250.52 s with no error; gallery shows the cross-shaped reveal widening. Centred needs handles on both clips. Border settings are Effect Controls only (not harvested).",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/062b.png",
+  "note": "Plate A splits into four quarters that slide out to the corners, revealing plate B through a widening cross.",
+  "rerender": false
+ }
+},
+{
+ "kind": "pr_transition",
+ "app": "PR",
+ "name": "Clock Wipe (Legacy)",
+ "match": null,
+ "category": "Wipe",
+ "status": "obsolete",
+ "summary": "The old Clock Wipe: a radius line sweeps clockwise around the centre from 12 o'clock like a clock hand, revealing the incoming clip.",
+ "look": [
+  "clock hand sweep",
+  "radial wipe",
+  "countdown",
+  "graphic",
+  "classic"
+ ],
+ "use_for": [
+  "'time is running out' beat in a political explainer",
+  "countdown / deadline gag in satire",
+  "passage-of-time chapter change in a documentary"
+ ],
+ "avoid": [
+  "prefer the new Clock Wipe for new edits",
+  "hard edge looks dated at long durations"
+ ],
+ "confidence": "high",
+ "family": "wipe",
+ "feel": "classic, ticking clock",
+ "duration_typical": "0.5-1.0",
+ "sfx": "swoosh_tr",
+ "single_sided_ok": true,
+ "equivalent": "PR: Clock Wipe (the new v26 transition). AE: Radial Wipe on the outgoing layer, Start Angle 0, Wipe = Clockwise, keyframe Transition Completion 0 -> 100%.",
+ "scripting": "Legacy version kept for old projects; applied by name via QE: placed 1 s centred at 253.52-254.52 s with no error; gallery shows a clockwise sweep from 12 o'clock. Centred needs handles on both clips. Use the exact name 'Clock Wipe (Legacy)' only to reproduce old edits; otherwise apply 'Clock Wipe'.",
+ "verified": {
+  "verdict": "pass",
+  "frame": "pve/gallery/tr/063b.png",
+  "note": "A radius line sweeps clockwise from 12 o'clock around the centre: about 2 o'clock at 20%, the right half at the cut, the top-left wedge left at 80%.",
+  "rerender": false
+ }
+}
+]}

@@ -1,0 +1,3282 @@
+{
+ "cards": [
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Grungy film reel",
+   "summary": "Worn projection print: muted warm colour with lifted blacks, moving grain, gate weave, random exposure lifts and a soft vignette; the After Effects version adds drifting vertical scratches.",
+   "use_for": [
+    "archive section of a history documentary",
+    "reenactment or AI-generated shots made to pass as old film",
+    "flashback to a 1950s-70s event",
+    "trailer cold open set in the past"
+   ],
+   "avoid": [
+    "clean news packages and data explainers: it reads as stylised, not archival",
+    "under captions or lower thirds (put the look below the graphics)",
+    "lowering Strobe Light Blend With Original below 90: the flicker becomes a photosensitivity risk",
+    "stacking it on footage that is already real archive: double grain and weave look fake"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 70,
+      "Contrast": 15,
+      "Faded Film": 30,
+      "Temperature": 12,
+      "Highlights": -15
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 8,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 2,
+      "Vertical Range": 3,
+      "Wiggle Speed": 90,
+      "Spin Range (deg)": 0.3,
+      "Min Scale": 103,
+      "Max Scale": 103,
+      "Motion Blur": 0,
+      "Seed": 7,
+      "Master": 100
+     }
+    },
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Blend With Original": 92,
+      "Strobe Duration (secs)": 0.04,
+      "Strobe Period (secs)": 0.08,
+      "Random Strobe Probablity": 45,
+      "Strobe": 0,
+      "Strobe Operator": 0,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 55,
+      "Scale": 95,
+      "Feather": 60,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 70,
+      "Contrast": 15,
+      "Faded Film": 30,
+      "Temperature": 12,
+      "Highlights": -15
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 2,
+      "Wave Width": 4000,
+      "Direction": 90,
+      "Wave Speed": 1.5,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 1.5,
+      "Wave Width": 4000,
+      "Direction": 0,
+      "Wave Speed": 1.12,
+      "Phase": 120,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 103
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.9,
+      "Size": 1.4,
+      "Softness": 1.0,
+      "Monochromatic": 0,
+      "Animation Speed": 1,
+      "Saturation": 0.4
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 1,
+      "Contrast": 900,
+      "Brightness": -380,
+      "Uniform Scaling": 0,
+      "Scale Width": 2,
+      "Scale Height": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        1800
+       ]
+      ],
+      "Opacity": 40,
+      "Blending Mode": 5
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 3,
+      "Contrast": 300,
+      "Brightness": 0,
+      "Uniform Scaling": 1,
+      "Scale": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        22500
+       ]
+      ],
+      "Opacity": 8,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 110,
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "transition": {
+    "name": "Grunge",
+    "dur": 0.6
+   },
+   "sfx": [
+    "amb_projector",
+    "amb_crackle"
+   ],
+   "keyframes_note": "Static look, no keyframes: put it on an adjustment layer spanning the archive section. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters. Scratches (AE only): a Fractal Noise squeezed to 2% wide and 10000% tall makes full-height vertical lines, Brightness -380 keeps only the brightest few, Screen blend adds them as white scratches; Blending Mode 5 = Screen follows AE's menu order (None, Normal, Add, Multiply, Screen) but is not render-verified, and if the frame darkens the index is wrong. Tune Brightness until 1-4 lines show. Premiere has no scratch effect: use the Grunge transition on cuts inside the section, or lay AdobeBridge's grunge.py dust/scratch overlay (ProRes 4444 with alpha) on a track above. Keep captions, lower thirds and logos on tracks/layers ABOVE the treated clip or adjustment layer.",
+   "built_from": [
+    "Lumetri Color",
+    "Noise",
+    "Wiggle",
+    "Strobe Light",
+    "Vignette",
+    "Grunge",
+    "Wave Warp",
+    "Transform",
+    "Add Grain",
+    "Fractal Noise",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "medium",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/000b.png",
+    "note": "No longer blown white: a muted warm grade with lifted blacks, fine grain, a soft vignette and a smooth ~10 px gate weave now read, but the single white strobe only lifts the blacks ~15 levels on the first frame and as a held lift from about 1 s on (per-frame scan of the build), not frame-to-frame flicker, so the summary now says 'random exposure lifts'.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "wrong",
+     "frame": "pve/gallery/recipes_ae/000b.png",
+     "note": "Muted warm colour, grain, a strong vignette and many faint vertical scratch lines show, but the whole picture drops to under half brightness (mean luma about 107 -> 44, 2nd-percentile blacks 40 -> 15, pushed down instead of lifted), so the scratch Fractal Noise at Blending Mode 5 behaves like Multiply rather than Screen (index 5 is not Screen; if AE counts a menu separator after Normal, Screen would be 6, unverified); vs Premiere: Premiere keeps normal brightness with lifted blacks (mean luma 115); the AE half is far darker and muddier.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Faded colour print",
+   "summary": "1970s-80s colour print that has aged: low contrast, milky lifted blacks, dimmed whites, colour drained and drifting magenta-red as the cyan dye fades, with fine grain.",
+   "use_for": [
+    "1970s-80s events, elections and rallies",
+    "nostalgic flashback",
+    "family-album or biography segment",
+    "matching modern B-roll to faded archive colour"
+   ],
+   "avoid": [
+    "skin-critical interviews (the magenta drift shifts skin)",
+    "national flags and party colours that must read correctly",
+    "already low-contrast or foggy footage (it turns to mush)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 65,
+      "Contrast": -15,
+      "Faded Film": 45,
+      "Temperature": 10,
+      "Tint": 12,
+      "Highlights": -20
+     }
+    },
+    {
+     "name": "Levels",
+     "pr_props": {
+      "(RGB) White Output Level": 232,
+      "(R) Black Output Level": 28,
+      "(G) Black Output Level": 14,
+      "(B) Black Output Level": 18,
+      "(G) Gamma": 94
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 5,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 65,
+      "Contrast": -15,
+      "Faded Film": 45,
+      "Temperature": 10,
+      "Tint": 12,
+      "Highlights": -20
+     }
+    },
+    {
+     "name": "ADBE Pro Levels2",
+     "props": {
+      "Output White": 0.91,
+      "Red Output Black": 0.11,
+      "Green Output Black": 0.055,
+      "Blue Output Black": 0.07,
+      "Green Gamma": 0.94
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.6,
+      "Size": 1.2,
+      "Softness": 1.2,
+      "Monochromatic": 0,
+      "Animation Speed": 1,
+      "Saturation": 0.5
+     }
+    }
+   ],
+   "transition": {
+    "name": "Film Dissolve",
+    "dur": 1.0
+   },
+   "keyframes_note": "Static grade, no keyframes; one adjustment layer over the section. Premiere Levels are 0-255 (gamma x100), AE Levels (Individual Controls) are 0-1: lifting red and blue output black more than green tints the shadows magenta, and green gamma below 1 drains green from the mids. The gamma direction in Premiere Levels is unverified: if the mids go green instead of magenta, use (G) Gamma 106. Lumetri Tint +12 pushes magenta, Faded Film lifts the blacks. For a stronger fade raise Faded Film toward 70 rather than lowering Contrast further.",
+   "built_from": [
+    "Lumetri Color",
+    "Levels",
+    "Noise",
+    "Film Dissolve",
+    "Levels (Individual Controls)",
+    "Add Grain"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/001b.png",
+    "note": "Low contrast with milky lifted blacks, dimmed whites, drained colour and a magenta-red cast (mean R 126 / G 94 / B 89 vs ref 129/102/63) plus fine grain: a clearly aged colour print.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/001b.png",
+     "note": "Low contrast with milky lifted blacks (2nd percentile 41 -> 58), dimmed whites (98th 201 -> 179), drained colour (saturation 0.54 -> 0.31), a magenta-red cast in the shadows (darkest tones 79/53/56) and fine grain: an aged colour print; vs Premiere: Practically the same as Premiere (mean 125/94/88 vs 126/94/89).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Sepia film",
+   "summary": "Moving footage turned into warm brown-and-cream monochrome film with contrast, grain, light gate weave, gentle flicker and darkened edges.",
+   "use_for": [
+    "pre-1940s history and freedom-movement segments",
+    "legend or origin-story section",
+    "reenactments placed between real sepia archive",
+    "chapter intro in a historical explainer"
+   ],
+   "avoid": [
+    "faces that must keep natural skin colour",
+    "long talking-head interviews (sepia plus weave gets tiring)",
+    "modern-looking subjects (phones, LED screens) that break the period illusion"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Contrast": 25,
+      "Highlights": -10,
+      "Blacks": -10
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#F2D7A6",
+      "Amount to Tint": 100
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 7,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 2,
+      "Vertical Range": 2,
+      "Wiggle Speed": 80,
+      "Spin Range (deg)": 0.3,
+      "Min Scale": 103,
+      "Max Scale": 103,
+      "Motion Blur": 0,
+      "Seed": 7,
+      "Master": 100
+     }
+    },
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Blend With Original": 93,
+      "Strobe Duration (secs)": 0.04,
+      "Strobe Period (secs)": 0.08,
+      "Random Strobe Probablity": 35,
+      "Strobe": 0,
+      "Strobe Operator": 0,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 55,
+      "Scale": 95,
+      "Feather": 60,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Tritone",
+     "props": {
+      "Highlights": "#FFF2D9",
+      "Midtones": "#8C5A32",
+      "Shadows": "#1A0F08",
+      "Blend With Original": 0
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Contrast": 20,
+      "Use Legacy (supports HDR)": 0
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 1.5,
+      "Wave Width": 4000,
+      "Direction": 90,
+      "Wave Speed": 1.5,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 1.12,
+      "Wave Width": 4000,
+      "Direction": 0,
+      "Wave Speed": 1.12,
+      "Phase": 120,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 103
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.9,
+      "Size": 1.4,
+      "Softness": 1.0,
+      "Monochromatic": 1,
+      "Animation Speed": 1
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 3,
+      "Contrast": 300,
+      "Brightness": 0,
+      "Uniform Scaling": 1,
+      "Scale": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        22500
+       ]
+      ],
+      "Opacity": 6,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 110,
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "sfx": [
+    "amb_projector"
+   ],
+   "keyframes_note": "Static look on an adjustment layer. Premiere Tint maps black to black and white to the cream #F2D7A6 (Map Black To is not settable through the checker, leave it black); Lumetri before it only sets the contrast the tint inherits. AE Tritone gives a richer brown midtone. For a colder 'cyanotype' variant use Map White To #CFE0EA / Tritone Midtones #3C5A78. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters.",
+   "built_from": [
+    "Lumetri Color",
+    "Tint",
+    "Noise",
+    "Wiggle",
+    "Strobe Light",
+    "Vignette",
+    "Tritone",
+    "Brightness & Contrast",
+    "Wave Warp",
+    "Transform",
+    "Add Grain",
+    "Fractal Noise",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/002b.png",
+    "note": "Warm brown-and-cream monochrome with punchy contrast, grain and darkened corners; the single white strobe gives faint frame lifts in the build render.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/002b.png",
+     "note": "Deep brown monochrome with firm contrast, grain and clearly darker edges (corner/centre luma 0.77 vs 1.52 in the reference), though the highlights only reach a light tan (98th percentile 135) so little cream shows; vs Premiere: Darker and browner than Premiere's lighter cream-grey version (mean luma 61 vs 97).",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Black-and-white newsreel",
+   "summary": "1930s-50s newsreel: punchy black-and-white with heavy moving grain, gate weave, exposure flicker and dark corners.",
+   "use_for": [
+    "WWII, independence and Partition-era segments",
+    "making reenactments match real newsreel",
+    "historical speech or rally recreated for a political explainer",
+    "'march of time' style intro"
+   ],
+   "avoid": [
+    "colourful material whose meaning depends on colour (flags, party symbols)",
+    "very dark footage (heavy grain, the contrast punch and the dark corners crush it)",
+    "modern 9:16 reels where it reads as a filter"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": -5,
+      "Contrast": 30
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 10,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 2,
+      "Vertical Range": 3,
+      "Wiggle Speed": 90,
+      "Spin Range (deg)": 0.3,
+      "Min Scale": 103,
+      "Max Scale": 103,
+      "Motion Blur": 0,
+      "Seed": 7,
+      "Master": 100
+     }
+    },
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Blend With Original": 91,
+      "Strobe Duration (secs)": 0.04,
+      "Strobe Period (secs)": 0.08,
+      "Random Strobe Probablity": 50,
+      "Strobe": 0,
+      "Strobe Operator": 0,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 80,
+      "Scale": 85,
+      "Feather": 65,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Black&White",
+     "props": {
+      "Reds": 60,
+      "Yellows": 75,
+      "Greens": 45,
+      "Cyans": 50,
+      "Blues": 20,
+      "Magentas": 60,
+      "Tint:": 0
+     }
+    },
+    {
+     "name": "ADBE Easy Levels2",
+     "props": {
+      "Input Black": 0.06,
+      "Input White": 0.9,
+      "Gamma": 0.95
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 2,
+      "Wave Width": 4000,
+      "Direction": 90,
+      "Wave Speed": 1.5,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 1.5,
+      "Wave Width": 4000,
+      "Direction": 0,
+      "Wave Speed": 1.12,
+      "Phase": 120,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 103
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 1.1,
+      "Size": 1.5,
+      "Softness": 0.8,
+      "Monochromatic": 1,
+      "Animation Speed": 1
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 3,
+      "Contrast": 300,
+      "Brightness": 0,
+      "Uniform Scaling": 1,
+      "Scale": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        22500
+       ]
+      ],
+      "Opacity": 9,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 120,
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "transition": {
+    "name": "Film Dissolve",
+    "dur": 0.8
+   },
+   "sfx": [
+    "amb_projector"
+   ],
+   "keyframes_note": "Static look on an adjustment layer over the newsreel section. Order matters in Premiere: Black & White first, then Brightness & Contrast punches the grey result. AE Black & White weights (Reds 60, Blues 20) keep skin light and skies dark, like orthochromatic stock. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters. For a silent-era feel see 'Silent-era film'.",
+   "built_from": [
+    "Black & White",
+    "Brightness & Contrast",
+    "Noise",
+    "Wiggle",
+    "Strobe Light",
+    "Vignette",
+    "Film Dissolve",
+    "Levels",
+    "Wave Warp",
+    "Transform",
+    "Add Grain",
+    "Fractal Noise",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/003b.png",
+    "note": "No longer blown white: punchy black-and-white with crushed blacks, grain, a ~10 px weave and a held strobe lift from about 1 s on now read, but the corners are no darker than the centre (corner/centre luma 1.37 vs 1.35 in the reference, Contrast 30 brightens the pale wall faster than Vignette 50 darkens it), so Vignette is raised 50 -> 80 and Scale 95 -> 85 (untested change).",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/003b.png",
+     "note": "Punchy black-and-white with heavier grain and clearly dark corners (corner/centre luma 0.71 vs 1.52 in the reference); flicker and weave cannot be judged from two stills; vs Premiere: Darker than Premiere (mean luma 71 vs 89) and, unlike Premiere, the corners clearly darken.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Silent-era film",
+   "summary": "1910s-20s silent film: stepped undercranked motion, high-contrast monochrome dyed amber, heavy grain, strong weave and flicker inside a round iris vignette.",
+   "use_for": [
+    "colonial-era and early-1900s history",
+    "comic 'old times' bit in a political roast reel",
+    "legend or myth retold as an old film",
+    "intro card of a historical chapter"
+   ],
+   "avoid": [
+    "talking heads with sync speech (Posterize Time breaks lip-sync)",
+    "serious tragedy footage (reads comic)",
+    "long stretches: the stepped motion and strong flicker tire the eye"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Posterize Time",
+     "pr_props": {
+      "Frame Rate": 16
+     }
+    },
+    {
+     "name": "Black & White",
+     "pr_props": {}
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": 5,
+      "Contrast": 40
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#FFD9A0",
+      "Amount to Tint": 60
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 14,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 4,
+      "Vertical Range": 5,
+      "Wiggle Speed": 120,
+      "Spin Range (deg)": 0.6,
+      "Min Scale": 105,
+      "Max Scale": 105,
+      "Motion Blur": 0,
+      "Seed": 13,
+      "Master": 100
+     }
+    },
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Blend With Original": 90,
+      "Strobe Duration (secs)": 0.04,
+      "Strobe Period (secs)": 0.08,
+      "Random Strobe Probablity": 55,
+      "Strobe": 0,
+      "Strobe Operator": 0,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 85,
+      "Scale": 75,
+      "Feather": 30,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Posterize Time",
+     "props": {
+      "Frame Rate": 16
+     }
+    },
+    {
+     "name": "ADBE Black&White",
+     "props": {
+      "Reds": 70,
+      "Yellows": 80,
+      "Greens": 40,
+      "Blues": 10,
+      "Tint:": 0
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Brightness": 5,
+      "Contrast": 35,
+      "Use Legacy (supports HDR)": 0
+     }
+    },
+    {
+     "name": "ADBE Tint",
+     "props": {
+      "Map Black To": "#000000",
+      "Map White To": "#FFD9A0",
+      "Amount to Tint": 60
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 3,
+      "Wave Width": 4000,
+      "Direction": 90,
+      "Wave Speed": 2,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 2.25,
+      "Wave Width": 4000,
+      "Direction": 0,
+      "Wave Speed": 1.5,
+      "Phase": 120,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 105
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 1.4,
+      "Size": 1.8,
+      "Softness": 0.8,
+      "Monochromatic": 1,
+      "Animation Speed": 1
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 3,
+      "Contrast": 300,
+      "Brightness": 0,
+      "Uniform Scaling": 1,
+      "Scale": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        22500
+       ]
+      ],
+      "Opacity": 10,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 200,
+      "Angle of View": 80,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "transition": {
+    "name": "Dip to Black",
+    "dur": 0.6
+   },
+   "sfx": [
+    "amb_projector"
+   ],
+   "keyframes_note": "Static look; apply per clip, not on an adjustment layer: Premiere time effects on adjustment layers may not step the layers below (card note), and Posterize Time only shows on moving footage. Silent films were dyed by scene: amber #FFD9A0 for day or interiors, blue #A8C8FF for night, rose #F4B6B0 for romance or fire. The iris is a small, hard Vignette (Scale 75, Feather 30); keyframe Premiere Vignette Scale from 75 down to 0 over the clip's last 0.6 s for a classic iris-out. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 105 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 105% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters.",
+   "built_from": [
+    "Posterize Time",
+    "Black & White",
+    "Brightness & Contrast",
+    "Tint",
+    "Noise",
+    "Wiggle",
+    "Strobe Light",
+    "Vignette",
+    "Dip to Black",
+    "Wave Warp",
+    "Transform",
+    "Add Grain",
+    "Fractal Noise",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/004b.png",
+    "note": "No longer a white disc: amber-dyed high-contrast monochrome with grain, a strong ~20-30 px weave, held frames from Posterize Time 16 and a round iris darkening the sides and corners (a third darker than the centre) now read, though the iris edge is soft rather than hard and the strobe gives a held lift from about 1 s on rather than per-frame flicker.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/004b.png",
+     "note": "High-contrast monochrome with a faint amber dye (centre 76/71/60), heavy grain and a hard round iris that blacks out the sides and corners (40% of the frame is pure black); stepped motion cannot be judged from two stills; vs Premiere: Same faint amber tone as Premiere, but the AE iris is far harder and larger where Premiere's is a soft corner darkening.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Super 8 home movie",
+   "summary": "Amateur 8 mm home movie: warm, slightly oversaturated colour, soft focus, coarse grain, 18 fps stutter, loose weave and a rounded vignette.",
+   "use_for": [
+    "childhood or family segment of a leader's biography",
+    "personal memory or 'how it started' story",
+    "nostalgic reel montage",
+    "travel or village life flashback"
+   ],
+   "avoid": [
+    "sync dialogue (18 fps stutter)",
+    "formal news and official government content",
+    "text-heavy shots (softness plus grain kills legibility)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Posterize Time",
+     "pr_props": {
+      "Frame Rate": 18
+     }
+    },
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 25,
+      "Saturation": 115,
+      "Contrast": 10,
+      "Faded Film": 25,
+      "Highlights": -25
+     }
+    },
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 4
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 12,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 4,
+      "Vertical Range": 5,
+      "Wiggle Speed": 110,
+      "Spin Range (deg)": 0.6,
+      "Min Scale": 105,
+      "Max Scale": 105,
+      "Motion Blur": 0,
+      "Seed": 21,
+      "Master": 100
+     }
+    },
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Blend With Original": 92,
+      "Strobe Duration (secs)": 0.04,
+      "Strobe Period (secs)": 0.08,
+      "Random Strobe Probablity": 40,
+      "Strobe": 0,
+      "Strobe Operator": 0,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 60,
+      "Scale": 85,
+      "Feather": 55,
+      "Roundness": 60,
+      "Color": "#000000",
+      "Chromatic Aberration": 15,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Posterize Time",
+     "props": {
+      "Frame Rate": 18
+     }
+    },
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 25,
+      "Saturation": 115,
+      "Contrast": 10,
+      "Faded Film": 25,
+      "Highlights": -25
+     }
+    },
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 1.5,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 3,
+      "Wave Width": 4000,
+      "Direction": 90,
+      "Wave Speed": 2,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 2.25,
+      "Wave Width": 4000,
+      "Direction": 0,
+      "Wave Speed": 1.5,
+      "Phase": 120,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 105
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 1.2,
+      "Size": 1.8,
+      "Softness": 1.0,
+      "Monochromatic": 0,
+      "Animation Speed": 1,
+      "Saturation": 0.6
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 3,
+      "Contrast": 300,
+      "Brightness": 0,
+      "Uniform Scaling": 1,
+      "Scale": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        22500
+       ]
+      ],
+      "Opacity": 8,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 130,
+      "Angle of View": 70,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "transition": {
+    "name": "Light Leak",
+    "dur": 0.8
+   },
+   "sfx": [
+    "amb_projector"
+   ],
+   "keyframes_note": "Static look per clip (Posterize Time does not reliably step clips below a Premiere adjustment layer). Use the Light Leak transition (multicolour by default, verified) at the start or end of a roll, not on every cut. Premiere's new Gaussian Blur Amount is 0-100: 4 is a gentle lens softness, commit higher only for a deliberate dream. Vignette Roundness 60 gives the rounded-rectangle gate of a small-gauge camera. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters.",
+   "built_from": [
+    "Posterize Time",
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Noise",
+    "Wiggle",
+    "Strobe Light",
+    "Vignette",
+    "Light Leak",
+    "Wave Warp",
+    "Transform",
+    "Add Grain",
+    "Fractal Noise",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/005b.png",
+    "note": "Warm, rich colour, soft focus, coarse grain and a rounded dark-edged gate read clearly as an amateur 8 mm home movie.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/005b.png",
+     "note": "Warm, richer colour (saturation 0.54 -> 0.64), coarse colour grain and a heavy rounded vignette that drops the corners to near black (36/29/11), while the 1.5 px softening barely shows at this size; vs Premiere: Darker and grainier than Premiere with a much heavier vignette and less visible softness.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Colour to archive era shift",
+   "summary": "Animated time jump: over about 1.2 s the colour drains into sepia while contrast, grain, fade, weave and vignette build up, taking a present-day shot into the past.",
+   "use_for": [
+    "'it all started in 1947' style time jump",
+    "linking a modern location to its archive past",
+    "start of a flashback chapter",
+    "reverse it to return from archive to the present"
+   ],
+   "avoid": [
+    "fast reels where 1.2 s of change is too slow (shorten to 0.5 s)",
+    "using it on every archive cut (once per chapter)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": [
+       [
+        0,
+        100
+       ],
+       [
+        1.2,
+        0
+       ]
+      ],
+      "Contrast": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        25
+       ]
+      ],
+      "Faded Film": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        30
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#F2D7A6",
+      "Amount to Tint": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        100
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        8
+       ]
+      ],
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 2,
+      "Vertical Range": 3,
+      "Wiggle Speed": 90,
+      "Spin Range (deg)": 0.3,
+      "Min Scale": 103,
+      "Max Scale": 103,
+      "Motion Blur": 0,
+      "Seed": 7,
+      "Master": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        100
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 55,
+      "Scale": 95,
+      "Feather": 60,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        100
+       ]
+      ]
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Color Balance (HLS)",
+     "props": {
+      "Saturation": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        -100
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Tritone",
+     "props": {
+      "Highlights": "#FFF2D9",
+      "Midtones": "#8C5A32",
+      "Shadows": "#1A0F08",
+      "Blend With Original": [
+       [
+        0,
+        100
+       ],
+       [
+        1.2,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Contrast": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        20
+       ]
+      ]
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        0.9
+       ]
+      ],
+      "Size": 1.4,
+      "Softness": 1.0,
+      "Monochromatic": 1,
+      "Animation Speed": 1
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": [
+       [
+        0,
+        0
+       ],
+       [
+        1.2,
+        110
+       ]
+      ],
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "transition": {
+    "name": "Film Dissolve",
+    "dur": 1.0
+   },
+   "sfx": [
+    "tape_rewind",
+    "amb_projector"
+   ],
+   "keyframes_note": "Times are seconds from the start of the shift; put the effects on an adjustment layer that starts at the shift point (keys are relative to the item's start) and runs through the archive section, so the end state holds after 1.2 s. To return to the present, swap each pair of key values (e.g. Saturation [[0, 0], [1.2, 100]]). Cut variant: put the end state on the archive clip and join the two with the Film Dissolve transition instead. tape_rewind on the shift start, amb_projector fades in under the archive section. After Effects: Hue/Saturation's Master Saturation cannot be keyframed (the harvest marks it not animatable and After Effects refused the keys in live wave 2), so the saturation keys sit on Color Balance (HLS) Saturation, the same -100..100 control, which is animatable.",
+   "built_from": [
+    "Lumetri Color",
+    "Tint",
+    "Noise",
+    "Wiggle",
+    "Vignette",
+    "Film Dissolve",
+    "Color Balance (HLS)",
+    "Tritone",
+    "Brightness & Contrast",
+    "Add Grain",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/006b.png",
+    "note": "At 0.2 s the shot is still near full colour and by 1.0 s it has drained into grainy, faded sepia with darker edges, the colour-to-archive shift the summary describes.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/006b.png",
+     "note": "After Effects refused the Hue/Saturation Master Saturation keys and the error ended the layer's setup, so no effect of the stack was applied: both frames equal the untouched clip.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-14",
+       "why": "Hue/Saturation Master Saturation keys moved to Color Balance (HLS) Saturation (animatable); not rendered again",
+       "frame": "pve/gallery/recipes_ae/006b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Analogue broadcast tape",
+   "summary": "1980s-90s TV news on analogue tape: 4:3 pillarbox, soft horizontal detail, colour bleeding sideways, boosted reds, lifted blacks and faint chroma noise; clean, not damaged.",
+   "use_for": [
+    "Doordarshan-era or 90s TV news clips",
+    "old campaign speeches and broadcast interviews",
+    "recreating an archive TV-news insert",
+    "90s nostalgia segments"
+   ],
+   "avoid": [
+    "sharp 4K drone or product shots that need detail",
+    "on-screen text inside the footage that must be read (horizontal softening)",
+    "true 4:3 sources already pillarboxed (drop the Crop)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 115,
+      "Blacks": 12,
+      "Contrast": -10,
+      "Highlights": -20,
+      "Temperature": 5
+     }
+    },
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": 3,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": true
+     }
+    },
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": 1.5,
+      "Softness": 20
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 4,
+      "Use Color Noise": true,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Crop",
+     "pr_props": {
+      "Left": 12.5,
+      "Right": 12.5
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 115,
+      "Blacks": 20,
+      "Contrast": -10,
+      "Highlights": -20,
+      "Temperature": 5
+     }
+    },
+    {
+     "name": "ADBE Box Blur2",
+     "props": {
+      "Blur Radius": 3,
+      "Iterations": 2,
+      "Blur Dimensions": 2,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": 16,
+      "Blue Blurriness": 10,
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Noise HLS Auto2",
+     "props": {
+      "Noise": 1,
+      "Hue": 0,
+      "Lightness": 4,
+      "Saturation": 6,
+      "Noise Animation Speed": 25
+     }
+    }
+   ],
+   "transition": {
+    "name": "Dip to Black",
+    "dur": 0.4
+   },
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Static look per clip. Premiere Crop 12.5% left and right leaves a centred 4:3 window (1440 of 1920 px) with transparent sides, black on an empty track below; skip it for vertical reels or sources that are already 4:3. After Effects has no crop effect card: build the archive inside a 1440x1080 comp or mask the layer instead. Fast Blur Blur Dimensions 1 = Horizontal (0-based in Premiere), Box Blur 2 = Horizontal (1-based in AE). For damaged tape use 'Damaged VHS tape'.",
+   "built_from": [
+    "Lumetri Color",
+    "Fast Blur",
+    "RGB Split",
+    "Noise",
+    "Crop",
+    "Dip to Black",
+    "Fast Box Blur",
+    "Channel Blur",
+    "Noise HLS Auto"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/007b.png",
+    "note": "Centred 4:3 pillarbox with black sides, horizontally soft picture, red-cyan colour bleed, boosted reds and lifted blacks; clean, undamaged tape.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/007b.png",
+     "note": "Only a slight saturation boost (0.54 -> 0.59) and a faint lift of the blacks read, while the horizontal softness, the red/blue sideways bleed and the chroma noise are barely visible on this already soft footage (no pillarbox, as expected for AE); vs Premiere: Premiere shows a clear red-cyan fringe and horizontal softness inside its 4:3 pillarbox; the AE half stays close to the clean reference.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: Bigger horizontal Channel Blur and Box Blur plus higher Lumetri Blacks should make the sideways colour bleed, the soft line detail and the lifted tape blacks readable while keeping the picture clean.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/007b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Damaged VHS tape",
+   "summary": "Worn consumer VHS: smeared oversaturated colour bleeding sideways, soft picture, crawling horizontal line jitter, colour fringes and heavy chroma noise.",
+   "use_for": [
+    "'leaked tape' or found-footage segment",
+    "90s-2000s home video and political rally tapes",
+    "retro reel aesthetic",
+    "glitchy intro to an old controversy"
+   ],
+   "avoid": [
+    "clean government or corporate pieces (reads as a fault)",
+    "mixing with digital glitch looks in the same piece (mixed eras)",
+    "faces that must stay identifiable and sharp"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 125,
+      "Contrast": -15,
+      "Blacks": 18,
+      "Highlights": -25
+     }
+    },
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": 4,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": true
+     }
+    },
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": 3,
+      "Softness": 30
+     }
+    },
+    {
+     "name": "Wave Warp",
+     "pr_props": {
+      "Wave Type": 7,
+      "Wave Height": 3,
+      "Wave Width": 12,
+      "Direction": 0,
+      "Wave Speed": 2,
+      "Pinning": 0,
+      "Antialiasing (Best Quality)": 1
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 14,
+      "Use Color Noise": true,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 125,
+      "Contrast": -15,
+      "Blacks": 18,
+      "Highlights": -25
+     }
+    },
+    {
+     "name": "ADBE Box Blur2",
+     "props": {
+      "Blur Radius": 5,
+      "Iterations": 2,
+      "Blur Dimensions": 2,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": 30,
+      "Blue Blurriness": 18,
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 8,
+      "Wave Height": 8,
+      "Wave Width": 12,
+      "Direction": 0,
+      "Wave Speed": 2,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 2
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": 30,
+      "Noise Type": 1,
+      "Clipping": 1
+     }
+    }
+   ],
+   "transition": {
+    "name": "VHS Damage",
+    "dur": 0.8
+   },
+   "sfx": [
+    "tape_rewind",
+    "glitch"
+   ],
+   "keyframes_note": "Static look on an adjustment layer; animation is built in (Wave Warp travels on its own, noise re-randomises every frame). Wave Warp Direction 0 sends the wave vertically, so each horizontal band of rows is pushed sideways a few pixels: tape line jitter (Noise wave type = Premiere 7 / AE 8, dropdowns 0-based vs 1-based). Add 'VHS tracking burst' on beats or cuts, and the VHS Damage transition (tape_rewind under it) between tapes.",
+   "built_from": [
+    "Lumetri Color",
+    "Fast Blur",
+    "RGB Split",
+    "Wave Warp",
+    "Noise",
+    "VHS Damage",
+    "Fast Box Blur",
+    "Channel Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/008a.png",
+    "note": "Strong red-cyan fringing, smeared oversaturated colour, soft picture, rows jittered sideways (foreground and right-edge blocks displaced) and chroma noise: worn VHS.",
+    "rerender": false,
+    "ae": {
+     "verdict": "corrected_unverified",
+     "frame": "pve/gallery/recipes_ae/008b.png",
+     "note": "Heavy noise and a slight saturation lift read, but the sideways colour smear, the softness and the row jitter (3 px on a 1920 px frame) are hard to see, so it reads as noisy clean video rather than worn tape; vs Premiere: Premiere shows strong red-cyan fringes and visibly displaced rows; the AE half is much milder.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "weak",
+       "changed": "2026-10-14",
+       "why": "after_effects changed: A wider horizontal Channel Blur and Box Blur smear the colour sideways and an 8 px Noise Wave Warp makes the crawling row jitter visible, closer to Premiere's worn-tape read.; not rendered again",
+       "frame": "pve/gallery/recipes_ae/008b.png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "VHS tracking burst",
+   "summary": "A 0.4 s tape tracking error on a hit: rows tear sideways, the picture jumps vertically, colours split and static spikes, then it snaps back to the clean tape picture.",
+   "use_for": [
+    "beat or cut accent inside a VHS / archive tape section",
+    "'rewind' moment before a reveal",
+    "found-footage style interruptions",
+    "reel hook on a retro clip"
+   ],
+   "avoid": [
+    "more than one burst every few seconds",
+    "over captions that must be read",
+    "clean modern footage (pair it with 'Damaged VHS tape' or 'Analogue broadcast tape')"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Wave Warp",
+     "pr_props": {
+      "Wave Type": 7,
+      "Wave Width": 30,
+      "Direction": 0,
+      "Wave Speed": 4,
+      "Wave Height": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        45
+       ],
+       [
+        0.2,
+        12
+       ],
+       [
+        0.4,
+        0
+       ]
+      ],
+      "Antialiasing (Best Quality)": 1
+     }
+    },
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": [
+       [
+        0,
+        1
+       ],
+       [
+        0.06,
+        14
+       ],
+       [
+        0.4,
+        1
+       ]
+      ],
+      "Softness": 20
+     }
+    },
+    {
+     "name": "Offset",
+     "pr_props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        0.08,
+        [
+         0.5,
+         0.62
+        ]
+       ],
+       [
+        0.16,
+        [
+         0.5,
+         0.47
+        ]
+       ],
+       [
+        0.24,
+        [
+         0.5,
+         0.5
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": [
+       [
+        0,
+        4
+       ],
+       [
+        0.06,
+        45
+       ],
+       [
+        0.4,
+        4
+       ]
+      ],
+      "Use Color Noise": true,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 8,
+      "Wave Width": 30,
+      "Direction": 0,
+      "Wave Speed": 4,
+      "Wave Height": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        45
+       ],
+       [
+        0.2,
+        12
+       ],
+       [
+        0.4,
+        0
+       ]
+      ],
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 2
+     }
+    },
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        40
+       ],
+       [
+        0.4,
+        0
+       ]
+      ],
+      "Blue Blurriness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.06,
+        25
+       ],
+       [
+        0.4,
+        0
+       ]
+      ],
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.08,
+        [
+         960,
+         670
+        ]
+       ],
+       [
+        0.16,
+        [
+         960,
+         510
+        ]
+       ],
+       [
+        0.24,
+        [
+         960,
+         540
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": [
+       [
+        0,
+        5
+       ],
+       [
+        0.06,
+        60
+       ],
+       [
+        0.4,
+        5
+       ]
+      ],
+      "Noise Type": 1,
+      "Clipping": 1
+     }
+    }
+   ],
+   "transition": {
+    "name": "VHS Damage",
+    "dur": 0.6
+   },
+   "sfx": [
+    "glitch",
+    "tape_rewind"
+   ],
+   "keyframes_note": "Times are seconds from the hit (keys are relative to the clip start, so add the hit's offset into the clip, or put the effects on a 0.4 s adjustment layer that starts on the hit). The Offset jump wraps the picture with a hard seam, which reads as the VHS head-switch bar. At a cut, the VHS Damage transition alone does the same job; do not stack both. glitch on the hit, tape_rewind if the burst leads into a jump back in time.",
+   "built_from": [
+    "Wave Warp",
+    "RGB Split",
+    "Offset",
+    "Noise",
+    "VHS Damage",
+    "Channel Blur"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/009a.png",
+    "note": "At 0.2 s rows tear sideways with heavy colour split and static, the picture unreadable; by 1.0 s (009b.png) it is back to an almost clean tape picture.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/009a.png",
+     "note": "At 0.2 s rows tear sideways into jagged edges, static covers the frame, a faint red split shows and the wrap seam of the vertical jump sits along the bottom edge, and at 1.0 s the picture is back to the clean frame (mean difference 1 level); vs Premiere: Much milder than Premiere's unreadable 0.2 s frame, but the same burst-then-snap-back.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "CRT television screen",
+   "summary": "Footage shown on an old tube TV: bulged barrel picture with black rounded corners, phosphor bloom, colour fringes, soft lines, noise and darkened edges; After Effects adds curved scanlines.",
+   "use_for": [
+    "'as broadcast at the time' framing for archive TV clips",
+    "retro news-bulletin segment",
+    "90s nostalgia reels",
+    "a speech shown as people watched it on TV"
+   ],
+   "avoid": [
+    "subtitles inside the treated layer (put captions above it)",
+    "long interviews (the bulge distorts faces at the edges)",
+    "pairing with the separate 'Analogue broadcast tape' Crop (double framing)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 110,
+      "Contrast": 15,
+      "Blacks": 10,
+      "Temperature": -15
+     }
+    },
+    {
+     "name": "Fast Blur",
+     "pr_props": {
+      "Blurriness": 2,
+      "Blur Dimensions": 1,
+      "Repeat Edge Pixels": true
+     }
+    },
+    {
+     "name": "RGB Split",
+     "pr_props": {
+      "Horizontal Split": 1.5,
+      "Softness": 10
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 6,
+      "Use Color Noise": true,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "VR Glow",
+     "pr_props": {
+      "Luma Threshold": 0.7,
+      "Glow Radius": 40,
+      "Glow Brightness": 1.4,
+      "Glow Saturation": 1
+     }
+    },
+    {
+     "name": "Lens Distortion",
+     "pr_props": {
+      "Curvature": 18,
+      "Fill Color": "#000000"
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 60,
+      "Scale": 90,
+      "Feather": 45,
+      "Roundness": 70,
+      "Color": "#000000",
+      "Chromatic Aberration": 10,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 110,
+      "Contrast": 15,
+      "Blacks": 10,
+      "Temperature": -15
+     }
+    },
+    {
+     "name": "ADBE Box Blur2",
+     "props": {
+      "Blur Radius": 1.5,
+      "Iterations": 2,
+      "Blur Dimensions": 2,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "ADBE Channel Blur",
+     "props": {
+      "Red Blurriness": 4,
+      "Blur Dimensions": 2,
+      "Edge Behavior": 1
+     }
+    },
+    {
+     "name": "ADBE Noise HLS Auto2",
+     "props": {
+      "Noise": 1,
+      "Hue": 0,
+      "Lightness": 5,
+      "Saturation": 5,
+      "Noise Animation Speed": 30
+     }
+    },
+    {
+     "name": "ADBE Venetian Blinds",
+     "props": {
+      "Transition Completion": 30,
+      "Direction": 90,
+      "Width": 4,
+      "Feather": 1
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Based On": 2,
+      "Glow Threshold": 190,
+      "Glow Radius": 12,
+      "Glow Intensity": 0.8,
+      "Composite Original": 2,
+      "Glow Operation": 3,
+      "Glow Colors": 1
+     }
+    },
+    {
+     "name": "ADBE Optics Compensation",
+     "props": {
+      "Field Of View (FOV)": 35,
+      "Reverse Lens Distortion": 0
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 120,
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "transition": {
+    "name": "TV Power",
+    "dur": 0.8
+   },
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Static look per clip. Order matters: grade, blur and noise first, then the bulge (Premiere Lens Distortion +18 shrinks the picture into a barrel and fills the corners with Fill Color, white by default, so it is set to black), vignette last. Premiere has no scanline generator; the AE version cuts 1 px transparent lines every 4 px with Venetian Blinds (Direction 90 = horizontal, render-verified that 0 is vertical), lets Glow bloom them back together, then bends them with Optics Compensation (transparent margins: keep a black solid or empty black comp below). VR Glow can wrap a bright edge to the opposite side on flat footage. Use the TV Power transition to switch the set on or off.",
+   "built_from": [
+    "Lumetri Color",
+    "Fast Blur",
+    "RGB Split",
+    "Noise",
+    "VR Glow",
+    "Lens Distortion",
+    "Vignette",
+    "TV Power",
+    "Fast Box Blur",
+    "Channel Blur",
+    "Noise HLS Auto",
+    "Venetian Blinds",
+    "Glow",
+    "Optics Compensation",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/010b.png",
+    "note": "The picture is bulged into a barrel with black rounded corners, highlights bloom, colours fringe and the edges darken: footage on an old tube TV.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/010a.png",
+     "note": "A barrel-bent picture with black rounded corners, fine horizontal scanlines (visible at full size), bloom on the lamps, red fringes and darkened edges, though the whole picture is darker and the pale wall turns a salmon-red (181/155/99 -> 111/73/41) instead of cooling; vs Premiere: Premiere's barrel is stronger and its picture brighter and cooler; the AE half is darker and redder but adds the scanlines.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "CRT vertical roll",
+   "summary": "The broadcast slips its vertical hold: in half a second the picture rolls one full frame upward with vertical smear, a brightness surge and static, landing back on the same frame.",
+   "use_for": [
+    "'changing the channel' between archive clips",
+    "interrupting a broadcast clip before a reveal",
+    "retro TV transition inside one shot",
+    "signal-loss beat in a found-footage piece"
+   ],
+   "avoid": [
+    "more than once or twice per piece",
+    "over text that must be read",
+    "photosensitive audiences if repeated rapidly"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Offset",
+     "pr_props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         0.5,
+         0.5
+        ]
+       ],
+       [
+        0.5,
+        [
+         0.5,
+         1.5
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Directional Blur",
+     "pr_props": {
+      "Angle": 0,
+      "Amount": [
+       [
+        0,
+        0
+       ],
+       [
+        0.15,
+        40
+       ],
+       [
+        0.35,
+        40
+       ],
+       [
+        0.5,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        25
+       ],
+       [
+        0.5,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        30
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Use Color Noise": true,
+      "Clip Result Values": true
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Offset",
+     "props": {
+      "Shift Center To": [
+       [
+        0,
+        [
+         960,
+         540
+        ]
+       ],
+       [
+        0.5,
+        [
+         960,
+         1620
+        ]
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Motion Blur",
+     "props": {
+      "Direction": 0,
+      "Blur Length": [
+       [
+        0,
+        0
+       ],
+       [
+        0.15,
+        60
+       ],
+       [
+        0.35,
+        60
+       ],
+       [
+        0.5,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Brightness & Contrast 2",
+     "props": {
+      "Brightness": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        30
+       ],
+       [
+        0.5,
+        0
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Noise2",
+     "props": {
+      "Amount of Noise": [
+       [
+        0,
+        0
+       ],
+       [
+        0.1,
+        40
+       ],
+       [
+        0.5,
+        0
+       ]
+      ],
+      "Noise Type": 1,
+      "Clipping": 1
+     }
+    }
+   ],
+   "sfx": [
+    "glitch"
+   ],
+   "keyframes_note": "Times are seconds from the start of the roll (shift keys by the roll's offset into the clip, or use a 0.5 s adjustment layer). Offset moves the picture exactly one frame height (y 0.5 -> 1.5 in Premiere frame fractions, 540 -> 1620 px in AE), so it ends on an identical frame and the wrap seam travels up like the black bar of a rolling TV. Both directional blurs smear vertically at angle 0 (Premiere render-verified; AE default 90 is horizontal). To cut on the roll, put it on the outgoing clip ending at the cut and start the next clip clean.",
+   "built_from": [
+    "Offset",
+    "Directional Blur",
+    "Brightness & Contrast",
+    "Noise"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/011a.png",
+    "note": "At 0.2 s the frame is mid-roll, smeared vertically into streaks with a lifted, noisy picture; at 1.0 s (011b.png) it has landed back on the clean frame.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/011a.png",
+     "note": "At 0.2 s the picture is mid-roll with the wrap seam crossing the frame, smeared vertically, brightened (mean luma 109 -> 123) and noisy, and at 1.0 s it has landed back on the clean frame; vs Premiere: Same roll as Premiere, whose 0.2 s frame is smeared even harder.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "TV power-off",
+   "summary": "Old CRT switch-off: the picture squashes into a bright horizontal line, collapses to a dot and goes black (and the reverse for switch-on).",
+   "use_for": [
+    "end of an archive TV segment",
+    "'and then the broadcast was cut' beat",
+    "chapter end in a retro explainer",
+    "switch-on to open a news-archive section"
+   ],
+   "avoid": [
+    "generic transitions between modern shots (gimmicky)",
+    "more than once or twice per piece",
+    "durations under 0.5 s: the phases blur into a flicker"
+   ],
+   "app": "both",
+   "premiere": [],
+   "after_effects": [
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 0,
+      "Scale Height": [
+       [
+        -0.4,
+        100
+       ],
+       [
+        -0.2,
+        1
+       ]
+      ],
+      "Scale Width": [
+       [
+        -0.2,
+        100
+       ],
+       [
+        -0.06,
+        0
+       ]
+      ],
+      "Use Composition’s Shutter Angle": 0,
+      "Shutter Angle": 180
+     }
+    },
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -0.4,
+        0
+       ],
+       [
+        -0.2,
+        2.5
+       ]
+      ]
+     }
+    }
+   ],
+   "transition": {
+    "name": "TV Power",
+    "dur": 0.8
+   },
+   "sfx": [
+    "blip"
+   ],
+   "keyframes_note": "Premiere: use the TV Power transition (render-verified: magenta scanlined collapse to a line and dot, about 0.3 s of black, then power-on); single-sided at a clip end it is a power-off, at a clip start a power-on, centred on a cut it does both. Its controls are not harvested, so keep the defaults. After Effects: negative key times count back from the layer's end: Exposure +2.5 stops blows the picture out while Transform squashes the height to a line (-0.4 to -0.2 s), then the width collapses to a dot (-0.2 to -0.06 s); Transform's own 180-degree shutter streaks the squash. For a power-on, mirror the keys from the layer start with positive times.",
+   "built_from": [
+    "TV Power",
+    "Transform",
+    "Exposure"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "not_rendered",
+    "frame": "",
+    "note": "No frame: the recipe has an empty premiere list (Premiere uses the TV Power transition, the keys are After Effects only), so the recipe gallery did not render it.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "untested:needs_setup",
+     "frame": "pve/gallery/recipes_ae/012b.png",
+     "note": "Both frames are identical to the reference because every key sits in the layer's last 0.4 s (negative times), which neither the 0.2 s nor the 1.0 s frame samples; frames at about 1.7-1.9 s of the 2 s clip are needed.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Projector beam",
+   "summary": "Film as projected in a dark hall: warm lamp colour, hot centre falling off to dark edges, halation bloom on highlights, soft rays, gate weave and lamp flicker.",
+   "use_for": [
+    "'screening the memory' scenes",
+    "title or chapter backdrop on archive footage",
+    "documentary intro over old film",
+    "cinema history segments"
+   ],
+   "avoid": [
+    "dark footage (the falloff leaves nothing to see)",
+    "faces at the frame edge (the vignette swallows them)",
+    "text inside the treated layer (glow and rays wash it out)"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Temperature": 20,
+      "Exposure": -0.3,
+      "Contrast": 10,
+      "Saturation": 85
+     }
+    },
+    {
+     "name": "Wiggle",
+     "pr_props": {
+      "Horizontal Range": 2,
+      "Vertical Range": 3,
+      "Wiggle Speed": 90,
+      "Spin Range (deg)": 0.3,
+      "Min Scale": 103,
+      "Max Scale": 103,
+      "Motion Blur": 0,
+      "Seed": 7,
+      "Master": 100
+     }
+    },
+    {
+     "name": "Wonder Glow",
+     "pr_props": {
+      "Intensity": 50,
+      "Highlights Only": 60,
+      "Size": 80,
+      "Color": "#FFD9A0",
+      "Colorize": 30,
+      "Ambient Amount": 0,
+      "Chromatic Aberration": 0
+     }
+    },
+    {
+     "name": "Volumetric Rays",
+     "pr_props": {
+      "Intensity": 65,
+      "Highlights Only": 55,
+      "Ray Length": 65,
+      "Light Position": [
+       0.5,
+       0.5
+      ],
+      "Volumetric Fog": 25,
+      "Color": "#FFD9A0",
+      "Colorize": 30,
+      "Chromatic Aberration": 0
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 6,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Strobe Light",
+     "pr_props": {
+      "Strobe Color": "#FFFFFF",
+      "Blend With Original": 93,
+      "Strobe Duration (secs)": 0.04,
+      "Strobe Period (secs)": 0.08,
+      "Random Strobe Probablity": 40,
+      "Strobe": 0,
+      "Strobe Operator": 0,
+      "Random Seed": 11
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 100,
+      "Scale": 80,
+      "Feather": 70,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Temperature": 20,
+      "Exposure": -0.3,
+      "Contrast": 10,
+      "Saturation": 85
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 2,
+      "Wave Width": 4000,
+      "Direction": 90,
+      "Wave Speed": 1.5,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Wave Warp",
+     "props": {
+      "Wave Type": 9,
+      "Wave Height": 1.5,
+      "Wave Width": 4000,
+      "Direction": 0,
+      "Wave Speed": 1.12,
+      "Phase": 120,
+      "Pinning": 1,
+      "Antialiasing (Best Quality)": 3
+     }
+    },
+    {
+     "name": "ADBE Geometry2",
+     "props": {
+      "Uniform Scale": 1,
+      "Scale Height": 103
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Based On": 2,
+      "Glow Threshold": 190,
+      "Glow Radius": 35,
+      "Glow Intensity": 0.8,
+      "Composite Original": 2,
+      "Glow Operation": 3,
+      "Glow Colors": 1
+     }
+    },
+    {
+     "name": "CC Light Rays",
+     "props": {
+      "Intensity": 120,
+      "Center": [
+       960,
+       540
+      ],
+      "Radius": 40,
+      "Warp Softness": 50,
+      "Shape": 1,
+      "Color from Source": 1,
+      "Allow Brightening": 1
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.8,
+      "Size": 1.4,
+      "Softness": 1.0,
+      "Monochromatic": 1,
+      "Animation Speed": 1
+     }
+    },
+    {
+     "name": "ADBE Fractal Noise",
+     "props": {
+      "Fractal Type": 1,
+      "Noise Type": 3,
+      "Contrast": 300,
+      "Brightness": 0,
+      "Uniform Scaling": 1,
+      "Scale": 10000,
+      "Complexity": 1,
+      "Evolution": [
+       [
+        0,
+        0
+       ],
+       [
+        10,
+        22500
+       ]
+      ],
+      "Opacity": 7,
+      "Blending Mode": 2
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 180,
+      "Angle of View": 75,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "sfx": [
+    "amb_projector"
+   ],
+   "keyframes_note": "Static look on an adjustment layer. The hot spot is the Vignette (Scale 80, Feather 70) plus rays streaming from the frame centre; move Light Position / Center to a bright subject for an off-axis beam. Keep Wonder Glow Highlights Only high (60) so it blooms highlights, not the whole frame, and AE Glow Threshold at 180+ (the 110 demo blew out in the render test). Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters. After Effects: CC Light Rays drew only a small glowing dot at its Center over the empty frame centre, so put Center on a bright source such as a lamp or window.",
+   "built_from": [
+    "Lumetri Color",
+    "Wiggle",
+    "Wonder Glow",
+    "Volumetric Rays",
+    "Noise",
+    "Strobe Light",
+    "Vignette",
+    "Wave Warp",
+    "Transform",
+    "Glow",
+    "CC Light Rays",
+    "Add Grain",
+    "Fractal Noise",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/012a.png",
+    "note": "Clearly stronger than v1: warm lamp grade, edges falling off ~37% darker than the centre, halation bloom on the small lamps with soft rays streaking from them and from the white sign, and a ~10 px weave now read; the centre itself is no brighter than the reference, so the 'hot centre' is relative to the dark edges.",
+    "rerender": false,
+    "recheck": "after re-render",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/013b.png",
+     "note": "Warm lamp grade with the edges falling to black (the left and right fifths fully black, the centre held at reference brightness), grain, a faint pink bloom on the pale wall and a small glowing dot at the frame centre from the CC Light Rays source point, but no visible rays; vs Premiere: The AE edge falloff is far heavier than Premiere's, and Premiere's soft rays and lamp bloom do not show in AE.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Film burn reel-end",
+   "summary": "The reel runs out: the last second of the shot overexposes and burns through like melting celluloid into the next shot or to light.",
+   "use_for": [
+    "end of a historical chapter",
+    "'the record ends here' moment",
+    "archive reel run-out before a modern section",
+    "trailer act break"
+   ],
+   "avoid": [
+    "condolence, tragedy or communal-violence stories (fire imagery reads as insensitive)",
+    "faces and on-screen text at the burn centre",
+    "sober news packages"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Brightness & Contrast",
+     "pr_props": {
+      "Brightness": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.1,
+        60
+       ]
+      ],
+      "Contrast": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.1,
+        30
+       ]
+      ]
+     }
+    },
+    {
+     "name": "Wonder Glow",
+     "pr_props": {
+      "Intensity": [
+       [
+        -1.0,
+        0
+       ],
+       [
+        -0.1,
+        90
+       ]
+      ],
+      "Highlights Only": 40,
+      "Size": 120,
+      "Color": "#FFB060",
+      "Colorize": 60,
+      "Ambient Amount": 0,
+      "Chromatic Aberration": 0
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Exposure2",
+     "props": {
+      "Exposure": [
+       [
+        -1.2,
+        0
+       ],
+       [
+        -0.3,
+        1.5
+       ]
+      ]
+     }
+    },
+    {
+     "name": "ADBE Glo2",
+     "props": {
+      "Glow Based On": 2,
+      "Glow Threshold": 180,
+      "Glow Radius": 40,
+      "Glow Intensity": [
+       [
+        -1.2,
+        0
+       ],
+       [
+        -0.3,
+        1.2
+       ]
+      ],
+      "Composite Original": 2,
+      "Glow Operation": 3,
+      "Glow Colors": 1
+     }
+    },
+    {
+     "name": "CC Burn Film",
+     "props": {
+      "Burn": [
+       [
+        -1.2,
+        0
+       ],
+       [
+        -0.05,
+        100
+       ]
+      ],
+      "Center": [
+       960,
+       540
+      ],
+      "Random Seed": 12
+     }
+    }
+   ],
+   "transition": {
+    "name": "Burn Chroma",
+    "dur": 0.8
+   },
+   "sfx": [
+    "amb_crackle",
+    "air"
+   ],
+   "keyframes_note": "Negative key times count back from the clip's end, so the burn always lands on the out point whatever the clip length. Premiere: the effects ramp the overexposure and warm bloom into the cut and the Burn Chroma transition (render-verified white burn) carries it into the next shot; use Phosphor instead for a fiery orange burn-through, never on tragedy stories. After Effects: CC Burn Film's burnt holes are transparent, so put the next shot (or a warm #FFB060 solid) on the layer below; move Center off faces. amb_crackle from 1 s before the cut, air on the cut.",
+   "built_from": [
+    "Brightness & Contrast",
+    "Wonder Glow",
+    "Burn Chroma",
+    "Exposure",
+    "Glow",
+    "CC Burn Film"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/013c.png",
+    "note": "The a/b frames precede the burn (keys run -1.0 to -0.1 s); at 1.7 s, extracted from the build render, the shot is overexposed with orange-white bloom eating through the figures, a clear reel-end burn.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/014b.png",
+     "note": "0.2 s is untouched, and by 1.0 s (0.2 s into the 0.9 s ramp) the picture is already overexposing into an orange-white bloom (98th percentile 201 -> 243) with a first burnt hole that renders black because nothing sits below the layer; vs Premiere: Premiere's 0.2 s / 1.0 s frames precede its burn, so only the AE 1.0 s frame shows the reel-end burn starting.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Aged photo print",
+   "summary": "A still archive photograph treated as an old print: faintly warm grey monochrome, faded milky blacks, dimmed whites, slight softness, fine grain and only slightly darker edges.",
+   "use_for": [
+    "historical photos of leaders and freedom fighters",
+    "family photos in a biography",
+    "Ken Burns pans over archive stills",
+    "evidence-board style explainer stills"
+   ],
+   "avoid": [
+    "photos that are already old prints (it doubles the ageing)",
+    "colour photos whose colour carries meaning",
+    "logos and text cards"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 0,
+      "Contrast": 10,
+      "Faded Film": 35,
+      "Highlights": -20
+     }
+    },
+    {
+     "name": "Tint",
+     "pr_props": {
+      "Map White To": "#EFE3C8",
+      "Amount to Tint": 85
+     }
+    },
+    {
+     "name": "Levels",
+     "pr_props": {
+      "(RGB) Black Output Level": 22,
+      "(RGB) White Output Level": 238
+     }
+    },
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 3
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 3,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 45,
+      "Scale": 100,
+      "Feather": 70,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE HUE SATURATION",
+     "props": {
+      "Colorize": 1,
+      "Colorize Hue": 35,
+      "Colorize Saturation": 25,
+      "Colorize Lightness": 0
+     }
+    },
+    {
+     "name": "ADBE Easy Levels2",
+     "props": {
+      "Output Black": 0.09,
+      "Output White": 0.93,
+      "Gamma": 1.05
+     }
+    },
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 1.2,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.5,
+      "Size": 1.2,
+      "Softness": 1.2,
+      "Monochromatic": 1,
+      "Animation Speed": 0.3
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 90,
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "sfx": [
+    "shutter"
+   ],
+   "keyframes_note": "Static look on the still; the motion comes from the clip's own zoom/pan (Ken Burns, 105-112% over the shot) or Transform Scale keys, never both. Noise re-randomises every frame, which keeps a still 'alive'; for a dead-still print keep it at 2-3. AE grain Animation Speed 0.3 makes it crawl slowly instead of boiling. shutter on the photo's first frame.",
+   "built_from": [
+    "Lumetri Color",
+    "Tint",
+    "Levels",
+    "Gaussian Blur",
+    "Noise",
+    "Vignette",
+    "Hue/Saturation",
+    "Add Grain",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "weak",
+    "frame": "pve/gallery/recipes/014b.png",
+    "note": "Faded milky monochrome with dimmed whites, softness and grain shows clearly, but the paper tone is only faintly warm (R-B about 11) and the edges barely darken; summary rewritten to match.",
+    "rerender": false,
+    "second_opinion": "agree",
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/015b.png",
+     "note": "Warm grey monochrome (mean 95/86/70), low-contrast milky tones (luma spread 46 -> 30), dimmed whites (98th percentile 201 -> 155), slight softness, fine grain and edges noticeably darker than the centre; vs Premiere: Warmer paper tone and a firmer vignette than Premiere's near-neutral grey with barely darker edges.",
+     "rerender": false
+    }
+   }
+  },
+  {
+   "kind": "recipe",
+   "family": "archive_looks",
+   "name": "Archive blend-in",
+   "summary": "A subtle match pass that lets clean modern, stock or AI-generated shots sit between real archive: slightly muted and faded, a touch soft, light grain and a faint vignette.",
+   "use_for": [
+    "AI-generated or stock B-roll cut between archive clips",
+    "reenactments in a history documentary",
+    "evening out mixed sources in one sequence",
+    "base layer before a stronger archive look"
+   ],
+   "avoid": [
+    "using it as the archive look itself (too gentle to read as old)",
+    "real archive footage (it is already there)",
+    "sharp product or data shots that need clarity"
+   ],
+   "app": "both",
+   "premiere": [
+    {
+     "name": "Lumetri Color",
+     "pr_props": {
+      "Saturation": 85,
+      "Contrast": -8,
+      "Faded Film": 15,
+      "Highlights": -15
+     }
+    },
+    {
+     "name": "Gaussian Blur",
+     "pr_props": {
+      "Amount": 3
+     }
+    },
+    {
+     "name": "Noise",
+     "pr_props": {
+      "Amount of Noise": 4,
+      "Use Color Noise": false,
+      "Clip Result Values": true
+     }
+    },
+    {
+     "name": "Vignette",
+     "pr_props": {
+      "Vignette": 30,
+      "Scale": 110,
+      "Feather": 70,
+      "Roundness": 100,
+      "Color": "#000000",
+      "Chromatic Aberration": 0,
+      "Master": 100
+     }
+    }
+   ],
+   "after_effects": [
+    {
+     "name": "ADBE Lumetri",
+     "props": {
+      "Saturation": 85,
+      "Contrast": -8,
+      "Faded Film": 15,
+      "Highlights": -15
+     }
+    },
+    {
+     "name": "ADBE Gaussian Blur 2",
+     "props": {
+      "Blurriness": 1.5,
+      "Repeat Edge Pixels": 1
+     }
+    },
+    {
+     "name": "VISINF Grain Implant",
+     "props": {
+      "Viewing Mode": 3,
+      "Preset": 1,
+      "Intensity": 0.5,
+      "Size": 1.1,
+      "Softness": 1.0,
+      "Monochromatic": 0,
+      "Animation Speed": 1,
+      "Saturation": 0.4
+     }
+    },
+    {
+     "name": "CS Vignette",
+     "props": {
+      "Amount": 60,
+      "Angle of View": 60,
+      "Center": [
+       960,
+       540
+      ],
+      "Pin Highlights": 0
+     }
+    }
+   ],
+   "keyframes_note": "Static, per clip on the modern shots only; match the grain amount to the neighbouring archive by eye on a frame grab. If the archive around it is monochrome, add Lumetri Saturation 0 (AE: Hue/Saturation Master Saturation -100).",
+   "built_from": [
+    "Lumetri Color",
+    "Gaussian Blur",
+    "Noise",
+    "Vignette",
+    "Add Grain",
+    "CC Vignette"
+   ],
+   "status": "current",
+   "confidence": "high",
+   "verified": {
+    "verdict": "pass",
+    "frame": "pve/gallery/recipes/015b.png",
+    "note": "A subtle match pass as described: slightly muted, faded and softened versus the reference with light grain and a faint vignette, still clean and natural.",
+    "rerender": false,
+    "ae": {
+     "verdict": "pass",
+     "frame": "pve/gallery/recipes_ae/016b.png",
+     "note": "A subtle match pass: slightly muted (saturation 0.54 -> 0.42), highlights eased (98th percentile 201 -> 169), light grain and a faint vignette, still clean and natural; vs Premiere: A little darker than Premiere (mean luma 89 vs 105) with a firmer vignette.",
+     "rerender": false
+    }
+   }
+  }
+ ]
+}
