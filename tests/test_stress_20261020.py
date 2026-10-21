@@ -658,6 +658,37 @@ class Tools(unittest.TestCase):
             grunge.main("x.mov", 0.02)
         p.assert_not_called()
 
+    def test_missed_master_never_lands_at_the_output_path(self):
+        """Callers ignore master_audio's exit code, so a loudness miss must not leave a file where they look."""
+        import master_audio
+        d = tmpdir(self)
+        src, out = d / "in.mp4", d / "out.mp4"
+        src.write_bytes(b"src")
+        meas = {"input_i": "-20.0", "input_tp": "-3.0", "input_lra": "5.0", "input_thresh": "-30.0", "target_offset": "0.0"}
+
+        def master(after_i, after_tp, enc=lambda cmd, **kw: Path(cmd[-1]).write_bytes(b"enc")):  # writes its last arg
+            after = dict(meas, input_i=after_i, input_tp=after_tp)
+            with (mock.patch.object(master_audio.subprocess, "run", side_effect=enc),
+                  mock.patch.object(master_audio, "measure", side_effect=[meas, after]),
+                  contextlib.redirect_stdout(io.StringIO())):
+                return master_audio.main([str(src), str(out)])
+
+        self.assertEqual(master("-14.2", "-1.6"), 0)
+        self.assertEqual(out.read_bytes(), b"enc")
+        self.assertEqual(master("-17.5", "-1.6"), 1)  # misses by 3.5 LU: the earlier master goes too
+        self.assertFalse(out.exists())
+        self.assertEqual(master("-14.0", "0.2"), 1)  # peaks over the ceiling
+        self.assertFalse(out.exists())
+        self.assertEqual(sorted(f.name for f in d.iterdir()), ["in.mp4", "out.missed.mp4"])
+        self.assertEqual(master("-14.2", "-1.6"), 0)  # a good run clears the earlier miss
+        self.assertEqual(sorted(f.name for f in d.iterdir()), ["in.mp4", "out.mp4"])
+
+        def broken(cmd, **kw):
+            raise subprocess.CalledProcessError(1, cmd)
+        with self.assertRaises(subprocess.CalledProcessError):  # a failed encode leaves no master, old or new
+            master("-14.2", "-1.6", enc=broken)
+        self.assertEqual(sorted(f.name for f in d.iterdir()), ["in.mp4"])
+
 
 if __name__ == "__main__":
     unittest.main()

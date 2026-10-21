@@ -3,9 +3,11 @@
 Two-pass EBU R128 loudnorm (measure, then apply with the measured values, linear when the range allows) to the
 YouTube target (-14 LUFS integrated, true peak <= -1 dBTP; -1.5 leaves headroom for the platform's AAC re-encode).
 The video stream is copied untouched; audio is re-encoded to AAC 320k 48 kHz. Prints before/after and exits 1 if the
-result misses the target by more than 1 LU or peaks above the ceiling.
+result misses the target by more than 1 LU or peaks above the ceiling; a missed master is left as <out stem>.missed<ext>,
+never at the output path, and an earlier run's master is removed before encoding, so a caller that ignores the exit
+code (a miss, or a failed encode) fails on the missing file instead of shipping an old or unmastered one.
 """
-import json, re, subprocess, sys
+import json, os, re, subprocess, sys
 from pathlib import Path
 
 
@@ -31,14 +33,25 @@ def main(argv):
     af = (f"loudnorm=I={lufs}:TP={tp}:LRA={lra}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,"
           f"aresample=48000")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-map", "0:v", "-map", "0:a", "-c:v", "copy",
-                    "-af", af, "-c:a", "aac", "-b:a", "320k", "-ar", "48000", "-movflags", "+faststart", str(out)], check=True)
-    a = measure(out, lufs, tp)
+    part = out.with_name(f"{out.stem}.part{out.suffix}")  # keeps the extension so ffmpeg picks the muxer
+    missed = out.with_name(f"{out.stem}.missed{out.suffix}")
+    for old in (out, missed):  # an earlier run's file must never pass for this one, whatever fails below
+        if old.exists() and old.resolve() != src.resolve():
+            old.unlink()
+    try:
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-map", "0:v", "-map", "0:a", "-c:v", "copy",
+                        "-af", af, "-c:a", "aac", "-b:a", "320k", "-ar", "48000", "-movflags", "+faststart", str(part)],
+                       check=True)
+        a = measure(part, lufs, tp)
+        ok = abs(float(a["input_i"]) - lufs) <= 1.0 and float(a["input_tp"]) <= tp + 0.5
+        dest = out if ok else missed
+        os.replace(part, dest)
+    finally:
+        part.unlink(missing_ok=True)
     print(f"before: {m['input_i']} LUFS, TP {m['input_tp']} dBTP, LRA {m['input_lra']}")
-    print(f"after:  {a['input_i']} LUFS, TP {a['input_tp']} dBTP, LRA {a['input_lra']}  -> {out}")
-    ok = abs(float(a["input_i"]) - lufs) <= 1.0 and float(a["input_tp"]) <= tp + 0.5
+    print(f"after:  {a['input_i']} LUFS, TP {a['input_tp']} dBTP, LRA {a['input_lra']}  -> {dest}")
     if not ok:
-        print("MISSED the target: check the mix (a few very loud hits can force the limiter)")
+        print(f"MISSED the target: check the mix (a few very loud hits can force the limiter); no master left at {out}")
     return 0 if ok else 1
 
 
