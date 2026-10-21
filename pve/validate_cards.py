@@ -2,9 +2,10 @@
 
     python pve/validate_cards.py pve/work/batches/ae_effect_03.json pve/cards/ae_effect_03.json
 
-Exit 0 = clean. Otherwise prints one issue per line. Checks: one card per input item; required fields; status values;
-verdicts (pve.VERDICTS or "untested:<cause>" with a cause from pve.UNTESTED, also in verified.previous); the "flash"
-field; for effects: every `params[].name` and `demo_settings` key is a real property of that effect, numbers sit inside
+Exit 0 = clean. Otherwise prints one issue per line. Checks: one card per input item, under the item's match name;
+required fields; status values; verdicts (pve.VERDICTS or "untested:<cause>" with a cause from pve.UNTESTED, also in
+verified.previous; not_rendered names no frame); the "flash" field; for effects: every `params[].name` and
+`demo_settings` key is a real property of that effect, every `enum_labels` key a harvested popup, numbers sit inside
 the harvested range, booleans are booleans, colours are "#RRGGBB", points are [x, y]. A duplicate harvest row may be a
 stub {"name", "kind", "app", "match", "merged_into": "<card file>"} pointing at the card it was merged into.
 """
@@ -12,14 +13,22 @@ import json, re, sys
 from pathlib import Path
 
 try:
-    from pve import verdict_meaning
+    from pve import HERE, verdict_meaning
 except ImportError:  # `pve` is the namespace package here (a caller did `from pve import pve`)
-    from pve.pve import verdict_meaning
+    from pve.pve import HERE, verdict_meaning
 
 REQUIRED = {"name", "app", "kind", "status", "summary", "use_for", "confidence"}
 STATUS = {"current", "obsolete", "hidden", "needs_input", "unusable"}
 EFFECT_KINDS = {"ae_effect", "pr_effect", "pr_audio"}
 FLASH_KEYS = {"per_frame", "period", "duration", "rate", "per_use", "quiet", "basis"}  # see the flash notes in pve.py
+
+
+def enum_labels():
+    """match name -> {"popups": {popup path (Name#2 for repeats): ...}} from harvest/ae_enum_labels.json ({} without it)."""
+    if not hasattr(enum_labels, "cache"):
+        p = HERE / "harvest" / "ae_enum_labels.json"
+        enum_labels.cache = json.loads(p.read_text(encoding="utf-8-sig")).get("effects", {}) if p.exists() else {}
+    return enum_labels.cache
 
 
 def check_verdicts(c):
@@ -30,6 +39,9 @@ def check_verdicts(c):
     for x in ([v] + list(v.get("previous") or []) if v else []) + ([ae] + list(ae.get("previous") or []) if ae else []):
         if x.get("verdict") is not None and not verdict_meaning(x.get("verdict")):
             out.append(f"{c.get('name')}: verdict {x.get('verdict')!r} is not legal (pve.VERDICTS or untested:<pve.UNTESTED cause>)")
+    for x in (v, ae):  # the legend says not_rendered = no test frame exists, so it names none
+        if x.get("verdict") == "not_rendered" and x.get("frame"):
+            out.append(f"{c.get('name')}: verdict not_rendered but frame {x['frame']!r} (clear the frame, or judge it)")
     return out
 
 
@@ -115,9 +127,9 @@ def check_value(name, spec, v, app):
 
 
 def main(batch_path, card_path):
-    batch = json.loads(Path(batch_path).read_text(encoding="utf-8"))
+    batch = json.loads(Path(batch_path).read_text(encoding="utf-8-sig"))
     try:
-        cards = json.loads(Path(card_path).read_text(encoding="utf-8"))["cards"]
+        cards = json.loads(Path(card_path).read_text(encoding="utf-8-sig"))["cards"]
     except Exception as e:  # noqa: BLE001
         print(f"card file unreadable: {e}")
         return 1
@@ -132,6 +144,8 @@ def main(batch_path, card_path):
         if not got:
             issues.append(f"missing card for {it.get('name')!r}")
             continue
+        if not by_key.get(key):  # found by name only: pve.card(match), the flash guard and check_scenes key on match
+            issues.append(f"{it['name']}: match {got[0].get('match')!r} should be {it.get('match')!r}")
         if len(got) > 1:
             issues.append(f"{len(got)} cards for {it.get('name')!r}")
         c = got[0]
@@ -151,6 +165,9 @@ def main(batch_path, card_path):
             for p in c.get("params", []):
                 if p.get("name") not in props:
                     issues.append(f"{it['name']}: params lists {p.get('name')!r}, not a property (have: {', '.join(list(props)[:60])})")
+            popups = (enum_labels().get(it.get("match")) or {}).get("popups")
+            issues += [f"{it['name']}: enum_labels {k!r} is not one of its harvested popups ({', '.join(popups)})"
+                       for k in c.get("enum_labels") or {} if popups is not None and k not in popups]
             for n, v in (c.get("demo_settings") or {}).items():
                 if n not in props:
                     issues.append(f"{it['name']}: demo_settings {n!r} is not a property")

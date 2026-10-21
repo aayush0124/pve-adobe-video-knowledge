@@ -48,6 +48,13 @@ def normalize(spec, base):
     W, H = S["width"], S["height"]
     if not S.get("clips"):
         sys.exit("spec needs at least one clip (Premiere builds its sequence from the first one)")
+    if isinstance(S["fps"], bool) or not isinstance(S["fps"], (int, float)) or not 0 < S["fps"] < float("inf"):
+        sys.exit(f"spec fps {S['fps']!r}: needs a number above 0")
+    for k, keys in (("texts", ()), ("mgts", ("file",)), ("aecomps", ("aep", "comp"))):
+        for i, x in enumerate(S.get(k) or []):
+            miss = [n for n in keys + ("start", "dur") if not isinstance(x, dict) or n not in x]
+            if miss:
+                sys.exit(f"{k} {i + 1}: needs " + " and ".join(f'"{n}"' for n in miss) + " (start / dur in seconds)")
     ends, files, fps = {}, [], S["fps"]
 
     def snap(x):
@@ -95,7 +102,7 @@ def normalize(spec, base):
         c["media_dur"] = None if c["still"] else d
     plan_transitions(S, base)
     top = max(c["track"] for c in S["clips"])
-    vend = max(ends.values())
+    vend = max(c["start"] + c["dur"] for c in S["clips"])  # the picture's end, whatever order the clips are listed in
     for a in S.setdefault("audio", []):
         src(a)
         a["still"] = False
@@ -453,10 +460,11 @@ def _script_error_dialog():
     return False
 
 
-# "AB_ERROR|AB_WARN <text> ~" comp names inside a saved .aep (stored as UTF-8). <text> is printable ASCII except "~"
-# or any well-formed UTF-8 multi-byte character: After Effects' own messages carry curly quotes ("Can not “set value”"),
+# "AB_ERROR|AB_WARN <text> ~" comp names inside a saved .aep (stored as UTF-8). <text> is printable ASCII ("~" too:
+# ExtendScript writes home paths as "~/", 8.3 names carry "~1"; the lazy match still ends at the first " ~") or any
+# well-formed UTF-8 multi-byte character: After Effects' own messages carry curly quotes ("Can not “set value”"),
 # which an ASCII-only pattern dropped silently (an AB_ERROR then did not fail the build); stray binary does not match.
-_AE_NOTE = re.compile(rb"AB_(ERROR|WARN) ((?:[ -}]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}"
+_AE_NOTE = re.compile(rb"AB_(ERROR|WARN) ((?:[ -~]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}"
                       rb"|[\xf0-\xf4][\x80-\xbf]{3}){1,250}?) ~")
 
 
@@ -466,9 +474,9 @@ def ae_notes(data):
                               for m in _AE_NOTE.finditer(data)))
 
 
-def _pve_check(fn, data):
+def _pve_check(fn, data, *args):
     """PVE pre-flight (pve/pve.py): effect / property / transition names and value ranges against what the installed
-    apps actually have. Advisory: returns issues, never blocks a build."""
+    apps actually have. Advisory: returns issues, never blocks a build. args go to pve.<fn> after data."""
     try:
         # load pve/pve.py by path: a plain `import pve` returned the pve PACKAGE whenever a caller had already done
         # `from pve import pve`, so every pre-flight silently printed "unavailable" (2026-10-09)
@@ -476,7 +484,7 @@ def _pve_check(fn, data):
         spec_ = importlib.util.spec_from_file_location("pve_checker", HERE / "pve" / "pve.py")
         pve = importlib.util.module_from_spec(spec_)
         spec_.loader.exec_module(pve)
-        return getattr(pve, fn)(data)
+        return getattr(pve, fn)(data, *args)
     except Exception as e:  # noqa: BLE001
         return [f"pre-flight unavailable ({e})"]
 
@@ -484,7 +492,7 @@ def _pve_check(fn, data):
 def build(spec, base, render=False, premiere=True, ae=True):
     """ae=False: Premiere-only edit (e.g. when AE renders the VFX shots separately); AE still relays the job."""
     S = normalize(spec, base)
-    pve_issues = _pve_check("check_spec", spec)
+    pve_issues = _pve_check("check_spec", spec, tuple(a for a, on in (("AE", ae), ("PR", premiere)) if on))
     if not ae and S["texts"]:
         sys.exit("texts are After Effects comps; build with ae=True or render them as clips")
     out = outputs(S, base)
@@ -562,7 +570,8 @@ if __name__ == "__main__":
     ap.add_argument("--no-ae", action="store_true", help="Premiere only (AE still relays the job)")
     a = ap.parse_args()
     spec_path = Path(a.spec).resolve()
-    res = build(json.loads(spec_path.read_text(encoding="utf-8")), spec_path.parent, a.render, not a.no_pr, not a.no_ae)
+    spec = json.loads(spec_path.read_text(encoding="utf-8-sig"))  # utf-8-sig: Windows PowerShell 5.1 saves with a BOM
+    res = build(spec, spec_path.parent, a.render, not a.no_pr, not a.no_ae)
     for w in res.pop("warnings"):
         print("WARNING", w)
     for k, v in res.items():

@@ -16,7 +16,7 @@ Offline (any OS, Python 3.10+, standard library only):
 ```bash
 python -m unittest discover -s tests -v       # the whole offline suite
 python pve/pve.py find "film grain"           # search the cards
-python pve/pve.py check example/fx_test.json  # pre-flight a spec (exit 1 = issues found)
+python pve/pve.py check example/fx_test.json  # pre-flight a spec (exit 1 = issues found, 2 = could not check)
 python pipeline.py status                     # where every stage stands
 ```
 
@@ -44,7 +44,7 @@ paths = build(spec_dict, base_dir, render=True)   # {"aep":..., "prproj":..., "a
 
 | variable | default | what |
 |---|---|---|
-| `PVE_HOME` | `pve/` next to the code | folder holding `cards/`, `harvest/`, `work/` |
+| `PVE_HOME` | `pve/` next to the code | folder holding `cards/`, `harvest/`, `work/` (a relative path is resolved once, against the current folder, and `pipeline.py` hands that to its stage scripts) |
 | `PVE_ADOBE_DIR` | `C:\Program Files\Adobe` | Adobe install root (Media Encoder preset, default app paths) |
 | `PVE_AFTERFX` | `<root>\Adobe After Effects 2026\Support Files\AfterFX.exe` | also locates `aerender.exe` and `Presets` |
 | `PVE_PREMIERE` | `<root>\Adobe Premiere Pro 2026\Adobe Premiere Pro.exe` | |
@@ -53,23 +53,41 @@ paths = build(spec_dict, base_dir, render=True)   # {"aep":..., "prproj":..., "a
 ## PVE command line
 
 ```bash
-python pve/pve.py find "film grain"             # rank cards by name / look / summary / use_for
+python pve/pve.py find "film grain"             # rank cards by name / look / summary / use_for / kind / category
 python pve/pve.py card "Camera Shake" PR        # one card in full (name or match name, optional app)
-python pve/pve.py check spec.json               # pre-flight an AdobeBridge spec
+python pve/pve.py check spec.json [--no-ae|--no-pr]   # pre-flight an AdobeBridge spec
 python pve/pve.py scenes scenes.json            # pre-flight After Effects VFX scenes (vfx.py input)
 python pve/pve.py stats                         # what PVE knows
 ```
 
+Exit codes: 0 ok (a `find` or `card` with no match too: "no cards matched" / the closest names go to stderr), 1 =
+`check` / `scenes` found issues, 2 = could not check (usage error, unknown command or option value, a file that is
+missing, not JSON or the wrong shape, or a knowledge base that is missing or partly unreadable, which `check` /
+`scenes` name in their first line and which also reaches every build as a `PVE knowledge base incomplete ...` warning).
+`find` matches whole words (stemmed; "a", "to", "the" and the like carry no weight), ranks a card whose name is the
+query first, and scales obsolete, hidden, unusable and broken cards down; a line reads `[app kind] name: summary`, with
+`[status, verdict]` after the colon for a card that is not current or whose render (either half) did not pass.
+
 `check` runs inside every `adobe_bridge.build()` and `scenes` inside every `vfx.render_scenes()`; both are advisory
-(the issues come back as `PVE ...` warnings and never block a build). They flag unknown effect, property and transition
-names, out-of-range values (After Effects kills the script on one; Premiere clamps), properties that cannot be set from
-a spec, text-animator presets on non-text layers, shape presets on the wrong layer type or without an origin, and
-flashing: every effect, transition and preset whose card has a `flash` field is held to the photosensitivity rule
-(Harding / ITU-R BT.1702: no more than 3 flashes in any one second; saturated red flashes count), from a strobe's
-Period and Duration (Strobe Light's Random Strobe Probablity 0 or 100; any value in between makes random bursts and
+(the issues come back as `PVE ...` warnings and never block a build). A clip's effects are checked for every app the
+build drives (`build(ae=False)` / `--no-ae`: Premiere only): Premiere gets `pr_name` / `pr_props`, After Effects
+`name` / `props` (an effect After Effects lacks is skipped there while Premiere's half names it, as the build only warns
+about it; an After Effects-only build, `--no-pr`, flags it); text effects and
+presets run in After Effects only and are checked against it (`pve.check_spec(spec)` in code keeps the clip check
+Premiere-only unless you pass `apps=("AE", "PR")`). They flag unknown effect, property and transition names,
+out-of-range values (both apps clamp them, After Effects with a warning), values of the wrong type (a string, NaN, a
+malformed colour, point or keyframe list), properties that cannot be set from a spec, text-animator presets on
+non-text layers, shape presets on the wrong layer type or without an origin, and flashing: every effect, transition
+and preset whose card has a `flash` field is held to the photosensitivity rule (Harding / ITU-R BT.1702: no more than
+3 flashes in any one second; saturated red flashes count), from a strobe's Period and Duration (Strobe Light's Random Strobe Probablity 0 or 100; any value in between makes random bursts and
 is always flagged), a preset's measured flash rate, or flash transitions placed on the timeline. Where no rate can be
-computed the line starts "check by eye" and is advisory: `check` / `scenes` exit 1 only on the other lines.
-`card` warns on stderr when several cards match (ask by match name, app, or "Category/Name").
+computed the line starts "check by eye" and is advisory: `check` / `scenes` exit 1 only on the other lines. After
+Effects runs a strobe on the layer's source clock, so a layer that becomes visible mid-period (a trimmed footage
+layer) opens with a partial flash: there Strobe Period needs 0.5 s or more. One malformed entry gives an issue of its
+own and the rest of the spec is still checked.
+`card` warns on stderr when several cards match (ask by match name, app, or "Category/Name"; a current card comes
+before hidden, obsolete and unusable ones). The app is `AE`, `PR` or `both` in any case, and another app's card is
+never returned for it.
 In code: `sys.path.insert(0, "pve"); import pve; pve.check_spec(spec)`.
 
 ## Spec format (seconds; paths relative to the spec file)
@@ -149,6 +167,18 @@ editable source.
 | `<name>.prproj` | Premiere sequence: clips V1.., titles on the next track, music on the next audio track |
 | `<name>_pr_titles.aep` | the copy Premiere Dynamic-Links its titles to (double-click a title in Premiere to edit it in AE) |
 
+## Not in the repo
+
+Git ignores these folders; each is rebuilt by a script here. Other pipelines that read them need them rebuilt after a
+fresh clone.
+
+| folder | rebuilt by |
+|---|---|
+| `example/*.mp4`, `*.mp3`, `*.png`, `pve/media/` | `python make_test_media.py` (ffmpeg; makes only what is missing, and a file appears only once complete) |
+| `sfx/` | `python sfx_synth.py --all` (numpy, scipy; without `--all` only the missing ambience beds) |
+| `pve/gallery/` | `pve/gallery.py` (live, After Effects and Premiere) |
+| `mgt/house/` | `python make_house_mogrts.py` (live, After Effects) |
+
 ## Pipeline
 
 `python pipeline.py status | run <stage> | doctor | all`. Exit codes: 0 ok, 1 failure, 10 needs attention.
@@ -158,9 +188,9 @@ Deterministic stages run anywhere; live stages need the apps (and `PVE_LIVE=1`);
 | stage | kind | runs |
 |---|---|---|
 | harvest | live | `pve/harvest_files.py`, `pve/harvest_ae.py`, `pve/harvest_pr.py` -> `pve/harvest/` |
-| batches | deterministic | `pve/prepare_batches.py` -> `pve/work/batches/` (kept once cards exist; `--force` re-cuts) |
+| batches | deterministic | `pve/prepare_batches.py` -> `pve/work/batches/` (kept once cards exist; `--force` re-cuts all but the frozen Premiere batches, which were patched by hand after their cut) |
 | cards | agent | one agent per batch writes `pve/cards/<batch>.json` (workflow not shipped here) |
-| validate | deterministic | `pve/validate_cards.py` on every batch + `pve.py` pre-flight on every recipe |
+| validate | deterministic | every card and harvest file loads, `pve/validate_cards.py` on every batch, `pve.py` pre-flight on every recipe stack (`pve.RECIPE_STACKS`: `premiere`, `after_effects` and their `_out`, `_alt`, `background` and `premiere_audio` variants), spec and scenes |
 | gallery | live | `pve/gallery.py ae / pr / tr / presets / recipes / recipes_ae / specs / text` -> `pve/gallery/` (not in the repo); `strobe` / `flashes` -> `work/pve_live/*.json` |
 | verify | agent | Workflow `pve/verify_wave.js` (args `root`, `batches`, optional `clip_a` / `clip_b`) |
 | recipes | agent | Workflow `pve/recipes_wave.js` (args `root`, optional `skip_critic` / `only_critic`) |
@@ -178,7 +208,8 @@ measured (where each app puts a Transform Position on an off-aspect still, ducki
 animations (`work/pve_live/wave2/text_timing.json`).
 `strobe` settles Strobe Light's timing in both apps and `flashes` measures every card whose flash rate `check` cannot
 compute; both count flashes with `pve/flash_scan.py` (per-frame luma against a render without the effect: a flash is a
-rise and a fall of 25+ levels, also counted per cell of a grid so a chase across letters is not averaged away).
+rise and a fall of 25+ levels, also counted per cell of a grid so a chase across letters is not averaged away; run on
+its own it counts at the clip's own frame rate unless `--fps` says otherwise).
 `pve/harvest_enums.py` harvests every After Effects popup's labels (`pve/harvest/ae_enum_labels.json`): offline from
 the plug-ins' own string tables, and with `--readback` from the running app, which in 26.0 lists a popup's menu
 (`Property.propertyParameters`) and the current item's text (`Property.valueText`); the string-table list stays as its
@@ -197,7 +228,7 @@ harvest   live  ae_effects 445, pr_video_effects 143, pr_transitions 154, pr_aud
 batches   det   97 batch files, 2067 items
 cards     agent 2683 cards: ae_effect 445, ae_preset 621, lut 55, mogrt 214, pr_audio 53, pr_effect 141, pr_preset 379, pr_transition 154, recipe 171, tool 450
 validate  det   ok, 0 issues
-verify    agent broken 7, corrected_unverified 12, not_rendered 230, pass 1245, unverified 1129, weak 38, untested 22 (audio_only 1, needs_analysis 2, needs_second_layer 2, needs_setup 17); recipe After Effects halves: broken 1, corrected_unverified 26, pass 97, weak 3, wrong 1, untested 18 (audio_only 5, needs_analysis 1, needs_second_layer 2, needs_setup 10)
+verify    agent broken 7, corrected_unverified 12, not_rendered 230, pass 1245, unverified 1129, weak 38, untested 22 (audio_only 1, needs_analysis 2, needs_second_layer 2, needs_setup 17); recipe After Effects halves: broken 1, corrected_unverified 27, pass 97, weak 3, untested 18 (audio_only 5, needs_analysis 1, needs_second_layer 2, needs_setup 10)
 recipes   agent 171 recipes
 docs      det   pve/PVE.md fresh
 ```
@@ -324,8 +355,9 @@ both apps where they apply and judged them: 31 of 33 app halves pass; the news t
 wrap) and the ducking recipe's middle gap (-9.6 dB instead of -6) were fixed by value afterwards. The same wave judged
 the After Effects half of every recipe (`verified.ae`), the 17 text recipes and 22 sampled templates in Latin and
 Devanagari copy (Devanagari keeps time with the Latin, but per-character animators split matras mid-animation and
-three bundled sports / gaming templates draw it unshaped even with a Devanagari font; the cards say so). 38 cards and After Effects halves are now changed after their render (`corrected_unverified`, listed in the
-critic) and wait for the next live wave. AE
+three bundled sports / gaming templates draw it unshaped even with a Devanagari font; the cards say so). 39 cards and After Effects halves are now changed after their render (`corrected_unverified`, listed in the
+critic; the latest, 2026-10-20, is Grungy film reel's scratch layer, whose Fractal Noise Blending Mode 5 is Multiply in
+the harvested labels and is now 6 = Screen) and wait for the next live wave. AE
 dropdown labels are harvested from the app's own menus (`pve/harvest/ae_enum_labels.json`, live wave 3) and the AE
 effect cards carry them in `enum_labels`; no card hedges on a label any more, but a mode known only by its label (CC
 Radial Blur's zoom Types, most blend modes) has not been rendered. Live wave 3 also settled the two-track questions

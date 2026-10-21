@@ -171,7 +171,10 @@ def build():
 
 
 def beds2():
-    """More looping ambience beds. Only missing files are written: an open Premiere project locks the ones it uses."""
+    """More looping ambience beds. Only missing files are written: an open Premiere project locks the ones it uses.
+    The noise stream restarts at seed 7, so a bed comes out the same with or without --all (build() first)."""
+    global rng
+    rng = np.random.default_rng(7)
     def keep(name, x):
         if not (OUT / f"{name}.wav").exists():
             save(name, loop_fade(x), -6)

@@ -155,7 +155,7 @@
        ]
       ],
       "Opacity": 40,
-      "Blending Mode": 5
+      "Blending Mode": 6
      }
     },
     {
@@ -203,7 +203,7 @@
     "amb_projector",
     "amb_crackle"
    ],
-   "keyframes_note": "Static look, no keyframes: put it on an adjustment layer spanning the archive section. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters. Scratches (AE only): a Fractal Noise squeezed to 2% wide and 10000% tall makes full-height vertical lines, Brightness -380 keeps only the brightest few, Screen blend adds them as white scratches; Blending Mode 5 = Screen follows AE's menu order (None, Normal, Add, Multiply, Screen) but is not render-verified, and if the frame darkens the index is wrong. Tune Brightness until 1-4 lines show. Premiere has no scratch effect: use the Grunge transition on cuts inside the section, or lay AdobeBridge's grunge.py dust/scratch overlay (ProRes 4444 with alpha) on a track above. Keep captions, lower thirds and logos on tracks/layers ABOVE the treated clip or adjustment layer.",
+   "keyframes_note": "Static look, no keyframes: put it on an adjustment layer spanning the archive section. Gate weave: Premiere Wiggle range units are unverified (pixels or % of frame), so render-check that the picture drifts only a few pixels; Min/Max Scale 103 hides the moving edges. After Effects has no Wiggle effect, so two Wave Warps (Smooth Noise, wavelength 4000 px, far wider than the frame) bob the whole picture vertically and sideways, then Transform scales 103% to push the edges out; check on playback. Flicker: Premiere's Strobe Light shows each flash for Period minus Duration (verified), so 0.04/0.08 gives (render-measured on the test clip) one lifted frame at the clip start and then a steady lift of about 15 levels in the blacks, not frame-to-frame flicker; for real flicker keyframe Brightness & Contrast or Exposure instead; keep Blend With Original at 90 or above so every change stays under the 10% luminance flash threshold. Two Strobe Lights on one clip are fine since the 2026-10-04 relay fix (each instance keeps its own values). After Effects' Strobe Light timing is broken in the PVE render test, so AE flickers with one giant Fractal Noise cell (Scale 10000, Soft Linear so no cell edge crosses the frame) mixed at 10% Opacity or less in the verified Normal blend; Evolution keys run past 10 s on purpose, the rate is what matters. Scratches (AE only): a Fractal Noise squeezed to 2% wide and 10000% tall makes full-height vertical lines, Brightness -380 keeps only the brightest few, Screen blend adds them as white scratches; Blending Mode 6 = Screen (the popup counts its menu separators at 3, 10, 13 and 18, so 5 is Multiply, which darkened the 2026-10-13 render); not rendered again since the change. Tune Brightness until 1-4 lines show. Premiere has no scratch effect: use the Grunge transition on cuts inside the section, or lay AdobeBridge's grunge.py dust/scratch overlay (ProRes 4444 with alpha) on a track above. Keep captions, lower thirds and logos on tracks/layers ABOVE the treated clip or adjustment layer.",
    "built_from": [
     "Lumetri Color",
     "Noise",
@@ -226,10 +226,18 @@
     "rerender": false,
     "recheck": "after re-render",
     "ae": {
-     "verdict": "wrong",
+     "verdict": "corrected_unverified",
      "frame": "pve/gallery/recipes_ae/000b.png",
-     "note": "Muted warm colour, grain, a strong vignette and many faint vertical scratch lines show, but the whole picture drops to under half brightness (mean luma about 107 -> 44, 2nd-percentile blacks 40 -> 15, pushed down instead of lifted), so the scratch Fractal Noise at Blending Mode 5 behaves like Multiply rather than Screen (index 5 is not Screen; if AE counts a menu separator after Normal, Screen would be 6, unverified); vs Premiere: Premiere keeps normal brightness with lifted blacks (mean luma 115); the AE half is far darker and muddier.",
-     "rerender": false
+     "note": "Muted warm colour, grain, a strong vignette and many faint vertical scratch lines show, but the whole picture drops to under half brightness (mean luma about 107 -> 44, 2nd-percentile blacks 40 -> 15, pushed down instead of lifted), so the scratch Fractal Noise at Blending Mode 5 behaves like Multiply rather than Screen (the harvested popup labels confirm it: 5 = Multiply, 6 = Screen); vs Premiere: Premiere keeps normal brightness with lifted blacks (mean luma 115); the AE half is far darker and muddier.",
+     "rerender": true,
+     "previous": [
+      {
+       "verdict": "wrong",
+       "changed": "2026-10-20",
+       "why": "scratch Fractal Noise Blending Mode 5 (Multiply in the harvested popup labels) changed to 6 (Screen); not rendered again",
+       "frame": "pve/gallery/recipes_ae/000b.png"
+      }
+     ]
     }
    }
   },

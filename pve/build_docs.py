@@ -1,17 +1,19 @@
 """PVE: generate pve/PVE.md (the readable guide) from the cards, the harvest and the verification results.
 
-    python pve/build_docs.py
+    python pve/build_docs.py            (-h / --help: this text, nothing written)
+
+Exits 1 without writing PVE.md when a card file does not parse: a guide missing those cards would look complete.
 """
-import json, os
+import json, os, sys
 from collections import defaultdict
 from pathlib import Path
 
 try:
-    from pve import FLASH_LIMIT, UNTESTED, VERDICTS
+    from pve import FLASH_LIMIT, UNTESTED, VERDICTS, cards, unreadable
 except ImportError:  # `pve` is the namespace package here (a caller did `from pve import pve`)
-    from pve.pve import FLASH_LIMIT, UNTESTED, VERDICTS
+    from pve.pve import FLASH_LIMIT, UNTESTED, VERDICTS, cards, unreadable
 
-HERE = Path(os.environ.get("PVE_HOME") or Path(__file__).resolve().parent)
+HERE = Path(os.environ.get("PVE_HOME") or Path(__file__).resolve().parent).resolve()
 KIND_TITLES = [("ae_effect", "After Effects effects"), ("pr_effect", "Premiere Pro video effects"),
                ("pr_transition", "Premiere Pro transitions"), ("pr_audio", "Premiere Pro audio effects"),
                ("ae_preset", "After Effects animation presets"), ("pr_preset", "Premiere Pro effect presets (incl. Lumetri looks)"),
@@ -94,13 +96,13 @@ def legend():
 
 
 def load():
-    cards = []
-    for f in sorted((HERE / "cards").glob("*.json")):
-        try:
-            cards += [c for c in json.loads(f.read_text(encoding="utf-8")).get("cards", []) if not c.get("merged_into")]
-        except Exception:  # noqa: BLE001
-            print("unreadable:", f.name)
-    return cards
+    """The cards, through the one loader the checks use (pve.cards())."""
+    return list(cards())
+
+
+def bad_card_files():
+    """'cards/<file> unreadable (...)' for every card file that did not parse."""
+    return [f"{k} {v}" for k, v in sorted(unreadable().items()) if k.startswith("cards/")]
 
 
 def line(c):
@@ -148,11 +150,19 @@ def render():
     return "\n".join(out) + "\n", len(cards), len(out)
 
 
-def main():
+def main(argv=()):
+    if set(argv) & {"-h", "--help"}:
+        print(__doc__)
+        return 0
+    bad = bad_card_files()
+    if bad or not cards():
+        print("PVE.md not written: " + ("; ".join(bad) or f"no cards in {HERE / 'cards'}"), file=sys.stderr)
+        return 1
     text, n_cards, n_lines = render()
     (HERE / "PVE.md").write_text(text, encoding="utf-8")
     print(f"PVE.md: {n_cards} cards, {n_lines} lines")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main(sys.argv[1:]))

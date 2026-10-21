@@ -14,6 +14,15 @@ from adobe_bridge import AERENDER, HERE, ae_lock, ae_notes, ae_titles, run_job
 W, H, FPS = 1920, 1080, 25
 
 
+def _plays(f):
+    """True when ffprobe can open the file (a render cut short has no moov atom and fails). True when ffprobe itself is
+    missing: then the output cannot be judged and the launcher's exit code is not trusted (the lingering-worker case)."""
+    try:
+        return subprocess.run(["ffprobe", "-v", "error", "-i", str(f)], capture_output=True, timeout=60).returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        return True
+
+
 def _aerender(aep, files, t0, settle=20, timeout=None, grace=600):
     """Run aerender on a project and return its exit code. Its output goes to a log file, not a pipe: the render
     engine (AfterFX.com -noui) sometimes lingers after the last frame and would hold a pipe open forever. Once every
@@ -29,8 +38,9 @@ def _aerender(aep, files, t0, settle=20, timeout=None, grace=600):
             if -1 not in now and now == sizes:
                 stable_since = stable_since or time.time()
                 if time.time() - stable_since > settle:
+                    rc = p.poll()  # an error exit with an output that does not decode is a failed render, not a linger
                     subprocess.run(["taskkill", "/F", "/T", "/PID", str(p.pid)], capture_output=True)
-                    return 0
+                    return rc if rc and not all(_plays(f) for f in files.values()) else 0
             else:
                 stable_since = None
             sizes = now
@@ -39,7 +49,7 @@ def _aerender(aep, files, t0, settle=20, timeout=None, grace=600):
                 return -1
             if p.poll() is not None:
                 exited_at = exited_at or time.time()
-                if time.time() - exited_at > grace and (-1 in now or now != sizes):
+                if time.time() - exited_at > grace and -1 in now:
                     return p.returncode if p.returncode else -1
             time.sleep(2)
 

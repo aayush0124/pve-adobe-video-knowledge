@@ -201,7 +201,8 @@ class FlashRule(unittest.TestCase):
     def test_measured_2_a_second_passes(self):
         for name in ("Random On-Off", "Opacity Flash - random"):
             self.assertEqual(pve.check_scenes(scene(type="text", presets=[{"file": preset_file(name)}])), [], name)
-        spec = {"clips": [{"src": "a.mp4", "dur": 2}], "texts": [{"text": "x", "presets": [preset_file("Random On-Off")]}]}
+        spec = {"clips": [{"src": "a.mp4", "dur": 2}],
+                "texts": [{"text": "x", "start": 0, "dur": 2, "presets": [preset_file("Random On-Off")]}]}
         self.assertEqual(pve.check_spec(spec), [])
 
     def test_no_flasher_left_to_check_by_eye(self):

@@ -37,7 +37,7 @@ Second set, pve/media/set2/ (25 fps, 5 s, 1920x1080 unless noted): footage the f
 test_adobe_bridge.py depends on these sizes and durations (cover-fit of the 1080x1350 still, clip_a's 6 s, the
 12 s music bed), so keep them if you swap the pictures.
 """
-import re, subprocess, sys
+import os, re, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -134,6 +134,12 @@ MEDIA.update({
 })
 
 
+def part(out):
+    """Where the last step writes before the file is moved into place: same folder and extension (ffmpeg picks its muxer
+    by extension), so an interrupted run never leaves a truncated clip under the real name."""
+    return out.with_name(f"{out.stem}.part{out.suffix}")
+
+
 def commands(rel, root=ROOT):
     """The ffmpeg argument lists that make MEDIA[rel] under root, in order (the last one writes the file)."""
     out, args = Path(root, rel), MEDIA[rel]
@@ -153,8 +159,12 @@ def main(root=ROOT, only=None):
         if out.exists() or (only is not None and rel not in only):
             continue
         out.parent.mkdir(parents=True, exist_ok=True)
-        for cmd in commands(rel, root):
+        part(out).unlink(missing_ok=True)  # left by an interrupted run
+        cmds = commands(rel, root)
+        cmds[-1][-1] = str(part(out))  # the last step writes beside the file, which appears only once it is whole
+        for cmd in cmds:
             subprocess.run(cmd, check=True)
+        os.replace(part(out), out)
         for t in out.parent.glob(f"_{out.stem}_tmp.*"):
             t.unlink()
         made.append(rel)

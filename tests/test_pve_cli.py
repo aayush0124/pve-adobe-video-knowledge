@@ -32,8 +32,8 @@ class Cli(unittest.TestCase):
         self.assertIn("Cross Dissolve", out)
 
     def test_find_nothing(self):
-        rc, out, _ = pve("find", "zzqx_no_such_word")
-        self.assertEqual((rc, out.strip()), (0, ""))
+        rc, out, err = pve("find", "zzqxnosuchword")  # one token: find splits on "_" since it matches whole words
+        self.assertEqual((rc, out.strip(), err.strip()), (0, "", "no cards matched"))
 
     def test_card(self):
         rc, out, _ = pve("card", "Camera Shake", "PR")

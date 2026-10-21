@@ -45,12 +45,15 @@ def frames(n, seed=3):
 
 def main(out, seconds=12.0):
     n = int(seconds * FPS)
+    if n < 1:  # ffmpeg exits 0 on zero frames and leaves an empty .mov
+        sys.exit(f"seconds {seconds:g} is too short: need at least one frame (1/{FPS} s)")
     p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{W}x{H}", "-r", str(FPS),
                           "-i", "-", "-c:v", "prores_ks", "-profile:v", "4444", "-pix_fmt", "yuva444p10le", out], stdin=subprocess.PIPE)
     for img in frames(n):
         p.stdin.write(img.tobytes())
     p.stdin.close()
-    p.wait()
+    if p.wait():
+        sys.exit(f"ffmpeg failed (exit {p.returncode}) writing {out}")
     return out
 
 

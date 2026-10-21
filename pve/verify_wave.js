@@ -24,7 +24,7 @@ pve/pve.py UNTESTED. In your returned counts put corrected_unverified under "wro
 const isRecipe = b => b.startsWith('recipe_')
 const validate = b => isRecipe(b)
   ? `for each recipe build a temp spec {"clips": [{"src": "x", "effects": <its premiere list>}]} and run
-python ${ROOT}/pve.py check <spec>  (ignore "missing source" and advisory "check by eye" lines) until nothing else is reported`
+python ${ROOT}/pve.py check --no-ae <spec>  (ignore "missing source" and advisory "check by eye" lines) until nothing else is reported`
   : `python ${ROOT}/validate_cards.py ${ROOT}/work/batches/${b}.json ${ROOT}/cards/${b}.json  until 0 issues`
 
 function recipePrompt(b) {

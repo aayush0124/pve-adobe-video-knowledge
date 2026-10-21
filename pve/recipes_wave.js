@@ -42,7 +42,7 @@ Rules: use ONLY effects/transitions that have cards, prefer cards whose verified
 names and values inside the ranges in those cards (read the card's params/demo_settings/scripting before using it),
 and give BOTH a Premiere and an After Effects version when the look is achievable in both. Premiere-first: if
 Premiere can do it, the Premiere version must be complete. Then check every recipe with
-  python ${ROOT}/pve.py check <a temp spec file containing {"clips": [{"src": "x", "effects": <premiere list>}]}>
+  python ${ROOT}/pve.py check --no-ae <a temp spec file containing {"clips": [{"src": "x", "effects": <premiere list>}]}>
 (ignore "missing source"), fixing any property / range problem it reports. Return the summary.`
 }
 

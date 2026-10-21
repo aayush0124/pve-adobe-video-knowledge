@@ -9,7 +9,7 @@
 Stages (kind): harvest (live), batches, cards (agent), validate, gallery (live), verify (agent), recipes (agent),
 docs, build (live bridge smoke test). Exit codes: 0 ok, 1 failure, 10 needs attention.
 """
-import contextlib, io, json, os, platform, shutil, subprocess, sys
+import contextlib, io, json, os, platform, re, shutil, subprocess, sys
 from collections import Counter
 from pathlib import Path
 
@@ -41,14 +41,22 @@ AGENT_STAGES = {
 STAGES = ["harvest", "batches", "cards", "validate", "gallery", "verify", "recipes", "docs", "build"]
 
 
+def child_env():
+    """The stage scripts run with cwd=ROOT: hand them the PVE_HOME this process resolved (a relative one would
+    otherwise resolve against ROOT instead of the caller's folder)."""
+    return dict(os.environ, PVE_HOME=str(PVE))
+
+
 def pairs():
     """(batch file, card file) for every agent batch."""
     return [(b, PVE / "cards" / b.name) for b in sorted(BATCHES.glob("*.json"))]
 
 
 def validate():
-    """validate_cards over every batch + pve.py pre-flight over every recipe -> list of issue lines."""
-    issues = []
+    """validate_cards over every batch, every card / harvest file loads, and the pve.py pre-flight over every recipe
+    (each RECIPE_STACKS stack, its spec and its scenes) -> list of issue lines."""
+    kb = pve.kb_problems()  # every card and harvest file loads; reported once here, not once per recipe spec
+    issues = list(kb) + ([] if pairs() else [f"no batch files in {BATCHES.as_posix()} (python pipeline.py run batches)"])
     for b, c in pairs():
         if not c.exists():
             issues.append(f"{c.name}: no card file for batch {b.name}")
@@ -56,14 +64,12 @@ def validate():
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             rc = validate_cards.main(b, c)
-        if rc:
-            issues += [f"{c.name}: {x}" for x in buf.getvalue().splitlines()[:-1]]
-    for r in (x for x in pve.cards() if x.get("kind") == "recipe"):
-        fx, ae = r.get("premiere") or [], r.get("after_effects")
-        found = pve.check_effects(fx, "PR", "premiere") + pve.check_effects(ae, "AE", "after_effects") \
-            + pve._flash_rate(fx, "premiere", 25) + pve._flash_rate(ae, "after_effects", 25, "AE") \
-            + (pve.check_spec(r["spec"]) if r.get("spec") else []) + (pve.check_scenes(r["scenes"]) if r.get("scenes") else [])
-        issues +=[f"recipe {r['name']!r}: {x}" for x in found if not pve.advisory(x)]  # "check by eye" is for builds
+        if rc:  # every line but validate_cards' "N cards, M issues" summary (an unreadable file prints no summary)
+            lines = [x for x in buf.getvalue().splitlines() if not re.fullmatch(r"\d+ cards, \d+ issues", x)]
+            issues += [f"{c.name}: {x}" for x in lines or [f"validate_cards exit {rc}"]]
+    for r in (x for x in pve.cards() if x.get("kind") == "recipe"):  # every RECIPE_STACKS stack, its spec and scenes
+        issues += [f"recipe {r['name']!r}: {x}" for x in pve.check_recipe(r)
+                   if not pve.advisory(x) and x not in kb]  # "check by eye" is for builds
     return issues
 
 
@@ -82,9 +88,8 @@ def docs_fresh():
 
 def status():
     cs = pve.cards()
-    h = PVE / "harvest"
-    files = json.loads((h / "files.json").read_text(encoding="utf-8")) if (h / "files.json").exists() else {}
-    lists = json.loads((h / "pr" / "pr_lists.json").read_text(encoding="utf-8")) if (h / "pr" / "pr_lists.json").exists() else {}
+    files = pve._harvest("harvest/files.json") or {}  # a missing or corrupt file counts 0 here; validate names it
+    lists = pve._harvest("harvest/pr/pr_lists.json") or {}
     harvested = {"ae_effects": len(pve.ae_effects()), "pr_video_effects": len(lists.get("video_effects", [])),
                  "pr_transitions": len(lists.get("video_transitions", [])), "pr_audio_effects": len(lists.get("audio_effects", [])),
                  **{k: len(v) for k, v in files.items() if isinstance(v, list)}}
@@ -129,9 +134,9 @@ def run(stage, force=False):
     if stage == "batches":
         if pairs() and not force:  # the cards were written against these exact batches (chunking included)
             print(f"batches: {len(pairs())} batch files already exist and cards were written against them; kept "
-                  "(--force rebuilds them from the harvest, after which every card file must be re-validated)")
+                  "(--force re-cuts them from the harvest, keeping the frozen Premiere ones; then re-validate every card file)")
             return 0
-        return subprocess.run([PY, "pve/prepare_batches.py"], cwd=ROOT).returncode and 1
+        return subprocess.run([PY, "pve/prepare_batches.py"] + ["--force"] * force, cwd=ROOT, env=child_env()).returncode and 1
     if stage == "validate":
         issues = validate()
         print("\n".join(issues) or f"validate: {len(pairs())} card files and every recipe clean")
@@ -140,7 +145,7 @@ def run(stage, force=False):
         if docs_fresh():
             print("docs: pve/PVE.md already fresh")
             return 0
-        return subprocess.run([PY, "pve/build_docs.py"], cwd=ROOT).returncode and 1
+        return subprocess.run([PY, "pve/build_docs.py"], cwd=ROOT, env=child_env()).returncode and 1
     print(f"unknown stage {stage!r}; stages: {', '.join(STAGES)}")
     return 1
 

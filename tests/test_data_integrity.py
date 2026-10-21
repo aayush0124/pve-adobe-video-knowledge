@@ -71,9 +71,9 @@ class Cards(unittest.TestCase):
 
     def test_recipes_preflight_clean(self):
         bad = []
-        for r in (c for c in pve.cards() if c.get("kind") == "recipe"):
-            bad += [(r["name"], i) for i in pve.check_effects(r.get("premiere"), "PR", "premiere")
-                    + pve.check_effects(r.get("after_effects"), "AE", "after_effects")]
+        for r in (c for c in pve.cards() if c.get("kind") == "recipe"):  # every stack: premiere, after_effects, _out ...
+            bad += [(r["name"], i) for key, app, fx in pve.recipe_stacks(r) for i in pve.check_effects(fx, app, key)
+                    if not pve.advisory(i)]
         self.assertGreater(sum(1 for c in pve.cards() if c.get("kind") == "recipe"), 100)
         self.assertEqual(bad, [])
 

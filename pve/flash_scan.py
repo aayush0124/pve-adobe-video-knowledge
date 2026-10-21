@@ -1,15 +1,19 @@
 """Count flashes in a rendered clip from its per-frame luma (ffmpeg decodes, the counting is plain Python).
 
-    python pve/flash_scan.py clip.mp4 [--ref control.mp4] [--start S] [--end S]   -> JSON on stdout
+    python pve/flash_scan.py clip.mp4 [--ref control.mp4] [--fps N] [--start S] [--end S]   -> JSON on stdout
+
+--fps defaults to the clip's own frame rate (ffprobe); the JSON says which rate it used. Exit 2 when nothing could be
+measured (no frames in the window, a reference whose frame count differs by more than one, no frame rate).
 
 A flash is a pair of opposing luma changes of at least DELTA levels (Harding / ITU-R BT.1702 count a flash as a
 pair of opposing changes). The signal is the mean over the pixels that change at all: with a reference render
-(the same plate without the effect) it is the mean of |clip - reference| over the pixels where the two ever differ
-by DELTA, so the plate's own cuts and exposure flashes cancel; without one it is the mean luma of the pixels whose
-luma ever swings by DELTA. `area` says how much of the frame that is (the Harding count applies from 25%). The same
+(the same plate without the effect) it is the mean of (clip - reference) over the pixels where the two ever differ
+by DELTA, so the plate's own cuts and exposure flashes cancel and a flicker above and below the plate still swings;
+without one it is the mean luma of the pixels whose luma ever swings by DELTA. `area` says how much of the frame that is (the Harding count applies from 25%). The same
 count in every cell of a grid gives the worst local rate (a chase across letters averages out in the whole-area mean).
 """
 import json, subprocess, sys
+from fractions import Fraction
 
 W, H = 192, 108
 GRID = (24, 12)  # cells of 8 x 9 scan pixels: about one letter of a 75 px title at 960 x 540
@@ -27,10 +31,11 @@ def frames(video, start=None, end=None, w=W, h=H):
 
 
 def _masked(fr, ref, delta):
-    """(frames, mask): |frame - reference| frames when there is a reference, and the pixels that ever change by delta."""
+    """(frames, mask): frame - reference (signed: brighter and darker than the plate must not cancel) when there is a
+    reference, and the pixels that ever change by delta."""
     if ref is not None:
-        fr = [[abs(a - b) for a, b in zip(f, r)] for f, r in zip(fr, ref)]
-        mask = [i for i in range(len(fr[0])) if max(f[i] for f in fr) >= delta] if fr else []
+        fr = [[a - b for a, b in zip(f, r)] for f, r in zip(fr, ref)]
+        mask = [i for i in range(len(fr[0])) if max(abs(f[i]) for f in fr) >= delta] if fr else []
     else:
         mask = [i for i in range(len(fr[0])) if max(f[i] for f in fr) - min(f[i] for f in fr) >= delta] if fr else []
     return fr, mask
@@ -113,12 +118,27 @@ def local(fr, ref, fps, delta=DELTA):
 def scan(video, fps, ref=None, start=None, end=None, delta=DELTA):
     """Everything the card writer needs about one clip's flashing, from its own frames (and a control render)."""
     fr = frames(video, start, end)
+    if not fr:
+        raise ValueError("no frames decoded (check --start / --end)")
     rf = frames(ref, start, end) if ref else None
+    if rf is not None and abs(len(rf) - len(fr)) > 1:  # one frame either way is normal between two exports
+        raise ValueError(f"the reference has {len(rf)} frames, the clip {len(fr)}: render both over the same span")
     sig, area = signal(fr, rf, delta)
     ch = changes(sig, delta)
-    return {"frames": len(fr), "fps": fps, "area": round(area, 3), "swing": round(max(sig) - min(sig), 1) if sig else 0,
+    return {"frames": len(fr), "frames_compared": len(sig), "fps": fps, "area": round(area, 3), "swing": round(max(sig) - min(sig), 1) if sig else 0,
             "changes": [[i, s] for i, s in ch], **rate(ch, fps, len(fr)), **local(fr, rf, fps, delta), "delta": delta,
             "signal": [round(v, 1) for v in sig]}
+
+
+def clip_fps(video):
+    """The first video stream's average frame rate (ffprobe), or None when it cannot be read."""
+    try:
+        r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=avg_frame_rate",
+                            "-of", "default=nw=1:nk=1", str(video)], capture_output=True, text=True, check=True)
+        f = float(Fraction(r.stdout.strip().splitlines()[0]))
+    except (OSError, subprocess.CalledProcessError, ValueError, IndexError, ZeroDivisionError):
+        return None
+    return f if f > 0 else None
 
 
 def main(argv):
@@ -126,11 +146,19 @@ def main(argv):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("video")
     ap.add_argument("--ref")
-    ap.add_argument("--fps", type=float, default=25)
+    ap.add_argument("--fps", type=float, help="frame rate to count with (default: the clip's own, from ffprobe)")
     ap.add_argument("--start", type=float)
     ap.add_argument("--end", type=float)
     a = ap.parse_args(argv)
-    res = scan(a.video, round(a.fps), a.ref, a.start, a.end)
+    fps = a.fps or clip_fps(a.video)
+    if not fps:
+        print("flash_scan: cannot read the clip's frame rate (is ffprobe installed?): pass --fps", file=sys.stderr)
+        return 2
+    try:
+        res = scan(a.video, round(fps), a.ref, a.start, a.end)
+    except ValueError as e:
+        print(f"flash_scan: {e}", file=sys.stderr)
+        return 2
     print(json.dumps(res))
     return 0
 
